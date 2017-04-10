@@ -1,4 +1,4 @@
-FastAdmin是一款基于ThinkPHP5+Bootstrap所开发的极速后台管理系统。
+FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台管理系统。
 ===============
 
 
