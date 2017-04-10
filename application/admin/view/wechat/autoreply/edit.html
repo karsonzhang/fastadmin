@@ -1,0 +1,57 @@
+<link href="<?= $site['cdnurl'] ?>/assets/css/wechat/menu.css?v=<?= $site['version'] ?>" rel="stylesheet">
+<style>
+    .clickbox {margin:0;text-align: left;}
+    .create-click {
+        margin-left:0;
+    }
+</style>
+<form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label for="c-title" class="control-label col-xs-12 col-sm-2"><?= __('Title') ?>:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[title]" value="<?= $row['title'] ?>"  id="c-title" class="form-control" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-text" class="control-label col-xs-12 col-sm-2"><?= __('Text') ?>:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[text]" value="<?= $row['text'] ?>"  id="c-text" class="form-control" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-content" class="control-label col-xs-12 col-sm-2"><?= __('Content') ?>:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="clickbox">
+                <input type="hidden" name="row[eventkey]" id="c-eventkey" value="<?= $row['eventkey'] ?>" />
+                <span class="create-click"><a href="<?= url('wechat.response/select') ?>" id="select-resources"><i class="weixin-icon big-add-gray"></i><strong>选择现有资源</strong></a><div class="keytitle">资源名:<?= $response['title'] ?></div></span>
+                <span class="create-click"><a href="<?= url('wechat.response/add') ?>" id="add-resources"><i class="weixin-icon big-add-gray"></i><strong>添加新资源</strong></a></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-remark" class="control-label col-xs-12 col-sm-2"><?= __('Remark') ?>:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[remark]" value="<?= $row['remark'] ?>"  id="c-remark" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-createtime" class="control-label col-xs-12 col-sm-2"><?= __('Createtime') ?>:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="datetime" name="row[createtime]" value="<?= date("Y-m-d H:i:s", $row['createtime']) ?>"  id="c-createtime" class="form-control datetimepicker" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2"><?= __('Status') ?>:</label>
+        <div class="col-xs-12 col-sm-8">
+            <?= build_status(NULL, $row['status']); ?>
+        </div>
+    </div>
+    <div class="form-group hide layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed"><?= __('OK') ?></button>
+            <button type="reset" class="btn btn-default btn-embossed"><?= __('Reset') ?></button>
+        </div>
+    </div>
+</form>

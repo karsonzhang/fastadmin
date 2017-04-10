@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="page-header" style="margin-top:10px;">
+                <h4>会员中心</h4>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    {if $user->check()}
+                    <div class="alert alert-dismissable alert-warning clearfix">
+                        <div class="pull-left"><img class="img-responsive img-circle" style="width:100px;" src="/assets/img/avatar.png" /></div>
+                        <div class="pull-left text-left" style="margin-left:15px;">
+                            <p>
+                                {:__('Welcome', $user->nickname)}<br />
+                                Lv:{$user->level}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="list-group">
+                            <a href="{:url('user/changepwd')}" class="list-group-item">
+                                <i class="fa fa-user"></i> 修改密码
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">2</span>
+                                <i class="fa fa-list"></i> 我发表的帖子
+                            </a>
+                            <a href="#" class="list-group-item">
+                                <span class="badge">1</span>
+                                <i class="fa fa-list-alt"></i> 我发表的主题
+                            </a>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-danger btn-block" href="{:url('user/logout')}"><i class="fa fa-user"></i> 立即注销</a>
+                    {else/}
+                    <a class="btn btn-info btn-block" href="{:url('user/register')}"><i class="fa fa-user"></i> 立即注册</a>
+                    <a class="btn btn-success btn-block" href="{:url('user/login')}"><i class="fa fa-user"></i> 立即登录</a>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
+
+    var Controller = {
+        index: function () {
+            // 初始化表格参数配置
+            Table.api.init({
+                extend: {
+                    index_url: '{%controllerUrl%}/index',
+                    add_url: '{%controllerUrl%}/add',
+                    edit_url: '{%controllerUrl%}/edit',
+                    del_url: '{%controllerUrl%}/del',
+                    multi_url: '{%controllerUrl%}/multi',
+                    table: '{%table%}',
+                }
+            });
+
+            var table = $("#table");
+
+            // 初始化表格
+            table.bootstrapTable({
+                url: $.fn.bootstrapTable.defaults.extend.index_url,
+                sortName: '{%order%}',
+                columns: [
+                    [
+                        {%javascriptList%}
+                    ]
+                ]
+            });
+
+            // 为表格绑定事件
+            Table.api.bindevent(table);
+        },
+        add: function () {
+            Controller.api.bindevent();
+        },
+        edit: function () {
+            Controller.api.bindevent();
+        },
+        api: {
+            bindevent: function () {
+                Form.api.bindevent($("form[role=form]"));
+            }
+        }
+    };
+    return Controller;
+});

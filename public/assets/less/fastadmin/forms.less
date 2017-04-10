@@ -1,0 +1,117 @@
+/*
+ * Component: Form
+ * ---------------
+ */
+.form-control {
+    .border-radius(@input-radius);
+    box-shadow: none;
+    border-color: @gray;
+    &:focus {
+        border-color: @light-blue;
+        box-shadow: none;
+    }
+    &::-moz-placeholder,
+    &:-ms-input-placeholder,
+        &::-webkit-input-placeholder {
+        color: #bbb;
+        opacity: 1;
+    }
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    .btn {
+        .border-radius(@input-radius);
+    }
+}
+
+select.form-control {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    background-position: right 50%;
+    background-repeat: no-repeat;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMCAYAAABSgIzaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NDZFNDEwNjlGNzFEMTFFMkJEQ0VDRTM1N0RCMzMyMkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NDZFNDEwNkFGNzFEMTFFMkJEQ0VDRTM1N0RCMzMyMkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0NkU0MTA2N0Y3MUQxMUUyQkRDRUNFMzU3REIzMzIyQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0NkU0MTA2OEY3MUQxMUUyQkRDRUNFMzU3REIzMzIyQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PuGsgwQAAAA5SURBVHjaYvz//z8DOYCJgUxAf42MQIzTk0D/M+KzkRGPoQSdykiKJrBGpOhgJFYTWNEIiEeAAAMAzNENEOH+do8AAAAASUVORK5CYII=);
+}
+
+.form-group {
+    &.has-success {
+        label {
+            color: @green;
+        }
+        .form-control,
+        .input-group-addon {
+            border-color: @green;
+            box-shadow: none;
+        }
+        .help-block {
+            color: @green;
+        }
+    }
+
+    &.has-warning {
+        label {
+            color: @yellow;
+        }
+        .form-control,
+        .input-group-addon {
+            border-color: @yellow;
+            box-shadow: none;
+        }
+        .help-block {
+            color: @yellow;
+        }
+    }
+
+    &.has-error {
+        label {
+            color: @red;
+        }
+        .form-control,
+        .input-group-addon {
+            border-color: @red;
+            box-shadow: none;
+        }
+        .help-block {
+            color: @red;
+        }
+    }
+}
+
+/* Input group */
+.input-group {
+    .input-group-addon {
+        .border-radius(@input-radius);
+        border-color: @gray;
+        background-color: #fff;
+    }
+}
+
+/* button groups */
+.btn-group-vertical {
+    .btn {
+        &.btn-flat:first-of-type, &.btn-flat:last-of-type {
+            .border-radius(0);
+        }
+    }
+}
+
+.icheck > label {
+    padding-left: 0;
+}
+
+/* support Font Awesome icons in form-control */
+.form-control-feedback.fa {
+    line-height: @input-height-base;
+}
+
+.input-lg + .form-control-feedback.fa,
+.input-group-lg + .form-control-feedback.fa,
+.form-group-lg .form-control + .form-control-feedback.fa {
+    line-height: @input-height-large;
+}
+
+.input-sm + .form-control-feedback.fa,
+.input-group-sm + .form-control-feedback.fa,
+.form-group-sm .form-control + .form-control-feedback.fa {
+    line-height: @input-height-small;
+}

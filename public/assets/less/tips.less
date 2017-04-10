@@ -1,0 +1,54 @@
+@import "bootstrap/mixins.less";
+@import "bootstrap/variables.less";
+@import "bootstrap-less/variables.less";
+
+body {
+    background:#ecf0f5;
+}
+.info-box {
+    z-index:2;
+}
+.tips .col-xs-12 {
+    position:relative;
+}
+.headline {
+    color:#fff;
+    position:absolute;
+    top:-115px;
+    right:10px;
+    z-index:-1;
+    font-size: 120px;
+    font-family:'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /*            transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);*/
+}
+.error-content p {
+    margin-bottom:0;
+}
+h3 {
+    margin-top:10px;
+}
+.tips {
+    float: none;display: block;margin:150px auto;max-width:500px;
+    .box {
+        padding:19px 25px;-webkit-box-shadow:none;box-shadow:none;
+    }
+    .media-left {
+        > span {line-height:1.72222;}
+        span {
+            font-size: 80px;margin:0 10px 0 0;
+            &.fa-info-circle {color:#5dade2}
+            &.fa-times-circle {color:#ec7063}
+            &.fa-check-circle {color:#1abc9c}
+        }
+    }
+    .media-body {
+        margin-top:25px;
+        p {
+            margin-bottom:10px;
+        }
+    }
+    .media-heading {
+        margin: 15px 0 15px 0;line-height:30px;font-weight: 400
+    }
+}

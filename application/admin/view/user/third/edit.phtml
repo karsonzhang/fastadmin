@@ -1,0 +1,64 @@
+<form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label for="c-user_id" class="control-label col-xs-12 col-sm-2">{:__('User_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[user_id]" value="{$row.user_id}"  id="c-user_id" class="form-control   typeahead " />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-platform" class="control-label col-xs-12 col-sm-2">{:__('Platform')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select("row[platform]", 'weibo,wechat,qq', $row['platform'], ['id' => 'c-platform', 'class' => 'form-control selectpicker', 'multiple', 'required']);}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-openid" class="control-label col-xs-12 col-sm-2">{:__('Openid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[openid]" value="{$row.openid}"  id="c-openid" class="form-control    "required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-openname" class="control-label col-xs-12 col-sm-2">{:__('Openname')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[openname]" value="{$row.openname}"  id="c-openname" class="form-control    "required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-access_token" class="control-label col-xs-12 col-sm-2">{:__('Access_token')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[access_token]" value="{$row.access_token}"  id="c-access_token" class="form-control    "required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-refresh_token" class="control-label col-xs-12 col-sm-2">{:__('Refresh_token')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[refresh_token]" value="{$row.refresh_token}"  id="c-refresh_token" class="form-control    "required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-expires_in" class="control-label col-xs-12 col-sm-2">{:__('Expires_in')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="number" name="row[expires_in]" value="{$row.expires_in}"  id="c-expires_in" class="form-control    " />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-logintime" class="control-label col-xs-12 col-sm-2">{:__('Logintime')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="datetime" name="row[logintime]" value="{$row.logintime|datetime}"  id="c-logintime" class="form-control datetimepicker   " />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-expiretime" class="control-label col-xs-12 col-sm-2">{:__('Expiretime')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="datetime" name="row[expiretime]" value="{$row.expiretime|datetime}"  id="c-expiretime" class="form-control datetimepicker   " />
+        </div>
+    </div>
+    <div class="form-group hide layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,42 @@
+<style>
+    #chooseicon {
+        margin:10px;
+    }
+    #chooseicon ul {
+        margin:5px 0 0 0;
+    }
+    #chooseicon ul li{
+        width:30px;height:30px;
+        line-height:30px;
+        border:1px solid #ddd;
+        padding:1px;
+        margin:1px;
+        text-align: center;
+    }
+    #chooseicon ul li:hover{
+        border:1px solid #2c3e50;
+        cursor:pointer;
+    }
+</style>
+<script id="chooseicontpl" type="text/html">
+    <div id="chooseicon">
+        <div>
+            <form onsubmit="return false;">
+                <div class="input-group input-groupp-md">
+                    <div class="input-group-addon">搜索图标</div>
+                    <input class="js-icon-search form-control" type="text" placeholder="">
+                </div>
+            </form>
+        </div>
+        <div>
+            <ul class="list-inline">
+                <% for(var i=0; i<iconlist.length; i++){ %>
+                    <li data-font="<%=iconlist[i]%>" title="<%=iconlist[i]%>">
+                    <i class="fa fa-<%=iconlist[i]%>"></i>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+
+    </div>
+</script>

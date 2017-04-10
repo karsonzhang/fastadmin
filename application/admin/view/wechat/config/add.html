@@ -1,0 +1,28 @@
+<form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label for="module" class="control-label col-xs-12 col-sm-2">{:__('Id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="id" name="row[id]" value="" pattern="[A-Za-z0-9_\.]{3,}" required="required" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="controller" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="name" name="row[name]" value="" required="required" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="action" class="control-label col-xs-12 col-sm-2">{:__('Value')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea class="form-control" id="value" name="row[value]" required="required"></textarea>
+            <a href="javascript:;" class="btn-insertlink">{:__('Insert link')}</a>
+        </div>
+    </div>
+    <div class="form-group hidden layer-footer">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

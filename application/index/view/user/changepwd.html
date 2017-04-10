@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="page-header" style="margin-top:10px;">
+                <h4>修改密码</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="well">
+                        <form id="loginForm" method="POST" action="#">
+                            <div class="form-group">
+                                <label for="oldpassword" class="control-label">旧密码</label>
+                                <input type="password" class="form-control" id="oldpassword" name="oldpassword" value="" required="" placeholder="旧密码">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="newpassword" class="control-label">新密码</label>
+                                <input type="password" class="form-control" id="newpassword" name="newpassword" value="" required="" placeholder="新密码" />
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="renewpassword" class="control-label">确认新密码</label>
+                                <input type="password" class="form-control" id="renewpassword" name="renewpassword" value="" required="" placeholder="确认新密码" />
+                                <span class="help-block"></span>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">提 交</button>
+                            <a href="{:url('user/index')}" class="btn btn-default btn-block">返回</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

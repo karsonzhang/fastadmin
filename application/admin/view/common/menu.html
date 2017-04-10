@@ -1,0 +1,27 @@
+<!-- sidebar: style can be found in sidebar.less -->
+<section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel hidden-xs">
+        <div class="pull-left image">
+            <img src="{$admin.avatar}" class="img-circle" />
+        </div>
+        <div class="pull-left info">
+            <p>{$admin.nickname}</p>
+            <i class="fa fa-circle text-success"></i> {:__('Online')}
+        </div>
+    </div>
+    <!-- search form -->
+    <form action="#" method="get" class="sidebar-form hidden-xs" style="overflow:visible;border:none;">
+        <select class="form-control fastmenujump btn">
+            <option value="">{:__('Shortcut')}</option>
+        </select>
+    </form>
+    <!-- /.search form -->
+
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <!--如果想始终显示子菜单,则给ul加上show-submenu类即可-->
+    <ul class="sidebar-menu">
+        {$menulist}
+    </ul>
+</section>
+<!-- /.sidebar -->

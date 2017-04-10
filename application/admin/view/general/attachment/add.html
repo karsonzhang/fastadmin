@@ -1,0 +1,29 @@
+<form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label for="c-upyun" class="control-label col-xs-12 col-sm-2">{:__('Upload')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[upyun]" id="c-upyun" class="form-control" cols="60" data-plupload-id="plupload-upyun-text" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="c-upyun" class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button id="plupload-upyun" class="btn btn-danger plupload" ><i class="fa fa-upload"></i> {:__("Upload to upyun")}</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="c-local" class="control-label col-xs-12 col-sm-2">{:__('Upload')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" name="row[local]" id="c-local" class="form-control" cols="60" data-plupload-id="plupload-local-text" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="c-local" class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button id="plupload-local" class="btn btn-primary plupload" data-url="{:url('ajax/upload')}"><i class="fa fa-upload"></i> {:__("Upload to local")}</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,54 @@
+<form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label for="module" class="control-label col-xs-12 col-sm-2">{:__('Resource title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="title" name="row[title]" value="" required="required" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="controller" class="control-label col-xs-12 col-sm-2">{:__('Event key')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="eventkey" name="row[eventkey]" value="" pattern="[A-Za-z0-9_]{1,}" readonly />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="remark" class="control-label col-xs-12 col-sm-2">{:__('Memo')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea class="form-control" id="remark" name="row[remark]"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="radio" name="row[type]" value="text" id="type-text" checked />
+            <label for="type-text">{:__('Text')}</label>
+            <input type="radio" name="row[type]" value="app" id="type-app" />
+            <label for="type-app">{:__('App')}</label>
+        </div>
+    </div>
+    <div id="expand">
+
+    </div>
+    <div class="form-group">
+        <label for="status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')])}
+        </div>
+    </div>
+    <div class="form-group {:input('get.callback')?'':'hidden layer-footer'}">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+    <select name="applist" disabled="true" class="hidden">
+        {foreach $applist as $k => $v}
+            <option value="{$k}">{$v.name}</option>
+        {/foreach}
+    </select>
+</form>
+<script>
+    var apps = {:json_encode($applist)};
+    var datas = {};
+</script>

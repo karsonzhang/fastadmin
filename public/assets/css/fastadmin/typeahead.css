@@ -1,0 +1,51 @@
+span.twitter-typeahead {
+  width: 100%;
+}
+span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .tt-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-clip: padding-box;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 0;
+}
+span.twitter-typeahead .tt-menu .tt-suggestion,
+span.twitter-typeahead .tt-dropdown-menu .tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.428571429;
+  color: #333333;
+  white-space: nowrap;
+}
+span.twitter-typeahead .tt-menu .tt-suggestion:hover,
+span.twitter-typeahead .tt-dropdown-menu .tt-suggestion:hover,
+span.twitter-typeahead .tt-menu .tt-suggestion:focus,
+span.twitter-typeahead .tt-dropdown-menu .tt-suggestion:focus {
+  color: #ffffff;
+  text-decoration: none;
+  outline: 0;
+  background-color: #428bca;
+}
+span.twitter-typeahead .tt-menu li.notfound,
+span.twitter-typeahead .tt-dropdown-menu li.notfound {
+  text-indent: 10px;
+}
+.bootstrap-tagsinput {
+  border-radius: 0!important;
+}
+/*# sourceMappingURL=typeahead.css.map */

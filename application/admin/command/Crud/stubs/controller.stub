@@ -1,0 +1,25 @@
+<?php
+
+namespace {%controllerNamespace%};
+
+use app\common\controller\Backend;
+
+use think\Controller;
+use think\Request;
+
+/**
+ * {%tableComment%}
+ *
+ * @icon {%iconName%}
+ */
+class {%controllerName%} extends Backend
+{
+
+    protected $model = null;
+
+    public function _initialize()
+    {
+        parent::_initialize();
+        $this->model = model('{%modelName%}');
+    }
+}

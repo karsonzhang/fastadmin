@@ -1,0 +1,59 @@
+<style type="text/css">
+    #fieldlist dd {display:block;margin:5px 0;}
+    #fieldlist dd input{display: inline-block;width:300px;}
+    #fieldlist dd input:first-child{width:110px;}
+    #fieldlist dd ins{width:110px;display: inline-block;text-decoration:none;font-weight: bold;}
+</style>
+<form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label for="name" class="control-label col-xs-12 col-sm-2">ID:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="id" name="row[id]" value="{$row.id}" required="required" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="name" name="row[name]" value="{$row.name}" required="required" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <dl id="fieldlist" rel="{$row.content|count}">
+                <dd>
+                    <ins>{:__('Key')}</ins>
+                    <ins>{:__('Value')}</ins>
+                </dd>
+                {foreach $row.content as $key => $vo}
+                <dd class="form-inline">
+                    <input type="text" name="field[{$key}]" class="form-control" id="field-{$key}" value="{$key}" size="10" />
+                    <input type="text" name="value[{$key}]" class="form-control" id="value-{$key}" value="{$vo}" size="40" />
+                    <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
+                    <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
+                </dd>
+                {/foreach}
+                <dd><a href="javascript:;" class="append btn btn-sm btn-success"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+            </dl>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="weigh" name="row[weigh]" value="{$row.weigh}" required="required" size="6" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')], $row['status'])}
+        </div>
+    </div>
+    <div class="form-group hidden layer-footer">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,27 @@
+{
+    "name": "karsonzhang/fastadmin",
+    "description": "the fastest admin framework",
+    "type": "project",
+    "keywords": [
+        "fastadmin",
+        "thinkphp"
+    ],
+    "homepage": "http://www.fastadmin.net/",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "karson",
+            "email": "karsonzhang@163.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "topthink/framework": "^5.0",
+        "overtrue/wechat": "~3.1",
+        "endroid/qrcode": "^1.9",
+        "topthink/think-captcha": "^1.0"
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+}

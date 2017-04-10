@@ -1,0 +1,254 @@
+define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte'], function ($, undefined, Backend, undefined, AdminLTE) {
+
+    var Controller = {
+        index: function () {
+            //窗口大小改变,修正主窗体最小高度
+            $(window).resize(function () {
+                $(".tab-addtabs").css("height", $(".content-wrapper").height() + "px");
+            });
+
+            //双击重新加载页面
+            $(document).on("dblclick", ".sidebar-menu li > a", function (e) {
+                $("#tab_" + $(this).attr("addtabs") + " iframe").attr('src', function (i, val) {
+                    return val;
+                });
+                e.stopPropagation();
+            });
+
+
+            //切换左侧sidebar显示隐藏
+            $(document).on("click", ".sidebar-menu li > a", function (e) {
+                $(".sidebar-menu li").removeClass("active");
+                //当外部触发隐藏的a时,触发父辈a的事件
+                if (!$(this).closest("ul").is(":visible")) {
+                    //如果不需要左侧的菜单栏联动可以注释下面一行即可
+                    $(this).closest("ul").prev().trigger("click");
+                }
+
+                var visible = $(this).next("ul").is(":visible");
+                if (!visible) {
+                    $(this).parents("li").addClass("active");
+                } else {
+                }
+                e.stopPropagation();
+            });
+
+            //全屏事件
+            $(document).on('click', "[data-toggle='fullscreen']", function () {
+                var doc = document.documentElement;
+                if ($(document.body).hasClass("full-screen")) {
+                    $(document.body).removeClass("full-screen");
+                    document.exitFullscreen ? document.exitFullscreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitExitFullscreen && document.webkitExitFullscreen();
+                } else {
+                    $(document.body).addClass("full-screen");
+                    doc.requestFullscreen ? doc.requestFullscreen() : doc.mozRequestFullScreen ? doc.mozRequestFullScreen() : doc.webkitRequestFullscreen ? doc.webkitRequestFullscreen() : doc.msRequestFullscreen && doc.msRequestFullscreen();
+                }
+            });
+
+            //绑定tabs事件
+            $('#nav').addtabs({iframeHeight: "100%"});
+
+            if (location.hash.indexOf("#!") === 0) {
+                var url = decodeURIComponent(location.hash.substring(2));
+                //刷新页面后将左侧对应的LI展开
+                $("ul.sidebar-menu a[href='" + url + "']").trigger("click");
+            } else {
+                $("ul.sidebar-menu li.active a").trigger("click");
+            }
+
+            /**
+             * List of all the available skins
+             *
+             * @type Array
+             */
+            var my_skins = [
+                "skin-blue",
+                "skin-black",
+                "skin-red",
+                "skin-yellow",
+                "skin-purple",
+                "skin-green",
+                "skin-blue-light",
+                "skin-black-light",
+                "skin-red-light",
+                "skin-yellow-light",
+                "skin-purple-light",
+                "skin-green-light"
+            ];
+
+            setup();
+
+            /**
+             * Toggles layout classes
+             *
+             * @param String cls the layout class to toggle
+             * @returns void
+             */
+            function change_layout(cls) {
+                $("body").toggleClass(cls);
+                AdminLTE.layout.fixSidebar();
+                //Fix the problem with right sidebar and layout boxed
+                if (cls == "layout-boxed")
+                    AdminLTE.controlSidebar._fix($(".control-sidebar-bg"));
+                if ($('body').hasClass('fixed') && cls == 'fixed') {
+                    AdminLTE.pushMenu.expandOnHover();
+                    AdminLTE.layout.activate();
+                }
+                AdminLTE.controlSidebar._fix($(".control-sidebar-bg"));
+                AdminLTE.controlSidebar._fix($(".control-sidebar"));
+            }
+
+            /**
+             * Replaces the old skin with the new skin
+             * @param String cls the new skin class
+             * @returns Boolean false to prevent link's default action
+             */
+            function change_skin(cls) {
+                $.each(my_skins, function (i) {
+                    $("body").removeClass(my_skins[i]);
+                });
+
+                $("body").addClass(cls);
+                store('skin', cls);
+                return false;
+            }
+
+            /**
+             * Store a new settings in the browser
+             *
+             * @param String name Name of the setting
+             * @param String val Value of the setting
+             * @returns void
+             */
+            function store(name, val) {
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.setItem(name, val);
+                } else {
+                    window.alert('Please use a modern browser to properly view this template!');
+                }
+            }
+
+            /**
+             * Get a prestored setting
+             *
+             * @param String name Name of of the setting
+             * @returns String The value of the setting | null
+             */
+            function get(name) {
+                if (typeof (Storage) !== "undefined") {
+                    return localStorage.getItem(name);
+                } else {
+                    window.alert('Please use a modern browser to properly view this template!');
+                }
+            }
+
+            /**
+             * Retrieve default settings and apply them to the template
+             *
+             * @returns void
+             */
+            function setup() {
+                var tmp = get('skin');
+                if (tmp && $.inArray(tmp, my_skins))
+                    change_skin(tmp);
+
+                // 皮肤切换
+                $("[data-skin]").on('click', function (e) {
+                    if ($(this).hasClass('knob'))
+                        return;
+                    e.preventDefault();
+                    change_skin($(this).data('skin'));
+                });
+
+                // 布局切换
+                $("[data-layout]").on('click', function () {
+                    change_layout($(this).data('layout'));
+                });
+
+                // 切换子菜单显示和菜单小图标的显示
+                $("[data-menu]").on('click', function () {
+                    console.log($(this).data("menu"));
+                    if ($(this).data("menu") == 'show-submenu') {
+                        $("ul.sidebar-menu").toggleClass("show-submenu");
+                    } else {
+                        $(".nav-addtabs").toggleClass("disable-top-badge");
+                    }
+                });
+
+                // 右侧控制栏切换
+                $("[data-controlsidebar]").on('click', function () {
+                    change_layout($(this).data('controlsidebar'));
+                    var slide = !AdminLTE.options.controlSidebarOptions.slide;
+                    AdminLTE.options.controlSidebarOptions.slide = slide;
+                    if (!slide)
+                        $('.control-sidebar').removeClass('control-sidebar-open');
+                });
+
+                // 右侧控制栏背景切换
+                $("[data-sidebarskin='toggle']").on('click', function () {
+                    var sidebar = $(".control-sidebar");
+                    if (sidebar.hasClass("control-sidebar-dark")) {
+                        sidebar.removeClass("control-sidebar-dark")
+                        sidebar.addClass("control-sidebar-light")
+                    } else {
+                        sidebar.removeClass("control-sidebar-light")
+                        sidebar.addClass("control-sidebar-dark")
+                    }
+                });
+
+                // 菜单栏展开或收起
+                $("[data-enable='expandOnHover']").on('click', function () {
+                    $(this).attr('disabled', true);
+                    AdminLTE.pushMenu.expandOnHover();
+                    if (!$('body').hasClass('sidebar-collapse'))
+                        $("[data-layout='sidebar-collapse']").click();
+                });
+
+                // 重设选项
+                if ($('body').hasClass('fixed')) {
+                    $("[data-layout='fixed']").attr('checked', 'checked');
+                }
+                if ($('body').hasClass('layout-boxed')) {
+                    $("[data-layout='layout-boxed']").attr('checked', 'checked');
+                }
+                if ($('body').hasClass('sidebar-collapse')) {
+                    $("[data-layout='sidebar-collapse']").attr('checked', 'checked');
+                }
+                if ($('ul.sidebar-menu').hasClass('show-submenu')) {
+                    $("[data-menu='show-submenu']").attr('checked', 'checked');
+                }
+                if ($('ul.nav-addtabs').hasClass('disable-top-badge')) {
+                    $("[data-menu='disable-top-badge']").attr('checked', 'checked');
+                }
+
+            }
+
+            $(window).resize();
+        },
+        login: function () {
+
+            $("#login-form").validator({
+                timely: 2, theme: 'yellow_right_effect',
+                fields: {
+                    username: "required",
+                    password: "required",
+                },
+                valid: function (form) {
+                    form.submit();
+                }
+            });
+            $.ajax({
+                url: 'ajax/dailybg',
+                dataType: 'json',
+                success: function (ret) {
+                    if (ret.code === 1) {
+                        $("body").css("background", "url(" + ret.data.url + ")");
+                        $("body").css("background-size", "cover");
+                    }
+                }
+            });
+        }
+    };
+
+    return Controller;
+});

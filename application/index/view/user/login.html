@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="page-header" style="margin-top:10px;">
+                <h4>登录</h4>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="well">
+                        <form id="loginForm" method="POST" action="#">
+                            <div class="form-group">
+                                <label for="account" class="control-label">账号</label>
+                                <input type="text" class="form-control" id="account" name="account" value="" required="" placeholder="用户名、手机或邮箱">
+                                <span class="help-block"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="control-label">密码</label>
+                                <input type="password" class="form-control" id="password" name="password" value="" required="" />
+                                <span class="help-block"></span>
+                            </div>
+                            <div id="loginErrorMsg" class="alert alert-error hide">Wrong username og password</div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="remember" id="remember"> 记住我
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">提 交</button>
+                            <a href="{:url('user/register')}" class="btn btn-default btn-block">注册一个新账号</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <p class="lead">会员权益</p>
+                    <ul class="list-unstyled" style="line-height: 2">
+                        <li><span class="fa fa-check text-success"></span> 最新代码推送</li>
+                        <li><span class="fa fa-check text-success"></span> 发布评论</li>
+                        <li><span class="fa fa-check text-success"></span> 个性化头像</li>
+                        <li><span class="fa fa-check text-success"></span> 定制专属页面</li>
+                        <li><span class="fa fa-check text-success"></span> 发现更多</li>
+                    </ul>
+                    <a href="{:url('user/third?action=redirect&platform=weibo')}" class="btn btn-danger btn-block"><i class="fa fa-weibo"></i> 微博登录</a>
+                    <a href="{:url('user/third?action=redirect&platform=wechat')}" class="btn btn-success btn-block"><i class="fa fa-wechat"></i> 微信登录</a>
+                    <a href="{:url('user/third?action=redirect&platform=qq')}" class="btn btn-info btn-block"><i class="fa fa-qq"></i> QQ登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
