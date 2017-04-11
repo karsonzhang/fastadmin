@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config', 'validator', 'adminlte'], function ($, undefined, Toastr, Layer, Lang, Config, undefined, AdminLTE) {
+define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($, undefined, Toastr, Layer, Lang, Config) {
     var Backend = {
         config: {
             //toastr默认配置

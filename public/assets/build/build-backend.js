@@ -4,7 +4,7 @@
     optimize: 'none',
     removeCombined: false,
     name: "require-backend",
-    include: ['css', 'layer', 'toastr', 'frontend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs'],
+    include: ['css', 'layer', 'toastr', 'backend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs'],
     out: "../js/require-backend.min.js",
     packages: [{
             name: 'moment',
@@ -52,7 +52,7 @@
         'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
         'validator': '../libs/nice-validator/dist/local/zh-CN',
         'plupload': '../libs/plupload/js/plupload.min',
-        'toastr': '../libs/toastr/toastr.min',
+        'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/layer/src/layer',
         'echarts': '../libs/echarts/dist/echarts.min',

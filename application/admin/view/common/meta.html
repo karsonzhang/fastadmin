@@ -4,9 +4,7 @@
 
 <link rel="shortcut icon" href="__CDN__/assets/img/favicon.ico" />
 <!-- Loading Bootstrap -->
-<link href="__CDN__/assets/build/backend.css?v={$Think.config.site.version}" rel="stylesheet">
-
-<link rel="shortcut icon" href="__CDN__/assets/img/favicon.ico">
+<link href="__CDN__/assets/{$Think.config.app_debug?'build/backend':'css/backend.min'}.css?v={$Think.config.site.version}" rel="stylesheet">
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
 <!--[if lt IE 9]>

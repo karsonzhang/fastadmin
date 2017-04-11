@@ -147,12 +147,3 @@
     </div>
     <img src="" alt="" id='qrcodeimg' />
 </div>
-<script>
-    $(function () {
-        $("form").submit(function () {
-            $("#qrcodeimg").prop("src", "{:url('demo/qrcode')}?" + $(this).serialize());
-            return false;
-        });
-        $("form").trigger('submit');
-    });
-</script>

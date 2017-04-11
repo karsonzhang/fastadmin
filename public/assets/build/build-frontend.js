@@ -52,7 +52,7 @@
         'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
         'validator': '../libs/nice-validator/dist/local/zh-CN',
         'plupload': '../libs/plupload/js/plupload.min',
-        'toastr': '../libs/toastr/toastr.min',
+        'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/layer/src/layer',
         'echarts': '../libs/echarts/dist/echarts.min',

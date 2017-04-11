@@ -6,29 +6,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="基于ThinkPHP5和Bootstrap的极速后台开发系统">
         <link rel="shortcut icon" href="__CDN__/assets/img/favicon.ico" />
-        <link href="__CDN__/assets/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-        <link href="__CDN__/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="__CDN__/assets/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
-        <link href="__CDN__/assets/libs/bootstrap3-dialog/dist/css/bootstrap-dialog.css" rel="stylesheet" type="text/css"/>
+        <!-- Loading Bootstrap -->
+        <link href="__CDN__/assets/{$Think.config.app_debug?'build/frontend':'css/frontend.min'}.css?v={$Think.config.site.version}" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
           <script src="assets/js/html5shiv.js"></script>
           <script src="assets/js/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+            var require = {
+                config: {
+                    'config': {$config|json_encode}
+                }
+            };
+        </script>
         <style>
             html{height:100%;overflow:auto;-webkit-overflow-scrolling: touch;}
             body{padding:70px 0;}
         </style>
-        <script src="__CDN__/assets/libs/jquery/dist/jquery.min.js" type="text/javascript"></script>
-        <script src="__CDN__/assets/libs/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="__CDN__/assets/libs/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js" type="text/javascript"></script>
 
-        <!--script>
-          var less=less || {};
-          less.env='development';
-        </script-->
-        <script src="__CDN__/assets/libs/less/dist/less.min.js" type="text/javascript"></script>
         <script>
             var _hmt = _hmt || [];
             (function () {
@@ -64,5 +61,6 @@
 
         {__CONTENT__}
 
+        <script src="__CDN__/assets/js/require.js" data-main="__CDN__/assets/js/require-frontend{$Think.config.app_debug?'':'.min'}.js?v={$site.version}"></script>
     </body>
 </html>
