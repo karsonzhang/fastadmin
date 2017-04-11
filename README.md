@@ -64,6 +64,3 @@ FastAdmin遵循Apache2开源协议发布，并提供免费使用。
 版权所有Copyright © 2017-2018 by FastAdmin (http://www.fastadmin.net)
 
 All rights reserved。
-```
-这里输入代码
-```
