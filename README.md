@@ -22,7 +22,7 @@ FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台管理系统。
 
 ## **在线演示**
 
-`http://demo.fastadmin.net`
+http://demo.fastadmin.net
 
 用户名：admin 
 
