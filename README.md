@@ -30,7 +30,7 @@ http://demo.fastadmin.net
 
 ## **界面截图**
 ![控制台](http://git.oschina.net/uploads/images/2017/0411/113717_e99ff3e7_10933.png "控制台")
-![权限分组](http://git.oschina.net/uploads/images/2017/0411/114123_7449f5a1_10933.png "权限分组")
+![权限分组](http://git.oschina.net/uploads/images/2017/0411/115838_2a541809_10933.png "权限分组")
 ![规则节点](http://git.oschina.net/uploads/images/2017/0411/113821_ab9040f4_10933.png "规则节点")
 ![微信管理](http://git.oschina.net/uploads/images/2017/0411/113842_bf52d293_10933.png "微信菜单管理")
 ![单页添加](http://git.oschina.net/uploads/images/2017/0411/113908_23144e89_10933.png "单页添加")
