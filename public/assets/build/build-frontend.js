@@ -3,19 +3,14 @@
     optimizeCss: 'standard',
     optimize: 'none',
     removeCombined: false,
-    name: "require-backend",
-    include: ['css', 'layer', 'toastr', 'backend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs'],
-    out: "../js/require-backend.min.js",
+    name: "require-frontend",
+    include: ['css', 'layer', 'toastr', 'frontend'],
+    out: "../js/require-frontend.min.js",
     packages: [{
             name: 'moment',
             location: '../libs/moment',
             main: 'moment'
         }],
-    map: {
-        '*': {
-            'css': '../libs/require-css/css.min'
-        }
-    },
     paths: {
         'lang': "empty:",
         'config': 'require-config',
@@ -44,23 +39,25 @@
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
         'bootstrap-table-advancedsearch': 'bootstrap-table-advancedsearch',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
+        'typeahead': '../libs/typeahead.js/dist/typeahead.jquery.min',
+        'bloodhound': '../libs/typeahead.js/dist/bloodhound.min',
         'tableexport': '../libs/tableExport.jquery.plugin/tableExport.min',
         'dropzone': '../libs/dropzone/dist/min/dropzone-amd-module.min',
         'less': '../libs/less/dist/less.min',
         'dragsort': '../libs/dragsort/jquery.dragsort',
+        'sortable': '../libs/Sortable/Sortable.min',
         'addtabs': '../libs/jquery-addtabs/jquery.addtabs',
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
-        'crontab': '../libs/jqcron/src/jqCron',
-        'crontab-lang': '../libs/jqcron/src/jqCron.cn',
-        'validate': '../libs/jquery-validation/dist/jquery.validate.min',
+        'crontab': '../libs/jqcron/src/jqCron.cn',
+        'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
+        'validator': '../libs/nice-validator/dist/local/zh-CN',
         'plupload': '../libs/plupload/js/plupload.min',
-        'summernote': '../libs/summernote/dist/summernote.min',
-        'summernote-lang': '../libs/summernote/dist/lang/summernote-zh-CN.min',
-        'toastr': '../libs/toastr/toastr',
+        'toastr': '../libs/toastr/toastr.min',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/layer/src/layer',
         'echarts': '../libs/echarts/dist/echarts.min',
         'cookie': '../libs/jquery.cookie/jquery.cookie',
+        'template': '../libs/art-template/dist/template-native',
     },
     // shim依赖配置
     shim: {
@@ -103,8 +100,7 @@
                 return require.s.contexts._.registry['typeahead.js'].factory($);
             }
         },
-        'crontab': ['css!../libs/jqcron/src/jqCron.css'],
-        'crontab-lang': ['crontab'],
+        'crontab': ['../libs/jqcron/src/jqCron', 'css!../libs/jqcron/src/jqCron.css'],
         'bootstrap-checkbox': ['jquery'],
         'bootstrap-radio': ['jquery'],
         'bootstrap-switch': ['jquery'],
@@ -120,8 +116,7 @@
             'typeahead'
         ],
         'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
-        'summernote': ['css!../libs/summernote/dist/summernote.css'],
-        'summernote-lang': ['summernote'],
+        'summernote': ['../libs/summernote/dist/summernote.min', 'css!../libs/summernote/dist/summernote.css'],
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],
         'plupload': {
@@ -131,5 +126,14 @@
             exports: "plupload"
         },
 //        'layer': ['css!../libs/layer/build/skin/default/layer.css'],
+        validator: {
+            deps: ['../libs/nice-validator/dist/jquery.validator', 'css!../libs/nice-validator/dist/jquery.validator.css']
+        }
     },
-})
+    map: {
+        '*': {
+            'css': '../libs/require-css/css.min'
+        }
+    },
+    charset: 'utf-8' // 文件编码
+});

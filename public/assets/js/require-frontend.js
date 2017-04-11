@@ -41,16 +41,16 @@ require.config({
         'sortable': '../libs/Sortable/Sortable.min',
         'addtabs': '../libs/jquery-addtabs/jquery.addtabs',
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
-        'crontab': '../libs/jqcron/src/jqCron',
-        'crontab-lang': '../libs/jqcron/src/jqCron.cn',
+        'crontab': '../libs/jqcron/src/jqCron.cn',
+        'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
+        'validator': '../libs/nice-validator/dist/local/zh-CN',
         'plupload': '../libs/plupload/js/plupload.min',
-        'summernote': '../libs/summernote/dist/summernote.min',
-        'summernote-lang': '../libs/summernote/dist/lang/summernote-zh-CN.min',
         'toastr': '../libs/toastr/toastr.min',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/layer/src/layer',
         'echarts': '../libs/echarts/dist/echarts.min',
         'cookie': '../libs/jquery.cookie/jquery.cookie',
+        'template': '../libs/art-template/dist/template-native',
     },
     // shim依赖配置
     shim: {
@@ -93,8 +93,7 @@ require.config({
                 return require.s.contexts._.registry['typeahead.js'].factory($);
             }
         },
-        'crontab': ['css!../libs/jqcron/src/jqCron.css'],
-        'crontab-lang': ['crontab'],
+        'crontab': ['../libs/jqcron/src/jqCron', 'css!../libs/jqcron/src/jqCron.css'],
         'bootstrap-checkbox': ['jquery'],
         'bootstrap-radio': ['jquery'],
         'bootstrap-switch': ['jquery'],
@@ -110,8 +109,7 @@ require.config({
             'typeahead'
         ],
         'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
-        'summernote': ['css!../libs/summernote/dist/summernote.css'],
-        'summernote-lang': ['summernote'],
+        'summernote': ['../libs/summernote/dist/summernote.min', 'css!../libs/summernote/dist/summernote.css'],
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],
         'plupload': {
@@ -121,6 +119,9 @@ require.config({
             exports: "plupload"
         },
 //        'layer': ['css!../libs/layer/build/skin/default/layer.css'],
+        validator: {
+            deps: ['../libs/nice-validator/dist/jquery.validator', 'css!../libs/nice-validator/dist/jquery.validator.css']
+        }
     },
     baseUrl: requirejs.s.contexts._.config.config.config.site.cdnurl + '/assets/js/', //资源基础路径
     map: {
@@ -134,15 +135,15 @@ require.config({
 require(['jquery', 'bootstrap', 'config'], function ($, undefined, Config) {
     // 配置语言包的路径
     var paths = {};
-    paths['lang'] = (Config.subdomain == "1" ? '' : '/' + Config.modulename) + '/ajax/lang?callback=define&controllername=' + Config.controllername;
+    paths['lang'] = (Config.subdomain == "1" ? '' : '/index') + '/ajax/lang?callback=define&controllername=' + Config.controllername;
 
     // 避免目录冲突
-    paths[Config.modulename + '/'] = Config.modulename + '/';
+    paths['frontend/'] = 'frontend/';
     require.config({paths: paths});
 
     // 初始化
     $(function () {
-        require([Config.modulename], function (Module) {
+        require(['frontend'], function (Module) {
             // 对相对地址进行处理
             $.ajaxSetup({
                 beforeSend: function (xhr, setting) {

@@ -179,14 +179,12 @@ class Ajax extends Backend
     public function upload()
     {
         $this->code = -1;
-        $this->data = NULL;
         $file = $this->request->file('file');
-        dump($file);
         $uploaddir = '/public/uploads/';
         $info = $file->move(ROOT_PATH . $uploaddir);
         if ($info)
         {
-            $this->code = 1;
+            $this->code = 200;
             $this->data = $uploaddir . $info->getSaveName();
         }
         else

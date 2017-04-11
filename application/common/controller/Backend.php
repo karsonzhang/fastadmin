@@ -217,7 +217,7 @@ class Backend extends Controller
         //判断是否设置code值,如果有则变动response对象的正文
         if (!is_null($this->code))
         {
-            $this->result($this->data, $this->code, $this->msg);
+            $this->result($this->data, $this->code, $this->msg, 'json');
         }
     }
 
