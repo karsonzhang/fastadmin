@@ -1,71 +1,69 @@
-#Fastadmin
-Fastadmin是一个基于Yaf(PHP框架)+Bootstrap(UI框架)的极速通用后台管理系统
+FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台管理系统。
+===============
 
-##功能特性
 
-* 完善的`RBAC`权限管理系统
-    *  支持无限级父子级继承权限
-    *  根据目录和控制器结构`全自动生成`权限节点
-* Bootstrap响应式操作,支持手机平板
-* PJAX无刷新操作
-* 支持数据库表一键生成控制器和模板
-* 支持多语言
+## **主要特性**
 
-##编译YAF
-```
-$/path/to/phpize
-$./configure --with-php-config=/path/to/php-config
-$make && make install
-```
+* 基于`Auth`验证的权限管理系统
+    * 支持无限级父子级权限继承，父级的管理员可任意增删改子级管理员及权限设置
+    * 支持单管理员多角色
+    * 支持目录和控制器结构一键生成权限节点
+* 完善的前端功能组件开发
+    * 基于`AdminLTE`二次开发
+    * 基于`Bootstrap`开发，自适应手机、平板、PC
+    * 基于`RequireJS`进行JS模块管理，按需加载
+    * 基于`Less`进行样式开发
+    * 基于`Bower`进行前端组件包管理
+* 数据库表一键生成`CRUD`,包括控制器、模型、视图、JS、语言包
+* 多语言支持，服务端及客户端支持
+* 无缝整合又拍云上传功能
+* 第三方登录(QQ、微信、微博)整合
+* Ucenter整合
 
-##YAF文档
-http://www.php.net/manual/en/book.yaf.php
+## **在线演示**
 
-##伪静态规则
+http://demo.fastadmin.net
 
-###Apache
-```
-#.htaccess
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule .* index.php
-```
+用户名：admin 
 
-###Nginx
-```
-location / {
-    root   /var/www/yoursitepath;
-    index  index.php index.html index.htm;
-    if (!-e $request_filename){
-        rewrite ^/(.*)$ /index.php/$1 last;
-    }
-}
-请注意在Nginx下需要增加额外的配置,避免相关隐私信息暴露
-location ~ /(application|conf|data|system) {
-    deny all;
-    return 403;
-}
-```
+密　码：123456
 
-##Bootstrap组件
-http://demo.fastadmin.net/demo.php
+## **界面截图**
 
-##问题反馈
-> 在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
-* Email: (karsonzhang#163.com, 把#换成@)
-* weibo: [@karsonzhang](http://weibo.com/karsonzhang)
-* Github: https://github.com/karsonzhang/fastadmin
-* Git@OSC: https://git.oschina.com/karson/fastadmin
+## **问题反馈**
 
-##捐助
-[Paypal](https://www.paypal.com/) 
-[支付宝](https://www.alipay.com/) 
+在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
 
-##感激
+Email: (karsonzhang#163.com, 把#换成@)
+
+weibo: @karsonzhang
+
+Github: https://github.com/karsonzhang/fastadmin 
+
+Git@OSC: https://git.oschina.com/karson/fastadmin
+
+## **特别鸣谢**
+
 感谢以下的项目,排名不分先后
 
-* [YAF](https://github.com/laruence/yaf) 
-* [Bootstrap](http://getbootstrap.com/)
-* [jQuery](http://jquery.com)
-* [Datatables](http://datatables.net)
+ThinkPHP：http://www.thinkphp.cn 
+
+AdminLTE：https://almsaeedstudio.com 
+
+Bootstrap：http://getbootstrap.com 
+
+jQuery：http://jquery.com 
+
+
+## 版权信息
+
+FastAdmin遵循Apache2开源协议发布，并提供免费使用。
+
+本项目包含的第三方源码和二进制文件之版权信息另行标注。
+
+版权所有Copyright © 2017-2018 by FastAdmin (http://www.fastadmin.net)
+
+All rights reserved。
+```
+这里输入代码
+```
