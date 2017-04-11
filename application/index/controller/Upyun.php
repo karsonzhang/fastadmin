@@ -13,15 +13,15 @@ class Upyun extends Frontend
 
     public function notify()
     {
-        $url = $this->request->param("url");
-        $code = $this->request->param("code");
-        $message = $this->request->param("message");
-        $sign = $this->request->param("sign");
-        $time = $this->request->param("time");
-        $extparam = $this->request->param("ext-param");
+        $url = $this->request->post("url");
+        $code = $this->request->post("code");
+        $message = $this->request->post("message");
+        $sign = $this->request->post("sign");
+        $time = $this->request->post("time");
+        $extparam = $this->request->post("ext-param");
         if ($url && $code && $message && $time && $sign)
         {
-            $arr = [$code, $message, $url, $time, Config::get('upload', 'formkey')];
+            $arr = [$code, $message, $url, $time, Config::get('upload.formkey')];
             if ($extparam)
             {
                 $arr[] = $extparam;
