@@ -3,6 +3,7 @@
 namespace app\admin\controller\general;
 
 use app\common\controller\Backend;
+use fast\Random;
 
 /**
  * 个人配置
@@ -53,13 +54,13 @@ class Profile extends Backend
             unset($v);
             if (isset($params['password']))
             {
-                $params['salt'] = Random::basic(4);
+                $params['salt'] = Random::alnum();
                 $params['password'] = md5(md5($params['password']) . $params['salt']);
             }
             if ($params)
             {
-                model('admin')->where('id', Auth::id())->update($params);
-                $this->code = 0;
+                model('admin')->where('id', $this->auth->id)->update($params);
+                $this->code = 1;
             }
         }
         return;

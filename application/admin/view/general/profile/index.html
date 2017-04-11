@@ -5,7 +5,7 @@
                 {:__('Profile')}
             </div>
             <div class="panel-body">
-                <form id="update-form" role="form" data-toggle="validator" method="POST" action="/general_profile/update">
+                <form id="update-form" role="form" data-toggle="validator" method="POST" action="{:url('general.profile/update')}">
                     <div class="form-group">
                         <label for="username" class="control-label">{:__('Username')}:</label>
                         <input type="text" class="form-control" name="row[username]" value="{$admin.username}" disabled />
