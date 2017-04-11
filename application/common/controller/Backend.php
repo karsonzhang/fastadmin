@@ -117,26 +117,13 @@ class Backend extends Controller
             $this->view->engine->layout('layout/' . $this->layout);
         }
 
-        // 上传参数配置配置
-        $uploadcfg = Configvalue::upload();
-
-        $upload = [
-            'uploadurl' => $uploadcfg['uploadurl'],
-            'cdnurl'    => $uploadcfg['cdnurl'],
-            'multipart' => [
-                'policy'    => $uploadcfg['policy'],
-                'signature' => $uploadcfg['signature']
-            ],
-            'maxsize'   => $uploadcfg['maxsize'],
-            'mimetype'  => $uploadcfg['mimetype'],
-        ];
-
+        // 语言检测
         $lang = Lang::detect();
 
         // 配置信息
         $config = [
             'site'           => Config::get("site"),
-            'upload'         => $upload,
+            'upload'         => Configvalue::upload(),
             'modulename'     => $modulename,
             'controllername' => $controllername,
             'actionname'     => $actionname,
