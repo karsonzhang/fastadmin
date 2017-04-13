@@ -355,7 +355,7 @@ class Tree
                     '@childlist' => $childlist,
                     '@url'       => $childdata || !isset($value['@url']) ? "javascript:;" : url($value['@url']),
                     '@caret'     => ($childdata && !$value['@badge'] ? '<i class="fa fa-angle-left"></i>' : ''),
-                    '@badge'     => $value['@badge'],
+                    '@badge'     => isset($value['@badge']) ? $value['@badge'] : '',
                     '@class'     => ($selected ? ' active' : '') . ($disabled ? ' disabled' : '') . ($childdata ? ' treeview' : ''),
                 );
                 $str .= strtr($nstr, $value);
