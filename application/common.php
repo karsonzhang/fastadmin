@@ -21,6 +21,7 @@ if (!function_exists('__'))
         {
             $vars = func_get_args();
             array_shift($vars);
+            $lang = '';
         }
         return Lang::get($name, $vars, $lang);
     }

@@ -18,7 +18,7 @@ return [
         'scope'      => 'snsapi_userinfo',
     ],
     // QQ
-    // 申请请到https://connect.qq.com创建
+    // 申请请到https://connect.qq.com
     'qq'     => [
         'app_id'     => '',
         'app_secret' => '',
