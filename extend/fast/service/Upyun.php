@@ -106,14 +106,14 @@ class Upyun
 
     /**
      * 上传文件
-     * @param string $path 存储路径
+     * @param string $path 存储路径或文件
      * @param mixed $file 需要上传的文件，可以是文件流或者文件内容
      * @param boolean $auto_mkdir 自动创建目录
      * @param array $opts 可选参数
      */
     public function upload($path, $file = NULL, $auto_mkdir = True, $opts = NULL)
     {
-        return $this->writeFile($path, $file = NULL, $auto_mkdir, $opts);
+        return $this->writeFile($path, $file, $auto_mkdir, $opts);
     }
 
     public function writeFile($path, $file = NULL, $auto_mkdir = True, $opts = NULL)
