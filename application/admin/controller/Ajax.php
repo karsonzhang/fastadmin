@@ -146,7 +146,8 @@ class Ajax extends Backend
             $admin_rule_ids = $this->auth->getRuleIds();
             $superadmin = $this->auth->isSuperAdmin();
             $current_rule_ids = $id ? explode(',', $currentgroupmodel->rules) : [];
-            if (!$id || !array_key_exists($pid, Tree::instance()->init($model->all(['status' => 'normal']))->getChildrenIds($id, TRUE)))
+
+            if (!$id || !in_array($pid, Tree::instance()->init($model->all(['status' => 'normal']))->getChildrenIds($id, TRUE)))
             {
                 //构造jstree所需的数据
                 $nodelist = [];

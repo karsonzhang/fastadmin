@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\wechat;
 
+use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use app\common\model\WechatResponse;
 use think\Db;
@@ -37,9 +38,10 @@ class Autoreply extends Backend
             if ($params)
             {
                 $row->save($params);
+                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
-            return FALSE;
+            return;
         }
         $response = WechatResponse::get(['eventkey' => $row['eventkey']]);
         $this->view->assign("response", $response);

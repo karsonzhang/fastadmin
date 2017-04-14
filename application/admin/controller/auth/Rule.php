@@ -2,8 +2,10 @@
 
 namespace app\admin\controller\auth;
 
+use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use fast\Tree;
+use think\Cache;
 
 /**
  * 规则管理
@@ -24,7 +26,7 @@ class Rule extends Backend
         // 必须将结果集转换为数组
         Tree::instance()->init(collection($this->model->order('weigh', 'desc')->select())->toArray());
         $this->rulelist = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'title');
-        $ruledata = [];
+        $ruledata = [0 => __('None')];
         foreach ($this->rulelist as $k => $v)
         {
             $ruledata[$v['id']] = $v['title'];
@@ -61,6 +63,8 @@ class Rule extends Backend
             if ($params)
             {
                 $this->model->create($params);
+                AdminLog::record(__('Add'), $this->model->getLastInsID());
+                Cache::rm('__menu__');
                 $this->code = 1;
             }
 
@@ -84,6 +88,8 @@ class Rule extends Backend
             if ($params)
             {
                 $row->save($params);
+                AdminLog::record(__('Edit'), $ids);
+                Cache::rm('__menu__');
                 $this->code = 1;
             }
 
@@ -104,11 +110,23 @@ class Rule extends Backend
             $count = $this->model->where('id', 'in', $ids)->delete();
             if ($count)
             {
+                AdminLog::record(__('Del'), $ids);
+                Cache::rm('__menu__');
                 $this->code = 1;
             }
         }
 
         return;
+    }
+
+    /**
+     * 批量更新
+     * @internal
+     */
+    public function multi($ids = "")
+    {
+        // 节点禁止批量操作
+        $this->code = -1;
     }
 
 }

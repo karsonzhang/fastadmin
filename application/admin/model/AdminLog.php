@@ -17,6 +17,7 @@ class AdminLog extends Model
     {
         $admin = \think\Session::get('admin');
         $admin_id = $admin ? $admin->id : 0;
+        $content = !is_scalar($content) ? json_encode($content) : $content . '';
         $username = $username ? $username : ($admin ? $admin->username : __(''));
         self::create([
             'title'    => $title,

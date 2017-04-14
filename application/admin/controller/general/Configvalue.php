@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\general;
 
+use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 
 /**
@@ -75,6 +76,7 @@ class Configvalue extends Backend
                     $params['content'] = array_combine($fieldarr, $valuearr);
                 }
                 $this->model->save($params);
+                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $this->code = 1;
             }
 
@@ -114,6 +116,7 @@ class Configvalue extends Backend
                     $params['content'] = array_combine($fieldarr, $valuearr);
                 }
                 $row->save($params);
+                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
 
@@ -121,55 +124,6 @@ class Configvalue extends Backend
         }
         $this->view->assign("row", $row);
         return $this->view->fetch();
-    }
-
-    /**
-     * 删除
-     */
-    public function del($ids = "")
-    {
-        $this->code = -1;
-        if ($ids)
-        {
-            $count = $this->model->where('id', 'in', $ids)->delete();
-            if ($count)
-            {
-                $this->code = 1;
-            }
-        }
-
-        return;
-    }
-
-    /**
-     * 批量更新
-     */
-    public function multi($ids = "")
-    {
-        $this->code = -1;
-        $ids = $ids ? $ids : $this->request->param("ids");
-        if ($ids)
-        {
-            if ($this->request->has('params'))
-            {
-                parse_str($this->request->post("params"), $values);
-                $values = array_intersect_key($values, array_flip(array('status')));
-                if ($values)
-                {
-                    $count = $this->model->where('id', 'in', $ids)->update($values);
-                    if ($count)
-                    {
-                        $this->code = 1;
-                    }
-                }
-            }
-            else
-            {
-                $this->code = 1;
-            }
-        }
-
-        return;
     }
 
 }

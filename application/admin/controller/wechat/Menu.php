@@ -2,10 +2,12 @@
 
 namespace app\admin\controller\wechat;
 
+use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use app\common\model\Configvalue;
 use app\common\model\WechatResponse;
 use EasyWeChat\Foundation\Application;
+use think\Config;
 use think\Exception;
 
 /**
@@ -51,6 +53,7 @@ class Menu extends Backend
         $content['menu'] = $menu;
         $this->wechatcfg->content = $content;
         $this->wechatcfg->save();
+        AdminLog::record(__('Edit'), $ids);
         $this->code = 1;
         return;
     }
@@ -68,6 +71,7 @@ class Menu extends Backend
             $ret = $app->menu->add($this->wechatcfg->content['menu']);
             if ($ret->errcode == 0)
             {
+                AdminLog::record(__('Sync'), $this->wechatcfg->content['menu']);
                 $this->code = 1;
             }
             else

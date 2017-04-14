@@ -3,8 +3,8 @@
 return [
     'SQL Result'                                                             => '查询结果',
     'Basic query'                                                            => '基础查询',
-    'View structure'                                                         => '基础查询',
-    'View data'                                                              => '基础查询',
+    'View structure'                                                         => '查看表结构',
+    'View data'                                                              => '查看表数据',
     'Optimize'                                                               => '优化表',
     'Repair'                                                                 => '修复表',
     'Optimize all'                                                           => '优化全部表',

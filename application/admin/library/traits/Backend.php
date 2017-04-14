@@ -2,6 +2,8 @@
 
 namespace app\admin\library\traits;
 
+use app\admin\model\AdminLog;
+
 trait Backend
 {
 
@@ -42,6 +44,7 @@ trait Backend
             if ($params)
             {
                 $this->model->create($params);
+                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $this->code = 1;
             }
 
@@ -65,6 +68,7 @@ trait Backend
             if ($params)
             {
                 $row->save($params);
+                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
 
@@ -85,6 +89,7 @@ trait Backend
             $count = $this->model->where('id', 'in', $ids)->delete();
             if ($count)
             {
+                AdminLog::record(__('Del'), $ids);
                 $this->code = 1;
             }
         }
@@ -110,6 +115,7 @@ trait Backend
                     $count = $this->model->where('id', 'in', $ids)->update($values);
                     if ($count)
                     {
+                        AdminLog::record(__('Multi'), $ids);
                         $this->code = 1;
                     }
                 }

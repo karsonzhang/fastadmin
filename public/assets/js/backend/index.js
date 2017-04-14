@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte'], function ($, undefined, Backend, undefined, AdminLTE) {
+define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], function ($, undefined, Backend, undefined, AdminLTE, undefined) {
 
     var Controller = {
         index: function () {

@@ -11,6 +11,7 @@ use think\console\Command;
 use think\console\Input;
 use think\console\input\Option;
 use think\console\Output;
+use think\Exception;
 
 class Menu extends Command
 {
@@ -33,8 +34,7 @@ class Menu extends Command
         $controller = $input->getOption('controller') ? : '';
         if (!$controller)
         {
-            $output->error("please input controller name");
-            return;
+            throw new Exception("please input controller name");
         }
 
         if ($controller != 'all-controller')

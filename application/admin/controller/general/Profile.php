@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\general;
 
+use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use fast\Random;
 
@@ -60,6 +61,7 @@ class Profile extends Backend
             if ($params)
             {
                 model('admin')->where('id', $this->auth->id)->update($params);
+                AdminLog::record(__('Update'), $params);
                 $this->code = 1;
             }
         }

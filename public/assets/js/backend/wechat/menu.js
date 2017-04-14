@@ -132,7 +132,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'sortable'], function
             //更新菜单数据
             var menuUpdate = function () {
                 $.post("wechat/menu/edit", {menu: JSON.stringify(getMenuList())}, function (data) {
-                    if (data['code'] == 0) {
+                    if (data['code'] == 1) {
                     } else {
                         Backend.api.error();
                     }
@@ -255,7 +255,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'sortable'], function
             });
             $(document).on('click', "#menuSyn", function () {
                 $.post("wechat/menu/sync", {}, function (data) {
-                    if (data['code'] == 0) {
+                    if (data['code'] == 1) {
                         Backend.api.toastr.success('菜单同步更新成功，生效时间看微信官网说明，或者你重新关注微信号！');
                     } else {
                         Backend.api.toastr.error(data['content']);

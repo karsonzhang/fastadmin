@@ -9,6 +9,7 @@ use think\console\Input;
 use think\console\input\Option;
 use think\console\Output;
 use think\Db;
+use think\Exception;
 use think\Lang;
 
 class Crud extends Command
@@ -41,8 +42,7 @@ class Crud extends Command
         $local = $input->getOption('local');
         if (!$table)
         {
-            $output->error('table name can\'t empty');
-            return;
+            throw new Exception('table name can\'t empty');
         }
         $dbname = Config::get('database.database');
         $prefix = Config::get('database.prefix');
@@ -50,8 +50,7 @@ class Crud extends Command
         $tableInfo = Db::query("SHOW TABLE STATUS LIKE '{$tableName}'", [], TRUE);
         if (!$tableInfo)
         {
-            $output->error("table not found");
-            return;
+            throw new Exception("table not found");
         }
         $tableInfo = $tableInfo[0];
 
@@ -69,8 +68,7 @@ class Crud extends Command
         //非覆盖模式时如果存在控制器文件则报错
         if (is_file($controllerFile) && !$force)
         {
-            $output->error('controller already exists');
-            return;
+            throw new Exception('controller already exists');
         }
 
         //模型默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入model,不支持目录层级
@@ -91,8 +89,7 @@ class Crud extends Command
         //非覆盖模式时如果存在模型文件则报错
         if (is_file($modelFile) && !$force)
         {
-            $output->error('model already exists');
-            return;
+            throw new Exception('model already exists');
         }
 
         //从数据库中获取表字段信息

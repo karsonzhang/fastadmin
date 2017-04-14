@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\wechat;
 
+use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use fast\service\Wechat;
 
@@ -44,6 +45,7 @@ class Response extends Backend
             if ($params)
             {
                 $this->model->save($params);
+                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $this->code = 1;
                 $this->content = $params;
             }
@@ -72,6 +74,7 @@ class Response extends Backend
             if ($params)
             {
                 $row->save($params);
+                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
             return;
