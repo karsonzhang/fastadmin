@@ -28,6 +28,8 @@ http://demo.fastadmin.net
 
 密　码：123456
 
+提示：演示站数据无法进行删除和修改，只能新增，完整体验请下载源码安装体验
+
 ## **界面截图**
 ![控制台](http://git.oschina.net/uploads/images/2017/0411/113717_e99ff3e7_10933.png "控制台")
 ![权限分组](http://git.oschina.net/uploads/images/2017/0411/115838_2a541809_10933.png "权限分组")
