@@ -20,11 +20,15 @@ FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台管理系统。
 * 第三方登录(QQ、微信、微博)整合
 * Ucenter整合
 
+## **安装使用**
+
+http://www.kancloud.cn/karsonzhang/fastadmin
+
 ## **在线演示**
 
 http://demo.fastadmin.net
 
-用户名：admin 
+用户名：admin
 
 密　码：123456
 
@@ -46,7 +50,7 @@ Email: (karsonzhang#163.com, 把#换成@)
 
 weibo: @karsonzhang
 
-Github: https://github.com/karsonzhang/fastadmin 
+Github: https://github.com/karsonzhang/fastadmin
 
 Git@OSC: https://git.oschina.com/karson/fastadmin
 
@@ -54,13 +58,13 @@ Git@OSC: https://git.oschina.com/karson/fastadmin
 
 感谢以下的项目,排名不分先后
 
-ThinkPHP：http://www.thinkphp.cn 
+ThinkPHP：http://www.thinkphp.cn
 
-AdminLTE：https://almsaeedstudio.com 
+AdminLTE：https://almsaeedstudio.com
 
-Bootstrap：http://getbootstrap.com 
+Bootstrap：http://getbootstrap.com
 
-jQuery：http://jquery.com 
+jQuery：http://jquery.com
 
 
 ## 版权信息
