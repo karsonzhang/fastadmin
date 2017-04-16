@@ -430,7 +430,9 @@ function _init() {
                         if (!$this.parent().hasClass("active")) {
                             $this.parent().addClass("active");
                         }
-                        $this.parent().siblings().find("ul.menu-open").slideUp();
+                        if ($(".show-submenu", menu).size() == 0) {
+                            $this.parent().siblings().find("ul.menu-open").slideUp();
+                        }
                     }
                     //if this isn't a link, prevent the page from being redirected
                     if (checkElement.is('.treeview-menu')) {
