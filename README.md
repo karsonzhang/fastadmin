@@ -20,6 +20,10 @@ FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台管理系统。
 * 第三方登录(QQ、微信、微博)整合
 * Ucenter整合
 
+## **安装使用**
+
+http://www.kancloud.cn/karsonzhang/fastadmin
+
 ## **在线演示**
 
 http://demo.fastadmin.net
