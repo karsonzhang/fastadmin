@@ -35,12 +35,12 @@ http://demo.fastadmin.net
 提　示：演示站数据无法进行删除和修改，只能新增，完整体验请下载源码安装体验
 
 ## **界面截图**
-![控制台](https://git.oschina.net/uploads/images/2017/0411/113717_e99ff3e7_10933.png "控制台")
-![权限分组](https://git.oschina.net/uploads/images/2017/0411/115838_2a541809_10933.png "权限分组")
-![规则节点](https://git.oschina.net/uploads/images/2017/0411/113821_ab9040f4_10933.png "规则节点")
-![微信管理](https://git.oschina.net/uploads/images/2017/0411/113842_bf52d293_10933.png "微信菜单管理")
-![单页添加](https://git.oschina.net/uploads/images/2017/0411/113908_23144e89_10933.png "单页添加")
-![添加分组](https://git.oschina.net/uploads/images/2017/0411/113932_7891b543_10933.png "添加分组")
+![控制台](https://git.oschina.net/uploads/images/2017/0411/113717_e99ff3e7_10933.png?1 "控制台")
+![权限分组](https://git.oschina.net/uploads/images/2017/0411/115838_2a541809_10933.png?1 "权限分组")
+![规则节点](https://git.oschina.net/uploads/images/2017/0411/113821_ab9040f4_10933.png?1 "规则节点")
+![微信管理](https://git.oschina.net/uploads/images/2017/0411/113842_bf52d293_10933.png?1 "微信菜单管理")
+![单页添加](https://git.oschina.net/uploads/images/2017/0411/113908_23144e89_10933.png?1 "单页添加")
+![添加分组](https://git.oschina.net/uploads/images/2017/0411/113932_7891b543_10933.png?1 "添加分组")
 
 ## **问题反馈**
 
