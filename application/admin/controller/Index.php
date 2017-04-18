@@ -3,7 +3,6 @@
 namespace app\admin\controller;
 
 use app\common\controller\Backend;
-use fast\Menu;
 use think\Validate;
 
 /**
@@ -28,7 +27,7 @@ class Index extends Backend
     public function index()
     {
         //
-        $menulist = Menu::instance()->sidebar([
+        $menulist = $this->auth->getSidebar([
             'dashboard'  => 'hot',
             'auth'       => ['new', 'red', 'badge'],
             'auth/admin' => 12,

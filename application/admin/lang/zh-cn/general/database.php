@@ -18,7 +18,7 @@ return [
     'Max output:%s'                                                          => '最大返回%s条',
     'Total:%s'                                                               => '共有%s条记录! ',
     'Row:%s'                                                                 => '记录：%s',
-    'Executes one or multiple queries which are concatenated by a semicolon' => '请输入SQL语句，支持批量查询，多条SQL以分号(,)分格',
+    'Executes one or multiple queries which are concatenated by a semicolon' => '请输入SQL语句，支持批量查询，多条SQL以分号(;)分格',
     'Query affected %s rows and took %s seconds'                             => '共影响%s条记录! 耗时：%s秒!',
     'Query returned an empty result'                                         => '返回结果为空!',
     'Query took %s seconds'                                                  => '耗时%s秒!',

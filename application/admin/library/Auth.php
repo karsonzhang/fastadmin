@@ -4,6 +4,7 @@ namespace app\admin\library;
 
 use app\admin\model\Admin;
 use fast\Random;
+use fast\Tree;
 use think\Cookie;
 use think\Request;
 use think\Session;
@@ -200,6 +201,69 @@ class Auth extends \fast\Auth
     public function isSuperAdmin()
     {
         return in_array('*', $this->getRuleIds()) ? TRUE : FALSE;
+    }
+
+    /**
+     * 获取左侧菜单栏
+     *
+     * @param array $params URL对应的badge数据
+     * @return string
+     */
+    public function getSidebar($params = [])
+    {
+        $colorArr = ['red', 'green', 'yellow', 'blue', 'teal', 'orange', 'purple'];
+        $colorNums = count($colorArr);
+        $badgeList = [];
+        // 生成菜单的badge
+        foreach ($params as $k => $v)
+        {
+            if (stripos($k, '/') === false)
+            {
+                $url = '/admin/' . $k;
+            }
+            else
+            {
+                $url = url($k);
+            }
+
+            if (is_array($v))
+            {
+                $nums = isset($v[0]) ? $v[0] : 0;
+                $color = isset($v[1]) ? $v[1] : $colorArr[(is_numeric($nums) ? $nums : strlen($nums)) % $colorNums];
+                $class = isset($v[2]) ? $v[2] : 'label';
+            }
+            else
+            {
+                $nums = $v;
+                $color = $colorArr[(is_numeric($nums) ? $nums : strlen($nums)) % $colorNums];
+                $class = 'label';
+            }
+            //必须nums大于0才显示
+            if ($nums)
+            {
+                $badgeList[$url] = '<small class="' . $class . ' pull-right bg-' . $color . '">' . $nums . '</small>';
+            }
+        }
+
+        // 读取管理员当前拥有的权限节点
+        $userRule = $this->getRuleList();
+
+        $select_id = 0;
+        $dashboard = rtrim(url('dashboard/'), '/');
+        // 必须将结果集转换为数组
+        $ruleList = collection(model('AuthRule')->where('ismenu', 1)->order('weigh', 'desc')->cache("__menu__")->select())->toArray();
+        foreach ($ruleList as $k => &$v)
+        {
+            if (!in_array($v['name'], $userRule))
+                continue;
+            $select_id = $v['name'] == $dashboard ? $v['id'] : $select_id;
+            $v['url'] = $v['name'];
+            $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
+        }
+        // 构造菜单数据
+        Tree::instance()->init($ruleList);
+        $menu = Tree::instance()->getTreeMenu(0, '<li class="@class"><a href="@url" addtabs="@id" url="@url"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
+        return $menu;
     }
 
 }
