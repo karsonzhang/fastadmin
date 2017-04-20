@@ -107,7 +107,13 @@ class Rule extends Backend
         $this->code = -1;
         if ($ids)
         {
-            $count = $this->model->where('id', 'in', $ids)->delete();
+            $delIds = [];
+            foreach (explode(',', $ids) as $k => $v)
+            {
+                $delIds = array_merge($delIds, Tree::instance()->getChildrenIds($v, TRUE));
+            }
+            $delIds = array_unique($delIds);
+            $count = $this->model->where('id', 'in', $delIds)->delete();
             if ($count)
             {
                 AdminLog::record(__('Del'), $ids);
