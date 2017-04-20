@@ -41,6 +41,8 @@ http://demo.fastadmin.net
 ![微信管理](//git.oschina.net/uploads/images/2017/0411/113842_bf52d293_10933.png "微信菜单管理")
 ![单页添加](//git.oschina.net/uploads/images/2017/0411/113908_23144e89_10933.png "单页添加")
 ![添加分组](//git.oschina.net/uploads/images/2017/0411/113932_7891b543_10933.png "添加分组")
+![一键生成CRUD](//box.kancloud.cn/b56b9655aef1e6c64b98eb1b264bd3bf_1061x775.gif "一键生成CRUD")
+![一键生成权限节点](//box.kancloud.cn/4d4e92f0b56e93990406124a35a342b0_1065x770.gif "一键生成权限节点")
 
 ## **问题反馈**
 
