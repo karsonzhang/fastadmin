@@ -27,7 +27,7 @@ class Dashboard extends Backend
             $paylist[$day] = mt_rand(1, mt_rand(1, $createlist[$day]));
         }
         $this->view->assign([
-            'totaluser'          => 3500,
+            'totaluser'          => 35200,
             'totalviews'         => 219390,
             'totalorder'         => 32143,
             'totalorderamount'   => 174800,

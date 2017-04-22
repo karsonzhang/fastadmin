@@ -1,0 +1,5 @@
+({
+  cssIn: "{%cssBasePath%}{%cssBaseName%}.css",
+  out: "{%cssBasePath%}{%cssBaseName%}.min.css",
+  optimizeCss: "default"
+})

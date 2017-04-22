@@ -1,0 +1,10 @@
+({
+    {%config%}
+    ,
+    optimizeCss: "standard",
+    optimize: "none",
+    removeCombined: false,
+    baseUrl: "{%jsBasePath%}",    //JS文件所在的基础目录
+    name: "{%jsBaseName%}", //来源文件,不包含后缀
+    out: "{%jsBasePath%}{%jsBaseName%}.min.js"  //目标文件
+});

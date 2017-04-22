@@ -5,7 +5,10 @@ require.config({
             location: '../libs/moment',
             main: 'moment'
         }],
+    //在打包压缩时将会把include中的模块合并到主文件中
+    include: ['css', 'layer', 'toastr', 'frontend'],
     paths: {
+        'lang': "empty:",
         'config': 'require-config',
         'bootstrap-checkbox': 'bootstrap-checkbox',
         'bootstrap-radio': 'bootstrap-radio',
