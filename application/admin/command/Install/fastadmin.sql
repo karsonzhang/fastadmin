@@ -252,6 +252,8 @@ CREATE TABLE `fa_page` (
   `icon` varchar(50) NOT NULL DEFAULT '' COMMENT '图标',
   `views` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击',
   `comments` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`)
