@@ -15,6 +15,20 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
                 e.stopPropagation();
             });
 
+            //读取FastAdmin的更新信息
+            $.ajax({
+                url: 'http://www.fa.com/index/index/news',
+                type: 'post',
+                dataType: 'jsonp',
+                success: function (ret) {
+                    $(".notifications-menu > a span").text(ret.new > 0 ? ret.new : '');
+                    $(".notifications-menu .footer a").attr("href", ret.url);
+                    $.each(ret.newslist, function (i, j) {
+                        var item = '<li><a href="' + j.url + '" target="_blank"><i class="' + j.icon + '"></i> ' + j.title + '</a></li>';
+                        $(item).appendTo($(".notifications-menu ul.menu"));
+                    });
+                }
+            });
 
             //切换左侧sidebar显示隐藏
             $(document).on("click", ".sidebar-menu li > a", function (e) {

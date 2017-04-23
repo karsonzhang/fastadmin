@@ -1,0 +1,63 @@
+<form id="add-form" role="form" data-toggle="validator" method="POST" action="">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+                <label for="type" class="control-label">{:__('Type')}:</label>
+                {:build_select('row[type]', $typelist, $row['type'], ['id'=>'c-type','class'=>'form-control selectpicker','required'=>''])}
+            </div>
+            <div class="form-group">
+                <label for="title" class="control-label">{:__('Name')}:</label>
+                <input type="text" class="form-control" id="name" name="row[name]" value="{$row.name}" required="required" />
+            </div>
+            <div class="form-group">
+                <label for="nickname" class="control-label">{:__('Nickname')}:</label>
+                <input type="text" class="form-control" id="nickname" name="row[nickname]" value="{$row.nickname}" required="required" />
+            </div>
+            <div class="form-group">
+                <label for="diyname" class="control-label">{:__('Diyname')}:</label>
+                <input type="text" class="form-control" id="diyname" name="row[diyname]" value="{$row.diyname}" required="required" />
+            </div>
+            <div class="form-group">
+                <label for="keywords" class="control-label">{:__('Keywords')}:</label>
+                <input type="text" class="form-control" id="keywords" name="row[keywords]" value="{$row.keywords}" />
+            </div>
+            <div class="form-group">
+                <label for="description" class="control-label">{:__('Description')}:</label>
+                <textarea name="row[description]" id="description" class="form-control" cols="30" rows="3">{$row.description}</textarea>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group form-inline">
+                        <label for="weigh" class="control-label">{:__('Weigh')}:</label>
+                        <input type="text" class="form-control" id="weigh" name="row[weigh]" value="{$row.weigh}" required="required" size="3" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+
+            <div class="form-group">
+                <label for="pid" class="control-label">{:__('Parent')}:</label>
+                {:build_select('row[pid]', $parentlist, $row['pid'], ['id'=>'c-pid','class'=>'form-control selectpicker','required'=>''])}
+            </div>
+            <div class="form-group">
+                <label for="c-flag" class="control-label">{:__('Flag')}:</label>
+                {:build_select('row[flag]', 'h,i,s', $row['flag'], ['id'=>'c-flag','class'=>'form-control selectpicker','required'=>''])}
+            </div>
+            <div class="form-group">
+                <label for="content" class="control-label">{:__('Status')}:</label>
+                <div>
+                    {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')], $row['status'])}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group hidden layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</div>
+</form>

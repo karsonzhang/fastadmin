@@ -25,31 +25,32 @@
                 <a href="{:url('index/index/index')}" target="_blank"><i class="fa fa-home" style="font-size:14px;"></i></a>
             </li>
 
-            <!-- 通栏下拉框样式 -->
             <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-bell-o"></i>
-                    <span class="label label-warning">2</span>
+                    <span class="label label-warning"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="header">You have 10 notifications</li>
+                    <li class="header">{:__('Latest news')}</li>
                     <li>
-                        <!-- 下拉条目样式 -->
+                        <!-- FastAdmin最新更新信息,你可以替换成你自己站点的信息,请注意修改public/assets/js/backend/index.js文件 -->
                         <ul class="menu">
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                                    page and may cause design problems
-                                </a>
-                            </li>
+
                         </ul>
                     </li>
-                    <li class="footer"><a href="#">View all</a></li>
+                    <li class="footer"><a href="#" target="_blank">{:__('View all')}</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-language"></i></a>
+                <ul class="dropdown-menu">
+                    <li class="{$config['language']=='zh-cn'?'active':''}">
+                        <a href="?lang=zh-cn">简体中文</a>
+                    </li>
+                    <li class="{$config['language']=='en'?'active':''}">
+                        <a href="?lang=en">English</a>
+                    </li>
                 </ul>
             </li>
 

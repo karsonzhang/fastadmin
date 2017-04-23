@@ -71,8 +71,8 @@ class Ajax extends Backend
         $controllername = input("controllername");
         Lang::load(APP_PATH . $modulename . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $controllername) . '.php');
         //强制输出JSON Object
-//        $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
-        return jsonp(Lang::get());
+        $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
+        return $result;
     }
 
     /**

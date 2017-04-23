@@ -8,9 +8,9 @@ class Page extends Model
 {
 
     // 自动写入时间戳字段
-    protected $autoWriteTimestamp = false;
-
+    protected $autoWriteTimestamp = 'int';
     // 定义时间戳字段名
-    protected $createTime = false;
-    protected $updateTime = false;
+    protected $createTime = 'createtime';
+    protected $updateTime = 'updatetime';
+
 }

@@ -41,7 +41,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             valign: 'middle',
         },
         config: {
-            firsttd: 'tbody tr td:first-child',
+            firsttd: 'tbody tr td:first-child:not(:has(div.card-views))',
             toolbar: '.toolbar',
             refreshbtn: '.btn-refresh',
             addbtn: '.btn-add',

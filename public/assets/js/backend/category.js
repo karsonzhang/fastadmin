@@ -24,12 +24,12 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     [
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID'},
-                        {field: 'name', title: '名称', align: 'left'},
-                        {field: 'nickname', title: '昵称'},
-                        {field: 'flag', title: '标志', formatter: Table.api.formatter.flag},
-                        {field: 'weigh', title: '权重'},
-                        {field: 'status', title: '状态', formatter: Table.api.formatter.status},
-                        {field: 'operate', title: '操作', events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'name', title: __('Name'), align: 'left'},
+                        {field: 'nickname', title: __('Nickname')},
+                        {field: 'flag', title: __('Flag'), formatter: Table.api.formatter.flag},
+                        {field: 'weigh', title: __('Weigh')},
+                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
+                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
@@ -39,10 +39,15 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
 
         },
         add: function () {
-            Form.api.bindevent($("form[role=form]"));
+            Controller.api.bindevent();
         },
         edit: function () {
-            Form.api.bindevent($("form[role=form]"));
+            Controller.api.bindevent();
+        },
+        api: {
+            bindevent: function () {
+                Form.api.bindevent($("form[role=form]"));
+            }
         }
 
     };

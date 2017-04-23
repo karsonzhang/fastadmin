@@ -84,7 +84,7 @@ class Backend extends Controller
         // 非选项卡时重定向
         if (!IS_AJAX && !IS_ADDTABS && $controllername != 'index' && $actionname == 'index')
         {
-            header("location:" . url('index/index#!' . urlencode($this->request->url()), '', false));
+            header("location:" . url('index/index#!' . urlencode($this->request->baseUrl()), '', false));
             exit;
         }
 

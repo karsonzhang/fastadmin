@@ -90,6 +90,8 @@ return [
     '%d month%s ago'                                        => '%d月前',
     '%d year%s ago'                                         => '%d年前',
     //
+    'Set to normal'                                         => '设为正常',
+    'Set to hidden'                                         => '设为隐藏',
     'Invalid parameters'                                    => '未知参数',
     'No results were found'                                 => '记录未找到',
     'Parameter %s can not be empty'                         => '参数%s不能为空',
