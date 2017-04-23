@@ -17,7 +17,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
 
             //读取FastAdmin的更新信息
             $.ajax({
-                url: 'http://www.fa.com/index/index/news',
+                url: 'http://demo.fastadmin.net/index/index/news',
                 type: 'post',
                 dataType: 'jsonp',
                 success: function (ret) {
