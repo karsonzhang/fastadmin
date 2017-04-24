@@ -93,6 +93,9 @@ class Configvalue extends Backend
         $row = $this->model->get(['id' => $ids]);
         if (!$row)
             $this->error(__('No Results were found'));
+        // 状态为locked时不允许编辑
+        if ($row['status'] == 'locked')
+            $this->error(__('The current item can not be edited'));
         if ($this->request->isPost())
         {
             $this->code = -1;

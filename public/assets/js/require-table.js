@@ -244,20 +244,24 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             // 单元格数据格式化
             formatter: {
                 icon: function (value, row, index) {
+                    value = value.indexOf(" ") > -1 ? value : "fa fa-" + value;
                     //渲染fontawesome图标
-                    return '<i class="fa fa-' + value + '"></i> ' + value;
+                    return '<i class="' + value + '"></i> ' + value;
                 },
                 image: function (value, row, index) {
                     return '<img class="img-rounded img-sm" src="' + (value.indexOf("http") === 0 ? '' : Config.upload.cdnurl) + value + '" />';
                 },
-                status: function (value, row, index) {
-                    //渲染状态
-                    var html = '';
-                    if (value == 'normal') {
-                        html = '<span class="text-success"><i class="fa fa-circle"></i> ' + __('Normal') + '</span>';
-                    } else {
-                        html = '<span class="text-default"><i class="fa fa-circle"></i> ' + __('Hidden') + '</span>';
+                status: function (value, row, index, custom) {
+                    //颜色状态数组,可使用red/yellow/aqua/blue/navy/teal/olive/lime/fuchsia/purple/maroon
+                    var colorArr = {normal: 'success', hidden: 'grey', deleted: 'danger', locked: 'info'};
+                    //如果有自定义状态,可以按需传入
+                    if (typeof custom !== 'undefined') {
+                        colorArr = $.extend(colorArr, custom);
                     }
+                    var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
+                    value = value[0].toUpperCase() + value.substr(1);
+                    //渲染状态
+                    var html = '<span class="text-' + color + '"><i class="fa fa-circle"></i> ' + __(value) + '</span>';
                     return html;
                 },
                 url: function (value, row, index) {
