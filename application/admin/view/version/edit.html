@@ -1,0 +1,58 @@
+<form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label for="c-oldversion" class="control-label col-xs-12 col-sm-2">{:__('Oldversion')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-oldversion" class="form-control" name="row[oldversion]" type="text" value="{$row.oldversion}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-newversion" class="control-label col-xs-12 col-sm-2">{:__('Newversion')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-newversion" class="form-control" name="row[newversion]" type="text" value="{$row.newversion}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-packagesize" class="control-label col-xs-12 col-sm-2">{:__('Packagesize')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-packagesize" class="form-control" name="row[packagesize]" type="text" value="{$row.packagesize}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-content" class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-content" class="form-control" name="row[content]">{$row.content}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-downloadurl" class="control-label col-xs-12 col-sm-2">{:__('Downloadurl')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-downloadurl" class="form-control" name="row[downloadurl]" type="text" value="{$row.downloadurl}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-enforce" class="control-label col-xs-12 col-sm-2">{:__('Enforce')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[enforce]', [1=>__('Yes'), 0=>__('No')], $row['enforce'])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-weigh" class="form-control" name="row[weigh]" type="number" value="{$row.weigh}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')], $row['status'])}
+        </div>
+    </div>
+    <div class="form-group hide layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>
