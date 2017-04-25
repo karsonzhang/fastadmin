@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\general;
 
+use think\Session;
 use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use fast\Random;
@@ -62,6 +63,13 @@ class Profile extends Backend
             {
                 model('admin')->where('id', $this->auth->id)->update($params);
                 AdminLog::record(__('Update'), $params);
+                //因为个人资料面板读取的Session显示，修改自己资料后同时更新Session
+                $admin = Session::get('admin');
+                $admin_id = $admin ? $admin->id : 0;
+                if($this->auth->id==$admin_id){
+                    $admin = model('admin')->get(['id' => $admin_id]);
+                    Session::set("admin", $admin);
+                }
                 $this->code = 1;
             }
         }
