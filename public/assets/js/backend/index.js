@@ -62,6 +62,11 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
             //绑定tabs事件
             $('#nav').addtabs({iframeHeight: "100%"});
 
+            //修复iOS下iframe无法滚动的BUG
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                $(".tab-addtabs").addClass("ios-iframe-fix");
+            }
+
             if (location.hash.indexOf("#!") === 0) {
                 var url = decodeURIComponent(location.hash.substring(2));
                 //刷新页面后将左侧对应的LI展开
@@ -181,7 +186,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
 
                 // 切换子菜单显示和菜单小图标的显示
                 $("[data-menu]").on('click', function () {
-                    console.log($(this).data("menu"));
                     if ($(this).data("menu") == 'show-submenu') {
                         $("ul.sidebar-menu").toggleClass("show-submenu");
                     } else {

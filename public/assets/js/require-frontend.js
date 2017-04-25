@@ -138,7 +138,7 @@ require.config({
 require(['jquery', 'bootstrap', 'config'], function ($, undefined, Config) {
     // 配置语言包的路径
     var paths = {};
-    paths['lang'] = (Config.subdomain == "1" ? '' : '/index') + '/ajax/lang?callback=define&controllername=' + Config.controllername;
+    paths['lang'] = Config.moduleurl + '/ajax/lang?callback=define&controllername=' + Config.controllername;
 
     // 避免目录冲突
     paths['frontend/'] = 'frontend/';
@@ -170,6 +170,8 @@ require(['jquery', 'bootstrap', 'config'], function ($, undefined, Config) {
             //加载相应模块
             require([Config.jsname], function (Controller) {
                 Controller[Config.actionname] != undefined && Controller[Config.actionname]();
+            }, function (e) {
+                // 这里可捕获模块加载的错误
             });
         });
     });

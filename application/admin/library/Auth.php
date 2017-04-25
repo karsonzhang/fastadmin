@@ -214,12 +214,13 @@ class Auth extends \fast\Auth
         $colorArr = ['red', 'green', 'yellow', 'blue', 'teal', 'orange', 'purple'];
         $colorNums = count($colorArr);
         $badgeList = [];
+        $module = request()->module();
         // 生成菜单的badge
         foreach ($params as $k => $v)
         {
             if (stripos($k, '/') === false)
             {
-                $url = '/admin/' . $k;
+                $url = '/' . $module . '/' . $k;
             }
             else
             {
@@ -249,7 +250,7 @@ class Auth extends \fast\Auth
         $userRule = $this->getRuleList();
 
         $select_id = 0;
-        $dashboard = rtrim(url('dashboard/'), '/');
+        $dashboard = '/' . $module . '/dashboard';
         // 必须将结果集转换为数组
         $ruleList = collection(model('AuthRule')->where('ismenu', 1)->order('weigh', 'desc')->cache("__menu__")->select())->toArray();
         foreach ($ruleList as $k => &$v)

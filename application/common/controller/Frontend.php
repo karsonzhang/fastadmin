@@ -59,11 +59,10 @@ class Frontend extends Controller
             'controllername' => $controllername,
             'actionname'     => $actionname,
             'jsname'         => 'frontend/' . str_replace('.', '/', $controllername),
-            'subdomain'      => 0,
+            'moduleurl'      => url("/{$modulename}", '', false),
             'language'       => $lang
         ];
         Lang::load(APP_PATH . $modulename . '/lang/' . $lang . '/' . str_replace('.', '/', $controllername) . '.php');
-
         $this->assign('site', Config::get("site"));
         $this->assign('config', $config);
     }

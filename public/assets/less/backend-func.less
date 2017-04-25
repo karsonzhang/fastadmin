@@ -51,8 +51,12 @@ body {
     .tab-pane {
         height: 100%;
         width: 100%;
-        -webkit-overflow-scrolling:touch;
-        overflow:auto;
+    }
+    &.ios-iframe-fix{
+        .tab-pane {
+            -webkit-overflow-scrolling:touch;
+            overflow: auto;
+        }
     }
 }
 

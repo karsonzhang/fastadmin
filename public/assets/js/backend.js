@@ -56,7 +56,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                 if (url.substr(0, 1) !== "/") {
                     var r = new RegExp('^(?:[a-z]+:)?//', 'i');
                     if (!r.test(url)) {
-                        url = (Config.subdomain == "1" ? "" : "/" + Config.modulename) + "/" + url;
+                        url = Config.moduleurl + "/" + url;
                     }
                 }
                 return url;

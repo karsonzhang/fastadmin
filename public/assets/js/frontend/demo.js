@@ -3,7 +3,7 @@ define(['jquery', 'bootstrap', 'frontend', 'config'], function ($, undefined, Fr
     var Controller = {
         qrcode: function () {
             $("form").submit(function () {
-                $("#qrcodeimg").prop("src", (Config.subdomain == "1" ? '' : '/index') + "/demo/qrcode?" + $(this).serialize());
+                $("#qrcodeimg").prop("src", Config.moduleurl + "/demo/qrcode?" + $(this).serialize());
                 return false;
             });
             $("form").trigger('submit');

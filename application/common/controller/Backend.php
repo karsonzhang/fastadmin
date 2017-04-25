@@ -84,7 +84,11 @@ class Backend extends Controller
         // 非选项卡时重定向
         if (!IS_AJAX && !IS_ADDTABS && $controllername != 'index' && $actionname == 'index')
         {
-            header("location:" . url('index/index#!' . urlencode($this->request->baseUrl()), '', false));
+            $url = $this->request->baseUrl();
+            $start = stripos($url, 'index.php');
+            if ($start !== false)
+                $url = substr($url, 0, $start + 9) . str_replace('.', '/', substr($url, $start + 9));
+            header("location:" . url('index/index#!' . urlencode($url), '', false));
             exit;
         }
 
@@ -128,11 +132,10 @@ class Backend extends Controller
             'controllername' => $controllername,
             'actionname'     => $actionname,
             'jsname'         => 'backend/' . str_replace('.', '/', $controllername),
-            'subdomain'      => 0,
+            'moduleurl'      => url("/{$modulename}", '', false),
             'language'       => $lang
         ];
         Lang::load(APP_PATH . $modulename . '/lang/' . $lang . '/' . str_replace('.', '/', $controllername) . '.php');
-
 
         $this->assign('site', Config::get("site"));
         $this->assign('config', $config);

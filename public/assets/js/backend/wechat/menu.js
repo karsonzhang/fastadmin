@@ -121,7 +121,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'sortable'], function
                     } else if (false) {
 
                     }
-                    console.log(currentItem.children());
                     currentItem.children("a").find("span").text(title.subByte(0, 16));
                     $("input[name='item-title']").val(title);
                     currentItem.attr('data-name', title);
