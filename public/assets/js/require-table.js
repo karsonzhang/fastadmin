@@ -228,9 +228,17 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                     },
                     'click .btn-delone': function (e, value, row, index) {
                         var that = this;
+                        var top = $(that).offset().top - $(window).scrollTop();
+                        var left = $(that).offset().left - $(window).scrollLeft() - 260;
+                        if(top + 154 > $(window).height()){
+                            top = top - 154;
+                        }
+                        if($(window).width()<480){
+                            top = left = undefined;
+                        }
                         var index = Backend.api.layer.confirm(
                                 __('Are you sure you want to delete this item?'),
-                                {icon: 3, title: __('Warning'), offset: [$(that).offset().top, $(that).offset().left - 260], shadeClose: true},
+                                {icon: 3, title: __('Warning'), offset: [top, left], shadeClose: true},
                                 function () {
                                     var table = $(that).closest('table');
                                     Table.api.multi("del", row.id, table, that);
