@@ -76,12 +76,12 @@ class Index extends Backend
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
             if ($result === true)
             {
-                $this->success(__('Login success'), $url);
+                $this->success(__('Login successful'), $url);
                 return;
             }
             else
             {
-                $this->success(__('Username or password is incorrect'), $url);
+                $this->error(__('Username or password is incorrect'), $url);
             }
             return;
         }

@@ -107,6 +107,7 @@ return [
     'Username or password is incorrect'                     => '用户名或密码不正确',
     'Username is incorrect'                                 => '用户名不正确',
     'Password is incorrect'                                 => '密码不正确',
+    'Login successful'                                      => '登录成功!',
     'Verification code is incorrect'                        => '验证码不正确',
     'An unexpected error occurred'                          => '发生了一个意外错误,程序猿正在紧急处理中',
     'This page will be re-directed in %s seconds'           => '页面将在 %s 秒后自动跳转',
