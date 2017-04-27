@@ -173,12 +173,16 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                 var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
 
                 var oldheg = heg + titHeight + btnHeight;
+                var maxheg = 600;
+                if (frame.outerWidth() < 768) {
+                    maxheg = $(window).height() - 28;
+                }
                 // 如果有.layer-footer或窗口小于600则重新排
-                if (layerfooter.size() > 0 || oldheg < 600) {
+                if (layerfooter.size() > 0 || oldheg < maxheg) {
                     var footerHeight = layero.find('.layui-layer-footer').outerHeight() || 0;
                     footerHeight = 0;
-                    if (oldheg >= 600) {
-                        heg = Math.min(600, oldheg) - titHeight - btnHeight - footerHeight;
+                    if (oldheg >= maxheg) {
+                        heg = Math.min(maxheg, oldheg) - titHeight - btnHeight - footerHeight;
                     }
                     layero.css({height: heg + titHeight + btnHeight + footerHeight});
                     layero.find("iframe").css({height: heg});
