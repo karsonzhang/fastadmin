@@ -4,7 +4,7 @@
         {include file="common/meta" /}
     </head>
 
-    <body class="inside-header inside-aside {$Think.const.IS_DIALOG ? 'is-dialog' : ''}">
+    <body class="inside-header inside-aside {:defined(IS_DIALOG) && IS_DIALOG ? 'is-dialog' : ''}">
 
         <div id="main" role="main">
             <div class="tab-content tab-addtabs">
