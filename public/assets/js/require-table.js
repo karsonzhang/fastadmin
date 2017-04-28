@@ -230,10 +230,10 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                         var that = this;
                         var top = $(that).offset().top - $(window).scrollTop();
                         var left = $(that).offset().left - $(window).scrollLeft() - 260;
-                        if(top + 154 > $(window).height()){
+                        if (top + 154 > $(window).height()) {
                             top = top - 154;
                         }
-                        if($(window).width()<480){
+                        if ($(window).width() < 480) {
                             top = left = undefined;
                         }
                         var index = Backend.api.layer.confirm(
