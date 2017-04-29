@@ -15,6 +15,7 @@
     #database .dropdown-menu ul li{margin:3px 0;}
     #database .dropdown-menu.row .col-xs-6{padding:0 5px;}
     #sqlquery {font-size:12px;color:#444;}
+    #resultparent {padding:5px;}
 </style>
 <div class="panel panel-default panel-intro">
     {:build_heading()}
@@ -60,7 +61,7 @@
                         </div>
 
                     </div>
-                    <div class="well" style="padding:5px;">
+                    <div class="well" id="resultparent">
                         <iframe name="resultframe" frameborder="0" id="resultframe" style="height:100%;" width="100%" height="100%"></iframe>
                     </div>
                     <form action="{:url('general.database/query')}" method="post" id="sqlexecute" name="form1" target="resultframe">

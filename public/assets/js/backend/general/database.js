@@ -27,6 +27,11 @@ define(['jquery', 'bootstrap', 'backend'], function ($, undefined, Backend) {
                 $("#database .well").height($(window).height() - $("#database #sqlexecute").height() - $("#ribbon").outerHeight() - $(".panel-heading").outerHeight() - 130);
             });
 
+            //修复iOS下iframe无法滚动的BUG
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                $("#resultparent").css({"-webkit-overflow-scrolling": "touch", "overflow": "auto"});
+            }
+
             $(window).resize();
         }
     };

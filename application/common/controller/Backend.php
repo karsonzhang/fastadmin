@@ -86,8 +86,8 @@ class Backend extends Controller
         {
             $url = $this->request->baseUrl();
             $start = stripos($url, 'index.php');
-            if ($start !== false)
-                $url = substr($url, 0, $start + 9) . str_replace('.', '/', substr($url, $start + 9));
+            $start = $start !== false ? $start : 0;
+            $url = substr($url, 0, $start + 9) . str_replace('.', '/', substr($url, $start + 9));
             header("location:" . url('index/index#!' . urlencode($url), '', false));
             exit;
         }

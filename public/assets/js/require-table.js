@@ -25,6 +25,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             paginationNextText: __("Next"),
             paginationLastText: __("Last"),
             mobileResponsive: true,
+            cardView: true,
             checkOnInit: true,
             extend: {
                 index_url: '',

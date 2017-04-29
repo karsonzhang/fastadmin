@@ -5,7 +5,6 @@ namespace app\index\controller;
 use app\common\controller\Frontend;
 use app\common\model\WechatContext;
 use app\common\model\WechatResponse;
-use EasyWeChat\Message\Text;
 use EasyWeChat\Payment\Order;
 use fast\service\Wechat as WechatService;
 use fast\third\Application;
@@ -142,7 +141,6 @@ class Wechat extends Frontend
         $response = $this->app->server->serve();
         // 将响应输出
         $response->send();
-        return FALSE;
     }
 
     /**
@@ -151,25 +149,6 @@ class Wechat extends Frontend
     public function callback()
     {
 
-    }
-
-    /**
-     * 主动推送消息给用户
-     */
-    public function push()
-    {
-        $openid = $this->request->request("openid");
-        $message = $this->request->request("message");
-        if (!$openid || !$message)
-        {
-            $this->code = 1000;
-            return;
-        }
-        $message = new Text(['content' => $message]);
-        $result = $this->app->staff->message($message)->to($openid)->send();
-        $this->code = 0;
-        echo json_encode(['code' => $this->code]);
-        return FALSE;
     }
 
     /**
@@ -201,19 +180,8 @@ class Wechat extends Frontend
             // 用户是否支付成功
             if ($successful)
             {
-                // 不是已经支付状态则修改为已经支付状态
-                Order::update(['paytime' => time(), 'paytype' => 'wechat', 'transaction_id' => $notify->transaction_id, 'status' => FA_STATUS_PAID], $orderinfo['id']);
-                $userinfo = User::get($orderinfo['user_id']);
-                if ($userinfo)
-                {
-                    $data = [
-                        'first'            => '你好!' . $userinfo['nickname'] . '，我们已收到您的货款，开始为您印刷书本，请耐心等待: )',
-                        'orderMoneySum'    => $orderinfo['saleamount'],
-                        'orderProductName' => $orderinfo['title'],
-                        'Remark'           => '如有问题请直接在微信留言，我们将第一时间为您服务！',
-                    ];
-                    notice($userinfo['id'], $data, url('order/info/' . $orderinfo['id'], 1), 'lABqvSfOD1nJ6mrVVY1vSBpKr8NpQf1MzqgdN0M_Ifo');
-                }
+                // 请在这里编写处理成功的处理逻辑
+
                 return true; // 返回处理完成
             }
             else
@@ -223,7 +191,6 @@ class Wechat extends Frontend
         });
 
         $response->send();
-        return FALSE;
     }
 
 }
