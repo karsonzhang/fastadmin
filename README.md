@@ -49,6 +49,8 @@ http://demo.fastadmin.net
 
 在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
 
+QQ群: 636393962
+
 Email: (karsonzhang#163.com, 把#换成@)
 
 weibo: @karsonzhang
