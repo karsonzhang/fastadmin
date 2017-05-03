@@ -253,6 +253,8 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             // 单元格数据格式化
             formatter: {
                 icon: function (value, row, index) {
+                    if (!value)
+                        return '';
                     value = value.indexOf(" ") > -1 ? value : "fa fa-" + value;
                     //渲染fontawesome图标
                     return '<i class="' + value + '"></i> ' + value;

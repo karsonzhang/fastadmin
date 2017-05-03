@@ -88,6 +88,11 @@ class Backend extends Controller
             $start = stripos($url, 'index.php');
             $start = $start !== false ? $start : 0;
             $url = substr($url, 0, $start + 9) . str_replace('.', '/', substr($url, $start + 9));
+            // 如果是域名部署则加上前缀
+            if (Config::get('url_domain_deploy'))
+            {
+                $url = rtrim(url('/'), '/') . $url;
+            }
             header("location:" . url('index/index#!' . urlencode($url), '', false));
             exit;
         }
@@ -202,12 +207,26 @@ class Backend extends Controller
                     break;
                 case 'IS NULL':
                 case 'IS NOT NULL':
-                    $where[] = [$k, str_replace(' NULL', '', $sym), NULL];
+                    $where[] = [$k, strtolower(str_replace('IS ', '', $sym))];
                     break;
                 default:
                     break;
             }
         }
+        $where = function($query) use ($where)
+        {
+            foreach ($where as $k => $v)
+            {
+                if (is_array($v))
+                {
+                    call_user_func_array([$query, 'where'], $v);
+                }
+                else
+                {
+                    $query->where($v);
+                }
+            }
+        };
         return [$where, $sort, $order, $offset, $limit];
     }
 

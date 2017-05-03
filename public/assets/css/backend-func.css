@@ -460,6 +460,14 @@ body {
 .layui-layer-setwin .layui-layer-close1:after {
   content: "\e626";
 }
+.layui-layer-setwin .layui-layer-close2,
+.layui-layer-setwin .layui-layer-close2:hover {
+  background: url('../libs/layer/build/skin/default/icon.png') no-repeat -149px -31px !important;
+}
+.layui-layer-setwin .layui-layer-close2:after,
+.layui-layer-setwin .layui-layer-close2:hover:after {
+  display: none;
+}
 /*手机版样式*/
 @media (max-width: 480px) {
   .nav-addtabs {
