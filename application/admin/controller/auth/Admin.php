@@ -96,7 +96,7 @@ class Admin extends Backend
             {
                 if ($params['password'])
                 {
-                    $params['salt'] = Random::basic(4);
+                    $params['salt'] = Random::alnum();
                     $params['password'] = md5(md5($params['password']) . $params['salt']);
                 }
                 $row->save($params);

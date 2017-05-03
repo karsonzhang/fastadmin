@@ -32,6 +32,7 @@ class Configvalue extends Model
         $uploadcfg = $uploadcfg ? $uploadcfg : [];
         $uploadcfg = array_merge($uploadcfg, $params);
         $uploadcfg['bucket'] = isset($uploadcfg['bucket']) ? $uploadcfg['bucket'] : '';
+        $multiple = isset($uploadcfg['multiple']) ? $uploadcfg['multiple'] : false;
         $savekey = isset($uploadcfg['savekey']) ? $uploadcfg['savekey'] : '';
         $uploadcfg['save-key'] = isset($uploadcfg['save-key']) ? $uploadcfg['save-key'] : $savekey;
         $expiration = time() + (isset($uploadcfg['expire']) ? $uploadcfg['expire'] : 600);
@@ -68,6 +69,7 @@ class Configvalue extends Model
             'maxsize'   => isset($uploadcfg['maxsize']) ? $uploadcfg['maxsize'] : '',
             'mimetype'  => isset($uploadcfg['mimetype']) ? $uploadcfg['mimetype'] : '',
             'multipart' => $multipart,
+            'multiple'  => $multiple,
         ];
     }
 

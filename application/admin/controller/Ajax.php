@@ -4,7 +4,9 @@ namespace app\admin\controller;
 
 use app\common\controller\Backend;
 use fast\Http;
+use fast\Random;
 use fast\Tree;
+use think\Config;
 use think\Db;
 use think\Lang;
 
@@ -181,12 +183,58 @@ class Ajax extends Backend
     {
         $this->code = -1;
         $file = $this->request->file('file');
-        $uploaddir = '/public/uploads/';
-        $info = $file->move(ROOT_PATH . $uploaddir);
-        if ($info)
+        $upload = Config::get('upload');
+
+        preg_match('/(\d+)(\w+)/', $upload['maxsize'], $matches);
+        $type = strtolower($matches[2]);
+        $typeDict = ['b' => 0, 'k' => 1, 'kb' => 1, 'm' => 2, 'mb' => 2, 'gb' => 3, 'g' => 3];
+        $size = (int) $upload['maxsize'] * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0);
+        $fileInfo = $file->getInfo();
+        $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
+        $suffix = $suffix ? $suffix : 'file';
+        $replaceArr = [
+            '{year}'     => date("Y"),
+            '{mon}'      => date("m"),
+            '{day}'      => date("d"),
+            '{hour}'     => date("H"),
+            '{min}'      => date("i"),
+            '{sec}'      => date("s"),
+            '{random}'   => Random::alnum(16),
+            '{random32}' => Random::alnum(32),
+            '{filename}' => $suffix ? substr($fileInfo['name'], 0, strripos($fileInfo['name'], '.')) : $fileInfo['name'],
+            '{suffix}'   => $suffix,
+            '{.suffix}'  => $suffix ? '.' . $suffix : '',
+            '{filemd5}'  => md5_file($fileInfo['tmp_name']),
+        ];
+        $savekey = $upload['savekey'];
+        $savekey = str_replace(array_keys($replaceArr), array_values($replaceArr), $savekey);
+
+        $uploadDir = substr($savekey, 0, strripos($savekey, '/') + 1);
+        $fileName = substr($savekey, strripos($savekey, '/') + 1);
+        //
+        $splInfo = $file->validate(['size' => $size])->move(ROOT_PATH . '/public' . $uploadDir, $fileName);
+        if ($splInfo)
         {
+            $imagewidth = $imageheight = 0;
+            if (in_array($suffix, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf']))
+            {
+                $imgInfo = getimagesize($splInfo->getPathname());
+                $imagewidth = isset($imgInfo[0]) ? $imgInfo[0] : $imagewidth;
+                $imageheight = isset($imgInfo[1]) ? $imgInfo[1] : $imageheight;
+            }
+            $params = array(
+                'filesize'    => $fileInfo['size'],
+                'imagewidth'  => $imagewidth,
+                'imageheight' => $imageheight,
+                'imagetype'   => $suffix,
+                'imageframes' => 0,
+                'mimetype'    => $fileInfo['type'],
+                'url'         => $uploadDir . $splInfo->getSaveName(),
+                'uploadtime'  => time()
+            );
+            model("attachment")->create(array_filter($params));
             $this->code = 200;
-            $this->data = $uploaddir . $info->getSaveName();
+            $this->data = $uploadDir . $splInfo->getSaveName();
         }
         else
         {

@@ -15,6 +15,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                     var maxsize = $(this).data("maxsize");
                     var mimetype = $(this).data("mimetype");
                     var multipart = $(this).data("multipart");
+                    var multiple = $(this).data("multiple");
                     //上传URL
                     url = url ? url : Config.upload.uploadurl;
                     //最大可上传
@@ -23,10 +24,13 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                     mimetype = mimetype ? mimetype : Config.upload.mimetype;
                     //请求的表单参数
                     multipart = multipart ? multipart : Config.upload.multipart;
+                    //是否支持批量上传
+                    multiple = multiple ? multiple : Config.upload.multiple;
+                    //生成Plupload实例
                     Upload.list[id] = new Plupload.Uploader({
                         runtimes: 'html5,flash,silverlight,html4',
-                        multi_selection: false, //是否允许多选批量上传
-                        browse_button: id, // you can pass an id...
+                        multi_selection: multiple, //是否允许多选批量上传
+                        browse_button: id, // 浏览按钮的ID
                         container: $(this).parent().get(0), //取按钮的上级元素
                         flash_swf_url: '/assets/libs/plupload/js/Moxie.swf',
                         silverlight_xap_url: '/assets/libs/plupload/js/Moxie.xap',
@@ -63,19 +67,19 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                                 //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML += (' [Url]: ' + '<a href="' + url + '" target="_blank">' + url + '</a>');
                                 //这里建议不修改
                                 try {
-                                    var data = JSON.parse(info.response);
-                                    if (data.hasOwnProperty('code')) {
-                                        data.code = data.code == 200 ? 0 : data.code;
-                                        if (data.hasOwnProperty("url")) {
-                                            data.content = data.url;
+                                    var response = JSON.parse(info.response);
+                                    if (response.hasOwnProperty('code')) {
+                                        response.code = response.code == 200 ? 1 : response.code;
+                                        if (response.hasOwnProperty("url")) {
+                                            response.data = response.url;
                                         }
-                                        $("input[data-plupload-id='" + id + "-text']").val(data.content);
+                                        $("input[data-plupload-id='" + id + "-text']").val(response.data);
                                         var afterUpload = $("#" + id).data("after-upload");
                                         if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
-                                            Upload.api.custom[afterUpload].call(info, id, data);
+                                            Upload.api.custom[afterUpload].call(info, id, response);
                                         }
                                         if (typeof onAfterUpload == 'function') {
-                                            onAfterUpload.call(info, id, data);
+                                            onAfterUpload.call(info, id, response);
                                         }
                                     } else {
                                         Toastr.error(e.message + "(code:-2)");
