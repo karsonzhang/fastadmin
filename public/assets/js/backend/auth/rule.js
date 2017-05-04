@@ -95,10 +95,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                         var data = get_children($("#treeview").jstree('get_json'));
                                         Backend.api.ajax({url: "auth/rule/rebuild", data: {step: 2, data: data}}, function (content) {
                                             Backend.api.layer.close(index);
-                                            Backend.api.success(function () {
-                                                //刷新页面
-                                                top.location.reload();
-                                            });
+                                            top.location.reload();
                                         });
                                     }
                                 });

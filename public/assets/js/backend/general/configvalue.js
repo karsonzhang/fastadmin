@@ -42,7 +42,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         url: 'ajax/clearcache'
                     }, function (ret) {
                         Layer.closeAll();
-                        Backend.api.success();
+                        Toastr.success(__('Operation completed'));
                     });
                 });
             });

@@ -39,6 +39,10 @@ return [
      */
     'mimetype'  => '*',
     /**
+     * 是否支持批量上传
+     */
+    'multiple'  => true,
+    /**
      * 又拍云操作员用户名
      */
     'username'  => '',

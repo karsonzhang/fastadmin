@@ -26,20 +26,21 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                 options = $.extend({
                     type: "POST",
                     dataType: 'json',
-                    success: function (data) {
+                    success: function (ret) {
                         Backend.api.layer.close(index);
-                        if (data.hasOwnProperty("code")) {
-                            var content = data.hasOwnProperty("content") && data.content != "" ? data.content : "";
-                            if (data.code === 1) {
+                        if (ret.hasOwnProperty("code")) {
+                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
                                 if (typeof success == 'function') {
-                                    var onAfterResult = success.call(undefined, content);
+                                    var onAfterResult = success.call(undefined, data);
                                     if (!onAfterResult) {
                                         return false;
                                     }
                                 }
-                                Toastr.success(content ? content : __('Operation completed'));
+                                Toastr.success(msg ? msg : __('Operation completed'));
                             } else {
-                                Toastr.error(content ? content : __('Operation failed'));
+                                Toastr.error(msg ? msg : __('Operation failed'));
                             }
                         } else {
                             Toastr.error(__('Unknown data format'));
@@ -87,14 +88,23 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                     processData: false,
                     type: 'POST',
                     dataType: 'json',
-                    success: function (data) {
-                        if (data.hasOwnProperty("code")) {
-                            var content = data.hasOwnProperty("content") && data.content != "" ? data.content : "";
-                            if (data.code === 1) {
-                                $('.summernote').summernote("insertImage", data.content, 'filename');
+                    success: function (ret) {
+                        if (ret.hasOwnProperty("code")) {
+                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
+                                if (typeof callback == 'function') {
+                                    var onAfterResult = success.call(undefined, data);
+                                    if (!onAfterResult) {
+                                        return false;
+                                    }
+                                }
+                                if ($('.summernote').size() > 0 && data && typeof data.url !== 'undefined') {
+                                    $('.summernote').summernote("insertImage", data.url, 'filename');
+                                }
                                 Toastr.success(__('Operation completed'));
                             } else {
-                                Toastr.error(content ? content : __('Operation failed'));
+                                Toastr.error(msg ? msg : __('Operation failed'));
                             }
                         } else {
                             Toastr.error(__('Unknown data format'));

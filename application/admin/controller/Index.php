@@ -101,7 +101,7 @@ class Index extends Backend
     public function logout()
     {
         $this->auth->logout();
-        $this->success(__('Logout success!'), 'index/login');
+        $this->success(__('Logout successful'), 'index/login');
         return;
     }
 

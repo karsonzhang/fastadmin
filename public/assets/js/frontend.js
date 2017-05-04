@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefined, Toastr, Layer, Config) {
+define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($, undefined, Toastr, Layer, Lang, Config) {
     var Frontend = {
         config: {
             //toastr默认配置
@@ -26,20 +26,21 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefi
                 options = $.extend({
                     type: "POST",
                     dataType: 'json',
-                    success: function (data) {
+                    success: function (ret) {
                         Frontend.api.layer.close(index);
-                        if (data.hasOwnProperty("code")) {
-                            var content = data.hasOwnProperty("content") && data.content != "" ? data.content : "";
-                            if (data.code == 0) {
+                        if (ret.hasOwnProperty("code")) {
+                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
                                 if (typeof success == 'function') {
-                                    var onAfterResult = success.call(undefined, content);
+                                    var onAfterResult = success.call(undefined, data);
                                     if (!onAfterResult) {
                                         return false;
                                     }
                                 }
-                                Toastr.success(content ? content : __('Operation completed'));
+                                Toastr.success(msg ? msg : __('Operation completed'));
                             } else {
-                                Toastr.error(content ? content : __('Operation failed'));
+                                Toastr.error(msg ? msg : __('Operation failed'));
                             }
                         } else {
                             Toastr.error(__('Unknown data format'));
@@ -56,10 +57,24 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefi
                 if (url.substr(0, 1) !== "/") {
                     var r = new RegExp('^(?:[a-z]+:)?//', 'i');
                     if (!r.test(url)) {
-                        url = (Config.moduleurl) + "/" + url;
+                        url = Config.moduleurl + "/" + url;
                     }
                 }
                 return url;
+            },
+            //查询Url参数
+            query: function (name, url) {
+                if (!url) {
+                    url = window.location.href;
+                }
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                        results = regex.exec(url);
+                if (!results)
+                    return null;
+                if (!results[2])
+                    return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
             },
             //上传文件
             upload: function (file, callback) {
@@ -73,14 +88,23 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefi
                     processData: false,
                     type: 'POST',
                     dataType: 'json',
-                    success: function (data) {
-                        if (data.hasOwnProperty("code")) {
-                            var content = data.hasOwnProperty("content") && data.content != "" ? data.content : "";
-                            if (data.code == 0) {
-                                $('.summernote').summernote("insertImage", data.content, 'filename');
+                    success: function (ret) {
+                        if (ret.hasOwnProperty("code")) {
+                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
+                                if (typeof callback == 'function') {
+                                    var onAfterResult = success.call(undefined, data);
+                                    if (!onAfterResult) {
+                                        return false;
+                                    }
+                                }
+                                if ($('.summernote').size() > 0 && data && typeof data.url !== 'undefined') {
+                                    $('.summernote').summernote("insertImage", data.url, 'filename');
+                                }
                                 Toastr.success(__('Operation completed'));
                             } else {
-                                Toastr.error(content ? content : __('Operation failed'));
+                                Toastr.error(msg ? msg : __('Operation failed'));
                             }
                         } else {
                             Toastr.error(__('Unknown data format'));
@@ -152,7 +176,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefi
                 }
                 return Frontend.api.layer.msg(__('Operation completed'), $.extend({
                     offset: 0, icon: 1
-                }, type ? {} : options));
+                }, type ? {} : options), callback);
             },
             error: function (options, callback) {
                 var type = typeof options === 'function';
@@ -161,7 +185,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefi
                 }
                 return Frontend.api.layer.msg(__('Operation failed'), $.extend({
                     offset: 0, icon: 2
-                }, type ? {} : options));
+                }, type ? {} : options), callback);
             },
             toastr: Toastr,
             layer: Layer
@@ -170,7 +194,26 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefi
             var args = arguments,
                     string = args[0],
                     i = 1;
-            string = Lang[string] != undefined ? Lang[string] : string;
+            string = string.toLowerCase();
+            //string = typeof Lang[string] != 'undefined' ? Lang[string] : string;
+            if (typeof Lang[string] != 'undefined') {
+                if (typeof Lang[string] == 'object')
+                    return Lang[string];
+                string = Lang[string];
+            } else if (string.indexOf('.') !== -1) {
+                var arr = string.split('.');
+                var current = Lang[arr[0]];
+                for (var i = 1; i < arr.length; i++) {
+                    current = typeof current[arr[i]] != 'undefined' ? current[arr[i]] : '';
+                    if (typeof current != 'object')
+                        break;
+                }
+                if (typeof current == 'object')
+                    return current;
+                string = current;
+            } else {
+                string = args[0];
+            }
             return string.replace(/%((%)|s|d)/g, function (m) {
                 // m is the matched format, e.g. %s, %d
                 var val = null;
@@ -199,6 +242,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'config'], function ($, undefi
     window.Toastr = Toastr;
     //将语言方法暴露到全局中去
     window.__ = Frontend.lang;
+    //将Frontend渲染至全局,以便于在子框架中调用
+    window.Frontend = Frontend;
     //Toastr定义
     Toastr.options = Frontend.config.toastr;
     return Frontend;

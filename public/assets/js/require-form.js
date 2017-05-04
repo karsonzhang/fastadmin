@@ -29,28 +29,29 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'bootstr
                     url: url,
                     data: form.serialize(),
                     dataType: 'json',
-                    success: function (data) {
-                        if (data.hasOwnProperty("code")) {
-                            var content = data.hasOwnProperty("content") && data.content != "" ? data.content : "";
-                            if (data.code === 1) {
+                    success: function (ret) {
+                        if (ret.hasOwnProperty("code")) {
+                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
                                 $('.form-group', form).removeClass('has-feedback has-success has-error');
                                 //成功提交后事件
                                 var afterSubmit = form.data("after-submit");
                                 //元素绑定函数
                                 if (afterSubmit && typeof Form.api.custom[afterSubmit] == 'function') {
-                                    if (!Form.api.custom[afterSubmit].call(form, content)) {
+                                    if (!Form.api.custom[afterSubmit].call(form, data)) {
                                         return false;
                                     }
                                 }
                                 //自定义函数
                                 if (typeof onAfterSubmit == 'function') {
-                                    if (!onAfterSubmit.call(form, content)) {
+                                    if (!onAfterSubmit.call(form, data)) {
                                         return false;
                                     }
                                 }
-                                Toastr.success(content ? content : __('Operation completed'));
+                                Toastr.success(msg ? msg : __('Operation completed'));
                             } else {
-                                Toastr.error(content ? content : __('Operation failed'));
+                                Toastr.error(msg ? msg : __('Operation failed'));
                             }
                         } else {
                             Toastr.error(__('Unknown data format'));
@@ -67,19 +68,16 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'bootstr
                     if (e.isDefaultPrevented()) {
                         //验证不通过
                         Toastr.error("验证失败,请检查表单输入是否正确");
-                        //Backend.api.error();
                     } else {
                         //验证通过提交表单
-                        Form.api.submit(form, onBeforeSubmit, function (content) {
+                        Form.api.submit(form, onBeforeSubmit, function (data) {
                             if (typeof onAfterSubmit == 'function') {
-                                if (!onAfterSubmit.call(form, content)) {
+                                if (!onAfterSubmit.call(form, data)) {
                                     return false;
                                 }
                             }
                             //提示及关闭当前窗口
-                            parent.Layer.msg(__('Operation completed'), {
-                                offset: 0, icon: 1
-                            });
+                            parent.Toastr.success(__('Operation completed'));
                             parent.$(".btn-refresh").trigger("click");
                             var index = parent.Layer.getFrameIndex(window.name);
                             parent.Layer.close(index);
@@ -114,8 +112,8 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'bootstr
                                 remote: {
                                     url: '/ajax/typeahead?search=%QUERY&field=' + $(input).attr("name"),
                                     wildcard: '%QUERY',
-                                    transform: function (data) {
-                                        return data.content.searchlist;
+                                    transform: function (ret) {
+                                        return ret.data.searchlist;
                                     }
                                 }
                             });
@@ -215,7 +213,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'bootstr
                                     //依次上传图片
                                     for (var i = 0; i < files.length; i++) {
                                         Upload.api.send(files[i], function (data) {
-                                            var url = Config.upload.cdnurl + data.content;
+                                            var url = Config.upload.cdnurl + data.url;
                                             $(that).summernote("insertImage", url, 'filename');
                                         });
                                     }

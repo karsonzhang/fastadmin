@@ -67,19 +67,19 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                                 //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML += (' [Url]: ' + '<a href="' + url + '" target="_blank">' + url + '</a>');
                                 //这里建议不修改
                                 try {
-                                    var response = JSON.parse(info.response);
-                                    if (response.hasOwnProperty('code')) {
-                                        response.code = response.code == 200 ? 1 : response.code;
-                                        if (response.hasOwnProperty("url")) {
-                                            response.data = response.url;
-                                        }
-                                        $("input[data-plupload-id='" + id + "-text']").val(response.data);
+                                    var ret = JSON.parse(info.response);
+                                    if (ret.hasOwnProperty('code')) {
+                                        ret.data = ret.code == 200 ? ret : ret.data;
+                                        ret.code = ret.code == 200 ? 1 : ret.code;
+                                        var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
+                                        var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                                        $("input[data-plupload-id='" + id + "-text']").val(data.url);
                                         var afterUpload = $("#" + id).data("after-upload");
                                         if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
-                                            Upload.api.custom[afterUpload].call(info, id, response);
+                                            Upload.api.custom[afterUpload].call(info, id, data);
                                         }
                                         if (typeof onAfterUpload == 'function') {
-                                            onAfterUpload.call(info, id, response);
+                                            onAfterUpload.call(info, id, data);
                                         }
                                     } else {
                                         Toastr.error(e.message + "(code:-2)");
@@ -111,22 +111,21 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                     processData: false,
                     type: 'POST',
                     dataType: 'json',
-                    success: function (data) {
-                        if (data.hasOwnProperty("code")) {
-                            data.code = data.code == 200 ? 1 : data.code;
-                            if (data.hasOwnProperty("url")) {
-                                data.content = data.url;
-                            }
-                            var content = data.hasOwnProperty("content") && data.content != "" ? data.content : "";
-                            if (data.code === 1) {
+                    success: function (ret) {
+                        if (ret.hasOwnProperty("code")) {
+                            ret.data = ret.code == 200 ? ret : ret.data;
+                            ret.code = ret.code == 200 ? 1 : ret.code;
+                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
                                 // 如果回调存在,则直接调用回调
                                 if (typeof callback == 'function') {
                                     callback.call(this, data);
                                 } else {
-                                    Toastr.success(content ? content : __('Operation completed'));
+                                    Toastr.success(msg ? msg : __('Operation completed'));
                                 }
                             } else {
-                                Toastr.error(content ? content : __('Operation failed'));
+                                Toastr.error(msg ? msg : __('Operation failed'));
                             }
                         } else {
                             Toastr.error(__('Unknown data format'));

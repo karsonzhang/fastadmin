@@ -133,7 +133,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'sortable'], function
                 $.post("wechat/menu/edit", {menu: JSON.stringify(getMenuList())}, function (data) {
                     if (data['code'] == 1) {
                     } else {
-                        Backend.api.error();
+                        Toastr.error(__('Operation failed'));
                     }
                 }, 'json');
             };
@@ -253,11 +253,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'sortable'], function
                 updateChangeMenu();
             });
             $(document).on('click', "#menuSyn", function () {
-                $.post("wechat/menu/sync", {}, function (data) {
-                    if (data['code'] == 1) {
+                $.post("wechat/menu/sync", {}, function (ret) {
+
+                    var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                    if (ret.code == 1) {
                         Backend.api.toastr.success('菜单同步更新成功，生效时间看微信官网说明，或者你重新关注微信号！');
                     } else {
-                        Backend.api.toastr.error(data['content']);
+                        Backend.api.toastr.error(msg ? msg : __('Operation failed'));
                     }
                 }, 'json');
             });

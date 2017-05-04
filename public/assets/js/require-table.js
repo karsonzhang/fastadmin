@@ -196,7 +196,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                                     table: table.bootstrapTable('getOptions').extend.table
                                 }
                             };
-                            Backend.api.ajax(options, function (content) {
+                            Backend.api.ajax(options, function (data) {
                                 Toastr.success(__('Operation completed'));
                                 table.bootstrapTable('refresh');
                             });
@@ -215,7 +215,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                 var url = action == "del" ? options.extend.del_url : options.extend.multi_url;
                 url = url + "/ids/" + ($.isArray(ids) ? ids.join(",") : ids);
                 var options = {url: url, data: {action: action, ids: ids, params: element ? $(element).data("params") : ''}};
-                Backend.api.ajax(options, function (content) {
+                Backend.api.ajax(options, function (data) {
                     Toastr.success(__('Operation completed'));
                     table.bootstrapTable('refresh');
                 });

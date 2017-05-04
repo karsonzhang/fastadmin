@@ -2,6 +2,8 @@
 
 namespace app\admin\command;
 
+use PDO;
+use think\Config;
 use think\console\Command;
 use think\console\Input;
 use think\console\input\Option;
@@ -35,6 +37,12 @@ class Install extends Command
         }
 
         $sql = file_get_contents(__DIR__ . '/Install/fastadmin.sql');
+
+        // 先尝试能否自动创建数据
+        $config = Config::get('database');
+        $pdo = new PDO("{$config['type']}:host={$config['hostname']}", $config['username'], $config['password']);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->query("CREATE DATABASE IF NOT EXISTS `{$config['database']}` CHARACTER SET utf8 COLLATE utf8_general_ci;");
 
         // 查询一次SQL,判断连接是否正常
         Db::execute("SELECT 1");

@@ -248,7 +248,6 @@ class Auth extends \fast\Auth
 
         // 读取管理员当前拥有的权限节点
         $userRule = $this->getRuleList();
-
         $select_id = 0;
         $dashboard = '/' . $module . '/dashboard';
         // 必须将结果集转换为数组
@@ -256,7 +255,10 @@ class Auth extends \fast\Auth
         foreach ($ruleList as $k => &$v)
         {
             if (!in_array($v['name'], $userRule))
+            {
+                unset($ruleList[$k]);
                 continue;
+            }
             $select_id = $v['name'] == $dashboard ? $v['id'] : $select_id;
             $v['url'] = $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
