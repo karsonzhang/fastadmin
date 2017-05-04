@@ -84,12 +84,13 @@ class Group extends Backend
             if (!in_array($params['pid'], $this->childrenIds))
             {
                 $this->code = -1;
+                $this->msg = __('');
                 return;
             }
             $parentmodel = model("AuthGroup")->get($params['pid']);
             if (!$parentmodel)
             {
-                $this->code = -1;
+                $this->msg = __('The parent group can not found');
                 return;
             }
             // 父级别的规则节点
@@ -126,10 +127,10 @@ class Group extends Backend
         {
             $this->code = -1;
             $params = $this->request->post("row/a");
-            // 复节点不能是它自身的子节点
+            // 父节点不能是它自身的子节点
             if (!in_array($params['pid'], $this->childrenIds))
             {
-                $this->code = -1;
+                $this->msg = __('The parent group can not be its own child');
                 return;
             }
             $params['rules'] = explode(',', $params['rules']);
@@ -137,7 +138,7 @@ class Group extends Backend
             $parentmodel = model("AuthGroup")->get($params['pid']);
             if (!$parentmodel)
             {
-                $this->code = -1;
+                $this->msg = __('The parent group can not found');
                 return;
             }
             // 父级别的规则节点
@@ -199,6 +200,11 @@ class Group extends Backend
                     $ids = array_diff($ids, [$v['id']]);
                     continue;
                 }
+            }
+            if (!$ids)
+            {
+                $this->msg = __('You can not delete group that contain child group and administrators');
+                return;
             }
             $count = $this->model->where('id', 'in', $ids)->delete();
             if ($count)

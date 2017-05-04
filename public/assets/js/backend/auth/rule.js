@@ -41,69 +41,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 为表格绑定事件
             Table.api.bindevent(table);//当内容渲染完成后
 
-            $(document).on("click", ".btn-rebuild", function () {
-                Backend.api.layer.confirm(
-                        __('Are you sure you want to rebuild node?'),
-                        {icon: 3, title: __('Warning'), offset: 0},
-                        function (index) {
-                            Backend.api.layer.close(index);
-                            Backend.api.ajax({url: "auth/rule/rebuild", data: {step: 1}}, function (content) {
-                                table.bootstrapTable('refresh');
-                                var msg = '<div style="padding:20px;"><div class="alert alert-warning alert-light">' + __('You can change the node name if you want to') + '</div><label>' + __('Node list') + '</label><div id="treeview"></div></div>';
-                                Backend.api.layer.open({
-                                    type: 1,
-                                    content: msg,
-                                    area: ['600px', '400px'],
-                                    scrollbar: false,
-                                    success: function (layero, index) {
-                                        require(['jstree'], function () {
-                                            $("#treeview", $(layero)).jstree({
-                                                "themes": {"stripes": true},
-                                                "types": {
-                                                    "menu": {
-                                                        "icon": "fa fa-folder-open",
-                                                        "valid_children": []
-                                                    },
-                                                    "file": {
-                                                        "icon": "fa fa-file-o",
-                                                        "valid_children": []
-                                                    }
-                                                },
-                                                "plugins": ["types"],
-                                                "core": {
-                                                    'check_callback': true,
-                                                    "data": content
-                                                }
-                                            }).bind("select_node.jstree", function (e, data) {
-                                                var ref = $("#treeview", layero).jstree(true);
-                                                ref.edit(data.node);
-                                            });
-                                        });
-                                    }
-                                    ,
-                                    btn: [__('OK'), __('Cancel')],
-                                    yes: function (index, layero) {
-                                        //递归获取所有节点信息
-                                        var get_children = function (node) {
-                                            var data = [];
-                                            $.each(node, function (i, j) {
-                                                data.push({id: j.id, name: j.text});
-                                                data = data.concat(get_children(j.children));
-                                            });
-                                            return data;
-                                        };
-                                        var data = get_children($("#treeview").jstree('get_json'));
-                                        Backend.api.ajax({url: "auth/rule/rebuild", data: {step: 2, data: data}}, function (content) {
-                                            Backend.api.layer.close(index);
-                                            top.location.reload();
-                                        });
-                                    }
-                                });
-
-                            });
-                        }
-                );
-            });
             //默认隐藏所有子节点
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
                 $("a.btn[data-id][data-pid][data-pid!=0]").closest("tr").hide();
