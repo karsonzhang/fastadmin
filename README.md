@@ -35,7 +35,7 @@ http://demo.fastadmin.net
 提　示：演示站数据无法进行删除和修改，只能新增，完整体验请下载源码安装体验
 
 ## **界面截图**
-![控制台](https://git.oschina.net/uploads/images/2017/0411/113717_e99ff3e7_10933.png?1 "控制台")
+![控制台](https://wx2.sinaimg.cn/large/718e40a3gy1ff9k65lrumj21400pdjvk.jpg "控制台")
 
 ## **问题反馈**
 
