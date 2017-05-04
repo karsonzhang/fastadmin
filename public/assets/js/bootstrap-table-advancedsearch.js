@@ -87,8 +87,24 @@
                     htmlForm.push(sprintf('<select class="form-control" name="field-%s" data-name="%s">%s</select>', vObjCol.field, vObjCol.field, selectHtml));
                     htmlForm.push('</div>');
                 }
+
                 htmlForm.push('<div class="col-sm-6">');
-                htmlForm.push(sprintf('<input type="text" class="form-control input-md" name="%s" placeholder="%s" id="%s">', vObjCol.field, vObjCol.title, vObjCol.field));
+                if (vObjCol.searchList) {
+                    if (typeof vObjCol.searchList == 'function') {
+                        htmlForm.push(vObjCol.searchList.call(this, vObjCol));
+                    } else {
+                        var isArray = vObjCol.searchList.constructor === Array;
+                        var searchList = [];
+                        searchList.push(sprintf('<option value="">%s</option>', $.fn.bootstrapTable.locales.formatAdvancedChoose()));
+                        $.each(vObjCol.searchList, function (key, value) {
+                            searchList.push("<option value='" + (isArray ? value : key) + "'>" + value + "</option>");
+                        });
+                        htmlForm.push(sprintf('<select class="form-control" name="%s">%s</select>', vObjCol.field, searchList.join('')));
+                    }
+                } else {
+                    htmlForm.push(sprintf('<input type="text" class="form-control input-md" name="%s" placeholder="%s" id="%s">', vObjCol.field, vObjCol.title, vObjCol.field));
+                }
+
                 htmlForm.push('</div>');
                 htmlForm.push('</div>');
             }
@@ -146,6 +162,9 @@
         },
         formatAdvancedCloseButton: function () {
             return "Close";
+        },
+        formatAdvancedChoose: function () {
+            return "Choose";
         }
     });
 
@@ -240,7 +259,10 @@
             $("#avdSearchModalContent_" + this.options.idTable + " select").each(function () {
                 var name = $(this).data("name");
                 var sym = $(this).val();
-                var value = $("input[name='" + name + "']").val();
+                var obj = $("[name='" + name + "']");
+                if (obj.size() == 0)
+                    return true;
+                var value = obj.size() > 1 ? $("[name='" + name + "']:checked").val() : obj.val();
                 if (value == '' && sym.indexOf("NULL") == -1) {
                     return true;
                 }
