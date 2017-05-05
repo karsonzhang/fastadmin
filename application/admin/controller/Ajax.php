@@ -183,6 +183,16 @@ class Ajax extends Backend
     {
         $this->code = -1;
         $file = $this->request->file('file');
+
+        //判断是否已经存在附件
+        $sha1 = $file->hash();
+        $uploaded = model("attachment")->where('sha1',$sha1)->find();
+        if($uploaded){
+            $this->code = 200;
+            $this->data = $uploaded['url'];
+            return;
+        }
+
         $upload = Config::get('upload');
 
         preg_match('/(\d+)(\w+)/', $upload['maxsize'], $matches);
@@ -230,7 +240,8 @@ class Ajax extends Backend
                 'imageframes' => 0,
                 'mimetype'    => $fileInfo['type'],
                 'url'         => $uploadDir . $splInfo->getSaveName(),
-                'uploadtime'  => time()
+                'uploadtime'  => time(),
+                'sha1'        => $sha1,
             );
             model("attachment")->create(array_filter($params));
             $this->code = 200;

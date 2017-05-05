@@ -54,9 +54,13 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table', 'config'], function (
             },
             formatter: {
                 thumb: function (value, row, index) {
-                    console.log(row);
+                    //console.log(row);
                     if (row.mimetype.indexOf("image") > -1) {
-                        return '<a href="' + Config.upload.cdnurl + value + '" target="_blank"><img src="' + Config.upload.cdnurl + value + '!/fwfh/50x50" alt=""></a>';
+                        if (Config.upload.bucket.replace(/^\s+|\s+$/gm,'').length === 0){
+                            return '<a href="' + Config.upload.cdnurl + value + '" target="_blank"><img src="' + Config.upload.cdnurl + value + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                        } else {
+                            return '<a href="' + Config.upload.cdnurl + value + '" target="_blank"><img src="' + Config.upload.cdnurl + value + '!/fwfh/50x50" alt=""></a>';
+                        }
                     } else {
                         return '无';
                     }

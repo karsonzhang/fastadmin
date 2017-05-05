@@ -93,7 +93,9 @@ CREATE TABLE `fa_attachment` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `uploadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
-  PRIMARY KEY (`id`)
+  `sha1` varchar(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sha1` (`sha1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='附件表';
 
 -- ----------------------------

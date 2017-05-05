@@ -69,11 +69,11 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                                 try {
                                     var ret = JSON.parse(info.response);
                                     if (ret.hasOwnProperty('code')) {
-                                        ret.data = ret.code == 200 ? ret : ret.data;
+                                        ret.data = ret.code == 200 ? ret.data : ret.data;
                                         ret.code = ret.code == 200 ? 1 : ret.code;
                                         var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
                                         var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                                        $("input[data-plupload-id='" + id + "-text']").val(data.url);
+                                        $("input[data-plupload-id='" + id + "-text']").val(data);
                                         var afterUpload = $("#" + id).data("after-upload");
                                         if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
                                             Upload.api.custom[afterUpload].call(info, id, data);
