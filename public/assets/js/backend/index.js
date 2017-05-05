@@ -47,6 +47,22 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
                 e.stopPropagation();
             });
 
+            //清除缓存
+            $(document).on('click', "[data-toggle='wipeCache']", function () {
+                $.ajax({
+                    url: 'ajax/wipeCache',
+                    dataType: 'json',
+                    cache: false,
+                    success: function (ret) {
+                        if (ret.code === 1) {
+                            Backend.api.toastr.success(ret.msg);
+                        } else {
+                            Backend.api.toastr.error('清除系统缓存失败！');
+                        }
+                    }
+                });
+            });
+
             //全屏事件
             $(document).on('click', "[data-toggle='fullscreen']", function () {
                 var doc = document.documentElement;

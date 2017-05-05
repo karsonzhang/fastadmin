@@ -162,7 +162,7 @@ class Backend extends Controller
         $sort = $this->request->get("sort", "id");
         $order = $this->request->get("order", "DESC");
         $offset = $this->request->get("offset", 0);
-        $limit = $this->request->get("limit", 10);
+        $limit = $this->request->get("limit", 0);
         $filter = json_decode($filter, TRUE);
         $op = json_decode($op, TRUE);
         $filter = $filter ? $filter : [];

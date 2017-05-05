@@ -5,19 +5,19 @@ return [
     /**
      * 上传地址,如果不使用又拍云,则可以使用/ajax/upload
      */
-    'uploadurl' => 'http://v0.api.upyun.com/yourbucketname',
+    'uploadurl' => '/admin/ajax/upload',
     /**
      * 又拍云或本机的CDN地址
      */
-    'cdnurl'    => 'http://yourbucketname.b0.upaiyun.com',
+    'cdnurl'    => '',
     /**
      * 上传成功后的通知地址
      */
-    'notifyurl' => 'http://www.yoursite.com/upyun/notify',
+    'notifyurl' => '',
     /**
      * 又拍云Bucket
      */
-    'bucket'    => 'yourbucketname',
+    'bucket'    => '',
     /**
      * 生成的policy有效时间
      */
@@ -29,7 +29,7 @@ return [
     /**
      * 文件保存格式
      */
-    'savekey'   => '/uploads/media/{year}{mon}{day}/{filemd5}{.suffix}',
+    'savekey'   => '/uploads/{year}{mon}{day}/{filemd5}{.suffix}',
     /**
      * 最大可上传大小
      */

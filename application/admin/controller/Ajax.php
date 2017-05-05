@@ -9,6 +9,7 @@ use fast\Tree;
 use think\Config;
 use think\Db;
 use think\Lang;
+use think\Cache;
 
 /**
  * Ajax异步请求接口
@@ -183,6 +184,16 @@ class Ajax extends Backend
     {
         $this->code = -1;
         $file = $this->request->file('file');
+
+        //判断是否已经存在附件
+        $sha1 = $file->hash();
+        $uploaded = model("attachment")->where('sha1',$sha1)->find();
+        if($uploaded){
+            $this->code = 200;
+            $this->data = $uploaded['url'];
+            return;
+        }
+
         $upload = Config::get('upload');
 
         preg_match('/(\d+)(\w+)/', $upload['maxsize'], $matches);
@@ -230,7 +241,8 @@ class Ajax extends Backend
                 'imageframes' => 0,
                 'mimetype'    => $fileInfo['type'],
                 'url'         => $uploadDir . $splInfo->getSaveName(),
-                'uploadtime'  => time()
+                'uploadtime'  => time(),
+                'sha1'        => $sha1,
             );
             model("attachment")->create(array_filter($params));
             $this->code = 200;
@@ -326,6 +338,27 @@ class Ajax extends Backend
             }
             $this->code = 1;
         }
+    }
+
+    /**
+     * 清空系统缓存
+     */
+    public function wipeCache()
+    {
+        $wipe_cache_type = ['TEMP_PATH', 'LOG_PATH', 'CACHE_PATH'];
+        foreach ($wipe_cache_type as $item) {
+            if ($item == 'LOG_PATH') {
+                $dirs = (array) glob(constant($item) . '*');
+                foreach ($dirs as $dir) {
+                    array_map('unlink', (array) glob($dir . DIRECTORY_SEPARATOR . '*.*'));
+                }
+                array_map('rmdir', $dirs);
+            } else {
+                array_map('unlink', (array) glob(constant($item) . DIRECTORY_SEPARATOR . '*.*'));
+            }
+        }
+        Cache::clear();
+        $this->success('清空系统缓存成功！');
     }
 
 }
