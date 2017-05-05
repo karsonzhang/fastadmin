@@ -213,7 +213,7 @@ CREATE TABLE `fa_configvalue` (
 --  Records of `fa_configvalue`
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_configvalue` VALUES ('wechat', '微信菜单', '{\"menu\":[{\"name\":\"极速后台\",\"sub_button\":[{\"name\":\"官网\",\"type\":\"view\",\"url\":\"http:\\/\\/www.fastadmin.net\"},{\"name\":\"演示站\",\"type\":\"view\",\"url\":\"http:\\/\\/demo.fastadmin.net\"}]},{\"name\":\"联系客户\",\"type\":\"click\",\"key\":\"58cb852984970\"},{\"name\":\"关于我们\",\"type\":\"click\",\"key\":\"58bf944aa0777\"}],\"config\":[{\"id\":\"default.subscribe.message\",\"name\":\"关注后自动推送内容\",\"value\":\"欢迎关注我们！\"},{\"id\":\"cccdddd\",\"name\":\"dfsdffdsfdsdfsdfs\",\"value\":\"fsfsfsdfsdfdsfdsgggg\"}]}', '0', '1492186828', '5', 'normal');
+INSERT INTO `fa_configvalue` VALUES ('wechat', '微信菜单', '{\"menu\":[{\"name\":\"极速后台\",\"sub_button\":[{\"name\":\"官网\",\"type\":\"view\",\"url\":\"http:\\/\\/www.fastadmin.net\"},{\"name\":\"演示站\",\"type\":\"view\",\"url\":\"http:\\/\\/demo.fastadmin.net\"}]},{\"name\":\"联系客服\",\"type\":\"click\",\"key\":\"58cb852984970\"},{\"name\":\"关于我们\",\"type\":\"click\",\"key\":\"58bf944aa0777\"}],\"config\":[{\"id\":\"default.subscribe.message\",\"name\":\"关注后自动推送内容\",\"value\":\"欢迎关注我们！\"},{\"id\":\"cccdddd\",\"name\":\"dfsdffdsfdsdfsdfs\",\"value\":\"fsfsfsdfsdfdsfdsgggg\"}]}', '0', '1493986907', '5', 'normal');
 COMMIT;
 
 -- ----------------------------
@@ -373,7 +373,14 @@ CREATE TABLE `fa_wechat_autoreply` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信自动回复表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信自动回复表';
+
+-- ----------------------------
+--  Records of `fa_wechat_autoreply`
+-- ----------------------------
+BEGIN;
+INSERT INTO `fa_wechat_autoreply` VALUES ('1', '输入hello', 'hello', '58c7d908c4570', '123', '1493366855', '1493366855', 'normal'), ('2', '输入你好', '你好', '58fdfaa9e1965', 'sad', '1493704976', '1493704976', 'normal');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `fa_wechat_context`
@@ -415,7 +422,7 @@ CREATE TABLE `fa_wechat_response` (
 --  Records of `fa_wechat_response`
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_wechat_response` VALUES ('1', '签到送积分', '58adaf7876aab', 'app', '{\"app\":\"signin\"}', '', '1487777656', '0', 'normal'), ('2', '关于我们', '58bf944aa0777', 'app', '{\"app\":\"article\",\"id\":\"1\"}', '', '1488950346', '0', 'normal'), ('3', '测试我们', '58c7d908c4570', 'text', '{\"content\":\"\\u8fd4\\u56de\\u6210\\u529f\\u5566\\uff01\"}', '测试我们', '1489492232', '0', 'normal'), ('4', '联系客服', '58cb852984970', 'app', '{\"app\":\"service\"}', '', '1489732905', '0', 'normal');
+INSERT INTO `fa_wechat_response` VALUES ('1', '签到送积分', '58adaf7876aab', 'app', '{\"app\":\"signin\"}', '', '1487777656', '1487777656', 'normal'), ('2', '关于我们', '58bf944aa0777', 'app', '{\"app\":\"page\",\"id\":\"1\"}', '', '1488950346', '1488950346', 'normal'), ('3', '自动回复1', '58c7d908c4570', 'text', '{\"content\":\"world\"}', '', '1489492232', '1489492232', 'normal'), ('4', '联系客服', '58cb852984970', 'app', '{\"app\":\"service\"}', '', '1489732905', '1489732905', 'normal'), ('5', '自动回复2', '58fdfaa9e1965', 'text', '{\"content\":\"我是FastAdmin!\"}', '', '1493039785', '1493039785', 'normal');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

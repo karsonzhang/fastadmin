@@ -48,17 +48,24 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
             });
 
             //清除缓存
-            $(document).on('click', "[data-toggle='wipeCache']", function () {
+            $(document).on('click', "[data-toggle='wipecache']", function () {
                 $.ajax({
-                    url: 'ajax/wipeCache',
+                    url: 'ajax/wipecache',
                     dataType: 'json',
                     cache: false,
                     success: function (ret) {
-                        if (ret.code === 1) {
-                            Backend.api.toastr.success(ret.msg);
+                        if (ret.hasOwnProperty("code")) {
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
+                                Toastr.success(msg ? msg : __('Wipe cache completed'));
+                            } else {
+                                Toastr.error(msg ? msg : __('Wipe cache failed'));
+                            }
                         } else {
-                            Backend.api.toastr.error('清除系统缓存失败！');
+                            Toastr.error(__('Unknown data format'));
                         }
+                    }, error: function () {
+                        Toastr.error(__('Network error'));
                     }
                 });
             });

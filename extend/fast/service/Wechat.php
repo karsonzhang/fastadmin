@@ -9,6 +9,7 @@ use app\common\model\UserThird;
 use EasyWeChat\Message\News;
 use EasyWeChat\Message\Transfer;
 use fast\Date;
+use think\Config;
 
 /**
  * Wechat服务类
@@ -62,7 +63,6 @@ class Wechat
     // 微信输入交互内容指令
     public function command($obj, $openid, $content, $context)
     {
-        $content = [];
         $response = FALSE;
         if (isset($content['app']))
         {
@@ -131,7 +131,7 @@ class Wechat
     // 微信点击菜单event指令
     public function response($obj, $openid, $content, $context)
     {
-        $content = [];
+        $upload = Config::get('upload');
         $response = FALSE;
         if (isset($content['app']))
         {
@@ -176,8 +176,8 @@ class Wechat
                         {
                             $news = new News();
                             $news->title = $pageinfo['title'];
-                            $news->url = $pageinfo['outlink'] ? $pageinfo['outlink'] : url('page/show/' . $pageinfo['id'], 1);
-                            $news->image = cdn($pageinfo['image']);
+                            $news->url = $pageinfo['url'] ? $pageinfo['url'] : url('index/page/show', ['id' => $pageinfo['id']], true, true);
+                            $news->image = $upload['cdnurl'] . $pageinfo['image'];
                             $news->description = $pageinfo['description'];
                             $response[] = $news;
                         }
@@ -190,8 +190,8 @@ class Wechat
                     {
                         $news = new News();
                         $news->title = $pageinfo['title'];
-                        $news->url = $pageinfo['outlink'] ? $pageinfo['outlink'] : url('page/show/' . $pageinfo['id'], 1);
-                        $news->image = cdn($pageinfo['image']);
+                        $news->url = $pageinfo['url'] ? $pageinfo['url'] : url('index/page/show', ['id' => $pageinfo['id']], true, true);
+                        $news->image = $upload['cdnurl'] . $pageinfo['image'];
                         $news->description = $pageinfo['description'];
                         return $news;
                     }

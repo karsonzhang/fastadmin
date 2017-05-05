@@ -74,7 +74,7 @@ if (!function_exists('configvalue'))
      */
     function configvalue($id)
     {
-        $data = Configvalue::get('wechat');
+        $data = Configvalue::get($id);
         return $data ? $data->content : null;
     }
 
