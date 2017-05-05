@@ -28,4 +28,6 @@ return [
     'Login successful'                                           => '登录成功!',
     'Logout successful'                                          => '退出成功!',
     'Verification code is incorrect'                             => '验证码不正确',
+    'Wipe cache completed'                                       => '清除缓存成功',
+    'Wipe cache failed'                                          => '清除缓存失败',
 ];

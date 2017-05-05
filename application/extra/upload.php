@@ -3,9 +3,9 @@
 //上传配置
 return [
     /**
-     * 上传地址,如果不使用又拍云,则可以使用/ajax/upload
+     * 上传地址,如果不使用又拍云,则可以使用ajax/upload
      */
-    'uploadurl' => '/admin/ajax/upload',
+    'uploadurl' => 'ajax/upload',
     /**
      * 又拍云或本机的CDN地址
      */

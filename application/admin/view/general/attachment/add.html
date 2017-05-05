@@ -23,7 +23,14 @@
     <div class="form-group">
         <label for="c-local" class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
-            <button id="plupload-local" class="btn btn-primary plupload" data-url="{:url('ajax/upload')}"><i class="fa fa-upload"></i> {:__("Upload to local")}</button>
+            <button id="plupload-local" class="btn btn-primary plupload" data-url="{:url('ajax/upload')}" data-after-upload="afteruploadcallback"><i class="fa fa-upload"></i> {:__("Upload to local")}</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="c-local" class="control-label col-xs-12 col-sm-2">{:__('Upload by summernote')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea name="row[summernote]" id="c-summernote" cols="30" rows="5" class="summernote"></textarea>
         </div>
     </div>
 </form>

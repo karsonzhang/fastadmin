@@ -187,10 +187,13 @@ class Ajax extends Backend
 
         //判断是否已经存在附件
         $sha1 = $file->hash();
-        $uploaded = model("attachment")->where('sha1',$sha1)->find();
-        if($uploaded){
-            $this->code = 200;
-            $this->data = $uploaded['url'];
+        $uploaded = model("attachment")->where('sha1', $sha1)->find();
+        if ($uploaded)
+        {
+            $this->code = 1;
+            $this->data = [
+                'url' => $uploaded['url']
+            ];
             return;
         }
 
@@ -245,8 +248,10 @@ class Ajax extends Backend
                 'sha1'        => $sha1,
             );
             model("attachment")->create(array_filter($params));
-            $this->code = 200;
-            $this->data = $uploadDir . $splInfo->getSaveName();
+            $this->code = 1;
+            $this->data = [
+                'url' => $uploadDir . $splInfo->getSaveName()
+            ];
         }
         else
         {
@@ -343,22 +348,27 @@ class Ajax extends Backend
     /**
      * 清空系统缓存
      */
-    public function wipeCache()
+    public function wipecache()
     {
         $wipe_cache_type = ['TEMP_PATH', 'LOG_PATH', 'CACHE_PATH'];
-        foreach ($wipe_cache_type as $item) {
-            if ($item == 'LOG_PATH') {
+        foreach ($wipe_cache_type as $item)
+        {
+            if ($item == 'LOG_PATH')
+            {
                 $dirs = (array) glob(constant($item) . '*');
-                foreach ($dirs as $dir) {
+                foreach ($dirs as $dir)
+                {
                     array_map('unlink', (array) glob($dir . DIRECTORY_SEPARATOR . '*.*'));
                 }
                 array_map('rmdir', $dirs);
-            } else {
+            }
+            else
+            {
                 array_map('unlink', (array) glob(constant($item) . DIRECTORY_SEPARATOR . '*.*'));
             }
         }
         Cache::clear();
-        $this->success('清空系统缓存成功！');
+        $this->code = 1;
     }
 
 }

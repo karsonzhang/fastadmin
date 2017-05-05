@@ -10,6 +10,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
             plupload: function (element, onAfterUpload) {
                 element = typeof element == 'undefined' ? Upload.config.classname : element;
                 $(element, Upload.config.container).each(function () {
+                    var that = this;
                     var id = $(this).prop("id");
                     var url = $(this).data("url");
                     var maxsize = $(this).data("maxsize");
@@ -69,17 +70,21 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                                 try {
                                     var ret = JSON.parse(info.response);
                                     if (ret.hasOwnProperty('code')) {
-                                        ret.data = ret.code == 200 ? ret.data : ret.data;
+                                        ret.data = ret.code == 200 ? ret : ret.data;
                                         ret.code = ret.code == 200 ? 1 : ret.code;
                                         var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
                                         var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                                        $("input[data-plupload-id='" + id + "-text']").val(data);
-                                        var afterUpload = $("#" + id).data("after-upload");
-                                        if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
-                                            Upload.api.custom[afterUpload].call(info, id, data);
-                                        }
-                                        if (typeof onAfterUpload == 'function') {
-                                            onAfterUpload.call(info, id, data);
+                                        if (ret.code === 1) {
+                                            $("input[data-plupload-id='" + id + "-text']").val(data.url);
+                                            var afterUpload = $("#" + id).data("after-upload");
+                                            if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
+                                                Upload.api.custom[afterUpload].call(that, data);
+                                            }
+                                            if (typeof onAfterUpload == 'function') {
+                                                onAfterUpload.call(that, data);
+                                            }
+                                        } else {
+                                            Toastr.error(msg ? msg : __('Operation failed'));
                                         }
                                     } else {
                                         Toastr.error(e.message + "(code:-2)");
@@ -137,8 +142,8 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
             },
             custom: {
                 //自定义上传完成回调
-                afteruploadcallback: function (id, response) {
-                    console.log(this, id, response);
+                afteruploadcallback: function (response) {
+                    console.log(this, response);
                     alert("Custom Callback,Response URL:" + response.url);
                 },
             },
