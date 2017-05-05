@@ -48,16 +48,16 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
             });
 
             //清除缓存
-            $(document).on('click', "[data-toggle='wipeCache']", function () {
+            $(document).on('click', "[data-toggle='wipecache']", function () {
                 $.ajax({
-                    url: 'ajax/wipeCache',
+                    url: 'ajax/wipecache',
                     dataType: 'json',
                     cache: false,
                     success: function (ret) {
                         if (ret.code === 1) {
-                            Backend.api.toastr.success(ret.msg);
+                            Backend.api.toastr.success(__('Wipe cache completed'));
                         } else {
-                            Backend.api.toastr.error('清除系统缓存失败！');
+                            Backend.api.toastr.error(__('Wipe cache failed'));
                         }
                     }
                 });
