@@ -188,7 +188,7 @@ class Crud extends Command
                     //如果是图片则额外附加
                     if (substr($field, -5) == 'image' || substr($field, -6) == 'avatar')
                     {
-                        $attr['data-plupload-id'] = "plupload-{$field}-text";
+                        //$attr['data-plupload-id'] = "plupload-{$field}-text";
                         $attr['size'] = 50;
                     }
                     $fieldFunc = substr($field, -4) == 'time' ? "|datetime" : "";
@@ -377,7 +377,7 @@ EOD;
         return <<<EOD
 <div class="form-inline">
                 {$content}
-                <span><button id="plupload-{$field}" class="btn btn-danger plupload" ><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
             </div>
 EOD;
     }
