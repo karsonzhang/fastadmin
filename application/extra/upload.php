@@ -7,9 +7,9 @@ return [
      */
     'uploadurl' => 'ajax/upload',
     /**
-     * 又拍云或本机的CDN地址
+     * 本机的CDN地址或又拍云http://yourbucketname.b0.upaiyun.com
      */
-    'cdnurl'    => 'http://yourbucketname.b0.upaiyun.com',
+    'cdnurl'    => '',
     /**
      * 上传成功后的通知地址
      */
