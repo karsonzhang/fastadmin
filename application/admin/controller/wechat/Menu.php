@@ -64,7 +64,7 @@ class Menu extends Backend
     public function sync($ids = NULL)
     {
         $this->code = -1;
-        $app = new Application(Config::get('wechat')->toArray());
+        $app = new Application(Config::get('wechat'));
 
         try
         {

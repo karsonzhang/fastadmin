@@ -3,11 +3,12 @@
 namespace app\index\controller;
 
 use app\common\controller\Frontend;
+use app\common\model\WechatAutoreply;
 use app\common\model\WechatContext;
 use app\common\model\WechatResponse;
+use EasyWeChat\Foundation\Application;
 use EasyWeChat\Payment\Order;
 use fast\service\Wechat as WechatService;
-use fast\third\Application;
 use think\Config;
 use think\Log;
 
@@ -22,7 +23,7 @@ class Wechat extends Frontend
     public function _initialize()
     {
         parent::_initialize();
-        $this->app = new Application(Config::getSecret('wechat')->toArray());
+        $this->app = new Application(Config::get('wechat'));
     }
 
     /**
@@ -68,11 +69,11 @@ class Wechat extends Frontend
                             break;
                     }
 
-                    $response = $WechatResponse->where(["eventkey" => $eventkey, 'status' => FA_STATUS_NORMAL])->get();
+                    $response = $WechatResponse->where(["eventkey" => $eventkey, 'status' => 'normal'])->find();
                     if ($response)
                     {
                         $content = (array) json_decode($response['content'], TRUE);
-                        $context = $WechatContext->where(['openid' => $openid])->get();
+                        $context = $WechatContext->where(['openid' => $openid])->find();
                         $data = ['eventkey' => $eventkey, 'command' => '', 'refreshtime' => time(), 'openid' => $openid];
                         if ($context)
                         {
@@ -81,7 +82,7 @@ class Wechat extends Frontend
                         }
                         else
                         {
-                            $id = $WechatContext->data($data)->insert();
+                            $id = $WechatContext->data($data)->save();
                             $data['id'] = $id;
                         }
                         $result = $WechatService->response($this, $openid, $content, $data);
@@ -99,10 +100,10 @@ class Wechat extends Frontend
                 case 'link': //链接消息
                 default: //其它消息
                     //上下文事件处理
-                    $context = $WechatContext->where([['openid', $openid], ['refreshtime', '>=', time() - 1800]])->get();
+                    $context = $WechatContext->where(['openid' => ['=', $openid], 'refreshtime' => ['>=', time() - 1800]])->find();
                     if ($context && $context['eventkey'])
                     {
-                        $response = $WechatResponse->where(['eventkey' => $context['eventkey'], 'status' => FA_STATUS_NORMAL])->get();
+                        $response = $WechatResponse->where(['eventkey' => $context['eventkey'], 'status' => 'normal'])->find();
                         if ($response)
                         {
                             $WechatContext->data(array('refreshtime' => time()))->where('id', $context['id'])->update();
@@ -117,15 +118,15 @@ class Wechat extends Frontend
                     //自动回复处理
                     if ($message->MsgType == 'text')
                     {
-                        $wechat_autoreply = new Orm('wechat_autoreply');
-                        $autoreply = $wechat_autoreply->where(['text' => $message->Content, 'status' => FA_STATUS_NORMAL])->get();
+                        $wechat_autoreply = new WechatAutoreply();
+                        $autoreply = $wechat_autoreply->where(['text' => $message->Content, 'status' => 'normal'])->find();
                         if ($autoreply)
                         {
-                            $response = $WechatResponse->where(["eventkey" => $autoreply['eventkey'], 'status' => FA_STATUS_NORMAL])->get();
+                            $response = $WechatResponse->where(["eventkey" => $autoreply['eventkey'], 'status' => 'normal'])->find();
                             if ($response)
                             {
                                 $content = (array) json_decode($response['content'], TRUE);
-                                $context = $WechatContext->where(['openid' => $openid])->get();
+                                $context = $WechatContext->where(['openid' => $openid])->find();
                                 $result = $WechatService->response($this, $openid, $content, $context);
                                 if ($result)
                                 {

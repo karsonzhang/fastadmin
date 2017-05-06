@@ -54,11 +54,18 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
                     dataType: 'json',
                     cache: false,
                     success: function (ret) {
-                        if (ret.code === 1) {
-                            Backend.api.toastr.success(__('Wipe cache completed'));
+                        if (ret.hasOwnProperty("code")) {
+                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
+                            if (ret.code === 1) {
+                                Toastr.success(msg ? msg : __('Wipe cache completed'));
+                            } else {
+                                Toastr.error(msg ? msg : __('Wipe cache failed'));
+                            }
                         } else {
-                            Backend.api.toastr.error(__('Wipe cache failed'));
+                            Toastr.error(__('Unknown data format'));
                         }
+                    }, error: function () {
+                        Toastr.error(__('Network error'));
                     }
                 });
             });
