@@ -19,6 +19,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                     var multiple = $(this).data("multiple");
                     //上传URL
                     url = url ? url : Config.upload.uploadurl;
+                    url = Backend.api.fixurl(url);
                     //最大可上传
                     maxsize = maxsize ? maxsize : Config.upload.maxsize;
                     //文件类型
@@ -50,7 +51,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                                     //这里可以改成其它的表现形式
                                     //document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
                                 });
-                                $("#" + id).data("bakup-html", $("#" + id).html());
+                                $(that).data("bakup-html", $(that).html());
                                 //添加后立即上传
                                 setTimeout(function () {
                                     Upload.list[id].start();
@@ -59,11 +60,11 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                             UploadProgress: function (up, file) {
                                 //这里可以改成其它的表现形式
                                 //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                                $("#" + id).prop("disabled", true).html("<i class='fa fa-upload'></i> 上传" + file.percent + "%");
+                                $(that).prop("disabled", true).html("<i class='fa fa-upload'></i> 上传" + file.percent + "%");
                             },
                             FileUploaded: function (up, file, info) {
                                 //还原按钮文字及状态
-                                $("#" + id).prop("disabled", false).html($("#" + id).data("bakup-html"));
+                                $(that).prop("disabled", false).html($(that).data("bakup-html"));
                                 //这里可以改成其它的表现形式
                                 //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML += (' [Url]: ' + '<a href="' + url + '" target="_blank">' + url + '</a>');
                                 //这里建议不修改
@@ -75,7 +76,10 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, un
                                         var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
                                         var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
                                         if (ret.code === 1) {
-                                            $("input[data-plupload-id='" + id + "-text']").val(data.url);
+                                            //$("input[data-plupload-id='" + id + "-text']").val(data.url);
+                                            if ($(that).data("input-id")) {
+                                                $("input#" + $(that).data("input-id")).val(data.url);
+                                            }
                                             var afterUpload = $("#" + id).data("after-upload");
                                             if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
                                                 Upload.api.custom[afterUpload].call(that, data);

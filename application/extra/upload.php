@@ -3,21 +3,21 @@
 //上传配置
 return [
     /**
-     * 上传地址,如果不使用又拍云,则可以使用ajax/upload
+     * 上传地址,默认是本地上传,如果需要使用又拍云则改为http://v0.api.upyun.com/yourbucketname
      */
     'uploadurl' => 'ajax/upload',
     /**
      * 又拍云或本机的CDN地址
      */
-    'cdnurl'    => '',
+    'cdnurl'    => 'http://yourbucketname.b0.upaiyun.com',
     /**
      * 上传成功后的通知地址
      */
-    'notifyurl' => '',
+    'notifyurl' => 'http://www.yoursite.com/upyun/notify',
     /**
      * 又拍云Bucket
      */
-    'bucket'    => '',
+    'bucket'    => 'yourbucketname',
     /**
      * 生成的policy有效时间
      */
