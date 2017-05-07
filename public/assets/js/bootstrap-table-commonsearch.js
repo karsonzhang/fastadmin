@@ -30,6 +30,30 @@
             });
         }
 
+        //绑定日期时间元素事件
+        var form = $("#" + that.options.idForm);
+        if ($(".datetimepicker", form).size() > 0) {
+            require(['bootstrap-datetimepicker'], function () {
+                $('.datetimepicker', form).parent().css('position', 'relative');
+                $('.datetimepicker', form).datetimepicker({
+                    //format: 'YYYY-MM-DD',
+                    icons: {
+                        time: 'fa fa-clock-o',
+                        date: 'fa fa-calendar',
+                        up: 'fa fa-chevron-up',
+                        down: 'fa fa-chevron-down',
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-history',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-remove'
+                    },
+                    showTodayButton: true,
+                    showClose: true
+                });
+            });
+        }
+
         // 提交搜索
         $("#btnSubmitCommon" + "_" + that.options.idTable).click(function (event) {
             that.onColumnCommonSearch();
@@ -69,6 +93,7 @@
                 }
 
                 //htmlForm.push('<div class="col-sm-8">');
+                var style = typeof vObjCol.style === 'undefined' ? '' : sprintf('style="%s"', vObjCol.style);
                 if (vObjCol.searchList) {
                     if (typeof vObjCol.searchList == 'function') {
                         htmlForm.push(vObjCol.searchList.call(this, vObjCol));
@@ -79,10 +104,18 @@
                         $.each(vObjCol.searchList, function (key, value) {
                             searchList.push("<option value='" + (isArray ? value : key) + "'>" + value + "</option>");
                         });
-                        htmlForm.push(sprintf('<select class="form-control" name="%s">%s</select>', vObjCol.field, searchList.join('')));
+                        htmlForm.push(sprintf('<select class="form-control" name="%s" %s>%s</select>', vObjCol.field, style, searchList.join('')));
                     }
                 } else {
-                    htmlForm.push(sprintf('<input type="text" class="form-control" name="%s" placeholder="%s" id="%s">', vObjCol.field, vObjCol.title, vObjCol.field));
+                    var placeholder = typeof vObjCol.placeholder === 'undefined' ? vObjCol.title : vObjCol.placeholder;
+                    var type = typeof vObjCol.type === 'undefined' ? 'text' : vObjCol.type;
+                    var addclass = typeof vObjCol.addclass === 'undefined' ? 'form-control' : 'form-control ' + vObjCol.addclass;
+                    var data = typeof vObjCol.data === 'undefined' ? '' : vObjCol.data;
+                    htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, placeholder, vObjCol.field, style, data));
+                    var reg = /BETWEEN$/;
+                    if (reg.test(vObjCol.operate)) {
+                        htmlForm.push(sprintf('&nbsp;-&nbsp;<input type="%s" class="%s" name="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, placeholder, vObjCol.field, style, data));
+                    }
                 }
 
                 //htmlForm.push('</div>');
@@ -237,7 +270,28 @@
                 var obj = $("[name='" + name + "']");
                 if (obj.size() == 0)
                     return true;
-                var value = obj.size() > 1 ? $("[name='" + name + "']:checked").val() : obj.val();
+                if (obj.size() > 1) {
+                    if (/BETWEEN$/.test(sym)) {
+                        var value_begin = $.trim($("[name='" + name + "']:first").val()), value_end = $.trim($("[name='" + name + "']:last").val());
+                        if (!value_begin.length || !value_end.length) {
+                            return true;
+                        }
+                        //datetime类型字段转换成时间戳
+                        if ($("[name='" + name + "']:first").attr('type') === 'datetime') {
+                            var datetimestamp = Date.parse(value_begin).toString();
+                            value_begin = datetimestamp.substr(0, datetimestamp.length - 3) - 28800; //TODO:Date.parse导致的时区差
+
+                            datetimestamp = Date.parse(value_end).toString();
+                            value_end = datetimestamp.substr(0, datetimestamp.length - 3) - 28800; //TODO:Date.parse导致的时区差
+                        }
+                        var value = value_begin + ',' + value_end;
+                    } else {
+                        var value = $("[name='" + name + "']:checked").val();
+                    }
+                } else {
+                    var value = obj.val();
+                }
+
                 if (value == '' && sym.indexOf("NULL") == -1) {
                     return true;
                 }
