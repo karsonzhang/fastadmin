@@ -152,19 +152,19 @@
     });
     $.extend($.fn.bootstrapTable.locales, {
         formatAdvancedSearch: function () {
-            return 'Advanced search';
+            return __('Advanced search');
         },
         formatAdvancedSubmitButton: function () {
-            return "Submit";
+            return __("Submit");
         },
         formatAdvancedResetButton: function () {
-            return "Reset";
+            return __("Reset");
         },
         formatAdvancedCloseButton: function () {
-            return "Close";
+            return __("Close");
         },
         formatAdvancedChoose: function () {
-            return "Choose";
+            return __("Choose");
         }
     });
 

@@ -35,7 +35,10 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table', 'config'], function (
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
-                ]
+                ],
+                //普通搜索
+                commonSearch: true,
+                titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
             });
 
             // 为表格绑定事件

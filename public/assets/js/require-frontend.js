@@ -34,6 +34,7 @@ require.config({
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
         'bootstrap-table-advancedsearch': 'bootstrap-table-advancedsearch',
+        'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
         'typeahead': '../libs/typeahead.js/dist/typeahead.jquery.min',
         'bloodhound': '../libs/typeahead.js/dist/bloodhound.min',
@@ -75,6 +76,10 @@ require.config({
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-advancedsearch': {
+            deps: ['bootstrap-table'],
+            exports: '$.fn.bootstrapTable.defaults'
+        },
+        'bootstrap-table-commonsearch': {
             deps: ['bootstrap-table'],
             exports: '$.fn.bootstrapTable.defaults'
         },

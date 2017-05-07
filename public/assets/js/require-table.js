@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-advancedsearch'], function ($, undefined, Backend, Config, Toastr, Moment) {
+define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-advancedsearch', 'bootstrap-table-commonsearch'], function ($, undefined, Backend, Config, Toastr, Moment) {
 
     var Table = {
         list: {},
@@ -10,7 +10,9 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             toolbar: "#toolbar",
             search: true,
             cache: false,
-            advancedSearch: true,
+            advancedSearch: false,
+            commonSearch: false,
+            titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
             idTable: 'advancedTable',
             showExport: true,
             exportDataType: "all",
