@@ -6,10 +6,12 @@ use app\common\controller\Backend;
 use fast\Http;
 use fast\Random;
 use fast\Tree;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use think\Cache;
 use think\Config;
 use think\Db;
 use think\Lang;
-use think\Cache;
 
 /**
  * Ajax异步请求接口
@@ -353,19 +355,20 @@ class Ajax extends Backend
         $wipe_cache_type = ['TEMP_PATH', 'LOG_PATH', 'CACHE_PATH'];
         foreach ($wipe_cache_type as $item)
         {
-            if ($item == 'LOG_PATH')
+            $dir = constant($item);
+            if (!is_dir($dir))
+                continue;
+            $files = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($files as $fileinfo)
             {
-                $dirs = (array) glob(constant($item) . '*');
-                foreach ($dirs as $dir)
-                {
-                    array_map('unlink', (array) glob($dir . DIRECTORY_SEPARATOR . '*.*'));
-                }
-                array_map('rmdir', $dirs);
+                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                $todo($fileinfo->getRealPath());
             }
-            else
-            {
-                array_map('unlink', (array) glob(constant($item) . DIRECTORY_SEPARATOR . '*.*'));
-            }
+
+            //rmdir($dir);
         }
         Cache::clear();
         $this->code = 1;
