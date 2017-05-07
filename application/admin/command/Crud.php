@@ -55,15 +55,15 @@ class Crud extends Command
         $tableInfo = $tableInfo[0];
 
         //根据表名匹配对应的Fontawesome图标
-        $iconPath = ROOT_PATH . '/public/assets/libs/font-awesome/less/variables.less';
+        $iconPath = ROOT_PATH . str_replace('/', DS, '/public/assets/libs/font-awesome/less/variables.less');
         $iconName = is_file($iconPath) && stripos(file_get_contents($iconPath), '@fa-var-' . $table . ':') ? $table : 'fa fa-circle-o';
 
         //控制器默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入controller,格式为目录层级
         $controllerArr = !$controller ? explode('_', strtolower($table)) : explode('/', strtolower($controller));
         $controllerUrl = implode('/', $controllerArr);
         $controllerName = ucfirst(array_pop($controllerArr));
-        $controllerDir = implode('/', $controllerArr);
-        $controllerFile = ($controllerDir ? $controllerDir . '/' : '') . $controllerName . '.php';
+        $controllerDir = implode(DS, $controllerArr);
+        $controllerFile = ($controllerDir ? $controllerDir . DS : '') . $controllerName . '.php';
 
         //非覆盖模式时如果存在控制器文件则报错
         if (is_file($controllerFile) && !$force)
@@ -330,7 +330,7 @@ class Crud extends Command
      */
     protected function getStub($name)
     {
-        return __DIR__ . '/Crud/stubs/' . $name . '.stub';
+        return __DIR__ . DS . 'Crud' . DS . 'stubs' . DS . $name . '.stub';
     }
 
     protected function getLangItem($field, $content)
