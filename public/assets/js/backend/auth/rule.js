@@ -30,6 +30,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         {field: 'title', title: __('Title'), align: 'left'},
                         {field: 'icon', title: __('Icon'), formatter: Controller.api.formatter.icon},
                         {field: 'name', title: __('Name'), align: 'left'},
+                        {field: 'ismenu', title: __('Ismenu'), align: 'left'},
                         {field: 'weigh', title: __('Weigh')},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
                         {field: 'id', title: '<a href="javascript:;" class="btn btn-primary btn-xs btn-toggle"><i class="fa fa-chevron-down"></i></a>', formatter: Controller.api.formatter.subnode},

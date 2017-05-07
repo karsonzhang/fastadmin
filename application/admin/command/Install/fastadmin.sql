@@ -155,7 +155,7 @@ CREATE TABLE `fa_auth_rule` (
   `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否为菜单',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `weigh` int(10) NOT NULL COMMENT '权重',
+  `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`) USING BTREE,

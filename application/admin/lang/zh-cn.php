@@ -30,6 +30,8 @@ return [
     'Cancel'                                                => '取消',
     'Loading'                                               => '加载中',
     'More'                                                  => '更多',
+    'Yes'                                                   => '是',
+    'No'                                                    => '否',
     'Normal'                                                => '正常',
     'Hidden'                                                => '隐藏',
     'Submit'                                                => '提交',
