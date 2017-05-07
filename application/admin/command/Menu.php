@@ -43,7 +43,7 @@ class Menu extends Command
             end($controllerArr);
             $key = key($controllerArr);
             $controllerArr[$key] = ucfirst($controllerArr[$key]);
-            $adminPath = dirname(__DIR__) . DS . 'controller' . DS . implode('/', $controllerArr) . '.php';
+            $adminPath = dirname(__DIR__) . DS . 'controller' . DS . implode(DS, $controllerArr) . '.php';
             if (!is_file($adminPath))
             {
                 $output->error("controller not found");
@@ -75,9 +75,9 @@ class Menu extends Command
         {
             if (!in_array($value, array(".", "..")))
             {
-                if (is_dir($dir . '/' . $value))
+                if (is_dir($dir . DS . $value))
                 {
-                    $result[$value] = $this->scandir($dir . '/' . $value);
+                    $result[$value] = $this->scandir($dir . DS . $value);
                 }
                 else
                 {
@@ -127,8 +127,32 @@ class Menu extends Command
         end($controllerArr);
         $key = key($controllerArr);
         $controllerArr[$key] = ucfirst($controllerArr[$key]);
+        $classSuffix = Config::get('controller_suffix') ? ucfirst(Config::get('url_controller_layer')) : '';
+        $className = "\\app\\admin\\controller\\" . implode("\\", $controllerArr) . $classSuffix;
+        if (version_compare(PHP_VERSION, '7.0.0', '<'))
+        {
+            $pathArr = $controllerArr;
+            array_unshift($pathArr, '', 'application', 'admin', 'controller');
+            $classFile = ROOT_PATH . implode(DS, $pathArr) . $classSuffix . ".php";
+            $classContent = file_get_contents($classFile);
+            $uniqueName = uniqid("FastAdmin") . $classSuffix;
+            $classContent = str_replace("class " . $controllerArr[$key] . $classSuffix . " ", 'class ' . $uniqueName . ' ', $classContent);
+            $classContent = preg_replace("/namespace\s(.*);/", 'namespace ' . __NAMESPACE__ . ";", $classContent);
+
+            //临时的类文件
+            $tempClassFile = __DIR__ . DS . $uniqueName . ".php";
+            file_put_contents($tempClassFile, $classContent);
+            $className = "\\app\\admin\\command\\" . $uniqueName;
+        }
         //反射机制调用类的注释和方法名
-        $reflector = new ReflectionClass("\\app\\admin\\controller\\" . implode("\\", $controllerArr) . (Config::get('controller_suffix') ? ucfirst(Config::get('url_controller_layer')) : ''));
+        $reflector = new ReflectionClass($className);
+
+        if (isset($tempClassFile))
+        {
+            //删除临时文件
+            @unlink($tempClassFile);
+        }
+
         //只匹配公共的方法
         $methods = $reflector->getMethods(ReflectionMethod::IS_PUBLIC);
         $classComment = $reflector->getDocComment();
