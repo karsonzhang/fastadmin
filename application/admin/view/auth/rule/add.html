@@ -4,6 +4,12 @@
 </div>
 <form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
     <div class="form-group">
+        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Ismenu')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[ismenu]', ['1'=>__('Yes'), '0'=>__('No')])}
+        </div>
+    </div>
+    <div class="form-group">
         <label for="pid" class="control-label col-xs-12 col-sm-2">{:__('Parent')}:</label>
         <div class="col-xs-12 col-sm-8">
             {:build_select('row[pid]', $ruledata, null, ['class'=>'form-control selectpicker', 'required'=>''])}

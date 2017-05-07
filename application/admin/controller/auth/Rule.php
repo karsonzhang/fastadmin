@@ -29,6 +29,8 @@ class Rule extends Backend
         $ruledata = [0 => __('None')];
         foreach ($this->rulelist as $k => $v)
         {
+            if (!$v['ismenu'])
+                continue;
             $ruledata[$v['id']] = $v['title'];
         }
         $this->view->assign('ruledata', $ruledata);
@@ -62,6 +64,11 @@ class Rule extends Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
+                if (!$params['ismenu'] && !$params['pid'])
+                {
+                    $this->msg = __('The non-menu rule must have parent');
+                    return;
+                }
                 $this->model->create($params);
                 AdminLog::record(__('Add'), $this->model->getLastInsID());
                 Cache::rm('__menu__');
@@ -87,6 +94,11 @@ class Rule extends Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
+                if (!$params['ismenu'] && !$params['pid'])
+                {
+                    $this->msg = __('The non-menu rule must have parent');
+                    return;
+                }
                 $row->save($params);
                 AdminLog::record(__('Edit'), $ids);
                 Cache::rm('__menu__');
