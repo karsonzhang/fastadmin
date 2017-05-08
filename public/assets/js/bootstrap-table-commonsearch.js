@@ -8,7 +8,7 @@
 !function ($) {
     'use strict';
 
-    var firstLoad = false;
+    var firstLoad = false, ColumnsForSearch = [];
 
     var sprintf = $.fn.bootstrapTable.utils.sprintf;
 
@@ -81,8 +81,9 @@
             htmlForm.push(sprintf("<legend>%s</legend>", that.options.titleForm));
         for (var i in pColumns) {
             var vObjCol = pColumns[i];
-            if (!vObjCol.checkbox && vObjCol.field !== 'operate' && vObjCol.visible && vObjCol.searchable && vObjCol.operate !== false) {
-                htmlForm.push('<div class="form-group" style="margin:0 5px;">');
+            if (!vObjCol.checkbox && vObjCol.field !== 'operate' && vObjCol.searchable && vObjCol.operate !== false) {
+                ColumnsForSearch.push(vObjCol);
+                htmlForm.push('<div class="form-group" style="margin:5px">');
                 htmlForm.push(sprintf('<label for="%s" class="control-label" style="padding:0 10px">%s</label>', vObjCol.field, vObjCol.title));
                 if (that.options.sidePagination == 'server' && that.options.url) {
                     //htmlForm.push('<div class="col-sm-2">');
@@ -123,9 +124,7 @@
             }
         }
 
-        htmlForm.push('<div class="form-group" style="margin:0 5px;">');
         htmlForm.push(createFormBtn(that).join(''));
-        htmlForm.push('</div>');
         htmlForm.push('</fieldset>');
         htmlForm.push('</form>');
 
@@ -137,7 +136,7 @@
         var searchSubmit = that.options.formatCommonSubmitButton();
         var searchReset = that.options.formatCommonResetButton();
         var searchClose = that.options.formatCommonCloseButton();
-        htmlBtn.push('<div class="form-group">');
+        htmlBtn.push('<div class="form-group" style="margin:5px">');
         htmlBtn.push('<div class="col-sm-12 text-center">');
         if (that.options.sidePagination == 'server' && that.options.url) {
             htmlBtn.push(sprintf('<button type="button" id="btnSubmitCommon%s" class="btn btn-success" >%s</button> ', "_" + that.options.idTable, searchSubmit));
@@ -264,34 +263,36 @@
         if (typeof event === 'undefined') {
             var op = {};
             var filter = {};
-            $("#commonSearchModalContent_" + this.options.idTable + " input.operate").each(function () {
+            $("#commonSearchModalContent_" + this.options.idTable + " input.operate").each(function (i) {
                 var name = $(this).data("name");
                 var sym = $(this).val();
                 var obj = $("[name='" + name + "']");
                 if (obj.size() == 0)
                     return true;
+                var vObjCol = ColumnsForSearch[i];
                 if (obj.size() > 1) {
                     if (/BETWEEN$/.test(sym)) {
                         var value_begin = $.trim($("[name='" + name + "']:first").val()), value_end = $.trim($("[name='" + name + "']:last").val());
                         if (!value_begin.length || !value_end.length) {
                             return true;
                         }
-                        //datetime类型字段转换成时间戳
-                        if ($("[name='" + name + "']:first").attr('type') === 'datetime') {
-                            var datetimestamp = Date.parse(value_begin).toString();
-                            value_begin = datetimestamp.substr(0, datetimestamp.length - 3) - 28800; //TODO:Date.parse导致的时区差
-
-                            datetimestamp = Date.parse(value_end).toString();
-                            value_end = datetimestamp.substr(0, datetimestamp.length - 3) - 28800; //TODO:Date.parse导致的时区差
+                        if (typeof vObjCol.process === 'function') {
+                            value_begin = vObjCol.process(value_begin, 'begin');
+                            value_end = vObjCol.process(value_end, 'end');
+                        } else if ($("[name='" + name + "']:first").attr('type') === 'datetime') { //datetime类型字段转换成时间戳
+                            value_begin = strtotime(value_begin);
+                            value_end = strtotime(value_end);
+                            if (value_begin === value_end && '00:00:00' === date('H:i:s', value_begin)) {
+                                value_end += 86399;
+                            }
                         }
                         var value = value_begin + ',' + value_end;
                     } else {
                         var value = $("[name='" + name + "']:checked").val();
                     }
                 } else {
-                    var value = obj.val();
+                    var value = (typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : obj.val();
                 }
-
                 if (value == '' && sym.indexOf("NULL") == -1) {
                     return true;
                 }
@@ -330,6 +331,54 @@
             this.onSearch(event);
 //        this.updatePagination();
             this.trigger('column-common-search', $field, text);
+        }
+    };
+
+    /**
+     * 模仿PHP的strtotime()函数
+     * strtotime('2017-05-20 13:14:00') OR strtotime('2017-05-20')
+     * @return 时间戳
+     */
+    var strtotime = function (str) {
+        var _arr = str.split(' ');
+        var _day = _arr[0].split('-');
+        _arr[1] = (_arr[1] == null) ? '0:0:0' : _arr[1];
+        var _time = _arr[1].split(':');
+        for (var i = _day.length - 1; i >= 0; i--) {
+            _day[i] = isNaN(parseInt(_day[i])) ? 0 : parseInt(_day[i]);
+        }
+        for (var i = _time.length - 1; i >= 0; i--) {
+            _time[i] = isNaN(parseInt(_time[i])) ? 0 : parseInt(_time[i]);
+        }
+        var _temp = new Date(_day[0], _day[1] - 1, _day[2], _time[0], _time[1], _time[2]);
+        return _temp.getTime() / 1000;
+    };
+    /**
+     * 模仿PHP的date()函数
+     * strtotime('Y-m-d H:i:s');
+     * @param format 只支持 'Y-m-d H:i:s','Y-m-d','H:i:s' 三种调用方式
+     * @param time 为空时，取当前时间
+     * @return 日期格式化的字符串
+     */
+    var date = function (format, time) {
+        var _temp = (time != null) ? new Date(time * 1000) : new Date();
+        var _return = '';
+
+        if (/Y-m-d/.test(format)) {
+            var _day = [_temp.getFullYear(), addzero(1 + _temp.getMonth()), addzero(_temp.getDate())];
+            _return = _day.join('-');
+        }
+        if (/H:i:s/.test(format)) {
+            var _time = [addzero(_temp.getHours()), addzero(_temp.getMinutes()), addzero(_temp.getSeconds())];
+            _return += ' ' + _time.join(':');
+        }
+        return _return.replace(/^\s+|\s+$/gm, '');
+        function addzero(i) {
+            if (i <= 9) {
+                return '0' + i;
+            } else {
+                return i;
+            }
         }
     };
 }(jQuery);

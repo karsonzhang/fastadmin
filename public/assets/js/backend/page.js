@@ -25,7 +25,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'state', checkbox: true},
                         {field: 'id', title: __('Id'), operate: false},
                         {field: 'category_id', title: __('Category_id'), operate: '='},
-                        {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '标题，模糊搜索', style: 'width:200px'},
+                        {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '标题，模糊搜索，*表示任意字符', style: 'width:200px',
+                            process: function (value, arg) {
+                                return value.replace(/\*/g, '%'); //仅演示用法
+                            }
+                        },
                         {field: 'keywords', title: __('Keywords'), operate: 'LIKE %...%', placeholder: '关键字，模糊搜索'},
                         {field: 'flag', title: __('Flag'), formatter: Table.api.formatter.flag, operate: false},
                         {field: 'image', title: __('Image'), formatter: Table.api.formatter.image, operate: false},
