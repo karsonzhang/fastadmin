@@ -36,7 +36,7 @@ http://demo.fastadmin.net
 提　示：演示站数据无法进行删除和修改，只能新增，完整体验请下载源码安装体验
 
 ## **界面截图**
-![控制台](//git.oschina.net/uploads/images/2017/0411/113717_e99ff3e7_10933.png "控制台")
+![控制台](https://git.oschina.net/uploads/images/2017/0411/113717_e99ff3e7_10933.png "控制台")
 
 ## **问题反馈**
 
@@ -50,7 +50,7 @@ weibo: [@karsonzhang](https://weibo.com/karsonzhang)
 
 Github: https://github.com/karsonzhang/fastadmin
 
-Git@OSC: https://git.oschina.com/karson/fastadmin
+Git@OSC: https://git.oschina.net/karson/fastadmin
 
 ## **特别鸣谢**
 
