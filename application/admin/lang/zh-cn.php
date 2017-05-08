@@ -34,6 +34,7 @@ return [
     'No'                                                    => '否',
     'Normal'                                                => '正常',
     'Hidden'                                                => '隐藏',
+    'Locked'                                                => '锁定',
     'Submit'                                                => '提交',
     'Reset'                                                 => '重置',
     'Execute'                                               => '执行',
