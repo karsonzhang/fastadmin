@@ -35,7 +35,10 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table', 'config'], function (
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
-                ]
+                ],
+                //普通搜索
+                commonSearch: true,
+                titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
             });
 
             // 为表格绑定事件
@@ -56,7 +59,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table', 'config'], function (
                 thumb: function (value, row, index) {
                     //console.log(row);
                     if (row.mimetype.indexOf("image") > -1) {
-                        if (Config.upload.bucket.replace(/^\s+|\s+$/gm, '').length === 0) {
+                        var reg = /ajax\/upload$/;
+                        if (reg.test(Config.upload.uploadurl)) {
                             return '<a href="' + Config.upload.cdnurl + value + '" target="_blank"><img src="' + Config.upload.cdnurl + value + '" alt="" style="max-height:90px;max-width:120px"></a>';
                         } else {
                             return '<a href="' + Config.upload.cdnurl + value + '" target="_blank"><img src="' + Config.upload.cdnurl + value + '!/fwfh/50x50" alt=""></a>';
