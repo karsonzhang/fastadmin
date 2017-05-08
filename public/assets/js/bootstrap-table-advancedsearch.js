@@ -272,6 +272,17 @@
             });
             // 追加查询关键字
             this.options.pageNumber = 1;
+            this.options.queryParams = function (params) {
+                return {
+                    search: params.search,
+                    sort: params.sort,
+                    order: params.order,
+                    filter: JSON.stringify(filter),
+                    op: JSON.stringify(op),
+                    offset: params.offset,
+                    limit: params.limit,
+                };
+            };
             this.refresh({query: {filter: JSON.stringify(filter), op: JSON.stringify(op)}});
 
         } else {
