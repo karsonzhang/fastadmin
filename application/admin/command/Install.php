@@ -40,7 +40,7 @@ class Install extends Command
 
         // 先尝试能否自动创建数据
         $config = Config::get('database');
-        $pdo = new PDO("{$config['type']}:host={$config['hostname']}", $config['username'], $config['password']);
+        $pdo = new PDO("{$config['type']}:host={$config['hostname']}" . ($config['hostport'] ? ";port={$config['hostport']}" : ''), $config['username'], $config['password']);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->query("CREATE DATABASE IF NOT EXISTS `{$config['database']}` CHARACTER SET utf8 COLLATE utf8_general_ci;");
 
