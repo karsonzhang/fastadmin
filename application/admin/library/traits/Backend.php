@@ -43,6 +43,11 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
+                foreach ($params as $k => &$v)
+                {
+                    $v = is_array($v) ? implode(',', $v) : $v;
+                    $v = substr($k, -4) == 'time' && !is_numeric($v) ? strtotime($v) : $v;
+                }
                 $this->model->create($params);
                 AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $this->code = 1;
@@ -67,6 +72,11 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
+                foreach ($params as $k => &$v)
+                {
+                    $v = is_array($v) ? implode(',', $v) : $v;
+                    $v = substr($k, -4) == 'time' && !is_numeric($v) ? strtotime($v) : $v;
+                }
                 $row->save($params);
                 AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;

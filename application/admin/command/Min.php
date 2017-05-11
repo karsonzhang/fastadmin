@@ -51,17 +51,28 @@ class Min extends Command
         $publicPath = ROOT_PATH . 'public' . DS;
         $tempFile = $minPath . 'temp.js';
 
-        try
+        // Winsows下请手动配置配置该值
+        $nodeExec = "";
+
+        if (!$nodeExec)
         {
-            $nodeExec = exec("which node");
-            if (!$nodeExec)
+            if (IS_WIN)
             {
-                throw new Exception("node environment not found!please install node first!");
+                throw new Exception("node environment require nodejs!please check http://doc.fastadmin.net/322813 !");
             }
-        }
-        catch (Exception $e)
-        {
-            throw new Exception($e->getMessage());
+
+            try
+            {
+                $nodeExec = exec("which node");
+                if (!$nodeExec)
+                {
+                    throw new Exception("node environment not found!please install node first!");
+                }
+            }
+            catch (Exception $e)
+            {
+                throw new Exception($e->getMessage());
+            }
         }
 
         foreach ($moduleArr as $mod)

@@ -54,6 +54,27 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         api: {
             bindevent: function () {
+                $("form[role=form]").validator({
+                    rules: {
+                        mobile: [/^1[3-9]\d{9}$/, "请填写有效的手机号"],
+                        chinese: [/^[\u0391-\uFFE5]+$/, "请填写中文字符"],
+                        // 使用函数定义规则
+                        phone: function (elem, param) {
+                            return /^1[3458]\d{9}$/.test($(elem).val()) || '请检查手机号格式';
+                        },
+                        image: function (elem, param) {
+                            return /^\/(.*)\.(jpg|jpeg|png|gif)$/.test($(elem).val()) || '请上传有并行的图片文件';
+                        }
+                    },
+                    messages: {
+                    },
+                    fields: {
+                        'row[title]': "required;length(3~16)",
+                        'row[image]': "required;image",
+                        'row[views]': "required;range[0~100]",
+                        'row[content]': "required"
+                    },
+                });
                 Form.api.bindevent($("form[role=form]"));
             }
         }

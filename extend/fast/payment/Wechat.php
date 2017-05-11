@@ -50,7 +50,7 @@ class Wechat
     {
         if ($config = Config::get('payment.wechat'))
         {
-            $this->config = array_merge($this->config, $config);
+            $this->_config = array_merge($this->_config, $config);
         }
         $this->_config = array_merge($this->_config, is_array($options) ? $options : []);
     }

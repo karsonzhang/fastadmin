@@ -262,6 +262,40 @@ CREATE TABLE `fa_page` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='单页表';
 
 -- ----------------------------
+--  Table structure for `fa_test`
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_test`;
+CREATE TABLE `fa_test` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID(单选)',
+  `category_ids` varchar(100) NOT NULL DEFAULT '' COMMENT '分类ID(多选)',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `user_ids` varchar(100) NOT NULL DEFAULT '' COMMENT '多会员ID',
+  `week` enum('monday','tuesday','wednesday') NOT NULL COMMENT '星期(单选)',
+  `flag` set('hot','index','recommend') NOT NULL DEFAULT '' COMMENT '标志(多选)',
+  `genderdata` enum('male','female') NOT NULL DEFAULT 'male' COMMENT '性别(单选)',
+  `hobbydata` set('music','reading','swimming') NOT NULL COMMENT '爱好(多选)',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` text NOT NULL COMMENT '内容',
+  `image` varchar(100) NOT NULL DEFAULT '' COMMENT '图片',
+  `attachfile` varchar(100) NOT NULL DEFAULT '' COMMENT '附件',
+  `keywords` varchar(100) NOT NULL DEFAULT '' COMMENT '关键字',
+  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+  `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
+  `views` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击',
+  `startdate` date DEFAULT NULL COMMENT '开始日期',
+  `activitydate` datetime DEFAULT NULL COMMENT '活动时间(datetime)',
+  `year` year(4) DEFAULT NULL COMMENT '年',
+  `times` time DEFAULT NULL COMMENT '时间',
+  `refreshtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '刷新时间(int)',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
+  `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='测试表';
+
+-- ----------------------------
 --  Table structure for `fa_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_user`;

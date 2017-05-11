@@ -1,27 +1,24 @@
 <?php
 
 use app\admin\library\Auth;
+use app\common\model\Category;
 use app\common\model\Configvalue;
 use fast\Form;
+use fast\Tree;
 use think\Db;
 
-function get_upload_multipart($savekey = '', $mimetype = '', $maxsize = '')
+/**
+ * 重新生成上传的参数配置
+ * @return type
+ */
+function get_upload_multipart($params = [])
 {
     // 加载配置
     $configvalue = new Configvalue;
     // 上传参数配置配置
-    $uploadcfg = $configvalue->upload($savekey, $mimetype, $maxsize);
+    $uploadcfg = $configvalue->upload($params);
 
-    return json_encode(['policy' => $uploadcfg['policy'], 'signature' => $uploadcfg['signature']]);
-}
-
-function get_flag_list()
-{
-    return [
-        'h' => __('Hot'),
-        'i' => __('Index'),
-        'r' => __('Recommend'),
-    ];
+    return json_encode(isset($uploadcfg['multipart']) ? $uploadcfg['multipart'] : []);
 }
 
 /**
@@ -50,9 +47,10 @@ function build_radios($name, $list = [], $selected = null)
 {
     $html = [];
     $selected = is_null($selected) ? key($list) : $selected;
+    $selected = is_array($selected) ? $selected : explode(',', $selected);
     foreach ($list as $k => $v)
     {
-        $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::radio($name, $k, $k == $selected, ['id' => "{$name}-{$k}"]));
+        $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::radio($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
     }
     return implode(' ', $html);
 }
@@ -68,11 +66,34 @@ function build_checkboxs($name, $list = [], $selected = null)
 {
     $html = [];
     $selected = is_null($selected) ? [] : $selected;
+    $selected = is_array($selected) ? $selected : explode(',', $selected);
     foreach ($list as $k => $v)
     {
-        $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox($name, $k, $k == $selected, ['id' => "{$name}-{$k}"]));
+        $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
     }
     return implode(' ', $html);
+}
+
+/**
+ * 生成分类下拉列表框
+ * @param string $name
+ * @param string $type
+ * @param mixed $selected
+ * @param array $attr
+ * @return string
+ */
+function build_category_select($name, $type, $selected = null, $attr = [])
+{
+    $tree = Tree::instance();
+    $tree->init(Category::getCategoryArray($type), 'pid');
+    $categorylist = $tree->getTreeList($tree->getTreeArray(0), 'name');
+    $categorydata = [0 => __('None')];
+    foreach ($categorylist as $k => $v)
+    {
+        $categorydata[$v['id']] = $v['name'];
+    }
+    $attr = array_merge(['id' => "c-{$name}", 'class' => 'form-control selectpicker'], $attr);
+    return build_select($name, $categorydata, $selected, $attr);
 }
 
 /**

@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'bootstrap-validator', 'bootstrap-checkbox', 'bootstrap-radio', 'bootstrap-switch'], function ($, undefined, Backend, Config, Toastr, Upload, undefined) {
+define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'validator'], function ($, undefined, Backend, Config, Toastr, Upload, Validator) {
     var Form = {
         config: {
         },
@@ -64,11 +64,14 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'bootstr
                 return false;
             },
             bindevent: function (form, onBeforeSubmit, onAfterSubmit) {
-                form.validator().on('submit', function (e) {
-                    if (e.isDefaultPrevented()) {
-                        //验证不通过
-                        Toastr.error("验证失败,请检查表单输入是否正确");
-                    } else {
+                form.validator({
+                    validClass: 'has-success',
+                    invalidClass: 'has-error',
+                    bindClassTo: '.form-group',
+                    formClass: 'n-default n-bootstrap',
+                    msgClass: 'n-right',
+                    stopOnError: true,
+                    valid: function (ret) {
                         //验证通过提交表单
                         Form.api.submit(form, onBeforeSubmit, function (data) {
                             if (typeof onAfterSubmit == 'function') {
@@ -85,16 +88,6 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'bootstr
                         return false;
                     }
                 });
-
-                // Activate the switches with icons
-                if ($('.switch').length != 0) {
-                    $('.switch')['bootstrapSwitch']();
-                }
-
-                // Activate regular switches
-                if ($("[data-toggle='switch']").length != 0) {
-                    $("[data-toggle='switch']").wrap('<div class="switch" />').parent().bootstrapSwitch();
-                }
 
                 //绑定select元素事件
                 if ($(".selectpicker", form).size() > 0) {

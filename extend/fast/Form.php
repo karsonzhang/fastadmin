@@ -89,6 +89,12 @@ class FormBuilder
      * @var array
      */
     protected $skipValueTypes = array('file', 'password', 'checkbox', 'radio');
+
+    /**
+     * Escape html
+     * @var boolean
+     */
+    protected $escapeHtml = true;
     protected static $instance;
 
     /**
@@ -180,6 +186,32 @@ class FormBuilder
     }
 
     /**
+     * Set the escape html mode
+     * @param boolean $escape
+     */
+    public function setEscapeHtml($escape)
+    {
+        $this->escapeHtml = $escape;
+    }
+
+    /**
+     * Escape HTML special characters in a string.
+     * @return string
+     */
+    public function escape($value)
+    {
+        if (!$this->escapeHtml)
+        {
+            return $value;
+        }
+        if (is_array($value))
+        {
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
+    }
+
+    /**
      * Close the current form.
      *
      * @return string
@@ -222,7 +254,7 @@ class FormBuilder
 
         $options = $this->attributes($options);
 
-        $value = e($this->formatLabel($name, $value));
+        $value = $this->escape($this->formatLabel($name, $value));
 
         return '<label for="' . $name . '"' . $options . '>' . $value . '</label>';
     }
@@ -378,7 +410,7 @@ class FormBuilder
         // the element. Then we'll create the final textarea elements HTML for us.
         $options = $this->attributes($options);
 
-        return '<textarea' . $options . '>' . e($value) . '</textarea>';
+        return '<textarea' . $options . '>' . $this->escape($value) . '</textarea>';
     }
 
     /**
@@ -547,7 +579,7 @@ class FormBuilder
             $html[] = $this->option($display, $value, $selected);
         }
 
-        return '<optgroup label="' . e($label) . '">' . implode('', $html) . '</optgroup>';
+        return '<optgroup label="' . $this->escape($label) . '">' . implode('', $html) . '</optgroup>';
     }
 
     /**
@@ -562,9 +594,9 @@ class FormBuilder
     {
         $selected = $this->getSelectedValue($value, $selected);
 
-        $options = array('value' => e($value), 'selected' => $selected);
+        $options = array('value' => $this->escape($value), 'selected' => $selected);
 
-        return '<option' . $this->attributes($options) . '>' . e($display) . '</option>';
+        return '<option' . $this->attributes($options) . '>' . $this->escape($display) . '</option>';
     }
 
     /**
