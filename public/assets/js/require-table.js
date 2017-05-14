@@ -1,5 +1,4 @@
 define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-advancedsearch', 'bootstrap-table-commonsearch'], function ($, undefined, Backend, Config, Toastr, Moment) {
-
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -10,7 +9,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             toolbar: "#toolbar",
             search: true,
             cache: false,
-            advancedSearch: false,
+            advancedSearch: true,
             commonSearch: false,
             titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
             idTable: 'advancedTable',
@@ -22,7 +21,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             pagination: true,
             clickToSelect: true,
             showRefresh: false,
-            locale: Config.language.replace('_', '-'),
+            locale: 'zh-CN',
             showToggle: true,
             showColumns: true,
             sortName: 'id',

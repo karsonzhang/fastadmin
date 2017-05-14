@@ -16,7 +16,7 @@
 
         var vFormCommon = createFormCommon(pColumns, that), timeoutId = 0;
 
-        var vModal = sprintf("<div id=\"commonSearchModalContent_%s\" class=\"well bs-component\">", that.options.idTable);
+        var vModal = sprintf("<div id=\"commonSearchModalContent_%s\" class=\"common-search-table\">", that.options.idTable);
         vModal += vFormCommon.join('');
         vModal += "</div>";
         $("#myTabContent").before($(vModal));
@@ -152,7 +152,7 @@
     $.extend($.fn.bootstrapTable.defaults, {
         commonSearch: false,
         idForm: 'commonSearch',
-        titleForm: __("Common search"),
+        titleForm: "Common search",
         actionForm: '',
         idTable: undefined,
         onColumnCommonSearch: function (field, text) {
@@ -170,19 +170,19 @@
 
     $.extend($.fn.bootstrapTable.locales, {
         formatCommonSearch: function () {
-            return __("Common search");
+            return "Common search";
         },
         formatCommonSubmitButton: function () {
-            return __("Submit");
+            return "Submit";
         },
         formatCommonResetButton: function () {
-            return __("Reset");
+            return "Reset";
         },
         formatCommonCloseButton: function () {
-            return __("Close");
+            return "Close";
         },
         formatCommonChoose: function () {
-            return __("Choose");
+            return "Choose";
         }
     });
 

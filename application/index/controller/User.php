@@ -60,7 +60,7 @@ class User extends Frontend
                     $synchtml = $uc->uc_user_synregister($this->user->id, $password);
                 }
                 $referer = Cookie::get('referer_url');
-                $this->error(__('Sign up successful') . $synchtml, $url);
+                $this->success(__('Sign up successful') . $synchtml, $url);
             }
             else
             {
@@ -96,7 +96,7 @@ class User extends Frontend
                     $uc = new Client();
                     $synchtml = $uc->uc_user_synlogin($this->user->id);
                 }
-                $this->error(__('Logged in successful') . $synchtml, $url);
+                $this->success(__('Logged in successful') . $synchtml, $url);
             }
             else
             {

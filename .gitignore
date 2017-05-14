@@ -2,6 +2,7 @@
 .idea
 composer.lock
 *.log
+*.css.map
 thinkphp
 vendor
 runtime

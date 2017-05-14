@@ -13,6 +13,22 @@ body {
   -o-transition: none;
   transition: none;
 }
+.main-header .navbar {
+  position: relative;
+}
+.main-header .navbar .sidebar-toggle {
+  position: absolute;
+  width: 45px;
+  text-align: center;
+}
+.main-header .navbar #nav {
+  position: absolute;
+  left: 45px;
+}
+.main-header .navbar .navbar-custom-menu {
+  position: absolute;
+  right: 0;
+}
 .note-dialog .modal {
   z-index: 1060;
 }
@@ -37,6 +53,12 @@ body {
 .tab-addtabs.ios-iframe-fix .tab-pane {
   -webkit-overflow-scrolling: touch;
   overflow: auto;
+}
+.common-search-table {
+  min-height: 20px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f5f5f5;
 }
 /*
  * RIBBON

@@ -180,7 +180,7 @@ class Menu extends Command
             }
         }
         //过滤掉其它字符
-        $controllerTitle = trim(preg_replace(array('/^\/\*\*(.*)[\n\r\t]/', '/[\s]+\*\//', '/\*\s@(.*)/', '/[\s|\*]+/'), '', $classComment));
+        $controllerTitle = trim(preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $classComment));
         //先定入菜单的数据
         $pid = 0;
         $name = "/admin";

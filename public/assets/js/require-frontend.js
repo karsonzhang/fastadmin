@@ -10,14 +10,12 @@ require.config({
     paths: {
         'lang': "empty:",
         'config': 'require-config',
-        'bootstrap-checkbox': 'bootstrap-checkbox',
-        'bootstrap-radio': 'bootstrap-radio',
-        'bootstrap-switch': 'bootstrap-switch',
         'form': 'require-form',
         'table': 'require-table',
         'upload': 'require-upload',
         'drag': 'jquery.drag.min',
         'drop': 'jquery.drop.min',
+        'echarts': 'echarts.min',
         'echarts-theme': 'echarts-theme',
         'adminlte': 'adminlte',
         //
@@ -47,12 +45,11 @@ require.config({
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
         'crontab': '../libs/jqcron/src/jqCron.cn',
         'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
-        'validator': '../libs/nice-validator/dist/local/zh-CN',
+        'validator': '../libs/nice-validator/dist/jquery.validator.js?local=zh-CN',
         'plupload': '../libs/plupload/js/plupload.min',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/layer/src/layer',
-        'echarts': '../libs/echarts/dist/echarts.min',
         'cookie': '../libs/jquery.cookie/jquery.cookie',
         'template': '../libs/art-template/dist/template-native',
     },
@@ -108,7 +105,7 @@ require.config({
         'bootstrap-dialog': ['css!../libs/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css'],
         'bootstrap-datetimepicker': [
             'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
-            'moment/locale/zh-cn'
+            'moment/locale/zh-cn',
         ],
         'bootstrap-tagsinput': [
             'css!../libs/bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css',
@@ -127,9 +124,7 @@ require.config({
             exports: "plupload"
         },
 //        'layer': ['css!../libs/layer/build/skin/default/layer.css'],
-        validator: {
-            deps: ['../libs/nice-validator/dist/jquery.validator', 'css!../libs/nice-validator/dist/jquery.validator.css']
-        }
+
     },
     baseUrl: requirejs.s.contexts._.config.config.config.site.cdnurl + '/assets/js/', //资源基础路径
     map: {

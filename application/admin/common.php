@@ -9,7 +9,8 @@ use think\Db;
 
 /**
  * 重新生成上传的参数配置
- * @return type
+ * @param array $params
+ * @return string
  */
 function get_upload_multipart($params = [])
 {
