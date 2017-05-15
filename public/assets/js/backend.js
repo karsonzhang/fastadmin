@@ -306,6 +306,16 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                 }
                 return val;
             });
+        },
+        init: function () {
+            //后台的公用代码
+            //点击包含.btn-dialog的元素时弹出dialog
+            $(document).on('click', '.btn-dialog', function (e) {
+                Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
+                e.preventDefault();
+            });
+            //支持data-bind-url方式进行渲染select元素
+            
         }
     };
     //将Layer暴露到全局中去
@@ -318,10 +328,6 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
     window.Backend = Backend;
     //Toastr定义
     Toastr.options = Backend.config.toastr;
-    //点击包含.btn-dialog的元素时弹出dialog
-    $(document).on('click', '.btn-dialog', function (e) {
-        Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
-        e.preventDefault();
-    });
+
     return Backend;
 });

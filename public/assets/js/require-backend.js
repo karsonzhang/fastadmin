@@ -45,7 +45,7 @@ require.config({
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
         'crontab': '../libs/jqcron/src/jqCron.cn',
         'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
-        'validator': '../libs/nice-validator/dist/jquery.validator.js?local=zh-CN',
+        'validator': '../libs/nice-validator/dist/jquery.validator',
         'plupload': '../libs/plupload/js/plupload.min',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
