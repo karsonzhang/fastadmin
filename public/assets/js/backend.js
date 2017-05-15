@@ -308,7 +308,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
             });
         },
         init: function () {
-            //后台的公用代码
+            //公共代码
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog', function (e) {
                 Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
@@ -328,6 +328,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
     window.Backend = Backend;
     //Toastr定义
     Toastr.options = Backend.config.toastr;
-
+    
+    Backend.init();
     return Backend;
 });

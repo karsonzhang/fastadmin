@@ -234,6 +234,10 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                 }
                 return val;
             });
+        },
+        init: function () {
+            //公共代码
+            
         }
     };
     //将Layer暴露到全局中去
@@ -246,5 +250,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
     window.Frontend = Frontend;
     //Toastr定义
     Toastr.options = Frontend.config.toastr;
+    
+    Frontend.init();
     return Frontend;
 });
