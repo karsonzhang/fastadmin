@@ -38,6 +38,7 @@
   "devDependencies": {
     "dragsort": "https://github.com/karsonzhang/dragsort.git",
     "jquery-addtabs": "https://github.com/karsonzhang/jquery-addtabs.git",
+    "jquery-cxselect": "https://github.com/karsonzhang/cxSelect.git#",
     "jqcron": "https://github.com/karsonzhang/jqcron.git#"
   }
 }

@@ -2,7 +2,6 @@
 
 namespace app\admin\controller\general;
 
-use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use think\Db;
 use think\Debug;
@@ -60,7 +59,6 @@ class Database extends Backend
 
         if (in_array($do_action, array('doquery', 'optimizeall', 'repairall')))
         {
-            AdminLog::record(__('query'), ['table' => $tablename, 'action' => $do_action, 'sql' => $this->request->post('sqlquery')]);
             $this->$do_action();
         }
         else if (count($tablename) == 0)
@@ -69,7 +67,6 @@ class Database extends Backend
         }
         else
         {
-            AdminLog::record(__('query'), ['table' => $tablename, 'action' => $do_action]);
             foreach ($tablename as $table)
             {
                 $this->$do_action($table);

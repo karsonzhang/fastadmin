@@ -20,13 +20,13 @@
                             <!-- RIBBON -->
                             <div id="ribbon">
                                 <ol class="breadcrumb pull-left">
-                                    <li><a href="#"><i class="fa fa-dashboard"></i> {:__('Dashboard')}</a></li>
-                                    <li>{$title|default=''}</li>
+                                    <li><a href="dashboard" class="addtabsit"><i class="fa fa-dashboard"></i> {:__('Dashboard')}</a></li>
                                 </ol>
-                                <div class="shortcut pull-right">
-                                    <a href="javascript:;" id="search" onclick="$('.search input').focus();"><i class="fa fa-search"></i> <span class="hidden-mobile">{:__('Search')}</span></a>
-                                    <a href="javascript:;" id="refresh" onclick="location.reload();"><i class="fa fa-refresh"></i> <span class="hidden-mobile">{:__('Refresh')}</span></a>
-                                </div>
+                                <ol class="breadcrumb pull-right">
+                                    {foreach $breadcrumb as $vo}
+                                    <li>{$vo.title}</li>
+                                    {/foreach}
+                                </ol>
                             </div>
                             <!-- END RIBBON -->
                             {/if}

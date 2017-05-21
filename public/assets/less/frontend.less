@@ -1,0 +1,23 @@
+@import (reference) "bootstrap-less/mixins.less";
+@import (reference) "bootstrap-less/variables.less";
+@import "lesshat.less";
+
+@import url("../css/bootstrap.min.css");
+@import url("../css/fastadmin.min.css");
+@import url("../css/skins/skin-green.css");
+@import url("../css/iconfont.css");
+@import url("../libs/font-awesome/css/font-awesome.min.css");
+@import url("../libs/toastr/toastr.min.css");
+@import url("../libs/layer/build/skin/default/layer.css");
+
+.clearfix() {
+    &:before,
+        &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+

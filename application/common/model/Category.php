@@ -29,7 +29,6 @@ class Category Extends Model
             'default' => __('Default'),
             'page'    => __('Page'),
             'article' => __('Article'),
-            'block'   => __('Block'),
         ];
         return $typelist;
     }

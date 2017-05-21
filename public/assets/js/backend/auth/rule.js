@@ -33,7 +33,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         {field: 'ismenu', title: __('Ismenu'), align: 'left'},
                         {field: 'weigh', title: __('Weigh')},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'id', title: '<a href="javascript:;" class="btn btn-primary btn-xs btn-toggle"><i class="fa fa-chevron-down"></i></a>', formatter: Controller.api.formatter.subnode},
+                        {field: 'id', title: '<a href="javascript:;" class="btn btn-primary btn-xs btn-toggle"><i class="fa fa-chevron-down"></i></a>', operate: false, formatter: Controller.api.formatter.subnode},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
@@ -93,7 +93,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 Form.api.bindevent($("form[role=form]"));
                 $(document).on('click', ".btn-search-icon", function () {
                     if (iconlist.length == 0) {
-                        $.get(requirejs.s.contexts._.config.config.config.site.cdnurl + "/assets/libs/font-awesome/less/variables.less", function (ret) {
+                        $.get(Config.site.cdnurl + "/assets/libs/font-awesome/less/variables.less", function (ret) {
                             var exp = /fa-var-(.*):/ig;
                             var result;
                             while ((result = exp.exec(ret)) != null) {

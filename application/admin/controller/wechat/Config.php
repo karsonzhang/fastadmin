@@ -2,7 +2,6 @@
 
 namespace app\admin\controller\wechat;
 
-use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use app\common\model\Configvalue;
 
@@ -55,7 +54,6 @@ class Config extends Backend
             $this->obj['config'][] = $this->request->post('row/a');
             $this->wechatcfg->content = $this->obj;
             $this->wechatcfg->save();
-            AdminLog::record(__('Add'), $this->request->post('row/a'));
             $this->code = 1;
             return;
         }
@@ -86,7 +84,6 @@ class Config extends Backend
             $this->wechatcfg->content = $this->obj;
             $this->wechatcfg->save();
             $this->code = 1;
-            AdminLog::record(__('Edit'), $ids);
             return;
         }
         $this->view->assign("row", $row);
@@ -111,7 +108,6 @@ class Config extends Backend
             }
             $this->wechatcfg->content = $this->obj;
             $this->wechatcfg->save();
-            AdminLog::record(__('Del'), $ids);
             $this->code = 1;
         }
 

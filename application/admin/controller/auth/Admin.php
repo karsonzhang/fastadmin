@@ -2,7 +2,6 @@
 
 namespace app\admin\controller\auth;
 
-use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use fast\Random;
 use fast\Tree;
@@ -47,6 +46,37 @@ class Admin extends Backend
     }
 
     /**
+     * 查看
+     */
+    public function index()
+    {
+        if ($this->request->isAjax())
+        {
+            $childrenAdminIds = model('AuthGroupAccess')
+                    ->field('uid')
+                    ->where('group_id', 'in', $this->childrenIds)
+                    ->column('uid');
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $total = $this->model
+                    ->where($where)
+                    ->where('id', 'in', $childrenAdminIds)
+                    ->order($sort, $order)
+                    ->count();
+
+            $list = $this->model
+                    ->where($where)
+                    ->where('id', 'in', $childrenAdminIds)
+                    ->order($sort, $order)
+                    ->limit($offset, $limit)
+                    ->select();
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+        }
+        return $this->view->fetch();
+    }
+
+    /**
      * 添加
      */
     public function add()
@@ -61,7 +91,6 @@ class Admin extends Backend
                 $params['password'] = md5(md5($params['password']) . $params['salt']);
 
                 $admin = $this->model->create($params);
-                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $group = $this->request->post("group/a");
 
                 //过滤不允许的组别,避免越权
@@ -99,8 +128,11 @@ class Admin extends Backend
                     $params['salt'] = Random::alnum();
                     $params['password'] = md5(md5($params['password']) . $params['salt']);
                 }
+                else
+                {
+                    unset($params['password'], $params['salt']);
+                }
                 $row->save($params);
-                AdminLog::record(__('Edit'), $ids);
 
                 // 先移除所有权限
                 model('AuthGroupAccess')->where('uid', $row->id)->delete();
@@ -142,8 +174,7 @@ class Admin extends Backend
         {
             // 避免越权删除管理员
             $childrenGroupIds = $this->childrenIds;
-            $adminList = $this->model->where('id', 'in', $ids)->where('id', 'in', function($query) use($childrenGroupIds)
-                    {
+            $adminList = $this->model->where('id', 'in', $ids)->where('id', 'in', function($query) use($childrenGroupIds) {
                         $query->name('auth_group_access')->where('group_id', 'in', $childrenGroupIds)->field('uid');
                     })->select();
             if ($adminList)
@@ -156,7 +187,6 @@ class Admin extends Backend
                 $deleteIds = array_diff($deleteIds, [$this->auth->id]);
                 if ($deleteIds)
                 {
-                    AdminLog::record(__('Del'), $deleteIds);
                     $this->model->destroy($deleteIds);
                     model('AuthGroupAccess')->where('uid', 'in', $deleteIds)->delete();
                     $this->code = 1;

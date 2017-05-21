@@ -40,6 +40,7 @@ class Auth
      * @var object 对象实例
      */
     protected static $instance;
+    protected $rules = [];
 
     /**
      * 当前请求实例
@@ -179,7 +180,7 @@ class Auth
                 ->view($auth_group, 'id,pid,name,rules', "{$auth_group_access}.group_id={$auth_group}.id", 'LEFT')
                 ->where("{$auth_group_access}.uid='{$uid}' and {$auth_group}.status='normal'")
                 ->select();
-        $groups[$uid] = $user_groups ? : [];
+        $groups[$uid] = $user_groups ?: [];
 
         return $groups[$uid];
     }
@@ -208,7 +209,7 @@ class Auth
             $_rulelist[$uid] = [];
             return [];
         }
-
+        
         // 筛选条件
         $where = [
             'status' => 'normal'
@@ -218,10 +219,11 @@ class Auth
             $where['id'] = ['in', $ids];
         }
         //读取用户组所有权限规则
-        $rules = Db::name($this->config['auth_rule'])->where($where)->field('id,condition,name,ismenu')->select();
+        $this->rules = Db::name($this->config['auth_rule'])->where($where)->field('id,pid,condition,icon,name,title,ismenu')->select();
+        
         //循环规则，判断结果。
         $rulelist = []; //
-        foreach ($rules as $rule)
+        foreach ($this->rules as $rule)
         {
             //超级管理员无需验证condition
             if (!empty($rule['condition']) && !in_array('*', $ids))

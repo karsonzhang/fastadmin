@@ -13,6 +13,7 @@ class Auth extends \fast\Auth
 {
 
     protected $requestUri = '';
+    protected $breadcrumb = [];
 
     public function __construct()
     {
@@ -201,6 +202,27 @@ class Auth extends \fast\Auth
     public function isSuperAdmin()
     {
         return in_array('*', $this->getRuleIds()) ? TRUE : FALSE;
+    }
+
+    /**
+     * 获得面包屑导航
+     * @param string $path
+     * @return array
+     */
+    public function getBreadCrumb($path = '')
+    {
+        if ($this->breadcrumb || !$path)
+            return $this->breadcrumb;
+        $path_rule_id = 0;
+        foreach ($this->rules as $rule)
+        {
+            $path_rule_id = $rule['name'] == $path ? $rule['id'] : $path_rule_id;
+        }
+        if ($path_rule_id)
+        {
+            $this->breadcrumb = Tree::instance()->init($this->rules)->getParents($path_rule_id, true);
+        }
+        return $this->breadcrumb;
     }
 
     /**

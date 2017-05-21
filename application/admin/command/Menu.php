@@ -31,7 +31,7 @@ class Menu extends Command
         $this->model = new AuthRule();
         $adminPath = dirname(__DIR__) . DS;
         //控制器名
-        $controller = $input->getOption('controller') ? : '';
+        $controller = $input->getOption('controller') ?: '';
         if (!$controller)
         {
             throw new Exception("please input controller name");
@@ -129,21 +129,19 @@ class Menu extends Command
         $controllerArr[$key] = ucfirst($controllerArr[$key]);
         $classSuffix = Config::get('controller_suffix') ? ucfirst(Config::get('url_controller_layer')) : '';
         $className = "\\app\\admin\\controller\\" . implode("\\", $controllerArr) . $classSuffix;
-        if (version_compare(PHP_VERSION, '7.0.0', '<'))
-        {
-            $pathArr = $controllerArr;
-            array_unshift($pathArr, '', 'application', 'admin', 'controller');
-            $classFile = ROOT_PATH . implode(DS, $pathArr) . $classSuffix . ".php";
-            $classContent = file_get_contents($classFile);
-            $uniqueName = uniqid("FastAdmin") . $classSuffix;
-            $classContent = str_replace("class " . $controllerArr[$key] . $classSuffix . " ", 'class ' . $uniqueName . ' ', $classContent);
-            $classContent = preg_replace("/namespace\s(.*);/", 'namespace ' . __NAMESPACE__ . ";", $classContent);
 
-            //临时的类文件
-            $tempClassFile = __DIR__ . DS . $uniqueName . ".php";
-            file_put_contents($tempClassFile, $classContent);
-            $className = "\\app\\admin\\command\\" . $uniqueName;
-        }
+        $pathArr = $controllerArr;
+        array_unshift($pathArr, '', 'application', 'admin', 'controller');
+        $classFile = ROOT_PATH . implode(DS, $pathArr) . $classSuffix . ".php";
+        $classContent = file_get_contents($classFile);
+        $uniqueName = uniqid("FastAdmin") . $classSuffix;
+        $classContent = str_replace("class " . $controllerArr[$key] . $classSuffix . " ", 'class ' . $uniqueName . ' ', $classContent);
+        $classContent = preg_replace("/namespace\s(.*);/", 'namespace ' . __NAMESPACE__ . ";", $classContent);
+
+        //临时的类文件
+        $tempClassFile = __DIR__ . DS . $uniqueName . ".php";
+        file_put_contents($tempClassFile, $classContent);
+        $className = "\\app\\admin\\command\\" . $uniqueName;
         //反射机制调用类的注释和方法名
         $reflector = new ReflectionClass($className);
 
@@ -181,16 +179,20 @@ class Menu extends Command
         }
         //过滤掉其它字符
         $controllerTitle = trim(preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $classComment));
+
+        //导入中文语言包
+        \think\Lang::load(dirname(__DIR__) . DS . 'lang/zh-cn.php');
+
         //先定入菜单的数据
         $pid = 0;
         $name = "/admin";
         foreach (explode('/', $controller) as $k => $v)
         {
             $name .= '/' . strtolower($v);
-            $title = (!isset($controllerArr[$k + 1]) ? $controllerTitle : ucfirst($v));
+            $title = (!isset($controllerArr[$k + 1]) ? $controllerTitle : '');
             $icon = (!isset($controllerArr[$k + 1]) ? $controllerIcon : 'fa fa-list');
             $remark = (!isset($controllerArr[$k + 1]) ? $controllerRemark : '');
-            $title = $title ? $title : ucfirst($v);
+            $title = $title ? $title : __(ucfirst($v) . ' manager');
             $rulemodel = $this->model->get(['name' => $name]);
             if (!$rulemodel)
             {

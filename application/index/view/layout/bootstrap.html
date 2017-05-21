@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{$config.language}">
     <head>
         <meta charset="utf-8">
         <title>FastAdmin</title>
@@ -16,14 +16,15 @@
         <![endif]-->
         <script type="text/javascript">
             var require = {
-                config: {
-                    'config': {$config|json_encode}
-                }
+                config: {$config | json_encode}
             };
         </script>
         <style>
             html{height:100%;overflow:auto;-webkit-overflow-scrolling: touch;}
-            body{padding:70px 0;}
+            body{padding:70px 0 0 0;}
+            footer {margin-top:20px;font-size:14px;padding:25px 0;background:#f4f6f6;}
+            .footer-link ul li a{margin-top:10px;line-height: 25px;}
+            #component-list .caption p {font-size:13px;line-height:20px;}
         </style>
 
         <script>
@@ -44,7 +45,7 @@
                 </div>
                 <ul class="nav navbar-nav pull-right">
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">更多示例 <span class="caret"></span></a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">你好!{:$user->id?$user->nickname:'游客'} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a id="userindex" href="{:url('user/index')}">会员中心</a></li>
                             <li><a id="thirdlogin" href="{:url('user/login')}">第三方登录</a></li>
@@ -60,6 +61,41 @@
 
 
         {__CONTENT__}
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="footer-link">
+                            <ul class="list-inline">
+                                <li><a href="http://www.fastadmin.net">关于我们</a></li>
+                                <li><a href="http://doc.fastadmin.net">帮助文档</a></li>
+                                <li><a href="https://git.oschina.net/karson/fastadmin">Git@OSC</a></li>
+                                <li><a href="https://github.com/karsonzhang/fastadmin" class="">Github</a></li>
+                                <li><a href="http://www.fastadmin.net/#donate" class="">打赏</a></li>
+                                <li><a href="http://www.fastadmin.net/#contact" class="">联系我们</a></li>
+                                <li><a href="http://demo.fastadmin.net/" class="">在线演示</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="pull-left">
+                            <p>
+                                <span class="text-muted"><a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备15054802号-4</a></span>
+                            </p>
+                            <span class="small"></span>
+                            <p>
+                                Copyright © fastadmin.net 2017-2018 All rights reserved
+                            </p>
+                        </div>
+                        <div class="pull-right hidden-xs hidden-sm">
+                            
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
 
         <script src="__CDN__/assets/js/require.js" data-main="__CDN__/assets/js/require-frontend{$Think.config.app_debug?'':'.min'}.js?v={$site.version}"></script>
     </body>

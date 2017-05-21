@@ -1,5 +1,5 @@
 require.config({
-    urlArgs: "v=" + requirejs.s.contexts._.config.config.config.site.version,
+    urlArgs: "v=" + requirejs.s.contexts._.config.config.site.version,
     packages: [{
             name: 'moment',
             location: '../libs/moment',
@@ -9,15 +9,16 @@ require.config({
     include: ['css', 'layer', 'toastr', 'backend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs'],
     paths: {
         'lang': "empty:",
-        'config': 'require-config',
         'form': 'require-form',
         'table': 'require-table',
         'upload': 'require-upload',
+        'validator': 'require-validator',
         'drag': 'jquery.drag.min',
         'drop': 'jquery.drop.min',
         'echarts': 'echarts.min',
         'echarts-theme': 'echarts-theme',
         'adminlte': 'adminlte',
+        'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
         //
         // 以下的包从bower的libs目录加载
         'jquery': '../libs/jquery/dist/jquery.min',
@@ -31,8 +32,6 @@ require.config({
         'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
-        'bootstrap-table-advancedsearch': 'bootstrap-table-advancedsearch',
-        'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
         'typeahead': '../libs/typeahead.js/dist/typeahead.jquery.min',
         'bloodhound': '../libs/typeahead.js/dist/bloodhound.min',
@@ -45,19 +44,24 @@ require.config({
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
         'crontab': '../libs/jqcron/src/jqCron.cn',
         'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
-        'validator': '../libs/nice-validator/dist/jquery.validator',
+        'validator-core': '../libs/nice-validator/dist/jquery.validator',
+        'validator-lang': '../libs/nice-validator/dist/local/zh-CN',
         'plupload': '../libs/plupload/js/plupload.min',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/layer/src/layer',
         'cookie': '../libs/jquery.cookie/jquery.cookie',
+        'cxselect': '../libs/jquery-cxselect/js/jquery.cxselect',
         'template': '../libs/art-template/dist/template-native',
     },
     // shim依赖配置
     shim: {
         'bootstrap': ['jquery'],
         'bootstrap-table': {
-            deps: ['bootstrap', 'css!../libs/bootstrap-table/dist/bootstrap-table.min.css'],
+            deps: [
+                'bootstrap',
+//                'css!../libs/bootstrap-table/dist/bootstrap-table.min.css'
+            ],
             exports: '$.fn.bootstrapTable'
         },
         'bootstrap-table-lang': {
@@ -104,8 +108,8 @@ require.config({
         'bootstrap-switch': ['jquery'],
         'bootstrap-dialog': ['css!../libs/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css'],
         'bootstrap-datetimepicker': [
-            'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
             'moment/locale/zh-cn',
+//            'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
         ],
         'bootstrap-tagsinput': [
             'css!../libs/bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css',
@@ -118,15 +122,14 @@ require.config({
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],
         'plupload': {
-            deps: [
-                '../libs/plupload/js/moxie.min'
-            ],
+            deps: ['../libs/plupload/js/moxie.min'],
             exports: "plupload"
         },
 //        'layer': ['css!../libs/layer/build/skin/default/layer.css'],
-
+//        'validator-core': ['css!../libs/nice-validator/dist/jquery.validator.css'],
+        'validator-lang': ['validator-core'],
     },
-    baseUrl: requirejs.s.contexts._.config.config.config.site.cdnurl + '/assets/js/', //资源基础路径
+    baseUrl: requirejs.s.contexts._.config.config.site.cdnurl + '/assets/js/', //资源基础路径
     map: {
         '*': {
             'css': '../libs/require-css/css.min'
@@ -135,7 +138,11 @@ require.config({
     charset: 'utf-8' // 文件编码
 });
 
-require(['jquery', 'bootstrap', 'config'], function ($, undefined, Config) {
+require(['jquery', 'bootstrap'], function ($, undefined) {
+    //初始配置
+    var Config = requirejs.s.contexts._.config.config;
+    //将Config渲染到全局
+    window.Config = Config;
     // 配置语言包的路径
     var paths = {};
     paths['lang'] = Config.moduleurl + '/ajax/lang?callback=define&controllername=' + Config.controllername;

@@ -6,6 +6,8 @@
         <style type="text/css">
             body {
                 color:#999;
+                background:url('http://img.infinitynewtab.com/wallpaper/{:date("Ymd")%4000}.jpg');
+                background-size:cover;
             }
             .login-panel{margin-top:150px;}
             .login-screen {
@@ -72,12 +74,12 @@
                                 {:token()}
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
-                                    <input type="text" class="form-control" id="pd-form-username" placeholder="" name="username" autocomplete="off" required="required" value="admin" />
+                                    <input type="text" class="form-control" id="pd-form-username" placeholder="" name="username" autocomplete="off" value="admin" />
                                 </div>
 
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                                    <input type="password" class="form-control" id="pd-form-password" placeholder="" name="password" autocomplete="off" required="required" value="123456" />
+                                    <input type="password" class="form-control" id="pd-form-password" placeholder="" name="password" autocomplete="off" value="123456" />
                                 </div>
 
                                 <div class="form-group">

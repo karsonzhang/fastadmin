@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-advancedsearch', 'bootstrap-table-commonsearch'], function ($, undefined, Backend, Config, Toastr, Moment) {
+define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch'], function ($, undefined, Backend, Toastr, Moment) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -9,10 +9,10 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
             toolbar: "#toolbar",
             search: true,
             cache: false,
-            advancedSearch: true,
-            commonSearch: false,
+            commonSearch: true,
+            searchFormVisible: false,
             titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
-            idTable: 'advancedTable',
+            idTable: 'commonTable',
             showExport: true,
             exportDataType: "all",
             exportTypes: ['json', 'xml', 'csv', 'txt', 'doc', 'excel'],
@@ -70,17 +70,20 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                 $.extend($.fn.bootstrapTable.columnDefaults, Table.columnDefaults, columnDefaults);
                 // 写入bootstrap-table locale配置
                 $.extend($.fn.bootstrapTable.locales[Table.defaults.locale], {
-                    formatAdvancedSearch: function () {
-                        return __('Advanced search');
+                    formatCommonSearch: function () {
+                        return __('Common search');
                     },
-                    formatAdvancedSubmitButton: function () {
-                        return __("Submit");
+                    formatCommonSubmitButton: function () {
+                        return __('Submit');
                     },
-                    formatAdvancedResetButton: function () {
-                        return __("Reset");
+                    formatCommonResetButton: function () {
+                        return __('Reset');
                     },
-                    formatAdvancedCloseButton: function () {
-                        return __("Close");
+                    formatCommonCloseButton: function () {
+                        return __('Close');
+                    },
+                    formatCommonChoose: function () {
+                        return __('Choose');
                     }
                 }, locales);
             },
@@ -92,7 +95,6 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                 var options = table.bootstrapTable('getOptions');
                 //Bootstrap操作区
                 var toolbar = $(options.toolbar, parenttable);
-
                 //当刷新表格时
                 table.on('load-error.bs.table', function (status, res) {
                     Toastr.error(__('Unknown data format'));
@@ -275,6 +277,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                     if (typeof custom !== 'undefined') {
                         colorArr = $.extend(colorArr, custom);
                     }
+                    value = value.toString();
                     var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
                     value = value[0].toUpperCase() + value.substr(1);
                     //渲染状态
@@ -284,16 +287,28 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'moment', 'bootstr
                 url: function (value, row, index) {
                     return '<a href="' + value + '" target="_blank" class="label bg-green">' + value + '</a>';
                 },
-                flag: function (value, row, index) {
-                    var flagstext = __('Flags');
-                    var flagscolor = {t: 'red', i: 'blue', r: 'green', h: 'yellow'};
-                    if (!value)
-                        return value;
+                search: function (value, row, index) {
+                    return '<a href="javascript:;" class="searchit" data-field="' + this.field + '" data-value="' + value + '">' + value + '</a>';
+                },
+                addtabs: function (value, row, index, url) {
+                    return '<a href="' + url + '" class="addtabsit" title="' + __("Search %s", value) + '">' + value + '</a>';
+                },
+                flag: function (value, row, index, custom) {
+                    var colorArr = {index: 'success', hot: 'warning', recommend: 'danger', 'new': 'info'};
+                    //如果有自定义状态,可以按需传入
+                    if (typeof custom !== 'undefined') {
+                        colorArr = $.extend(colorArr, custom);
+                    }
                     //渲染Flag
                     var html = [];
                     var arr = value.split(',');
-                    arr.forEach(function (value) {
-                        html.push('<span class="label bg-' + (typeof flagscolor[value] != 'undefined' ? flagscolor[value] : 'primary') + '">' + (typeof flagstext[value] !== 'undefined' ? flagstext[value] : '') + '</span>');
+                    $.each(arr, function (i, value) {
+                        value = value.toString();
+                        if (value == '')
+                            return true;
+                        var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
+                        value = value[0].toUpperCase() + value.substr(1);
+                        html.push('<span class="label label-' + color + '">' + __(value) + '</span>');
                     });
                     return html.join(' ');
                 },

@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'frontend', 'config'], function ($, undefined, Frontend, Config) {
+define(['jquery', 'bootstrap', 'frontend'], function ($, undefined, Frontend) {
 
     var Controller = {
         qrcode: function () {

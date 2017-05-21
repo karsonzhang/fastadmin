@@ -1,5 +1,5 @@
 require.config({
-    urlArgs: "v=" + requirejs.s.contexts._.config.config.config.site.version,
+    urlArgs: "v=" + requirejs.s.contexts._.config.config.site.version,
     packages: [{
             name: 'moment',
             location: '../libs/moment',
@@ -9,7 +9,6 @@ require.config({
     include: ['css', 'layer', 'toastr', 'frontend'],
     paths: {
         'lang': "empty:",
-        'config': 'require-config',
         'form': 'require-form',
         'table': 'require-table',
         'upload': 'require-upload',
@@ -18,6 +17,7 @@ require.config({
         'echarts': 'echarts.min',
         'echarts-theme': 'echarts-theme',
         'adminlte': 'adminlte',
+        'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
         //
         // 以下的包从bower的libs目录加载
         'jquery': '../libs/jquery/dist/jquery.min',
@@ -31,8 +31,6 @@ require.config({
         'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
-        'bootstrap-table-advancedsearch': 'bootstrap-table-advancedsearch',
-        'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
         'typeahead': '../libs/typeahead.js/dist/typeahead.jquery.min',
         'bloodhound': '../libs/typeahead.js/dist/bloodhound.min',
@@ -126,7 +124,7 @@ require.config({
 //        'layer': ['css!../libs/layer/build/skin/default/layer.css'],
 
     },
-    baseUrl: requirejs.s.contexts._.config.config.config.site.cdnurl + '/assets/js/', //资源基础路径
+    baseUrl: requirejs.s.contexts._.config.config.site.cdnurl + '/assets/js/', //资源基础路径
     map: {
         '*': {
             'css': '../libs/require-css/css.min'
@@ -135,7 +133,11 @@ require.config({
     charset: 'utf-8' // 文件编码
 });
 
-require(['jquery', 'bootstrap', 'config'], function ($, undefined, Config) {
+require(['jquery', 'bootstrap'], function ($, undefined) {
+    //初始配置
+    var Config = requirejs.s.contexts._.config.config;
+    //将Config渲染到全局
+    window.Config = Config;
     // 配置语言包的路径
     var paths = {};
     paths['lang'] = Config.moduleurl + '/ajax/lang?callback=define&controllername=' + Config.controllername;

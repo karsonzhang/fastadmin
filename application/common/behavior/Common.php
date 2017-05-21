@@ -9,7 +9,8 @@ class Common
 
     public function run(&$params)
     {
-        $cdnurl = str_replace('/index.php', '', $params->root());
+        $cdnurl = str_replace($_SERVER['SCRIPT_NAME'], '', $params->root());
+
         // 如果未设置__CDN__则自动匹配得出
         if (!Config::get('view_replace_str.__CDN__'))
         {
@@ -19,6 +20,11 @@ class Common
         if (!Config::get('site.cdnurl'))
         {
             Config::set('site.cdnurl', $cdnurl);
+        }
+        // 如果未设置cdnurl则自动匹配得出
+        if (!Config::get('upload.cdnurl'))
+        {
+            Config::set('upload.cdnurl', $cdnurl);
         }
         // 如果是调试模式将version置为当前的时间戳可避免缓存
         if (!Config::get('app_debug'))

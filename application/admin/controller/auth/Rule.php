@@ -2,7 +2,6 @@
 
 namespace app\admin\controller\auth;
 
-use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use fast\Tree;
 use think\Cache;
@@ -70,7 +69,6 @@ class Rule extends Backend
                     return;
                 }
                 $this->model->create($params);
-                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 Cache::rm('__menu__');
                 $this->code = 1;
             }
@@ -100,7 +98,6 @@ class Rule extends Backend
                     return;
                 }
                 $row->save($params);
-                AdminLog::record(__('Edit'), $ids);
                 Cache::rm('__menu__');
                 $this->code = 1;
             }
@@ -128,7 +125,6 @@ class Rule extends Backend
             $count = $this->model->where('id', 'in', $delIds)->delete();
             if ($count)
             {
-                AdminLog::record(__('Del'), $ids);
                 Cache::rm('__menu__');
                 $this->code = 1;
             }

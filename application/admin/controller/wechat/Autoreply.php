@@ -2,10 +2,8 @@
 
 namespace app\admin\controller\wechat;
 
-use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use app\common\model\WechatResponse;
-use think\Db;
 
 /**
  * 微信自动回复管理
@@ -28,7 +26,7 @@ class Autoreply extends Backend
      */
     public function edit($ids = NULL)
     {
-        $row = Db::table($this->table)->where('id', $ids)->get();
+        $row = $this->model->get(['id' => $ids]);
         if (!$row)
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
@@ -38,7 +36,6 @@ class Autoreply extends Backend
             if ($params)
             {
                 $row->save($params);
-                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
             return;

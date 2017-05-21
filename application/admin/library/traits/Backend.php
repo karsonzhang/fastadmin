@@ -2,7 +2,6 @@
 
 namespace app\admin\library\traits;
 
-use app\admin\model\AdminLog;
 
 trait Backend
 {
@@ -49,7 +48,6 @@ trait Backend
                     $v = substr($k, -4) == 'time' && !is_numeric($v) ? strtotime($v) : $v;
                 }
                 $this->model->create($params);
-                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $this->code = 1;
             }
 
@@ -78,7 +76,6 @@ trait Backend
                     $v = substr($k, -4) == 'time' && !is_numeric($v) ? strtotime($v) : $v;
                 }
                 $row->save($params);
-                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
 
@@ -99,7 +96,6 @@ trait Backend
             $count = $this->model->where('id', 'in', $ids)->delete();
             if ($count)
             {
-                AdminLog::record(__('Del'), $ids);
                 $this->code = 1;
             }
         }
@@ -125,7 +121,6 @@ trait Backend
                     $count = $this->model->where('id', 'in', $ids)->update($values);
                     if ($count)
                     {
-                        AdminLog::record(__('Multi'), $ids);
                         $this->code = 1;
                     }
                 }

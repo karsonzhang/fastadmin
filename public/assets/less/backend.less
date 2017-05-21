@@ -1,7 +1,19 @@
-
 @import (reference) "bootstrap-less/mixins.less";
 @import (reference) "bootstrap-less/variables.less";
+@import (reference) "fastadmin/mixins.less";
+@import (reference) "fastadmin/variables.less";
 @import "lesshat.less";
+
+@import url("../css/bootstrap.min.css");
+@import url("../css/fastadmin.min.css");
+@import url("../css/skins/skin-green.css");
+@import url("../css/iconfont.css");
+@import url("../libs/font-awesome/css/font-awesome.min.css");
+@import url("../libs/toastr/toastr.min.css");
+@import url("../libs/layer/build/skin/default/layer.css");
+@import url("../libs/bootstrap-table/dist/bootstrap-table.min.css");
+@import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
+@import url("../libs/nice-validator/dist/jquery.validator.css");
 
 .clearfix() {
     &:before,
@@ -81,6 +93,9 @@ body {
     margin-bottom: 15px;
     background-color: #f5f5f5;
 }
+.searchit{
+    border-bottom:1px dashed @link-color;
+}
 
 /*
  * RIBBON
@@ -103,7 +118,7 @@ body {
     }
 
     .breadcrumb > .active,
-    .breadcrumb li:last-child {
+    .breadcrumb li {
         color: #aaa;
     }
     .shortcut {
@@ -123,11 +138,17 @@ body {
         font-weight: normal;
     }
 }
+
+.user-panel > .image img{
+    width:45px;
+    height:45px;
+}
+
 /*panel扩展描述样式*/
 .panel-intro {
     margin-bottom:0;
     border:none;
-    .panel-heading {
+    > .panel-heading {
         padding:15px;
         padding-bottom:0;
         background:@panel-intro-bg;
@@ -411,7 +432,7 @@ body {
     background-color: #48c9b0!important;
 }
 .toast-success {
-    background-color: #2ecc71!important;
+    background-color: #18bc9c!important;
 }
 .toast-error {
     background-color: #e74c3c!important;
@@ -427,6 +448,11 @@ body {
 }
 .toast-default {
     background-color: #bdc3c7!important;
+}
+#toast-container{
+    >div, >div:hover{
+        .box-shadow(0 0 3px #eee);
+    }
 }
 
 .layui-layer-title {
@@ -527,6 +553,12 @@ body {
         &:after {
             display:none;
         }
+    }
+}
+
+@media (min-width: 768px){
+    .form-inline .form-control {
+        padding-right:20px;
     }
 }
 

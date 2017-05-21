@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($, undefined, Toastr, Layer, Lang, Config) {
+define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($, undefined, Toastr, Layer, Lang, Moment) {
     var Backend = {
         config: {
             //toastr默认配置
@@ -7,7 +7,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                 "debug": false,
                 "newestOnTop": false,
                 "progressBar": false,
-                "positionClass": "toast-top-center",
+                "positionClass": "toast-top-right",
                 "preventDuplicates": false,
                 "onclick": null,
                 "showDuration": "300",
@@ -234,12 +234,45 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
                     badgeList[$url] = $nums > 0 ? '<small class="' + $class + ' pull-right bg-' + $color + '">' + $nums + '</small>' : '';
                 });
                 $.each(badgeList, function (k, v) {
-                    var anchor = $(".treeview li a[addtabs][url='" + k + "']");
+                    var anchor = top.window.$(".treeview li a[addtabs][url='" + k + "']");
                     if (anchor) {
-                        $(".pull-right-container", anchor).html(v);
-                        $(".nav-addtabs li a[node-id='" + anchor.attr("addtabs") + "'] .pull-right-container").html(v);
+                        top.window.$(".pull-right-container", anchor).html(v);
+                        top.window.$(".nav-addtabs li a[node-id='" + anchor.attr("addtabs") + "'] .pull-right-container").html(v);
                     }
                 });
+            },
+            addtabs: function (url, title, icon) {
+                var dom = ".sidebar-menu li a[url='{url}']"
+                var leftlink = top.window.$(dom.replace(/\{url\}/, url));
+                if (leftlink.size() > 0) {
+                    leftlink.trigger("click");
+                } else {
+                    url = Backend.api.fixurl(url);
+                    leftlink = top.window.$(dom.replace(/\{url\}/, url));
+                    if (leftlink.size() > 0) {
+                        var event = leftlink.parent().hasClass("active") ? "dblclick" : "click";
+                        leftlink.trigger(event);
+                    } else {
+                        var baseurl = url.substr(0, url.indexOf("?") > -1 ? url.indexOf("?") : url.length);
+                        leftlink = top.window.$(dom.replace(/\{url\}/, baseurl));
+                        //能找到相对地址
+                        if (leftlink.size() > 0) {
+                            icon = typeof icon != 'undefined' ? icon : leftlink.find("i").attr("class");
+                            title = typeof title != 'undefined' ? title : leftlink.find("span:first").text();
+                            leftlink.trigger("fa.event.toggleitem");
+                        }
+                        var navnode = $(".nav-tabs ul li a[node-url='" + url + "']");
+                        if (navnode.size() > 0) {
+                            navnode.trigger("click");
+                        } else {
+                            //追加新的tab
+                            var id = Math.floor(new Date().valueOf() * Math.random());
+                            icon = typeof icon != 'undefined' ? icon : 'fa fa-circle-o';
+                            title = typeof title != 'undefined' ? title : '';
+                            top.window.$("<a />").append('<i class="' + icon + '"></i> <span>' + title + '</span>').prop("href", url).attr({url: url, addtabs: id}).appendTo(top.window.document.body).trigger("click");
+                        }
+                    }
+                }
             },
             success: function (options, callback) {
                 var type = typeof options === 'function';
@@ -309,13 +342,17 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
         },
         init: function () {
             //公共代码
+            //配置Toastr的参数
+            Toastr.options = Backend.config.toastr;
             //点击包含.btn-dialog的元素时弹出dialog
-            $(document).on('click', '.btn-dialog', function (e) {
+            $(document).on('click', '.btn-dialog,.dialogit', function (e) {
                 Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
                 e.preventDefault();
             });
-            //支持data-bind-url方式进行渲染select元素
-            
+            $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
+                Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
+                e.preventDefault();
+            });
         }
     };
     //将Layer暴露到全局中去
@@ -326,9 +363,9 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
     window.__ = Backend.lang;
     //将Backend渲染至全局,以便于在子框架中调用
     window.Backend = Backend;
-    //Toastr定义
-    Toastr.options = Backend.config.toastr;
-    
+    //将Moment方法暴露到全局中去
+    window.Moment = Moment;
+
     Backend.init();
     return Backend;
 });

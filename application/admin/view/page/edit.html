@@ -21,7 +21,7 @@
     <div class="form-group">
         <label for="c-flag" class="control-label col-xs-12 col-sm-2">{:__('Flag')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_select('row[flag]', 'h,i,s', $row['flag'], ['id'=>'c-flag','class'=>'form-control selectpicker','required'=>''])}
+            {:build_select('row[flag]', ['recommend'=>__('Recommend'), 'index'=>__('Index'), 'hot'=>__('Hot')], $row['flag'], ['id'=>'c-flag','class'=>'form-control selectpicker','required'=>''])}
         </div>
     </div>
     <div class="form-group">

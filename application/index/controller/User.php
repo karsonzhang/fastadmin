@@ -38,7 +38,7 @@ class User extends Frontend
     {
         $url = $this->request->get('url', '/');
         if ($this->user->check())
-            $this->error(__('You are already logged in'), $url);
+            $this->error(__('You\'ve logged in, do not login again'), $url);
         if ($this->request->isPost())
         {
             $username = $this->request->post('username');
@@ -77,7 +77,7 @@ class User extends Frontend
     {
         $url = $this->request->get('url', '/');
         if ($this->user->check())
-            $this->error(__('You are already logged in'), $url);
+            $this->error(__('You\'ve logged in, do not login again'), $url);
         if ($this->request->isPost())
         {
             $account = $this->request->post('account');

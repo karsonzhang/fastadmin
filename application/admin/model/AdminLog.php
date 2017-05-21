@@ -13,19 +13,39 @@ class AdminLog extends Model
     protected $createTime = 'createtime';
     protected $updateTime = '';
 
-    public static function record($title, $content = '', $username = '')
+    public static function record($title = '')
     {
         $admin = \think\Session::get('admin');
         $admin_id = $admin ? $admin->id : 0;
-        $content = !is_scalar($content) ? json_encode($content) : $content . '';
-        $username = $username ? $username : ($admin ? $admin->username : __(''));
+        $username = $admin ? $admin->username : __('Unknown');
+        $content = request()->param();
+        foreach ($content as $k => $v)
+        {
+            if (is_string($v) && strlen($v) > 200)
+            {
+                unset($content[$k]);
+            }
+        }
+        $title = [];
+        $breadcrumb = \app\admin\library\Auth::instance()->getBreadcrumb();
+        foreach ($breadcrumb as $k => $v)
+        {
+            $title[] = $v['title'];
+        }
         self::create([
-            'title'    => $title,
-            'content'  => $content,
-            'url'      => request()->url(),
-            'admin_id' => $admin_id,
-            'username' => $username
+            'title'     => implode(' ', $title),
+            'content'   => json_encode($content),
+            'url'       => request()->url(),
+            'admin_id'  => $admin_id,
+            'username'  => $username,
+            'useragent' => request()->server('HTTP_USER_AGENT'),
+            'ip'        => request()->ip()
         ]);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo('Admin', 'admin_id')->setEagerlyType(0);
     }
 
 }

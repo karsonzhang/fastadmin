@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], function ($, undefined, Backend, undefined, AdminLTE, Form, Validator) {
+define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], function ($, undefined, Backend, undefined, AdminLTE, Form) {
     var Controller = {
         index: function () {
             //窗口大小改变,修正主窗体最小高度
@@ -83,7 +83,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
             });
 
             //切换左侧sidebar显示隐藏
-            $(document).on("click", ".sidebar-menu li > a", function (e) {
+            $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
                 $(".sidebar-menu li").removeClass("active");
                 //当外部触发隐藏的a时,触发父辈a的事件
                 if (!$(this).closest("ul").is(":visible")) {
@@ -141,11 +141,10 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
             if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
                 $(".tab-addtabs").addClass("ios-iframe-fix");
             }
-
-            if (location.hash.indexOf("#!") === 0) {
-                var url = decodeURIComponent(location.hash.substring(2));
-                //刷新页面后将左侧对应的LI展开
-                $("ul.sidebar-menu a[href='" + url + "']").trigger("click");
+            
+            if (Config.referer) {
+                //刷新页面后跳到到刷新前的页面
+                Backend.api.addtabs(Config.referer);
             } else {
                 $("ul.sidebar-menu li.active a").trigger("click");
             }
@@ -205,7 +204,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
 
                     $("body").addClass(cls);
                     store('skin', cls);
-                    var cssfile = requirejs.s.contexts._.config.config.config.upload.cdnurl + "/assets/css/skins/" + cls + ".css";
+                    var cssfile = Config.upload.cdnurl + "/assets/css/skins/" + cls + ".css";
                     $('head').append('<link rel="stylesheet" href="' + cssfile + '" type="text/css" />');
                 }
                 return false;
@@ -323,26 +322,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'validator'], f
             $(window).resize();
         },
         login: function () {
-
-            $("#login-form").validator({
-                timely: 2, theme: 'yellow_right_effect',
-                fields: {
-                    username: "required",
-                    password: "required",
-                },
-                valid: function (form) {
-                    form.submit();
-                }
-            });
-            $.ajax({
-                url: 'ajax/dailybg',
-                dataType: 'json',
-                success: function (ret) {
-                    if (ret.code === 1) {
-                        $("body").css("background", "url(" + ret.data.url + ")");
-                        $("body").css("background-size", "cover");
-                    }
-                }
+            Form.api.bindevent($("#login-form"), null, function () {
+                location.href = Backend.api.fixurl("index/index");
             });
         }
     };

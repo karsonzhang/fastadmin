@@ -3,7 +3,6 @@
 namespace app\admin\controller;
 
 use app\common\controller\Backend;
-use fast\Http;
 use fast\Random;
 use fast\Tree;
 use RecursiveDirectoryIterator;
@@ -20,7 +19,7 @@ use think\Lang;
 class Ajax extends Backend
 {
 
-    protected $noNeedLogin = ['dailybg', 'lang'];
+    protected $noNeedLogin = ['lang'];
     protected $noNeedRight = ['*'];
     protected $layout = '';
 
@@ -29,8 +28,8 @@ class Ajax extends Backend
      */
     public function typeahead()
     {
-        $search = $this->_request->getRequest("search");
-        $field = $this->_request->getRequest("field");
+        $search = $this->request->get("search");
+        $field = $this->request->get("field");
         $field = str_replace(['row[', ']'], '', $field);
         if (substr($field, -3) !== '_id' && substr($field, -4) !== '_ids')
         {
@@ -50,11 +49,12 @@ class Ajax extends Backend
                 break;
         }
 
-        $searchlist = Db::table($field)
-                ->orWhere($searchfield, 'like', "%{$search}%")
-                ->orWhere('id', 'like', "%{$search}%")
+        $searchlist = Db::name($field)
+                ->whereOr($searchfield, 'like', "%{$search}%")
+                ->whereOr('id', 'like', "%{$search}%")
                 ->limit(10)
-                ->select("id,{$searchfield} AS name");
+                ->field("id,{$searchfield} AS name")
+                ->select();
 
         foreach ($searchlist as $k => &$v)
         {
@@ -78,54 +78,6 @@ class Ajax extends Backend
         //强制输出JSON Object
         $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
         return $result;
-    }
-
-    /**
-     * 每日一图
-     */
-    public function dailybg()
-    {
-        //采用Infinty的图片
-        $this->code = 1;
-        $this->data = [
-            'url' => 'http://img.infinitynewtab.com/wallpaper/' . (date("Ymd") % 4000) . '.jpg'
-        ];
-        return;
-        //采用Bing每日一图
-        $ret = Http::sendRequest("http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1", [], 'GET');
-        if ($ret['ret'])
-        {
-            $json = json_decode($ret['msg'], TRUE);
-            if ($json && isset($json['images'][0]))
-            {
-                $url = $json['images'][0]['url'];
-                $startdate = $json['images'][0]['startdate'];
-                $enddate = $json['images'][0]['enddate'];
-                $copyright = $json['images'][0]['copyright'];
-                $url = substr($url, 0, 4) != 'http' ? 'http://cn.bing.com' . $url : $url;
-                $title = '';
-                $intro = '';
-                $ret = Http::sendRequest("http://cn.bing.com/cnhp/coverstory/", [], 'GET');
-                if ($ret['ret'])
-                {
-                    $info = json_decode($ret['msg'], TRUE);
-                    if (isset($info['title']))
-                    {
-                        $title = $info['title'];
-                        $intro = $info['para1'];
-                    }
-                }
-                $this->code = 1;
-                $this->data = [
-                    'title'     => $title,
-                    'intro'     => $intro,
-                    'url'       => $url,
-                    'startdate' => $startdate,
-                    'enddate'   => $enddate,
-                    'copyright' => $copyright,
-                ];
-            }
-        }
     }
 
     /**
@@ -372,6 +324,53 @@ class Ajax extends Backend
         }
         Cache::clear();
         $this->code = 1;
+    }
+
+    /**
+     * 读取分类数据
+     */
+    public function category()
+    {
+        $type = $this->request->get('type');
+        $pid = $this->request->get('pid');
+        $where = ['status' => 'normal'];
+        if ($type)
+        {
+            $where['type'] = $type;
+        }
+        if ($pid)
+        {
+            $where['pid'] = $pid;
+        }
+
+        $categorylist = Db::name('category')->where($where)->field('id as value,name')->order('weigh desc,id desc')->select();
+        $this->code = 1;
+        $this->data = $categorylist;
+        return;
+    }
+
+    /**
+     * 读取省市区数据
+     */
+    public function area()
+    {
+        $province = $this->request->get('province');
+        $city = $this->request->get('city');
+        $where = ['pid' => 0, 'level' => 1];
+        if ($province)
+        {
+            $where['pid'] = $province;
+            $where['level'] = 2;
+        }
+        if ($city)
+        {
+            $where['pid'] = $city;
+            $where['level'] = 3;
+        }
+        $provincelist = Db::name('area')->where($where)->field('id as value,name')->select();
+        $this->code = 1;
+        $this->data = $provincelist;
+        return;
     }
 
 }

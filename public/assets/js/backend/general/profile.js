@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
+define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function ($, undefined, Backend, Table, Form, Upload) {
 
     var Controller = {
         index: function () {
@@ -26,8 +26,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {field: 'id', title: 'ID'},
                         {field: 'title', title: __('Title')},
-                        {field: 'content', title: __('Content'), align: 'left'},
-                        {field: 'url', title: __('Url'), formatter: Table.api.formatter.url},
+                        {field: 'url', title: __('Url'), align: 'left', formatter: Table.api.formatter.url},
+                        {field: 'ip', title: __('ip')},
                         {field: 'username', title: __('Userame')},
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
                     ]
@@ -39,8 +39,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             Form.api.bindevent($("#update-form"), null, function () {
                 $("input[name='row[password]']").val('');
+                var url = Config.upload.cdnurl + $("#c-avatar").val();
+                top.window.$(".user-panel .image img,.user-menu > a > img,.user-header > img").prop("src", url);
                 return true;
             });
+            Upload.api.custom.changeavatar = function (response) {
+                var url = Config.upload.cdnurl + response.url;
+                $(".profile-user-img").prop("src", url);
+            };
+            console.log(Upload);
         }
     };
     return Controller;

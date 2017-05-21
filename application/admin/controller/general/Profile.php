@@ -52,7 +52,7 @@ class Profile extends Backend
         {
             $this->code = -1;
             $params = $this->request->post("row/a");
-            $params = array_filter(array_intersect_key($params, array_flip(array('email', 'nickname', 'password'))));
+            $params = array_filter(array_intersect_key($params, array_flip(array('email', 'nickname', 'password', 'avatar'))));
             unset($v);
             if (isset($params['password']))
             {
@@ -62,7 +62,6 @@ class Profile extends Backend
             if ($params)
             {
                 model('admin')->where('id', $this->auth->id)->update($params);
-                AdminLog::record(__('Update'), $params);
                 //因为个人资料面板读取的Session显示，修改自己资料后同时更新Session
                 $admin = Session::get('admin');
                 $admin_id = $admin ? $admin->id : 0;

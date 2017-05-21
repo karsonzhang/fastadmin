@@ -2,7 +2,6 @@
 
 namespace app\admin\controller\general;
 
-use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 
 /**
@@ -76,7 +75,6 @@ class Configvalue extends Backend
                     $params['content'] = array_combine($fieldarr, $valuearr);
                 }
                 $this->model->save($params);
-                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $this->code = 1;
             }
 
@@ -119,7 +117,6 @@ class Configvalue extends Backend
                     $params['content'] = array_combine($fieldarr, $valuearr);
                 }
                 $row->save($params);
-                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
 

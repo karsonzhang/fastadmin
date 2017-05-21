@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'validator'], function ($, undefined, Backend, Config, Toastr, Upload, Validator) {
+define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], function ($, undefined, Backend, Toastr, Upload, Validator) {
     var Form = {
         config: {
         },
@@ -20,7 +20,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'validat
                         return false;
                     }
                 }
-                var type = form.attr("method");
+                var type = form.attr("method").toUpperCase();
                 type = type && (type == 'GET' || type == 'POST') ? type : 'GET';
                 url = form.attr("action");
                 url = url ? url : location.href;
@@ -96,6 +96,16 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'validat
                     });
                 }
 
+                //绑定cxselect元素事件
+                if ($("[data-toggle='cxselect']").size() > 0) {
+                    require(['cxselect'], function () {
+                        $.cxSelect.defaults.jsonName = 'name';
+                        $.cxSelect.defaults.jsonValue = 'value';
+                        $.cxSelect.defaults.jsonSpace = 'data';
+                        $("[data-toggle='cxselect']").cxSelect();
+                    });
+                }
+
                 if ($(".typeahead").size() > 0 || $(".tagsinput").size() > 0) {
                     require(['bloodhound'], function () {
                         var remotesource = function (input) {
@@ -103,7 +113,7 @@ define(['jquery', 'bootstrap', 'backend', 'config', 'toastr', 'upload', 'validat
                                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                                 remote: {
-                                    url: '/ajax/typeahead?search=%QUERY&field=' + $(input).attr("name"),
+                                    url: 'ajax/typeahead?search=%QUERY&field=' + $(input).attr("name"),
                                     wildcard: '%QUERY',
                                     transform: function (ret) {
                                         return ret.data.searchlist;

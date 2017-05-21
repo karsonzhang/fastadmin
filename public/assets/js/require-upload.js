@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'config', 'plupload'], function ($, undefined, Backend, Config, Plupload) {
+define(['jquery', 'bootstrap', 'backend', 'plupload'], function ($, undefined, Backend, Plupload) {
     var Upload = {
         list: {},
         config: {

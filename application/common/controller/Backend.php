@@ -84,16 +84,8 @@ class Backend extends Controller
         // 非选项卡时重定向
         if (!IS_AJAX && !IS_ADDTABS && $controllername != 'index' && $actionname == 'index')
         {
-            $url = $this->request->baseUrl();
-            $start = stripos($url, 'index.php');
-            $start = $start !== false ? $start : 0;
-            $url = substr($url, 0, $start + 9) . str_replace('.', '/', substr($url, $start + 9));
-            // 如果是域名部署则加上前缀
-            if (Config::get('url_domain_deploy'))
-            {
-                $url = rtrim(url('/'), '/') . $url;
-            }
-            header("location:" . url('index/index#!' . urlencode($url), '', false));
+            $url = $this->request->url();
+            $this->redirect('index/index', [], 302, ['referer' => $url]);
             exit;
         }
 
@@ -120,6 +112,12 @@ class Backend extends Controller
                 }
             }
         }
+
+        // 设置面包屑导航数据
+        $breadcrumb = $this->auth->getBreadCrumb($path);
+        array_pop($breadcrumb);
+        $this->view->breadcrumb = $breadcrumb;
+
         // 如果有使用模板布局
         if ($this->layout)
         {
@@ -138,8 +136,10 @@ class Backend extends Controller
             'actionname'     => $actionname,
             'jsname'         => 'backend/' . str_replace('.', '/', $controllername),
             'moduleurl'      => url("/{$modulename}", '', false),
-            'language'       => $lang
+            'language'       => $lang,
+            'referer'        => Session::get("referer")
         ];
+
         Lang::load(APP_PATH . $modulename . '/lang/' . $lang . '/' . str_replace('.', '/', $controllername) . '.php');
 
         $this->assign('site', Config::get("site"));
@@ -177,9 +177,27 @@ class Backend extends Controller
             }
             $where[] = "(" . implode(' OR ', $searchlist) . ")";
         }
+        $table = '';
+        if (!empty($this->model))
+        {
+            $class = get_class($this->model);
+            $name = basename(str_replace('\\', '/', $class));
+            $table = $this->model->db(false)->getTable($name);
+            $table = $table . ".";
+        }
+        if (stripos($sort, ".") === false)
+        {
+
+            $sort = $table . $sort;
+        }
         foreach ($filter as $k => $v)
         {
             $sym = isset($op[$k]) ? $op[$k] : '=';
+            if (stripos($k, ".") === false)
+            {
+                $k = $table . $k;
+            }
+            $sym = isset($op[$k]) ? $op[$k] : $sym;
             switch ($sym)
             {
                 case '=':

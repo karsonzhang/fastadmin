@@ -140,12 +140,10 @@ function build_heading($title = NULL, $content = NULL)
 {
     if (is_null($title) && is_null($content))
     {
+        $path = request()->pathinfo();
+        $path = $path[0] == '/' ? $path : '/' . $path;
         // 根据当前的URI自动匹配父节点的标题和备注
-        $path = Auth::instance()->getRequestUri();
-        $data = Db::name('auth_rule')->where('id', 'IN', function($query) use($path)
-                {
-                    $query->name('auth_rule')->where('name', $path)->field('pid');
-                })->find();
+        $data = Db::name('auth_rule')->where('name', $path)->field('title,remark')->find();
         if ($data)
         {
             $title = $data['title'];

@@ -2,7 +2,6 @@
 
 namespace app\admin\controller\auth;
 
-use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use fast\Tree;
 
@@ -106,7 +105,6 @@ class Group extends Backend
             if ($params)
             {
                 $this->model->create($params);
-                AdminLog::record(__('Add'), $this->model->getLastInsID());
                 $this->code = 1;
             }
 
@@ -154,7 +152,6 @@ class Group extends Backend
             if ($params)
             {
                 $row->save($params);
-                AdminLog::record(__('Edit'), $ids);
                 $this->code = 1;
             }
 
@@ -209,7 +206,6 @@ class Group extends Backend
             $count = $this->model->where('id', 'in', $ids)->delete();
             if ($count)
             {
-                AdminLog::record(__('Del'), $ids);
                 $this->code = 1;
             }
         }

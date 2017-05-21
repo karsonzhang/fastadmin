@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($, undefined, Toastr, Layer, Lang, Config) {
+define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefined, Toastr, Layer, Lang) {
     var Frontend = {
         config: {
             //toastr默认配置
@@ -237,6 +237,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
         },
         init: function () {
             //公共代码
+            //配置Toastr的参数
+            Toastr.options = Frontend.config.toastr;
             
         }
     };
@@ -248,8 +250,6 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'config'], function ($
     window.__ = Frontend.lang;
     //将Frontend渲染至全局,以便于在子框架中调用
     window.Frontend = Frontend;
-    //Toastr定义
-    Toastr.options = Frontend.config.toastr;
     
     Frontend.init();
     return Frontend;
