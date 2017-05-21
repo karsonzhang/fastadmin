@@ -40,7 +40,9 @@ http://demo.fastadmin.net
 
 ## **问题反馈**
 
-在使用中有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
+在使用中有任何问题，请使用以下联系方式联系我们
+
+交流社区: http://forum.fastadmin.net
 
 QQ群: [636393962](https://jq.qq.com/?_wv=1027&k=487PNBb)
 

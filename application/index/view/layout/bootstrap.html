@@ -43,19 +43,28 @@
                 <div class="navbar-header pull-left">
                     <a href="{:url('/')}" class="navbar-brand">FastAdmin</a>
                 </div>
-                <ul class="nav navbar-nav pull-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">你好!{:$user->id?$user->nickname:'游客'} <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a id="userindex" href="{:url('user/index')}">会员中心</a></li>
-                            <li><a id="thirdlogin" href="{:url('user/login')}">第三方登录</a></li>
-                            <li><a id="qrcode" href="{:url('demo/qrcode')}">二维码生成</a></li>
-                            <li><a id="bootstrap" href="{:url('demo/bootstrap')}">Bootstrap组件</a></li>
-                            <li><a id="admin" href="{:url('admin/index/index')}"><span class="text text-danger">后台演示</span></a></li>
-                            <li><a id="home" href="http://www.fastadmin.net?ref=demo"><span class="text text-info">返回官网</span></a></li>
-                        </ul>
-                    </li>
-                </ul>
+                <div class="navbar-collapse collapse navbar-responsive-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="http://www.fastadmin.net">官网</a></li>
+                        <li><a href="http://doc.fastadmin.net">文档</a></li>
+                        <li><a href="http://forum.fastadmin.net">论坛</a></li>
+                        <li class="divider"></li>
+                        <li><a href="http://www.fastadmin.net#donate">打赏</a></li>
+                        <li><a href="http://demo.fastadmin.net">演示</a></li>
+                    </ul>
+                    <form class="navbar-form navbar-left" action="http://forum.fastadmin.net">
+                        <input name="q" type="text" class="form-control col-lg-8" placeholder="搜索">
+                    </form>
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">你好!{:$user->id?$user->nickname:'游客'} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a id="admin" href="{:url('admin/index/index')}"><span class="text text-danger">后台演示</span></a></li>
+                                <li><a id="home" href="http://www.fastadmin.net?ref=demo"><span class="text text-info">返回官网</span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -68,12 +77,11 @@
                     <div class="col-xs-12">
                         <div class="footer-link">
                             <ul class="list-inline">
-                                <li><a href="http://www.fastadmin.net">关于我们</a></li>
+                                <li><a href="http://www.fastadmin.net">官方网站</a></li>
                                 <li><a href="http://doc.fastadmin.net">帮助文档</a></li>
                                 <li><a href="https://git.oschina.net/karson/fastadmin">Git@OSC</a></li>
-                                <li><a href="https://github.com/karsonzhang/fastadmin" class="">Github</a></li>
-                                <li><a href="http://www.fastadmin.net/#donate" class="">打赏</a></li>
-                                <li><a href="http://www.fastadmin.net/#contact" class="">联系我们</a></li>
+                                <li><a href="http://www.fastadmin.net/#donate" class="">捐赠打赏</a></li>
+                                <li><a href="http://forum.fastadmin.net" class="">交流社区</a></li>
                                 <li><a href="http://demo.fastadmin.net/" class="">在线演示</a></li>
                             </ul>
                         </div>
@@ -88,7 +96,7 @@
                             </p>
                         </div>
                         <div class="pull-right hidden-xs hidden-sm">
-                            
+
                         </div>
                         <div class="clearfix"></div>
                     </div>
