@@ -90,7 +90,7 @@
                     } else {
                         var isArray = vObjCol.searchList.constructor === Array;
                         var searchList = [];
-                        searchList.push(sprintf('<option value="">%s</option>', $.fn.bootstrapTable.locales.formatCommonChoose()));
+                        searchList.push(sprintf('<option value="">%s</option>', that.options.formatCommonChoose()));
                         $.each(vObjCol.searchList, function (key, value) {
                             var isSelect = (isArray ? value : key) === vObjCol.defaultValue ? 'selected' : '';
                             searchList.push(sprintf("<option value='" + (isArray ? value : key) + "' %s>" + value + "</option>", isSelect));
@@ -214,7 +214,7 @@
         'column-common-search.bs.table': 'onColumnCommonSearch'
     });
 
-    $.extend($.fn.bootstrapTable.locales, {
+    $.extend($.fn.bootstrapTable.locales[$.fn.bootstrapTable.defaults.locale], {
         formatCommonSearch: function () {
             return "Common search";
         },
