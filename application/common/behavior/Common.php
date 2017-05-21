@@ -9,8 +9,7 @@ class Common
 
     public function run(&$params)
     {
-        $cdnurl = str_replace($_SERVER['SCRIPT_NAME'], '', $params->root());
-
+        $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $params->root());
         // 如果未设置__CDN__则自动匹配得出
         if (!Config::get('view_replace_str.__CDN__'))
         {
