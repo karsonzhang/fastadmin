@@ -47,7 +47,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                 var url = Config.upload.cdnurl + response.url;
                 $(".profile-user-img").prop("src", url);
             };
-            console.log(Upload);
         }
     };
     return Controller;

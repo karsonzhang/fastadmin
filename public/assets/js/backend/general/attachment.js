@@ -54,7 +54,6 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             },
             formatter: {
                 thumb: function (value, row, index) {
-                    //console.log(row);
                     if (row.mimetype.indexOf("image") > -1) {
                         var reg = /ajax\/upload$/;
                         if (reg.test(Config.upload.uploadurl)) {

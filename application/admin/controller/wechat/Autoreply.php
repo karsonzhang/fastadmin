@@ -43,6 +43,7 @@ class Autoreply extends Backend
         $response = WechatResponse::get(['eventkey' => $row['eventkey']]);
         $this->view->assign("response", $response);
         $this->view->assign("row", $row);
+        return $this->view->fetch();
     }
 
 }

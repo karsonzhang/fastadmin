@@ -138,7 +138,6 @@
     };
 
     var isSearchAvailble = function (that) {
-        console.log('isSearchAvailble');
         //只支持服务端搜索
         if (!that.options.commonSearch || that.options.sidePagination != 'server' || !that.options.url) {
             return false;
@@ -293,7 +292,6 @@
             return;
         }
         if (!firstLoad) {
-            console.log(122);
             var height = parseInt($(".bootstrap-table").height());
             height += 10;
             $("#" + this.options.idTable).bootstrapTable("resetView", {height: height});
