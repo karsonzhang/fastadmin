@@ -70,18 +70,18 @@ class Index extends Backend
             $result = $validate->check($data);
             if (!$result)
             {
-                $this->error($validate->getError());
+                $this->error($validate->getError(), $url, ['token' => $this->request->token()]);
                 return;
             }
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
             if ($result === true)
             {
-                $this->success(__('Login successful'), $url);
+                $this->success(__('Login successful'), $url, ['url' => $url]);
                 return;
             }
             else
             {
-                $this->error(__('Username or password is incorrect'), $url);
+                $this->error(__('Username or password is incorrect'), $url, ['token' => $this->request->token()]);
             }
             return;
         }

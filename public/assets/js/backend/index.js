@@ -141,7 +141,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
                 $(".tab-addtabs").addClass("ios-iframe-fix");
             }
-            
+
             if (Config.referer) {
                 //刷新页面后跳到到刷新前的页面
                 Backend.api.addtabs(Config.referer);
@@ -322,8 +322,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             $(window).resize();
         },
         login: function () {
-            Form.api.bindevent($("#login-form"), null, function () {
-                location.href = Backend.api.fixurl("index/index");
+            Form.api.bindevent($("#login-form"), null, function (data) {
+                location.href = Backend.api.fixurl(data.url);
             });
         }
     };

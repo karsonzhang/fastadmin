@@ -140,8 +140,9 @@ body {
 }
 
 .user-panel > .image img{
-    width:45px;
-    height:45px;
+    width:100%;
+    max-width:45px;
+    max-height:45px;
 }
 
 /*panel扩展描述样式*/
@@ -364,6 +365,27 @@ body {
     display: block !important;
 }
 
+.plupload-preview {
+    padding:10px;
+    margin-bottom:0;
+    li {
+        margin-bottom:10px;
+    }
+    .thumbnail {
+        margin-bottom:10px;
+    }
+    a{
+        display:block;
+        &:first-child{
+            height:90px;
+        }
+        img{
+            height:80px;
+            object-fit: cover;
+        }
+    }
+}
+
 .pjax-loader-bar .progress {
     position: fixed;
     top: 0;
@@ -566,6 +588,11 @@ body {
 @media (max-width: @screen-phone) {
     .nav-addtabs {
         display:none;
+    }
+    .fixed-table-toolbar {
+        .columns-right.btn-group{
+            display:none;
+        }
     }
 }
 /*平板样式*/

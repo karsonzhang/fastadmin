@@ -46,6 +46,32 @@ class Attachment extends Backend
         }
         return $this->view->fetch();
     }
+    
+    /**
+     * 选择附件
+     */
+    public function select()
+    {
+        if ($this->request->isAjax())
+        {
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $total = $this->model
+                    ->where($where)
+                    ->order($sort, $order)
+                    ->count();
+
+            $list = $this->model
+                    ->where($where)
+                    ->order($sort, $order)
+                    ->limit($offset, $limit)
+                    ->select();
+
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+        }
+        return $this->view->fetch();
+    }
 
     /**
      * 添加

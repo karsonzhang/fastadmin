@@ -51,6 +51,9 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                                 }
                                 Toastr.success(msg ? msg : __('Operation completed'));
                             } else {
+                                if (typeof data.token !== 'undefined') {
+                                    $("input[name='__token__']").val(data.token);
+                                }
                                 Toastr.error(msg ? msg : __('Operation failed'));
                             }
                         } else {
@@ -229,6 +232,33 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                 //绑定plupload上传元素事件
                 if ($(".plupload", form).size() > 0) {
                     Upload.api.plupload();
+                }
+
+                //绑定fachoose选择附件事件
+                if ($(".fachoose", form).size() > 0) {
+                    $(document).on('click', ".fachoose", function () {
+                        var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
+                        var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
+                        Backend.api.open("general/attachment/select?callback=refreshchoose&element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype="+mimetype, __('Choose'));
+                        return false;
+                    });
+
+                    //刷新选择的元素
+                    window.refreshchoose = function (id, data, multiple) {
+                        var input_id = $("#" + id).data("input-id");
+                        if (multiple) {
+                            var urlArr = [];
+                            var inputObj = $("#" + input_id);
+                            if (inputObj.val() != "") {
+                                urlArr.push(inputObj.val());
+                            }
+                            urlArr.push(data.url);
+                            inputObj.val(urlArr.join(",")).trigger("change");
+                        } else {
+                            $("#" + input_id).val(data.url).trigger("change");
+                        }
+                        layer.closeAll();
+                    };
                 }
             },
             custom: {}

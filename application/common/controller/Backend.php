@@ -93,19 +93,22 @@ class Backend extends Controller
 
         // 设置当前请求的URI
         $this->auth->setRequestUri($path);
-
         // 检测是否需要验证登录
         if (!$this->auth->match($this->noNeedLogin))
         {
             //检测是否登录
             if (!$this->auth->isLogin())
             {
-                $this->error(__('Please login first'), url('index/login', ['url' => $this->request->url()]));
+                $url = Session::get('referer');
+                $url = $url ? $url : $this->request->url();
+                $this->error(__('Please login first'), url('index/login', ['url' => $url]));
             }
             // 判断是否需要验证权限
             if (!$this->auth->match($this->noNeedRight))
             {
                 // 判断控制器和方法判断是否有对应权限
+                $path = $this->request->path();
+                $path = substr($path, 0, 1) == '/' ? $path : '/' . $path;
                 if (!$this->auth->check($path))
                 {
                     $this->error(__('You have no permission'), NULL);

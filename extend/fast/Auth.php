@@ -209,7 +209,7 @@ class Auth
             $_rulelist[$uid] = [];
             return [];
         }
-        
+
         // 筛选条件
         $where = [
             'status' => 'normal'
@@ -220,9 +220,13 @@ class Auth
         }
         //读取用户组所有权限规则
         $this->rules = Db::name($this->config['auth_rule'])->where($where)->field('id,pid,condition,icon,name,title,ismenu')->select();
-        
+
         //循环规则，判断结果。
         $rulelist = []; //
+        if (in_array('*', $ids))
+        {
+            $rulelist[] = "*";
+        }
         foreach ($this->rules as $rule)
         {
             //超级管理员无需验证condition

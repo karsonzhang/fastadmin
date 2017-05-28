@@ -1,15 +1,17 @@
-define(['jquery', 'bootstrap', 'backend', 'plupload'], function ($, undefined, Backend, Plupload) {
+define(['jquery', 'bootstrap', 'backend', 'plupload', 'dragsort', 'template'], function ($, undefined, Backend, Plupload, Dragsort, Template) {
     var Upload = {
         list: {},
         config: {
             container: document.body,
-            classname: '.plupload',
+            classname: '.plupload:not([initialized])',
+            previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
         },
         api: {
             //Plupload上传
             plupload: function (element, onAfterUpload) {
                 element = typeof element == 'undefined' ? Upload.config.classname : element;
                 $(element, Upload.config.container).each(function () {
+                    $(this).attr("initialized", true);
                     var that = this;
                     var id = $(this).prop("id");
                     var url = $(this).data("url");
@@ -20,14 +22,18 @@ define(['jquery', 'bootstrap', 'backend', 'plupload'], function ($, undefined, B
                     //上传URL
                     url = url ? url : Config.upload.uploadurl;
                     url = Backend.api.fixurl(url);
+                    //填充ID
+                    var input_id = $(that).data("input-id") ? $(that).data("input-id") : "";
+                    //预览ID
+                    var preview_id = $(that).data("preview-id") ? $(that).data("preview-id") : "";
                     //最大可上传
-                    maxsize = maxsize ? maxsize : Config.upload.maxsize;
+                    maxsize = typeof maxsize !== "undefined" ? maxsize : Config.upload.maxsize;
                     //文件类型
-                    mimetype = mimetype ? mimetype : Config.upload.mimetype;
+                    mimetype = typeof mimetype !== "undefined" ? mimetype : Config.upload.mimetype;
                     //请求的表单参数
-                    multipart = multipart ? multipart : Config.upload.multipart;
+                    multipart = typeof multipart !== "undefined" ? multipart : Config.upload.multipart;
                     //是否支持批量上传
-                    multiple = multiple ? multiple : Config.upload.multiple;
+                    multiple = typeof multiple !== "undefined" ? multiple : Config.upload.multiple;
                     //生成Plupload实例
                     Upload.list[id] = new Plupload.Uploader({
                         runtimes: 'html5,flash,silverlight,html4',
@@ -63,6 +69,7 @@ define(['jquery', 'bootstrap', 'backend', 'plupload'], function ($, undefined, B
                                 $(that).prop("disabled", true).html("<i class='fa fa-upload'></i> 上传" + file.percent + "%");
                             },
                             FileUploaded: function (up, file, info) {
+                                var options = this.getOption();
                                 //还原按钮文字及状态
                                 $(that).prop("disabled", false).html($(that).data("bakup-html"));
                                 //这里可以改成其它的表现形式
@@ -76,9 +83,14 @@ define(['jquery', 'bootstrap', 'backend', 'plupload'], function ($, undefined, B
                                         var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
                                         var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
                                         if (ret.code === 1) {
-                                            //$("input[data-plupload-id='" + id + "-text']").val(data.url);
-                                            if ($(that).data("input-id")) {
-                                                $("input#" + $(that).data("input-id")).val(data.url);
+                                            if (input_id) {
+                                                var urlArr = [];
+                                                var inputObj = $("#" + input_id);
+                                                if (options.multi_selection && inputObj.val() != "") {
+                                                    urlArr.push(inputObj.val());
+                                                }
+                                                urlArr.push(data.url);
+                                                inputObj.val(urlArr.join(",")).trigger("change");
                                             }
                                             var afterUpload = $("#" + id).data("after-upload");
                                             if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
@@ -102,6 +114,49 @@ define(['jquery', 'bootstrap', 'backend', 'plupload'], function ($, undefined, B
                             }
                         }
                     });
+
+                    //拖动排序
+                    if (preview_id && multiple) {
+                        $("#" + preview_id).dragsort({
+                            dragSelector: "li",
+                            dragEnd: function () {
+                                $("#" + preview_id).trigger("fa.preview.change");
+                            },
+                            placeHolderTemplate: '<li class="col-xs-3"></li>'
+                        });
+                    }
+                    if (preview_id && input_id) {
+                        $(document.body).on("keyup change", "#" + input_id, function () {
+                            var inputStr = $("#" + input_id).val();
+                            var inputArr = inputStr.split(/\,/);
+                            $("#" + preview_id).empty();
+                            $.each(inputArr, function (i, j) {
+                                if (!j) {
+                                    return true;
+                                }
+                                var html = Template.render(Upload.config.previewtpl, {url: j, fullurl: Config.upload.cdnurl + j});
+                                $("#" + preview_id).append(html);
+                            });
+                        });
+                        $("#" + input_id).trigger("keyup");
+                    }
+                    if (preview_id) {
+                        // 监听事件
+                        $(document.body).on("fa.preview.change", "#" + preview_id, function () {
+                            var urlArr = new Array();
+                            $("#" + preview_id + " [data-url]").each(function (i, j) {
+                                urlArr.push($(this).data("url"));
+                            });
+                            if (input_id) {
+                                $("#" + input_id).val(urlArr.join(","));
+                            }
+                        });
+                        //移除按钮事件
+                        $(document.body).on("click", "#" + preview_id + " .btn-trash", function () {
+                            $(this).closest("li").remove();
+                            $("#" + preview_id).trigger("fa.preview.change");
+                        });
+                    }
                     Upload.list[id].init();
                 });
             },

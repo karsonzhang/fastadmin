@@ -2,7 +2,7 @@
 
 //UC配置
 // Ucenter配置配置
-define('UC_STATUS', TRUE);  //是否开启Ucenter同步
+define('UC_STATUS', false);  //是否开启Ucenter同步
 
 define('UC_CONNECT', 'mysql');
 
