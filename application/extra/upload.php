@@ -41,7 +41,7 @@ return [
     /**
      * 是否支持批量上传
      */
-    'multiple'  => true,
+    'multiple'  => false,
     /**
      * 又拍云操作员用户名
      */

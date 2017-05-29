@@ -28,8 +28,9 @@
         <div class="col-xs-12 col-sm-8">
             <div class="form-inline">
                 <input id="c-image" class="form-control" size="50" name="row[image]" type="text" value="">
-                <span><button id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-preview-id="plupload-preview-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
-                <ul class="row list-inline plupload-preview" id="plupload-preview-image"></ul>
+                <span><button id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-multiple="false" data-input-id="c-image"><i class="fa fa-list-ul"></i> {:__('Choose')}</button></span>
+                <ul class="row list-inline plupload-preview" id="p-image"></ul>
             </div>
         </div>
     </div>
