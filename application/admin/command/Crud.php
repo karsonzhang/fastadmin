@@ -238,7 +238,7 @@ class Crud extends Command
                         $formAddElement = "{:build_radios('{$fieldName}', [{$itemString}], '{$defaultValue}')}";
                         $formEditElement = "{:build_radios('{$fieldName}', [{$itemString}], \$row.{$field})}";
                     }
-                    else if ($inputType == 'textarea' || ($inputType == 'text' && $v['CHARACTER_MAXIMUM_LENGTH'] >= 255))
+                    else if ($inputType == 'textarea')
                     {
                         $cssClassArr[] = substr($field, -7) == 'content' ? 'summernote' : '';
                         $attrArr['class'] = implode(' ', $cssClassArr);
