@@ -26,16 +26,17 @@ class Relationmodel extends Backend
      */
     public function index()
     {
+        $this->relationSearch = true;
         if ($this->request->isAjax())
         {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
-                    ->with("Admin")
+                    ->with("admin")
                     ->where($where)
                     ->order($sort, $order)
                     ->count();
             $list = $this->model
-                    ->with("Admin")
+                    ->with("admin")
                     ->where($where)
                     ->order($sort, $order)
                     ->limit($offset, $limit)
