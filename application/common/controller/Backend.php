@@ -60,6 +60,16 @@ class Backend extends Controller
     protected $auth = null;
 
     /**
+     * 快速搜索时执行查找的字段
+     */
+    protected $searchFields = 'id';
+
+    /**
+     * 是否是关联查询
+     */
+    protected $relationSearch = false;
+
+    /**
      * 引入后台控制器的traits
      */
     use \app\admin\library\traits\Backend;
@@ -154,11 +164,13 @@ class Backend extends Controller
     /**
      * 生成查询所需要的条件,排序方式
      * @param mixed $searchfields 查询条件
+     * @param boolean $relationSearch 是否关联查询
      * @return array
      */
-    protected function buildparams($searchfields = NULL)
+    protected function buildparams($searchfields = null, $relationSearch = null)
     {
-        $searchfields = is_null($searchfields) ? 'id' : $searchfields;
+        $searchfields = is_null($searchfields) ? $this->searchFields : $searchfields;
+        $relationSearch = is_null($relationSearch) ? $this->relationSearch : $relationSearch;
         $search = $this->request->get("search", '');
         $filter = $this->request->get("filter", '');
         $op = $this->request->get("op", '');
@@ -180,25 +192,27 @@ class Backend extends Controller
             }
             $where[] = "(" . implode(' OR ', $searchlist) . ")";
         }
-        $table = '';
-        if (!empty($this->model))
+        $modelName = '';
+        if ($relationSearch)
         {
-            $class = get_class($this->model);
-            $name = basename(str_replace('\\', '/', $class));
-            $table = $this->model->db(false)->getTable($name);
-            $table = $table . ".";
-        }
-        if (stripos($sort, ".") === false)
-        {
-
-            $sort = $table . $sort;
+            if (!empty($this->model))
+            {
+                $class = get_class($this->model);
+                $name = basename(str_replace('\\', '/', $class));
+                $name = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $name));
+                $modelName = $name . ".";
+            }
+            if (stripos($sort, ".") === false)
+            {
+                $sort = $modelName . $sort;
+            }
         }
         foreach ($filter as $k => $v)
         {
             $sym = isset($op[$k]) ? $op[$k] : '=';
             if (stripos($k, ".") === false)
             {
-                $k = $table . $k;
+                $k = $modelName . $k;
             }
             $sym = isset($op[$k]) ? $op[$k] : $sym;
             switch ($sym)

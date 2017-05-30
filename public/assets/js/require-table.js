@@ -283,7 +283,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     }
                     value = value.toString();
                     var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
-                    value = value[0].toUpperCase() + value.substr(1);
+                    value = value.charAt(0).toUpperCase() + value.slice(1);
                     //渲染状态
                     var html = '<span class="text-' + color + '"><i class="fa fa-circle"></i> ' + __(value) + '</span>';
                     return html;
@@ -311,7 +311,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                         if (value == '')
                             return true;
                         var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
-                        value = value[0].toUpperCase() + value.substr(1);
+                        value = value.charAt(0).toUpperCase() + value.slice(1);
                         html.push('<span class="label label-' + color + '">' + __(value) + '</span>');
                     });
                     return html.join(' ');

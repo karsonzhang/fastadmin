@@ -305,7 +305,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 if (typeof Lang[string] == 'object')
                     return Lang[string];
                 string = Lang[string];
-            } else if (string.indexOf('.') !== -1) {
+            } else if (string.indexOf('.') !== -1 && false) {
                 var arr = string.split('.');
                 var current = Lang[arr[0]];
                 for (var i = 1; i < arr.length; i++) {

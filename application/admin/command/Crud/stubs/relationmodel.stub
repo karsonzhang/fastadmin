@@ -1,0 +1,12 @@
+<?php
+
+namespace {%modelNamespace%};
+
+use think\Model;
+
+class {%relationModelName%} extends Model
+{
+    // 表名,不含前缀
+    protected $name = '{%relationModelTableName%}';
+    
+}

@@ -24,6 +24,11 @@ class Crud extends Command
                 ->addOption('model', 'm', Option::VALUE_OPTIONAL, 'model name', null)
                 ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', null)
                 ->addOption('local', 'l', Option::VALUE_OPTIONAL, 'local model', 1)
+                ->addOption('relation', 'r', Option::VALUE_OPTIONAL, 'relation table name without prefix', null)
+                ->addOption('relationmodel', 'e', Option::VALUE_OPTIONAL, 'relation model name', null)
+                ->addOption('relationforeignkey', 'k', Option::VALUE_OPTIONAL, 'relation foreign key', null)
+                ->addOption('relationprimarykey', 'p', Option::VALUE_OPTIONAL, 'relation primary key', null)
+                ->addOption('mode', 'o', Option::VALUE_OPTIONAL, 'relation table mode,hasone or belongsto', 'hasone')
                 ->setDescription('Build CRUD controller and model from table');
     }
 
@@ -44,8 +49,26 @@ class Crud extends Command
         {
             throw new Exception('table name can\'t empty');
         }
+        //关联表
+        $relation = $input->getOption('relation');
+        //自定义关联表模型
+        $relationModel = $input->getOption('relationmodel');
+        //模式
+        $mode = $input->getOption('mode');
+        //外键
+        $relationForeignKey = $input->getOption('relationforeignkey');
+        //主键
+        $relationPrimaryKey = $input->getOption('relationprimarykey');
+        //如果有启用关联模式
+        if ($relation && !in_array($mode, ['hasone', 'belongsto']))
+        {
+            throw new Exception("relation table only work in hasone or belongsto mode");
+        }
+
         $dbname = Config::get('database.database');
         $prefix = Config::get('database.prefix');
+
+        //检查主表
         $tableName = $prefix . $table;
         $tableInfo = Db::query("SHOW TABLE STATUS LIKE '{$tableName}'", [], TRUE);
         if (!$tableInfo)
@@ -53,6 +76,17 @@ class Crud extends Command
             throw new Exception("table not found");
         }
         $tableInfo = $tableInfo[0];
+
+        //检查关联表
+        if ($relation)
+        {
+            $relationTableName = $prefix . $relation;
+            $relationTableInfo = Db::query("SHOW TABLE STATUS LIKE '{$relationTableName}'", [], TRUE);
+            if (!$relationTableInfo)
+            {
+                throw new Exception("relation table not found");
+            }
+        }
 
         //根据表名匹配对应的Fontawesome图标
         $iconPath = ROOT_PATH . str_replace('/', DS, '/public/assets/libs/font-awesome/less/variables.less');
@@ -72,19 +106,12 @@ class Crud extends Command
         }
 
         //模型默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入model,不支持目录层级
-        if (!$model)
-        {
-            $modelarr = explode('_', strtolower($table));
-            foreach ($modelarr as $k => &$v)
-                $v = ucfirst($v);
-            unset($v);
-            $modelName = implode('', $modelarr);
-        }
-        else
-        {
-            $modelName = ucfirst($model);
-        }
+        $modelName = $this->getModelName($model, $table);
         $modelFile = ($local ? $adminPath : APP_PATH . 'common' . DS) . 'model' . DS . $modelName . '.php';
+
+        //关联模型默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入relationmodel,不支持目录层级
+        $relationModelName = $this->getModelName($relationModel, $relation);
+        $relationModelFile = ($local ? $adminPath : APP_PATH . 'common' . DS) . 'model' . DS . $relationModelName . '.php';
 
         //非覆盖模式时如果存在模型文件则报错
         if (is_file($modelFile) && !$force)
@@ -95,12 +122,26 @@ class Crud extends Command
         require $adminPath . 'common.php';
 
         //从数据库中获取表字段信息
-        $columnList = Db::query("SELECT * FROM `information_schema`.`columns` WHERE TABLE_SCHEMA = ? AND table_name = ? ORDER BY ORDINAL_POSITION", [$dbname, $tableName]);
+        $sql = "SELECT * FROM `information_schema`.`columns` "
+                . "WHERE TABLE_SCHEMA = ? AND table_name = ? "
+                . "ORDER BY ORDINAL_POSITION";
+        $columnList = Db::query($sql, [$dbname, $tableName]);
+        $relationColumnList = [];
+        if ($relation)
+        {
+            $relationColumnList = Db::query($sql, [$dbname, $relationTableName]);
+        }
 
-        $fields = [];
+        $fieldArr = [];
         foreach ($columnList as $k => $v)
         {
-            $fields[] = $v['COLUMN_NAME'];
+            $fieldArr[] = $v['COLUMN_NAME'];
+        }
+
+        $relationFieldArr = [];
+        foreach ($relationColumnList as $k => $v)
+        {
+            $relationFieldArr[] = $v['COLUMN_NAME'];
         }
 
         $addList = [];
@@ -110,20 +151,68 @@ class Crud extends Command
         $field = 'id';
         $order = 'id';
         $priDefined = FALSE;
-        $prikey = '';
+        $priKey = '';
+        $relationPriKey = '';
         foreach ($columnList as $k => $v)
         {
             if ($v['COLUMN_KEY'] == 'PRI')
             {
-                $prikey = $v['COLUMN_NAME'];
+                $priKey = $v['COLUMN_NAME'];
                 break;
             }
         }
-        if (!$prikey)
+        if (!$priKey)
         {
             throw new Exception('Primary key not found!');
         }
-        $order = $prikey;
+        if ($relation)
+        {
+            foreach ($relationColumnList as $k => $v)
+            {
+                if ($v['COLUMN_KEY'] == 'PRI')
+                {
+                    $relationPriKey = $v['COLUMN_NAME'];
+                    break;
+                }
+            }
+            if (!$relationPriKey)
+            {
+                throw new Exception('Relation Primary key not found!');
+            }
+        }
+        $order = $priKey;
+
+
+        //如果是关联模型
+        if ($relation)
+        {
+            if ($mode == 'hasone')
+            {
+                $relationForeignKey = $relationForeignKey ? $relationForeignKey : $table . "_id";
+                $relationPrimaryKey = $relationPrimaryKey ? $relationPrimaryKey : $priKey;
+                if (!in_array($relationForeignKey, $relationFieldArr))
+                {
+                    throw new Exception('relation table must be contain field:' . $relationForeignKey);
+                }
+                if (!in_array($relationPrimaryKey, $fieldArr))
+                {
+                    throw new Exception('table must be contain field:' . $relationPrimaryKey);
+                }
+            }
+            else
+            {
+                $relationForeignKey = $relationForeignKey ? $relationForeignKey : $relation . "_id";
+                $relationPrimaryKey = $relationPrimaryKey ? $relationPrimaryKey : $relationPriKey;
+                if (!in_array($relationForeignKey, $fieldArr))
+                {
+                    throw new Exception('table must be contain field:' . $relationForeignKey);
+                }
+                if (!in_array($relationPrimaryKey, $relationFieldArr))
+                {
+                    throw new Exception('relation table must be contain field:' . $relationPrimaryKey);
+                }
+            }
+        }
 
         try
         {
@@ -309,6 +398,30 @@ class Crud extends Command
                     $order = $field == 'weigh' ? 'weigh' : $order;
                 }
             }
+
+            $relationPriKey = 'id';
+            $relationFieldArr = [];
+            foreach ($relationColumnList as $k => $v)
+            {
+                $relationField = $v['COLUMN_NAME'];
+                $relationFieldArr[] = $field;
+
+                $relationField = strtolower($relationModelName) . "." . $relationField;
+                // 语言列表
+                if ($v['COLUMN_COMMENT'] != '')
+                {
+                    $langList[] = $this->getLangItem($relationField, $v['COLUMN_COMMENT']);
+                }
+
+                //过滤text类型字段
+                if ($v['DATA_TYPE'] != 'text')
+                {
+                    //构造JS列信息
+                    $javascriptList[] = $this->getJsColumn($relationField);
+                }
+            }
+
+
             //JS最后一列加上操作列
             $javascriptList[] = str_repeat(" ", 24) . "{field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}";
             $addList = implode("\n", array_filter($addList));
@@ -333,6 +446,7 @@ class Crud extends Command
             $controllerNamespace = "{$appNamespace}\\{$moduleName}\\controller" . ($controllerDir ? "\\" : "") . str_replace('/', "\\", $controllerDir);
             $modelNamespace = "{$appNamespace}\\" . ($local ? $moduleName : "common") . "\\model";
 
+
             $data = [
                 'controllerNamespace'     => $controllerNamespace,
                 'modelNamespace'          => $modelNamespace,
@@ -342,7 +456,7 @@ class Crud extends Command
                 'modelName'               => $modelName,
                 'tableComment'            => $tableComment,
                 'iconName'                => $iconName,
-                'pk'                      => $prikey,
+                'pk'                      => $priKey,
                 'order'                   => $order,
                 'table'                   => $table,
                 'tableName'               => $tableName,
@@ -350,15 +464,49 @@ class Crud extends Command
                 'editList'                => $editList,
                 'javascriptList'          => $javascriptList,
                 'langList'                => $langList,
-                'modelAutoWriteTimestamp' => in_array('createtime', $fields) || in_array('updatetime', $fields) ? "'int'" : 'false',
-                'createTime'              => in_array('createtime', $fields) ? "'createtime'" : 'false',
-                'updateTime'              => in_array('updatetime', $fields) ? "'updatetime'" : 'false',
+                'modelAutoWriteTimestamp' => in_array('createtime', $fieldArr) || in_array('updatetime', $fieldArr) ? "'int'" : 'false',
+                'createTime'              => in_array('createtime', $fieldArr) ? "'createtime'" : 'false',
+                'updateTime'              => in_array('updatetime', $fieldArr) ? "'updatetime'" : 'false',
+                'modelTableName'          => $table,
+                'relationModelTableName'  => $relation,
+                'relationModelName'       => $relationModelName,
+                'relationWith'            => '',
+                'relationMethod'          => '',
+                'relationModel'           => '',
+                'relationForeignKey'      => '',
+                'relationPrimaryKey'      => '',
+                'relationSearch'          => $relation ? 'true' : 'false',
+                'controllerIndex'         => '',
+                'modelMethod'             => '',
             ];
+
+            //如果使用关联模型
+            if ($relation)
+            {
+                //需要构造关联的方法
+                $data['relationMethod'] = strtolower($relationModelName);
+                //预载入的方法
+                $data['relationWith'] = "->with('{$data['relationMethod']}')";
+                //需要重写index方法
+                $data['controllerIndex'] = $this->getReplacedStub('controllerindex', $data);
+                //关联的模式
+                $data['relationMode'] = $mode == 'hasone' ? 'hasOne' : 'belongsTo';
+                //关联字段
+                $data['relationForeignKey'] = $relationForeignKey;
+                $data['relationPrimaryKey'] = $relationPrimaryKey ? $relationPrimaryKey : $priKey;
+                //构造关联模型的方法
+                $data['modelMethod'] = $this->getReplacedStub('modelmethod', $data);
+            }
 
             // 生成控制器文件
             $result = $this->writeToFile('controller', $data, $controllerFile);
             // 生成模型文件
             $result = $this->writeToFile('model', $data, $modelFile);
+            if ($relation && !is_file($relationModelFile))
+            {
+                // 生成关联模型文件
+                $result = $this->writeToFile('relationmodel', $data, $relationModelFile);
+            }
             // 生成视图文件
             $result = $this->writeToFile('add', $data, $addFile);
             $result = $this->writeToFile('edit', $data, $editFile);
@@ -378,6 +526,23 @@ class Crud extends Command
         $output->writeln("<info>Build Successed</info>");
     }
 
+    protected function getModelName($model, $table)
+    {
+        if (!$model)
+        {
+            $modelarr = explode('_', strtolower($table));
+            foreach ($modelarr as $k => &$v)
+                $v = ucfirst($v);
+            unset($v);
+            $modelName = implode('', $modelarr);
+        }
+        else
+        {
+            $modelName = ucfirst($model);
+        }
+        return $modelName;
+    }
+
     /**
      * 写入到文件
      * @param string $name
@@ -387,6 +552,23 @@ class Crud extends Command
      */
     protected function writeToFile($name, $data, $pathname)
     {
+        $content = $this->getReplacedStub($name, $data);
+
+        if (!is_dir(dirname($pathname)))
+        {
+            mkdir(strtolower(dirname($pathname)), 0755, true);
+        }
+        return file_put_contents($pathname, $content);
+    }
+
+    /**
+     * 获取替换后的数据
+     * @param string $name
+     * @param array $data
+     * @return string
+     */
+    protected function getReplacedStub($name, $data)
+    {
         $search = $replace = [];
         foreach ($data as $k => $v)
         {
@@ -395,12 +577,7 @@ class Crud extends Command
         }
         $stub = file_get_contents($this->getStub($name));
         $content = str_replace($search, $replace, $stub);
-
-        if (!is_dir(dirname($pathname)))
-        {
-            mkdir(strtolower(dirname($pathname)), 0755, true);
-        }
-        return file_put_contents($pathname, $content);
+        return $content;
     }
 
     /**
@@ -570,6 +747,7 @@ EOD;
     {
         $lang = ucfirst($field);
         $html = str_repeat(" ", 24) . "{field: '{$field}', title: __('{$lang}')";
+        $field = substr($field, stripos($field, '.') + 1);
         $formatter = '';
         if ($field == 'status')
             $formatter = 'status';

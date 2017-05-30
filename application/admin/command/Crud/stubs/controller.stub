@@ -22,4 +22,5 @@ class {%controllerName%} extends Backend
         parent::_initialize();
         $this->model = model('{%modelName%}');
     }
+{%controllerIndex%}
 }
