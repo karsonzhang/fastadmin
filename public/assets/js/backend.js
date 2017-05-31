@@ -62,6 +62,10 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 }
                 return url;
             },
+            //获取修复后可访问的cdn链接
+            cdnurl: function (url) {
+                return /^(?:[a-z]+:)?\/\//i.test(url) ? url : Config.upload.cdnurl + url;
+            },
             //查询Url参数
             query: function (name, url) {
                 if (!url) {

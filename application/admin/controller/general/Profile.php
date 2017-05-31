@@ -27,11 +27,13 @@ class Profile extends Backend
 
             $total = $model
                     ->where($where)
+                    ->where('admin_id', $this->auth->id)
                     ->order($sort, $order)
                     ->count();
 
             $list = $model
                     ->where($where)
+                    ->where('admin_id', $this->auth->id)
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();

@@ -204,7 +204,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
                     $("body").addClass(cls);
                     store('skin', cls);
-                    var cssfile = Config.upload.cdnurl + "/assets/css/skins/" + cls + ".css";
+                    var cssfile = Backend.api.cdnurl("/assets/css/skins/" + cls + ".css");
                     $('head').append('<link rel="stylesheet" href="' + cssfile + '" type="text/css" />');
                 }
                 return false;

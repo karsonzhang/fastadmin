@@ -134,7 +134,7 @@ define(['jquery', 'bootstrap', 'backend', 'plupload', 'dragsort', 'template'], f
                                 if (!j) {
                                     return true;
                                 }
-                                var html = Template.render(Upload.config.previewtpl, {url: j, fullurl: Config.upload.cdnurl + j});
+                                var html = Template.render(Upload.config.previewtpl, {url: j, fullurl: Backend.api.cdnurl(j)});
                                 $("#" + preview_id).append(html);
                             });
                         });

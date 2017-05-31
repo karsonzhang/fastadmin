@@ -39,14 +39,19 @@ class Attachment extends Backend
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();
-
+            $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $this->request->root());
+            foreach ($list as $k => &$v)
+            {
+                $v['fullurl'] = ($v['storage'] == 'local' ? $cdnurl : $this->view->config['upload']['cdnurl']) . $v['url'];
+            }
+            unset($v);
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
         }
         return $this->view->fetch();
     }
-    
+
     /**
      * 选择附件
      */

@@ -219,7 +219,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                                     //依次上传图片
                                     for (var i = 0; i < files.length; i++) {
                                         Upload.api.send(files[i], function (data) {
-                                            var url = Config.upload.cdnurl + data.url;
+                                            var url = Backend.api.cdnurl(data.url);
                                             $(that).summernote("insertImage", url, 'filename');
                                         });
                                     }

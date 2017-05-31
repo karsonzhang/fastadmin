@@ -272,7 +272,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     return '<i class="' + value + '"></i> ' + value;
                 },
                 image: function (value, row, index) {
-                    return '<img class="img-rounded img-sm" src="' + (value.indexOf("http") === 0 ? '' : Config.upload.cdnurl) + value + '" />';
+                    return '<img class="img-rounded img-sm" src="' + Backend.api.cdnurl(value) + '" />';
                 },
                 status: function (value, row, index, custom) {
                     //颜色状态数组,可使用red/yellow/aqua/blue/navy/teal/olive/lime/fuchsia/purple/maroon

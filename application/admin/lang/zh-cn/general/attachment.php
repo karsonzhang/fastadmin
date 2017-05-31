@@ -10,5 +10,6 @@ return [
     'Mimetype'    => 'mime类型',
     'Extparam'    => '透传数据',
     'Createtime'  => '创建日期',
-    'Uploadtime'  => '上传时间'
+    'Uploadtime'  => '上传时间',
+    'Storage'     => '存储引擎'
 ];

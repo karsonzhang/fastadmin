@@ -199,6 +199,7 @@ class Ajax extends Backend
                 'mimetype'    => $fileInfo['type'],
                 'url'         => $uploadDir . $splInfo->getSaveName(),
                 'uploadtime'  => time(),
+                'storage'     => 'local',
                 'sha1'        => $sha1,
             );
             model("attachment")->create(array_filter($params));

@@ -39,12 +39,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
 
             Form.api.bindevent($("#update-form"), null, function () {
                 $("input[name='row[password]']").val('');
-                var url = Config.upload.cdnurl + $("#c-avatar").val();
+                var url = Backend.api.cdnurl($("#c-avatar").val());
                 top.window.$(".user-panel .image img,.user-menu > a > img,.user-header > img").prop("src", url);
                 return true;
             });
             Upload.api.custom.changeavatar = function (response) {
-                var url = Config.upload.cdnurl + response.url;
+                var url = Backend.api.cdnurl(response.url);
                 $(".profile-user-img").prop("src", url);
             };
         }

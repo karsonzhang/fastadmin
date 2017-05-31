@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="c-upyun" class="control-label col-xs-12 col-sm-2">{:__('Upload')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" name="row[upyun]" id="c-upyun" class="form-control" cols="60" />
+            <input type="text" name="row[upyun]" id="c-upyun" class="form-control" />
         </div>
     </div>
 
@@ -16,7 +16,7 @@
     <div class="form-group">
         <label for="c-local" class="control-label col-xs-12 col-sm-2">{:__('Upload')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" name="row[local]" id="c-local" class="form-control" cols="60" />
+            <input type="text" name="row[local]" id="c-local" class="form-control" />
         </div>
     </div>
 
@@ -30,7 +30,13 @@
     <div class="form-group">
         <label for="c-local" class="control-label col-xs-12 col-sm-2">{:__('Upload by summernote')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea name="row[summernote]" id="c-summernote" cols="30" rows="5" class="summernote"></textarea>
+            <textarea name="row[summernote]" id="c-summernote" cols="60" rows="5" class="summernote"></textarea>
+        </div>
+    </div>
+    <div class="form-group hidden layer-footer">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-12 col-sm-8">
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
         </div>
     </div>
 </form>

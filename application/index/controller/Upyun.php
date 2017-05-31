@@ -37,7 +37,8 @@ class Upyun extends Frontend
                     'mimetype'    => $this->request->param("mimetype"),
                     'extparam'    => $extparam,
                     'url'         => $url,
-                    'uploadtime'  => $time
+                    'uploadtime'  => $time,
+                    'storage'     => 'upyun'
                 );
                 model("attachment")->create(array_filter($params));
                 echo "success";

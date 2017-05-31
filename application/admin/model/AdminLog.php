@@ -21,7 +21,7 @@ class AdminLog extends Model
         $content = request()->param();
         foreach ($content as $k => $v)
         {
-            if (is_string($v) && strlen($v) > 200)
+            if (is_string($v) && strlen($v) > 200 || stripos($k, 'password') !== false)
             {
                 unset($content[$k]);
             }

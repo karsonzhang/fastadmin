@@ -29,7 +29,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'imagewidth', title: __('Imagewidth')},
                         {field: 'imageheight', title: __('Imageheight')},
                         {field: 'imagetype', title: __('Imagetype')},
-                        {field: 'imageframes', title: __('Imageframes')},
+                        {field: 'storage', title: __('Storage')},
                         {field: 'filesize', title: __('Filesize')},
                         {field: 'mimetype', title: __('Mimetype')},
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
@@ -112,18 +112,14 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             formatter: {
                 thumb: function (value, row, index) {
                     if (row.mimetype.indexOf("image") > -1) {
-                        var reg = /ajax\/upload$/;
-                        if (reg.test(Config.upload.uploadurl)) {
-                            return '<a href="' + Config.upload.cdnurl + value + '" target="_blank"><img src="' + Config.upload.cdnurl + value + '" alt="" style="max-height:90px;max-width:120px"></a>';
-                        } else {
-                            return '<a href="' + Config.upload.cdnurl + value + '" target="_blank"><img src="' + Config.upload.cdnurl + value + '!/fwfh/50x50" alt=""></a>';
-                        }
+                        var style = row.storage == 'upyun' ? '!/fwfh/120x90' : '';
+                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + style + '" alt="" style="max-height:90px;max-width:120px"></a>';
                     } else {
-                        return '无';
+                        return '<a href="' + row.fullurl + '" target="_blank">' + __('None') + '</a>';
                     }
                 },
                 url: function (value, row, index) {
-                    return '<a href="' + Config.upload.cdnurl + value + '" target="_blank" class="label bg-green">' + value + '</a>';
+                    return '<a href="' + Backend.api.cdnurl(value) + '" target="_blank" class="label bg-green">' + value + '</a>';
                 },
             }
         }
