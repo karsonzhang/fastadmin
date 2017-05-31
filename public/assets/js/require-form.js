@@ -51,7 +51,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                                 }
                                 Toastr.success(msg ? msg : __('Operation completed'));
                             } else {
-                                if (typeof data.token !== 'undefined') {
+                                if (data && typeof data === 'object' && typeof data.token !== 'undefined') {
                                     $("input[name='__token__']").val(data.token);
                                 }
                                 Toastr.error(msg ? msg : __('Operation failed'));
