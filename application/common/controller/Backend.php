@@ -117,8 +117,6 @@ class Backend extends Controller
             if (!$this->auth->match($this->noNeedRight))
             {
                 // 判断控制器和方法判断是否有对应权限
-                $path = str_replace('.', '/', $this->request->path());
-                $path = substr($path, 0, 1) == '/' ? $path : '/' . $path;
                 if (!$this->auth->check($path))
                 {
                     $this->error(__('You have no permission'), NULL);
