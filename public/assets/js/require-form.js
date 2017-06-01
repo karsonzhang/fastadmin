@@ -76,9 +76,9 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                     stopOnError: true,
                     valid: function (ret) {
                         //验证通过提交表单
-                        Form.api.submit(form, onBeforeSubmit, function (data) {
+                        Form.api.submit($(ret), onBeforeSubmit, function (data) {
                             if (typeof onAfterSubmit == 'function') {
-                                if (!onAfterSubmit.call(form, data)) {
+                                if (!onAfterSubmit.call($(ret), data)) {
                                     return false;
                                 }
                             }
@@ -239,7 +239,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                     $(document).on('click', ".fachoose", function () {
                         var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
                         var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
-                        Backend.api.open("general/attachment/select?callback=refreshchoose&element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype="+mimetype, __('Choose'));
+                        Backend.api.open("general/attachment/select?callback=refreshchoose&element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype, __('Choose'));
                         return false;
                     });
 

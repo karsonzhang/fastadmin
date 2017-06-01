@@ -92,7 +92,7 @@ class Backend extends Controller
         !defined('IS_AJAX') && define('IS_AJAX', $this->request->isAjax());
 
         // 非选项卡时重定向
-        if (!IS_AJAX && !IS_ADDTABS && $controllername != 'index' && $actionname == 'index')
+        if (!IS_AJAX && !IS_ADDTABS && !IS_DIALOG && $path !== "/{$modulename}/index/index" && $controllername != 'ajax')
         {
             $url = $this->request->url();
             $this->redirect('index/index', [], 302, ['referer' => $url]);

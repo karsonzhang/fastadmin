@@ -246,7 +246,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 });
             },
             addtabs: function (url, title, icon) {
-                var dom = ".sidebar-menu li a[url='{url}']"
+                var dom = "a[url='{url}']"
                 var leftlink = top.window.$(dom.replace(/\{url\}/, url));
                 if (leftlink.size() > 0) {
                     leftlink.trigger("click");
@@ -273,7 +273,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                             var id = Math.floor(new Date().valueOf() * Math.random());
                             icon = typeof icon != 'undefined' ? icon : 'fa fa-circle-o';
                             title = typeof title != 'undefined' ? title : '';
-                            top.window.$("<a />").append('<i class="' + icon + '"></i> <span>' + title + '</span>').prop("href", url).attr({url: url, addtabs: id}).appendTo(top.window.document.body).trigger("click");
+                            top.window.$("<a />").append('<i class="' + icon + '"></i> <span>' + title + '</span>').prop("href", url).attr({url: url, addtabs: id}).addClass("hide").appendTo(top.window.document.body).trigger("click");
                         }
                     }
                 }

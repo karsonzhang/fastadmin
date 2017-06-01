@@ -16,5 +16,14 @@ class {%modelName%} extends Model
     protected $createTime = {%createTime%};
     protected $updateTime = {%updateTime%};
     
+    // 追加属性
+    protected $append = [
+{%appendAttrList%}
+    ];
+    
+{%getAttrList%}
+
+{%setAttrList%}
+
 {%modelMethod%}
 }

@@ -217,6 +217,9 @@ class Crud extends Command
         try
         {
             Form::setEscapeHtml(false);
+            $setAttrArr = [];
+            $getAttrArr = [];
+            $appendAttrList = [];
 
             //循环所有字段,开始构造视图的HTML和JS信息
             foreach ($columnList as $k => $v)
@@ -257,6 +260,7 @@ class Crud extends Command
                         //如果状态类型不是enum或set
                         $itemArr = !$itemArr ? ['normal', 'hidden'] : $itemArr;
                         $inputType = 'radio';
+                        $this->getAttr($getAttrArr, $field);
                     }
                     if ($inputType == 'select')
                     {
@@ -270,6 +274,10 @@ class Crud extends Command
                         $attrStr = $this->getArrayString($attrArr);
                         $itemArr = $this->getLangArray($itemArr, FALSE);
                         $itemString = $this->getArrayString($itemArr);
+
+                        //添加一个获取器
+                        $this->getAttr($getAttrArr, $field, $itemArr, $v['DATA_TYPE'] == 'set' ? 'multiple' : 'select');
+                        $this->appendAttr($appendAttrList, $field);
                         $formAddElement = "{:build_select('{$fieldName}', [{$itemString}], '{$defaultValue}', [{$attrStr}])}";
                         $formEditElement = "{:build_select('{$fieldName}', [{$itemString}], \$row.{$field}, [{$attrStr}])}";
                     }
@@ -302,6 +310,9 @@ class Crud extends Command
                                 break;
                             default:
                                 $fieldFunc = 'datetime';
+                                $this->getAttr($getAttrArr, $field, '', $inputType);
+                                $this->setAttr($setAttrArr, $field, '', $inputType);
+                                $this->appendAttr($appendAttrList, $field);
                                 break;
                         }
                         $defaultDateTime = "{:date('{$phpFormat}')}";
@@ -316,6 +327,9 @@ class Crud extends Command
                         $fieldName .= "[]";
                         $itemArr = $this->getLangArray($itemArr, FALSE);
                         $itemString = $this->getArrayString($itemArr);
+                        //添加一个获取器
+                        $this->getAttr($getAttrArr, $field, $itemArr, $inputType);
+                        $this->appendAttr($appendAttrList, $field);
                         $formAddElement = "{:build_checkboxs('{$fieldName}', [{$itemString}], '{$defaultValue}')}";
                         $formEditElement = "{:build_checkboxs('{$fieldName}', [{$itemString}], \$row.{$field})}";
                     }
@@ -324,6 +338,9 @@ class Crud extends Command
                         $itemArr = $this->getLangArray($itemArr, FALSE);
                         $itemString = $this->getArrayString($itemArr);
                         $defaultValue = $defaultValue ? $defaultValue : key($itemArr);
+                        //添加一个获取器
+                        $this->getAttr($getAttrArr, $field, $itemArr, $inputType);
+                        $this->appendAttr($appendAttrList, $field);
                         $formAddElement = "{:build_radios('{$fieldName}', [{$itemString}], '{$defaultValue}')}";
                         $formEditElement = "{:build_radios('{$fieldName}', [{$itemString}], \$row.{$field})}";
                     }
@@ -477,6 +494,9 @@ class Crud extends Command
                 'relationPrimaryKey'      => '',
                 'relationSearch'          => $relation ? 'true' : 'false',
                 'controllerIndex'         => '',
+                'appendAttrList'          => implode(",\n", $appendAttrList),
+                'getAttrList'             => implode("\n\n", $getAttrArr),
+                'setAttrList'             => implode("\n\n", $setAttrArr),
                 'modelMethod'             => '',
             ];
 
@@ -524,6 +544,79 @@ class Crud extends Command
             print_r($e);
         }
         $output->writeln("<info>Build Successed</info>");
+    }
+
+    protected function getAttr(&$getAttr, $field, $itemArr = '', $inputType = '')
+    {
+        if (!in_array($inputType, ['datetime', 'select', 'multiple', 'checkbox', 'radio']))
+            return;
+        $attrField = ucfirst($field);
+        if ($inputType == 'datetime')
+        {
+            $return = <<<EOD
+\$value = \$data['{$field}'];
+        return is_numeric(\$value) ? date("Y-m-d H:i:s", \$value) : \$value;
+EOD;
+        }
+        else if (in_array($inputType, ['multiple', 'checkbox']))
+        {
+            $itemString = $this->getArrayString($itemArr);
+            $return = <<<EOD
+\$value = \$data['{$field}'];
+        \$valueArr = explode(',', \$value);
+        \$arr = [{$itemString}];
+        \$resultArr = [];
+        foreach (\$valueArr as \$k => \$v)
+        {
+            if (isset(\$arr[\$v]))
+            {
+                \$resultArr[] = \$arr[\$v];
+            }
+        }
+        return implode(',', \$resultArr);
+EOD;
+        }
+        else
+        {
+            $itemString = $this->getArrayString($itemArr);
+            $return = <<<EOD
+\$value = \$data['{$field}'];
+        \$arr = [{$itemString}];
+        return isset(\$arr[\$value]) ? \$arr[\$value] : '';
+EOD;
+        }
+        $getAttr[] = <<<EOD
+    protected function get{$attrField}TextAttr(\$value, \$data)
+    {
+        $return
+    }
+EOD;
+    }
+
+    protected function setAttr(&$setAttr, $field, $itemArr = '', $inputType = '')
+    {
+        if ($inputType != 'datetime')
+            return;
+        $field = ucfirst($field);
+        if ($inputType == 'datetime')
+        {
+            $return = <<<EOD
+return is_numeric(\$value) ? strtotime(\$value) : \$value;
+EOD;
+        }
+        $setAttr[] = <<<EOD
+    protected function set{$field}TextAttr(\$value)
+    {
+        $return
+    }
+EOD;
+    }
+
+    protected function appendAttr(&$appendAttrList, $field)
+    {
+        $appendAttrList[] = <<<EOD
+        '{$field}_text'
+EOD;
     }
 
     protected function getModelName($model, $table)
@@ -747,7 +840,7 @@ EOD;
     {
         $lang = ucfirst($field);
         $html = str_repeat(" ", 24) . "{field: '{$field}', title: __('{$lang}')";
-        $field = substr($field, stripos($field, '.') + 1);
+        $field = stripos($field, ".") !== false ? substr($field, stripos($field, '.') + 1) : $field;
         $formatter = '';
         if ($field == 'status')
             $formatter = 'status';

@@ -23,6 +23,7 @@ trait Backend
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();
+          
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
@@ -44,10 +45,27 @@ trait Backend
                 foreach ($params as $k => &$v)
                 {
                     $v = is_array($v) ? implode(',', $v) : $v;
-                    $v = substr($k, -4) == 'time' && !is_numeric($v) ? strtotime($v) : $v;
                 }
-                $this->model->create($params);
-                $this->code = 1;
+                try
+                {
+                    $result = $this->model->create($params);
+                    if ($result !== false)
+                    {
+                        $this->code = 1;
+                    }
+                    else
+                    {
+                        $this->msg = $this->model->getError();
+                    }
+                }
+                catch (think\Exception $e)
+                {
+                    $this->msg = $e->getMessage();
+                }
+            }
+            else
+            {
+                $this->msg = __('Parameter %s can not be empty', '');
             }
 
             return;
@@ -72,10 +90,27 @@ trait Backend
                 foreach ($params as $k => &$v)
                 {
                     $v = is_array($v) ? implode(',', $v) : $v;
-                    $v = substr($k, -4) == 'time' && !is_numeric($v) ? strtotime($v) : $v;
                 }
-                $row->save($params);
-                $this->code = 1;
+                try
+                {
+                    $result = $row->save($params);
+                    if ($result !== false)
+                    {
+                        $this->code = 1;
+                    }
+                    else
+                    {
+                        $this->msg = $row->getError();
+                    }
+                }
+                catch (think\Exception $e)
+                {
+                    $this->msg = $e->getMessage();
+                }
+            }
+            else
+            {
+                $this->msg = __('Parameter %s can not be empty', '');
             }
 
             return;
@@ -126,7 +161,7 @@ trait Backend
             }
             else
             {
-                $this->code = 1;
+                $this->msg = __('Parameter %s can not be empty', '');
             }
         }
 
