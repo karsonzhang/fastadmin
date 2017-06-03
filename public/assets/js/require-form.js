@@ -74,6 +74,17 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                     formClass: 'n-default n-bootstrap',
                     msgClass: 'n-right',
                     stopOnError: true,
+                    display: function (elem) {
+                        return $(elem).closest('.form-group').find(".control-label").text().replace(/\:/, '');
+                    },
+                    target: function (input) {
+                        var $formitem = $(input).closest('.form-group'),
+                                $msgbox = $formitem.find('span.msg-box');
+                        if (!$msgbox.length) {
+                            $msgbox = $('<span class="msg-box"></span>').insertAfter(input);
+                        }
+                        return $msgbox;
+                    },
                     valid: function (ret) {
                         //验证通过提交表单
                         Form.api.submit($(ret), onBeforeSubmit, function (data) {

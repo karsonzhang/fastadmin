@@ -609,11 +609,11 @@ EOD;
         if ($inputType == 'datetime')
         {
             $return = <<<EOD
-return is_numeric(\$value) ? strtotime(\$value) : \$value;
+return \$value && is_numeric(\$value) ? strtotime(\$value) : \$value;
 EOD;
         }
         $setAttr[] = <<<EOD
-    protected function set{$field}TextAttr(\$value)
+    protected function set{$field}Attr(\$value)
     {
         $return
     }

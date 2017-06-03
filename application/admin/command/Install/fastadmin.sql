@@ -95,17 +95,11 @@ CREATE TABLE `fa_attachment` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `uploadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
+  `storage` enum('local','upyun') NOT NULL DEFAULT 'local' COMMENT '存储位置',
   `sha1` varchar(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sha1` (`sha1`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='附件表';
-
--- ----------------------------
---  Records of `fa_attachment`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_attachment` VALUES ('1', '/uploads/20170520/81c791c0b84edf167b233a7917119399.jpg', '500', '356', 'jpg', '0', '120891', 'image/jpeg', '', '1495270641', '1495270641', '1495270641', '92be279c3cf306b65b8ac46964d7986552ee5449'), ('2', '/uploads/20170520/85aae95c4373e792d422b4c6a453d07b.jpg', '600', '401', 'jpg', '0', '86257', 'image/jpeg', '', '1495270673', '1495270673', '1495270673', '8a3fa16c5623af5134fc5f063e40962920785b59'), ('3', '/uploads/20170520/a67cfec11b4dd895eedc33a58aaa8bba.jpg', '420', '315', 'jpg', '0', '19076', 'image/jpeg', '', '1495270783', '1495270783', '1495270784', 'b2a30fc250d462ad7a450c43019279268f741a7c'), ('4', '/uploads/20170520/cbd11475b0cd64d7d02956070226e964.jpg', '500', '333', 'jpg', '0', '31768', 'image/jpeg', '', '1495270790', '1495270790', '1495270790', '99925d7cd560d32b6b1d6c03abe71f5496f3a216'), ('5', '/uploads/20170520/a82004ccabbacff58213459013bd2458.jpg', '500', '334', 'jpg', '0', '41465', 'image/jpeg', '', '1495270810', '1495270810', '1495270810', '2748fb122e5e42b37abae578bf9244476b31b29a'), ('6', '/uploads/20170520/6c3618d7d4c03a00931f091677d0bb98.jpg', '600', '401', 'jpg', '0', '52952', 'image/jpeg', '', '1495270817', '1495270817', '1495270817', 'd9ad6ac645fdf8bcc2bf7a519d4e54acedb54861'), ('7', '/uploads/20170520/0bc9cd023e0de3c943f29eafa8ae5da9.jpg', '510', '397', 'jpg', '0', '43517', 'image/jpeg', '', '1495270866', '1495270866', '1495270866', 'c2b810bceded447d30ed556a4429da8cb78dfd11'), ('8', '/uploads/20170520/0a67e00f5dc18d3b4098617be6e8fb4a.jpg', '500', '333', 'jpg', '0', '97654', 'image/jpeg', '', '1495271110', '1495271110', '1495271110', 'df39da0f5bff78e72bee7aec2c60161b3239f6e1'), ('9', '/uploads/20170520/5fa1f64bc1bc4c0e0279591df3ec9699.jpg', '600', '511', 'jpg', '0', '76951', 'image/jpeg', '', '1495271716', '1495271716', '1495271716', '53c4a8c3c40c3f5b79ea8d9b99719fac522bf1ef'), ('10', '/uploads/20170520/fdb91b442e627cb3a8388386ca14e03d.jpg', '510', '364', 'jpg', '0', '41151', 'image/jpeg', '', '1495273057', '1495273057', '1495273057', '600fca07ebfc7769c880e2fb4c19bad26f04d1dd');
-COMMIT;
 
 -- ----------------------------
 --  Table structure for `fa_auth_group`
@@ -300,7 +294,7 @@ CREATE TABLE `fa_test` (
   `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
   `views` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击',
   `startdate` date DEFAULT NULL COMMENT '开始日期',
-  `activitydate` datetime DEFAULT NULL COMMENT '活动时间(datetime)',
+  `activitytime` datetime DEFAULT NULL COMMENT '活动时间(datetime)',
   `year` year(4) DEFAULT NULL COMMENT '年',
   `times` time DEFAULT NULL COMMENT '时间',
   `refreshtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '刷新时间(int)',
