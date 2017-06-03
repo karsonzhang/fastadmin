@@ -26,6 +26,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'id', title: 'ID'},
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'nickname', title: __('Nickname')},
+                        {field: 'type', title: __('Type')},
                         {field: 'flag', title: __('Flag'), formatter: Table.api.formatter.flag},
                         {field: 'weigh', title: __('Weigh')},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},

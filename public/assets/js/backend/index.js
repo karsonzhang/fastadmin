@@ -14,6 +14,12 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 e.stopPropagation();
             });
 
+            //此处为FastAdmin的统计代码,正式使用请移除
+            var s = document.createElement("script");
+            s.type = "text/javascript";
+            s.src = "https://hm.baidu.com/hm.js?58347d769d009bcf6074e9a0ab7ba05e";
+            $("head").append(s);
+
             //读取FastAdmin的更新信息
             $.ajax({
                 url: 'http://demo.fastadmin.net/index/index/news',

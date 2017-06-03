@@ -73,6 +73,10 @@ body {
 .searchit {
   border-bottom: 1px dashed #3c8dbc;
 }
+.toast-top-right-index {
+  top: 62px;
+  right: 12px;
+}
 /*
  * RIBBON
  */

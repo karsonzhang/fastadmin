@@ -548,6 +548,10 @@ class Crud extends Command
 
     protected function getAttr(&$getAttr, $field, $itemArr = '', $inputType = '')
     {
+        if (preg_match("/[_\-]+/", $field))
+        {
+            return;
+        }
         if (!in_array($inputType, ['datetime', 'select', 'multiple', 'checkbox', 'radio']))
             return;
         $attrField = ucfirst($field);
@@ -595,6 +599,10 @@ EOD;
 
     protected function setAttr(&$setAttr, $field, $itemArr = '', $inputType = '')
     {
+        if (preg_match("/[_\-]+/", $field))
+        {
+            return;
+        }
         if ($inputType != 'datetime')
             return;
         $field = ucfirst($field);
@@ -614,6 +622,10 @@ EOD;
 
     protected function appendAttr(&$appendAttrList, $field)
     {
+        if (preg_match("/[_\-]+/", $field))
+        {
+            return;
+        }
         $appendAttrList[] = <<<EOD
         '{$field}_text'
 EOD;

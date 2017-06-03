@@ -24,13 +24,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: 'ID', operate: false},
                         //使用Table.api.formatter.search可直接响应搜索
                         {field: 'username', title: __('Username'), formatter: Table.api.formatter.search},
-                        {field: 'title', title: __('Title')},
+                        {field: 'title', title: __('Title'),
+                            operate: 'LIKE %...%',
+                            placeholder: '模糊搜索，*表示任意字符',
+                            style: 'width:200px',
+                            process: function (value, arg) {
+                                return value.replace(/\*/g, '%');
+                            }
+                        },
                         {field: 'url', title: __('Url'), align: 'left', formatter: Controller.api.formatter.url},
-                        //点击IP时同时执行搜索此IP
-                        {field: 'ip', title: __('IP'), events: Controller.api.events.ip, formatter: Controller.api.formatter.ip},
+                        //点击IP时同时执行搜索此IP,同时普通搜索使用下拉列表的形式
+                        {field: 'ip', title: __('IP'), searchList: ['127.0.0.1', '127.0.0.2'], events: Controller.api.events.ip, formatter: Controller.api.formatter.ip},
                         //browser是一个不存在的字段
                         //通过formatter来渲染数据,同时为它添加上事件
                         {field: 'browser', title: __('Browser'), operate: false, events: Controller.api.events.browser, formatter: Controller.api.formatter.browser},
+                        //启用时间段搜索
                         {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime, operate: 'BETWEEN', type: 'datetime', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD HH:mm:ss"'},
                         //我们向操作栏额外添加上一个详情按钮,并保留已有的编辑和删除控制,同时为这个按钮添加上点击事件
                         {field: 'operate', title: __('Operate'), events: Controller.api.events.operate, formatter: Controller.api.formatter.operate}

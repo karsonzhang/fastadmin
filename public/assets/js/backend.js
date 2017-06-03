@@ -347,6 +347,9 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
         init: function () {
             //公共代码
             //配置Toastr的参数
+            if (Config.controllername == 'index') {
+                Backend.config.toastr.positionClass = "toast-top-right-index";
+            }
             Toastr.options = Backend.config.toastr;
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
