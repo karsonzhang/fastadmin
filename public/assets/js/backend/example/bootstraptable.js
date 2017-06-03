@@ -89,7 +89,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     'click .btn-ip': function (e, value, row, index) {
                         var options = $("#table").bootstrapTable('getOptions');
                         //这里我们手动将数据填充到表单然后提交
-                        $("#commonSearchContent_" + options.idTable + " form input[name='ip']").val(value);
+                        $("#commonSearchContent_" + options.idTable + " form [name='ip']").val(value);
                         $("#commonSearchContent_" + options.idTable + " form").trigger('submit');
                         Toastr.info("执行了自定义搜索操作");
                     }

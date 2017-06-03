@@ -26,7 +26,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'title', title: __('Title')},
                         {field: 'ip', title: __('IP'), formatter: Controller.api.formatter.ip},
                         {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: function (value, row, index) {
+                                return Table.api.formatter.operate(value, row, index, table);
+                            }
+                        }
                     ]
                 ]
             });

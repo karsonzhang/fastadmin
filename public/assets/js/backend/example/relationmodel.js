@@ -28,7 +28,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'admin.nickname', title: __('Nickname'), operate: 'LIKE %...%', placeholder: '关键字，模糊搜索'},
                         {field: 'ip', title: __('IP'), operate: '='},
                         {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime, operate: 'BETWEEN', type: 'datetime', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD"'},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: function (value, row, index) {
+                                return Table.api.formatter.operate(value, row, index, table);
+                            }
+                        }
                     ]
                 ],
             });
@@ -41,7 +44,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         edit: function () {
             Form.api.bindevent($("form[role=form]"));
-        }
+        },
     };
     return Controller;
 });

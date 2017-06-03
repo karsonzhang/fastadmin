@@ -266,10 +266,13 @@
         });
 
         that.$container.on("click", "." + that.options.searchClass, function () {
-            $("form [name='" + $(this).data("field") + "']", searchContainer).val($(this).data("value"));
-            $("form", searchContainer).trigger("submit");
+            var obj = $("form [name='" + $(this).data("field") + "']", searchContainer);
+            if (obj.size() > 0) {
+                obj.val($(this).data("value"));
+                $("form", searchContainer).trigger("submit");
+            }
         });
-        
+
         var searchquery = getSearchQuery(this);
         this.options.queryParams = function (params) {
             return {

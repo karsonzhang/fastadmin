@@ -92,9 +92,11 @@ class Backend extends Controller
         !defined('IS_AJAX') && define('IS_AJAX', $this->request->isAjax());
 
         // 非选项卡时重定向
-        if (!IS_AJAX && !IS_ADDTABS && !IS_DIALOG && !in_array($controllername, ['index', 'ajax']))
+        if (!$this->request->isPost() && !IS_AJAX && !IS_ADDTABS && !IS_DIALOG && input("ref") == 'addtabs')
         {
-            $url = $this->request->url();
+            $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function($matches) {
+                return $matches[2] == '&' ? $matches[1] : '';
+            }, $this->request->url());
             $this->redirect('index/index', [], 302, ['referer' => $url]);
             exit;
         }

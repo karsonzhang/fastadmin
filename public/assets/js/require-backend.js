@@ -174,12 +174,14 @@ require(['jquery', 'bootstrap'], function ($, undefined) {
                 }
             });
             //加载相应模块
-            require([Config.jsname], function (Controller) {
-                Controller[Config.actionname] != undefined && Controller[Config.actionname]();
-            }, function (e) {
-                console.error(e);
-                // 这里可捕获模块加载的错误
-            });
+            if (Config.jsname) {
+                require([Config.jsname], function (Controller) {
+                    Controller[Config.actionname] != undefined && Controller[Config.actionname]();
+                }, function (e) {
+                    console.error(e);
+                    // 这里可捕获模块加载的错误
+                });
+            }
         });
     });
 });
