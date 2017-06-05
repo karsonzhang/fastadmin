@@ -26,7 +26,7 @@ class Common
             Config::set('upload.cdnurl', $cdnurl);
         }
         // 如果是调试模式将version置为当前的时间戳可避免缓存
-        if (!Config::get('app_debug'))
+        if (Config::get('app_debug'))
         {
             Config::set('site.version', time());
         }

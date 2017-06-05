@@ -18,7 +18,7 @@
         var vModal = sprintf("<div id=\"commonSearchContent_%s\" class=\"common-search-table %s\">", that.options.idTable, that.options.searchFormVisible ? "" : "hidden");
         vModal += vFormCommon.join('');
         vModal += "</div>";
-        $("#myTabContent").before($(vModal));
+        that.$container.prepend($(vModal));
 
         var form = $("#commonSearchForm" + "_" + that.options.idTable);
 
@@ -181,7 +181,7 @@
                     var value = $("[name='" + name + "']:checked").val();
                 }
             } else {
-                var value = (typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : obj.val();
+                var value = (typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : (sym == 'LIKE %...%' ? obj.val().replace(/\*/g, '%') : obj.val());
             }
             if (value == '' && sym.indexOf("NULL") == -1) {
                 return true;

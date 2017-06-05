@@ -119,7 +119,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     }
                 },
                 url: function (value, row, index) {
-                    return '<a href="' + Backend.api.cdnurl(value) + '" target="_blank" class="label bg-green">' + value + '</a>';
+                    return '<a href="' + row.fullurl + '" target="_blank" class="label bg-green">' + value + '</a>';
                 },
             }
         }
