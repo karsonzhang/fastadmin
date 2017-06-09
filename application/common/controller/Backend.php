@@ -91,16 +91,6 @@ class Backend extends Controller
         // 定义是否AJAX请求
         !defined('IS_AJAX') && define('IS_AJAX', $this->request->isAjax());
 
-        // 非选项卡时重定向
-        if (!$this->request->isPost() && !IS_AJAX && !IS_ADDTABS && !IS_DIALOG && input("ref") == 'addtabs')
-        {
-            $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function($matches) {
-                return $matches[2] == '&' ? $matches[1] : '';
-            }, $this->request->url());
-            $this->redirect('index/index', [], 302, ['referer' => $url]);
-            exit;
-        }
-
         $this->auth = Auth::instance();
 
         // 设置当前请求的URI
@@ -124,6 +114,16 @@ class Backend extends Controller
                     $this->error(__('You have no permission'), NULL);
                 }
             }
+        }
+        
+        // 非选项卡时重定向
+        if (!$this->request->isPost() && !IS_AJAX && !IS_ADDTABS && !IS_DIALOG && input("ref") == 'addtabs')
+        {
+            $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function($matches) {
+                return $matches[2] == '&' ? $matches[1] : '';
+            }, $this->request->url());
+            $this->redirect('index/index', [], 302, ['referer' => $url]);
+            exit;
         }
 
         // 设置面包屑导航数据

@@ -221,6 +221,10 @@ class Auth extends \fast\Auth
         if ($path_rule_id)
         {
             $this->breadcrumb = Tree::instance()->init($this->rules)->getParents($path_rule_id, true);
+            foreach ($this->breadcrumb as $k => &$v)
+            {
+                $v['url'] = url($v['name']);
+            }
         }
         return $this->breadcrumb;
     }

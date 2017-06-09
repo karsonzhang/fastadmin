@@ -25,14 +25,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'state', checkbox: true},
                         {field: 'id', title: __('Id'), operate: false},
                         {field: 'category_id', title: __('Category_id'), operate: '='},
-                        {field: 'title', title: __('Title'), 
-                            operate: 'LIKE %...%', 
-                            placeholder: '标题，模糊搜索，*表示任意字符', 
-                            style: 'width:200px',
-                            process: function (value, arg) {
-                                return value.replace(/\*/g, '%'); //仅演示用法
-                            }
-                        },
+                        {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '关键字，模糊搜索'},
                         {field: 'keywords', title: __('Keywords'), operate: 'LIKE %...%', placeholder: '关键字，模糊搜索'},
                         {field: 'flag', title: __('Flag'), formatter: Table.api.formatter.flag, operate: false},
                         {field: 'image', title: __('Image'), formatter: Table.api.formatter.image, operate: false},
@@ -42,7 +35,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'weigh', title: __('Weigh'), operate: false},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status, searchList: {'normal': __('Normal'), 'hidden': __('Hidden')}, style: 'min-width:100px;'},
                         {field: 'createtime', title: __('Create Time'), formatter: Table.api.formatter.datetime, operate: 'BETWEEN', type: 'datetime', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD"'},
-                        {field: 'operate', title: __('Operate'), events: Controller.api.events.operate, formatter: Controller.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ],
                 //普通搜索
@@ -61,40 +54,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         api: {
             bindevent: function () {
-                $("form[role=form]").validator({
-                    rules: {
-                        mobile: [/^1[3-9]\d{9}$/, "请填写有效的手机号"],
-                        chinese: [/^[\u0391-\uFFE5]+$/, "请填写中文字符"],
-                        // 使用函数定义规则
-                        phone: function (elem, param) {
-                            return /^1[3458]\d{9}$/.test($(elem).val()) || '请检查手机号格式';
-                        },
-                        image: function (elem, param) {
-                            return /^\/(.*)\.(jpg|jpeg|png|gif)$/.test($(elem).val()) || '请上传有并行的图片文件';
-                        }
-                    },
-                    messages: {
-                    },
-                    fields: {
-                        'row[title]': "required;length(3~16)",
-                        'row[image]': "required;image",
-                        'row[views]': "required;range[0~100]",
-                        'row[content]': "required"
-                    },
-                });
                 Form.api.bindevent($("form[role=form]"));
-            },
-            formatter: {
-                operate: function (value, row, index) {
-                    return '<a class="btn btn-info btn-xs btn-detail">' + __('Detail') + '</a> ' + Table.api.formatter.operate(value, row, index);
-                },
-            },
-            events: {
-                operate: $.extend({
-                    'click .btn-detail': function (e, value, row, index) {
-                        Backend.api.open("page/detail/" + value, __('Detail'));
-                    }
-                }, Table.api.events.operate)
             }
         }
     };

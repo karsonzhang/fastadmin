@@ -66,6 +66,7 @@ class Admin extends Backend
             $list = $this->model
                     ->where($where)
                     ->where('id', 'in', $childrenAdminIds)
+                    ->field(['password', 'salt', 'token'], true)
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();

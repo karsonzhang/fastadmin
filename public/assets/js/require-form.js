@@ -67,7 +67,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                 return false;
             },
             bindevent: function (form, onBeforeSubmit, onAfterSubmit) {
-                form.validator({
+                form.validator($.extend({
                     validClass: 'has-success',
                     invalidClass: 'has-error',
                     bindClassTo: '.form-group',
@@ -101,12 +101,48 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                         });
                         return false;
                     }
-                });
+                }, form.data("validator-options") || {}));
 
                 //绑定select元素事件
                 if ($(".selectpicker", form).size() > 0) {
-                    require(['bootstrap-select'], function () {
-                        $('.selectpicker', form).selectpicker();
+                    require(['bootstrap-select', 'bootstrap-select-ajax'], function () {
+                        var selectlist = $('.selectpicker', form).selectpicker();
+                        $.each(selectlist, function () {
+                            var that = this;
+                            if ($(this).data("live-search")) {
+                                $(this).ajaxSelectPicker({
+                                    ajax: {
+                                        url: 'ajax/selectpicker',
+                                        beforeSend: function (xhr, setting) {
+                                            setting.url = Backend.api.fixurl(setting.url);
+                                        },
+                                        data: function () {
+                                            var params = {
+                                                search: '{{{q}}}',
+                                                field: $(that).attr("name")
+                                            };
+                                            return params;
+                                        },
+                                        dataType: 'json'
+                                    },
+                                    locale: {
+                                        emptyTitle: 'Search...'
+                                    },
+                                    preprocessData: function (ret) {
+                                        var list = [];
+                                        if (ret.hasOwnProperty('data') && ret.data) {
+                                            var len = ret.data.length;
+                                            for (var i = 0; i < len; i++) {
+                                                var curr = ret.data[i];
+                                                list.push(curr);
+                                            }
+                                        }
+                                        return list;
+                                    },
+                                    preserveSelected: true
+                                });
+                            }
+                        });
                     });
                 }
 
@@ -123,11 +159,12 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                 if ($(".typeahead").size() > 0 || $(".tagsinput").size() > 0) {
                     require(['bloodhound'], function () {
                         var remotesource = function (input) {
+                            var url = $(input).data("url") ? $(input).data("url") : "ajax/typeahead";
                             return new Bloodhound({
                                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                                 remote: {
-                                    url: 'ajax/typeahead?search=%QUERY&field=' + $(input).attr("name"),
+                                    url: url + '?search=%QUERY&field=' + $(input).attr("name"),
                                     wildcard: '%QUERY',
                                     transform: function (ret) {
                                         return ret.data.searchlist;
@@ -166,11 +203,12 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                                 $('.tagsinput', form).each(function () {
                                     $(this).tagsinput({
                                         freeInput: false,
+                                        itemValue: 'id',
+                                        itemText: 'name',
                                         typeaheadjs: {
                                             name: 'tagsinput',
                                             limit: 20,
                                             displayKey: 'name',
-                                            valueKey: 'id',
                                             source: remotesource(this),
                                             templates: {
                                                 empty: '<li class="notfound">' + __('No matches found') + '</li>',
@@ -181,7 +219,6 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                                         }
                                     });
                                 });
-                                $('.bootstrap-tagsinput .twitter-typeahead').css('display', 'inline');
                             });
                         }
                     });
@@ -217,6 +254,16 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                         $(".summernote", form).summernote({
                             height: 250,
                             lang: 'zh-CN',
+                            fontNames: [
+                                'Arial', 'Arial Black', 'Serif', 'Sans', 'Courier',
+                                'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande',
+                                "Open Sans", "Hiragino Sans GB", "Microsoft YaHei",
+                                '微软雅黑', '宋体', '黑体', '仿宋', '楷体', '幼圆',
+                            ],
+                            fontNamesIgnoreCheck: [
+                                "Open Sans", "Microsoft YaHei",
+                                '微软雅黑', '宋体', '黑体', '仿宋', '楷体', '幼圆'
+                            ],
                             dialogsInBody: true,
                             callbacks: {
                                 onChange: function (contents) {

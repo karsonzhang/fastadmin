@@ -1,6 +1,5 @@
 <?php
 
-use app\admin\library\Auth;
 use app\common\model\Category;
 use app\common\model\Configvalue;
 use fast\Form;
@@ -99,32 +98,30 @@ function build_category_select($name, $type, $selected = null, $attr = [])
 
 /**
  * 生成表格操作按钮栏
- * @param array $btns
+ * @param array $btns 按钮组
+ * @param array $attr 按钮属性值
  * @return string
  */
-function build_toolbar($btns = NULL)
+function build_toolbar($btns = NULL, $attr = [])
 {
     $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'delete'];
     $btns = is_array($btns) ? $btns : explode(',', $btns);
-    $addbtn = __('Add');
-    $editbtn = __('Edit');
-    $deletebtn = __('Delete');
+    $btnAttr = [
+        'refresh' => ['javascript:;', 'btn btn-primary btn-refresh', 'fa fa-refresh', ''],
+        'add'     => ['javascript:;', 'btn btn-success btn-add', 'fa fa-plus', __('Add')],
+        'edit'    => ['javascript:;', 'btn btn-success btn-edit btn-disabled disabled', 'fa fa-pencil', __('Edit')],
+        'delete'     => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete')],
+    ];
+    $btnAttr = array_merge($btnAttr, $attr);
     $html = [];
-    if (in_array('refresh', $btns))
+    foreach ($btns as $k => $v)
     {
-        $html[] = '<a class="btn btn-primary btn-refresh" ><i class="fa fa-refresh"></i></a>';
-    }
-    if (in_array('add', $btns))
-    {
-        $html[] = '<a class="btn btn-success btn-add" ><i class="fa fa-plus"></i> ' . $addbtn . '</a>';
-    }
-    if (in_array('edit', $btns))
-    {
-        $html[] = '<a class="btn btn-success btn-edit btn-disabled disabled" ><i class="fa fa-pencil"></i> ' . $editbtn . '</a>';
-    }
-    if (in_array('delete', $btns))
-    {
-        $html[] = '<a class="btn btn-danger btn-del btn-disabled disabled" ><i class="fa fa-trash"></i> ' . $deletebtn . '</a>';
+        if (!isset($btnAttr[$v]))
+        {
+            continue;
+        }
+        list($href, $class, $icon, $text) = $btnAttr[$v];
+        $html[] = '<a href="' . $href . '" class="' . $class . '" ><i class="' . $icon . '"></i> ' . $text . '</a>';
     }
     return implode(' ', $html);
 }

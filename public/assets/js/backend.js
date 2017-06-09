@@ -215,13 +215,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 $colorNums = colorArr.length;
                 badgeList = {};
                 $.each(params, function (k, v) {
-                    if (k.indexOf('/') > -1)
-                    {
-                        $url = Backend.api.fixurl(k);
-                    } else
-                    {
-                        $url = k;
-                    }
+                    $url = Backend.api.fixurl(k);
 
                     if ($.isArray(v))
                     {
@@ -238,7 +232,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                     badgeList[$url] = $nums > 0 ? '<small class="' + $class + ' pull-right bg-' + $color + '">' + $nums + '</small>' : '';
                 });
                 $.each(badgeList, function (k, v) {
-                    var anchor = top.window.$(".treeview li a[addtabs][url='" + k + "']");
+                    var anchor = top.window.$("li a[addtabs][url='" + k + "']");
                     if (anchor) {
                         top.window.$(".pull-right-container", anchor).html(v);
                         top.window.$(".nav-addtabs li a[node-id='" + anchor.attr("addtabs") + "'] .pull-right-container").html(v);
@@ -356,9 +350,29 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
                 e.preventDefault();
             });
+            //点击包含.btn-addtabs的元素时事件
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
                 Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
                 e.preventDefault();
+            });
+            //点击加入到Shortcut
+            $(document).on('click', '#ribbon ol li:last a[data-url]', function (e) {
+                e.preventDefault();
+                var fastjump = top.window.$(".fastmenujump");
+                if (fastjump) {
+                    var url = $(this).data("url");
+                    var text = $(this).text();
+                    if (fastjump.find("option[value='" + url + "']").size() == 0) {
+                        fastjump.append("<option value='" + url + "'>" + $(this).text() + "</option>");
+                        var shortcut = localStorage.getItem("shortcut");
+                        shortcut = shortcut ? JSON.parse(shortcut) : {};
+                        shortcut[url] = text;
+                        localStorage.setItem("shortcut", JSON.stringify(shortcut));
+                        Toastr.success(__('Operation completed'));
+                    }
+                } else {
+                    Toastr.error(__('Operation failed'));
+                }
             });
         }
     };

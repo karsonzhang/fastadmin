@@ -37,7 +37,8 @@ class Ajax extends Backend
             return;
         }
         $searchfield = 'name';
-        $field = substr($field, 0, -3);
+        $fieldArr = explode('_', $field);
+        $field = $fieldArr[0];
         switch ($field)
         {
             case 'category':
@@ -56,11 +57,6 @@ class Ajax extends Backend
                 ->field("id,{$searchfield} AS name")
                 ->select();
 
-        foreach ($searchlist as $k => &$v)
-        {
-            $v['name'] = $v['name'] . "[id:{$v['id']}]";
-        }
-        unset($v);
         $this->code = 1;
         $this->data = ['searchlist' => $searchlist];
     }

@@ -33,7 +33,8 @@
     "typeahead.js": "^0.11.1",
     "bootstrap-tagsinput": "^0.8.0",
     "nice-validator": "^1.0.10",
-    "art-template": "^3.0.1"
+    "art-template": "^3.0.1",
+    "ajax-bootstrap-select": "^1.3.8"
   },
   "devDependencies": {
     "dragsort": "https://github.com/karsonzhang/dragsort.git",

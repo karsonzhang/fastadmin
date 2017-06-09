@@ -76,16 +76,26 @@
                 ColumnsForSearch.push(vObjCol);
                 htmlForm.push('<div class="form-group" style="margin:5px">');
                 htmlForm.push(sprintf('<label for="%s" class="control-label" style="padding:0 10px">%s</label>', vObjCol.field, vObjCol.title));
-                //htmlForm.push('<div class="col-sm-2">');
-                //htmlForm.push(sprintf('<select class="form-control" name="field-%s" data-name="%s">%s</select>', vObjCol.field, vObjCol.field, selectHtml));
                 vObjCol.operate = (typeof vObjCol.operate === 'undefined' || $.inArray(vObjCol.operate, opList) === -1) ? '=' : vObjCol.operate;
                 htmlForm.push(sprintf('<input type="hidden" class="form-control operate" name="field-%s" data-name="%s" value="%s" readonly>', vObjCol.field, vObjCol.field, vObjCol.operate));
-                //htmlForm.push('</div>');
 
-                //htmlForm.push('<div class="col-sm-8">');
                 var style = typeof vObjCol.style === 'undefined' ? '' : sprintf('style="%s"', vObjCol.style);
                 if (vObjCol.searchList) {
-                    if (typeof vObjCol.searchList == 'function') {
+                    if (typeof vObjCol.searchList === 'object' && typeof vObjCol.searchList.then === 'function') {
+                        htmlForm.push(sprintf('<select class="form-control" name="%s" %s>%s</select>', vObjCol.field, style, sprintf('<option value="">%s</option>', that.options.formatCommonChoose())));
+                        (function (vObjCol, options) {
+                            $.when(vObjCol.searchList).done(function (ret) {
+                                if (ret.data && ret.data.searchlist && $.isArray(ret.data.searchlist)) {
+                                    var optionList = [];
+                                    $.each(ret.data.searchlist, function (key, value) {
+                                        var isSelect = value.id === vObjCol.defaultValue ? 'selected' : '';
+                                        optionList.push(sprintf("<option value='" + value.id + "' %s>" + value.name + "</option>", isSelect));
+                                    });
+                                    $("#commonSearchForm_" + options.idTable + " select[name='" + vObjCol.field + "']").append(optionList.join(''));
+                                }
+                            });
+                        })(vObjCol, that.options);
+                    } else if (typeof vObjCol.searchList == 'function') {
                         htmlForm.push(vObjCol.searchList.call(this, vObjCol));
                     } else {
                         var isArray = vObjCol.searchList.constructor === Array;
@@ -112,7 +122,6 @@
                     }
                 }
 
-                //htmlForm.push('</div>');
                 htmlForm.push('</div>');
             }
         }
@@ -273,17 +282,13 @@
             }
         });
 
-        var searchquery = getSearchQuery(this);
-        this.options.queryParams = function (params) {
-            return {
-                search: params.search,
-                sort: params.sort,
-                order: params.order,
-                filter: JSON.stringify(searchquery.filter),
-                op: JSON.stringify(searchquery.op),
-                offset: params.offset,
-                limit: params.limit,
-            };
+        var searchQuery = getSearchQuery(this);
+        var queryParams = this.options.queryParams;
+        this.options.queryParams = function () {
+            var params = queryParams.apply(this, arguments);
+            params.filter = JSON.stringify($.extend(params.filter || {}, searchQuery.filter));
+            params.op = JSON.stringify($.extend(params.op || {}, searchQuery.op));
+            return params;
         };
 
     };

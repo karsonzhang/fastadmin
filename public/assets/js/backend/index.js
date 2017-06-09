@@ -140,6 +140,17 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
+            var shortcut = localStorage.getItem("shortcut");
+            shortcut = shortcut ? JSON.parse(shortcut) : {};
+            $.each(shortcut, function (i, j) {
+                $("select.fastmenujump").append("<option value='" + i + "'>" + j + "</option>");
+            });
+            $(document).on("change", "select.fastmenujump", function () {
+                if (!$(this).val())
+                    return;
+                Backend.api.addtabs($(this).val(), $("option:selected", this).text());
+            });
+
             //绑定tabs事件
             $('#nav').addtabs({iframeHeight: "100%"});
 
@@ -189,7 +200,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 //Fix the problem with right sidebar and layout boxed
                 if (cls == "layout-boxed")
                     AdminLTE.controlSidebar._fix($(".control-sidebar-bg"));
-                if ($('body').hasClass('fixed') && cls == 'fixed') {
+                if ($('body').hasClass('fixed') && cls == 'fixed' && false) {
                     AdminLTE.pushMenu.expandOnHover();
                     AdminLTE.layout.activate();
                 }
@@ -328,7 +339,29 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             $(window).resize();
         },
         login: function () {
+            var lastlogin = localStorage.getItem("lastlogin");
+            if (lastlogin) {
+                lastlogin = JSON.parse(lastlogin);
+                $("#profile-img").attr("src", Backend.api.cdnurl(lastlogin.avatar));
+                $("#pd-form-username").val(lastlogin.username);
+            }
+
+            //让错误提示框居中
+            Backend.config.toastr.positionClass = "toast-top-center";
+
+            //本地验证未通过时提示
+            $("#login-form").data("validator-options", {
+                invalid: function (form, errors) {
+                    $.each(errors, function (i, j) {
+                        Toastr.error(j);
+                    });
+                },
+                target: '#errtips'
+            });
+
+            //为表单绑定事件
             Form.api.bindevent($("#login-form"), null, function (data) {
+                localStorage.setItem("lastlogin", JSON.stringify({id: data.id, username: data.username, avatar: data.avatar}));
                 location.href = Backend.api.fixurl(data.url);
             });
         }

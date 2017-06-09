@@ -67,6 +67,13 @@ body {
     max-width:885px;
 }
 
+.form-group .bootstrap-tagsinput {
+    display: inherit;
+    span.twitter-typeahead {
+        width:auto;
+    }
+}
+
 #header {
     background: #fff;
     box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05);
@@ -100,6 +107,17 @@ body {
 .toast-top-right-index{
     top:62px;
     right:12px;
+}
+
+.bootstrap-select .status {
+    background: #f0f0f0;
+    clear: both;
+    color: #999;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: -5px;
+    padding: 10px 20px;
 }
 
 /*
@@ -324,6 +342,12 @@ body {
     }
     > li .badge {
         margin-top:0;
+    }
+}
+.sidebar-collapse {
+    .user-panel > .image img{
+        width:25px;
+        height:25px;
     }
 }
 #treeview {

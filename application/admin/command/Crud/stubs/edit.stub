@@ -1,4 +1,4 @@
-<form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
 {%editList%}
     <div class="form-group hide layer-footer">

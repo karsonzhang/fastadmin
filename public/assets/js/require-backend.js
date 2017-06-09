@@ -29,6 +29,7 @@ require.config({
         'bootstrap-dialog': '../libs/bootstrap3-dialog/dist/js/bootstrap-dialog.min',
         'bootstrap-datetimepicker': '../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
         'bootstrap-select': '../libs/bootstrap-select/dist/js/bootstrap-select.min',
+        'bootstrap-select-ajax': '../libs/ajax-bootstrap-select/dist/js/ajax-bootstrap-select.min',
         'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',

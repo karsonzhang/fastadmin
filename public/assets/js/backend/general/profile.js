@@ -26,12 +26,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                     [
                         {field: 'id', title: 'ID'},
                         {field: 'title', title: __('Title')},
-                        {field: 'url', title: __('Url'), align: 'left', formatter: Table.api.formatter.url},
+                        {field: 'url', title: __('Url'), align: 'left', formatter: Controller.api.formatter.url},
                         {field: 'ip', title: __('ip')},
-                        {field: 'username', title: __('Userame')},
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
                     ]
-                ]
+                ],
+                commonSearch: false
             });
 
             // 为表格绑定事件
@@ -47,6 +47,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                 var url = Backend.api.cdnurl(response.url);
                 $(".profile-user-img").prop("src", url);
             };
+        },
+        api: {
+            formatter: {
+                url: function (value, row, index) {
+                    return '<div class="input-group input-group-sm" style="width:250px;"><input type="text" class="form-control input-sm" value="' + value + '"><span class="input-group-btn input-group-sm"><a href="' + value + '" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-link"></i></a></span></div>';
+                },
+            },
         }
     };
     return Controller;

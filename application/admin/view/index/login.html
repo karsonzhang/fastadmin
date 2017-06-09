@@ -9,6 +9,9 @@
                 background:url('http://img.infinitynewtab.com/wallpaper/{:date("Ymd")%4000}.jpg');
                 background-size:cover;
             }
+            a {
+                color:#fff;
+            }
             .login-panel{margin-top:150px;}
             .login-screen {
                 max-width:400px;
@@ -70,16 +73,18 @@
                         <div class="login-form">
                             <img id="profile-img" class="profile-img-card" src="__CDN__/assets/img/avatar.png" />
                             <p id="profile-name" class="profile-name-card"></p>
+                            
                             <form action="" method="post" id="login-form">
+                                <div id="errtips" class="hide"></div>
                                 {:token()}
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
-                                    <input type="text" class="form-control" id="pd-form-username" placeholder="" name="username" autocomplete="off" value="admin" />
+                                    <input type="text" class="form-control" id="pd-form-username" placeholder="{:__('Username')}" name="username" autocomplete="off" value="" data-rule="{:__('Username')}:required;username" />
                                 </div>
 
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
-                                    <input type="password" class="form-control" id="pd-form-password" placeholder="" name="password" autocomplete="off" value="123456" />
+                                    <input type="password" class="form-control" id="pd-form-password" placeholder="{:__('Password')}" name="password" autocomplete="off" value="" data-rule="{:__('Password')}:required;password" />
                                 </div>
 
                                 <div class="form-group">
