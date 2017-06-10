@@ -46,7 +46,7 @@ class Category extends Backend
             //构造父类select列表选项数据
             $list = $this->categorylist;
             $total = count($list);
-            $result = array("total" => $total, "rows" => $list);
+            $result = array("total" => 1, "rows" => $list);
 
             return json($result);
         }

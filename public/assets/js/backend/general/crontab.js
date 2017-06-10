@@ -42,18 +42,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.bindevent(table);
         },
         add: function () {
-            Form.api.bindevent($("form[role=form]"));
             Controller.api.bindevent();
         },
         edit: function () {
-            Form.api.bindevent($("form[role=form]"));
             Controller.api.bindevent();
         },
         api: {
             bindevent: function () {
-                $(document).on("click", "#fieldlist .append", function () {
-
-                });
+                Form.api.bindevent($("form[role=form]"));
                 //拖拽排序
                 require(['crontab'], function () {
                     $('#schedulepicker').jqCron({

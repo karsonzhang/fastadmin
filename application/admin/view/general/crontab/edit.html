@@ -7,50 +7,56 @@
     <div class="form-group">
         <label for="name" class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" class="form-control" id="title" name="row[title]" value="{$row.title}" required="required" />
+            <input type="text" class="form-control" id="title" name="row[title]" value="{$row.title}" data-rule="required" />
         </div>
     </div>
     <div class="form-group">
         <label for="name" class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_select('row[type]', $typedata, $row['type'], ['class'=>'form-control'])}
+            {:build_select('row[type]', $typedata, $row['type'], ['class'=>'form-control', 'data-rule'=>'required'])}
         </div>
     </div>
     <div class="form-group">
         <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea name="row[content]" id="conent" cols="30" rows="5" class="form-control">{$row.content}</textarea>
+            <textarea name="row[content]" id="conent" cols="30" rows="5" class="form-control" data-rule="required">{$row.content}</textarea>
         </div>
     </div>
     <div class="form-group">
         <label for="schedule" class="control-label col-xs-12 col-sm-2">{:__('Schedule')}:</label>
         <div class="col-xs-12 col-sm-8">
             <div id="schedulepicker"></div>
-            <input type="text" class="form-control hide" id="schedule" name="row[schedule]" value="{$row.schedule}" required="required" />
+            <input type="text" class="form-control hide" id="schedule" name="row[schedule]" value="{$row.schedule}" data-rule="required" />
         </div>
     </div>
     <div class="form-group">
         <label for="sleep" class="control-label col-xs-12 col-sm-2">{:__('sleep')}:</label>
         <div class="col-xs-12 col-sm-4">
-            <input type="number" class="form-control" id="sleep" name="row[sleep]" value="{$row.sleep}" required="required" size="6" />
+            <input type="number" class="form-control" id="sleep" name="row[sleep]" value="{$row.sleep}" data-rule="required" size="6" />
         </div>
     </div>
     <div class="form-group">
         <label for="maximums" class="control-label col-xs-12 col-sm-2">{:__('Maximums')}:</label>
         <div class="col-xs-12 col-sm-4">
-            <input type="number" class="form-control" id="maximums" name="row[maximums]" value="{$row.maximums}" required="required" size="6" />
+            <input type="number" class="form-control" id="maximums" name="row[maximums]" value="{$row.maximums}" data-rule="required" size="6" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="begintime" class="control-label col-xs-12 col-sm-2">{:__('Begin time')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input type="text" class="form-control datetimepicker" id="begintime" name="row[begintime]" value="{$row.begintime|datetime}" data-rule="{:__('Begin time')}:required" size="6" />
         </div>
     </div>
     <div class="form-group">
         <label for="endtime" class="control-label col-xs-12 col-sm-2">{:__('End time')}:</label>
         <div class="col-xs-12 col-sm-4">
-            <input type="text" class="form-control datetimepicker" id="endtime" name="row[endtime]" value="{$row.endtime|datetime}" required="required" size="6" />
+            <input type="text" class="form-control datetimepicker" id="endtime" name="row[endtime]" value="{$row.endtime|datetime}" data-rule="{:__('End time')}:required;match(gte, row[begintime], datetime)" size="6" />
         </div>
     </div>
     <div class="form-group">
         <label for="weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
         <div class="col-xs-12 col-sm-4">
-            <input type="text" class="form-control" id="weigh" name="row[weigh]" value="{$row.weigh}" required="required" size="6" />
+            <input type="text" class="form-control" id="weigh" name="row[weigh]" value="{$row.weigh}" data-rule="required" size="6" />
         </div>
     </div>
     <div class="form-group">

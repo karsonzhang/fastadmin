@@ -2,19 +2,19 @@
     <div class="form-group">
         <label for="module" class="control-label col-xs-12 col-sm-2">{:__('Id')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" class="form-control" id="id" name="row[id]" value="{$row.id}" pattern="[A-Za-z0-9_\.]{3,}" required="required" />
+            <input type="text" class="form-control" id="id" name="row[id]" value="{$row.id}" pattern="[A-Za-z0-9_\.]{3,}" data-rule="required" />
         </div>
     </div>
     <div class="form-group">
         <label for="controller" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" class="form-control" id="name" name="row[name]" value="{$row.name}" required="required" />
+            <input type="text" class="form-control" id="name" name="row[name]" value="{$row.name}" data-rule="required" />
         </div>
     </div>
     <div class="form-group">
         <label for="action" class="control-label col-xs-12 col-sm-2">{:__('Value')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea class="form-control" id="value" name="row[value]" required="required">{$row.value}</textarea>
+            <textarea class="form-control" id="value" name="row[value]" data-rule="required">{$row.value}</textarea>
             <a href="javascript:;" class="btn-insertlink">{:__('Insert link')}</a>
         </div>
     </div>

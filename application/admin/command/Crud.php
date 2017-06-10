@@ -253,7 +253,7 @@ class Crud extends Command
                     // 如果默认值为空,则是一个必选项
                     if ($v['COLUMN_DEFAULT'] == '')
                     {
-                        $attrArr['required'] = '';
+                        $attrArr['data-rule'] = 'required';
                     }
                     if ($field == 'status' && in_array($inputType, ['text', 'number']))
                     {
