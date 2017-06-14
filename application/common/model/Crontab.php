@@ -15,5 +15,23 @@ class Crontab extends Model
     // 定义字段类型
     protected $type = [
     ];
+    // 追加属性
+    protected $append = [
+    ];
+
+    protected function setBegintimeAttr($value)
+    {
+        return $value && !is_numeric($value) ? strtotime($value) : $value;
+    }
+
+    protected function setEndtimeAttr($value)
+    {
+        return $value && !is_numeric($value) ? strtotime($value) : $value;
+    }
+
+    protected function setExecutetimeAttr($value)
+    {
+        return $value && !is_numeric($value) ? strtotime($value) : $value;
+    }
 
 }
