@@ -152,7 +152,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 // 添加按钮事件
                 $(toolbar).on('click', Table.config.addbtn, function () {
                     var ids = Table.api.selectedids(table);
-                    Backend.api.open(options.extend.add_url + "/ids/" + ids.join(","), __('Add'));
+                    Backend.api.open(options.extend.add_url + "/ids" + (ids.length > 0 ? '/' : '') + ids.join(","), __('Add'));
                 });
                 // 编辑按钮事件
                 $(toolbar).on('click', Table.config.editbtn, function () {
@@ -274,6 +274,14 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 image: function (value, row, index) {
                     return '<img class="img-rounded img-sm" src="' + Backend.api.cdnurl(value) + '" />';
                 },
+                images: function (value, row, index) {
+                    var arr = value.split(',');
+                    var html = [];
+                    $.each(arr, function (i, value) {
+                        html.push('<img class="img-rounded img-sm" src="' + Backend.api.cdnurl(value) + '" />');
+                    });
+                    return html.join(' ');
+                },
                 status: function (value, row, index, custom) {
                     //颜色状态数组,可使用red/yellow/aqua/blue/navy/teal/olive/lime/fuchsia/purple/maroon
                     var colorArr = {normal: 'success', hidden: 'grey', deleted: 'danger', locked: 'info'};
@@ -289,7 +297,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     return html;
                 },
                 url: function (value, row, index) {
-                    return '<a href="' + value + '" target="_blank" class="label bg-green">' + value + '</a>';
+                    return '<div class="input-group input-group-sm" style="width:250px;"><input type="text" class="form-control input-sm" value="' + value + '"><span class="input-group-btn input-group-sm"><a href="' + value + '" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-link"></i></a></span></div>';
                 },
                 search: function (value, row, index) {
                     return '<a href="javascript:;" class="searchit" data-field="' + this.field + '" data-value="' + value + '">' + value + '</a>';

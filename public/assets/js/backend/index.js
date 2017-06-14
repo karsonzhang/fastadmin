@@ -159,11 +159,14 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 $(".tab-addtabs").addClass("ios-iframe-fix");
             }
 
+            if ($("ul.sidebar-menu li.active a").size() > 0) {
+                $("ul.sidebar-menu li.active a").trigger("click");
+            } else {
+                $("ul.sidebar-menu li a[url!='javascript:;']").trigger("click");
+            }
             if (Config.referer) {
                 //刷新页面后跳到到刷新前的页面
                 Backend.api.addtabs(Config.referer);
-            } else {
-                $("ul.sidebar-menu li.active a").trigger("click");
             }
 
             /**

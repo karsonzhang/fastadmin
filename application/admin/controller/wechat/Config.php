@@ -3,45 +3,23 @@
 namespace app\admin\controller\wechat;
 
 use app\common\controller\Backend;
-use app\common\model\Configvalue;
+use think\Controller;
+use think\Request;
 
 /**
- * 配置管理
+ * 微信配置管理
  *
- * @icon fa fa-list-alt
+ * @icon fa fa-circle-o
  */
 class Config extends Backend
 {
 
-    protected $wechatcfg = NULL;
-    protected $obj = [];
+    protected $model = null;
 
     public function _initialize()
     {
         parent::_initialize();
-        $this->wechatcfg = Configvalue::get('wechat');
-        $this->obj = $this->wechatcfg->content;
-    }
-
-    /**
-     * 查看
-     */
-    public function index()
-    {
-        if ($this->request->isAjax())
-        {
-            $configlist = isset($this->obj['config']) ? $this->obj['config'] : [];
-            $list = array();
-            foreach ($configlist as $row)
-            {
-                $list[] = $row;
-            }
-            $total = count($list);
-            $result = array("total" => $total, "rows" => $list);
-
-            return json($result);
-        }
-        return $this->view->fetch();
+        $this->model = model('WechatConfig');
     }
 
     /**
@@ -51,10 +29,61 @@ class Config extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->obj['config'][] = $this->request->post('row/a');
-            $this->wechatcfg->content = $this->obj;
-            $this->wechatcfg->save();
-            $this->code = 1;
+            $this->code = -1;
+            $params = $this->request->post("row/a");
+            if ($params)
+            {
+                foreach ($params as $k => &$v)
+                {
+                    $v = is_array($v) ? implode(',', $v) : $v;
+                }
+
+                if ($params['mode'] == 'json')
+                {
+                    //JSON字段
+                    $fieldarr = $valuearr = [];
+                    $field = $this->request->post('field/a');
+                    $value = $this->request->post('value/a');
+                    foreach ($field as $k => $v)
+                    {
+                        if ($v != '')
+                        {
+                            $fieldarr[] = $field[$k];
+                            $valuearr[] = $value[$k];
+                        }
+                    }
+                    $params['value'] = json_encode(array_combine($fieldarr, $valuearr), JSON_UNESCAPED_UNICODE);
+                }
+                unset($params['mode']);
+                try
+                {
+                    //是否采用模型验证
+                    if ($this->modelValidate)
+                    {
+                        $name = basename(str_replace('\\', '/', get_class($this->model)));
+                        $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
+                        $this->model->validate($validate);
+                    }
+                    $result = $this->model->save($params);
+                    if ($result !== false)
+                    {
+                        $this->code = 1;
+                    }
+                    else
+                    {
+                        $this->msg = $this->model->getError();
+                    }
+                }
+                catch (\think\exception\PDOException $e)
+                {
+                    $this->msg = $e->getMessage();
+                }
+            }
+            else
+            {
+                $this->msg = __('Parameter %s can not be empty', '');
+            }
+
             return;
         }
         return $this->view->fetch();
@@ -65,63 +94,71 @@ class Config extends Backend
      */
     public function edit($ids = NULL)
     {
-        $row = [];
-        foreach ($this->obj['config'] as $k => $v)
-        {
-            if ($v['id'] == $ids)
-            {
-                $row = $v;
-                break;
-            }
-        }
+        $row = $this->model->get($ids);
         if (!$row)
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
         {
-            $params = $this->request->post('row/a');
-            $this->obj['config'][$k] = $params;
-            $this->obj['config'] = array_values($this->obj['config']);
-            $this->wechatcfg->content = $this->obj;
-            $this->wechatcfg->save();
-            $this->code = 1;
+            $this->code = -1;
+            $params = $this->request->post("row/a");
+            if ($params)
+            {
+                foreach ($params as $k => &$v)
+                {
+                    $v = is_array($v) ? implode(',', $v) : $v;
+                }
+
+                if ($params['mode'] == 'json')
+                {
+                    //JSON字段
+                    $fieldarr = $valuearr = [];
+                    $field = $this->request->post('field/a');
+                    $value = $this->request->post('value/a');
+                    foreach ($field as $k => $v)
+                    {
+                        if ($v != '')
+                        {
+                            $fieldarr[] = $field[$k];
+                            $valuearr[] = $value[$k];
+                        }
+                    }
+                    $params['value'] = json_encode(array_combine($fieldarr, $valuearr), JSON_UNESCAPED_UNICODE);
+                }
+                unset($params['mode']);
+                try
+                {
+                    //是否采用模型验证
+                    if ($this->modelValidate)
+                    {
+                        $name = basename(str_replace('\\', '/', get_class($this->model)));
+                        $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
+                        $row->validate($validate);
+                    }
+                    $result = $row->save($params);
+                    if ($result !== false)
+                    {
+                        $this->code = 1;
+                    }
+                    else
+                    {
+                        $this->msg = $row->getError();
+                    }
+                }
+                catch (think\exception\PDOException $e)
+                {
+                    $this->msg = $e->getMessage();
+                }
+            }
+            else
+            {
+                $this->msg = __('Parameter %s can not be empty', '');
+            }
+
             return;
         }
         $this->view->assign("row", $row);
+        $this->view->assign("value", (array) json_decode($row->value, true));
         return $this->view->fetch();
-    }
-
-    /**
-     * 删除
-     */
-    public function del($ids = "")
-    {
-        $this->code = -1;
-        if ($ids)
-        {
-            $ids = is_array($ids) ? $ids : explode(',', $ids);
-            foreach ($this->obj['config'] as $k => $v)
-            {
-                if (in_array($v['id'], $ids))
-                {
-                    unset($this->obj['config'][$k]);
-                }
-            }
-            $this->wechatcfg->content = $this->obj;
-            $this->wechatcfg->save();
-            $this->code = 1;
-        }
-
-        return;
-    }
-
-    /**
-     * 批量更新
-     */
-    public function multi($ids = "")
-    {
-        $this->code = -1;
-        //不支持指操作
-        return;
     }
 
 }

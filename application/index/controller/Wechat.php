@@ -6,6 +6,7 @@ use app\common\controller\Frontend;
 use app\common\model\WechatAutoreply;
 use app\common\model\WechatContext;
 use app\common\model\WechatResponse;
+use app\common\model\WechatConfig;
 use EasyWeChat\Foundation\Application;
 use EasyWeChat\Payment\Order;
 use fast\service\Wechat as WechatService;
@@ -31,15 +32,7 @@ class Wechat extends Frontend
      */
     public function api()
     {
-        $this->app->server->setMessageHandler(function ($message)
-        {
-            $content = configvalue('wechat');
-            //微信配置信息
-            $wechat_config = [];
-            foreach ($content['config'] as $k => $v)
-            {
-                $wechat_config[$v['id']] = $v['value'];
-            }
+        $this->app->server->setMessageHandler(function ($message) {
 
             $WechatService = new WechatService;
             $WechatContext = new WechatContext;
@@ -50,7 +43,8 @@ class Wechat extends Frontend
             $event = $message->Event;
             $eventkey = $message->EventKey ? $message->EventKey : $message->Event;
 
-            $unknownmessage = isset($wechat_config['default.unknown.message']) ? $wechat_config['default.unknown.message'] : "对找到对应指令!";
+            $unknownmessage = WechatConfig::value('default.unknown.message');
+            $unknownmessage = $unknownmessage ? $unknownmessage : "对找到对应指令!";
 
             switch ($message->MsgType)
             {
@@ -58,7 +52,9 @@ class Wechat extends Frontend
                     switch ($event)
                     {
                         case 'subscribe'://添加关注
-                            return isset($wechat_config['default.subscribe.message']) ? $wechat_config['default.subscribe.message'] : "欢迎关注我们!";
+                            $subscribemessage = WechatConfig::value('default.subscribe.message');
+                            $subscribemessage = $subscribemessage ? $subscribemessage : "欢迎关注我们!";
+                            return $subscribemessage;
                         case 'unsubscribe'://取消关注
                             return '';
                         case 'LOCATION'://获取地理位置
@@ -149,7 +145,7 @@ class Wechat extends Frontend
      */
     public function callback()
     {
-
+        
     }
 
     /**
@@ -158,8 +154,7 @@ class Wechat extends Frontend
     public function notify()
     {
         Log::record(file_get_contents('php://input'), "notify");
-        $response = $this->app->payment->handleNotify(function($notify, $successful)
-        {
+        $response = $this->app->payment->handleNotify(function($notify, $successful) {
             // 使用通知里的 "微信支付订单号" 或者 "商户订单号" 去自己的数据库找到订单
             $orderinfo = Order::findByTransactionId($notify->transaction_id);
             if ($orderinfo)

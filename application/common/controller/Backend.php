@@ -70,6 +70,16 @@ class Backend extends Controller
     protected $relationSearch = false;
 
     /**
+     * 是否开启Validate验证
+     */
+    protected $modelValidate = false;
+
+    /**
+     * 是否开启模型场景验证
+     */
+    protected $modelSceneValidate = false;
+
+    /**
      * 引入后台控制器的traits
      */
     use \app\admin\library\traits\Backend;
@@ -115,7 +125,7 @@ class Backend extends Controller
                 }
             }
         }
-        
+
         // 非选项卡时重定向
         if (!$this->request->isPost() && !IS_AJAX && !IS_ADDTABS && !IS_DIALOG && input("ref") == 'addtabs')
         {
@@ -140,9 +150,11 @@ class Backend extends Controller
         // 语言检测
         $lang = Lang::detect();
 
+        $site = Config::get("site");
+
         // 配置信息
         $config = [
-            'site'           => Config::get("site"),
+            'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
             'upload'         => Configvalue::upload(),
             'modulename'     => $modulename,
             'controllername' => $controllername,
@@ -155,7 +167,7 @@ class Backend extends Controller
 
         Lang::load(APP_PATH . $modulename . '/lang/' . $lang . '/' . str_replace('.', '/', $controllername) . '.php');
 
-        $this->assign('site', Config::get("site"));
+        $this->assign('site', $site);
         $this->assign('config', $config);
 
         $this->assign('admin', Session::get('admin'));
@@ -182,16 +194,6 @@ class Backend extends Controller
         $op = json_decode($op, TRUE);
         $filter = $filter ? $filter : [];
         $where = [];
-        if ($search)
-        {
-            $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
-            $searchlist = [];
-            foreach ($searcharr as $k => $v)
-            {
-                $searchlist[] = "`{$v}` LIKE '%{$search}%'";
-            }
-            $where[] = "(" . implode(' OR ', $searchlist) . ")";
-        }
         $modelName = '';
         if ($relationSearch)
         {
@@ -206,6 +208,16 @@ class Backend extends Controller
             {
                 $sort = $modelName . $sort;
             }
+        }
+        if ($search)
+        {
+            $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
+            $searchlist = [];
+            foreach ($searcharr as $k => $v)
+            {
+                $searchlist[] = "{$modelName}`{$v}` LIKE '%{$search}%'";
+            }
+            $where[] = "(" . implode(' OR ', $searchlist) . ")";
         }
         foreach ($filter as $k => $v)
         {

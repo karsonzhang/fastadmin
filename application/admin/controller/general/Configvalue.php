@@ -9,6 +9,7 @@ use app\common\controller\Backend;
  *
  * @icon fa fa-cog
  * @remark 用于管理一些字典数据,通常以键值格式进行录入,保存的数据格式为JSON
+ * @internal
  */
 class Configvalue extends Backend
 {

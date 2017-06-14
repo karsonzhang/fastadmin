@@ -23,7 +23,7 @@ trait Backend
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();
-          
+
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
@@ -48,7 +48,14 @@ trait Backend
                 }
                 try
                 {
-                    $result = $this->model->create($params);
+                    //是否采用模型验证
+                    if ($this->modelValidate)
+                    {
+                        $name = basename(str_replace('\\', '/', get_class($this->model)));
+                        $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
+                        $this->model->validate($validate);
+                    }
+                    $result = $this->model->save($params);
                     if ($result !== false)
                     {
                         $this->code = 1;
@@ -58,7 +65,7 @@ trait Backend
                         $this->msg = $this->model->getError();
                     }
                 }
-                catch (think\Exception $e)
+                catch (\think\exception\PDOException $e)
                 {
                     $this->msg = $e->getMessage();
                 }
@@ -93,6 +100,13 @@ trait Backend
                 }
                 try
                 {
+                    //是否采用模型验证
+                    if ($this->modelValidate)
+                    {
+                        $name = basename(str_replace('\\', '/', get_class($this->model)));
+                        $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
+                        $row->validate($validate);
+                    }
                     $result = $row->save($params);
                     if ($result !== false)
                     {
@@ -103,7 +117,7 @@ trait Backend
                         $this->msg = $row->getError();
                     }
                 }
-                catch (think\Exception $e)
+                catch (think\exception\PDOException $e)
                 {
                     $this->msg = $e->getMessage();
                 }

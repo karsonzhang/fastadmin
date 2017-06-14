@@ -81,7 +81,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                         var $formitem = $(input).closest('.form-group'),
                                 $msgbox = $formitem.find('span.msg-box');
                         if (!$msgbox.length) {
-                            $msgbox = $('<span class="msg-box"></span>').insertAfter(input);
+                            return [];
                         }
                         return $msgbox;
                     },

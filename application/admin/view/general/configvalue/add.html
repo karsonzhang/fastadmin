@@ -1,9 +1,3 @@
-<style type="text/css">
-    #fieldlist dd {display:block;margin:5px 0;}
-    #fieldlist dd input{display: inline-block;width:300px;}
-    #fieldlist dd input:first-child{width:110px;}
-    #fieldlist dd ins{width:110px;display: inline-block;text-decoration:none;font-weight: bold;}
-</style>
 <form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
     <div class="form-group">
         <label for="name" class="control-label col-xs-12 col-sm-2">ID:</label>
@@ -20,7 +14,7 @@
     <div class="form-group">
         <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <dl id="fieldlist" rel="1">
+            <dl class="fieldlist" rel="1">
                 <dd>
                     <ins>{:__('Key')}</ins>
                     <ins>{:__('Value')}</ins>

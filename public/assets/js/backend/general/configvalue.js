@@ -57,18 +57,18 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         api: {
             bindevent: function () {
-                $(document).on("click", "#fieldlist .append", function () {
+                $(document).on("click", ".fieldlist .append", function () {
                     var rel = parseInt($(this).closest("dl").attr("rel")) + 1;
                     $(this).closest("dl").attr("rel", rel);
                     $('<dd class="form-inline"><input type="text" name="field[' + rel + ']" class="form-control" id="field-' + rel + '" value="" size="10" /> <input type="text" name="value[' + rel + ']" class="form-control" id="value-' + rel + '" value="" size="40" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>').insertBefore($(this).parent());
                 });
-                $(document).on("click", "#fieldlist dd .btn-remove", function () {
+                $(document).on("click", ".fieldlist dd .btn-remove", function () {
                     $(this).parent().remove();
                 });
                 //拖拽排序
                 require(['dragsort'], function () {
                     //绑定拖动排序
-                    $("dl#fieldlist").dragsort({
+                    $("dl.fieldlist").dragsort({
                         itemSelector: 'dd',
                         dragSelector: ".btn-dragsort",
                         dragEnd: function () {

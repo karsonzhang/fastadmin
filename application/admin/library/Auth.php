@@ -235,7 +235,7 @@ class Auth extends \fast\Auth
      * @param array $params URL对应的badge数据
      * @return string
      */
-    public function getSidebar($params = [])
+    public function getSidebar($params = [], $fixedPage = 'dashboard')
     {
         $colorArr = ['red', 'green', 'yellow', 'blue', 'teal', 'orange', 'purple'];
         $colorNums = count($colorArr);
@@ -275,7 +275,7 @@ class Auth extends \fast\Auth
         // 读取管理员当前拥有的权限节点
         $userRule = $this->getRuleList();
         $select_id = 0;
-        $dashboard = '/' . $module . '/dashboard';
+        $activeUrl = '/' . $module . '/' . $fixedPage;
         // 必须将结果集转换为数组
         $ruleList = collection(model('AuthRule')->where('ismenu', 1)->order('weigh', 'desc')->cache("__menu__")->select())->toArray();
         foreach ($ruleList as $k => &$v)
@@ -285,7 +285,7 @@ class Auth extends \fast\Auth
                 unset($ruleList[$k]);
                 continue;
             }
-            $select_id = $v['name'] == $dashboard ? $v['id'] : $select_id;
+            $select_id = $v['name'] == $activeUrl ? $v['id'] : $select_id;
             $v['url'] = $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
         }

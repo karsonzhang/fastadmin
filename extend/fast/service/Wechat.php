@@ -6,6 +6,7 @@ use app\common\model\Page;
 use app\common\model\User;
 use app\common\model\UserSignin;
 use app\common\model\UserThird;
+use app\common\model\WechatConfig;
 use EasyWeChat\Message\News;
 use EasyWeChat\Message\Transfer;
 use fast\Date;
@@ -19,7 +20,7 @@ class Wechat
 
     public function __construct()
     {
-
+        
     }
 
     public static function appConfig()
@@ -73,7 +74,7 @@ class Wechat
                 case 'page':
                     break;
                 case 'service':
-                    $service = configvalue('service');
+                    $service = (array) json_decode(WechatConfig::value('service'), true);
                     list($begintime, $endtime) = explode('-', $service['onlinetime']);
                     $session = $obj->app->staff_session;
                     $staff = $obj->app->staff;
@@ -107,8 +108,7 @@ class Wechat
                     else
                     {
                         $server = $obj->app->server;
-                        $server->setMessageHandler(function($message)
-                        {
+                        $server->setMessageHandler(function($message) {
                             return new Transfer();
                         });
                         $response = $server->serve();
@@ -154,7 +154,7 @@ class Wechat
                         }
                         else
                         {
-                            $signdata = configvalue('signin');
+                            $signdata = (array) json_decode(WechatConfig::value('signin'), TRUE);
 
                             $lastdata = $usersign->where('user_id', $user_id)->order('id', 'desc')->limit(1)->get();
                             $successions = $lastdata && $lastdata['createtime'] > Date::unixtime('day', -1) ? $lastdata['successions'] + 1 : 1;

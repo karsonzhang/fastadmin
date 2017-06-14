@@ -4,15 +4,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         index: function () {
             // 初始化表格参数配置
             Table.api.init({
-                search: true,
-                advancedSearch: false,
-                pagination: false,
                 extend: {
-                    "index_url": "wechat/config/index",
-                    "add_url": "wechat/config/add",
-                    "edit_url": "wechat/config/edit",
-                    "del_url": "wechat/config/del",
-                    "multi_url": "wechat/config/multi",
+                    index_url: 'wechat/config/index',
+                    add_url: 'wechat/config/add',
+                    edit_url: 'wechat/config/edit',
+                    del_url: 'wechat/config/del',
+                    multi_url: 'wechat/config/multi',
+                    table: 'wechat_config',
                 }
             });
 
@@ -21,21 +19,23 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
+                pk: 'id',
                 sortName: 'id',
                 columns: [
                     [
-                        {field: 'state', checkbox: true, },
-                        {field: 'id', title: 'ID'},
+                        {field: 'state', checkbox: true},
+                        {field: 'id', title: __('Id')},
                         {field: 'name', title: __('Name')},
-                        {field: 'value', title: __('Value')},
+                        {field: 'title', title: __('Title')},
+                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
+                        {field: 'updatetime', title: __('Updatetime'), formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
 
             // 为表格绑定事件
-            Table.api.bindevent(table);//当内容渲染完成后
-
+            Table.api.bindevent(table);
         },
         add: function () {
             Controller.api.bindevent();
@@ -46,6 +46,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
+                $(document).on('click', ".btn-jsoneditor", function () {
+                    $("#c-value").toggle();
+                    $(".fieldlist").toggleClass("hide");
+                    $(".btn-insertlink").toggle();
+                    $("input[name='row[mode]']").val($("#c-value").is(":visible") ? "textarea" : "json");
+                });
                 $(document).on('click', ".btn-insertlink", function () {
                     var textarea = $("textarea[name='row[value]']");
                     var cursorPos = textarea.prop('selectionStart');
@@ -63,6 +69,27 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     });
                 });
                 $("input[name='row[type]']:checked").trigger("click");
+
+                $(document).on("click", ".fieldlist .append", function () {
+                    var rel = parseInt($(this).closest("dl").attr("rel")) + 1;
+                    $(this).closest("dl").attr("rel", rel);
+                    $('<dd><input type="text" name="field[' + rel + ']" class="form-control" id="field-' + rel + '" value="" size="10" /> <input type="text" name="value[' + rel + ']" class="form-control" id="value-' + rel + '" value="" size="40" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>').insertBefore($(this).parent());
+                });
+                $(document).on("click", ".fieldlist dd .btn-remove", function () {
+                    $(this).parent().remove();
+                });
+                //拖拽排序
+                require(['dragsort'], function () {
+                    //绑定拖动排序
+                    $("dl.fieldlist").dragsort({
+                        itemSelector: 'dd',
+                        dragSelector: ".btn-dragsort",
+                        dragEnd: function () {
+
+                        },
+                        placeHolderTemplate: "<dd></dd>"
+                    });
+                });
             }
         }
     };

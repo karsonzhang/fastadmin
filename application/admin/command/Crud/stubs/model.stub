@@ -21,6 +21,9 @@ class {%modelName%} extends Model
 {%appendAttrList%}
     ];
     
+    
+{%getEnumList%}
+
 {%getAttrList%}
 
 {%setAttrList%}

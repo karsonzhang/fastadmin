@@ -25,11 +25,7 @@ class Category Extends Model
      */
     public static function getTypeList()
     {
-        $typelist = [
-            'default' => __('Default'),
-            'page'    => __('Page'),
-            'article' => __('Article'),
-        ];
+        $typelist = config('site', 'categorytype');
         return $typelist;
     }
 

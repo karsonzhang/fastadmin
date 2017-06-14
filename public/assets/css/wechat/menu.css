@@ -67,6 +67,7 @@
     float: left;
     text-align: center;
     width: 33.33%;
+    list-style: none;
 }
 .ui-sortable-placeholder{
     background-color:#fff;
@@ -140,6 +141,7 @@
 .sub-menu-list li{
     line-height: 44px;
     margin: -1px -1px 0;
+    list-style: none;
 }
 .sub-menu-box .arrow {
     position: absolute;

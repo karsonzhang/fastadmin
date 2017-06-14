@@ -1,35 +1,31 @@
 <?php
 
-//站点配置
-return [
-    /**
-     * 站点名称
-     */
-    'name'        => 'FastAdmin',
-    /**
-     * 备案号
-     */
-    'beian'       => '',
-    /**
-     * CDN地址,建议使用upload中配置的cdnurl
-     */
-    'cdnurl'      => '',
-    /**
-     * 版本号
-     */
-    'version'     => '1.0.1',
-    /**
-     * 时区
-     */
-    'timezone'    => 'Asia/Shanghai',
-    /**
-     * 禁止访问的IP
-     */
-    'forbiddenip' => '',
-    /**
-     * 模块语言
-     */
-    'languages'   => [
-        'backend' => 'zh-cn',
-    ],
-];
+return array (
+  'name' => 'FastAdmin',
+  'beian' => '',
+  'cdnurl' => '',
+  'version' => '1.0.1',
+  'timezone' => 'Asia/Shanghai',
+  'forbiddenip' => '',
+  'languages' => 
+  array (
+    'backend' => 'zh-cn',
+    'frontend' => 'zh-cn',
+  ),
+  'fixedpage' => 'dashboard',
+  'categorytype' => 
+  array (
+    'default' => '默认',
+    'page' => '单页',
+    'article' => '文章',
+    'test' => '测试',
+  ),
+  'configgroup' => 
+  array (
+    'basic' => '基础配置',
+    'email' => '邮件配置',
+    'dictionary' => '字典配置',
+    'user' => '会员配置',
+    'example' => '示例分组',
+  ),
+);

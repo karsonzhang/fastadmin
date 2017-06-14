@@ -1,25 +1,44 @@
-<form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <input type="hidden" name="row[mode]" value="textarea" />
     <div class="form-group">
-        <label for="module" class="control-label col-xs-12 col-sm-2">{:__('Id')}:</label>
+        <label for="c-name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" class="form-control" id="id" name="row[id]" value="{$row.id}" pattern="[A-Za-z0-9_\.]{3,}" data-rule="required" />
+            <input id="c-name" data-rule="required" class="form-control" name="row[name]" type="text" value="{$row.name}">
         </div>
     </div>
     <div class="form-group">
-        <label for="controller" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <label for="c-title" class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" class="form-control" id="name" name="row[name]" value="{$row.name}" data-rule="required" />
+            <input id="c-title" data-rule="required" class="form-control" name="row[title]" type="text" value="{$row.title}">
         </div>
     </div>
     <div class="form-group">
-        <label for="action" class="control-label col-xs-12 col-sm-2">{:__('Value')}:</label>
+        <label for="c-value" class="control-label col-xs-12 col-sm-2">{:__('Value')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea class="form-control" id="value" name="row[value]" data-rule="required">{$row.value}</textarea>
-            <a href="javascript:;" class="btn-insertlink">{:__('Insert link')}</a>
+            <p>
+                <a href="javascript:;" class="btn btn-info btn-jsoneditor"><i class="fa fa-pencil"></i> {:__('Json editor')}</a>
+                <a href="javascript:;" class="btn btn-primary btn-insertlink"><i class="fa fa-link"></i> {:__('Insert link')}</a>
+            </p>
+            <textarea id="c-value" class="form-control " rows="15" name="row[value]">{$row.value}</textarea>
+            <dl class="fieldlist hide" rel="{$value|count}">
+                <dd>
+                    <ins>{:__('Json key')}</ins>
+                    <ins>{:__('Json value')}</ins>
+                </dd>
+                {foreach $value as $key => $vo}
+                <dd class="form-inline">
+                    <input type="text" name="field[{$key}]" class="form-control" id="field-{$key}" value="{$key}" size="10" />
+                    <input type="text" name="value[{$key}]" class="form-control" id="value-{$key}" value="{$vo}" size="40" />
+                    <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
+                    <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
+                </dd>
+                {/foreach}
+                <dd><a href="javascript:;" class="append btn btn-sm btn-success"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+            </dl>
         </div>
     </div>
-    <div class="form-group hidden layer-footer">
-        <div class="col-xs-2"></div>
+    <div class="form-group hide layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
             <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
             <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>

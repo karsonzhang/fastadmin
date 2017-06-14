@@ -76,7 +76,9 @@ body.is-dialog {
         width:auto;
     }
 }
-
+.content {
+    min-height:500px;
+}
 #header {
     background: #fff;
     box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05);
@@ -353,6 +355,14 @@ body.is-dialog {
         height:25px;
     }
 }
+
+.fieldlist dd {
+    display:block;margin:5px 0;
+    input{display: inline-block;width:300px;}
+    input:first-child{width:110px;}
+    ins{width:110px;display: inline-block;text-decoration:none;font-weight: bold;}
+}
+
 #treeview {
     .jstree-container-ul .jstree-node{
         display:block;clear:both;
@@ -433,10 +443,13 @@ body.is-dialog {
     }
 }
 .bootstrap-table .fixed-table-toolbar .dropdown-menu{
-    overflow:visible;
+    overflow:auto;
 }
 
 .bootstrap-table table tbody tr:first-child td .bs-checkbox {
+    vertical-align: middle;
+}
+.bootstrap-table td.bs-checkbox {
     vertical-align: middle;
 }
 .dropdown-submenu {

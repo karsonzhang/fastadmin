@@ -1,0 +1,6 @@
+
+    public function {%methodName%}($value, $data)
+    {
+        $value = $value ? $value : $data['{%field%}'];
+        return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+    }

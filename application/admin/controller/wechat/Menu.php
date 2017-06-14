@@ -22,7 +22,7 @@ class Menu extends Backend
     public function _initialize()
     {
         parent::_initialize();
-        $this->wechatcfg = Configvalue::get('wechat');
+        $this->wechatcfg = \app\common\model\WechatConfig::get(['name' => 'menu']);
     }
 
     /**
@@ -37,7 +37,7 @@ class Menu extends Backend
             $responselist[$v['eventkey']] = $v['title'];
         }
         $this->view->assign('responselist', $responselist);
-        $this->view->assign('menu', $this->wechatcfg->content['menu']);
+        $this->view->assign('menu', (array) json_decode($this->wechatcfg->value, TRUE));
         return $this->view->fetch();
     }
 
@@ -48,9 +48,7 @@ class Menu extends Backend
     {
         $menu = $this->request->post("menu");
         $menu = (array) json_decode($menu, TRUE);
-        $content = $this->wechatcfg->content;
-        $content['menu'] = $menu;
-        $this->wechatcfg->content = $content;
+        $this->wechatcfg->value = json_encode($menu, JSON_UNESCAPED_UNICODE);
         $this->wechatcfg->save();
         $this->code = 1;
         return;
@@ -66,7 +64,7 @@ class Menu extends Backend
 
         try
         {
-            $ret = $app->menu->add($this->wechatcfg->content['menu']);
+            $ret = $app->menu->add(json_decode($this->wechatcfg->value, TRUE));
             if ($ret->errcode == 0)
             {
                 $this->code = 1;

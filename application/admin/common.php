@@ -82,12 +82,12 @@ function build_checkboxs($name, $list = [], $selected = null)
  * @param array $attr
  * @return string
  */
-function build_category_select($name, $type, $selected = null, $attr = [])
+function build_category_select($name, $type, $selected = null, $attr = [], $header = [])
 {
     $tree = Tree::instance();
     $tree->init(Category::getCategoryArray($type), 'pid');
     $categorylist = $tree->getTreeList($tree->getTreeArray(0), 'name');
-    $categorydata = [0 => __('None')];
+    $categorydata = $header ? $header : [];
     foreach ($categorylist as $k => $v)
     {
         $categorydata[$v['id']] = $v['name'];
@@ -110,7 +110,7 @@ function build_toolbar($btns = NULL, $attr = [])
         'refresh' => ['javascript:;', 'btn btn-primary btn-refresh', 'fa fa-refresh', ''],
         'add'     => ['javascript:;', 'btn btn-success btn-add', 'fa fa-plus', __('Add')],
         'edit'    => ['javascript:;', 'btn btn-success btn-edit btn-disabled disabled', 'fa fa-pencil', __('Edit')],
-        'delete'     => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete')],
+        'delete'  => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete')],
     ];
     $btnAttr = array_merge($btnAttr, $attr);
     $html = [];

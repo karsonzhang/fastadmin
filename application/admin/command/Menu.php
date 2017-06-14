@@ -23,6 +23,7 @@ class Menu extends Command
         $this
                 ->setName('menu')
                 ->addOption('controller', 'c', Option::VALUE_REQUIRED, 'controller name,use \'all-controller\' when build all menu', null)
+                ->addOption('delete', 'd', Option::VALUE_OPTIONAL, 'delete the specified menu', '')
                 ->setDescription('Build auth menu from controller');
     }
 
@@ -30,11 +31,44 @@ class Menu extends Command
     {
         $this->model = new AuthRule();
         $adminPath = dirname(__DIR__) . DS;
+        $moduleName = 'admin';
         //控制器名
         $controller = $input->getOption('controller') ?: '';
         if (!$controller)
         {
             throw new Exception("please input controller name");
+        }
+        //是否为删除模式
+        $delete = $input->getOption('delete');
+        if ($delete)
+        {
+            if ($controller == 'all-controller')
+            {
+                throw new Exception("could not delete all menu");
+            }
+            $ids = [];
+            $list = $this->model->where('name', 'like', "/{$moduleName}/" . strtolower($controller) . "%")->select();
+            foreach ($list as $k => $v)
+            {
+                $output->warning($v->name);
+                $ids[] = $v->id;
+            }
+            if (!$ids)
+            {
+                throw new Exception("There is no menu to delete");
+            }
+            $readyMenu = [];
+            $output->info("Are you sure you want to delete all those menu?  Type 'yes' to continue: ");
+            $line = fgets(STDIN);
+            if (trim($line) != 'yes')
+            {
+                throw new Exception("Operation is aborted!");
+            }
+            AuthRule::destroy($ids);
+
+            Cache::rm("__menu__");
+            $output->info("Delete Successed");
+            return;
         }
 
         if ($controller != 'all-controller')
