@@ -23,8 +23,6 @@ require.config({
         'jquery': '../libs/jquery/dist/jquery.min',
         'bootstrap': '../libs/bootstrap/dist/js/bootstrap.min',
         'bootstrap-validator': '../libs/bootstrap-validator/dist/validator.min',
-        'bootstrap-typeahead': '../libs/bootstrap3-typeahead/bootstrap3-typeahead.min',
-        'bootstrap-tagsinput': '../libs/bootstrap-tagsinput/dist/bootstrap-tagsinput.min',
         'bootstrap-dialog': '../libs/bootstrap3-dialog/dist/js/bootstrap-dialog.min',
         'bootstrap-datetimepicker': '../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
         'bootstrap-select': '../libs/bootstrap-select/dist/js/bootstrap-select.min',
@@ -32,8 +30,6 @@ require.config({
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
-        'typeahead': '../libs/typeahead.js/dist/typeahead.jquery.min',
-        'bloodhound': '../libs/typeahead.js/dist/bloodhound.min',
         'tableexport': '../libs/tableExport.jquery.plugin/tableExport.min',
         'dropzone': '../libs/dropzone/dist/min/dropzone-amd-module.min',
         'less': '../libs/less/dist/less.min',
@@ -90,12 +86,6 @@ require.config({
             deps: ['bootstrap', 'slimscroll'],
             exports: '$.AdminLTE'
         },
-        'typeahead': {
-            deps: ['jquery'],
-            init: function ($) {
-                return require.s.contexts._.registry['typeahead.js'].factory($);
-            }
-        },
         'crontab': ['../libs/jqcron/src/jqCron', 'css!../libs/jqcron/src/jqCron.css'],
         'bootstrap-checkbox': ['jquery'],
         'bootstrap-radio': ['jquery'],
@@ -104,12 +94,6 @@ require.config({
         'bootstrap-datetimepicker': [
             'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
             'moment/locale/zh-cn',
-        ],
-        'bootstrap-tagsinput': [
-            'css!../libs/bootstrap-tagsinput/dist/bootstrap-tagsinput-typeahead.css',
-            'css!../libs/bootstrap-tagsinput/dist/bootstrap-tagsinput.css',
-            'jquery',
-            'typeahead'
         ],
         'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
         'summernote': ['../libs/summernote/dist/summernote.min', 'css!../libs/summernote/dist/summernote.css'],

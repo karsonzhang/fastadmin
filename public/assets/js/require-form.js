@@ -105,43 +105,16 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
 
                 //绑定select元素事件
                 if ($(".selectpicker", form).size() > 0) {
-                    require(['bootstrap-select', 'bootstrap-select-ajax'], function () {
-                        var selectlist = $('.selectpicker', form).selectpicker();
-                        $.each(selectlist, function () {
-                            var that = this;
-                            if ($(this).data("live-search")) {
-                                $(this).ajaxSelectPicker({
-                                    ajax: {
-                                        url: 'ajax/selectpicker',
-                                        beforeSend: function (xhr, setting) {
-                                            setting.url = Backend.api.fixurl(setting.url);
-                                        },
-                                        data: function () {
-                                            var params = {
-                                                search: '{{{q}}}',
-                                                field: $(that).attr("name")
-                                            };
-                                            return params;
-                                        },
-                                        dataType: 'json'
-                                    },
-                                    locale: {
-                                        emptyTitle: 'Search...'
-                                    },
-                                    preprocessData: function (ret) {
-                                        var list = [];
-                                        if (ret.hasOwnProperty('data') && ret.data) {
-                                            var len = ret.data.length;
-                                            for (var i = 0; i < len; i++) {
-                                                var curr = ret.data[i];
-                                                list.push(curr);
-                                            }
-                                        }
-                                        return list;
-                                    },
-                                    preserveSelected: true
-                                });
-                            }
+                    require(['bootstrap-select'], function () {
+                        $('.selectpicker', form).selectpicker();
+                    });
+                }
+
+                //绑定selectpage元素事件
+                if ($(".selectpage", form).size() > 0) {
+                    require(['selectpage'], function () {
+                        $('.selectpage', form).selectPage({
+                            source: 'ajax/selectpage',
                         });
                     });
                 }
@@ -153,74 +126,6 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                         $.cxSelect.defaults.jsonValue = 'value';
                         $.cxSelect.defaults.jsonSpace = 'data';
                         $("[data-toggle='cxselect']").cxSelect();
-                    });
-                }
-
-                if ($(".typeahead").size() > 0 || $(".tagsinput").size() > 0) {
-                    require(['bloodhound'], function () {
-                        var remotesource = function (input) {
-                            var url = $(input).data("url") ? $(input).data("url") : "ajax/typeahead";
-                            return new Bloodhound({
-                                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-                                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                                remote: {
-                                    url: url + '?search=%QUERY&field=' + $(input).attr("name"),
-                                    wildcard: '%QUERY',
-                                    transform: function (ret) {
-                                        return ret.data.searchlist;
-                                    }
-                                }
-                            });
-                        };
-
-                        //绑定typeahead事件
-                        if ($(".typeahead", form).size() > 0) {
-                            require(['typeahead'], function () {
-                                $(".typeahead", form).each(function () {
-                                    $(this).typeahead({
-                                        hint: true,
-                                        highlight: true,
-                                        minLength: 0
-                                    }, {
-                                        name: 'typeahead',
-                                        limit: 20,
-                                        displayKey: 'id',
-                                        source: remotesource(this),
-                                        templates: {
-                                            empty: '<li class="notfound">' + __('No matches found') + '</li>',
-                                            suggestion: function (item) {
-                                                return '<li>' + item.name + '</li>';
-                                            }
-                                        }
-                                    });
-                                });
-                            });
-                        }
-
-                        //绑定tagsinput事件
-                        if ($(".tagsinput", form).size() > 0) {
-                            require(['bootstrap-tagsinput'], function () {
-                                $('.tagsinput', form).each(function () {
-                                    $(this).tagsinput({
-                                        freeInput: false,
-                                        itemValue: 'id',
-                                        itemText: 'name',
-                                        typeaheadjs: {
-                                            name: 'tagsinput',
-                                            limit: 20,
-                                            displayKey: 'name',
-                                            source: remotesource(this),
-                                            templates: {
-                                                empty: '<li class="notfound">' + __('No matches found') + '</li>',
-                                                suggestion: function (item) {
-                                                    return '<li>' + item.name + '</li>';
-                                                }
-                                            }
-                                        }
-                                    });
-                                });
-                            });
-                        }
                     });
                 }
 

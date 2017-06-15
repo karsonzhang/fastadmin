@@ -17,6 +17,72 @@ class Crud extends Command
 
     protected $stubList = [];
 
+    /**
+     * Selectpage搜索字段关联
+     */
+    protected $fieldSelectpageMap = [
+        'nickname' => ['user_id', 'user_ids', 'admin_id', 'admin_ids']
+    ];
+
+    /**
+     * Enum类型识别为单选框的结尾字符,默认会识别为单选下拉列表
+     */
+    protected $enumRadioSuffix = 'data';
+
+    /**
+     * Set类型识别为复选框的结尾字符,默认会识别为多选下拉列表
+     */
+    protected $setCheckboxSuffix = 'data';
+
+    /**
+     * Int类型识别为日期时间的结尾字符,默认会识别为数字文本框
+     */
+    protected $intDateSuffix = 'time';
+
+    /**
+     * 开头后缀
+     */
+    protected $switchSuffix = 'switch';
+
+    /**
+     * 以指定字符结尾的字段格式化函数
+     */
+    protected $fieldFormatterSuffix = [
+        'status' => 'status',
+        'icon'   => 'icon',
+        'flag'   => 'flag',
+        'url'    => 'url',
+        'url'    => 'url',
+        'image'  => 'image',
+        'images' => 'images',
+        'time'   => ['type' => ['int', 'timestamp'], 'name' => 'datetime']
+    ];
+
+    /**
+     * 识别为图片字段
+     */
+    protected $imageField = ['image', 'images', 'avatar', 'avatars'];
+
+    /**
+     * 识别为文件字段
+     */
+    protected $fileField = ['file', 'files'];
+
+    /**
+     * 保留字段
+     */
+    protected $reservedField = ['createtime', 'updatetime'];
+
+    /**
+     * 排序字段
+     */
+    protected $sortField = 'weigh';
+
+    /**
+     * 编辑器的Class
+     */
+    protected $editorClass = 'summernote';
+
     protected function configure()
     {
         $this
@@ -286,7 +352,7 @@ class Crud extends Command
                 }
                 $inputType = '';
                 //createtime和updatetime是保留字段不能修改和添加
-                if ($v['COLUMN_KEY'] != 'PRI' && !in_array($field, ['createtime', 'updatetime']))
+                if ($v['COLUMN_KEY'] != 'PRI' && !in_array($field, $this->reservedField))
                 {
                     $inputType = $this->getFieldType($v);
 
@@ -381,34 +447,72 @@ class Crud extends Command
                     }
                     else if ($inputType == 'textarea')
                     {
-                        $cssClassArr[] = substr($field, -7) == 'content' ? 'summernote' : '';
+                        $cssClassArr[] = substr($field, -7) == 'content' ? $this->editorClass : '';
                         $attrArr['class'] = implode(' ', $cssClassArr);
                         $attrArr['rows'] = 5;
                         $formAddElement = Form::textarea($fieldName, $defaultValue, $attrArr);
                         $formEditElement = Form::textarea($fieldName, $editValue, $attrArr);
                     }
-                    else if ($field == 'category_id' || $field == 'category_ids')
+                    else if ($inputType == 'switch')
                     {
-                        $type = $table;
-                        if ($field == 'category_ids')
+                        if ($defaultValue === '1' || $defaultValue === 'Y')
                         {
-                            $attrArr['multiple'] = '';
+                            $yes = $defaultValue;
+                            $no = $defaultValue === '1' ? '0' : 'N';
                         }
-                        $attrStr = $this->getArrayString($attrArr);
-                        $formAddElement = "{:build_category_select('{$fieldName}', '{$type}', '{$defaultValue}', [{$attrStr}])}";
-                        $formEditElement = "{:build_category_select('{$fieldName}', '{$type}', \$row.{$field}, [{$attrStr}])}";
+                        else
+                        {
+                            $no = $defaultValue;
+                            $yes = $defaultValue === '0' ? '1' : 'Y';
+                        }
+                        $formAddElement = $formEditElement = Form::hidden($fieldName, $no, array_merge(['checked' => ''], $attrArr));
+                        $attrArr['id'] = $fieldName . "-switch";
+                        $formAddElement .= sprintf(Form::label("{$attrArr['id']}", "%s abcdefg"), Form::checkbox($fieldName, $yes, $defaultValue === $yes, $attrArr));
+                        $formEditElement .= sprintf(Form::label("{$attrArr['id']}", "%s abcdefg"), Form::checkbox($fieldName, $yes, 0, $attrArr));
+                        $formEditElement = str_replace('type="checkbox"', 'type="checkbox" {in name="' . "\$row.{$field}" . '" value="' . $yes . '"}checked{/in}', $formEditElement);
                     }
                     else
                     {
-                        //CSS类名
-                        $cssClassArr[] = substr($field, -3) == '_id' ? 'typeahead' : '';
-                        $cssClassArr[] = substr($field, -4) == '_ids' ? 'tagsinput' : '';
-                        $cssClassArr = array_filter($cssClassArr);
+                        $search = $replace = '';
+                        //特殊字段为关联搜索
+                        if (substr($field, -3) == '_id' || substr($field, -4) == '_ids')
+                        {
+                            $inputType = 'text';
+                            $defaultValue = '';
+                            $attrArr['data-rule'] = 'required';
+                            $cssClassArr[] = 'selectpage';
+                            $attrArr['data-db-table'] = substr($field, 0, strripos($field, '_'));
+                            if ($attrArr['data-db-table'] == 'category')
+                            {
+                                $attrArr['data-params'] = '##replacetext##';
+                                $search = '"##replacetext##"';
+                                $replace = '\'{"custom[type]":"' . $table . '"}\'';
+                            }
+                            if (substr($field, -4) == '_ids')
+                            {
+                                $attrArr['data-multiple'] = 'true';
+                            }
+                            foreach ($this->fieldSelectpageMap as $m => $n)
+                            {
+                                if (in_array($field, $n))
+                                {
+                                    $attrArr['data-field'] = $m;
+                                    break;
+                                }
+                            }
+                        }
                         //因为有自动完成可输入其它内容
-                        $step = array_intersect($cssClassArr, ['typeahead', 'tagsinput']) ? 0 : $step;
+                        $step = array_intersect($cssClassArr, ['selectpage']) ? 0 : $step;
                         $attrArr['class'] = implode(' ', $cssClassArr);
-
-                        $isUpload = in_array(substr($field, -4), ['file']) || in_array(substr($field, -5), ['files', 'image']) || in_array(substr($field, -6), ['images', 'avatar']) || in_array(substr($field, -7), ['avatars']) ? TRUE : FALSE;
+                        $isUpload = false;
+                        foreach (array_merge($this->imageField, $this->fileField) as $m => $n)
+                        {
+                            if (preg_match("/{$n}$/i", $field))
+                            {
+                                $isUpload = true;
+                                break;
+                            }
+                        }
                         //如果是步长则加上步长
                         if ($step)
                         {
@@ -422,7 +526,11 @@ class Crud extends Command
 
                         $formAddElement = Form::input($inputType, $fieldName, $defaultValue, $attrArr);
                         $formEditElement = Form::input($inputType, $fieldName, $editValue, $attrArr);
-
+                        if ($search && $replace)
+                        {
+                            $formAddElement = str_replace($search, $replace, $formAddElement);
+                            $formEditElement = str_replace($search, $replace, $formEditElement);
+                        }
                         //如果是图片或文件
                         if ($isUpload)
                         {
@@ -450,8 +558,8 @@ class Crud extends Command
                     {
                         $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], '_text');
                     }
-                    //排序方式,如果有weigh则按weigh,否则按主键排序
-                    $order = $field == 'weigh' ? 'weigh' : $order;
+                    //排序方式,如果有指定排序字段,否则按主键排序
+                    $order = $field == $this->sortField ? $this->sortField : $order;
                 }
             }
 
@@ -579,7 +687,7 @@ class Crud extends Command
         }
         catch (\think\exception\ErrorException $e)
         {
-            throw new Exception("Code: " . $e->getCode() . "\nLine: " . $e->getLine() . "\nMessage: " . $e->getMessage());
+            throw new Exception("Code: " . $e->getCode() . "\nLine: " . $e->getLine() . "\nMessage: " . $e->getMessage() . "\nFile: " . $e->getFile());
         }
         $output->info("Build Successed");
     }
@@ -846,20 +954,25 @@ EOD;
                 break;
         }
         $fieldsName = $v['COLUMN_NAME'];
-        // 如果后缀以time结尾说明也是个时间字段
-        if (substr($fieldsName, -4) == 'time')
+        // 指定后缀说明也是个时间字段
+        if (preg_match("/{$this->intDateSuffix}$/i", $fieldsName))
         {
             $inputType = 'datetime';
         }
-        // 如果后缀以data结尾且类型为enum,说明是个单选框
-        if (substr($fieldsName, -4) == 'data' && $v['DATA_TYPE'] == 'enum')
+        // 指定后缀结尾且类型为enum,说明是个单选框
+        if (preg_match("/{$this->enumRadioSuffix}$/i", $fieldsName) && $v['DATA_TYPE'] == 'enum')
         {
             $inputType = "radio";
         }
-        // 如果后缀以data结尾且类型为set,说明是个复选框
-        if (substr($fieldsName, -4) == 'data' && $v['DATA_TYPE'] == 'set')
+        // 指定后缀结尾且类型为set,说明是个复选框
+        if (preg_match("/{$this->setCheckboxSuffix}$/i", $fieldsName) && $v['DATA_TYPE'] == 'set')
         {
             $inputType = "checkbox";
+        }
+        // 指定后缀结尾且类型为char或tinyint且长度为1,说明是个Switch复选框
+        if (preg_match("/{$this->switchSuffix}$/i", $fieldsName) && ($v['COLUMN_TYPE'] == 'tinyint(1)' || $v['COLUMN_TYPE'] == 'char(1)') && $v['COLUMN_DEFAULT'] !== '' && $v['COLUMN_DEFAULT'] !== null)
+        {
+            $inputType = "switch";
         }
         return $inputType;
     }
@@ -891,7 +1004,15 @@ EOD;
      */
     protected function getImageUpload($field, $content)
     {
-        $filter = substr($field, -4) == 'avatar' || substr($field, -5) == 'image' || substr($field, -6) == 'images' ? ' data-mimetype="image/*"' : "";
+        $filter = '';
+        foreach ($this->imageField as $k => $v)
+        {
+            if (preg_match("/{$v}$/i", $field))
+            {
+                $filter = ' data-mimetype="image/*"';
+                break;
+            }
+        }
         $multiple = substr($field, -1) == 's' ? ' data-multiple="true"' : ' data-multiple="false"';
         $preview = $filter ? ' data-preview-id="p-' . $field . '"' : '';
         $previewcontainer = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $field . '"></ul>' : '';
@@ -914,22 +1035,26 @@ EOD;
     {
         $lang = ucfirst($field);
         $html = str_repeat(" ", 24) . "{field: '{$field}{$extend}', title: __('{$lang}')";
-        $field = stripos($field, ".") !== false ? substr($field, stripos($field, '.') + 1) : $field;
         $formatter = '';
-        if ($field == 'status')
-            $formatter = 'status';
-        else if ($field == 'icon')
-            $formatter = 'icon';
-        else if ($field == 'flag')
-            $formatter = 'flag';
-        else if (substr($field, -4) == 'time' && in_array($datatype, ['int', 'timestamp']))
-            $formatter = 'datetime';
-        else if (substr($field, -3) == 'url' || substr($field, -4) == 'file')
-            $formatter = 'url';
-        else if (substr($field, -5) == 'image')
-            $formatter = 'image';
-        else if (substr($field, -6) == 'images')
-            $formatter = 'images';
+        foreach ($this->fieldFormatterSuffix as $k => $v)
+        {
+            if (preg_match("/{$k}$/i", $field))
+            {
+                if (is_array($v))
+                {
+                    if (in_array($datatype, $v['type']))
+                    {
+                        $formatter = $v['name'];
+                        break;
+                    }
+                }
+                else
+                {
+                    $formatter = $v;
+                    break;
+                }
+            }
+        }
         if ($extend)
             $html .= ", operate:false";
         if ($formatter && !$extend)

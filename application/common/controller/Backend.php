@@ -215,7 +215,7 @@ class Backend extends Controller
             $searchlist = [];
             foreach ($searcharr as $k => $v)
             {
-                $searchlist[] = "{$modelName}`{$v}` LIKE '%{$search}%'";
+                $searchlist[] = (stripos($v, ".") !== false ? $v : "{$modelName}`{$v}`") . " LIKE '%{$search}%'";
             }
             $where[] = "(" . implode(' OR ', $searchlist) . ")";
         }

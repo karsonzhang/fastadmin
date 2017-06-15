@@ -27,6 +27,7 @@ class Relationmodel extends Backend
     public function index()
     {
         $this->relationSearch = true;
+        $this->searchFields = "admin.username,id";
         if ($this->request->isAjax())
         {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();

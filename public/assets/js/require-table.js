@@ -271,14 +271,16 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     //渲染fontawesome图标
                     return '<i class="' + value + '"></i> ' + value;
                 },
-                image: function (value, row, index) {
-                    return '<img class="img-rounded img-sm" src="' + Backend.api.cdnurl(value) + '" />';
+                image: function (value, row, index, custom) {
+                    var classname = typeof custom !== 'undefined' ? custom : 'img-rounded img-sm';
+                    return '<img class="' + classname + '" src="' + Backend.api.cdnurl(value) + '" />';
                 },
-                images: function (value, row, index) {
+                images: function (value, row, index, custom) {
+                    var classname = typeof custom !== 'undefined' ? custom : 'img-rounded img-sm';
                     var arr = value.split(',');
                     var html = [];
                     $.each(arr, function (i, value) {
-                        html.push('<img class="img-rounded img-sm" src="' + Backend.api.cdnurl(value) + '" />');
+                        html.push('<img class="' + classname + '" src="' + Backend.api.cdnurl(value) + '" />');
                     });
                     return html.join(' ');
                 },
@@ -343,7 +345,6 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     var html = [];
                     if (showweigh)
                         html.push('<a href="javascript:;" class="btn btn-primary btn-dragsort btn-xs"><i class="fa fa-arrows"></i></a>');
-
                     if (showedit)
                         html.push('<a href="javascript:;" class="btn btn-success btn-editone btn-xs"><i class="fa fa-pencil"></i></a>');
                     if (showdel)

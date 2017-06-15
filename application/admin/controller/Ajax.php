@@ -62,6 +62,78 @@ class Ajax extends Backend
     }
 
     /**
+     * SelectPage通用下拉列表搜索
+     */
+    public function selectpage()
+    {
+        //搜索关键词,客户端输入以空格分开,这里接收为数组
+        $word = $this->request->request("q_word/a");
+        //当前页
+        $page = $this->request->request("pageNumber");
+        //分页大小
+        $pagesize = $this->request->request("pageSize");
+        //搜索条件
+        $andor = $this->request->request("and_or");
+        //排序方式
+        $orderby = $this->request->request("order_by/a");
+        //表名
+        $table = $this->request->request("db_table");
+        //显示的字段
+        $field = $this->request->request("field");
+        //主键
+        $primarykey = $this->request->request("pkey_name");
+        //主键值
+        $primaryvalue = $this->request->request("pkey_value");
+        //搜索字段
+        $searchfield = $this->request->request("search_field/a");
+        //自定义搜索条件
+        $custom = $this->request->request("custom/a");
+        $order = [];
+        foreach ($orderby as $k => $v)
+        {
+            $order[$v[0]] = $v[1];
+        }
+        $field = $field ? $field : 'name';
+
+        //如果不使用ajax/selectpage这个页面提供结果,则是自己的控制器单独写搜索条件,$where按自己的需求写即可
+        //这里只是能用考虑,所以搜索条件写得比较复杂
+        //如果有primaryvalue,说明当前是初始化传值
+        if ($primaryvalue)
+        {
+            $where = [$primarykey => ['in', $primaryvalue]];
+        }
+        else
+        {
+            $where = function($query) use($word, $andor, $field, $searchfield, $custom) {
+                $where = $andor == "OR" ? "whereOr" : "where";
+                foreach ($word as $k => $v)
+                {
+                    foreach ($searchfield as $m => $n)
+                    {
+                        $query->{$where}($n, "like", "%{$v}%");
+                    }
+                }
+                if ($custom && is_array($custom))
+                {
+                    foreach ($custom as $k => $v)
+                    {
+                        $query->where($k, '=', $v);
+                    }
+                }
+            };
+        }
+        $list = [];
+        $total = Db::name($table)->where($where)->count();
+        if ($total > 0)
+        {
+            $list = Db::name($table)->where($where)->order($order)->page($page, $pagesize)->field("{$primarykey},{$field}")->select();
+        }
+
+        //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
+        return json(['list' => $list, 'total' => $total]);
+    }
+
+    /**
      * 加载语言包
      */
     public function lang()
