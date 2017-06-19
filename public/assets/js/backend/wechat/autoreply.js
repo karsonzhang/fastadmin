@@ -27,7 +27,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'text', title: __('Text')},
                         {field: 'eventkey', title: __('Event key')},
                         {field: 'remark', title: __('Remark')},
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
+                        {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime},
+                        {field: 'updatetime', title: __('Update time'), formatter: Table.api.formatter.datetime},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]

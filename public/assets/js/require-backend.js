@@ -19,6 +19,7 @@ require.config({
         'echarts-theme': 'echarts-theme',
         'adminlte': 'adminlte',
         'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
+        'bootstrap-table-template': 'bootstrap-table-template',
         //
         // 以下的包从bower的libs目录加载
         'jquery': '../libs/jquery/dist/jquery.min',
@@ -81,6 +82,10 @@ require.config({
             deps: ['bootstrap-table'],
             exports: '$.fn.bootstrapTable.defaults'
         },
+        'bootstrap-table-template': {
+            deps: ['bootstrap-table', 'template'],
+            exports: '$.fn.bootstrapTable.defaults'
+        },
         'tableexport': {
             deps: ['jquery'],
             exports: '$.fn.extend'
@@ -121,6 +126,7 @@ require.config({
             'css': '../libs/require-css/css.min'
         }
     },
+    waitSeconds: 30,
     charset: 'utf-8' // 文件编码
 });
 

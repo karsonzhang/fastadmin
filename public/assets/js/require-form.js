@@ -67,6 +67,9 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                 return false;
             },
             bindevent: function (form, onBeforeSubmit, onAfterSubmit) {
+                //移除提交按钮的disabled类
+                $(".layer-footer .btn.disabled", form).removeClass("disabled");
+                //绑定表单事件
                 form.validator($.extend({
                     validClass: 'has-success',
                     invalidClass: 'has-error',
@@ -116,6 +119,10 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                         $('.selectpage', form).selectPage({
                             source: 'ajax/selectpage',
                         });
+                    });
+                    //给隐藏的元素添加上validate验证触发事件
+                    $(form).on("change", ".selectpage-input-hidden", function () {
+                        $(this).trigger("validate");
                     });
                 }
 

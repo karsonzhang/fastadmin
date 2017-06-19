@@ -114,6 +114,7 @@ require.config({
             'css': '../libs/require-css/css.min'
         }
     },
+    waitSeconds: 30,
     charset: 'utf-8' // 文件编码
 });
 
