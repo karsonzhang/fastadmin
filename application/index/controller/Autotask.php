@@ -62,7 +62,7 @@ class Autotask extends Controller
             if ($crontab['maximums'] && $crontab['executes'] > $crontab['maximums'])
             {
                 //任务已超过最大执行次数
-                $update['status'] = 'finished';
+                $update['status'] = 'completed';
             }
             else if ($crontab['endtime'] > 0 && $time > $crontab['endtime'])
             {
@@ -83,7 +83,7 @@ class Autotask extends Controller
             {
                 $update['executetime'] = $time;
                 $update['executes'] = $crontab['executes'] + 1;
-                $update['status'] = ($crontab['maximums'] > 0 && $update['executes'] >= $crontab['maximums']) ? 'finished' : 'normal';
+                $update['status'] = ($crontab['maximums'] > 0 && $update['executes'] >= $crontab['maximums']) ? 'completed' : 'normal';
             }
 
             // 如果需要更新状态
@@ -118,7 +118,7 @@ class Autotask extends Controller
                 else if ($crontab['type'] == 'shell')
                 {
                     // 执行Shell
-                    exec('nohup php ' . $crontab['content'] . ' >> ' . $logDir . date("Y-m-d") . '.log 2>&1 &');
+                    exec( $crontab['content'] . ' >> ' . $logDir . date("Y-m-d") . '.log 2>&1 &');
                 }
             }
             catch (Exception $e)
