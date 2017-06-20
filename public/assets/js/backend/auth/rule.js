@@ -4,9 +4,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
         index: function () {
             // 初始化表格参数配置
             Table.api.init({
-                search: true,
-                advancedSearch: false,
-                pagination: false,
                 extend: {
                     "index_url": "auth/rule/index",
                     "add_url": "auth/rule/add",
@@ -36,7 +33,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         {field: 'id', title: '<a href="javascript:;" class="btn btn-primary btn-xs btn-toggle"><i class="fa fa-chevron-down"></i></a>', operate: false, formatter: Controller.api.formatter.subnode},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
-                ]
+                ],
+                pagination: false,
+                search: false,
+                commonSearch: false,
             });
 
             // 为表格绑定事件

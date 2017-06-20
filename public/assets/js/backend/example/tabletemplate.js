@@ -47,7 +47,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 //启用普通表单搜索
                 commonSearch: false,
                 //可以控制是否默认显示搜索单表,false则隐藏,默认为false
-                searchFormVisible: false
+                searchFormVisible: false,
+                //分页大小
+                pageSize:12
             });
 
             // 为表格绑定事件
