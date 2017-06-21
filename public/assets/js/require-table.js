@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch'], function ($, undefined, Backend, Toastr, Moment) {
+define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Backend, Toastr, Moment) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -141,8 +141,9 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 });
 
                 // 处理选中筛选框后按钮的状态统一变更
-                table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
-                    $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !table.bootstrapTable('getSelections').length);
+                table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table fa.event.check', function () {
+                    var ids = Table.api.selectedids(table);
+                    $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !ids.length);
                 });
 
                 // 刷新按钮事件
@@ -154,7 +155,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     var ids = Table.api.selectedids(table);
                     Backend.api.open(options.extend.add_url + "/ids" + (ids.length > 0 ? '/' : '') + ids.join(","), __('Add'));
                 });
-                // 编辑按钮事件
+                // 批量编辑按钮事件
                 $(toolbar).on('click', Table.config.editbtn, function () {
                     var ids = Table.api.selectedids(table);
                     //循环弹出多个编辑框
@@ -214,6 +215,27 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                         },
                         placeHolderTemplate: ""
                     });
+                });
+                $(table).on("click", "input[data-id][name='checkbox']", function (e) {
+                    table.trigger('fa.event.check');
+                });
+                $(table).on("click", "[data-id].btn-edit", function (e) {
+                    e.preventDefault();
+                    Backend.api.open(options.extend.edit_url + "/ids/" + $(this).data("id"), __('Edit'));
+                });
+                $(table).on("click", "[data-id].btn-del", function (e) {
+                    e.preventDefault();
+                    var id = $(this).data("id");
+                    var that = this;
+                    var index = Backend.api.layer.confirm(
+                            __('Are you sure you want to delete this item?'),
+                            {icon: 3, title: __('Warning'), shadeClose: true},
+                            function () {
+                                Table.api.multi("del", id, table, that);
+                                Backend.api.layer.close(index);
+                            }
+                    );
+
                 });
 
                 var id = table.attr("id");
@@ -355,9 +377,15 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
             // 获取选中的条目ID集合
             selectedids: function (table) {
                 var options = table.bootstrapTable('getOptions');
-                return $.map(table.bootstrapTable('getSelections'), function (row) {
-                    return row[options.pk];
-                });
+                if (options.templateView) {
+                    return $.map($("input[data-id][name='checkbox']:checked"), function (dom) {
+                        return $(dom).data("id");
+                    });
+                } else {
+                    return $.map(table.bootstrapTable('getSelections'), function (row) {
+                        return row[options.pk];
+                    });
+                }
             },
             // 切换复选框状态
             toggleattr: function (table) {

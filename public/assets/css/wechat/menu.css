@@ -1,7 +1,7 @@
 .weixin-menu-setting{
     margin:0;
-    position:relative;
     margin-bottom:10px;
+    width:100%;
 }
 .mobile-head-title{
     color: #fff;
@@ -15,12 +15,12 @@
     word-wrap: normal;
     margin: 0 40px 0 70px;
 }
+.weixin-body {
+    padding:0;
+    margin:0;
+    margin-left:337px;
+}
 .weixin-content,.no-weixin-content{
-    position:absolute;
-    left: 335px;
-    top:0;
-    right:0px;
-    bottom:0;
     background-color: #f4f5f9;
     border: 1px solid #e7e7eb;
     padding:15px;
@@ -31,7 +31,12 @@
     vertical-align: middle;
     padding-top:200px;
     text-align: center;
-
+}
+@media (max-width: 720px) {
+    .weixin-body {
+        margin-left:0;
+        margin-top:560px;
+    }
 }
 .weixin-menu-title{
     border-bottom: 1px solid #e7e7eb;
@@ -41,13 +46,16 @@
     margin-bottom: 20px;
 }
 .mobile-menu-preview{
-    position: relative;
+    display:block;
+    float:left;
+    position:relative;
     width: 317px;
     height: 550px;
     background: transparent url(../../img/wx_mobile_header_bg.png) no-repeat 0 0;
     background-position: 0 0;
     border: 1px solid #e7e7eb;
 }
+
 .mobile-menu-preview .menu-list {
     position: absolute;
     height:50px;
@@ -257,7 +265,7 @@ table.weixin-form td{
     margin:10px 0;
 }
 .form-item dl dt{
-    width:6em;
+    width:90px;
     height: 30px;
     line-height: 30px;
     text-align: right;
@@ -267,12 +275,12 @@ table.weixin-form td{
     left:0;
     bottom:0;
     display:block;
-
 }
 .form-item dl dd{
     position:relative;
     display:block;
-    margin-left: 7em;
+    margin-left: 90px;
+    line-height: 30px;
 }
 .form-item .input-box {
     display: inline-block;
@@ -297,6 +305,7 @@ table.weixin-form td{
     background-color: transparent;
     border: 0;
     outline: 0;
+    height:30px;
 }
 
 .clickbox{

@@ -100,6 +100,20 @@ body.is-dialog {
         }
     }
 }
+@media only screen and (min-width : 481px) {
+    .row-flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .row-flex > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+    .row-flex.row:after, 
+    .row-flex.row:before {
+        display: flex;
+    }
+}
 .common-search-table {
     min-height: 20px;
     padding: 15px;
@@ -110,6 +124,14 @@ body.is-dialog {
     border-bottom:1px dashed @link-color;
 }
 
+table.table-template{
+    overflow:hidden;
+}
+.sp_container .msg-box{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 .toast-top-right-index{
     top:62px;
     right:12px;

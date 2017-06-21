@@ -1,35 +1,35 @@
-define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
+define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function ($, undefined, Backend, Table, Form, Template) {
 
     var Controller = {
         index: function () {
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'example/bootstraptable/index',
+                    index_url: 'example/tabletemplate/index',
                     add_url: '',
                     edit_url: '',
-                    del_url: 'example/bootstraptable/del',
+                    del_url: 'example/tabletemplate/del',
                     multi_url: '',
                 }
             });
 
             var table = $("#table");
 
+            Template.helper("Moment", Moment);
+
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
+                templateView: true,
                 columns: [
                     [
-                        //该列为复选框字段,如果后台的返回state值将会默认选中
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID', operate: false},
-                        //默认隐藏该列
-                        {field: 'admin_id', title: __('Admin_id'), visible: false, operate: false},
                         //直接响应搜索
                         {field: 'username', title: __('Username'), formatter: Table.api.formatter.search},
                         //模糊搜索
                         {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '模糊搜索，*表示任意字符', style: 'width:200px'},
-                        //通过Ajax渲染searchList，也可以使用JSON数据
+                        //通过Ajax渲染searchList
                         {field: 'url', title: __('Url'), align: 'left', searchList: $.getJSON('ajax/typeahead?search=a&field=row[user_id]'), formatter: Controller.api.formatter.url},
                         //点击IP时同时执行搜索此IP,同时普通搜索使用下拉列表的形式
                         {field: 'ip', title: __('IP'), searchList: ['127.0.0.1', '127.0.0.2'], events: Controller.api.events.ip, formatter: Controller.api.formatter.ip},
@@ -45,22 +45,31 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 //禁用默认搜索
                 search: false,
                 //启用普通表单搜索
-                commonSearch: true,
+                commonSearch: false,
                 //可以控制是否默认显示搜索单表,false则隐藏,默认为false
-                searchFormVisible: true
+                searchFormVisible: false,
+                //分页大小
+                pageSize:12
             });
 
             // 为表格绑定事件
             Table.api.bindevent(table);
 
             //指定搜索条件
-            $(document).on("click", ".btn-singlesearch", function () {
-                table.bootstrapTable('refresh', {query: {filter: JSON.stringify({url: '/admin/index/login.html'}), op: JSON.stringify({url: '='})}});
+            $(document).on("click", ".btn-toggle-view", function () {
+                var options = table.bootstrapTable('getOptions');
+                table.bootstrapTable('refreshOptions', {templateView: !options.templateView});
+            });
+
+            //点击详情
+            $(document).on("click", ".btn-detail[data-id]", function () {
+                Backend.api.open('example/bootstraptable/detail/ids/' + $(this).data('id'), __('Detail'));
             });
 
             //获取选中项
             $(document).on("click", ".btn-selected", function () {
-                Layer.alert(JSON.stringify(table.bootstrapTable('getSelections')));
+                //在templateView的模式下不能调用table.bootstrapTable('getSelections')来获取选中的ID,只能通过下面的Table.api.selectedids来获取
+                Layer.alert(JSON.stringify(Table.api.selectedids(table)));
             });
         },
         add: function () {
@@ -73,7 +82,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
             },
-            formatter: {//渲染的方法
+            formatter: {
                 url: function (value, row, index) {
                     return '<div class="input-group input-group-sm" style="width:250px;"><input type="text" class="form-control input-sm" value="' + value + '"><span class="input-group-btn input-group-sm"><a href="' + value + '" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-link"></i></a></span></div>';
                 },
@@ -92,9 +101,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             + Table.api.formatter.operate(value, row, index, $("#table"));
                 },
             },
-            events: {//绑定事件的方法
+            events: {
                 ip: {
-                    //格式为：方法名+空格+DOM元素
                     'click .btn-ip': function (e, value, row, index) {
                         var options = $("#table").bootstrapTable('getOptions');
                         //这里我们手动将数据填充到表单然后提交
@@ -110,7 +118,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 },
                 operate: $.extend({
                     'click .btn-detail': function (e, value, row, index) {
-                        Backend.api.open('example/bootstraptable/detail/ids/' + row['id'], __('Detail'));
+                        Backend.api.open('example/tabletemplate/detail/ids/' + row['id'], __('Detail'));
                     }
                 }, Table.api.events.operate)
             }

@@ -204,7 +204,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 if (layerfooter.size() > 0) {
                     footer.on("click", ".btn", function () {
                         if ($(this).hasClass("disabled") || $(this).parent().hasClass("disabled")) {
-                            //return;
+                            return;
                         }
                         $(".btn:eq(" + $(this).index() + ")", layerfooter).trigger("click");
                     });
@@ -347,13 +347,13 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
             Toastr.options = Backend.config.toastr;
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
-                Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
                 e.preventDefault();
+                Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
             });
             //点击包含.btn-addtabs的元素时事件
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
-                Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
                 e.preventDefault();
+                Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
             });
             //点击加入到Shortcut
             $(document).on('click', '#ribbon ol li:last a[data-url]', function (e) {

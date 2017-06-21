@@ -19,9 +19,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
         index: function () {
             // 初始化表格参数配置
             Table.api.init({
-                search: false,
-                advancedSearch: false,
-                pagination: false,
                 extend: {
                     "index_url": "auth/group/index",
                     "add_url": "auth/group/add",
@@ -45,7 +42,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
-                ]
+                ],
+                pagination: false,
+                search: false,
+                commonSearch: false,
             });
 
             // 为表格绑定事件

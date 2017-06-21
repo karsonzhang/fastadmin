@@ -28,4 +28,6 @@ return array (
     'user' => '会员配置',
     'example' => '示例分组',
   ),
+  'aaaa' => '',
+  'ffff' => 'key2',
 );

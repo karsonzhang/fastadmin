@@ -8,19 +8,19 @@
 !function ($) {
     'use strict';
 
-    var firstLoad = false, ColumnsForSearch = [];
+    var ColumnsForSearch = [];
 
     var sprintf = $.fn.bootstrapTable.utils.sprintf;
 
     var initCommonSearch = function (pColumns, that) {
-        var vFormCommon = createFormCommon(pColumns, that), timeoutId = 0;
+        var vFormCommon = createFormCommon(pColumns, that);
 
-        var vModal = sprintf("<div id=\"commonSearchContent_%s\" class=\"common-search-table %s\">", that.options.idTable, that.options.searchFormVisible ? "" : "hidden");
+        var vModal = sprintf("<div class=\"commonsearch-table %s\">", that.options.searchFormVisible ? "" : "hidden");
         vModal += vFormCommon.join('');
         vModal += "</div>";
         that.$container.prepend($(vModal));
 
-        var form = $("#commonSearchForm" + "_" + that.options.idTable);
+        var form = $("form.form-commonsearch", that.$container);
 
         //绑定日期时间元素事件
         if ($(".datetimepicker", form).size() > 0) {
@@ -48,12 +48,13 @@
 
         // 表单提交
         form.on("submit", function (event) {
+            event.preventDefault();
             that.onColumnCommonSearch();
             return false;
         });
 
         // 重置搜索
-        form.on("click", "#btnResetCommon" + "_" + that.options.idTable, function (event) {
+        form.on("click", "button[type=reset]", function (event) {
             form[0].reset();
             that.onColumnCommonSearch();
         });
@@ -63,7 +64,7 @@
     var createFormCommon = function (pColumns, that) {
         var htmlForm = [];
         var opList = ['=', '>', '>=', '<', '<=', '!=', 'LIKE', 'LIKE %...%', 'NOT LIKE', 'IN(...)', 'NOT IN(...)', 'BETWEEN', 'NOT BETWEEN', 'IS NULL', 'IS NOT NULL'];
-        htmlForm.push(sprintf('<form class="form-inline" id="commonSearchForm_%s" action="%s" >', that.options.idTable, that.options.actionForm));
+        htmlForm.push(sprintf('<form class="form-inline form-commonsearch" action="%s" >', that.options.actionForm));
         htmlForm.push('<fieldset>');
         if (that.options.titleForm.length > 0)
             htmlForm.push(sprintf("<legend>%s</legend>", that.options.titleForm));
@@ -83,7 +84,7 @@
                 if (vObjCol.searchList) {
                     if (typeof vObjCol.searchList === 'object' && typeof vObjCol.searchList.then === 'function') {
                         htmlForm.push(sprintf('<select class="form-control" name="%s" %s>%s</select>', vObjCol.field, style, sprintf('<option value="">%s</option>', that.options.formatCommonChoose())));
-                        (function (vObjCol, options) {
+                        (function (vObjCol, that) {
                             $.when(vObjCol.searchList).done(function (ret) {
                                 if (ret.data && ret.data.searchlist && $.isArray(ret.data.searchlist)) {
                                     var optionList = [];
@@ -91,10 +92,10 @@
                                         var isSelect = value.id === vObjCol.defaultValue ? 'selected' : '';
                                         optionList.push(sprintf("<option value='" + value.id + "' %s>" + value.name + "</option>", isSelect));
                                     });
-                                    $("#commonSearchForm_" + options.idTable + " select[name='" + vObjCol.field + "']").append(optionList.join(''));
+                                    $("form.form-commonsearch select[name='" + vObjCol.field + "']", that.$container).append(optionList.join(''));
                                 }
                             });
-                        })(vObjCol, that.options);
+                        })(vObjCol, that);
                     } else if (typeof vObjCol.searchList == 'function') {
                         htmlForm.push(vObjCol.searchList.call(this, vObjCol));
                     } else {
@@ -139,29 +140,27 @@
         var searchReset = that.options.formatCommonResetButton();
         htmlBtn.push('<div class="form-group" style="margin:5px">');
         htmlBtn.push('<div class="col-sm-12 text-center">');
-        htmlBtn.push(sprintf('<button type="submit" id="btnSubmitCommon%s" class="btn btn-success" >%s</button> ', "_" + that.options.idTable, searchSubmit));
-        htmlBtn.push(sprintf('<button type="button" id="btnResetCommon%s" class="btn btn-default" >%s</button> ', "_" + that.options.idTable, searchReset));
+        htmlBtn.push(sprintf('<button type="submit" class="btn btn-success" >%s</button> ', searchSubmit));
+        htmlBtn.push(sprintf('<button type="reset" class="btn btn-default" >%s</button> ', searchReset));
         htmlBtn.push('</div>');
         htmlBtn.push('</div>');
         return htmlBtn;
     };
 
     var isSearchAvailble = function (that) {
+
         //只支持服务端搜索
         if (!that.options.commonSearch || that.options.sidePagination != 'server' || !that.options.url) {
             return false;
         }
 
-        if (!that.options.idTable) {
-            return false;
-        }
         return true;
     };
 
     var getSearchQuery = function (that) {
         var op = {};
         var filter = {};
-        $("#commonSearchContent_" + that.options.idTable + " input.operate").each(function (i) {
+        $("form.form-commonsearch input.operate", that.$container).each(function (i) {
             var name = $(this).data("name");
             var sym = $(this).val();
             var obj = $("[name='" + name + "']");
@@ -206,7 +205,6 @@
         commonSearch: false,
         titleForm: "Common search",
         actionForm: "",
-        idTable: undefined,
         searchFormVisible: true,
         searchClass: 'searchit',
         renderDefault: true,
@@ -266,7 +264,7 @@
 
         initCommonSearch(that.columns, that);
 
-        var searchContainer = $("#commonSearchContent_" + that.options.idTable);
+        var searchContainer = $(".commonsearch-table", that.$container);
 
         that.$toolbar.find('button[name="commonSearch"]')
                 .off('click').on('click', function () {
@@ -298,12 +296,6 @@
 
         if (!isSearchAvailble(this)) {
             return;
-        }
-        if (!firstLoad) {
-            var height = parseInt($(".bootstrap-table").height());
-            height += 10;
-            $("#" + this.options.idTable).bootstrapTable("resetView", {height: height});
-            firstLoad = true;
         }
     };
 

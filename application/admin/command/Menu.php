@@ -262,7 +262,7 @@ class Menu extends Command
                 continue;
             }
             //过滤掉其它字符
-            $comment = preg_replace(array('/^\/\*\*(.*)[\n\r\t]/', '/[\s]+\*\//', '/\*\s@(.*)/', '/[\s|\*]+/'), '', $comment);
+            $comment = preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $comment);
 
             $ruleArr[] = array('pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $comment ? $comment : $n->name, 'ismenu' => 0, 'status' => 'normal');
         }
