@@ -25,7 +25,7 @@
     <div class="form-group">
         <label for="schedule" class="control-label col-xs-12 col-sm-2">{:__('Schedule')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" class="form-control" id="schedule" style="font-size:12px;font-family: Verdana;word-spacing:23px;" name="row[schedule]" value="* * * * *" data-rule="required; remote(general/crontab/check_schedule)" />
+            <input type="text" class="form-control" id="schedule" style="font-size:12px;font-family: Verdana;word-spacing:23px;" name="row[schedule]" value="{$row.schedule}" data-rule="required; remote(general/crontab/check_schedule)" />
             <div id="schedulepicker">
                 <pre><code>*    *    *    *    *
 -    -    -    -    -
