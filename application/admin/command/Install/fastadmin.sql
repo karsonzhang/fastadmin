@@ -279,27 +279,7 @@ CREATE TABLE `fa_crontab` (
 --  Records of `fa_crontab`
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_crontab` VALUES ('1', 'url', '请求URL', 'http://www.fastadmin.net', '* * * * 0-2', '0', '0', '0', '1497070825', '1497070825', '1483200000', '1546272000', '0', '0', 'normal'), ('2', 'url', '执行SQL', 'SELECT 1;', '* * * * 0-2', '0', '0', '0', '1497071095', '1497071095', '1483200000', '1546272000', '0', '0', 'normal');
-COMMIT;
-
--- ----------------------------
---  Table structure for `fa_func`
--- ----------------------------
-DROP TABLE IF EXISTS `fa_func`;
-CREATE TABLE `fa_func` (
-  `f_id` int(10) NOT NULL AUTO_INCREMENT,
-  `f_title` varchar(50) NOT NULL COMMENT '标题',
-  `createtime` int(10) NOT NULL DEFAULT '0',
-  `updatetime` int(10) NOT NULL DEFAULT '0',
-  `status` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`f_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='函数表';
-
--- ----------------------------
---  Records of `fa_func`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_func` VALUES ('1', 'test', '1495811783', '1495811783', 'hidden'), ('2', 'test2fff', '1495811787', '1495813304', 'hidden'), ('3', 'fds', '1495813308', '1495813308', 'normal');
+INSERT INTO `fa_crontab` VALUES ('1', 'url', '请求FastAdmin', 'http://www.fastadmin.net', '* * * * *', '0', '0', '0', '1497070825', '1497070825', '1483200000', '1546272000', '0', '0', 'normal'), ('2', 'sql', '查询一条SQL', 'SELECT 1;', '* * * * *', '0', '0', '0', '1497071095', '1497071095', '1483200000', '1546272000', '0', '0', 'normal');
 COMMIT;
 
 -- ----------------------------

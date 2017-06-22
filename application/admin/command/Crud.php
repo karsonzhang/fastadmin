@@ -553,7 +553,7 @@ class Crud extends Command
                     if ($v['COLUMN_KEY'] == 'PRI' && !$priDefined)
                     {
                         $priDefined = TRUE;
-                        $javascriptList[] = "{field: 'state', checkbox: true}";
+                        $javascriptList[] = "{checkbox: true}";
                     }
                     //构造JS列信息
                     $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE']);
@@ -708,7 +708,6 @@ class Crud extends Command
             return;
         $fieldList = $this->getFieldListName($field);
         $methodName = 'get' . ucfirst($fieldList);
-        unset($v);
         foreach ($itemArr as $k => &$v)
         {
             $v = "__('" . ucfirst($v) . "')";

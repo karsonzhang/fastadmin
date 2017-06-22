@@ -62,9 +62,18 @@ class Frontend extends Controller
             'moduleurl'      => url("/{$modulename}", '', false),
             'language'       => $lang
         ];
-        Lang::load(APP_PATH . $modulename . '/lang/' . $lang . '/' . str_replace('.', '/', $controllername) . '.php');
+        $this->loadlang($controllername);
         $this->assign('site', Config::get("site"));
         $this->assign('config', $config);
+    }
+    
+    /**
+     * 加载语言文件
+     * @param string $name
+     */
+    protected function loadlang($name)
+    {
+        Lang::load(APP_PATH . $this->request->module() . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $name) . '.php');
     }
 
 }

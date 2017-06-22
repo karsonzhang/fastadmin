@@ -165,12 +165,21 @@ class Backend extends Controller
             'referer'        => Session::get("referer")
         ];
 
-        Lang::load(APP_PATH . $modulename . '/lang/' . $lang . '/' . str_replace('.', '/', $controllername) . '.php');
+        $this->loadlang($controllername);
 
         $this->assign('site', $site);
         $this->assign('config', $config);
 
         $this->assign('admin', Session::get('admin'));
+    }
+    
+    /**
+     * 加载语言文件
+     * @param string $name
+     */
+    protected function loadlang($name)
+    {
+        Lang::load(APP_PATH . $this->request->module() . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $name) . '.php');
     }
 
     /**
