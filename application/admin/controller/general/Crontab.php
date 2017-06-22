@@ -3,6 +3,7 @@
 namespace app\admin\controller\general;
 
 use app\common\controller\Backend;
+use Cron\CronExpression;
 
 /**
  * 定时任务
@@ -14,16 +15,13 @@ class Crontab extends Backend
 {
 
     protected $model = null;
+    protected $noNeedRight = ['check_schedule', 'get_schedule_future'];
 
     public function _initialize()
     {
         parent::_initialize();
         $this->model = model('Crontab');
-        $this->view->assign('typedata', [
-            'url'   => __('Request Url'),
-            'sql'   => __('Execute Sql Script'),
-            'shell' => __('Execute Shell'),
-        ]);
+        $this->view->assign('typedata', \app\common\model\Crontab::getTypeList());
     }
 
     /**
@@ -44,11 +42,59 @@ class Crontab extends Backend
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();
+            foreach ($list as $k => &$v)
+            {
+                $cron = CronExpression::factory($v['schedule']);
+                $v['nexttime'] = $cron->getNextRunDate()->getTimestamp();
+            }
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
         }
         return $this->view->fetch();
+    }
+
+    /**
+     * 判断Crontab格式是否正确
+     * @internal
+     */
+    public function check_schedule()
+    {
+        $row = $this->request->post("row/a");
+        $schedule = isset($row['schedule']) ? $row['schedule'] : '';
+        if (CronExpression::isValidExpression($schedule))
+        {
+            return json(['ok' => '']);
+        }
+        else
+        {
+            return json(['error' => __('Crontab format invalid')]);
+        }
+    }
+
+    /**
+     * 根据Crontab表达式读取未来七次的时间
+     * @internal
+     */
+    public function get_schedule_future()
+    {
+        $time = [];
+        $schedule = $this->request->post('schedule');
+        $days = (int) $this->request->post('days');
+        try
+        {
+            $cron = CronExpression::factory($schedule);
+            for ($i = 0; $i < $days; $i++)
+            {
+                $time[] = $cron->getNextRunDate(null, $i)->format('Y-m-d H:i:s');
+            }
+        }
+        catch (\Exception $e)
+        {
+            
+        }
+
+        return json(['futuretime' => $time]);
     }
 
 }

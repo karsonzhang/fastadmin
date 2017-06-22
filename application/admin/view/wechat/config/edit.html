@@ -28,7 +28,7 @@
                 {foreach $value as $key => $vo}
                 <dd class="form-inline">
                     <input type="text" name="field[{$key}]" class="form-control" id="field-{$key}" value="{$key}" size="10" />
-                    <input type="text" name="value[{$key}]" class="form-control" id="value-{$key}" value="{$vo}" size="40" />
+                    <input type="text" name="value[{$key}]" class="form-control" id="value-{$key}" value="{:is_array($vo)?'':$vo}" size="40" />
                     <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
                     <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
                 </dd>

@@ -139,10 +139,9 @@ class Ajax extends Backend
     public function lang()
     {
         header('Content-Type: application/javascript');
-        $modulename = $this->request->module();
         $callback = $this->request->get('callback');
         $controllername = input("controllername");
-        Lang::load(APP_PATH . $modulename . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $controllername) . '.php');
+        $this->loadlang($controllername);
         //强制输出JSON Object
         $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
         return $result;
@@ -153,6 +152,7 @@ class Ajax extends Backend
      */
     public function roletree()
     {
+        $this->loadlang('auth/group');
         $model = model('AuthGroup');
         $id = $this->request->post("id");
         $pid = $this->request->post("pid");
@@ -206,6 +206,11 @@ class Ajax extends Backend
     {
         $this->code = -1;
         $file = $this->request->file('file');
+        if (!$file)
+        {
+            $this->msg = "未上传文件或超出服务器上传限制";
+            return;
+        }
 
         //判断是否已经存在附件
         $sha1 = $file->hash();

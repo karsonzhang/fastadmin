@@ -24,12 +24,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID'},
-                        {field: 'type', title: __('Type')},
+                        {field: 'type_text', title: __('Type'), operate:false},
                         {field: 'title', title: __('Title')},
                         {field: 'maximums', title: __('Maximums')},
                         {field: 'executes', title: __('Executes')},
                         {field: 'begintime', title: __('Begin time'), formatter: Table.api.formatter.datetime},
                         {field: 'endtime', title: __('End time'), formatter: Table.api.formatter.datetime},
+                        {field: 'nexttime', title: __('Next execute time'), formatter: Table.api.formatter.datetime, operate:false},
                         {field: 'executetime', title: __('Execute time'), formatter: Table.api.formatter.datetime},
                         {field: 'weigh', title: __('Weigh')},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
@@ -49,22 +50,23 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         api: {
             bindevent: function () {
-                Form.api.bindevent($("form[role=form]"));
-                //拖拽排序
-                require(['crontab'], function () {
-                    $('#schedulepicker').jqCron({
-                        lang: 'cn',
-                        default_value: '* * * * 0-2',
-                        multiple_dom: true,
-                        multiple_month: true,
-                        multiple_mins: true,
-                        multiple_dow: true,
-                        multiple_time_hours: true,
-                        multiple_time_minutes: true,
-                        no_reset_button: false,
-                        bind_to: $("#schedule")
-                    });
+                $('#schedule').on('valid.field', function (e, result) {
+                    $("#pickdays").trigger("change");
                 });
+                Form.api.bindevent($("form[role=form]"));
+                $(document).on("change", "#pickdays", function () {
+                    $("#scheduleresult").html(__('Loading'));
+                    $.post("general/crontab/get_schedule_future", {schedule: $("#schedule").val(), days:$(this).val()}, function (ret) {
+                        $("#scheduleresult").html("");
+                        if (typeof ret.futuretime !== 'undefined' && $.isArray(ret.futuretime)) {
+                            $.each(ret.futuretime, function (i, j) {
+                                $("#scheduleresult").append("<li class='list-group-item'>" + j + "<span class='badge'>" + (i + 1) + "</span></li>");
+                            });
+                        }
+                    }, 'json');
+
+                });
+                $("#pickdays").trigger("change");
             }
         }
     };

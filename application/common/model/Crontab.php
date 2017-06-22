@@ -17,7 +17,24 @@ class Crontab extends Model
     ];
     // 追加属性
     protected $append = [
+        'type_text'
     ];
+
+    public static function getTypeList()
+    {
+        return [
+            'url'   => __('Request Url'),
+            'sql'   => __('Execute Sql Script'),
+            'shell' => __('Execute Shell'),
+        ];
+    }
+
+    public function getTypeTextAttr($value, $data)
+    {
+        $typelist = self::getTypeList();
+        $value = $value ? $value : $data['type'];
+        return $value && isset($typelist[$value]) ? $typelist[$value] : $value;
+    }
 
     protected function setBegintimeAttr($value)
     {

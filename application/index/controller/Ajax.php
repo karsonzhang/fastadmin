@@ -24,10 +24,9 @@ class Ajax extends Frontend
     public function lang()
     {
         header('Content-Type: application/javascript');
-        $modulename = $this->request->module();
         $callback = $this->request->get('callback');
         $controllername = input("controllername");
-        Lang::load(APP_PATH . $modulename . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $controllername) . '.php');
+        $this->loadlang($controllername);
         //强制输出JSON Object
         $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
         return $result;

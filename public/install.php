@@ -43,6 +43,10 @@ if (is_file($lockFile))
 {
     $errInfo = "当前已经安装{$sitename}，如果需要重新安装，请手动移除application/admin/command/Install/install.lock文件";
 }
+else if (!is_writeable($lockFile))
+{
+    $errInfo = "当前权限不足，无法写入锁定文件application/admin/command/Install/install.lock";
+}
 else if (version_compare(PHP_VERSION, '5.5.0', '<'))
 {
     $errInfo = "当前版本(" . PHP_VERSION . ")过低，请使用PHP5.5以上版本";
@@ -62,7 +66,7 @@ else
     {
         if (!is_dir(ROOT_PATH . $v))
         {
-            $errInfo = '请先下载扩展资源包覆盖后再安装，<a href="' . $link['qqun'] . '" target="_blank">群共享下载</a> <a href="' . $link['osc'] . '" target="_blank">码云下载</a>';
+            $errInfo = '请先下载完整包覆盖后再安装，<a href="' . $link['qqun'] . '" target="_blank">群共享下载</a> <a href="' . $link['osc'] . '" target="_blank">码云下载</a>';
             break;
         }
     }

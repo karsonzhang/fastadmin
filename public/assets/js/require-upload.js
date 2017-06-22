@@ -66,7 +66,7 @@ define(['jquery', 'bootstrap', 'backend', 'plupload', 'dragsort', 'template'], f
                             UploadProgress: function (up, file) {
                                 //这里可以改成其它的表现形式
                                 //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                                $(that).prop("disabled", true).html("<i class='fa fa-upload'></i> 上传" + file.percent + "%");
+                                $(that).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + file.percent + "%");
                             },
                             FileUploaded: function (up, file, info) {
                                 var options = this.getOption();

@@ -112,13 +112,16 @@ class Autotask extends Controller
                 }
                 else if ($crontab['type'] == 'sql')
                 {
+                    //这里需要强制重连数据库,使用已有的连接会报2014错误
+                    $connect = Db::connect([], true);
+                    $connect->execute("select 1");
                     // 执行SQL
-                    Db::getPdo()->exec($crontab['content']);
+                    $connect->getPdo()->exec($crontab['content']);
                 }
                 else if ($crontab['type'] == 'shell')
                 {
                     // 执行Shell
-                    exec( $crontab['content'] . ' >> ' . $logDir . date("Y-m-d") . '.log 2>&1 &');
+                    exec($crontab['content'] . ' >> ' . $logDir . date("Y-m-d") . '.log 2>&1 &');
                 }
             }
             catch (Exception $e)

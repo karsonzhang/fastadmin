@@ -140,11 +140,12 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                     zIndex: Backend.api.layer.zIndex,
                     skin: 'layui-layer-noborder',
                     success: function (layero, index) {
+                        var that = this;
                         //$(layero).removeClass("layui-layer-border");
                         Backend.api.layer.setTop(layero);
                         var frame = Backend.api.layer.getChildFrame('html', index);
                         var layerfooter = frame.find(".layer-footer");
-                        Backend.api.layerfooter(layero, index);
+                        Backend.api.layerfooter(layero, index, that);
 
                         //绑定事件
                         if (layerfooter.size() > 0) {
@@ -155,7 +156,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                             var target = layerfooter[0];
                             // 创建观察者对象
                             var observer = new MutationObserver(function (mutations) {
-                                Backend.api.layerfooter(layero, index);
+                                Backend.api.layerfooter(layero, index, that);
                                 mutations.forEach(function (mutation) {
                                 });
                             });
@@ -170,7 +171,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 }, options ? options : {}));
                 return false;
             },
-            layerfooter: function (layero, index) {
+            layerfooter: function (layero, index, that) {
                 var frame = Backend.api.layer.getChildFrame('html', index);
                 var layerfooter = frame.find(".layer-footer");
                 if (layerfooter.size() > 0) {
@@ -188,11 +189,11 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
 
                 var oldheg = heg + titHeight + btnHeight;
                 var maxheg = 600;
-                if (frame.outerWidth() < 768) {
-                    maxheg = $(window).height() - 28;
+                if (frame.outerWidth() < 768 || that.area[0].indexOf("%") > -1) {
+                    maxheg = $(window).height();
                 }
                 // 如果有.layer-footer或窗口小于600则重新排
-                if (layerfooter.size() > 0 || oldheg < maxheg) {
+                if (layerfooter.size() > 0 || oldheg < maxheg || that.area[0].indexOf("%") > -1) {
                     var footerHeight = layero.find('.layui-layer-footer').outerHeight() || 0;
                     footerHeight = 0;
                     if (oldheg >= maxheg) {
@@ -374,6 +375,10 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                     Toastr.error(__('Operation failed'));
                 }
             });
+            //修复含有fixed-footer类的body边距
+            if ($(".fixed-footer").size() > 0) {
+                $(document.body).css("padding-bottom", $(".fixed-footer").height());
+            }
         }
     };
     //将Layer暴露到全局中去
