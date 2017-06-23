@@ -43,7 +43,7 @@ if (is_file($lockFile))
 {
     $errInfo = "当前已经安装{$sitename}，如果需要重新安装，请手动移除application/admin/command/Install/install.lock文件";
 }
-else if (!is_writeable($lockFile))
+else if (!is_writeable(INSTALL_PATH))
 {
     $errInfo = "当前权限不足，无法写入锁定文件application/admin/command/Install/install.lock";
 }
