@@ -86,14 +86,24 @@
                         htmlForm.push(sprintf('<select class="form-control" name="%s" %s>%s</select>', vObjCol.field, style, sprintf('<option value="">%s</option>', that.options.formatCommonChoose())));
                         (function (vObjCol, that) {
                             $.when(vObjCol.searchList).done(function (ret) {
+                                
+                                var isArray = false;
                                 if (ret.data && ret.data.searchlist && $.isArray(ret.data.searchlist)) {
-                                    var optionList = [];
+                                    var resultlist = {};
                                     $.each(ret.data.searchlist, function (key, value) {
-                                        var isSelect = value.id === vObjCol.defaultValue ? 'selected' : '';
-                                        optionList.push(sprintf("<option value='" + value.id + "' %s>" + value.name + "</option>", isSelect));
+                                        resultlist[value.id] = value.name;
                                     });
-                                    $("form.form-commonsearch select[name='" + vObjCol.field + "']", that.$container).append(optionList.join(''));
+                                } else if (ret.constructor === Array || ret.constructor === Object) {
+                                    var resultlist = ret;
+                                    isArray = ret.constructor === Array ? true : isArray;
                                 }
+                                console.log(resultlist);
+                                var optionList = [];
+                                $.each(resultlist, function (key, value) {
+                                    var isSelect = (isArray ? value : key) == vObjCol.defaultValue ? 'selected' : '';
+                                    optionList.push(sprintf("<option value='" + (isArray ? value : key) + "' %s>" + value + "</option>", isSelect));
+                                });
+                                $("form.form-commonsearch select[name='" + vObjCol.field + "']", that.$container).append(optionList.join(''));
                             });
                         })(vObjCol, that);
                     } else if (typeof vObjCol.searchList == 'function') {
@@ -103,7 +113,7 @@
                         var searchList = [];
                         searchList.push(sprintf('<option value="">%s</option>', that.options.formatCommonChoose()));
                         $.each(vObjCol.searchList, function (key, value) {
-                            var isSelect = (isArray ? value : key) === vObjCol.defaultValue ? 'selected' : '';
+                            var isSelect = (isArray ? value : key) == vObjCol.defaultValue ? 'selected' : '';
                             searchList.push(sprintf("<option value='" + (isArray ? value : key) + "' %s>" + value + "</option>", isSelect));
                         });
                         htmlForm.push(sprintf('<select class="form-control" name="%s" %s>%s</select>', vObjCol.field, style, searchList.join('')));

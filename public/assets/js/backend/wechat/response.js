@@ -26,8 +26,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'type', title: __('Type')},
                         {field: 'title', title: __('Resource title')},
                         {field: 'eventkey', title: __('Event key')},
-                        {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
+                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status, operate:false},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
@@ -57,8 +56,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'type', title: __('Type')},
                         {field: 'title', title: __('Title')},
                         {field: 'event', title: __('Event')},
-                        {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
+                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status, operate:false},
                         {field: 'operate', title: __('Operate'), events: {
                                 'click .btn-chooseone': function (e, value, row, index) {
                                     var callback = Backend.api.query('callback');
@@ -108,9 +106,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             if (undefined != appConfig[i]['pattern'])
                                 pattern_str = 'pattern ="' + appConfig[i]['pattern'] + '" ';
                             if (appConfig[i]['type'] == 'textarea') {
-                                str += '<div class="form-group"><label for="content" class="control-label col-xs-12 col-sm-2">' + appConfig[i]['caption'] + ':</label><div class="col-xs-12 col-sm-8"><textarea class="form-control" name="row[content][' + appConfig[i]['field'] + ']" ' + pattern_str + ' alt="' + alt + '"></textarea> </div> </div>';
+                                str += '<div class="form-group"><label for="content" class="control-label col-xs-12 col-sm-2">' + appConfig[i]['caption'] + ':</label><div class="col-xs-12 col-sm-8"><textarea class="form-control" name="row[content][' + appConfig[i]['field'] + ']" ' + pattern_str + ' alt="' + alt + '" data-rule="required"></textarea> </div> </div>';
                             } else {
-                                str += '<div class="form-group"><label for="content" class="control-label col-xs-12 col-sm-2">' + appConfig[i]['caption'] + ':</label><div class="col-xs-12 col-sm-8"><input class="form-control" name="row[content][' + appConfig[i]['field'] + ']" type="text" ' + pattern_str + ' alt="' + alt + '"> </div> </div>';
+                                str += '<div class="form-group"><label for="content" class="control-label col-xs-12 col-sm-2">' + appConfig[i]['caption'] + ':</label><div class="col-xs-12 col-sm-8"><input class="form-control" name="row[content][' + appConfig[i]['field'] + ']" type="text" ' + pattern_str + ' alt="' + alt + '" data-rule="required"> </div> </div>';
                             }
                         } else {
                             var options = appConfig[i]['options'];
@@ -157,7 +155,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 $(document).on('click', "input[name='row[type]']", function () {
                     var type = $(this).val();
                     if (type == 'text') {
-                        $("#expand").html('<div class="form-group"><label for="content" class="control-label col-xs-12 col-sm-2">文本内容:</label><div class="col-xs-12 col-sm-8"><textarea class="form-control" name="row[content][content]"></textarea> <a href="javascript:;" class="btn-insertlink">插入链接</a></div></div>');
+                        $("#expand").html('<div class="form-group"><label for="content" class="control-label col-xs-12 col-sm-2">文本内容:</label><div class="col-xs-12 col-sm-8"><textarea class="form-control" name="row[content][content]" data-rule="required"></textarea> <a href="javascript:;" class="btn-insertlink">插入链接</a></div></div>');
                         $("form.form-ajax").field("row[content][content]", datas.content);
                     } else if (type == 'app') {
                         $("#expand").html('<div class="form-group"><label for="content" class="control-label col-xs-12 col-sm-2">应用:</label><div class="col-xs-12 col-sm-8"><select class="form-control" name="row[content][app]" id="app">' + $("select[name=applist]").html() + '</select></div></div><div id="appfields"><div>');

@@ -12,7 +12,7 @@ use think\Session;
 class Wechat
 {
 
-    const GET_AUTH_CODE_URL = "https://api.weixin.qq.com/sns/oauth2/authorize";
+    const GET_AUTH_CODE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize";
     const GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
     const GET_USERINFO_URL = "https://api.weixin.qq.com/sns/userinfo";
 
@@ -47,7 +47,7 @@ class Wechat
         $state = md5(uniqid(rand(), TRUE));
         Session::set('state', $state);
         $queryarr = array(
-            "app_id"        => $this->config['app_id'],
+            "appid"        => $this->config['app_id'],
             "redirect_uri"  => $this->config['callback'],
             "response_type" => "code",
             "scope"         => $this->config['scope'],

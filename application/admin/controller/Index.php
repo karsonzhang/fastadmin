@@ -73,6 +73,7 @@ class Index extends Backend
                 $this->error($validate->getError(), $url, ['token' => $this->request->token()]);
                 return;
             }
+            \app\admin\model\AdminLog::setTitle(__('Login'));
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
             if ($result === true)
             {

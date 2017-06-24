@@ -14,6 +14,7 @@ class Autoreply extends Backend
 {
 
     protected $model = null;
+    protected $noNeedRight = ['check_text_unique'];
 
     public function _initialize()
     {
@@ -44,6 +45,30 @@ class Autoreply extends Backend
         $this->view->assign("response", $response);
         $this->view->assign("row", $row);
         return $this->view->fetch();
+    }
+
+    /**
+     * 判断文本是否唯一
+     * @internal
+     */
+    public function check_text_unique()
+    {
+        $row = $this->request->post("row/a");
+        $except = $this->request->post("except");
+        $text = isset($row['text']) ? $row['text'] : '';
+        if ($this->model->where('text', $text)->where(function($query) use($except) {
+                    if ($except)
+                    {
+                        $query->where('text', '<>', $except);
+                    }
+                })->count() == 0)
+        {
+            return json(['ok' => '']);
+        }
+        else
+        {
+            return json(['error' => __('Text already exists')]);
+        }
     }
 
 }

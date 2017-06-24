@@ -1,10 +1,23 @@
+/**
+ * 将BootstrapTable的行使用自定义的模板来渲染
+ * 
+ * @author: karson
+ * @version: v0.0.1
+ *
+ * @update 2017-06-24 <http://github.com/karsonzhang/fastadmin>
+ */
+
 !function ($) {
     'use strict';
 
     $.extend($.fn.bootstrapTable.defaults, {
+        //是否启用模板渲染
         templateView: false,
+        //数据格式化的模板ID或格式函数
         templateFormatter: "itemtpl",
+        //添加的父类的class
         templateParentClass: "row row-flex",
+        //向table添加的class
         templateTableClass: "table-template",
 
     });
@@ -30,14 +43,14 @@
             showFooter: !that.options.templateView ? $.fn.bootstrapTable.defaults.showFooter : false,
         });
         $(that.$el).toggleClass(that.options.templateTableClass, that.options.templateView);
-        
+
         _initBody.apply(this, Array.prototype.slice.apply(arguments));
 
         if (!that.options.templateView) {
             return;
         } else {
             //由于Bootstrap是基于Table的，添加一个父类容器
-            $("> *", that.$body).wrapAll($("<div />").addClass(that.options.templateParentClass));
+            $("> *:not(.no-records-found)", that.$body).wrapAll($("<div />").addClass(that.options.templateParentClass));
         }
     };
 

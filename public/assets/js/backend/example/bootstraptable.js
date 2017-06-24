@@ -30,7 +30,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         //模糊搜索
                         {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '模糊搜索，*表示任意字符', style: 'width:200px'},
                         //通过Ajax渲染searchList，也可以使用JSON数据
-                        {field: 'url', title: __('Url'), align: 'left', searchList: $.getJSON('ajax/typeahead?search=a&field=row[user_id]'), formatter: Controller.api.formatter.url},
+                        {field: 'url', title: __('Url'), align: 'left', defaultValue:3, searchList: $.getJSON('ajax/typeahead?search=a&field=row[user_id]'), formatter: Controller.api.formatter.url},
                         //点击IP时同时执行搜索此IP,同时普通搜索使用下拉列表的形式
                         {field: 'ip', title: __('IP'), searchList: ['127.0.0.1', '127.0.0.2'], events: Controller.api.events.ip, formatter: Controller.api.formatter.ip},
                         //browser是一个不存在的字段

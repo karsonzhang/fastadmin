@@ -14,6 +14,7 @@ class Response extends Backend
 {
 
     protected $model = null;
+    protected $searchFields = 'id,title';
 
     public function _initialize()
     {
@@ -38,7 +39,7 @@ class Response extends Backend
         {
             $this->code = -1;
             $params = $this->request->post("row/a");
-            $params['eventkey'] = $params['eventkey'] ? $params['eventkey'] : uniqid();
+            $params['eventkey'] = isset($params['eventkey']) && $params['eventkey'] ? $params['eventkey'] : uniqid();
             $params['content'] = json_encode($params['content']);
             $params['createtime'] = time();
             if ($params)
@@ -67,7 +68,7 @@ class Response extends Backend
         {
             $this->code = -1;
             $params = $this->request->post("row/a");
-            $params['eventkey'] = $params['eventkey'] ? $params['eventkey'] : uniqid();
+            $params['eventkey'] = isset($params['eventkey']) && $params['eventkey'] ? $params['eventkey'] : uniqid();
             $params['content'] = json_encode($params['content']);
             if ($params)
             {

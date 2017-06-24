@@ -1,9 +1,6 @@
 <?php
 
 return [
-    'Keep login'                                            => '保持会话',
-    'Sign in'                                               => '登入',
-    'Username'                                              => '用户名',
     'User id'                                               => '会员ID',
     'Username'                                              => '用户名',
     'Nickname'                                              => '昵称',
@@ -49,6 +46,7 @@ return [
     'None'                                                  => '无',
     'Home'                                                  => '主页',
     'Online'                                                => '在线',
+    'Login'                                                 => '登录',
     'Logout'                                                => '注销',
     'Profile'                                               => '个人资料',
     'Index'                                                 => '首页',

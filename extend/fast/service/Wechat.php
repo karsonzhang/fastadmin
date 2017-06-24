@@ -141,13 +141,13 @@ class Wechat
                     $thirdinfo = UserThird::get(['platform' => 'wechat', 'openid' => $openid]);
                     if (!$thirdinfo)
                     {
-                        $response = '您还没有<a href="' . url('user/profile', 1) . '">绑定用户</a>还不能签到!';
+                        $response = '您还没有<a href="' . url('index/user/third', 'action=redirect&platform=wechat', true, true) . '">绑定用户</a>还不能签到!';
                     }
                     else
                     {
                         $user_id = $thirdinfo->user_id;
                         $usersign = new UserSignin;
-                        $signdata = $usersign->get([['user_id', '=', $user_id], ['createtime', '>=', Date::unixtime()]]);
+                        $signdata = $usersign->where('user_id', '=', $user_id)->where('createtime', '>=', Date::unixtime())->find();
                         if ($signdata)
                         {
                             $response = '今天已签到,请明天再来!';
@@ -156,7 +156,7 @@ class Wechat
                         {
                             $signdata = (array) json_decode(WechatConfig::value('signin'), TRUE);
 
-                            $lastdata = $usersign->where('user_id', $user_id)->order('id', 'desc')->limit(1)->get();
+                            $lastdata = $usersign->where('user_id', $user_id)->order('id', 'desc')->limit(1)->find();
                             $successions = $lastdata && $lastdata['createtime'] > Date::unixtime('day', -1) ? $lastdata['successions'] + 1 : 1;
                             $usersign->save(['user_id' => $thirdinfo['user_id'], 'successions' => $successions, 'createtime' => time()]);
                             $score = isset($signdata['s' . $successions]) ? $signdata['s' . $successions] : $signdata['sn'];

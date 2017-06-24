@@ -43,10 +43,6 @@ if (is_file($lockFile))
 {
     $errInfo = "当前已经安装{$sitename}，如果需要重新安装，请手动移除application/admin/command/Install/install.lock文件";
 }
-else if (!is_writeable($lockFile))
-{
-    $errInfo = "当前权限不足，无法写入锁定文件application/admin/command/Install/install.lock";
-}
 else if (version_compare(PHP_VERSION, '5.5.0', '<'))
 {
     $errInfo = "当前版本(" . PHP_VERSION . ")过低，请使用PHP5.5以上版本";
@@ -119,7 +115,12 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
     }
     try
     {
-        $sql = file_get_contents(INSTALL_PATH . 'fastadmin.sql');
+        //检测能否读取安装文件
+        $sql = @file_get_contents(INSTALL_PATH . 'fastadmin.sql');
+        if (!$sql)
+        {
+            throw new Exception("无法读取application/admin/command/Install/fastadmin.sql文件，请检查是否有读权限");
+        }
         $pdo = new PDO("mysql:host={$mysqlHostname};port={$mysqlHostport}", $mysqlUsername, $mysqlPassword, array(
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
@@ -131,7 +132,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
 
         $pdo->exec($sql);
 
-        $config = file_get_contents($dbConfigFile);
+        $config = @file_get_contents($dbConfigFile);
         $callback = function($matches) use($mysqlHostname, $mysqlHostport, $mysqlUsername, $mysqlPassword, $mysqlDatabase) {
             $field = ucfirst($matches[1]);
             $replace = ${"mysql{$field}"};
@@ -142,13 +143,28 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
             return "'{$matches[1]}'{$matches[2]}=>{$matches[3]}'{$replace}',";
         };
         $config = preg_replace_callback("/'(hostname|database|username|password|hostport)'(\s+)=>(\s+)'(.*)'\,/", $callback, $config);
-        file_put_contents($dbConfigFile, $config);
+        
+        //检测能否成功写入数据库配置
+        $result = @file_put_contents($dbConfigFile, $config);
+        if (!$result)
+        {
+            throw new Exception("无法写入数据库信息到application/database.php文件，请检查是否有写权限");
+        }
 
+        //检测能否成功写入lock文件
+        $result = @file_put_contents($lockFile, 1);
+        if (!$result)
+        {
+            throw new Exception("无法写入安装锁定到application/admin/command/Install/install.lock文件，请检查是否有写权限");
+        }
         $newSalt = substr(md5(uniqid(true)), 0, 6);
         $newPassword = md5(md5($adminPassword) . $newSalt);
         $pdo->query("UPDATE fa_admin SET username = '{$adminUsername}', email = '{$adminEmail}',password = '{$newPassword}', salt = '{$newSalt}' WHERE username = 'admin'");
-        file_put_contents($lockFile, 1);
         echo "success";
+    }
+    catch (Exception $e)
+    {
+        $err = $e->getMessage();
     }
     catch (PDOException $e)
     {

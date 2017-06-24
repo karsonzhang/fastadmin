@@ -12,29 +12,52 @@ class AdminLog extends Model
     // 定义时间戳字段名
     protected $createTime = 'createtime';
     protected $updateTime = '';
+    //自定义日志标题
+    protected static $title = '';
+    //自定义日志内容
+    protected static $content = '';
+
+    public static function setTitle($title)
+    {
+        self::$title = $title;
+    }
+
+    public static function setContent($content)
+    {
+        self::$content = $content;
+    }
 
     public static function record($title = '')
     {
         $admin = \think\Session::get('admin');
         $admin_id = $admin ? $admin->id : 0;
         $username = $admin ? $admin->username : __('Unknown');
-        $content = request()->param();
-        foreach ($content as $k => $v)
+        $content = self::$content;
+        if (!$content)
         {
-            if (is_string($v) && strlen($v) > 200 || stripos($k, 'password') !== false)
+            $content = request()->param();
+            foreach ($content as $k => $v)
             {
-                unset($content[$k]);
+                if (is_string($v) && strlen($v) > 200 || stripos($k, 'password') !== false)
+                {
+                    unset($content[$k]);
+                }
             }
         }
-        $title = [];
-        $breadcrumb = \app\admin\library\Auth::instance()->getBreadcrumb();
-        foreach ($breadcrumb as $k => $v)
+        $title = self::$title;
+        if (!$title)
         {
-            $title[] = $v['title'];
+            $title = [];
+            $breadcrumb = \app\admin\library\Auth::instance()->getBreadcrumb();
+            foreach ($breadcrumb as $k => $v)
+            {
+                $title[] = $v['title'];
+            }
+            $title = implode(' ', $title);
         }
         self::create([
-            'title'     => implode(' ', $title),
-            'content'   => json_encode($content),
+            'title'     => $title,
+            'content'   => !is_scalar($content) ? json_encode($content) : $content,
             'url'       => request()->url(),
             'admin_id'  => $admin_id,
             'username'  => $username,
