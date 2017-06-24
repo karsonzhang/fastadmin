@@ -2,7 +2,7 @@
 
 return array (
   'name' => 'FastAdmin',
-  'beian' => '',
+  'beian' => '粤ICP备15054802号-4',
   'cdnurl' => '',
   'version' => '1.0.1',
   'timezone' => 'Asia/Shanghai',
@@ -31,8 +31,8 @@ return array (
   'mail_type' => '1',
   'mail_smtp_host' => 'smtp.qq.com',
   'mail_smtp_port' => '465',
-  'mail_smtp_user' => '168128864',
-  'mail_smtp_pass' => 'pzufyihnzrrjbhfb',
+  'mail_smtp_user' => '10000',
+  'mail_smtp_pass' => 'password',
   'mail_verify_type' => '2',
-  'mail_from' => '168128864@qq.com',
+  'mail_from' => '10000@qq.com',
 );
