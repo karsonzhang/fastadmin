@@ -35,7 +35,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 为表格绑定事件
             Table.api.bindevent(table);
 
-            // 清楚缓存
+            // 清除缓存
             $(document).on("click", ".btn-clear-cache", function (e) {
                 Backend.api.layer.confirm(__("Are you sure you want to clear cache?"), function () {
                     Backend.api.ajax({
