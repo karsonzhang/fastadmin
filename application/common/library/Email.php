@@ -1,12 +1,10 @@
 <?php
 
-namespace app\common\controller;
+namespace app\common\library;
 
 use think\Config;
-use think\Controller;
 
-
-class Email extends Controller
+class Email
 {
     /**
      * 发送邮件
