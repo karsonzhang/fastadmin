@@ -3,6 +3,7 @@
 namespace app\admin\controller\general;
 
 use app\common\controller\Backend;
+use app\common\controller\Email;
 
 /**
  * 系统配置
@@ -233,4 +234,19 @@ class Config extends Backend
         }
     }
 
+
+    public function emailtest()
+    {
+        $content = '<table style="width: 99.8%; "><tbody><tr><td id="QQMAILSTATIONERY" style="background:url(https://rescdn.qqmail.com/zh_CN/htmledition/images/xinzhi/bg/a_07.jpg) repeat-x #e4ebf5; min-height:550px; padding: 100px 55px 200px;">这是一封测试邮件,用于测试邮件配置是否正常!</td></tr></tbody></table>';
+
+        $email = new Email;
+        $mailArr = Array();
+        $mailArr['mTo'] = '168128864@qq.com';       //收件人
+        $mailArr['subject'] = '这是一封测试邮件';    //邮件主题
+        $mailArr['content'] = $content;             //邮件内容(html)
+        $mailArr['fromNic'] = 'Fastadmin系统邮件';   //发件人昵称[可省略]
+        $mailArr['toNic'] = '亲爱的用户';            //收件人昵称[可省略]
+        $data = $email->sendMail($mailArr['mTo'],$mailArr['subject'],$mailArr['content'],$mailArr['fromNic'],$mailArr['toNic']);
+        return json(['data'=>$data,'code'=>200,'message'=>'操作完成']);
+    }
 }
