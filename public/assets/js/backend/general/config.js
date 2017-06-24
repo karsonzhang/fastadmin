@@ -76,6 +76,19 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             $(document).on("change", "form#add-form select[name='row[type]']", function (e) {
                 $("#add-content-container").toggleClass("hide", ['select', 'selects', 'checkbox', 'radio'].indexOf($(this).val()) > -1 ? false : true);
             });
+
+            //添加向发件人发送测试邮件按钮和方法
+            testMail = '<a class="btn btn-info testmail">向发件人发送测试邮件</a>'
+            $('input[name="row[mail_from]"]').parent().next().append(testMail);
+            $(document).on("click", ".testmail",function(){
+                $.get("/admin/general.config/emailtest", function(result){
+                    if (result.data.data) {
+                        Toastr.success(result.data.text)
+                    }else{
+                        Toastr.warning(result.data.text)
+                    }
+                });
+            })
         },
         add: function () {
             Controller.api.bindevent();
