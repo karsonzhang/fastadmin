@@ -51,9 +51,11 @@ class Frontend extends Controller
         // 语言检测
         $lang = Lang::detect();
 
+        $site = Config::get("site");
+
         // 配置信息
         $config = [
-            'site'           => Config::get("site"),
+            'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
             'upload'         => Configvalue::upload(),
             'modulename'     => $modulename,
             'controllername' => $controllername,
@@ -63,7 +65,7 @@ class Frontend extends Controller
             'language'       => $lang
         ];
         $this->loadlang($controllername);
-        $this->assign('site', Config::get("site"));
+        $this->assign('site', $site);
         $this->assign('config', $config);
     }
     
