@@ -163,7 +163,7 @@ trait Backend
             if ($this->request->has('params'))
             {
                 parse_str($this->request->post("params"), $values);
-                $values = array_intersect_key($values, array_flip(array('status')));
+                $values = array_intersect_key($values, array_flip(is_array($this->multiFields) ? $this->multiFields : explode(',', $this->multiFields)));
                 if ($values)
                 {
                     $count = $this->model->where($this->model->getPk(), 'in', $ids)->update($values);
@@ -171,6 +171,10 @@ trait Backend
                     {
                         $this->code = 1;
                     }
+                }
+                else
+                {
+                    $this->msg = __('You have no permission');
                 }
             }
             else

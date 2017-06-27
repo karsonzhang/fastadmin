@@ -162,7 +162,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             if ($("ul.sidebar-menu li.active a").size() > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
             } else {
-                $("ul.sidebar-menu li a[url!='javascript:;']").trigger("click");
+                $("ul.sidebar-menu li a[url!='javascript:;']:first").trigger("click");
             }
             if (Config.referer) {
                 //刷新页面后跳到到刷新前的页面

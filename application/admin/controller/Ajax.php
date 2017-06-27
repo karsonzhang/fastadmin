@@ -153,6 +153,7 @@ class Ajax extends Backend
     public function roletree()
     {
         $this->loadlang('auth/group');
+
         $model = model('AuthGroup');
         $id = $this->request->post("id");
         $pid = $this->request->post("pid");
@@ -165,22 +166,50 @@ class Ajax extends Backend
         if (($pid || $parentgroupmodel) && (!$id || $currentgroupmodel))
         {
             $id = $id ? $id : NULL;
+            $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->select())->toArray();
             //读取父类角色所有节点列表
-            $parentrulelist = model('AuthRule')->all(in_array('*', explode(',', $parentgroupmodel->rules)) ? NULL : $parentgroupmodel->rules);
+            $parentRuleList = [];
+            if (in_array('*', explode(',', $parentgroupmodel->rules)))
+            {
+                $parentRuleList = $ruleList;
+            }
+            else
+            {
+                $parent_rule_ids = explode(',', $parentgroupmodel->rules);
+                foreach ($ruleList as $k => $v)
+                {
+                    if (in_array($v['id'], $parent_rule_ids))
+                    {
+                        $parentRuleList[] = $v;
+                    }
+                }
+            }
+
+            //当前所有正常规则列表
+            Tree::instance()->init($ruleList);
+
             //读取当前角色下规则ID集合
             $admin_rule_ids = $this->auth->getRuleIds();
+            //是否是超级管理员
             $superadmin = $this->auth->isSuperAdmin();
+            //当前拥有的规则ID集合
             $current_rule_ids = $id ? explode(',', $currentgroupmodel->rules) : [];
 
-            if (!$id || !in_array($pid, Tree::instance()->init($model->all(['status' => 'normal']))->getChildrenIds($id, TRUE)))
+            if (!$id || !in_array($pid, Tree::instance()->getChildrenIds($id, TRUE)))
             {
-                //构造jstree所需的数据
+                $ruleList = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'name');
+                $hasChildrens = [];
+                foreach ($ruleList as $k => $v)
+                {
+                    if ($v['haschild'])
+                        $hasChildrens[] = $v['id'];
+                }
                 $nodelist = [];
-                foreach ($parentrulelist as $k => $v)
+                foreach ($parentRuleList as $k => $v)
                 {
                     if (!$superadmin && !in_array($v['id'], $admin_rule_ids))
                         continue;
-                    $state = array('selected' => !$v['ismenu'] && in_array($v['id'], $current_rule_ids));
+                    $state = array('selected' => in_array($v['id'], $current_rule_ids) && !in_array($v['id'], $hasChildrens));
                     $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => $v['title'], 'type' => 'menu', 'state' => $state);
                 }
                 $this->code = 1;
@@ -206,7 +235,7 @@ class Ajax extends Backend
     {
         $this->code = -1;
         $file = $this->request->file('file');
-        if (!$file)
+        if (empty($file))
         {
             $this->msg = "未上传文件或超出服务器上传限制";
             return;

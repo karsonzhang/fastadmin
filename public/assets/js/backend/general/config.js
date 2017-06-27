@@ -78,17 +78,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             });
 
             //添加向发件人发送测试邮件按钮和方法
-            testMail = '<a class="btn btn-info testmail">向发件人发送测试邮件</a>'
-            $('input[name="row[mail_from]"]').parent().next().append(testMail);
-            $(document).on("click", ".testmail",function(){
-                $.get("/admin/general.config/emailtest", function(result){
-                    if (result.data.data) {
-                        Toastr.success(result.data.text)
-                    }else{
-                        Toastr.warning(result.data.text)
-                    }
-                });
-            })
+            $('input[name="row[mail_from]"]').parent().next().append('<a class="btn btn-info testmail">' + __('Send a test message') + '</a>');
+            $(document).on("click", ".testmail", function () {
+                Backend.api.ajax({url: "general/config/emailtest", data: {receiver: $('input[name="row[mail_from]"]').val()}});
+            });
         },
         add: function () {
             Controller.api.bindevent();

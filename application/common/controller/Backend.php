@@ -78,6 +78,11 @@ class Backend extends Controller
      * 是否开启模型场景验证
      */
     protected $modelSceneValidate = false;
+    
+    /**
+     * Multi方法可批量修改的字段
+     */
+    protected $multiFields = 'status';
 
     /**
      * 引入后台控制器的traits

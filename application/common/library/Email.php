@@ -6,81 +6,186 @@ use think\Config;
 
 class Email
 {
+
+    /**
+     * 单例对象
+     */
+    protected static $instance;
+
+    /**
+     * phpmailer对象
+     */
+    protected $mail = [];
+
+    /**
+     * 错误内容
+     */
+    protected $_error = '';
+
+    /**
+     * 默认配置
+     */
+    public $options = [
+        'charset' => 'utf-8', //编码格式
+        'debug'   => 0, //调式模式
+    ];
+
+    /**
+     * 初始化
+     * @access public
+     * @param array $options 参数
+     * @return Email
+     */
+    public static function instance($options = [])
+    {
+        if (is_null(self::$instance))
+        {
+            self::$instance = new static($options);
+        }
+
+        return self::$instance;
+    }
+
+    /**
+     * 构造函数
+     * @param array $options
+     */
+    public function __construct($options = [])
+    {
+        if ($config = Config::get('site'))
+        {
+            $this->options = array_merge($this->options, $config);
+        }
+        $this->options = array_merge($this->options, $options);
+        vendor('phpmailer.phpmailer.PHPMailerAutoload');
+        $securArr = [1 => 'tls', 2 => 'ssl'];
+
+        $this->mail = new \PHPMailer(true);
+        $this->mail->CharSet = $this->options['charset'];
+        $this->mail->SMTPDebug = $this->options['debug'];
+        $this->mail->isSMTP();
+        $this->mail->SMTPAuth = true;
+        $this->mail->Host = $this->options['mail_smtp_host'];
+        $this->mail->Username = $this->options['mail_smtp_user'];
+        $this->mail->Password = $this->options['mail_smtp_pass'];
+        $this->mail->SMTPSecure = isset($securArr[$this->options['mail_verify_type']]) ? $securArr[$this->options['mail_verify_type']] : '';
+        $this->mail->Port = $this->options['mail_smtp_port'];
+
+        //设置发件人
+        $this->from($this->options['mail_from']);
+    }
+
+    /**
+     * 设置邮件主题
+     * @param string $subject
+     * @return $this
+     */
+    public function subject($subject)
+    {
+        $this->options['subject'] = $subject;
+        return $this;
+    }
+
+    /**
+     * 设置发件人
+     * @param string $email
+     * @param string $name
+     * @return $this
+     */
+    public function from($email, $name = '')
+    {
+        $this->options['from'] = $email;
+        $this->options['from_name'] = $name;
+        return $this;
+    }
+
+    /**
+     * 设置收件人
+     * @param string $email
+     * @param string $name
+     * @return $this
+     */
+    public function to($email, $name = '')
+    {
+        $this->options['to'] = $email;
+        $this->options['to_name'] = $name;
+        return $this;
+    }
+
+    /**
+     * 设置邮件正文
+     * @param string $body
+     * @param boolean $ishtml
+     * @return $this
+     */
+    public function message($body, $ishtml = true)
+    {
+        $this->options['body'] = $body;
+        $this->options['ishtml'] = $ishtml;
+        return $this;
+    }
+
+    /**
+     * 获取最后产生的错误
+     */
+    public function getError()
+    {
+        return $this->_error;
+    }
+
+    protected function setError($error)
+    {
+        $this->_error = $error;
+    }
+
     /**
      * 发送邮件
-     * @param string $mTo 收件人
-     * @param string $subject 邮件主题
-     * @param string $content 邮件内容(html)
-     * @param string $fromNic 发件人昵称
-     * @param string $toNic 收件人昵称
+     * @return boolean
      */
-    public function sendMail($mTo='',$subject='',$content='',$fromNic='',$toNic='')
+    public function send()
     {
-        $site = Config::get("site");
-        $re = Vendor('phpmailer.phpmailer.PHPMailerAutoload');
-
-        $mail = new \PHPMailer ();
-
-        //$mail->SMTPDebug = 3;                               // Enable verbose debug output
-        $mail->isSMTP();                                      //smtp需要鉴权 这个必须是true
-        $mail->Host = $site['mail_smtp_host'];                //SMTP服务器地址
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = $site['mail_smtp_user'];            // SMTP 用戶名
-        $mail->Password = $site['mail_smtp_pass'];            // SMTP 密碼
-        switch ($site['mail_verify_type'])                    // Enable TLS encryption, `ssl` also accepted
+        $result = false;
+        switch ($this->options['mail_type'])
         {
-        case 1:
-          $mail->SMTPSecure = 'tls';
-          break;
-        case 2:
-          $mail->SMTPSecure = 'ssl';
-          break;
-        default:
-          $mail->SMTPSecure = '';
-        }
-        $mail->Port = $site['mail_smtp_port'];                                      // 设置ssl连接smtp服务器的远程服务器端口号
-        $mail->setFrom($site['mail_from'], $fromNic);                               // [发件人],[昵称(可选)]
-        $mail->addAddress($mTo, $toNic);                                            // [收件人],[昵称(可选)]
-        //$mail->addReplyTo('xxxxxx@qq.com', 'Information');                        // 回复地址(可选)
-        //$mail->addCC('xxxxxx@qq.com');                                            //好像是密送
-        //$mail->addBCC('xxxxxx@qq.com');                                           //好像是密送B
-        // $mail->addAttachment('/var/tmp/file.tar.gz');                            // 添加附件
-        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');                       // 附件名选项
-        $mail->isHTML(true);                                                        //邮件正文是否为html编码
-        $mail->Subject = $subject;                                                  //添加邮件主题
-        $mail->Body    = $content;                                                  //邮件正文
-        //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';//附加信息，可以省略
+            case 1:
+                //使用phpmailer发送
+                $this->mail->setFrom($this->options['from'], $this->options['from_name']);
+                $this->mail->addAddress($this->options['to'], $this->options['to_name']);
+                $this->mail->Subject = $this->options['subject'];
+                if ($this->options['ishtml'])
+                {
+                    $this->mail->msgHTML($this->options['body']);
+                }
+                else
+                {
+                    $this->mail->Body = $this->options['body'];
+                }
+                try
+                {
+                    $result = $this->mail->send();
+                }
+                catch (\phpmailerException $e)
+                {
+                    $this->setError($e->getMessage());
+                }
 
-        switch ($site['mail_type'])
-        {
-        case 1:
-            if(!$mail->send()) {//这里如果提交错误的smpt配置PHPmailer会卡住暂时不清楚为什么
-                $sendResult['text'] = $mail->ErrorInfo;
-                $sendResult['data'] = false;
-                return $sendResult;
-            } else {
-                $sendResult['text'] ='smtp发送成功';
-                $sendResult['data'] = true;
-                return $sendResult;
-            }
-            break;
-        case 2://使用mail方法发送邮件
-            $headers  = 'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-            $headers .= 'To: '.$toNic.' <'.$mTo.'>' . "\r\n";//收件人
-            $headers .= 'From: '.$fromNic.' <'.$site['mail_from'].'>' . "\r\n";//发件人
-            $sendResult['data'] = mail($mTo, $subject, $content, $headers);
-            if ($sendResult['data']) {
-                $sendResult['text'] ='mail函数发送成功';
-            }else{
-                $sendResult['text'] ='mail函数发送失败';
-            }
-            return $sendResult;
-            break;
-        default:
-            $sendResult['data'] = false;
-            $sendResult['text'] ='已关闭邮件发送';
-            return $sendResult;
+                $this->setError($result ? '' : $this->mail->ErrorInfo);
+                break;
+            case 2:
+                //使用mail方法发送邮件
+                $headers = 'MIME-Version: 1.0' . "\r\n";
+                $headers .= "Content-type: text/html; charset=" . $this->options['charset'] . "\r\n";
+                $headers .= "To: {$this->options['to_name']} <{$this->options['to']}>\r\n"; //收件人
+                $headers .= "From: {$this->options['from_name']} <{$this->options['from']}>\r\n"; //发件人
+                $result = mail($this->options['mail_to'], $this->options['subject'], $this->options['body'], $headers);
+                $this->setError($result ? '' : error_get_last()['message']);
+                break;
+            default:
+                //邮件功能已关闭
+                $this->setError(__('Mail already closed'));
+                break;
         }
+        return $result;
     }
+
 }

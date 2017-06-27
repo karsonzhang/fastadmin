@@ -97,7 +97,6 @@
                                     var resultlist = ret;
                                     isArray = ret.constructor === Array ? true : isArray;
                                 }
-                                console.log(resultlist);
                                 var optionList = [];
                                 $.each(resultlist, function (key, value) {
                                     var isSelect = (isArray ? value : key) == vObjCol.defaultValue ? 'selected' : '';

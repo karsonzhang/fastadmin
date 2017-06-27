@@ -14,6 +14,7 @@ class Bootstraptable extends Backend
 {
 
     protected $model = null;
+    protected $noNeedRight = ['change', 'detail'];
 
     public function _initialize()
     {
@@ -44,7 +45,7 @@ class Bootstraptable extends Backend
         }
         return $this->view->fetch();
     }
-    
+
     /**
      * 详情
      */
@@ -55,6 +56,15 @@ class Bootstraptable extends Backend
             $this->error(__('No Results were found'));
         $this->view->assign("row", $row->toArray());
         return $this->view->fetch();
+    }
+
+    /**
+     * 变更
+     * @internal
+     */
+    public function change()
+    {
+        $this->code = 1;
     }
 
 }

@@ -67,8 +67,6 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                 return false;
             },
             bindevent: function (form, onBeforeSubmit, onAfterSubmit) {
-                //移除提交按钮的disabled类
-                $(".layer-footer .btn.disabled", form).removeClass("disabled");
                 //绑定表单事件
                 form.validator($.extend({
                     validClass: 'has-success',
@@ -105,6 +103,9 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                         return false;
                     }
                 }, form.data("validator-options") || {}));
+                
+                //移除提交按钮的disabled类
+                $(".layer-footer .btn.disabled", form).removeClass("disabled");
 
                 //绑定select元素事件
                 if ($(".selectpicker", form).size() > 0) {

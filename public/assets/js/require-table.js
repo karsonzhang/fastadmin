@@ -219,6 +219,10 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 $(table).on("click", "input[data-id][name='checkbox']", function (e) {
                     table.trigger('fa.event.check');
                 });
+                $(table).on("click", "[data-id].btn-change", function (e) {
+                    e.preventDefault();
+                    Table.api.multi($(this).data("action") ? $(this).data("action") : '', [$(this).data("id")], table, this);
+                });
                 $(table).on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
                     Backend.api.open(options.extend.edit_url + "/ids/" + $(this).data("id"), __('Edit'));
@@ -245,9 +249,11 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
             // 批量操作请求
             multi: function (action, ids, table, element) {
                 var options = table.bootstrapTable('getOptions');
-                var url = action == "del" ? options.extend.del_url : options.extend.multi_url;
+                var data = element ? $(element).data() : {};
+                var url = typeof data.url !== "undefined" ? data.url : (action == "del" ? options.extend.del_url : options.extend.multi_url);
                 url = url + "/ids/" + ($.isArray(ids) ? ids.join(",") : ids);
-                var options = {url: url, data: {action: action, ids: ids, params: element ? $(element).data("params") : ''}};
+                var params = typeof data.params !== "undefined" ? (typeof data.params == 'object' ? $.param(data.params) : data.params) : '';
+                var options = {url: url, data: {action: action, ids: ids, params: params}};
                 Backend.api.ajax(options, function (data) {
                     Toastr.success(__('Operation completed'));
                     table.bootstrapTable('refresh');
@@ -257,10 +263,12 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
             events: {
                 operate: {
                     'click .btn-editone': function (e, value, row, index) {
+                        e.stopPropagation();
                         var options = $(this).closest('table').bootstrapTable('getOptions');
                         Backend.api.open(options.extend.edit_url + "/ids/" + row[options.pk], __('Edit'));
                     },
                     'click .btn-delone': function (e, value, row, index) {
+                        e.stopPropagation();
                         var that = this;
                         var top = $(that).offset().top - $(window).scrollTop();
                         var left = $(that).offset().left - $(window).scrollLeft() - 260;
@@ -280,7 +288,6 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                                     Backend.api.layer.close(index);
                                 }
                         );
-
                     }
                 }
             },
@@ -344,6 +351,18 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                             return true;
                         var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
                         value = value.charAt(0).toUpperCase() + value.slice(1);
+                        html.push('<span class="label label-' + color + '">' + __(value) + '</span>');
+                    });
+                    return html.join(' ');
+                },
+                label: function (value, row, index, custom) {
+                    var colorArr = ['success', 'warning', 'danger', 'info'];
+                    //渲染Flag
+                    var html = [];
+                    var arr = value.split(',');
+                    $.each(arr, function (i, value) {
+                        value = value.toString();
+                        var color = colorArr[i % colorArr.length];
                         html.push('<span class="label label-' + color + '">' + __(value) + '</span>');
                     });
                     return html.join(' ');

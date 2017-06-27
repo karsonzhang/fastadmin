@@ -52,10 +52,21 @@ class Admin extends Backend
     {
         if ($this->request->isAjax())
         {
-            $childrenAdminIds = model('AuthGroupAccess')
-                    ->field('uid')
+            $groupData = model('AuthGroup')->where('status', 'normal')->column('id,name');
+
+            $childrenAdminIds = [];
+            $authGroupList = model('AuthGroupAccess')
+                    ->field('uid,group_id')
                     ->where('group_id', 'in', $this->childrenIds)
-                    ->column('uid');
+                    ->select();
+            
+            $adminGroupName = [];
+            foreach ($authGroupList as $k => $v)
+            {
+                $childrenAdminIds[] = $v['uid'];
+                if (isset($groupData[$v['group_id']]))
+                    $adminGroupName[$v['uid']][$v['group_id']] = $groupData[$v['group_id']];
+            }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
                     ->where($where)
@@ -70,6 +81,12 @@ class Admin extends Backend
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();
+            foreach ($list as $k => &$v)
+            {
+                $groups = isset($adminGroupName[$v['id']]) ? $adminGroupName[$v['id']] : [];
+                $v['groups'] = implode(',', array_keys($groups));
+                $v['groups_text'] = implode(',', array_values($groups));
+            }
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);

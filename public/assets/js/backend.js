@@ -119,15 +119,10 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 });
             },
             open: function (url, title, options) {
-                title = title == undefined ? "" : title;
+                title = title ? title : "";
                 url = Backend.api.fixurl(url);
                 url = url + (url.indexOf("?") > -1 ? "&" : "?") + "dialog=1";
-                var area;
-                if ($(window).width() < 800) {
-                    area = ["95%", "95%"];
-                } else {
-                    area = ['800px', '600px'];
-                }
+                var area = [$(window).width() > 800 ? '800px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
                 Backend.api.layer.open($.extend({
                     type: 2,
                     title: title,
@@ -188,7 +183,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang', 'moment'], function ($
                 var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
 
                 var oldheg = heg + titHeight + btnHeight;
-                var maxheg = 600;
+                var maxheg = $(window).height() < 600 ? $(window).height() : 600;
                 if (frame.outerWidth() < 768 || that.area[0].indexOf("%") > -1) {
                     maxheg = $(window).height();
                 }

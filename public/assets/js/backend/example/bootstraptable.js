@@ -30,9 +30,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         //模糊搜索
                         {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '模糊搜索，*表示任意字符', style: 'width:200px'},
                         //通过Ajax渲染searchList，也可以使用JSON数据
-                        {field: 'url', title: __('Url'), align: 'left', defaultValue:3, searchList: $.getJSON('ajax/typeahead?search=a&field=row[user_id]'), formatter: Controller.api.formatter.url},
+                        {field: 'url', title: __('Url'), align: 'left', defaultValue: 3, searchList: $.getJSON('ajax/typeahead?search=a&field=row[user_id]'), formatter: Controller.api.formatter.url},
                         //点击IP时同时执行搜索此IP,同时普通搜索使用下拉列表的形式
                         {field: 'ip', title: __('IP'), searchList: ['127.0.0.1', '127.0.0.2'], events: Controller.api.events.ip, formatter: Controller.api.formatter.ip},
+                        //自定义栏位
+                        {field: 'custom', title: __('Custom'), operate: false, formatter: Controller.api.formatter.custom},
                         //browser是一个不存在的字段
                         //通过formatter来渲染数据,同时为它添加上事件
                         {field: 'browser', title: __('Browser'), operate: false, events: Controller.api.events.browser, formatter: Controller.api.formatter.browser},
@@ -49,6 +51,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 //可以控制是否默认显示搜索单表,false则隐藏,默认为false
                 searchFormVisible: true
             });
+            
+            //在表格内容渲染完成后回调的事件
+            table.on('post-body.bs.table', function (e, settings, json, xhr) {
+                
+            });
 
             // 为表格绑定事件
             Table.api.bindevent(table);
@@ -62,6 +69,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             $(document).on("click", ".btn-selected", function () {
                 Layer.alert(JSON.stringify(table.bootstrapTable('getSelections')));
             });
+            
+            //启动和暂停按钮
+            $(document).on("click", ".btn-start,.btn-pause", function () {
+                //在table外不可以使用添加.btn-change的方法
+                //只能自己调用Table.api.multi实现
+                Table.api.multi("changestatus", 0, table, this);
+            });
+
         },
         add: function () {
             Controller.api.bindevent();
@@ -84,6 +99,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     //这里我们直接使用row的数据
                     return '<a class="btn btn-xs btn-browser">' + row.useragent.split(" ")[0] + '</a>';
                 },
+                custom: function (value, row, index) {
+                    //添加上btn-change可以自定义请求的URL进行数据处理
+                    return '<a class="btn btn-xs btn-danger btn-change" data-url="example/bootstraptable/change" data-id="' + row.id + '">' + __('Locked') + '</a>';
+                },
                 operate: function (value, row, index) {
                     //返回字符串加上Table.api.formatter.operate的结果
                     //默认需要按需显示排序/编辑/删除按钮,则需要在Table.api.formatter.operate将table传入
@@ -96,6 +115,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 ip: {
                     //格式为：方法名+空格+DOM元素
                     'click .btn-ip': function (e, value, row, index) {
+                        e.stopPropagation();
                         var options = $("#table").bootstrapTable('getOptions');
                         //这里我们手动将数据填充到表单然后提交
                         $("#commonSearchContent_" + options.idTable + " form [name='ip']").val(value);
@@ -105,11 +125,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 },
                 browser: {
                     'click .btn-browser': function (e, value, row, index) {
+                        e.stopPropagation();
                         Layer.alert("该行数据为: <code>" + JSON.stringify(row) + "</code>");
                     }
                 },
                 operate: $.extend({
                     'click .btn-detail': function (e, value, row, index) {
+                        e.stopPropagation();
                         Backend.api.open('example/bootstraptable/detail/ids/' + row['id'], __('Detail'));
                     }
                 }, Table.api.events.operate)

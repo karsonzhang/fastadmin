@@ -14,6 +14,7 @@ return [
     'Add'                                                   => '添加',
     'Edit'                                                  => '编辑',
     'Delete'                                                => '删除',
+    'Detail'                                                => '详情',
     'Move'                                                  => '移动',
     'Name'                                                  => '名称',
     'Status'                                                => '状态',

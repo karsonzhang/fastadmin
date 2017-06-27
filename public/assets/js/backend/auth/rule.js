@@ -24,13 +24,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     [
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID'},
-                        {field: 'title', title: __('Title'), align: 'left'},
+                        {field: 'title', title: __('Title'), align: 'left', align: 'left', formatter: Controller.api.formatter.title},
                         {field: 'icon', title: __('Icon'), formatter: Controller.api.formatter.icon},
-                        {field: 'name', title: __('Name'), align: 'left'},
-                        {field: 'ismenu', title: __('Ismenu'), align: 'left'},
+                        {field: 'name', title: __('Name'), align: 'left', formatter: Controller.api.formatter.name},
                         {field: 'weigh', title: __('Weigh')},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'id', title: '<a href="javascript:;" class="btn btn-primary btn-xs btn-toggle"><i class="fa fa-chevron-down"></i></a>', operate: false, formatter: Controller.api.formatter.subnode},
+                        {field: 'ismenu', title: __('Ismenu'), align: 'center', formatter: Controller.api.formatter.menu},
+                        {field: 'id', title: '<a href="javascript:;" class="btn btn-success btn-xs btn-toggle"><i class="fa fa-chevron-up"></i></a>', operate: false, formatter: Controller.api.formatter.subnode},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ],
@@ -44,19 +44,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             //默认隐藏所有子节点
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
-                $("a.btn[data-id][data-pid][data-pid!=0]").closest("tr").hide();
-            });
-            //显示隐藏子节点
-            $(document.body).on("click", ".btn-node-sub", function (e) {
-                var status = typeof status !== 'undefined' ? status : $(this).closest("tr").hasClass("selected");
-                $("a.btn[data-pid='" + $(this).data("id") + "']").each(function () {
-                    $(this).closest("tr").toggle(status).toggleClass("selected", status);
-                    $(this).closest("tr").find("input[type=checkbox]").prop("checked", status);
-                    // 展示全部子节点
-                    // $(this).trigger("click", status);
+                //$("a.btn[data-id][data-pid][data-pid!=0]").closest("tr").hide();
+                $(".btn-node-sub.disabled").closest("tr").hide();
+
+                //显示隐藏子节点
+                $(".btn-node-sub").off("click").on("click", function (e) {
+                    var status = $(this).data("shown") ? true : false;
+                    $("a.btn[data-pid='" + $(this).data("id") + "']").each(function () {
+                        $(this).closest("tr").toggle(!status);
+                    });
+                    $(this).data("shown", !status);
+                    return false;
                 });
-                return false;
+
             });
+            //展开隐藏一级
             $(document.body).on("click", ".btn-toggle", function (e) {
                 $("a.btn[data-id][data-pid][data-pid!=0].disabled").closest("tr").hide();
                 var that = this;
@@ -64,13 +66,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 $("i", that).toggleClass("fa-chevron-down", !show);
                 $("i", that).toggleClass("fa-chevron-up", show);
                 $("a.btn[data-id][data-pid][data-pid!=0]").not('.disabled').closest("tr").toggle(show);
+                $(".btn-node-sub[data-pid=0]").data("shown", show);
             });
+            //展开隐藏全部
             $(document.body).on("click", ".btn-toggle-all", function (e) {
                 var that = this;
                 var show = $("i", that).hasClass("fa-plus");
                 $("i", that).toggleClass("fa-plus", !show);
                 $("i", that).toggleClass("fa-minus", show);
-                $("a.btn[data-id][data-pid][data-pid!=0]").closest("tr").toggle(show);
+                $(".btn-node-sub.disabled").closest("tr").toggle(show);
+                $(".btn-node-sub").data("shown", show);
             });
         },
         add: function () {
@@ -81,11 +86,22 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
         },
         api: {
             formatter: {
+                title: function (value, row, index) {
+                    return !row.ismenu ? "<span class='text-muted'>" + value + "</span>" : value;
+                },
+                name: function (value, row, index) {
+                    return !row.ismenu ? "<span class='text-muted'>" + value + "</span>" : value;
+                },
+                menu: function (value, row, index) {
+                    return "<a href='javascript:;' class='btn btn-" + (value ? "info" : "default") + " btn-xs btn-change' data-id='"
+                            + row.id + "' data-params='ismenu=" + (value ? 0 : 1) + "'>" + (value ? __('Yes') : __('No')) + "</a>";
+                },
                 icon: function (value, row, index) {
                     return '<i class="' + value + '"></i>';
                 },
                 subnode: function (value, row, index) {
-                    return '<a href="javascript:;" data-id="' + row['id'] + '" data-pid="' + row['pid'] + '" class="btn btn-primary btn-xs ' + (row['haschild'] == 1 ? '' : 'disabled') + ' btn-node-sub"><i class="fa fa-sitemap"></i></a>';
+                    return '<a href="javascript:;" data-id="' + row['id'] + '" data-pid="' + row['pid'] + '" class="btn btn-xs '
+                            + (row['haschild'] == 1 ? 'btn-success' : 'btn-default disabled') + ' btn-node-sub"><i class="fa fa-sitemap"></i></a>';
                 }
             },
             bindevent: function () {

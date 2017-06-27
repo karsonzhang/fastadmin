@@ -6,8 +6,8 @@ use think\Model;
 
 class {%modelName%} extends Model
 {
-    // 表名,不含前缀
-    protected $name = '{%modelTableName%}';
+    // 表名
+    protected ${%modelTableType%} = '{%modelTableName%}';
     
     // 自动写入时间戳字段
     protected $autoWriteTimestamp = {%modelAutoWriteTimestamp%};

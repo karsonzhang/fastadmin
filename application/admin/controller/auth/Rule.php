@@ -17,6 +17,7 @@ class Rule extends Backend
 
     protected $model = null;
     protected $rulelist = [];
+    protected $multiFields = 'ismenu,status';
 
     public function _initialize()
     {
@@ -131,16 +132,6 @@ class Rule extends Backend
         }
 
         return;
-    }
-
-    /**
-     * 批量更新
-     * @internal
-     */
-    public function multi($ids = "")
-    {
-        // 节点禁止批量操作
-        $this->code = -1;
     }
 
 }
