@@ -3,7 +3,6 @@
 namespace app\admin\controller\wechat;
 
 use app\common\controller\Backend;
-use app\common\model\Configvalue;
 use app\common\model\WechatResponse;
 use EasyWeChat\Foundation\Application;
 use think\Config;
@@ -64,19 +63,47 @@ class Menu extends Backend
 
         try
         {
-            $ret = $app->menu->add(json_decode($this->wechatcfg->value, TRUE));
-            if ($ret->errcode == 0)
+            $hasError = false;
+            $menu = json_decode($this->wechatcfg->value, TRUE);
+            foreach ($menu as $k => $v)
             {
-                $this->code = 1;
+                if (isset($v['sub_button']))
+                {
+                    foreach ($v['sub_button'] as $m => $n)
+                    {
+                        if (isset($n['key']) && !$n['key'])
+                        {
+                            $hasError = true;
+                            break 2;
+                        }
+                    }
+                }
+                else if (isset($v['key']) && !$v['key'])
+                {
+                    $hasError = true;
+                    break;
+                }
+            }
+            if (!$hasError)
+            {
+                $ret = $app->menu->add($menu);
+                if ($ret->errcode == 0)
+                {
+                    $this->code = 1;
+                }
+                else
+                {
+                    $this->msg = $ret->errmsg;
+                }
             }
             else
             {
-                $this->content = $ret->errmsg;
+                $this->msg = __('Invalid parameters');
             }
         }
         catch (Exception $e)
         {
-            $this->content = $e->getMessage();
+            $this->msg = $e->getMessage();
         }
         return;
     }

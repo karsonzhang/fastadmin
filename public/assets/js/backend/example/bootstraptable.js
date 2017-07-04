@@ -30,7 +30,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         //模糊搜索
                         {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '模糊搜索，*表示任意字符', style: 'width:200px'},
                         //通过Ajax渲染searchList，也可以使用JSON数据
-                        {field: 'url', title: __('Url'), align: 'left', defaultValue: 3, searchList: $.getJSON('ajax/typeahead?search=a&field=row[user_id]'), formatter: Controller.api.formatter.url},
+                        {field: 'url', title: __('Url'), align: 'left', searchList: $.getJSON('ajax/typeahead?search=a&field=row[user_id]'), formatter: Controller.api.formatter.url},
                         //点击IP时同时执行搜索此IP,同时普通搜索使用下拉列表的形式
                         {field: 'ip', title: __('IP'), searchList: ['127.0.0.1', '127.0.0.2'], events: Controller.api.events.ip, formatter: Controller.api.formatter.ip},
                         //自定义栏位
@@ -41,7 +41,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         //启用时间段搜索
                         {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime, operate: 'BETWEEN', type: 'datetime', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD HH:mm:ss"'},
                         //我们向操作栏额外添加上一个详情按钮,并保留已有的编辑和删除控制,同时为这个按钮添加上点击事件
-                        {field: 'operate', title: __('Operate'), events: Controller.api.events.operate, formatter: Controller.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), events: Controller.api.events.operate, formatter: function (value, row, index) {
+                                return Table.api.formatter.operate.call(this, value, row, index, table);
+                            }}
                     ],
                 ],
                 //禁用默认搜索
@@ -51,10 +53,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 //可以控制是否默认显示搜索单表,false则隐藏,默认为false
                 searchFormVisible: true
             });
-            
+
             //在表格内容渲染完成后回调的事件
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
-                
+
             });
 
             // 为表格绑定事件
@@ -62,14 +64,29 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             //指定搜索条件
             $(document).on("click", ".btn-singlesearch", function () {
-                table.bootstrapTable('refresh', {query: {filter: JSON.stringify({url: '/admin/index/login.html'}), op: JSON.stringify({url: '='})}});
+                var options = table.bootstrapTable('getOptions');
+                options.pageNumber = 1;
+                options.queryParams = function (params) {
+                    return {
+                        search: params.search,
+                        sort: params.sort,
+                        order: params.order,
+                        filter: JSON.stringify({admin_id: 1}),
+                        op: JSON.stringify({admin_id: '='}),
+                        offset: params.offset,
+                        limit: params.limit,
+                    };
+                };
+                table.bootstrapTable('refresh', {});
+                Toastr.info("当前执行的是自定义搜索");
+                return false;
             });
 
             //获取选中项
             $(document).on("click", ".btn-selected", function () {
                 Layer.alert(JSON.stringify(table.bootstrapTable('getSelections')));
             });
-            
+
             //启动和暂停按钮
             $(document).on("click", ".btn-start,.btn-pause", function () {
                 //在table外不可以使用添加.btn-change的方法
@@ -116,10 +133,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     //格式为：方法名+空格+DOM元素
                     'click .btn-ip': function (e, value, row, index) {
                         e.stopPropagation();
+                        console.log();
+                        var container = $("#table").data("bootstrap.table").$container;
                         var options = $("#table").bootstrapTable('getOptions');
                         //这里我们手动将数据填充到表单然后提交
-                        $("#commonSearchContent_" + options.idTable + " form [name='ip']").val(value);
-                        $("#commonSearchContent_" + options.idTable + " form").trigger('submit');
+                        $("form.form-commonsearch [name='ip']", container).val(value);
+                        $("form.form-commonsearch", container).trigger('submit');
                         Toastr.info("执行了自定义搜索操作");
                     }
                 },

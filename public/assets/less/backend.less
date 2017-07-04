@@ -438,10 +438,12 @@ table.table-template{
     border:none!important;
 }
 
-.note-editor .note-editing-area .note-editable{
-    display: block !important;
+/*修复nice-validator和summernote的编辑框冲突*/
+.nice-validator .note-editor .note-editing-area .note-editable{
+    display:inherit;
 }
 
+/*预览区域*/
 .plupload-preview {
     padding:10px;
     margin-bottom:0;

@@ -15,8 +15,11 @@ class Category Extends Model
     // 定义时间戳字段名
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
-    // 定义字段类型
-    protected $type = [
+    
+    // 追加属性
+    protected $append = [
+        'type_text',
+        'flag_text',
     ];
 
     /**
@@ -29,6 +32,26 @@ class Category Extends Model
         return $typelist;
     }
 
+    public function getTypeTextAttr($value, $data)
+    {
+        $value = $value ? $value : $data['type'];
+        $list = $this->getTypeList();
+        return isset($list[$value]) ? $list[$value] : '';
+    }
+
+    public function getFlagList()
+    {
+        return ['hot' => __('Hot'), 'index' => __('Index'), 'recommend' => __('Recommend')];
+    }
+
+    public function getFlagTextAttr($value, $data)
+    {
+        $value = $value ? $value : $data['flag'];
+        $valueArr = explode(',', $value);
+        $list = $this->getFlagList();
+        return implode(',', array_intersect_key($list, array_flip($valueArr)));
+    }
+
     /**
      * 读取分类列表
      * @param string $type 指定类型
@@ -37,8 +60,7 @@ class Category Extends Model
      */
     public static function getCategoryArray($type = NULL, $status = NULL)
     {
-        $list = collection(self::where(function($query) use($type, $status)
-                {
+        $list = collection(self::where(function($query) use($type, $status) {
                     if (!is_null($type))
                     {
                         $query->where('type', '=', $type);

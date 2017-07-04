@@ -437,16 +437,20 @@ class Ajax extends Backend
         $type = $this->request->get('type');
         $pid = $this->request->get('pid');
         $where = ['status' => 'normal'];
-        if ($type)
+        $categorylist = null;
+        if ($pid !== '')
         {
-            $where['type'] = $type;
-        }
-        if ($pid)
-        {
-            $where['pid'] = $pid;
-        }
+            if ($type)
+            {
+                $where['type'] = $type;
+            }
+            if ($pid)
+            {
+                $where['pid'] = $pid;
+            }
 
-        $categorylist = Db::name('category')->where($where)->field('id as value,name')->order('weigh desc,id desc')->select();
+            $categorylist = Db::name('category')->where($where)->field('id as value,name')->order('weigh desc,id desc')->select();
+        }
         $this->code = 1;
         $this->data = $categorylist;
         return;
@@ -460,17 +464,24 @@ class Ajax extends Backend
         $province = $this->request->get('province');
         $city = $this->request->get('city');
         $where = ['pid' => 0, 'level' => 1];
-        if ($province)
+        $provincelist = null;
+        if ($province !== '')
         {
-            $where['pid'] = $province;
-            $where['level'] = 2;
+            if ($province)
+            {
+                $where['pid'] = $province;
+                $where['level'] = 2;
+            }
+            if ($city !== '')
+            {
+                if ($city)
+                {
+                    $where['pid'] = $city;
+                    $where['level'] = 3;
+                }
+                $provincelist = Db::name('area')->where($where)->field('id as value,name')->select();
+            }
         }
-        if ($city)
-        {
-            $where['pid'] = $city;
-            $where['level'] = 3;
-        }
-        $provincelist = Db::name('area')->where($where)->field('id as value,name')->select();
         $this->code = 1;
         $this->data = $provincelist;
         return;

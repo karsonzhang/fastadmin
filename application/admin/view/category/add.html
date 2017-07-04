@@ -1,54 +1,89 @@
-<form id="add-form" role="form" data-toggle="validator" method="POST" action="">
-    <div class="row">
-        <div class="col-xs-12 col-sm-6">
-            <div class="form-group">
-                <label for="type" class="control-label">{:__('Type')}:</label>
-                {:build_select('row[type]', $typelist, [], ['id'=>'c-type','class'=>'form-control selectpicker','data-rule'=>'required'])}
-            </div>
-            <div class="form-group">
-                <label for="title" class="control-label">{:__('Name')}:</label>
-                <input type="text" class="form-control" id="name" name="row[name]" value="" data-rule="required" />
-            </div>
-            <div class="form-group">
-                <label for="nickname" class="control-label">{:__('Nickname')}:</label>
-                <input type="text" class="form-control" id="nickname" name="row[nickname]" value="" data-rule="required" />
-            </div>
-            <div class="form-group">
-                <label for="keywords" class="control-label">{:__('Keywords')}:</label>
-                <input type="text" class="form-control" id="keywords" name="row[keywords]" value="" />
-            </div>
-            <div class="form-group">
-                <label for="description" class="control-label">{:__('Description')}:</label>
-                <textarea name="row[description]" id="description" class="form-control" cols="30" rows="3"></textarea>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group form-inline">
-                        <label for="weigh" class="control-label">{:__('Weigh')}:</label>
-                        <input type="text" class="form-control" id="weigh" name="row[weigh]" value="0" data-rule="required" size="3" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6">
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
-            <div class="form-group">
-                <label for="pid" class="control-label">{:__('Parent')}:</label>
-                {:build_select('row[pid]', $parentlist, null, ['id'=>'c-pid','class'=>'form-control selectpicker','data-rule'=>'required'])}
-            </div>
-            <div class="form-group">
-                <label for="c-flag" class="control-label">{:__('Flag')}:</label>
-                {:build_select('row[flag]', ['recommend'=>__('Recommend'), 'index'=>__('Index'), 'hot'=>__('Hot')], null, ['id'=>'c-flag','class'=>'form-control selectpicker','data-rule'=>'required'])}
-            </div>
-            <div class="form-group">
-                <label for="content" class="control-label">{:__('Status')}:</label>
-                <div>
-                    {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')])}
-                </div>
+    <div class="form-group">
+        <label for="c-type" class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-type" data-rule="required" class="form-control selectpicker" name="row[type]">
+                {foreach name="typeList" item="vo"}
+                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-pid" class="control-label col-xs-12 col-sm-2">{:__('Pid')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-flag" data-rule="required" class="form-control selectpicker" name="row[pid]">
+                {foreach name="parentList" item="vo"}
+                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" data-rule="required" class="form-control" name="row[name]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-nickname" class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-nickname" data-rule="required" class="form-control" name="row[nickname]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-flag" class="control-label col-xs-12 col-sm-2">{:__('Flag')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            <select  id="c-flag" class="form-control selectpicker" multiple="" name="row[flag][]">
+                {foreach name="flagList" item="vo"}
+                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-image" class="control-label col-xs-12 col-sm-2">{:__('Image')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="form-inline">
+                <input id="c-image" class="form-control" size="50" name="row[image]" type="text" value="">
+                <span><button type="button" id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-mimetype="image/*" data-multiple="false" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-input-id="c-image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                <ul class="row list-inline plupload-preview" id="p-image"></ul>
             </div>
         </div>
     </div>
-    <div class="form-group hidden layer-footer">
+    <div class="form-group">
+        <label for="c-keywords" class="control-label col-xs-12 col-sm-2">{:__('Keywords')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-keywords" class="form-control" name="row[keywords]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-description" class="control-label col-xs-12 col-sm-2">{:__('Description')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-description" class="form-control" name="row[description]"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-weigh" class="form-control" name="row[weigh]" type="number" value="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')])}
+        </div>
+    </div>
+    <div class="form-group layer-footer">
         <label class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
             <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>

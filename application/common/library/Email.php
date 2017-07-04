@@ -177,7 +177,7 @@ class Email
                 $headers .= "Content-type: text/html; charset=" . $this->options['charset'] . "\r\n";
                 $headers .= "To: {$this->options['to_name']} <{$this->options['to']}>\r\n"; //收件人
                 $headers .= "From: {$this->options['from_name']} <{$this->options['from']}>\r\n"; //发件人
-                $result = mail($this->options['mail_to'], $this->options['subject'], $this->options['body'], $headers);
+                $result = mail($this->options['to'], $this->options['subject'], $this->options['body'], $headers);
                 $this->setError($result ? '' : error_get_last()['message']);
                 break;
             default:

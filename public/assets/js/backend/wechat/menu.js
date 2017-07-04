@@ -254,7 +254,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'sortable'], function
             });
             $(document).on('click', "#menuSyn", function () {
                 $.post("wechat/menu/sync", {}, function (ret) {
-
                     var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
                     if (ret.code == 1) {
                         Backend.api.toastr.success('菜单同步更新成功，生效时间看微信官网说明，或者你重新关注微信号！');

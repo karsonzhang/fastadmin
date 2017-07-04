@@ -24,15 +24,16 @@ class Category extends Backend
         $this->model = model('Category');
 
         $tree = Tree::instance();
-        $tree->init(CategoryModel::getCategoryArray(), 'pid');
+        $tree->init($this->model->order('weigh desc,id desc')->select(), 'pid');
         $this->categorylist = $tree->getTreeList($tree->getTreeArray(0), 'name');
         $categorydata = [0 => __('None')];
         foreach ($this->categorylist as $k => $v)
         {
             $categorydata[$v['id']] = $v['name'];
         }
-        $this->view->assign("typelist", CategoryModel::getTypeList());
-        $this->view->assign("parentlist", $categorydata);
+        $this->view->assign("flagList", $this->model->getFlagList());
+        $this->view->assign("typeList", CategoryModel::getTypeList());
+        $this->view->assign("parentList", $categorydata);
     }
 
     /**

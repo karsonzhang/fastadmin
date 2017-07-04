@@ -20,7 +20,7 @@ $sitename = "FastAdmin";
 
 $link = array(
     'qqun'  => "https://jq.qq.com/?_wv=1027&amp;k=487PNBb",
-    'osc'   => 'https://git.oschina.net/karson/fastadmin',
+    'osc'   => 'https://git.oschina.net/karson/fastadmin/attach_files',
     'home'  => 'http://www.fastadmin.net?ref=install',
     'forum' => 'http://forum.fastadmin.net?ref=install',
     'doc'   => 'http://doc.fastadmin.net?ref=install',

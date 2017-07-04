@@ -48,7 +48,7 @@
             <div class="caption">
                 <h4><%=item.title?item.title:'无'%></h4>
                 <p class="text-muted">操作者IP:<%=item.ip%></p>
-                <p class="text-muted">操作时间:<%=Moment(item.createtime).format("YYYY-MM-DD HH:mm:ss")%></p>
+                <p class="text-muted">操作时间:<%=Moment(item.createtime*1000).format("YYYY-MM-DD HH:mm:ss")%></p>
                 <p>
                     <!--详情的事件需要在JS中手动绑定-->
                     <a href="#" class="btn btn-primary btn-success btn-detail" data-id="<%=item.id%>"><i class="fa fa-camera"></i> 详情</a> 

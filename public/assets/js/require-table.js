@@ -113,31 +113,33 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', true);
 
-                    // 挺拽选择,需要重新绑定事件
-                    require(['drag', 'drop'], function () {
-                        $(Table.config.firsttd, table).drag("start", function (ev, dd) {
-                            return $('<div class="selection" />').css('opacity', .65).appendTo(document.body);
-                        }).drag(function (ev, dd) {
-                            $(dd.proxy).css({
-                                top: Math.min(ev.pageY, dd.startY),
-                                left: Math.min(ev.pageX, dd.startX),
-                                height: Math.abs(ev.pageY - dd.startY),
-                                width: Math.abs(ev.pageX - dd.startX)
+                    if ($(Table.config.firsttd, table).find("input[type='checkbox'][data-index]").size() > 0) {
+                        // 挺拽选择,需要重新绑定事件
+                        require(['drag', 'drop'], function () {
+                            $(Table.config.firsttd, table).drag("start", function (ev, dd) {
+                                return $('<div class="selection" />').css('opacity', .65).appendTo(document.body);
+                            }).drag(function (ev, dd) {
+                                $(dd.proxy).css({
+                                    top: Math.min(ev.pageY, dd.startY),
+                                    left: Math.min(ev.pageX, dd.startX),
+                                    height: Math.abs(ev.pageY - dd.startY),
+                                    width: Math.abs(ev.pageX - dd.startX)
+                                });
+                            }).drag("end", function (ev, dd) {
+                                $(dd.proxy).remove();
                             });
-                        }).drag("end", function (ev, dd) {
-                            $(dd.proxy).remove();
+                            $(Table.config.firsttd, table).drop("start", function () {
+                                Table.api.toggleattr(this);
+                            }).drop(function () {
+                                Table.api.toggleattr(this);
+                            }).drop("end", function () {
+                                Table.api.toggleattr(this);
+                            });
+                            $.drop({
+                                multi: true
+                            });
                         });
-                        $(Table.config.firsttd, table).drop("start", function () {
-                            Table.api.toggleattr(this);
-                        }).drop(function () {
-                            Table.api.toggleattr(this);
-                        }).drop("end", function () {
-                            Table.api.toggleattr(this);
-                        });
-                        $.drop({
-                            multi: true
-                        });
-                    });
+                    }
                 });
 
                 // 处理选中筛选框后按钮的状态统一变更
