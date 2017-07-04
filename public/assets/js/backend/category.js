@@ -23,6 +23,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 sortName: 'weigh',
                 columns: [
                     [
+                        {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'type', title: __('Type')},
                         {field: 'name', title: __('Name'), align:'left'},
