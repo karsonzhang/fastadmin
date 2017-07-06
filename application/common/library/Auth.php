@@ -9,12 +9,13 @@ use fast\ucenter\client\Client;
 use think\Cookie;
 use think\Db;
 use think\Exception;
+use think\Request;
 use think\Validate;
 
 /**
  * Auth类
  */
-class Auth
+class Auth implements \JsonSerializable, \ArrayAccess
 {
 
     const ERR_ACCOUNT_IS_INCORRECT = 'Account is incorrect';
@@ -56,6 +57,15 @@ class Auth
         }
 
         return self::$instance;
+    }
+
+    /**
+     * 
+     * @return User
+     */
+    public function getModel()
+    {
+        return $this->user;
     }
 
     public function __get($name)
@@ -277,6 +287,10 @@ class Auth
             {
                 return FALSE;
             }
+            if (Token::identity($token) != $user['id'])
+            {
+                return FALSE;
+            }
             $this->user = $user;
             $this->_logined = TRUE;
             return TRUE;
@@ -415,8 +429,7 @@ class Auth
             }
         }
         // 调用事务删除账号
-        $result = Db::transaction(function($db) use($user_id)
-                {
+        $result = Db::transaction(function($db) use($user_id) {
                     // 删除会员
                     User::destroy($user_id);
 
@@ -456,6 +469,31 @@ class Auth
     public function getEncryptPassword($password, $salt = '')
     {
         return md5(md5($password) . $salt);
+    }
+    
+    
+
+    /**
+     * 检测当前控制器和方法是否匹配传递的数组
+     *
+     * @param array $arr 需要验证权限的数组
+     */
+    public function match($arr = [])
+    {
+        $request = Request::instance();
+        $arr = is_array($arr) ? $arr : explode(',', $arr);
+        if (!$arr)
+        {
+            return FALSE;
+        }
+        // 是否存在
+        if (in_array(strtolower($request->action()), $arr) || in_array('*', $arr))
+        {
+            return TRUE;
+        }
+
+        // 没找到匹配
+        return FALSE;
     }
 
     /**
@@ -575,6 +613,38 @@ class Auth
     public function getError()
     {
         return __($this->_error);
+    }
+
+    public function __toString()
+    {
+        return $this->user->toJson();
+    }
+
+    // JsonSerializable
+    public function jsonSerialize()
+    {
+        return $this->user->toArray();
+    }
+
+    // ArrayAccess
+    public function offsetSet($name, $value)
+    {
+        $this->user->setAttr($name, $value);
+    }
+
+    public function offsetExists($name)
+    {
+        return $this->user->__isset($name);
+    }
+
+    public function offsetUnset($name)
+    {
+        $this->user->__unset($name);
+    }
+
+    public function offsetGet($name)
+    {
+        return $this->user->getAttr($name);
     }
 
 }

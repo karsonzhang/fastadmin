@@ -79,7 +79,7 @@ class Auth extends \fast\Auth
         if ($id && $keeptime && $expiretime && $key && $expiretime > time())
         {
             $admin = Admin::get($id);
-            if (!$admin)
+            if (!$admin || !$admin->token)
             {
                 return false;
             }

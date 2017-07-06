@@ -12,8 +12,8 @@ use think\Validate;
 class Index extends Backend
 {
 
-    protected $noNeedLogin = ['login', 'logout'];
-    protected $noNeedRight = ['index'];
+    protected $noNeedLogin = ['login'];
+    protected $noNeedRight = ['index', 'logout'];
     protected $layout = '';
 
     public function _initialize()

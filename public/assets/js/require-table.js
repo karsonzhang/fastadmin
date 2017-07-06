@@ -34,6 +34,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
             mobileResponsive: true,
             cardView: true,
             checkOnInit: true,
+            escape:true,
             extend: {
                 index_url: '',
                 add_url: '',

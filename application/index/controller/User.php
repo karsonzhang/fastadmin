@@ -18,6 +18,7 @@ class User extends Frontend
 
     // 使用布局
     protected $layout = 'bootstrap';
+    protected $noNeedLogin = ['*'];
 
     public function _initialize()
     {

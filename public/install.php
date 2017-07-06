@@ -1,6 +1,8 @@
 <?php
 /**
  * FastAdmin安装程序
+ * 
+ * 安装完成后建议删除此文件
  * @author Karson
  * @website http://www.fastadmin.net
  */

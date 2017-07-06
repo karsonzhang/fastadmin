@@ -165,7 +165,7 @@ class Backend extends Controller
             'controllername' => $controllername,
             'actionname'     => $actionname,
             'jsname'         => 'backend/' . str_replace('.', '/', $controllername),
-            'moduleurl'      => url("/{$modulename}", '', false),
+            'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang,
             'referer'        => Session::get("referer")
         ];

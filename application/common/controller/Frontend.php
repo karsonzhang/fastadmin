@@ -7,15 +7,40 @@ use app\common\model\Configvalue;
 use think\Config;
 use think\Controller;
 use think\Lang;
+use think\Session;
 
 class Frontend extends Controller
 {
+
+    /**
+     * 返回码,默认为null,当设置了该值后将输出json数据
+     * @var int
+     */
+    protected $code = null;
+
+    /**
+     * 返回内容,默认为null,当设置了该值后将输出json数据
+     * @var mixed
+     */
+    protected $data = null;
+
+    /**
+     * 返回文本,默认为空
+     * @var mixed
+     */
+    protected $msg = '';
 
     /**
      *
      * @var Auth
      */
     protected $user = null;
+
+    /**
+     * 无需登录的方法，默认全部都无需登录
+     * @var array
+     */
+    protected $noNeedLogin = ['*'];
 
     /**
      * 布局模板
@@ -38,10 +63,21 @@ class Frontend extends Controller
 
         // 检测当前是否登录并进行初始化
         $this->user->init();
-
+        
+        // 检测是否需要验证登录
+        if (!$this->user->match($this->noNeedLogin))
+        {
+            //检测是否登录
+            if (!$this->user->isLogin())
+            {
+                $url = Session::get('referer');
+                $url = $url ? $url : $this->request->url();
+                $this->error(__('Please login first'), url('/user/login', ['url' => $url]));
+            }
+        }
+        
         // 将auth对象渲染至视图
         $this->view->assign("user", $this->user);
-
         // 如果有使用模板布局
         if ($this->layout)
         {
@@ -68,7 +104,7 @@ class Frontend extends Controller
         $this->assign('site', $site);
         $this->assign('config', $config);
     }
-    
+
     /**
      * 加载语言文件
      * @param string $name
@@ -76,6 +112,19 @@ class Frontend extends Controller
     protected function loadlang($name)
     {
         Lang::load(APP_PATH . $this->request->module() . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $name) . '.php');
+    }
+
+    /**
+     * 析构方法
+     *
+     */
+    public function __destruct()
+    {
+        //判断是否设置code值,如果有则变动response对象的正文
+        if (!is_null($this->code))
+        {
+            $this->result($this->data, $this->code, $this->msg, 'json');
+        }
     }
 
 }

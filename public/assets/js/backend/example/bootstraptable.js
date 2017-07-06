@@ -42,7 +42,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'createtime', title: __('Create time'), formatter: Table.api.formatter.datetime, operate: 'BETWEEN', type: 'datetime', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD HH:mm:ss"'},
                         //我们向操作栏额外添加上一个详情按钮,并保留已有的编辑和删除控制,同时为这个按钮添加上点击事件
                         {field: 'operate', title: __('Operate'), events: Controller.api.events.operate, formatter: function (value, row, index) {
-                                return Table.api.formatter.operate.call(this, value, row, index, table);
+                                var detail = '<a class="btn btn-xs btn-success btn-detail">详情</a> ';
+                                return detail + Table.api.formatter.operate.call(this, value, row, index, table);
                             }}
                     ],
                 ],
