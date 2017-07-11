@@ -7,25 +7,26 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
 
             // 表格1
             var table1 = $("#table1").bootstrapTable({
-                url: 'general/configvalue/index',
+                url: 'general/attachment/index',
                 extend: {
-                    index_url: 'general/configvalue/index',
-                    add_url: 'general/configvalue/add',
-                    edit_url: 'general/configvalue/edit',
-                    del_url: 'general/configvalue/del',
-                    multi_url: 'general/configvalue/multi',
-                    table: 'configvalue',
+                    index_url: 'general/attachment/index',
+                    add_url: 'general/attachment/add',
+                    edit_url: 'general/attachment/edit',
+                    del_url: 'general/attachment/del',
+                    multi_url: 'general/attachment/multi',
+                    table: 'attachment',
                 },
                 toolbar: '#toolbar1',
-                sortName: 'weigh',
+                sortName: 'id',
                 search: false,
                 columns: [
                     [
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID'},
-                        {field: 'name', title: __('Name')},
-                        {field: 'weigh', title: __('Weigh')},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
+                        {field: 'url', title: __('Url'), formatter: Table.api.formatter.url},
+                        {field: 'imagewidth', title: __('Imagewidth')},
+                        {field: 'imageheight', title: __('Imageheight')},
+                        {field: 'mimetype', title: __('Mimetype')},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]

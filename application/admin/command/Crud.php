@@ -214,8 +214,12 @@ class Crud extends Command
                 throw new Exception("table not found");
             }
         }
+        else
+        {
+            $table = stripos($table, $prefix) === 0 ? substr($table, strlen($prefix)) : $table;
+        }
         $tableInfo = $tableInfo[0];
-        
+
         $relationModelTableType = 'table';
         //检查关联表
         if ($relation)
@@ -231,6 +235,10 @@ class Crud extends Command
                 {
                     throw new Exception("relation table not found");
                 }
+            }
+            else
+            {
+                $relation = stripos($relation, $prefix) === 0 ? substr($relation, strlen($prefix)) : $relation;
             }
         }
 
@@ -442,8 +450,8 @@ class Crud extends Command
                     $fieldName = "row[{$field}]";
                     $defaultValue = $v['COLUMN_DEFAULT'];
                     $editValue = "{\$row.{$field}}";
-                    // 如果默认值为空,则是一个必选项
-                    if ($v['COLUMN_DEFAULT'] == '')
+                    // 如果默认值非null,则是一个必选项
+                    if (!is_null($v['COLUMN_DEFAULT']))
                     {
                         $attrArr['data-rule'] = 'required';
                     }
@@ -511,6 +519,7 @@ class Crud extends Command
                     }
                     else if ($inputType == 'checkbox' || $inputType == 'radio')
                     {
+                        unset($attrArr['data-rule']);
                         $fieldName = $inputType == 'checkbox' ? $fieldName .= "[]" : $fieldName;
                         $attrArr['name'] = "row[{$fieldName}]";
 
@@ -534,6 +543,7 @@ class Crud extends Command
                     }
                     else if ($inputType == 'switch')
                     {
+                        unset($attrArr['data-rule']);
                         if ($defaultValue === '1' || $defaultValue === 'Y')
                         {
                             $yes = $defaultValue;
@@ -560,10 +570,12 @@ class Crud extends Command
                             $defaultValue = '';
                             $attrArr['data-rule'] = 'required';
                             $cssClassArr[] = 'selectpage';
-                            $attrArr['data-db-table'] = substr($field, 0, strripos($field, '_'));
+                            $selectpageController = str_replace('_', '/', substr($field, 0, strripos($field, '_')));
+                            $attrArr['data-source'] = $selectpageController . "/index";
                             //如果是类型表需要特殊处理下
-                            if ($attrArr['data-db-table'] == 'category')
+                            if ($selectpageController == 'category')
                             {
+                                $attrArr['data-source'] = 'category/selectpage';
                                 $attrArr['data-params'] = '##replacetext##';
                                 $search = '"##replacetext##"';
                                 $replace = '\'{"custom[type]":"' . $table . '"}\'';
@@ -677,6 +689,12 @@ class Crud extends Command
             $validateNamespace = "{$appNamespace}\\" . $moduleName . "\\validate";
             $validateName = $modelName;
 
+            $modelInit = '';
+            if ($priKey != $order)
+            {
+                $modelInit = $this->getReplacedStub('mixins' . DS . 'modelinit', ['order' => $order]);
+            }
+
             $data = [
                 'controllerNamespace'     => $controllerNamespace,
                 'modelNamespace'          => $modelNamespace,
@@ -716,7 +734,8 @@ class Crud extends Command
                 'getEnumList'             => implode("\n\n", $getEnumArr),
                 'getAttrList'             => implode("\n\n", $getAttrArr),
                 'setAttrList'             => implode("\n\n", $setAttrArr),
-                'modelMethod'             => '',
+                'modelInit'               => $modelInit,
+                'modelRelationMethod'     => '',
             ];
 
             //如果使用关联模型
@@ -734,7 +753,7 @@ class Crud extends Command
                 $data['relationForeignKey'] = $relationForeignKey;
                 $data['relationPrimaryKey'] = $relationPrimaryKey ? $relationPrimaryKey : $priKey;
                 //构造关联模型的方法
-                $data['modelMethod'] = $this->getReplacedStub('modelmethod', $data);
+                $data['modelRelationMethod'] = $this->getReplacedStub('mixins' . DS . 'modelrelationmethod', $data);
             }
 
             // 生成控制器文件
@@ -1138,7 +1157,6 @@ EOD;
     protected function getJsColumn($field, $datatype = '', $extend = '')
     {
         $lang = ucfirst($field);
-        $html = str_repeat(" ", 24) . "{field: '{$field}{$extend}', title: __('{$lang}')";
         $formatter = '';
         foreach ($this->fieldFormatterSuffix as $k => $v)
         {
@@ -1159,7 +1177,12 @@ EOD;
                 }
             }
         }
-        $formatter = $extend ? '' : $formatter;
+        if ($formatter)
+        {
+            $extend = '';
+        }
+        $html = str_repeat(" ", 24) . "{field: '{$field}{$extend}', title: __('{$lang}')";
+        //$formatter = $extend ? '' : $formatter;
         if ($extend)
         {
             $html .= ", operate:false";

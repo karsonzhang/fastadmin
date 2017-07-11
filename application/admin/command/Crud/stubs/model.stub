@@ -21,6 +21,7 @@ class {%modelName%} extends Model
 {%appendAttrList%}
     ];
     
+{%modelInit%}
     
 {%getEnumList%}
 
@@ -28,5 +29,5 @@ class {%modelName%} extends Model
 
 {%setAttrList%}
 
-{%modelMethod%}
+{%modelRelationMethod%}
 }

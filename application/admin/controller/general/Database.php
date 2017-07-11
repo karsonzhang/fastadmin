@@ -28,14 +28,6 @@ class Database extends Backend
             $tables[] = ['name' => reset($row), 'rows' => 0];
         }
         $data['tables'] = $tables;
-        /*
-          $one = Db::table('configvalue')->where('name', 'sql')->find();
-          $saved_sql = [];
-          if ($one && $one['content'])
-          $saved_sql = explode('###', $one['content']);
-
-          $data['saved_sql'] = array_values(array_filter($saved_sql));
-         * */
         $data['saved_sql'] = [];
         $this->view->assign($data);
         return $this->view->fetch();

@@ -1,5 +1,0 @@
-
-    public function {%relationMethod%}()
-    {
-        return $this->{%relationMode%}('{%relationModelName%}', '{%relationForeignKey%}', '{%pk%}')->setEagerlyType(0);
-    }

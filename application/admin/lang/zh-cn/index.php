@@ -2,6 +2,7 @@
 
 return [
     'Title'                                                      => '标题',
+    'Search menu'                                                => '搜索菜单',
     'Layout Options'                                             => '布局设定',
     'Fixed Layout'                                               => '固定布局',
     'You can\'t use fixed and boxed layouts together'            => '盒子模型和固定布局不能同时启作用',

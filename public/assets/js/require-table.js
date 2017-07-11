@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Backend, Toastr, Moment) {
+define(['jquery', 'bootstrap', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Moment) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -34,7 +34,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
             mobileResponsive: true,
             cardView: true,
             checkOnInit: true,
-            escape:true,
+            escape: true,
             extend: {
                 index_url: '',
                 add_url: '',
@@ -156,14 +156,14 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 // 添加按钮事件
                 $(toolbar).on('click', Table.config.addbtn, function () {
                     var ids = Table.api.selectedids(table);
-                    Backend.api.open(options.extend.add_url + "/ids" + (ids.length > 0 ? '/' : '') + ids.join(","), __('Add'));
+                    Fast.api.open(options.extend.add_url + "/ids" + (ids.length > 0 ? '/' : '') + ids.join(","), __('Add'));
                 });
                 // 批量编辑按钮事件
                 $(toolbar).on('click', Table.config.editbtn, function () {
                     var ids = Table.api.selectedids(table);
                     //循环弹出多个编辑框
                     $.each(ids, function (i, j) {
-                        Backend.api.open(options.extend.edit_url + "/ids/" + j, __('Edit'));
+                        Fast.api.open(options.extend.edit_url + "/ids/" + j, __('Edit'));
                     });
                 });
                 // 批量操作按钮事件
@@ -175,12 +175,12 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 $(toolbar).on('click', Table.config.delbtn, function () {
                     var that = this;
                     var ids = Table.api.selectedids(table);
-                    var index = Backend.api.layer.confirm(
+                    var index = Layer.confirm(
                             __('Are you sure you want to delete the %s selected item?', ids.length),
                             {icon: 3, title: __('Warning'), offset: 0, shadeClose: true},
                             function () {
                                 Table.api.multi("del", ids, table, that);
-                                Backend.api.layer.close(index);
+                                Layer.close(index);
                             }
                     );
                 });
@@ -211,7 +211,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                                     table: options.extend.table
                                 }
                             };
-                            Backend.api.ajax(params, function (data) {
+                            Fast.api.ajax(params, function (data) {
                                 Toastr.success(__('Operation completed'));
                                 table.bootstrapTable('refresh');
                             });
@@ -228,18 +228,18 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 });
                 $(table).on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
-                    Backend.api.open(options.extend.edit_url + "/ids/" + $(this).data("id"), __('Edit'));
+                    Fast.api.open(options.extend.edit_url + "/ids/" + $(this).data("id"), __('Edit'));
                 });
                 $(table).on("click", "[data-id].btn-del", function (e) {
                     e.preventDefault();
                     var id = $(this).data("id");
                     var that = this;
-                    var index = Backend.api.layer.confirm(
+                    var index = Layer.confirm(
                             __('Are you sure you want to delete this item?'),
                             {icon: 3, title: __('Warning'), shadeClose: true},
                             function () {
                                 Table.api.multi("del", id, table, that);
-                                Backend.api.layer.close(index);
+                                Layer.close(index);
                             }
                     );
 
@@ -254,10 +254,10 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                 var options = table.bootstrapTable('getOptions');
                 var data = element ? $(element).data() : {};
                 var url = typeof data.url !== "undefined" ? data.url : (action == "del" ? options.extend.del_url : options.extend.multi_url);
-                url = url + "/ids/" + ($.isArray(ids) ? ids.join(",") : ids);
+                url = url + (url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + ($.isArray(ids) ? ids.join(",") : ids);
                 var params = typeof data.params !== "undefined" ? (typeof data.params == 'object' ? $.param(data.params) : data.params) : '';
                 var options = {url: url, data: {action: action, ids: ids, params: params}};
-                Backend.api.ajax(options, function (data) {
+                Fast.api.ajax(options, function (data) {
                     Toastr.success(__('Operation completed'));
                     table.bootstrapTable('refresh');
                 });
@@ -268,7 +268,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     'click .btn-editone': function (e, value, row, index) {
                         e.stopPropagation();
                         var options = $(this).closest('table').bootstrapTable('getOptions');
-                        Backend.api.open(options.extend.edit_url + "/ids/" + row[options.pk], __('Edit'));
+                        Fast.api.open(options.extend.edit_url + "/ids/" + row[options.pk], __('Edit'));
                     },
                     'click .btn-delone': function (e, value, row, index) {
                         e.stopPropagation();
@@ -281,14 +281,14 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                         if ($(window).width() < 480) {
                             top = left = undefined;
                         }
-                        var index = Backend.api.layer.confirm(
+                        var index = Layer.confirm(
                                 __('Are you sure you want to delete this item?'),
                                 {icon: 3, title: __('Warning'), offset: [top, left], shadeClose: true},
                                 function () {
                                     var table = $(that).closest('table');
                                     var options = table.bootstrapTable('getOptions');
                                     Table.api.multi("del", row[options.pk], table, that);
-                                    Backend.api.layer.close(index);
+                                    Layer.close(index);
                                 }
                         );
                     }
@@ -304,15 +304,15 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'moment', 'bootstrap-table',
                     return '<i class="' + value + '"></i> ' + value;
                 },
                 image: function (value, row, index, custom) {
-                    var classname = typeof custom !== 'undefined' ? custom : 'img-rounded img-sm';
-                    return '<img class="' + classname + '" src="' + Backend.api.cdnurl(value) + '" />';
+                    var classname = typeof custom !== 'undefined' ? custom : 'img-sm img-center';
+                    return '<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />';
                 },
                 images: function (value, row, index, custom) {
-                    var classname = typeof custom !== 'undefined' ? custom : 'img-rounded img-sm';
+                    var classname = typeof custom !== 'undefined' ? custom : 'img-sm img-center';
                     var arr = value.split(',');
                     var html = [];
                     $.each(arr, function (i, value) {
-                        html.push('<img class="' + classname + '" src="' + Backend.api.cdnurl(value) + '" />');
+                        html.push('<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />');
                     });
                     return html.join(' ');
                 },

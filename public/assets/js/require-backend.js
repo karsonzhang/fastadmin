@@ -6,7 +6,7 @@ require.config({
             main: 'moment'
         }],
     //在打包压缩时将会把include中的模块合并到主文件中
-    include: ['css', 'layer', 'toastr', 'backend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs', 'selectpage'],
+    include: ['css', 'layer', 'toastr', 'fast', 'backend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs', 'selectpage'],
     paths: {
         'lang': "empty:",
         'form': 'require-form',
@@ -26,12 +26,14 @@ require.config({
         'bootstrap': '../libs/bootstrap/dist/js/bootstrap.min',
         'bootstrap-datetimepicker': '../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
         'bootstrap-select': '../libs/bootstrap-select/dist/js/bootstrap-select.min',
+        'bootstrap-select-lang': '../libs/bootstrap-select/dist/js/i18n/defaults-zh_CN',
         'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
         'tableexport': '../libs/tableExport.jquery.plugin/tableExport.min',
         'dragsort': '../libs/dragsort/jquery.dragsort',
+        'qrcode': '../libs/jquery-qrcode/jquery.qrcode.min',
         'sortable': '../libs/Sortable/Sortable.min',
         'addtabs': '../libs/jquery-addtabs/jquery.addtabs',
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
@@ -98,6 +100,7 @@ require.config({
 //            'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
         ],
         'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
+        'bootstrap-select-lang': ['bootstrap-select'],
         'summernote': ['../libs/summernote/dist/summernote.min', 'css!../libs/summernote/dist/summernote.css'],
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],
@@ -134,36 +137,18 @@ require(['jquery', 'bootstrap'], function ($, undefined) {
 
     // 初始化
     $(function () {
-        require(['backend'], function (Module) {
-            // 对相对地址进行处理
-            $.ajaxSetup({
-                beforeSend: function (xhr, setting) {
-                    setting.url = Module.api.fixurl(setting.url);
+        require(['fast'], function (Fast) {
+            require(['backend'], function (Backend) {
+                //加载相应模块
+                if (Config.jsname) {
+                    require([Config.jsname], function (Controller) {
+                        Controller[Config.actionname] != undefined && Controller[Config.actionname]();
+                    }, function (e) {
+                        console.error(e);
+                        // 这里可捕获模块加载的错误
+                    });
                 }
             });
-            // 绑定ESC关闭窗口事件
-            $(window).keyup(function (e) {
-                if (e.keyCode == 27) {
-                    if ($(".layui-layer").size() > 0) {
-                        var index = 0;
-                        $(".layui-layer").each(function () {
-                            index = Math.max(index, parseInt($(this).attr("times")));
-                        });
-                        if (index) {
-                            Module.api.layer.close(index);
-                        }
-                    }
-                }
-            });
-            //加载相应模块
-            if (Config.jsname) {
-                require([Config.jsname], function (Controller) {
-                    Controller[Config.actionname] != undefined && Controller[Config.actionname]();
-                }, function (e) {
-                    console.error(e);
-                    // 这里可捕获模块加载的错误
-                });
-            }
         });
     });
 });

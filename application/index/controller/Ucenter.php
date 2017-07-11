@@ -40,7 +40,7 @@ class Ucenter extends Uc
     /**
      * 删除用户
      */
-    function deleteuser()
+    protected function deleteuser()
     {
         $uids = $this->get['ids'];
         $uids = is_array($uids) ? $uids : explode(',', $uids);
@@ -54,7 +54,7 @@ class Ucenter extends Uc
     /**
      * 获取标签
      */
-    function gettag()
+    protected function gettag()
     {
         $name = $this->get['id'];
         if (!API_GETTAG)
@@ -82,7 +82,7 @@ class Ucenter extends Uc
     /**
      * 同步注册
      */
-    function synregister()
+    protected function synregister()
     {
         $uid = $this->get['uid'];
         $username = $this->get['username'];
@@ -102,7 +102,7 @@ class Ucenter extends Uc
     /**
      * 同步登录
      */
-    function synlogin()
+    protected function synlogin()
     {
         $uid = $this->get['uid'];
         $username = $this->get['username'];
@@ -119,7 +119,7 @@ class Ucenter extends Uc
     /**
      * 同步退出
      */
-    function synlogout()
+    protected function synlogout()
     {
         if (!API_SYNLOGOUT)
         {
@@ -135,7 +135,7 @@ class Ucenter extends Uc
     /**
      * 添加用户
      */
-    function adduser()
+    protected function adduser()
     {
         $uid = $this->get['uid'];
         $username = $this->get['username'];
@@ -167,7 +167,7 @@ class Ucenter extends Uc
     /**
      * 更新用户信息,包含用户名,密码,邮箱,手机号和其它扩展信息
      */
-    function updateinfo()
+    protected function updateinfo()
     {
         if (!API_UPDATEINFO)
         {
@@ -211,7 +211,7 @@ class Ucenter extends Uc
     /**
      * 更新禁言文字
      */
-    function updatebadwords()
+    protected function updatebadwords()
     {
         if (!API_UPDATEBADWORDS)
         {
@@ -238,7 +238,7 @@ class Ucenter extends Uc
     /**
      * 更新HOSTS
      */
-    function updatehosts()
+    protected function updatehosts()
     {
         if (!API_UPDATEHOSTS)
         {
@@ -256,7 +256,7 @@ class Ucenter extends Uc
     /**
      * 更新App信息
      */
-    function updateapps()
+    protected function updateapps()
     {
         if (!API_UPDATEAPPS)
         {
@@ -291,7 +291,7 @@ class Ucenter extends Uc
     /**
      * 更新客户端配置文件
      */
-    function updateclient()
+    protected function updateclient()
     {
         if (!API_UPDATECLIENT)
         {
@@ -309,7 +309,7 @@ class Ucenter extends Uc
     /**
      * 更新积分
      */
-    function updatecredit()
+    protected function updatecredit()
     {
         if (!API_UPDATECREDIT)
         {
@@ -324,7 +324,7 @@ class Ucenter extends Uc
     /**
      * 获取积分
      */
-    function getcredit()
+    protected function getcredit()
     {
         if (!API_GETCREDIT)
         {
@@ -335,7 +335,7 @@ class Ucenter extends Uc
     /**
      * 获取积分配置
      */
-    function getcreditsettings()
+    protected function getcreditsettings()
     {
         if (!API_GETCREDITSETTINGS)
         {
@@ -351,7 +351,7 @@ class Ucenter extends Uc
     /**
      * 更新积分配置
      */
-    function updatecreditsettings()
+    protected function updatecreditsettings()
     {
         if (!API_UPDATECREDITSETTINGS)
         {

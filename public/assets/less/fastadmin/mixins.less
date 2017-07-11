@@ -173,6 +173,7 @@
   .sidebar-form {
     .border-radius(3px);
     border: 1px solid lighten(@sidebar-dark-bg, 10%);
+    background-color: lighten(@sidebar-dark-bg, 10%);
     margin: 10px 10px;
     input[type="text"], .btn {
       box-shadow: none;
@@ -189,9 +190,12 @@
         background-color: #fff;
         color: #666;
       }
+      &:focus + .input-group-btn {
+          background:#fff;
+          .border-radius(0, 2px, 0, 2px);
+      }
       &:focus + .input-group-btn .btn {
         border-left-color: #fff;
-
       }
     }
     .btn {

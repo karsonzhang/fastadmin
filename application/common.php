@@ -1,6 +1,5 @@
 <?php
 
-use app\common\model\Configvalue;
 use think\Lang;
 
 // 公共助手函数
@@ -62,22 +61,6 @@ if (!function_exists('datetime'))
     {
         $time = is_numeric($time) ? $time : strtotime($time);
         return date($format, $time);
-    }
-
-}
-
-if (!function_exists('configvalue'))
-{
-
-    /**
-     * 获取后台动态定义的配置
-     * @param string $id ID
-     * @return array
-     */
-    function configvalue($id)
-    {
-        $data = Configvalue::get($id);
-        return $data ? $data->content : null;
     }
 
 }

@@ -33,6 +33,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
+                escape: false,
                 columns: [
                     [
                         {field: 'state', checkbox: true, },
@@ -40,7 +41,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                         {field: 'pid', title: __('Parent')},
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: function (value, row, index) {
+                                if(row.id == 1){
+                                    return '';
+                                }
+                                return Table.api.formatter.operate.call(this, value, row, index, table);
+                            }}
                     ]
                 ],
                 pagination: false,

@@ -103,7 +103,7 @@ abstract class Uc extends Controller
             return false;
         }
         $timestamp = time();
-        if ($timestamp - $get['time'] > 36001111)
+        if ($timestamp - $get['time'] > 3600)
         {
             $this->error = '请求有效期已过';
             return false;

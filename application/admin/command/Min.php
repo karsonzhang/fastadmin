@@ -58,7 +58,7 @@ class Min extends Command
         {
             if (IS_WIN)
             {
-                throw new Exception("node environment require nodejs!please check http://doc.fastadmin.net/322813 !");
+                throw new Exception("node environment not found!please check http://doc.fastadmin.net/faq.html !");
             }
 
             try

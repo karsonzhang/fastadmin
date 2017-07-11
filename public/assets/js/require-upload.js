@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'plupload', 'dragsort', 'template'], function ($, undefined, Backend, Plupload, Dragsort, Template) {
+define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, Plupload, Template) {
     var Upload = {
         list: {},
         config: {
@@ -21,7 +21,7 @@ define(['jquery', 'bootstrap', 'backend', 'plupload', 'dragsort', 'template'], f
                     var multiple = $(this).data("multiple");
                     //上传URL
                     url = url ? url : Config.upload.uploadurl;
-                    url = Backend.api.fixurl(url);
+                    url = Fast.api.fixurl(url);
                     //填充ID
                     var input_id = $(that).data("input-id") ? $(that).data("input-id") : "";
                     //预览ID
@@ -117,12 +117,14 @@ define(['jquery', 'bootstrap', 'backend', 'plupload', 'dragsort', 'template'], f
 
                     //拖动排序
                     if (preview_id && multiple) {
-                        $("#" + preview_id).dragsort({
-                            dragSelector: "li",
-                            dragEnd: function () {
-                                $("#" + preview_id).trigger("fa.preview.change");
-                            },
-                            placeHolderTemplate: '<li class="col-xs-3"></li>'
+                        require(['dragsort'], function () {
+                            $("#" + preview_id).dragsort({
+                                dragSelector: "li",
+                                dragEnd: function () {
+                                    $("#" + preview_id).trigger("fa.preview.change");
+                                },
+                                placeHolderTemplate: '<li class="col-xs-3"></li>'
+                            });
                         });
                     }
                     if (preview_id && input_id) {
@@ -130,11 +132,13 @@ define(['jquery', 'bootstrap', 'backend', 'plupload', 'dragsort', 'template'], f
                             var inputStr = $("#" + input_id).val();
                             var inputArr = inputStr.split(/\,/);
                             $("#" + preview_id).empty();
+                            var tpl = $("#" + preview_id).data("template") ? $("#" + preview_id).data("template") : "";
                             $.each(inputArr, function (i, j) {
                                 if (!j) {
                                     return true;
                                 }
-                                var html = Template.render(Upload.config.previewtpl, {url: j, fullurl: Backend.api.cdnurl(j)});
+                                var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data()};
+                                var html = tpl ? Template(tpl, data) : Template.render(Upload.config.previewtpl, data);
                                 $("#" + preview_id).append(html);
                             });
                         });

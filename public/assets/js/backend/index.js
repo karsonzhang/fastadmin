@@ -13,6 +13,41 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 });
                 e.stopPropagation();
             });
+            
+            //快捷搜索
+            $(".menuresult").width($("form.sidebar-form > .input-group").width());
+            var searchResult = $(".menuresult");
+            $("form.sidebar-form").on("blur", "input[name=q]", function () {
+                searchResult.addClass("hide");
+            }).on("focus", "input[name=q]", function () {
+                if ($("a", searchResult).size() > 0) {
+                    searchResult.removeClass("hide");
+                }
+            }).on("keyup", "input[name=q]", function () {
+                searchResult.html('');
+                var val = $(this).val();
+                var html = new Array();
+                if (val != '') {
+                    $("ul.sidebar-menu li a[addtabs]:not([href^='javascript:;'])").each(function () {
+                        if ($("span:first", this).text().indexOf(val) > -1 || $(this).attr("py").indexOf(val) > -1 || $(this).attr("pinyin").indexOf(val) > -1) {
+                            html.push('<a data-url="' + $(this).attr("href") + '" href="javascript:;">' + $("span:first", this).text() + '</a>');
+                            if (html.length >= 100) {
+                                return false;
+                            }
+                        }
+                    });
+                }
+                $(searchResult).append(html.join(""));
+                if (html.length > 0) {
+                    searchResult.removeClass("hide");
+                } else {
+                    searchResult.addClass("hide");
+                }
+            });
+            //快捷搜索点击事件
+            $("form.sidebar-form").on('mousedown click', '.menuresult a[data-url]', function () {
+                Backend.api.addtabs($(this).data("url"));
+            });
 
             //此处为FastAdmin的统计代码,正式使用请移除
             var s = document.createElement("script");
@@ -138,17 +173,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     $(document.body).addClass("full-screen");
                     doc.requestFullscreen ? doc.requestFullscreen() : doc.mozRequestFullScreen ? doc.mozRequestFullScreen() : doc.webkitRequestFullscreen ? doc.webkitRequestFullscreen() : doc.msRequestFullscreen && doc.msRequestFullscreen();
                 }
-            });
-
-            var shortcut = localStorage.getItem("shortcut");
-            shortcut = shortcut ? JSON.parse(shortcut) : {};
-            $.each(shortcut, function (i, j) {
-                $("select.fastmenujump").append("<option value='" + i + "'>" + j + "</option>");
-            });
-            $(document).on("change", "select.fastmenujump", function () {
-                if (!$(this).val())
-                    return;
-                Backend.api.addtabs($(this).val(), $("option:selected", this).text());
             });
 
             //绑定tabs事件

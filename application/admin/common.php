@@ -1,25 +1,9 @@
 <?php
 
 use app\common\model\Category;
-use app\common\model\Configvalue;
 use fast\Form;
 use fast\Tree;
 use think\Db;
-
-/**
- * 重新生成上传的参数配置
- * @param array $params
- * @return string
- */
-function get_upload_multipart($params = [])
-{
-    // 加载配置
-    $configvalue = new Configvalue;
-    // 上传参数配置配置
-    $uploadcfg = $configvalue->upload($params);
-
-    return json_encode(isset($uploadcfg['multipart']) ? $uploadcfg['multipart'] : []);
-}
 
 /**
  * 生成下拉列表

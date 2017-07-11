@@ -13,4 +13,8 @@ class Page extends Model
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
 
+    public function category()
+    {
+        return $this->belongsTo('Category', 'category_id')->setEagerlyType(0);
+    }
 }

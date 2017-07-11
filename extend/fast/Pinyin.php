@@ -14,11 +14,12 @@ class Pinyin
     /**
      * 获取文字的拼音
      * @param string $chinese 中文汉字
-     * @param boolean $ucfirst 是否首字母大写
+     * @param boolean $onlyfirst 是否只返回拼音首字母
+     * @param string $delimiter 分隔符
      * @param string $charset 文字编码
      * @return string
      */
-    public static function get($chinese, $ucfirst = false, $charset = 'utf-8')
+    public static function get($chinese, $onlyfirst = false, $delimiter = '', $ucfirst = false, $charset = 'utf-8')
     {
         $keys_a = explode('|', self::$keys);
         $values_a = explode('|', self::$values);
@@ -36,7 +37,12 @@ class Pinyin
                 $_Q = ord(substr($chinese, ++$i, 1));
                 $_P = $_P * 256 + $_Q - 65536;
             }
-            $result .= ($ucfirst ? ucfirst(self::_pinyin($_P, $data)) : self::_pinyin($_P, $data));
+            $result .= ($onlyfirst ? substr(self::_pinyin($_P, $data), 0, 1) : self::_pinyin($_P, $data));
+            $result .= $delimiter;
+        }
+        if ($delimiter)
+        {
+            $result = rtrim($result, $delimiter);
         }
 
         return preg_replace("/[^a-z0-9_\-]*/i", '', $result);

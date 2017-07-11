@@ -3,6 +3,7 @@
 return [
     'id'          => 'ID',
     'category_id' => '分类ID',
+    'category'    => '分类',
     'title'       => '标题',
     'keywords'    => '关键字',
     'flag'        => '标志',

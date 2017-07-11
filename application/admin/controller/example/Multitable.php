@@ -25,6 +25,8 @@ class Multitable extends Backend
      */
     public function index()
     {
+        $this->loadlang('general/attachment');
+        $this->loadlang('general/crontab');
         return $this->view->fetch();
     }
 

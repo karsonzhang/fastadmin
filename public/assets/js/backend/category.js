@@ -19,6 +19,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
+                escape: false,
                 pk: 'id',
                 sortName: 'weigh',
                 columns: [
@@ -28,10 +29,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'type', title: __('Type')},
                         {field: 'name', title: __('Name'), align:'left'},
                         {field: 'nickname', title: __('Nickname')},
-                        {field: 'flag_text', title: __('Flag'), operate:false, formatter: Table.api.formatter.label},
-                        {field: 'image', title: __('Image'), formatter: Table.api.formatter.image},
-                        {field: 'weigh', title: __('Weigh')},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
+                        {field: 'flag', title: __('Flag'), operate:false, formatter: Table.api.formatter.flag},
+                        {field: 'image', title: __('Image'), operate:false, formatter: Table.api.formatter.image},
+                        {field: 'weigh', title: __('Weigh'), operate:false},
+                        {field: 'status', title: __('Status'), operate:false, formatter: Table.api.formatter.status},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]

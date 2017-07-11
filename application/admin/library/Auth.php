@@ -288,10 +288,12 @@ class Auth extends \fast\Auth
             $select_id = $v['name'] == $activeUrl ? $v['id'] : $select_id;
             $v['url'] = $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
+            $v['py'] = \fast\Pinyin::get($v['title'], true);
+            $v['pinyin'] = \fast\Pinyin::get($v['title']);
         }
         // 构造菜单数据
         Tree::instance()->init($ruleList);
-        $menu = Tree::instance()->getTreeMenu(0, '<li class="@class"><a href="@url" addtabs="@id" url="@url"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
+        $menu = Tree::instance()->getTreeMenu(0, '<li class="@class"><a href="@url" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
         return $menu;
     }
 

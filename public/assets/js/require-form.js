@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], function ($, undefined, Backend, Toastr, Upload, Validator) {
+define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, Upload, Validator) {
     var Form = {
         config: {
         },
@@ -39,13 +39,13 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                                 var afterSubmit = form.data("after-submit");
                                 //元素绑定函数
                                 if (afterSubmit && typeof Form.api.custom[afterSubmit] == 'function') {
-                                    if (!Form.api.custom[afterSubmit].call(form, data)) {
+                                    if (!Form.api.custom[afterSubmit].call(form, data, ret)) {
                                         return false;
                                     }
                                 }
                                 //自定义函数
                                 if (typeof onAfterSubmit == 'function') {
-                                    if (!onAfterSubmit.call(form, data)) {
+                                    if (!onAfterSubmit.call(form, data, ret)) {
                                         return false;
                                     }
                                 }
@@ -88,9 +88,9 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                     },
                     valid: function (ret) {
                         //验证通过提交表单
-                        Form.api.submit($(ret), onBeforeSubmit, function (data) {
+                        Form.api.submit($(ret), onBeforeSubmit, function (data, ret) {
                             if (typeof onAfterSubmit == 'function') {
-                                if (!onAfterSubmit.call($(ret), data)) {
+                                if (!onAfterSubmit.call($(this), data, ret)) {
                                     return false;
                                 }
                             }
@@ -109,7 +109,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
 
                 //绑定select元素事件
                 if ($(".selectpicker", form).size() > 0) {
-                    require(['bootstrap-select'], function () {
+                    require(['bootstrap-select', 'bootstrap-select-lang'], function () {
                         $('.selectpicker', form).selectpicker();
                     });
                 }
@@ -190,7 +190,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                                     //依次上传图片
                                     for (var i = 0; i < files.length; i++) {
                                         Upload.api.send(files[i], function (data) {
-                                            var url = Backend.api.cdnurl(data.url);
+                                            var url = Fast.api.cdnurl(data.url);
                                             $(that).summernote("insertImage", url, 'filename');
                                         });
                                     }
@@ -210,7 +210,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                     $(document).on('click', ".fachoose", function () {
                         var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
                         var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
-                        Backend.api.open("general/attachment/select?callback=refreshchoose&element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype, __('Choose'));
+                        Fast.api.open("general/attachment/select?callback=refreshchoose&element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype, __('Choose'));
                         return false;
                     });
 
@@ -228,7 +228,7 @@ define(['jquery', 'bootstrap', 'backend', 'toastr', 'upload', 'validator'], func
                         } else {
                             $("#" + input_id).val(data.url).trigger("change");
                         }
-                        layer.closeAll();
+                        Layer.closeAll();
                     };
                 }
             },

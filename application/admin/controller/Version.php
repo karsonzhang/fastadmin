@@ -22,4 +22,5 @@ class Version extends Backend
         parent::_initialize();
         $this->model = model('Version');
     }
+    
 }

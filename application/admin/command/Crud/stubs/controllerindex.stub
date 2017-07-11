@@ -6,7 +6,8 @@
     {
         //当前是否为关联查询
         $this->relationSearch = {%relationSearch%};
-        
+        //设置过滤方法
+        $this->request->filter(['strip_tags', 'htmlspecialchars']);
         if ($this->request->isAjax())
         {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();

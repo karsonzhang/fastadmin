@@ -98,6 +98,7 @@
 .skin-red .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
+  background-color: #374850;
   margin: 10px 10px;
 }
 .skin-red .sidebar-form input[type="text"],
@@ -118,6 +119,13 @@
 .skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
+}
+.skin-red .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
 .skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: #fff;

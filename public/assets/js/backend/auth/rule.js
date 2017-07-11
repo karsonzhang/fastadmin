@@ -20,6 +20,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'weigh',
+                escape:false, 
                 columns: [
                     [
                         {field: 'state', checkbox: true, },

@@ -98,6 +98,7 @@
 .skin-blue .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
+  background-color: #374850;
   margin: 10px 10px;
 }
 .skin-blue .sidebar-form input[type="text"],
@@ -118,6 +119,13 @@
 .skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
+}
+.skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
 .skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: #fff;
@@ -421,6 +429,7 @@
 .skin-black .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
+  background-color: #374850;
   margin: 10px 10px;
 }
 .skin-black .sidebar-form input[type="text"],
@@ -441,6 +450,13 @@
 .skin-black .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
+}
+.skin-black .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
 .skin-black .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: #fff;
@@ -732,6 +748,7 @@
 .skin-green .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
+  background-color: #374850;
   margin: 10px 10px;
 }
 .skin-green .sidebar-form input[type="text"],
@@ -752,6 +769,13 @@
 .skin-green .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
+}
+.skin-green .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
 .skin-green .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: #fff;
@@ -1016,6 +1040,7 @@
 .skin-red .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
+  background-color: #374850;
   margin: 10px 10px;
 }
 .skin-red .sidebar-form input[type="text"],
@@ -1036,6 +1061,13 @@
 .skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
+}
+.skin-red .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
 .skin-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: #fff;
@@ -1300,6 +1332,7 @@
 .skin-yellow .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
+  background-color: #374850;
   margin: 10px 10px;
 }
 .skin-yellow .sidebar-form input[type="text"],
@@ -1320,6 +1353,13 @@
 .skin-yellow .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
+}
+.skin-yellow .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
 .skin-yellow .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: #fff;
@@ -1584,6 +1624,7 @@
 .skin-purple .sidebar-form {
   border-radius: 3px;
   border: 1px solid #374850;
+  background-color: #374850;
   margin: 10px 10px;
 }
 .skin-purple .sidebar-form input[type="text"],
@@ -1604,6 +1645,13 @@
 .skin-purple .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   background-color: #fff;
   color: #666;
+}
+.skin-purple .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
 }
 .skin-purple .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
   border-left-color: #fff;

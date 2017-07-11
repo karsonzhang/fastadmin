@@ -2,8 +2,10 @@
 
 namespace app\admin\controller\general;
 
-use app\common\library\Email;
 use app\common\controller\Backend;
+use app\common\library\Email;
+use app\common\model\Config as ConfigModel;
+use think\Exception;
 
 /**
  * 系统配置
@@ -25,7 +27,7 @@ class Config extends Backend
     public function index()
     {
         $siteList = [];
-        $groupList = \app\admin\model\Config::getGroupList();
+        $groupList = ConfigModel::getGroupList();
         foreach ($groupList as $k => $v)
         {
             $siteList[$k]['name'] = $k;
@@ -58,8 +60,8 @@ class Config extends Backend
             $index++;
         }
         $this->view->assign('siteList', $siteList);
-        $this->view->assign('typeList', \app\admin\model\Config::getTypeList());
-        $this->view->assign('groupList', \app\admin\model\Config::getGroupList());
+        $this->view->assign('typeList', ConfigModel::getTypeList());
+        $this->view->assign('groupList', ConfigModel::getGroupList());
         return $this->view->fetch();
     }
 
@@ -116,7 +118,7 @@ class Config extends Backend
                         $this->msg = $this->model->getError();
                     }
                 }
-                catch (think\Exception $e)
+                catch (Exception $e)
                 {
                     $this->msg = $e->getMessage();
                 }

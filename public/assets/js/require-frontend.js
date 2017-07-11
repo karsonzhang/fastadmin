@@ -6,7 +6,7 @@ require.config({
             main: 'moment'
         }],
     //在打包压缩时将会把include中的模块合并到主文件中
-    include: ['css', 'layer', 'toastr', 'frontend'],
+    include: ['css', 'layer', 'toastr', 'fast', 'frontend'],
     paths: {
         'lang': "empty:",
         'form': 'require-form',
@@ -26,6 +26,7 @@ require.config({
         'bootstrap': '../libs/bootstrap/dist/js/bootstrap.min',
         'bootstrap-datetimepicker': '../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
         'bootstrap-select': '../libs/bootstrap-select/dist/js/bootstrap-select.min',
+        'bootstrap-select-lang': '../libs/bootstrap-select/dist/js/i18n/defaults-zh_CN',
         'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
@@ -98,6 +99,7 @@ require.config({
 //            'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
         ],
         'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
+        'bootstrap-select-lang': ['bootstrap-select'],
         'summernote': ['../libs/summernote/dist/summernote.min', 'css!../libs/summernote/dist/summernote.css'],
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],

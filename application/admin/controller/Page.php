@@ -14,11 +14,38 @@ class Page extends Backend
 {
 
     protected $model = null;
+    protected $relationSearch = true;
 
     public function _initialize()
     {
         parent::_initialize();
         $this->model = model('Page');
+    }
+
+    /**
+     * 查看
+     */
+    public function index()
+    {
+        if ($this->request->isAjax())
+        {
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $total = $this->model
+                    ->with("category")
+                    ->where($where)
+                    ->order($sort, $order)
+                    ->count();
+            $list = $this->model
+                    ->with("category")
+                    ->where($where)
+                    ->order($sort, $order)
+                    ->limit($offset, $limit)
+                    ->select();
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+        }
+        return $this->view->fetch();
     }
 
 }

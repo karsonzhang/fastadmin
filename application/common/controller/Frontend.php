@@ -3,7 +3,6 @@
 namespace app\common\controller;
 
 use app\common\library\Auth;
-use app\common\model\Configvalue;
 use think\Config;
 use think\Controller;
 use think\Lang;
@@ -50,6 +49,8 @@ class Frontend extends Controller
 
     public function _initialize()
     {
+        //移除HTML标签
+        $this->request->filter('strip_tags');
         $modulename = $this->request->module();
         $controllername = strtolower($this->request->controller());
         $actionname = strtolower($this->request->action());
@@ -67,13 +68,7 @@ class Frontend extends Controller
         // 检测是否需要验证登录
         if (!$this->user->match($this->noNeedLogin))
         {
-            //检测是否登录
-            if (!$this->user->isLogin())
-            {
-                $url = Session::get('referer');
-                $url = $url ? $url : $this->request->url();
-                $this->error(__('Please login first'), url('/user/login', ['url' => $url]));
-            }
+            $this->checkLogin();
         }
         
         // 将auth对象渲染至视图
@@ -92,17 +87,28 @@ class Frontend extends Controller
         // 配置信息
         $config = [
             'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
-            'upload'         => Configvalue::upload(),
+            'upload'         => \app\common\model\Config::upload(),
             'modulename'     => $modulename,
             'controllername' => $controllername,
             'actionname'     => $actionname,
             'jsname'         => 'frontend/' . str_replace('.', '/', $controllername),
-            'moduleurl'      => url("/{$modulename}", '', false),
+            'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang
         ];
         $this->loadlang($controllername);
         $this->assign('site', $site);
         $this->assign('config', $config);
+    }
+
+    protected function checkLogin()
+    {
+        //检测是否登录
+        if (!$this->user->isLogin())
+        {
+            $url = Session::get('referer');
+            $url = $url ? $url : $this->request->url();
+            $this->error(__('Please login first'), url('/user/login', ['url' => $url]));
+        }
     }
 
     /**

@@ -37,6 +37,7 @@ class Ajax extends Frontend
      */
     public function upload()
     {
+        $this->checkLogin();
         $this->code = -1;
         $file = $this->request->file('file');
 

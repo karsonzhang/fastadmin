@@ -61,7 +61,7 @@ class Rule extends Backend
         if ($this->request->isPost())
         {
             $this->code = -1;
-            $params = $this->request->post("row/a");
+            $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params)
             {
                 if (!$params['ismenu'] && !$params['pid'])
@@ -90,7 +90,7 @@ class Rule extends Backend
         if ($this->request->isPost())
         {
             $this->code = -1;
-            $params = $this->request->post("row/a");
+            $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params)
             {
                 if (!$params['ismenu'] && !$params['pid'])

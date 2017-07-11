@@ -18,6 +18,22 @@ define('APP_PATH', ROOT_PATH . 'application' . DS);
 // 安装包目录
 define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS);
 
+//判断文件或目录是否有写的权限
+function is_really_writable($file)
+{
+    if (DIRECTORY_SEPARATOR == '/' AND @ ini_get("safe_mode") == FALSE)
+    {
+        return is_writable($file);
+    }
+    if (!is_file($file) OR ( $fp = @fopen($file, FOPEN_WRITE_CREATE)) === FALSE)
+    {
+        return FALSE;
+    }
+
+    fclose($fp);
+    return TRUE;
+}
+
 $sitename = "FastAdmin";
 
 $link = array(
@@ -34,6 +50,10 @@ $checkDirs = [
     'vendor',
     'public' . DS . 'assets' . DS . 'libs'
 ];
+//缓存目录
+$runtimeDir = APP_PATH . 'runtime';
+
+//错误信息
 $errInfo = '';
 
 //数据库配置文件
@@ -53,7 +73,7 @@ else if (!extension_loaded("PDO"))
 {
     $errInfo = "当前未开启PDO，无法进行安装";
 }
-else if (!is_writeable($dbConfigFile))
+else if (!is_really_writable($dbConfigFile))
 {
     $errInfo = "当前权限不足，无法写入配置文件application/database.php";
 }
@@ -145,7 +165,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
             return "'{$matches[1]}'{$matches[2]}=>{$matches[3]}'{$replace}',";
         };
         $config = preg_replace_callback("/'(hostname|database|username|password|hostport)'(\s+)=>(\s+)'(.*)'\,/", $callback, $config);
-        
+
         //检测能否成功写入数据库配置
         $result = @file_put_contents($dbConfigFile, $config);
         if (!$result)
@@ -183,6 +203,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>安装<?php echo $sitename; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+        <meta name="renderer" content="webkit">
 
         <style>
             body {

@@ -17,10 +17,12 @@ class Category extends Backend
 
     protected $model = null;
     protected $categorylist = [];
+    protected $noNeedRight = ['selectpage'];
 
     public function _initialize()
     {
         parent::_initialize();
+        $this->request->filter(['strip_tags']);
         $this->model = model('Category');
 
         $tree = Tree::instance();
@@ -52,6 +54,16 @@ class Category extends Backend
             return json($result);
         }
         return $this->view->fetch();
+    }
+
+    /**
+     * Selectpage搜索
+     * 
+     * @internal
+     */
+    public function selectpage()
+    {
+        return parent::selectpage();
     }
 
 }
