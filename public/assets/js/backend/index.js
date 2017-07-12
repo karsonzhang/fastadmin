@@ -13,13 +13,20 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 });
                 e.stopPropagation();
             });
-            
+
             //快捷搜索
             $(".menuresult").width($("form.sidebar-form > .input-group").width());
+            var isAndroid = /(android)/i.test(navigator.userAgent);
             var searchResult = $(".menuresult");
             $("form.sidebar-form").on("blur", "input[name=q]", function () {
                 searchResult.addClass("hide");
+                if (isAndroid) {
+                    $.AdminLTE.options.sidebarSlimScroll = true;
+                }
             }).on("focus", "input[name=q]", function () {
+                if (isAndroid) {
+                    $.AdminLTE.options.sidebarSlimScroll = false;
+                }
                 if ($("a", searchResult).size() > 0) {
                     searchResult.removeClass("hide");
                 }

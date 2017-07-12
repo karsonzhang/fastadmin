@@ -201,7 +201,8 @@ class Crud extends Command
         $prefix = Config::get('database.prefix');
 
         //检查主表
-        $tableName = $table;
+        $table = stripos($table, $prefix) === 0 ? substr($table, strlen($prefix)) : $table;
+        $modelTableName = $tableName = $table;
         $modelTableType = 'table';
         $tableInfo = Db::query("SHOW TABLE STATUS LIKE '{$tableName}'", [], TRUE);
         if (!$tableInfo)
@@ -214,31 +215,25 @@ class Crud extends Command
                 throw new Exception("table not found");
             }
         }
-        else
-        {
-            $table = stripos($table, $prefix) === 0 ? substr($table, strlen($prefix)) : $table;
-        }
         $tableInfo = $tableInfo[0];
 
+        $relationModelTableName = $relationTableName = $relation;
         $relationModelTableType = 'table';
         //检查关联表
         if ($relation)
         {
-            $relationTableName = $prefix . $relation;
+            $relation = stripos($relation, $prefix) === 0 ? substr($relation, strlen($prefix)) : $relation;
+            $relationModelTableName = $relationTableName = $relation;
             $relationTableInfo = Db::query("SHOW TABLE STATUS LIKE '{$relationTableName}'", [], TRUE);
             if (!$relationTableInfo)
             {
-                $relationTableName = $relation;
+                $relationTableName = $prefix . $relation;
                 $relationModelTableType = 'name';
                 $relationTableInfo = Db::query("SHOW TABLE STATUS LIKE '{$relationTableName}'", [], TRUE);
                 if (!$relationTableInfo)
                 {
                     throw new Exception("relation table not found");
                 }
-            }
-            else
-            {
-                $relation = stripos($relation, $prefix) === 0 ? substr($relation, strlen($prefix)) : $relation;
             }
         }
 
@@ -247,6 +242,7 @@ class Crud extends Command
         $iconName = is_file($iconPath) && stripos(file_get_contents($iconPath), '@fa-var-' . $table . ':') ? $table : 'fa fa-circle-o';
 
         //控制器默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入controller,格式为目录层级
+        $controller = str_replace('_', '', $controller);
         $controllerArr = !$controller ? explode('_', strtolower($table)) : explode('/', strtolower($controller));
         $controllerUrl = implode('/', $controllerArr);
         $controllerName = ucfirst(array_pop($controllerArr));
@@ -670,7 +666,6 @@ class Crud extends Command
                 }
             }
 
-
             //JS最后一列加上操作列
             $javascriptList[] = str_repeat(" ", 24) . "{field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}";
             $addList = implode("\n", array_filter($addList));
@@ -718,9 +713,9 @@ class Crud extends Command
                 'modelAutoWriteTimestamp' => in_array('createtime', $fieldArr) || in_array('updatetime', $fieldArr) ? "'int'" : 'false',
                 'createTime'              => in_array('createtime', $fieldArr) ? "'createtime'" : 'false',
                 'updateTime'              => in_array('updatetime', $fieldArr) ? "'updatetime'" : 'false',
-                'modelTableName'          => $table,
+                'modelTableName'          => $modelTableName,
                 'modelTableType'          => $modelTableType,
-                'relationModelTableName'  => $relation,
+                'relationModelTableName'  => $relationModelTableName,
                 'relationModelTableType'  => $relationModelTableType,
                 'relationModelName'       => $relationModelName,
                 'relationWith'            => '',
