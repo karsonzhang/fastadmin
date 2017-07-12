@@ -87,7 +87,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                         return false;
                     }
                     $.ajax({
-                        url: "ajax/roletree",
+                        url: "auth/group/roletree",
                         type: 'post',
                         dataType: 'json',
                         data: {id: id, pid: $(this).val()},

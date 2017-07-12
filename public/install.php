@@ -18,14 +18,14 @@ define('APP_PATH', ROOT_PATH . 'application' . DS);
 // 安装包目录
 define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS);
 
-//判断文件或目录是否有写的权限
+// 判断文件或目录是否有写的权限
 function is_really_writable($file)
 {
     if (DIRECTORY_SEPARATOR == '/' AND @ ini_get("safe_mode") == FALSE)
     {
         return is_writable($file);
     }
-    if (!is_file($file) OR ( $fp = @fopen($file, FOPEN_WRITE_CREATE)) === FALSE)
+    if (!is_file($file) OR ( $fp = @fopen($file, "w+")) === FALSE)
     {
         return FALSE;
     }
