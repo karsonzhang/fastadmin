@@ -25,7 +25,7 @@ function is_really_writable($file)
     {
         return is_writable($file);
     }
-    if (!is_file($file) OR ( $fp = @fopen($file, "w+")) === FALSE)
+    if (!is_file($file) OR ( $fp = @fopen($file, "r+")) === FALSE)
     {
         return FALSE;
     }
