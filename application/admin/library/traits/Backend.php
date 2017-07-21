@@ -11,7 +11,7 @@ trait Backend
     public function index()
     {
         //设置过滤方法
-        $this->request->filter(['strip_tags', 'htmlspecialchars']);
+        $this->request->filter(['strip_tags']);
         if ($this->request->isAjax())
         {
             //如果发送的来源是Selectpage，则转发到Selectpage
@@ -45,7 +45,6 @@ trait Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a");
             if ($params)
             {
@@ -65,24 +64,19 @@ trait Backend
                     $result = $this->model->save($params);
                     if ($result !== false)
                     {
-                        $this->code = 1;
+                        $this->success();
                     }
                     else
                     {
-                        $this->msg = $this->model->getError();
+                        $this->error($this->model->getError());
                     }
                 }
                 catch (\think\exception\PDOException $e)
                 {
-                    $this->msg = $e->getMessage();
+                    $this->error($e->getMessage());
                 }
             }
-            else
-            {
-                $this->msg = __('Parameter %s can not be empty', '');
-            }
-
-            return;
+            $this->error(__('Parameter %s can not be empty', ''));
         }
         return $this->view->fetch();
     }
@@ -97,7 +91,6 @@ trait Backend
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a");
             if ($params)
             {
@@ -111,30 +104,25 @@ trait Backend
                     if ($this->modelValidate)
                     {
                         $name = basename(str_replace('\\', '/', get_class($this->model)));
-                        $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
+                        $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.edit' : true) : $this->modelValidate;
                         $row->validate($validate);
                     }
                     $result = $row->save($params);
                     if ($result !== false)
                     {
-                        $this->code = 1;
+                        $this->success();
                     }
                     else
                     {
-                        $this->msg = $row->getError();
+                        $this->error($row->getError());
                     }
                 }
                 catch (think\exception\PDOException $e)
                 {
-                    $this->msg = $e->getMessage();
+                    $this->error($e->getMessage());
                 }
             }
-            else
-            {
-                $this->msg = __('Parameter %s can not be empty', '');
-            }
-
-            return;
+            $this->error(__('Parameter %s can not be empty', ''));
         }
         $this->view->assign("row", $row);
         return $this->view->fetch();
@@ -145,17 +133,15 @@ trait Backend
      */
     public function del($ids = "")
     {
-        $this->code = -1;
         if ($ids)
         {
             $count = $this->model->destroy($ids);
             if ($count)
             {
-                $this->code = 1;
+                $this->success();
             }
         }
-
-        return;
+        $this->error(__('Parameter %s can not be empty', 'ids'));
     }
 
     /**
@@ -163,7 +149,6 @@ trait Backend
      */
     public function multi($ids = "")
     {
-        $this->code = -1;
         $ids = $ids ? $ids : $this->request->param("ids");
         if ($ids)
         {
@@ -176,21 +161,16 @@ trait Backend
                     $count = $this->model->where($this->model->getPk(), 'in', $ids)->update($values);
                     if ($count)
                     {
-                        $this->code = 1;
+                        $this->success();
                     }
                 }
                 else
                 {
-                    $this->msg = __('You have no permission');
+                    $this->error(__('You have no permission'));
                 }
             }
-            else
-            {
-                $this->msg = __('Parameter %s can not be empty', '');
-            }
         }
-
-        return;
+        $this->error(__('Parameter %s can not be empty', 'ids'));
     }
 
 }
