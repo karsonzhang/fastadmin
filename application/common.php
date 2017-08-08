@@ -1,7 +1,5 @@
 <?php
 
-use think\Lang;
-
 // 公共助手函数
 
 if (!function_exists('__'))
@@ -24,7 +22,7 @@ if (!function_exists('__'))
             array_shift($vars);
             $lang = '';
         }
-        return Lang::get($name, $vars, $lang);
+        return think\Lang::get($name, $vars, $lang);
     }
 
 }
@@ -61,6 +59,38 @@ if (!function_exists('datetime'))
     {
         $time = is_numeric($time) ? $time : strtotime($time);
         return date($format, $time);
+    }
+
+}
+
+if (!function_exists('human_date'))
+{
+
+    /**
+     * 获取语义化时间
+     * @param int $time 时间
+     * @param int $local 本地时间
+     * @return string
+     */
+    function human_date($time, $local = null)
+    {
+        return \fast\Date::human($time, $local);
+    }
+
+}
+
+if (!function_exists('cdnurl'))
+{
+
+    /**
+     * 获取CDN的地址
+     * @param int $time 时间戳
+     * @param string $format 日期时间格式
+     * @return string
+     */
+    function cdnurl($url)
+    {
+        return preg_match("/^https?:\/\/(.*)/i", $url) ? $url : think\Config::get('cdnurl') . $url;
     }
 
 }

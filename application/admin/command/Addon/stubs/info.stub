@@ -1,0 +1,7 @@
+name = {%name%}
+title = 插件名称
+intro = FastAdmin插件
+author = yourname
+website = http://www.fastadmin.net
+version = 1.0.0
+state = 1

@@ -219,13 +219,13 @@ class Menu extends Command
 
         //先定入菜单的数据
         $pid = 0;
-        $name = "/admin";
-        foreach (explode('/', $controller) as $k => $v)
+        foreach ($controllerArr as $k => $v)
         {
-            $name .= '/' . strtolower($v);
-            $title = (!isset($controllerArr[$k + 1]) ? $controllerTitle : '');
-            $icon = (!isset($controllerArr[$k + 1]) ? $controllerIcon : 'fa fa-list');
-            $remark = (!isset($controllerArr[$k + 1]) ? $controllerRemark : '');
+            $key = $k + 1;
+            $name = strtolower(implode('/', array_slice($controllerArr, 0, $key)));
+            $title = (!isset($controllerArr[$key]) ? $controllerTitle : '');
+            $icon = (!isset($controllerArr[$key]) ? $controllerIcon : 'fa fa-list');
+            $remark = (!isset($controllerArr[$key]) ? $controllerRemark : '');
             $title = $title ? $title : __(ucfirst($v) . ' manager');
             $rulemodel = $this->model->get(['name' => $name]);
             if (!$rulemodel)

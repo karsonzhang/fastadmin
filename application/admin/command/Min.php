@@ -32,8 +32,8 @@ class Min extends Command
 
     protected function execute(Input $input, Output $output)
     {
-        $module = $input->getOption('module') ? : '';
-        $resource = $input->getOption('resource') ? : '';
+        $module = $input->getOption('module') ?: '';
+        $resource = $input->getOption('resource') ?: '';
 
         if (!$module || !in_array($module, ['frontend', 'backend', 'all']))
         {
@@ -85,8 +85,8 @@ class Min extends Command
                     'jsBaseUrl'   => $this->options['jsBaseUrl'],
                     'cssBaseName' => str_replace('{module}', $mod, $this->options['cssBaseName']),
                     'cssBaseUrl'  => $this->options['cssBaseUrl'],
-                    'jsBasePath'  => ROOT_PATH . $this->options['jsBaseUrl'],
-                    'cssBasePath' => ROOT_PATH . $this->options['cssBaseUrl'],
+                    'jsBasePath'  => str_replace('\\', '/', ROOT_PATH) . $this->options['jsBaseUrl'],
+                    'cssBasePath' => str_replace('\\', '/', ROOT_PATH) . $this->options['cssBaseUrl'],
                     'ds'          => DS,
                 ];
 

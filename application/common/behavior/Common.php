@@ -9,6 +9,7 @@ class Common
 
     public function run(&$params)
     {
+        // 如果修改了index.php入口地址，则需要手动修改cdnurl的值
         $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $params->root());
         // 如果未设置__CDN__则自动匹配得出
         if (!Config::get('view_replace_str.__CDN__'))

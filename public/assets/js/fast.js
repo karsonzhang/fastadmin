@@ -20,42 +20,64 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 "hideMethod": "fadeOut"
             }
         },
+        events: {
+            //请求成功的回调
+            onAjaxSuccess: function (ret, onAjaxSuccess) {
+                var data = typeof ret.data !== 'undefined' ? ret.data : null;
+                var msg = typeof ret.msg !== 'undefined' && ret.msg ? ret.msg : __('Operation completed');
+
+                if (typeof onAjaxSuccess === 'function') {
+                    var result = onAjaxSuccess.call(this, data, ret);
+                    if (result === false)
+                        return;
+                }
+                Toastr.success(msg);
+            },
+            //请求错误的回调
+            onAjaxError: function (ret, onAjaxError) {
+                var data = typeof ret.data !== 'undefined' ? ret.data : null;
+                if (typeof onAjaxError === 'function') {
+                    var result = onAjaxError.call(this, data, ret);
+                    if (result === false) {
+                        return;
+                    }
+                }
+                Toastr.error(ret.msg + "(code:" + ret.code + ")");
+            },
+            //服务器响应数据后
+            onAjaxResponse: function (response) {
+                try {
+                    var ret = typeof response === 'object' ? response : JSON.parse(response);
+                    if (!ret.hasOwnProperty('code')) {
+                        $.extend(ret, {code: -2, msg: response, data: null});
+                    }
+                } catch (e) {
+                    var ret = {code: -1, msg: e.message, data: null};
+                }
+                return ret;
+            }
+        },
         api: {
             //发送Ajax请求
-            ajax: function (options, success, failure) {
-                options = typeof options == 'string' ? {url: options} : options;
+            ajax: function (options, success, error) {
+                options = typeof options === 'string' ? {url: options} : options;
                 var index = Layer.load();
                 options = $.extend({
                     type: "POST",
-                    dataType: 'json',
+                    dataType: "json",
                     success: function (ret) {
                         Layer.close(index);
-                        if (ret.hasOwnProperty("code")) {
-                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
-                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                            if (ret.code === 1) {
-                                if (typeof success == 'function') {
-                                    var onAfterResult = success.call(undefined, data);
-                                    if (!onAfterResult) {
-                                        return false;
-                                    }
-                                }
-                                Toastr.success(msg ? msg : __('Operation completed'));
-                            } else {
-                                Toastr.error(msg ? msg : __('Operation failed'));
-                            }
+                        ret = Fast.events.onAjaxResponse(ret);
+                        if (ret.code === 1) {
+                            Fast.events.onAjaxSuccess(ret, success);
                         } else {
-                            Toastr.error(__('Unknown data format'));
+                            Fast.events.onAjaxError(ret, error);
                         }
-                    }, error: function () {
+                    },
+                    error: function (err) {
                         Layer.close(index);
-                        if (typeof failure == 'function') {
-                            var onAfterResult = failure.call(undefined, data);
-                            if (!onAfterResult) {
-                                return false;
-                            }
-                        }
-                        Toastr.error(__('Network error'));
+                        var ret = {code: err.code, msg: err.message, data: null};
+                        Fast.events.onAjaxError(ret, error);
                     }
                 }, options);
                 $.ajax(options);
@@ -88,44 +110,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     return '';
                 return decodeURIComponent(results[2].replace(/\+/g, " "));
             },
-            //上传文件
-            upload: function (file, callback) {
-                var data = new FormData();
-                data.append("file", file);
-                $.ajax({
-                    url: "ajax/upload",
-                    data: data,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function (ret) {
-                        if (ret.hasOwnProperty("code")) {
-                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
-                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                            if (ret.code === 1) {
-                                if (typeof callback == 'function') {
-                                    var onAfterResult = success.call(undefined, data);
-                                    if (!onAfterResult) {
-                                        return false;
-                                    }
-                                }
-                                if ($('.summernote').size() > 0 && data && typeof data.url !== 'undefined') {
-                                    $('.summernote').summernote("insertImage", data.url, 'filename');
-                                }
-                                Toastr.success(__('Operation completed'));
-                            } else {
-                                Toastr.error(msg ? msg : __('Operation failed'));
-                            }
-                        } else {
-                            Toastr.error(__('Unknown data format'));
-                        }
-                    }, error: function () {
-                        Toastr.error(__('Network error'));
-                    }
-                });
-            },
+            //打开一个弹出窗口
             open: function (url, title, options) {
                 title = title ? title : "";
                 url = Fast.api.fixurl(url);
@@ -144,6 +129,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     skin: 'layui-layer-noborder',
                     success: function (layero, index) {
                         var that = this;
+                        //存储callback事件
+                        $(layero).data("callback", that.callback);
                         //$(layero).removeClass("layui-layer-border");
                         Layer.setTop(layero);
                         var frame = Layer.getChildFrame('html', index);
@@ -173,6 +160,17 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     }
                 }, options ? options : {}));
                 return false;
+            },
+            //关闭窗口并回传数据
+            close: function (data) {
+                var index = parent.Layer.getFrameIndex(window.name);
+                var callback = parent.$("#layui-layer" + index).data("callback");
+                //再执行关闭
+                parent.Layer.close(index);
+                //再调用回传函数
+                if (typeof callback === 'function') {
+                    callback.call(undefined, data);
+                }
             },
             layerfooter: function (layero, index, that) {
                 var frame = Layer.getChildFrame('html', index);

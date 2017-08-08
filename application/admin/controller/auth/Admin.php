@@ -101,7 +101,6 @@ class Admin extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a");
             if ($params)
             {
@@ -120,10 +119,9 @@ class Admin extends Backend
                     $dataset[] = ['uid' => $admin->id, 'group_id' => $value];
                 }
                 model('AuthGroupAccess')->saveAll($dataset);
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         return $this->view->fetch();
     }
@@ -138,7 +136,6 @@ class Admin extends Backend
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a");
             if ($params)
             {
@@ -167,10 +164,9 @@ class Admin extends Backend
                     $dataset[] = ['uid' => $row->id, 'group_id' => $value];
                 }
                 model('AuthGroupAccess')->saveAll($dataset);
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         $grouplist = $this->auth->getGroups($row['id']);
         $groupids = [];
@@ -188,7 +184,6 @@ class Admin extends Backend
      */
     public function del($ids = "")
     {
-        $this->code = -1;
         if ($ids)
         {
             // 避免越权删除管理员
@@ -208,12 +203,11 @@ class Admin extends Backend
                 {
                     $this->model->destroy($deleteIds);
                     model('AuthGroupAccess')->where('uid', 'in', $deleteIds)->delete();
-                    $this->code = 1;
+                    $this->success();
                 }
             }
         }
-
-        return;
+        $this->error();
     }
 
     /**
@@ -223,7 +217,7 @@ class Admin extends Backend
     public function multi($ids = "")
     {
         // 管理员禁止批量操作
-        $this->code = -1;
+        $this->error();
     }
 
 }

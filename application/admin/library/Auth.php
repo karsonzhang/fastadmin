@@ -244,14 +244,8 @@ class Auth extends \fast\Auth
         // 生成菜单的badge
         foreach ($params as $k => $v)
         {
-            if (stripos($k, '/') === false)
-            {
-                $url = '/' . $module . '/' . $k;
-            }
-            else
-            {
-                $url = url($k);
-            }
+
+            $url = $k;
 
             if (is_array($v))
             {
@@ -275,7 +269,6 @@ class Auth extends \fast\Auth
         // 读取管理员当前拥有的权限节点
         $userRule = $this->getRuleList();
         $select_id = 0;
-        $activeUrl = '/' . $module . '/' . $fixedPage;
         // 必须将结果集转换为数组
         $ruleList = collection(model('AuthRule')->where('ismenu', 1)->order('weigh', 'desc')->cache("__menu__")->select())->toArray();
         foreach ($ruleList as $k => &$v)
@@ -285,8 +278,8 @@ class Auth extends \fast\Auth
                 unset($ruleList[$k]);
                 continue;
             }
-            $select_id = $v['name'] == $activeUrl ? $v['id'] : $select_id;
-            $v['url'] = $v['name'];
+            $select_id = $v['name'] == $fixedPage ? $v['id'] : $select_id;
+            $v['url'] = '/' . $module . '/' . $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
             $v['py'] = \fast\Pinyin::get($v['title'], true);
             $v['pinyin'] = \fast\Pinyin::get($v['title']);

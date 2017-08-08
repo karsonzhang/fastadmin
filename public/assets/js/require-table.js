@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'moment', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Moment) {
+define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Moment) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -153,6 +153,7 @@ define(['jquery', 'bootstrap', 'moment', 'bootstrap-table', 'bootstrap-table-lan
                 $(toolbar).on('click', Table.config.refreshbtn, function () {
                     table.bootstrapTable('refresh');
                 });
+                
                 // 添加按钮事件
                 $(toolbar).on('click', Table.config.addbtn, function () {
                     var ids = Table.api.selectedids(table);
@@ -212,7 +213,6 @@ define(['jquery', 'bootstrap', 'moment', 'bootstrap-table', 'bootstrap-table-lan
                                 }
                             };
                             Fast.api.ajax(params, function (data) {
-                                Toastr.success(__('Operation completed'));
                                 table.bootstrapTable('refresh');
                             });
                         },
@@ -258,7 +258,6 @@ define(['jquery', 'bootstrap', 'moment', 'bootstrap-table', 'bootstrap-table-lan
                 var params = typeof data.params !== "undefined" ? (typeof data.params == 'object' ? $.param(data.params) : data.params) : '';
                 var options = {url: url, data: {action: action, ids: ids, params: params}};
                 Fast.api.ajax(options, function (data) {
-                    Toastr.success(__('Operation completed'));
                     table.bootstrapTable('refresh');
                 });
             },

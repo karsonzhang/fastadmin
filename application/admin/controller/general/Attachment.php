@@ -71,9 +71,23 @@ class Attachment extends Backend
     {
         if ($this->request->isAjax())
         {
-            $this->code = -1;
+            $this->error();
         }
         return $this->view->fetch();
+    }
+
+    public function del($ids = "")
+    {
+        if ($ids)
+        {
+            $count = $this->model->destroy($ids);
+            if ($count)
+            {
+                \think\Hook::listen("upload_after", $this);
+                $this->success();
+            }
+        }
+        $this->error(__('Parameter %s can not be empty', 'ids'));
     }
 
 }

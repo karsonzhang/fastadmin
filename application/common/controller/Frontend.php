@@ -12,24 +12,6 @@ class Frontend extends Controller
 {
 
     /**
-     * 返回码,默认为null,当设置了该值后将输出json数据
-     * @var int
-     */
-    protected $code = null;
-
-    /**
-     * 返回内容,默认为null,当设置了该值后将输出json数据
-     * @var mixed
-     */
-    protected $data = null;
-
-    /**
-     * 返回文本,默认为空
-     * @var mixed
-     */
-    protected $msg = '';
-
-    /**
      *
      * @var Auth
      */
@@ -57,22 +39,6 @@ class Frontend extends Controller
 
         $path = '/' . $modulename . '/' . str_replace('.', '/', $controllername) . '/' . $actionname;
 
-        $this->user = Auth::instance();
-
-        // 设置当前请求的URI
-        $this->user->setRequestUri($path);
-
-        // 检测当前是否登录并进行初始化
-        $this->user->init();
-        
-        // 检测是否需要验证登录
-        if (!$this->user->match($this->noNeedLogin))
-        {
-            $this->checkLogin();
-        }
-        
-        // 将auth对象渲染至视图
-        $this->view->assign("user", $this->user);
         // 如果有使用模板布局
         if ($this->layout)
         {
@@ -119,18 +85,15 @@ class Frontend extends Controller
     {
         Lang::load(APP_PATH . $this->request->module() . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $name) . '.php');
     }
-
+    
     /**
-     * 析构方法
-     *
+     * 渲染配置信息
+     * @param mixed $name 键名或数组
+     * @param mixed $value 值 
      */
-    public function __destruct()
+    protected function assignconfig($name, $value = '')
     {
-        //判断是否设置code值,如果有则变动response对象的正文
-        if (!is_null($this->code))
-        {
-            $this->result($this->data, $this->code, $this->msg, 'json');
-        }
+        $this->view->config = array_merge($this->view->config ? $this->view->config : [], is_array($name) ? $name : [$name => $value]);
     }
 
 }

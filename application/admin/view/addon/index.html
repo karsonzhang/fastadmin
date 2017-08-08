@@ -1,0 +1,120 @@
+<style type="text/css">
+    .addon {
+        height:100%;position: relative;
+    }
+    .addon > span {
+        position:absolute;left:15px;top:15px;
+    }
+    .layui-layer-pay .layui-layer-content {
+        padding:0;height:600px!important;
+    }
+    .layui-layer-pay {border:none;}
+</style>
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                        <button type="button" id="plupload-addon" class="btn btn-danger plupload" data-url="addon/local" data-mimetype="application/zip" data-multiple="false"><i class="fa fa-upload"></i> {:__('本地安装')}</button>
+                        <a class="btn btn-success btn-ajax" href="addon/refresh"><i class="fa fa-refresh"></i> {:__('刷新插件缓存')}</a>
+                    </div>
+                    <table id="table" class="table table-striped table-hover" width="100%">
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script id="paytpl" type="text/html">
+    <div style="position:relative;width:800px;height:600px;background:url('<%=payimg%>') 0 0 no-repeat;">
+        <div style="position:absolute;left:265px;top:442px;">
+            <%=paycode%>
+        </div>
+        <div style="position:absolute;left:660px;top:442px;">
+            <%=paycode%>
+        </div>
+    </div>
+</script>
+<script id="conflicttpl" type="text/html">
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>警告!</strong> 此插件中发现和现有系统中部分文件发现冲突！以下文件将会被影响，请备份好相关文件后再继续操作
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>文件</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%for(var i=0;i < conflictlist.length;i++){%>
+            <tr>
+                <th scope="row"><%=i+1%></th>
+                <td><%=conflictlist[i]%></td>
+            </tr>
+            <%}%>
+        </tbody>
+    </table>
+</script>
+<script id="itemtpl" type="text/html">
+    <div class="col-sm-4 col-md-3">
+        <% var labelarr = ['primary', 'success', 'info', 'danger', 'warning']; %>
+        <% var label = labelarr[item.id % 5]; %>
+        <% var addon = typeof addons[item.name]!= 'undefined' ? addons[item.name] : null; %>
+        <div class="thumbnail addon">
+            <!--<span class="btn btn-<%=label%>">ID:<%=item.id%></span>-->
+            <a href="<%=addon?addon.url:'javascript:;'%>" target="_blank"><img src="<%=item.image%>" class="img-responsive" alt="<%=item.title%>"></a>
+            <div class="caption">
+                <h4><%=item.title?item.title:'无'%> 
+                    <% if(item.flag.indexOf("recommend")>-1){%>
+                    <span class="label label-success">推荐</span>
+                    <% } %>
+                    <% if(item.flag.indexOf("hot")>-1){%>
+                    <span class="label label-danger">热门</span>
+                    <% } %>
+                    <% if(item.flag.indexOf("free")>-1){%>
+                    <span class="label label-info">免费</span>
+                    <% } %>
+                    <% if(item.flag.indexOf("sale")>-1){%>
+                    <span class="label label-warning">折扣</span>
+                    <% } %>
+                </h4>
+                <p class="text-<%=item.price>0?'danger':'success'%>"><b>￥<%=item.price%></b></p>
+                <p class="text-muted">作者: <a href="<%=item.url?item.url:'javascript:;'%>" target="_blank"><%=item.author%></a></p>
+                <p class="text-muted">描述: <%=item.intro%></p>
+                <p class="text-muted">版本: <%=# addon && item && addon.version!=item.version?'<span class="label label-danger">'+addon.version+'</span> -> <span class="label label-success">'+item.version+'</span>':item.version%></p>
+                <p class="text-muted">添加时间: <%=Moment(item.createtime*1000).format("YYYY-MM-DD HH:mm:ss")%></p>
+                <!--<p class="text-muted">最后时间: <%=Moment(item.updatetime*1000).format("YYYY-MM-DD HH:mm:ss")%></p>-->
+                <p class="operate" data-id="<%=item.id%>" data-name="<%=item.name%>">
+                    <% if(!addon){ %>
+                    <a href="javascript:;" class="btn btn-primary btn-success btn-install"><i class="fa fa-cloud-download"></i> 安装</a> 
+                    <% } %>
+                    <% if(addon){ %>
+                    <% if(addon.config){ %>
+                    <a href="javascript:;" class="btn btn-primary btn-config"><i class="fa fa-pencil"></i> 配置</a>
+                    <% } %>
+                    <% if(addon.state == "1"){ %>
+                    <a href="javascript:;" class="btn btn-warning btn-disable" data-action="disable"><i class="fa fa-times"></i> 点击禁用</a>
+                    <% }else{ %>
+                    <a href="javascript:;" class="btn btn-success btn-enable" data-action="enable"><i class="fa fa-check"></i> 点击启用</a>
+                    <a href="javascript:;" class="btn btn-danger btn-uninstall"><i class="fa fa-times"></i> 卸载</a>
+                    <% } %>
+                    <% } %>
+                    <!--                    
+                    <span class="pull-right" style="margin-top:10px;">
+                        <input name="checkbox" data-id="<%=item.id%>" type="checkbox" />
+                    </span>
+                    -->
+                </p>
+            </div>
+        </div>
+    </div>
+</script>

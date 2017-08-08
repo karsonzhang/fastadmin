@@ -29,9 +29,8 @@ class Index extends Backend
         //
         $menulist = $this->auth->getSidebar([
             'dashboard'  => 'hot',
-            'auth'       => ['new', 'red', 'badge'],
-            'auth/admin' => 12,
-            'auth/rule'  => 4,
+            'addon'       => ['new', 'red', 'badge'],
+            'auth/rule'  => 'side',
             'general'    => ['18', 'purple'],
                 ], $this->view->site['fixedpage']);
         $this->view->assign('menulist', $menulist);
@@ -48,7 +47,6 @@ class Index extends Backend
         if ($this->auth->isLogin())
         {
             $this->error(__("You've logged in, do not login again"), $url);
-            return;
         }
         if ($this->request->isPost())
         {
@@ -71,20 +69,17 @@ class Index extends Backend
             if (!$result)
             {
                 $this->error($validate->getError(), $url, ['token' => $this->request->token()]);
-                return;
             }
             \app\admin\model\AdminLog::setTitle(__('Login'));
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
             if ($result === true)
             {
                 $this->success(__('Login successful'), $url, ['url' => $url, 'id' => $this->auth->id, 'username' => $username, 'avatar' => $this->auth->avatar]);
-                return;
             }
             else
             {
                 $this->error(__('Username or password is incorrect'), $url, ['token' => $this->request->token()]);
             }
-            return;
         }
 
         // 根据客户端的cookie,判断是否可以自动登录
@@ -92,7 +87,9 @@ class Index extends Backend
         {
             $this->redirect($url);
         }
-        $this->view->assign('title', __('Login'));
+        $background = cdnurl("/assets/img/loginbg.jpg");
+        $this->view->assign('background', $background);
+        \think\Hook::listen("login_init", $this->request);
         return $this->view->fetch();
     }
 
@@ -103,7 +100,6 @@ class Index extends Backend
     {
         $this->auth->logout();
         $this->success(__('Logout successful'), 'index/login');
-        return;
     }
 
 }

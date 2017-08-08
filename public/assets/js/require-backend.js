@@ -4,7 +4,8 @@ require.config({
             name: 'moment',
             location: '../libs/moment',
             main: 'moment'
-        }],
+        }
+    ],
     //在打包压缩时将会把include中的模块合并到主文件中
     include: ['css', 'layer', 'toastr', 'fast', 'backend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs', 'selectpage'],
     paths: {
@@ -48,9 +49,12 @@ require.config({
         'cxselect': '../libs/jquery-cxselect/js/jquery.cxselect',
         'template': '../libs/art-template/dist/template-native',
         'selectpage': '../libs/selectpage/selectpage',
+        'citypicker': '../libs/city-picker/dist/js/city-picker.min',
+        'citypicker-data': '../libs/city-picker/dist/js/city-picker.data',
     },
     // shim依赖配置
     shim: {
+        'addons': ['backend'],
         'bootstrap': ['jquery'],
         'bootstrap-table': {
             deps: [
@@ -112,6 +116,7 @@ require.config({
 //        'validator-core': ['css!../libs/nice-validator/dist/jquery.validator.css'],
         'validator-lang': ['validator-core'],
 //        'selectpage': ['css!../libs/selectpage/selectpage.css'],
+        'citypicker': ['citypicker-data', 'css!../libs/city-picker/dist/css/city-picker.css']
     },
     baseUrl: requirejs.s.contexts._.config.config.site.cdnurl + '/assets/js/', //资源基础路径
     map: {
@@ -138,7 +143,7 @@ require(['jquery', 'bootstrap'], function ($, undefined) {
     // 初始化
     $(function () {
         require(['fast'], function (Fast) {
-            require(['backend'], function (Backend) {
+            require(['backend', 'addons'], function (Backend, Addons) {
                 //加载相应模块
                 if (Config.jsname) {
                     require([Config.jsname], function (Controller) {

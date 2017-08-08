@@ -52,7 +52,6 @@ class Profile extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a");
             $params = array_filter(array_intersect_key($params, array_flip(array('email', 'nickname', 'password', 'avatar'))));
             unset($v);
@@ -71,8 +70,9 @@ class Profile extends Backend
                     $admin = model('admin')->get(['id' => $admin_id]);
                     Session::set("admin", $admin);
                 }
-                $this->code = 1;
+                $this->success();
             }
+            $this->error();
         }
         return;
     }

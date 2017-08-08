@@ -3,10 +3,10 @@
     <div class="form-group">
         <label for="c-type" class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
-            <select  id="c-type" data-rule="required" class="form-control selectpicker" name="row[type]">
+
+            <select id="c-type" data-rule="required" class="form-control selectpicker" name="row[type]">
                 {foreach name="typeList" item="vo"}
-                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
                 {/foreach}
             </select>
 
@@ -15,10 +15,10 @@
     <div class="form-group">
         <label for="c-pid" class="control-label col-xs-12 col-sm-2">{:__('Pid')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
-            <select  id="c-flag" data-rule="required" class="form-control selectpicker" name="row[pid]">
+
+            <select id="c-pid" data-rule="required" class="form-control selectpicker" name="row[pid]">
                 {foreach name="parentList" item="vo"}
-                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                <option data-type="{$vo.type}" value="{$key}" {in name="key" value=""}selected{/in}>{$vo.name}</option>
                 {/foreach}
             </select>
 
@@ -39,10 +39,10 @@
     <div class="form-group">
         <label for="c-flag" class="control-label col-xs-12 col-sm-2">{:__('Flag')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
+
             <select  id="c-flag" class="form-control selectpicker" multiple="" name="row[flag][]">
                 {foreach name="flagList" item="vo"}
-                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
                 {/foreach}
             </select>
 

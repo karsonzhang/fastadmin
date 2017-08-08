@@ -4,8 +4,6 @@ namespace app\admin\controller;
 
 use app\common\controller\Backend;
 use fast\Random;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use think\Cache;
 use think\Config;
 use think\Db;
@@ -38,6 +36,7 @@ class Ajax extends Backend
         header('Content-Type: application/javascript');
         $callback = $this->request->get('callback');
         $controllername = input("controllername");
+        //默认只加载了控制器对应的语言名，你还根据控制器名来加载额外的语言包
         $this->loadlang($controllername);
         //强制输出JSON Object
         $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
@@ -49,25 +48,14 @@ class Ajax extends Backend
      */
     public function upload()
     {
-        $this->code = -1;
         $file = $this->request->file('file');
         if (empty($file))
         {
-            $this->msg = "未上传文件或超出服务器上传限制";
-            return;
+            $this->error("未上传文件或超出服务器上传限制");
         }
 
         //判断是否已经存在附件
         $sha1 = $file->hash();
-        $uploaded = model("attachment")->where('sha1', $sha1)->find();
-        if ($uploaded)
-        {
-            $this->code = 1;
-            $this->data = [
-                'url' => $uploaded['url']
-            ];
-            return;
-        }
 
         $upload = Config::get('upload');
 
@@ -120,16 +108,17 @@ class Ajax extends Backend
                 'storage'     => 'local',
                 'sha1'        => $sha1,
             );
-            model("attachment")->create(array_filter($params));
-            $this->code = 1;
-            $this->data = [
+            $attachment = model("attachment");
+            $attachment->create(array_filter($params));
+            \think\Hook::listen("upload_after", $attachment);
+            $this->success('上传成功', null, [
                 'url' => $uploadDir . $splInfo->getSaveName()
-            ];
+            ]);
         }
         else
         {
             // 上传失败获取错误信息
-            $this->data = $file->getError();
+            $this->error($file->getError());
         }
     }
 
@@ -177,7 +166,7 @@ class Ajax extends Backend
             {
                 Db::name($table)->where($prikey, $v[$prikey])->update([$field => $k + 1]);
             }
-            $this->code = 1;
+            $this->success();
         }
         else
         {
@@ -216,7 +205,7 @@ class Ajax extends Backend
                 $weighids[$n] = $weighdata[$offset];
                 Db::name($table)->where($prikey, $n)->update([$field => $weighdata[$offset]]);
             }
-            $this->code = 1;
+            $this->success();
         }
     }
 
@@ -231,20 +220,11 @@ class Ajax extends Backend
             $dir = constant($item);
             if (!is_dir($dir))
                 continue;
-            $files = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST
-            );
-
-            foreach ($files as $fileinfo)
-            {
-                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-                $todo($fileinfo->getRealPath());
-            }
-
-            //rmdir($dir);
+            rmdirs($dir);
         }
         Cache::clear();
-        $this->code = 1;
+        \think\Hook::listen("wipecache_after");
+        $this->success();
     }
 
     /**
@@ -269,9 +249,7 @@ class Ajax extends Backend
 
             $categorylist = Db::name('category')->where($where)->field('id as value,name')->order('weigh desc,id desc')->select();
         }
-        $this->code = 1;
-        $this->data = $categorylist;
-        return;
+        $this->success('', null, $categorylist);
     }
 
     /**
@@ -300,9 +278,7 @@ class Ajax extends Backend
                 $provincelist = Db::name('area')->where($where)->field('id as value,name')->select();
             }
         }
-        $this->code = 1;
-        $this->data = $provincelist;
-        return;
+        $this->success('', null, $provincelist);
     }
 
 }

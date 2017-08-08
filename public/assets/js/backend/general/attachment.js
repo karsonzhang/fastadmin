@@ -70,13 +70,9 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), events: {
                                 'click .btn-chooseone': function (e, value, row, index) {
-                                    var callback = Backend.api.query('callback');
-                                    var id = Backend.api.query('element_id');
                                     var multiple = Backend.api.query('multiple');
                                     multiple = multiple == 'true' ? true : false;
-                                    if (id && callback) {
-                                        parent.window[callback](id, {url: row.url}, multiple);
-                                    }
+                                    Fast.api.close({url: row.url, multiple: false});
                                 },
                             }, formatter: function () {
                                 return '<a href="javascript:;" class="btn btn-danger btn-chooseone btn-xs"><i class="fa fa-check"></i> ' + __('Choose') + '</a>';
@@ -87,13 +83,13 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
 
             // 选中多个
             $(document).on("click", ".btn-choose-multi", function () {
-                var callback = Backend.api.query('callback');
-                var id = Backend.api.query('element_id');
                 var urlArr = new Array();
                 $.each(table.bootstrapTable("getAllSelections"), function (i, j) {
                     urlArr.push(j.url);
                 });
-                parent.window[callback](id, {url: urlArr.join(",")}, true);
+                var multiple = Backend.api.query('multiple');
+                multiple = multiple == 'true' ? true : false;
+                Fast.api.close({url: urlArr.join(","), multiple: true});
             });
 
             // 为表格绑定事件

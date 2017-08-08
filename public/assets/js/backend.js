@@ -46,8 +46,8 @@ define(['fast', 'moment'], function (Fast, Moment) {
                         leftlink = top.window.$(dom.replace(/\{url\}/, baseurl));
                         //能找到相对地址
                         if (leftlink.size() > 0) {
-                            icon = typeof icon != 'undefined' ? icon : leftlink.find("i").attr("class");
-                            title = typeof title != 'undefined' ? title : leftlink.find("span:first").text();
+                            icon = typeof icon !== 'undefined' ? icon : leftlink.find("i").attr("class");
+                            title = typeof title !== 'undefined' ? title : leftlink.find("span:first").text();
                             leftlink.trigger("fa.event.toggleitem");
                         }
                         var navnode = $(".nav-tabs ul li a[node-url='" + url + "']");
@@ -56,8 +56,8 @@ define(['fast', 'moment'], function (Fast, Moment) {
                         } else {
                             //追加新的tab
                             var id = Math.floor(new Date().valueOf() * Math.random());
-                            icon = typeof icon != 'undefined' ? icon : 'fa fa-circle-o';
-                            title = typeof title != 'undefined' ? title : '';
+                            icon = typeof icon !== 'undefined' ? icon : 'fa fa-circle-o';
+                            title = typeof title !== 'undefined' ? title : '';
                             top.window.$("<a />").append('<i class="' + icon + '"></i> <span>' + title + '</span>').prop("href", url).attr({url: url, addtabs: id}).addClass("hide").appendTo(top.window.document.body).trigger("click");
                         }
                     }
@@ -67,16 +67,27 @@ define(['fast', 'moment'], function (Fast, Moment) {
         init: function () {
             //公共代码
             //配置Toastr的参数
-            Toastr.options.positionClass = Config.controllername == 'index' ? "toast-top-right-index" : "toast-top-right";
+            Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
                 e.preventDefault();
-                Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'));
+                var options = $(this).data();
+                options = options ? options : {};
+                Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'), options);
             });
             //点击包含.btn-addtabs的元素时事件
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
                 e.preventDefault();
                 Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
+            });
+            //点击包含.btn-ajax的元素时事件
+            $(document).on('click', '.btn-ajax,.ajaxit', function (e) {
+                e.preventDefault();
+                var options = $(this).data();
+                if (typeof options.url === 'undefined' && $(this).attr("href")) {
+                    options.url = $(this).attr("href");
+                }
+                Backend.api.ajax(options);
             });
             //修复含有fixed-footer类的body边距
             if ($(".fixed-footer").size() > 0) {

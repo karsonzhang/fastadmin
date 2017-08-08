@@ -45,6 +45,11 @@ class Crud extends Command
     protected $switchSuffix = ['switch'];
 
     /**
+     * 城市后缀
+     */
+    protected $citySuffix = ['city'];
+
+    /**
      * Selectpage对应的后缀
      */
     protected $selectpageSuffix = ['_id', '_ids'];
@@ -114,6 +119,7 @@ class Crud extends Command
                 ->addOption('filefield', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate file component with suffix', null)
                 ->addOption('intdatesuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate date component with suffix', null)
                 ->addOption('switchsuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate switch component with suffix', null)
+                ->addOption('citysuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate citypicker component with suffix', null)
                 ->addOption('selectpagesuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate selectpage component with suffix', null)
                 ->addOption('selectpagessuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate multiple selectpage component with suffix', null)
                 ->addOption('sortfield', null, Option::VALUE_OPTIONAL, 'sort field', null)
@@ -162,6 +168,8 @@ class Crud extends Command
         $intdatesuffix = $input->getOption('intdatesuffix');
         //开关后缀
         $switchsuffix = $input->getOption('switchsuffix');
+        //城市后缀
+        $citysuffix = $input->getOption('citysuffix');
         //selectpage后缀
         $selectpagesuffix = $input->getOption('selectpagesuffix');
         //selectpage多选后缀
@@ -182,6 +190,8 @@ class Crud extends Command
             $this->intDateSuffix = $intdatesuffix;
         if ($switchsuffix)
             $this->switchSuffix = $switchsuffix;
+        if ($citysuffix)
+            $this->citySuffix = $citysuffix;
         if ($selectpagesuffix)
             $this->selectpageSuffix = $selectpagesuffix;
         if ($selectpagessuffix)
@@ -447,7 +457,7 @@ class Crud extends Command
                     $defaultValue = $v['COLUMN_DEFAULT'];
                     $editValue = "{\$row.{$field}}";
                     // 如果默认值非null,则是一个必选项
-                    if (!is_null($v['COLUMN_DEFAULT']))
+                    if ($v['IS_NULLABLE'] == 'NO')
                     {
                         $attrArr['data-rule'] = 'required';
                     }
@@ -555,6 +565,13 @@ class Crud extends Command
                         $formAddElement .= sprintf(Form::label("{$attrArr['id']}", "%s abcdefg"), Form::checkbox($fieldName, $yes, $defaultValue === $yes, $attrArr));
                         $formEditElement .= sprintf(Form::label("{$attrArr['id']}", "%s abcdefg"), Form::checkbox($fieldName, $yes, 0, $attrArr));
                         $formEditElement = str_replace('type="checkbox"', 'type="checkbox" {in name="' . "\$row.{$field}" . '" value="' . $yes . '"}checked{/in}', $formEditElement);
+                    }
+                    else if ($inputType == 'citypicker')
+                    {
+                        $attrArr['class'] = implode(' ', $cssClassArr);
+                        $attrArr['data-toggle'] = "city-picker";
+                        $formAddElement = sprintf("<div class='control-relative'>%s</div>", Form::input('text', $fieldName, $defaultValue, $attrArr));
+                        $formEditElement = sprintf("<div class='control-relative'>%s</div>", Form::input('text', $fieldName, $editValue, $attrArr));
                     }
                     else
                     {
@@ -1077,6 +1094,11 @@ EOD;
         {
             $inputType = "switch";
         }
+        // 指定后缀结尾城市选择框
+        if ($this->isMatchSuffix($fieldsName, $this->citySuffix) && ($v['DATA_TYPE'] == 'varchar' || $v['DATA_TYPE'] == 'char'))
+        {
+            $inputType = "citypicker";
+        }
         return $inputType;
     }
 
@@ -1126,19 +1148,20 @@ EOD;
      */
     protected function getImageUpload($field, $content)
     {
-        $filter = '';
+        $uploadfilter = $selectfilter = '';
         if ($this->isMatchSuffix($field, $this->imageField))
         {
-            $filter = ' data-mimetype="image/*"';
+            $uploadfilter = ' data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp"';
+            $selectfilter = ' data-mimetype="image/*"';
         }
         $multiple = substr($field, -1) == 's' ? ' data-multiple="true"' : ' data-multiple="false"';
-        $preview = $filter ? ' data-preview-id="p-' . $field . '"' : '';
+        $preview = $uploadfilter ? ' data-preview-id="p-' . $field . '"' : '';
         $previewcontainer = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $field . '"></ul>' : '';
         return <<<EOD
 <div class="form-inline">
                 {$content}
-                <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$filter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
-                <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$filter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                 {$previewcontainer}
             </div>
 EOD;

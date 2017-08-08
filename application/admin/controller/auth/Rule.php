@@ -60,21 +60,18 @@ class Rule extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params)
             {
                 if (!$params['ismenu'] && !$params['pid'])
                 {
-                    $this->msg = __('The non-menu rule must have parent');
-                    return;
+                    $this->error(__('The non-menu rule must have parent'));
                 }
                 $this->model->create($params);
                 Cache::rm('__menu__');
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         return $this->view->fetch();
     }
@@ -89,21 +86,18 @@ class Rule extends Backend
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params)
             {
                 if (!$params['ismenu'] && !$params['pid'])
                 {
-                    $this->msg = __('The non-menu rule must have parent');
-                    return;
+                    $this->error(__('The non-menu rule must have parent'));
                 }
                 $row->save($params);
                 Cache::rm('__menu__');
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         $this->view->assign("row", $row);
         return $this->view->fetch();
@@ -114,7 +108,6 @@ class Rule extends Backend
      */
     public function del($ids = "")
     {
-        $this->code = -1;
         if ($ids)
         {
             $delIds = [];
@@ -127,11 +120,10 @@ class Rule extends Backend
             if ($count)
             {
                 Cache::rm('__menu__');
-                $this->code = 1;
+                $this->success();
             }
         }
-
-        return;
+        $this->error();
     }
 
 }

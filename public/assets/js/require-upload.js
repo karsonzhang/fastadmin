@@ -6,10 +6,85 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
             classname: '.plupload:not([initialized])',
             previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
         },
+        events: {
+            //上传成功的回调
+            onUploadSuccess: function (ret, onUploadSuccess, button) {
+                var data = typeof ret.data !== 'undefined' ? ret.data : null;
+                //上传成功后回调
+                if (button) {
+                    //如果有文本框则填充
+                    var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
+                    if (input_id) {
+                        var urlArr = [];
+                        var inputObj = $("#" + input_id);
+                        if ($(button).data("multiple") && inputObj.val() !== "") {
+                            urlArr.push(inputObj.val());
+                        }
+                        urlArr.push(data.url);
+                        inputObj.val(urlArr.join(",")).trigger("change");
+                    }
+                    //如果有回调函数
+                    var onDomUploadSuccess = $(button).data("upload-success");
+                    if (onDomUploadSuccess) {
+                        if (typeof onDomUploadSuccess !== 'function' && typeof Upload.api.custom[onDomUploadSuccess] === 'function') {
+                            onDomUploadSuccess = Upload.api.custom[onDomUploadSuccess];
+                        }
+                        if (typeof onDomUploadSuccess === 'function') {
+                            var result = onDomUploadSuccess.call(button, data, ret);
+                            if (result === false)
+                                return;
+                        }
+                    }
+                }
+
+                if (typeof onUploadSuccess === 'function') {
+                    var result = onUploadSuccess.call(button, data, ret);
+                    if (result === false)
+                        return;
+                }
+            },
+            //上传错误的回调
+            onUploadError: function (ret, onUploadError, button) {
+                var data = typeof ret.data !== 'undefined' ? ret.data : null;
+                if (button) {
+                    var onDomUploadError = $(button).data("upload-error");
+                    if (onDomUploadError) {
+                        if (typeof onDomUploadError !== 'function' && typeof Upload.api.custom[onDomUploadError] === 'function') {
+                            onDomUploadError = Upload.api.custom[onDomUploadError];
+                        }
+                        if (typeof onDomUploadError === 'function') {
+                            var result = onDomUploadError.call(button, data, ret);
+                            if (result === false)
+                                return;
+                        }
+                    }
+                }
+
+                if (typeof onUploadError === 'function') {
+                    var result = onUploadError.call(button, data, ret);
+                    if (result === false) {
+                        return;
+                    }
+                }
+                Toastr.error(ret.msg + "(code:" + ret.code + ")");
+            },
+            //服务器响应数据后
+            onUploadResponse: function (response) {
+                try {
+                    var ret = typeof response === 'object' ? response : JSON.parse(response);
+                    if (!ret.hasOwnProperty('code')) {
+                        $.extend(ret, {code: -2, msg: response, data: null});
+                    }
+                } catch (e) {
+                    var ret = {code: -1, msg: e.message, data: null};
+                }
+                return ret;
+            }
+        },
         api: {
             //Plupload上传
-            plupload: function (element, onAfterUpload) {
-                element = typeof element == 'undefined' ? Upload.config.classname : element;
+            plupload: function (element, onUploadSuccess, onUploadError) {
+                element = typeof element === 'undefined' ? Upload.config.classname : element;
                 $(element, Upload.config.container).each(function () {
                     $(this).attr("initialized", true);
                     var that = this;
@@ -19,13 +94,15 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     var mimetype = $(this).data("mimetype");
                     var multipart = $(this).data("multipart");
                     var multiple = $(this).data("multiple");
-                    //上传URL
-                    url = url ? url : Config.upload.uploadurl;
-                    url = Fast.api.fixurl(url);
+
                     //填充ID
                     var input_id = $(that).data("input-id") ? $(that).data("input-id") : "";
                     //预览ID
                     var preview_id = $(that).data("preview-id") ? $(that).data("preview-id") : "";
+
+                    //上传URL
+                    url = url ? url : Config.upload.uploadurl;
+                    url = Fast.api.fixurl(url);
                     //最大可上传
                     maxsize = typeof maxsize !== "undefined" ? maxsize : Config.upload.maxsize;
                     //文件类型
@@ -42,6 +119,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                         container: $(this).parent().get(0), //取按钮的上级元素
                         flash_swf_url: '/assets/libs/plupload/js/Moxie.swf',
                         silverlight_xap_url: '/assets/libs/plupload/js/Moxie.xap',
+                        headers: {'X-REQUESTED-WITH': 'XMLHttpRequest'},
                         filters: {
                             max_file_size: maxsize,
                             mime_types: mimetype
@@ -53,66 +131,40 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
 
                             },
                             FilesAdded: function (up, files) {
-                                Plupload.each(files, function (file) {
-                                    //这里可以改成其它的表现形式
-                                    //document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-                                });
-                                $(that).data("bakup-html", $(that).html());
+                                var button = up.settings.button;
+                                $(button).data("bakup-html", $(button).html());
                                 //添加后立即上传
                                 setTimeout(function () {
-                                    Upload.list[id].start();
+                                    up.start();
                                 }, 1);
                             },
                             UploadProgress: function (up, file) {
+                                var button = up.settings.button;
                                 //这里可以改成其它的表现形式
                                 //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                                $(that).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + file.percent + "%");
+                                $(button).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + file.percent + "%");
                             },
                             FileUploaded: function (up, file, info) {
-                                var options = this.getOption();
+                                var button = up.settings.button;
                                 //还原按钮文字及状态
-                                $(that).prop("disabled", false).html($(that).data("bakup-html"));
-                                //这里可以改成其它的表现形式
-                                //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML += (' [Url]: ' + '<a href="' + url + '" target="_blank">' + url + '</a>');
-                                //这里建议不修改
-                                try {
-                                    var ret = JSON.parse(info.response);
-                                    if (ret.hasOwnProperty('code')) {
-                                        ret.data = ret.code == 200 ? ret : ret.data;
-                                        ret.code = ret.code == 200 ? 1 : ret.code;
-                                        var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
-                                        var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                                        if (ret.code === 1) {
-                                            if (input_id) {
-                                                var urlArr = [];
-                                                var inputObj = $("#" + input_id);
-                                                if (options.multi_selection && inputObj.val() != "") {
-                                                    urlArr.push(inputObj.val());
-                                                }
-                                                urlArr.push(data.url);
-                                                inputObj.val(urlArr.join(",")).trigger("change");
-                                            }
-                                            var afterUpload = $("#" + id).data("after-upload");
-                                            if (afterUpload && typeof Upload.api.custom[afterUpload] == 'function') {
-                                                Upload.api.custom[afterUpload].call(that, data);
-                                            }
-                                            if (typeof onAfterUpload == 'function') {
-                                                onAfterUpload.call(that, data);
-                                            }
-                                        } else {
-                                            Toastr.error(msg ? msg : __('Operation failed'));
-                                        }
-                                    } else {
-                                        Toastr.error(e.message + "(code:-2)");
-                                    }
-                                } catch (e) {
-                                    Toastr.error(e.message + "(code:-1)");
+                                $(button).prop("disabled", false).html($(button).data("bakup-html"));
+                                var ret = Upload.events.onUploadResponse(info.response);
+                                if (ret.code === 1) {
+                                    Upload.events.onUploadSuccess(ret, onUploadSuccess, button);
+                                } else {
+                                    Upload.events.onUploadError(ret, onUploadError, button);
                                 }
                             },
                             Error: function (up, err) {
-                                Toastr.error(err.message + "(code:" + err.code + ")");
+                                var button = up.settings.button;
+                                $(button).prop("disabled", false).html($(button).data("bakup-html"));
+                                var ret = {code: err.code, msg: err.message, data: null};
+                                Upload.events.onUploadError(ret, onUploadError, button);
                             }
-                        }
+                        },
+                        onUploadSuccess: onUploadSuccess,
+                        onUploadError: onUploadError,
+                        button: that
                     });
 
                     //拖动排序
@@ -155,7 +207,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                                 $("#" + input_id).val(urlArr.join(","));
                             }
                         });
-                        //移除按钮事件
+                        // 移除按钮事件
                         $(document.body).on("click", "#" + preview_id + " .btn-trash", function () {
                             $(this).closest("li").remove();
                             $("#" + preview_id).trigger("fa.preview.change");
@@ -164,8 +216,8 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     Upload.list[id].init();
                 });
             },
-            // AJAX异步上传,主要用于Summernote上传回调
-            send: function (file, callback) {
+            // AJAX异步上传
+            send: function (file, onUploadSuccess, onUploadError) {
                 var data = new FormData();
                 data.append("file", file);
                 $.each(Config.upload.multipart, function (k, v) {
@@ -178,28 +230,16 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     contentType: false,
                     processData: false,
                     type: 'POST',
-                    dataType: 'json',
                     success: function (ret) {
-                        if (ret.hasOwnProperty("code")) {
-                            ret.data = ret.code == 200 ? ret : ret.data;
-                            ret.code = ret.code == 200 ? 1 : ret.code;
-                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
-                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                            if (ret.code === 1) {
-                                // 如果回调存在,则直接调用回调
-                                if (typeof callback == 'function') {
-                                    callback.call(this, data);
-                                } else {
-                                    Toastr.success(msg ? msg : __('Operation completed'));
-                                }
-                            } else {
-                                Toastr.error(msg ? msg : __('Operation failed'));
-                            }
+                        ret = Upload.events.onUploadResponse(ret);
+                        if (ret.code === 1) {
+                            Upload.events.onUploadSuccess(ret, onUploadSuccess);
                         } else {
-                            Toastr.error(__('Unknown data format'));
+                            Upload.events.onUploadError(ret, onUploadError);
                         }
-                    }, error: function () {
-                        Toastr.error(__('Network error'));
+                    }, error: function (e) {
+                        var ret = {code: 500, msg: e.message, data: null};
+                        Upload.events.onUploadError(ret, onUploadError);
                     }
                 });
             },

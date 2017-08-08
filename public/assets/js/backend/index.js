@@ -56,15 +56,9 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 Backend.api.addtabs($(this).data("url"));
             });
 
-            //此处为FastAdmin的统计代码,正式使用请移除
-            var s = document.createElement("script");
-            s.type = "text/javascript";
-            s.src = "https://hm.baidu.com/hm.js?58347d769d009bcf6074e9a0ab7ba05e";
-            $("head").append(s);
-
             //读取FastAdmin的更新信息
             $.ajax({
-                url: 'http://demo.fastadmin.net/index/index/news',
+                url: Config.fastadmin.api_url + '/news/index',
                 type: 'post',
                 dataType: 'jsonp',
                 success: function (ret) {
@@ -77,57 +71,51 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
-            //读取FastAdmin的Commits信息
-            $.ajax({
-                url: 'https://api.github.com/repos/karsonzhang/fastadmin/commits?state=open&per_page=10&page=1&sort=updated',
-                type: 'get',
-                dataType: 'jsonp',
-                success: function (ret) {
-                    $(".github-commits > a span").text(ret.data.length);
-                    $(".github-commits .footer a").attr("href", "https://github.com/karsonzhang/fastadmin/commits/master");
+            //版本检测
+            var checkupdate = function (ignoreversion, tips = false) {
+                $.ajax({
+                    url: Config.fastadmin.api_url + '/version/check',
+                    type: 'post',
+                    data: {version: Config.fastadmin.version},
+                    dataType: 'jsonp',
+                    success: function (ret) {
+                        if (ret.data && ignoreversion !== ret.data.newversion) {
+                            Layer.open({
+                                title: '发现新版本',
+                                area: ["500px", "auto"],
+                                content: '<h5 style="background-color:#f7f7f7; font-size:14px; padding: 10px;">你的版本是:' + ret.data.version + '，新版本:' + ret.data.newversion + '</h5><span class="label label-danger">更新说明</span><br/>' + ret.data.upgradetext,
+                                btn: ['去下载更新', '忽略此次更新', '不再提示'],
+                                btn2: function (index, layero) {
+                                    localStorage.setItem("ignoreversion", ret.data.newversion);
+                                },
+                                btn3: function (index, layero) {
+                                    localStorage.setItem("ignoreversion", "*");
+                                },
+                                success: function (layero, index) {
+                                    $(".layui-layer-btn0", layero).attr("href", ret.data.downloadurl).attr("target", "_blank");
+                                }
+                            });
+                        } else {
+                            if (tips) {
+                                Toastr.success("当前已经是最新版本");
+                            }
+                        }
+                    }, error: function (e) {
+                        if (tips) {
+                            Toastr.error("发生未知错误:" + e.message);
+                        }
+                    }
+                });
+            }
 
-                    var dateDiff = function (hisTime, nowTime) {
-                        if (!arguments.length)
-                            return '';
-                        var arg = arguments,
-                                now = arg[1] ? arg[1] : new Date().getTime(),
-                                diffValue = now - arg[0],
-                                result = '',
-                                minute = 1000 * 60,
-                                hour = minute * 60,
-                                day = hour * 24,
-                                halfamonth = day * 15,
-                                month = day * 30,
-                                year = month * 12,
-                                _year = diffValue / year,
-                                _month = diffValue / month,
-                                _week = diffValue / (7 * day),
-                                _day = diffValue / day,
-                                _hour = diffValue / hour,
-                                _min = diffValue / minute;
-
-                        if (_year >= 1)
-                            result = parseInt(_year) + "年前";
-                        else if (_month >= 1)
-                            result = parseInt(_month) + "个月前";
-                        else if (_week >= 1)
-                            result = parseInt(_week) + "周前";
-                        else if (_day >= 1)
-                            result = parseInt(_day) + "天前";
-                        else if (_hour >= 1)
-                            result = parseInt(_hour) + "个小时前";
-                        else if (_min >= 1)
-                            result = parseInt(_min) + "分钟前";
-                        else
-                            result = "刚刚";
-                        return result;
-                    };
-                    $.each(ret.data, function (i, j) {
-                        var author = j.author ? j.author : {html_url: "https://github.com/karsonzhang", avatar_url: "/assets/img/avatar.png", login: "Anonymous"};
-                        var item = '<li><a href="' + j.html_url + '"><div class="pull-left"><img src="' + author.avatar_url + '" class="img-circle" alt="' + author.login + '"></div><h4>' + author.login + '<small><i class="fa fa-clock-o"></i> ' + dateDiff(new Date(j.commit.committer.date).getTime()) + '</small></h4><p>' + j.commit.message + '</p></a></li>';
-                        $(item).appendTo($(".github-commits ul.menu"));
-                    });
-                }
+            //读取版本检测信息
+            var ignoreversion = localStorage.getItem("ignoreversion");
+            if (ignoreversion !== "*") {
+                checkupdate(ignoreversion);
+            }
+            //手动检测版本信息
+            $("a[data-toggle='checkupdate']").on('click', function () {
+                checkupdate('', true);
             });
 
             //切换左侧sidebar显示隐藏
@@ -219,7 +207,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 "skin-purple-light",
                 "skin-green-light"
             ];
-
             setup();
 
             /**
@@ -394,7 +381,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             });
 
             //为表单绑定事件
-            Form.api.bindevent($("#login-form"), null, function (data) {
+            Form.api.bindevent($("#login-form"), function (data) {
                 localStorage.setItem("lastlogin", JSON.stringify({id: data.id, username: data.username, avatar: data.avatar}));
                 location.href = Backend.api.fixurl(data.url);
             });

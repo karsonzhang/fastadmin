@@ -220,7 +220,7 @@ class Auth
         }
         //读取用户组所有权限规则
         $this->rules = Db::name($this->config['auth_rule'])->where($where)->field('id,pid,condition,icon,name,title,ismenu')->select();
-
+        
         //循环规则，判断结果。
         $rulelist = []; //
         if (in_array('*', $ids))
@@ -248,7 +248,6 @@ class Auth
             }
         }
         $_rulelist[$uid] = $rulelist;
-
         //登录验证则需要保存规则列表
         if (2 == $this->config['auth_type'])
         {

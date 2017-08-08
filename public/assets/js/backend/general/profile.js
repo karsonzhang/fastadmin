@@ -37,7 +37,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
             // 为表格绑定事件
             Table.api.bindevent(table);//当内容渲染完成后
 
-            Form.api.bindevent($("#update-form"), null, function () {
+            Form.api.bindevent($("#update-form"), function () {
                 $("input[name='row[password]']").val('');
                 var url = Backend.api.cdnurl($("#c-avatar").val());
                 top.window.$(".user-panel .image img,.user-menu > a > img,.user-header > img").prop("src", url);

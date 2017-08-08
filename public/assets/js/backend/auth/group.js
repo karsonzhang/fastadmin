@@ -42,7 +42,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: function (value, row, index) {
-                                if(row.id == 1){
+                                if (row.id == 1) {
                                     return '';
                                 }
                                 return Table.api.formatter.operate.call(this, value, row, index, table);
@@ -59,23 +59,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
 
         },
         add: function () {
-            Form.api.bindevent($("form[role=form]"));
             Controller.api.bindevent();
         },
         edit: function () {
-            Form.api.bindevent($("form[role=form]"));
             Controller.api.bindevent();
         },
         api: {
-            refreshrules: function () {
-                if ($("#treeview").size() > 0) {
-                    var r = $("#treeview").jstree("get_all_checked");
-                    $("input[name='row[rules]']").val(r.join(','));
-                }
-                return true;
-            },
             bindevent: function () {
-                Form.api.custom.refreshrules = Controller.api.refreshrules;
+                Form.api.bindevent($("form[role=form]"), null, null, function () {
+                    if ($("#treeview").size() > 0) {
+                        var r = $("#treeview").jstree("get_all_checked");
+                        $("input[name='row[rules]']").val(r.join(','));
+                    }
+                    return true;
+                });
                 //渲染权限节点树
                 //变更级别后需要重建节点树
                 $(document).on("change", "select[name='row[pid]']", function () {

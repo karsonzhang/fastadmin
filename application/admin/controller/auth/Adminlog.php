@@ -74,7 +74,7 @@ class Adminlog extends Backend
         }
         return $this->view->fetch();
     }
-    
+
     /**
      * 详情
      */
@@ -93,7 +93,7 @@ class Adminlog extends Backend
      */
     public function add()
     {
-        $this->code = -1;
+        $this->error();
     }
 
     /**
@@ -102,7 +102,7 @@ class Adminlog extends Backend
      */
     public function edit($ids = NULL)
     {
-        $this->code = -1;
+        $this->error();
     }
 
     /**
@@ -110,7 +110,6 @@ class Adminlog extends Backend
      */
     public function del($ids = "")
     {
-        $this->code = -1;
         if ($ids)
         {
             $childrenGroupIds = $this->childrenIds;
@@ -127,12 +126,11 @@ class Adminlog extends Backend
                 if ($deleteIds)
                 {
                     $this->model->destroy($deleteIds);
-                    $this->code = 1;
+                    $this->success();
                 }
             }
         }
-
-        return;
+        $this->error();
     }
 
     /**
@@ -142,7 +140,7 @@ class Adminlog extends Backend
     public function multi($ids = "")
     {
         // 管理员禁止批量操作
-        $this->code = -1;
+        $this->error();
     }
 
 }

@@ -7,7 +7,7 @@ use app\common\controller\Frontend;
 class Index extends Frontend
 {
 
-    protected $layout = 'bootstrap';
+    protected $layout = '';
 
     public function _initialize()
     {

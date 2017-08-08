@@ -38,7 +38,6 @@ class Ajax extends Frontend
     public function upload()
     {
         $this->checkLogin();
-        $this->code = -1;
         $file = $this->request->file('file');
 
         //判断是否已经存在附件
@@ -46,11 +45,9 @@ class Ajax extends Frontend
         $uploaded = model("attachment")->where('sha1', $sha1)->find();
         if ($uploaded)
         {
-            $this->code = 1;
-            $this->data = [
+            $this->success('', null, [
                 'url' => $uploaded['url']
-            ];
-            return;
+            ]);
         }
 
         $upload = Config::get('upload');
@@ -104,15 +101,14 @@ class Ajax extends Frontend
                 'sha1'        => $sha1,
             );
             model("attachment")->create(array_filter($params));
-            $this->code = 1;
-            $this->data = [
+            $this->success('', null, [
                 'url' => $uploadDir . $splInfo->getSaveName()
-            ];
+            ]);
         }
         else
         {
             // 上传失败获取错误信息
-            $this->data = $file->getError();
+            $this->error($file->getError());
         }
     }
 

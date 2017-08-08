@@ -72,7 +72,6 @@ class Config extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a");
             if ($params)
             {
@@ -106,36 +105,30 @@ class Config extends Backend
                         try
                         {
                             $this->refreshFile();
-                            $this->code = 1;
+                            $this->success();
                         }
                         catch (Exception $e)
                         {
-                            $this->msg = $e->getMessage();
+                            $this->error($e->getMessage());
                         }
                     }
                     else
                     {
-                        $this->msg = $this->model->getError();
+                        $this->error($this->model->getError());
                     }
                 }
                 catch (Exception $e)
                 {
-                    $this->msg = $e->getMessage();
+                    $this->error($e->getMessage());
                 }
             }
-            else
-            {
-                $this->msg = __('Parameter %s can not be empty', '');
-            }
-
-            return;
+            $this->error(__('Parameter %s can not be empty', ''));
         }
         return $this->view->fetch();
     }
 
     public function edit($ids = NULL)
     {
-        $this->code = -1;
         if ($this->request->isPost())
         {
             $params = $this->request->post("row/a");
@@ -175,19 +168,14 @@ class Config extends Backend
                 try
                 {
                     $this->refreshFile();
-                    $this->code = 1;
+                    $this->success();
                 }
                 catch (Exception $e)
                 {
-                    $this->msg = $e->getMessage();
+                    $this->error($e->getMessage());
                 }
             }
-            else
-            {
-                $this->msg = __('Parameter %s can not be empty', '');
-            }
-
-            return;
+            $this->error(__('Parameter %s can not be empty', ''));
         }
     }
 
@@ -251,12 +239,11 @@ class Config extends Backend
                 ->send();
         if ($result)
         {
-            $this->code = 1;
+            $this->success();
         }
         else
         {
-            $this->code = -1;
-            $this->msg = $email->getError();
+            $this->error($email->getError());
         }
     }
 

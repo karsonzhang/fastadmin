@@ -79,26 +79,21 @@ class Group extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             $params['rules'] = explode(',', $params['rules']);
             if (!in_array($params['pid'], $this->childrenIds))
             {
-                $this->code = -1;
-                $this->msg = __('');
-                return;
+                $this->error(__('The parent group can not be its own child'));
             }
             $parentmodel = model("AuthGroup")->get($params['pid']);
             if (!$parentmodel)
             {
-                $this->msg = __('The parent group can not found');
-                return;
+                $this->error(__('The parent group can not found'));
             }
             // 父级别的规则节点
             $parentrules = explode(',', $parentmodel->rules);
             // 当前组别的规则节点
             $currentrules = $this->auth->getRuleIds();
-            $rules = $params['rules'];
             // 如果父组不是超级管理员则需要过滤规则节点,不能超过父组别的权限
             $rules = in_array('*', $parentrules) ? $rules : array_intersect($parentrules, $rules);
             // 如果当前组别不是超级管理员则需要过滤规则节点,不能超当前组别的权限
@@ -107,10 +102,9 @@ class Group extends Backend
             if ($params)
             {
                 $this->model->create($params);
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         return $this->view->fetch();
     }
@@ -125,26 +119,24 @@ class Group extends Backend
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             // 父节点不能是它自身的子节点
             if (!in_array($params['pid'], $this->childrenIds))
             {
-                $this->msg = __('The parent group can not be its own child');
-                return;
+                $this->error(__('The parent group can not be its own child'));
             }
             $params['rules'] = explode(',', $params['rules']);
 
             $parentmodel = model("AuthGroup")->get($params['pid']);
             if (!$parentmodel)
             {
-                $this->msg = __('The parent group can not found');
-                return;
+                $this->error(__('The parent group can not found'));
             }
             // 父级别的规则节点
             $parentrules = explode(',', $parentmodel->rules);
             // 当前组别的规则节点
             $currentrules = $this->auth->getRuleIds();
+            $rules = $params['rules'];
             $rules = $params['rules'];
             // 如果父组不是超级管理员则需要过滤规则节点,不能超过父组别的权限
             $rules = in_array('*', $parentrules) ? $rules : array_intersect($parentrules, $rules);
@@ -154,9 +146,9 @@ class Group extends Backend
             if ($params)
             {
                 $row->save($params);
-                $this->code = 1;
+                $this->success();
             }
-
+            $this->error();
             return;
         }
         $this->view->assign("row", $row);
@@ -168,7 +160,6 @@ class Group extends Backend
      */
     public function del($ids = "")
     {
-        $this->code = -1;
         if ($ids)
         {
             $ids = explode(',', $ids);
@@ -201,16 +192,15 @@ class Group extends Backend
             }
             if (!$ids)
             {
-                $this->msg = __('You can not delete group that contain child group and administrators');
-                return;
+                $this->error(__('You can not delete group that contain child group and administrators'));
             }
             $count = $this->model->where('id', 'in', $ids)->delete();
             if ($count)
             {
-                $this->code = 1;
+                $this->success();
             }
         }
-        return;
+        $this->error();
     }
 
     /**
@@ -220,8 +210,7 @@ class Group extends Backend
     public function multi($ids = "")
     {
         // 组别禁止批量操作
-        $this->code = -1;
-        return;
+        $this->error();
     }
 
     /**
@@ -291,19 +280,16 @@ class Group extends Backend
                     $state = array('selected' => in_array($v['id'], $current_rule_ids) && !in_array($v['id'], $hasChildrens));
                     $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => $v['title'], 'type' => 'menu', 'state' => $state);
                 }
-                $this->code = 1;
-                $this->data = $nodelist;
+                $this->success('',null,$nodelist);
             }
             else
             {
-                $this->code = -1;
-                $this->data = __('Can not change the parent to child');
+                $this->error(__('Can not change the parent to child'));
             }
         }
         else
         {
-            $this->code = -1;
-            $this->data = __('Group not found');
+            $this->error(__('Group not found'));
         }
     }
 

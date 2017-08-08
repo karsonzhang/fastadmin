@@ -31,4 +31,8 @@ return [
     'Verification code is incorrect'                             => '验证码不正确',
     'Wipe cache completed'                                       => '清除缓存成功',
     'Wipe cache failed'                                          => '清除缓存失败',
+    'Wipe cache'                                                 => '清空缓存',
+    'Check for updates'                                          => '检测更新',
+    'Latest news'                                                => '最新消息',
+    'View more'                                                  => '查看更多',
 ];

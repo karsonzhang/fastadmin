@@ -5,34 +5,15 @@ namespace app\common\controller;
 use app\admin\library\Auth;
 use think\Config;
 use think\Controller;
+use think\Hook;
 use think\Lang;
 use think\Session;
-
-load_trait('library/traits/Backend');
 
 /**
  * 后台控制器基类
  */
 class Backend extends Controller
 {
-
-    /**
-     * 返回码,默认为null,当设置了该值后将输出json数据
-     * @var int
-     */
-    protected $code = null;
-
-    /**
-     * 返回内容,默认为null,当设置了该值后将输出json数据
-     * @var mixed
-     */
-    protected $data = null;
-
-    /**
-     * 返回文本,默认为空
-     * @var mixed
-     */
-    protected $msg = '';
 
     /**
      * 无需登录的方法,同时也就不需要鉴权了
@@ -94,7 +75,7 @@ class Backend extends Controller
         $controllername = strtolower($this->request->controller());
         $actionname = strtolower($this->request->action());
 
-        $path = '/' . $modulename . '/' . str_replace('.', '/', $controllername) . '/' . $actionname;
+        $path = str_replace('.', '/', $controllername) . '/' . $actionname;
 
         // 定义是否Addtabs请求
         !defined('IS_ADDTABS') && define('IS_ADDTABS', input("addtabs") ? TRUE : FALSE);
@@ -115,6 +96,7 @@ class Backend extends Controller
             //检测是否登录
             if (!$this->auth->isLogin())
             {
+                Hook::listen('admin_nologin', $this);
                 $url = Session::get('referer');
                 $url = $url ? $url : $this->request->url();
                 $this->error(__('Please login first'), url('index/login', ['url' => $url]));
@@ -125,7 +107,8 @@ class Backend extends Controller
                 // 判断控制器和方法判断是否有对应权限
                 if (!$this->auth->check($path))
                 {
-                    $this->error(__('You have no permission'), NULL);
+                    Hook::listen('admin_nopermission', $this);
+                    $this->error(__('You have no permission'), '');
                 }
             }
         }
@@ -156,24 +139,33 @@ class Backend extends Controller
 
         $site = Config::get("site");
 
+        $upload = \app\common\model\Config::upload();
+
+        // 上传信息配置后
+        Hook::listen("upload_config_init", $upload);
+
         // 配置信息
         $config = [
             'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
-            'upload'         => \app\common\model\Config::upload(),
+            'upload'         => $upload,
             'modulename'     => $modulename,
             'controllername' => $controllername,
             'actionname'     => $actionname,
             'jsname'         => 'backend/' . str_replace('.', '/', $controllername),
             'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang,
+            'fastadmin'      => Config::get('fastadmin'),
             'referer'        => Session::get("referer")
         ];
-
+        // 配置信息后
+        Hook::listen("config_init", $config);
+        //加载当前控制器语言包
         $this->loadlang($controllername);
-
+        //渲染站点配置
         $this->assign('site', $site);
+        //渲染配置信息
         $this->assign('config', $config);
-
+        //渲染管理员对象
         $this->assign('admin', Session::get('admin'));
     }
 
@@ -184,6 +176,16 @@ class Backend extends Controller
     protected function loadlang($name)
     {
         Lang::load(APP_PATH . $this->request->module() . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $name) . '.php');
+    }
+
+    /**
+     * 渲染配置信息
+     * @param mixed $name 键名或数组
+     * @param mixed $value 值 
+     */
+    protected function assignconfig($name, $value = '')
+    {
+        $this->view->config = array_merge($this->view->config ? $this->view->config : [], is_array($name) ? $name : [$name => $value]);
     }
 
     /**
@@ -207,37 +209,36 @@ class Backend extends Controller
         $op = json_decode($op, TRUE);
         $filter = $filter ? $filter : [];
         $where = [];
-        $modelName = '';
+        $tableName = '';
         if ($relationSearch)
         {
             if (!empty($this->model))
             {
                 $class = get_class($this->model);
                 $name = basename(str_replace('\\', '/', $class));
-                $name = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $name));
-                $modelName = $name . ".";
+                $tableName = $this->model->getQuery()->getTable($name) . ".";
             }
             if (stripos($sort, ".") === false)
             {
-                $sort = $modelName . $sort;
+                $sort = $tableName . $sort;
             }
         }
         if ($search)
         {
             $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
-            $searchlist = [];
-            foreach ($searcharr as $k => $v)
+            foreach ($searcharr as $k => &$v)
             {
-                $searchlist[] = (stripos($v, ".") !== false ? $v : "{$modelName}`{$v}`") . " LIKE '%{$search}%'";
+                $v = $tableName . $v;
             }
-            $where[] = "(" . implode(' OR ', $searchlist) . ")";
+            unset($v);
+            $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
         }
         foreach ($filter as $k => $v)
         {
             $sym = isset($op[$k]) ? $op[$k] : '=';
             if (stripos($k, ".") === false)
             {
-                $k = $modelName . $k;
+                $k = $tableName . $k;
             }
             $sym = isset($op[$k]) ? $op[$k] : $sym;
             switch ($sym)
@@ -306,7 +307,7 @@ class Backend extends Controller
         //当前页
         $page = $this->request->request("page");
         //分页大小
-        $pagesize = $this->request->request("page_size");
+        $pagesize = $this->request->request("per_page");
         //搜索条件
         $andor = $this->request->request("and_or");
         //排序方式
@@ -366,25 +367,6 @@ class Backend extends Controller
 
         //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
         return json(['list' => $list, 'total' => $total]);
-    }
-
-    /**
-     * 析构方法
-     *
-     */
-    public function __destruct()
-    {
-        //判断是否设置code值,如果有则变动response对象的正文
-        if (!is_null($this->code))
-        {
-            $result = [
-                'code' => $this->code,
-                'msg'  => $this->msg,
-                'time' => $_SERVER['REQUEST_TIME'],
-                'data' => $this->data,
-            ];
-            echo json_encode($result);
-        }
     }
 
 }

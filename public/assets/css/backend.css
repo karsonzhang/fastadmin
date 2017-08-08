@@ -60,6 +60,9 @@ body.is-dialog {
 .content-wrapper {
   position: relative;
 }
+.control-relative {
+  position: relative;
+}
 .tab-addtabs {
   overflow: hidden;
 }
@@ -370,6 +373,11 @@ table.table-template {
 .sidebar-collapse .user-panel > .image img {
   width: 25px;
   height: 25px;
+}
+@media (min-width: 768px) {
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
+    top: 41px;
+  }
 }
 .fieldlist dd {
   display: block;

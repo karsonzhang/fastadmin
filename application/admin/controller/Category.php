@@ -28,10 +28,10 @@ class Category extends Backend
         $tree = Tree::instance();
         $tree->init($this->model->order('weigh desc,id desc')->select(), 'pid');
         $this->categorylist = $tree->getTreeList($tree->getTreeArray(0), 'name');
-        $categorydata = [0 => __('None')];
+        $categorydata = [0 => ['type'=>'all', 'name'=>__('None')]];
         foreach ($this->categorylist as $k => $v)
         {
-            $categorydata[$v['id']] = $v['name'];
+            $categorydata[$v['id']] = $v;
         }
         $this->view->assign("flagList", $this->model->getFlagList());
         $this->view->assign("typeList", CategoryModel::getTypeList());

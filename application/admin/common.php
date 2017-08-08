@@ -135,3 +135,87 @@ function build_heading($title = NULL, $content = NULL)
         return '';
     return '<div class="panel-heading"><div class="panel-lead"><em>' . $title . '</em>' . $content . '</div></div>';
 }
+
+/**
+ * 判断文件或文件夹是否可写
+ * @param	string
+ * @return	bool
+ */
+function is_really_writable($file)
+{
+    if (DIRECTORY_SEPARATOR === '/')
+    {
+        return is_writable($file);
+    }
+    if (is_dir($file))
+    {
+        $file = rtrim($file, '/') . '/' . md5(mt_rand());
+        if (($fp = @fopen($file, 'ab')) === FALSE)
+        {
+            return FALSE;
+        }
+        fclose($fp);
+        @chmod($file, 0777);
+        @unlink($file);
+        return TRUE;
+    }
+    elseif (!is_file($file) OR ( $fp = @fopen($file, 'ab')) === FALSE)
+    {
+        return FALSE;
+    }
+    fclose($fp);
+    return TRUE;
+}
+
+/**
+ * 删除文件夹
+ * @param string $dirname
+ * @return boolean
+ */
+function rmdirs($dirname)
+{
+    if (!is_dir($dirname))
+        return false;
+    $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dirname, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST
+    );
+
+    foreach ($files as $fileinfo)
+    {
+        $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+        $todo($fileinfo->getRealPath());
+    }
+    @rmdir($dirname);
+    return true;
+}
+
+/**
+ * 复制文件夹
+ * @param string $source 源文件夹
+ * @param string $dest 目标文件夹
+ */
+function copydirs($source, $dest)
+{
+    if (!is_dir($dest))
+    {
+        mkdir($dest, 0755);
+    }
+    foreach (
+    $iterator = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST) as $item
+    )
+    {
+        if ($item->isDir())
+        {
+            $sontDir = $dest . DS . $iterator->getSubPathName();
+            if (!is_dir($sontDir))
+            {
+                mkdir($sontDir);
+            }
+        }
+        else
+        {
+            copy($item, $dest . DS . $iterator->getSubPathName());
+        }
+    }
+}

@@ -27,12 +27,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'type', title: __('Type')},
-                        {field: 'name', title: __('Name'), align:'left'},
+                        {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'nickname', title: __('Nickname')},
-                        {field: 'flag', title: __('Flag'), operate:false, formatter: Table.api.formatter.flag},
-                        {field: 'image', title: __('Image'), operate:false, formatter: Table.api.formatter.image},
-                        {field: 'weigh', title: __('Weigh'), operate:false},
-                        {field: 'status', title: __('Status'), operate:false, formatter: Table.api.formatter.status},
+                        {field: 'flag', title: __('Flag'), operate: false, formatter: Table.api.formatter.flag},
+                        {field: 'image', title: __('Image'), operate: false, formatter: Table.api.formatter.image},
+                        {field: 'weigh', title: __('Weigh'), operate: false},
+                        {field: 'status', title: __('Status'), operate: false, formatter: Table.api.formatter.status},
                         {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
@@ -49,6 +49,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         api: {
             bindevent: function () {
+                $(document).on("change", "#c-type", function () {
+                    $("#c-pid option[data-type='all']").prop("selected", true);
+                    $("#c-pid option").removeClass("hide");
+                    $("#c-pid option[data-type!='" + $(this).val() + "'][data-type!='all']").addClass("hide");
+                    $("#c-pid").selectpicker("refresh");
+                });
                 Form.api.bindevent($("form[role=form]"));
             }
         }
