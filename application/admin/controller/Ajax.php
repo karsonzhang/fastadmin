@@ -48,6 +48,7 @@ class Ajax extends Backend
      */
     public function upload()
     {
+        Config::set('default_return_type', 'json');
         $file = $this->request->file('file');
         if (empty($file))
         {
