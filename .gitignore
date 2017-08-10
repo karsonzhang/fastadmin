@@ -1,4 +1,5 @@
 /nbproject/
+/addons/
 .idea
 composer.lock
 *.log

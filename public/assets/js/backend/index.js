@@ -14,6 +14,14 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 e.stopPropagation();
             });
 
+            //修复在移除窗口时下拉框不隐藏的BUG
+            $(window).on("blur", function () {
+                $("[data-toggle='dropdown']").parent().removeClass("open");
+                if ($("body").hasClass("sidebar-open")) {
+                    $(".sidebar-toggle").trigger("click");
+                }
+            });
+
             //快捷搜索
             $(".menuresult").width($("form.sidebar-form > .input-group").width());
             var isAndroid = /(android)/i.test(navigator.userAgent);

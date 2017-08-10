@@ -122,7 +122,9 @@ class Addon extends Backend
         try
         {
             Service::install($name, $force);
-            $this->success("安装成功", null, ['addon' => get_addon_info($name)]);
+            $info = get_addon_info($name);
+            $info['config'] = get_addon_config($name) ? 1 : 0;
+            $this->success("安装成功", null, ['addon' => $info]);
         }
         catch (AddonException $e)
         {
@@ -251,7 +253,8 @@ class Addon extends Backend
 
                     //导入SQL
                     Service::importsql($name);
-
+                    
+                    $info['config'] = get_addon_config($name) ? 1 : 0;
                     $this->success("插件安装成功，你需要手动启用该插件，使之生效", null, ['addon' => $info]);
                 }
                 catch (Exception $e)
