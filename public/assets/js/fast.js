@@ -116,7 +116,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 url = Fast.api.fixurl(url);
                 url = url + (url.indexOf("?") > -1 ? "&" : "?") + "dialog=1";
                 var area = [$(window).width() > 800 ? '800px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
-                Layer.open($.extend({
+                options = $.extend({
                     type: 2,
                     title: title,
                     shadeClose: true,
@@ -158,7 +158,12 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                             // observer.disconnect();
                         }
                     }
-                }, options ? options : {}));
+                }, options ? options : {});
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").size() > 0) {
+                    options.area = [top.$(".tab-pane.active").width() + "px", top.$(".tab-pane.active").height() + "px"];
+                    options.offset = "lt";
+                }
+                Layer.open(options);
                 return false;
             },
             //关闭窗口并回传数据
@@ -183,33 +188,25 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         $(">", footer).wrapAll("<div class='row'></div>");
                     }
                     footer.insertAfter(layero.find('.layui-layer-content'));
-                }
-                var heg = frame.outerHeight();
-                var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
-                var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
-
-                var oldheg = heg + titHeight + btnHeight;
-                var maxheg = $(window).height() < 600 ? $(window).height() : 600;
-                if (frame.outerWidth() < 768 || that.area[0].indexOf("%") > -1) {
-                    maxheg = $(window).height();
-                }
-                // 如果有.layer-footer或窗口小于600则重新排
-                if (layerfooter.size() > 0 || oldheg < maxheg || that.area[0].indexOf("%") > -1) {
-                    var footerHeight = layero.find('.layui-layer-footer').outerHeight() || 0;
-                    footerHeight = 0;
-                    if (oldheg >= maxheg) {
-                        heg = Math.min(maxheg, oldheg) - titHeight - btnHeight - footerHeight;
-                    }
-                    layero.css({height: heg + titHeight + btnHeight + footerHeight});
-                    layero.find("iframe").css({height: heg});
-                }
-                if (layerfooter.size() > 0) {
+                    //绑定事件
                     footer.on("click", ".btn", function () {
                         if ($(this).hasClass("disabled") || $(this).parent().hasClass("disabled")) {
                             return;
                         }
                         $(".btn:eq(" + $(this).index() + ")", layerfooter).trigger("click");
                     });
+
+                    var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
+                    var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
+                    //重设iframe高度
+                    $("iframe", layero).height(layero.height() - titHeight - btnHeight);
+                }
+                //修复iOS下弹出窗口的高度和iOS下iframe无法滚动的BUG
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                    var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
+                    var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
+                    $("iframe", layero).parent().addClass("ios-iframe-fix").css("height", layero.height() - titHeight - btnHeight);
+                    $("iframe", layero).css("height", "100%");
                 }
             },
             success: function (options, callback) {

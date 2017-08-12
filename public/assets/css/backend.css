@@ -74,6 +74,11 @@ body.is-dialog {
   -webkit-overflow-scrolling: touch;
   overflow: auto;
 }
+.layui-layer-iframe .layui-layer-content.ios-iframe-fix {
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+  overflow-y: auto!important;
+}
 @media only screen and (min-width: 481px) {
   .row-flex {
     display: flex;

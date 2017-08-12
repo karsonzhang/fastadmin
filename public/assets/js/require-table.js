@@ -153,18 +153,18 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 $(toolbar).on('click', Table.config.refreshbtn, function () {
                     table.bootstrapTable('refresh');
                 });
-                
+
                 // 添加按钮事件
                 $(toolbar).on('click', Table.config.addbtn, function () {
                     var ids = Table.api.selectedids(table);
-                    Fast.api.open(options.extend.add_url + "/ids" + (ids.length > 0 ? '/' : '') + ids.join(","), __('Add'));
+                    Fast.api.open(options.extend.add_url + (ids.length > 0 ? (options.extend.add_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + ids.join(",") : ''), __('Add'));
                 });
                 // 批量编辑按钮事件
                 $(toolbar).on('click', Table.config.editbtn, function () {
                     var ids = Table.api.selectedids(table);
                     //循环弹出多个编辑框
                     $.each(ids, function (i, j) {
-                        Fast.api.open(options.extend.edit_url + "/ids/" + j, __('Edit'));
+                        Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + j, __('Edit'));
                     });
                 });
                 // 批量操作按钮事件
@@ -228,7 +228,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 });
                 $(table).on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
-                    Fast.api.open(options.extend.edit_url + "/ids/" + $(this).data("id"), __('Edit'));
+                    Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + $(this).data("id"), __('Edit'));
                 });
                 $(table).on("click", "[data-id].btn-del", function (e) {
                     e.preventDefault();
@@ -267,7 +267,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     'click .btn-editone': function (e, value, row, index) {
                         e.stopPropagation();
                         var options = $(this).closest('table').bootstrapTable('getOptions');
-                        Fast.api.open(options.extend.edit_url + "/ids/" + row[options.pk], __('Edit'));
+                        Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk], __('Edit'));
                     },
                     'click .btn-delone': function (e, value, row, index) {
                         e.stopPropagation();

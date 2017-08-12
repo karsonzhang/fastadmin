@@ -80,7 +80,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             });
 
             //版本检测
-            var checkupdate = function (ignoreversion, tips = false) {
+            var checkupdate = function (ignoreversion, tips) {
                 $.ajax({
                     url: Config.fastadmin.api_url + '/version/check',
                     type: 'post',
@@ -114,12 +114,12 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                         }
                     }
                 });
-            }
+            };
 
             //读取版本检测信息
             var ignoreversion = localStorage.getItem("ignoreversion");
             if (ignoreversion !== "*") {
-                checkupdate(ignoreversion);
+                checkupdate(ignoreversion, false);
             }
             //手动检测版本信息
             $("a[data-toggle='checkupdate']").on('click', function () {
