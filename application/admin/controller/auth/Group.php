@@ -94,6 +94,7 @@ class Group extends Backend
             $parentrules = explode(',', $parentmodel->rules);
             // 当前组别的规则节点
             $currentrules = $this->auth->getRuleIds();
+            $rules = $params['rules'];
             // 如果父组不是超级管理员则需要过滤规则节点,不能超过父组别的权限
             $rules = in_array('*', $parentrules) ? $rules : array_intersect($parentrules, $rules);
             // 如果当前组别不是超级管理员则需要过滤规则节点,不能超当前组别的权限
@@ -136,7 +137,6 @@ class Group extends Backend
             $parentrules = explode(',', $parentmodel->rules);
             // 当前组别的规则节点
             $currentrules = $this->auth->getRuleIds();
-            $rules = $params['rules'];
             $rules = $params['rules'];
             // 如果父组不是超级管理员则需要过滤规则节点,不能超过父组别的权限
             $rules = in_array('*', $parentrules) ? $rules : array_intersect($parentrules, $rules);
