@@ -21,7 +21,7 @@ class Index extends Frontend
 
     public function news()
     {
-        $newslist = \app\common\model\Page::where('category_id', 1)->order('weigh', 'desc')->select();
+        $newslist = [];
         return jsonp(['newslist' => $newslist, 'new' => count($newslist), 'url' => 'http://www.fastadmin.net?ref=news']);
     }
 

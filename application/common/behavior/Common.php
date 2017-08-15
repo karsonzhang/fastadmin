@@ -26,10 +26,15 @@ class Common
         {
             Config::set('upload.cdnurl', $cdnurl);
         }
-        // 如果是调试模式将version置为当前的时间戳可避免缓存
         if (Config::get('app_debug'))
         {
+            // 如果是调试模式将version置为当前的时间戳可避免缓存
             Config::set('site.version', time());
+        }
+        else
+        {
+            // 如果是开发模式修改异常页的模板
+            Config::set('exception_tmpl', APP_PATH . 'common' . DS . 'view' . DS . 'tpl' . DS . 'think_exception.tpl');
         }
     }
 

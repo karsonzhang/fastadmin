@@ -94,3 +94,107 @@ if (!function_exists('cdnurl'))
     }
 
 }
+
+
+if (!function_exists('is_really_writable'))
+{
+
+    /**
+     * 判断文件或文件夹是否可写
+     * @param	string $file 文件或目录
+     * @return	bool
+     */
+    function is_really_writable($file)
+    {
+        if (DIRECTORY_SEPARATOR === '/')
+        {
+            return is_writable($file);
+        }
+        if (is_dir($file))
+        {
+            $file = rtrim($file, '/') . '/' . md5(mt_rand());
+            if (($fp = @fopen($file, 'ab')) === FALSE)
+            {
+                return FALSE;
+            }
+            fclose($fp);
+            @chmod($file, 0777);
+            @unlink($file);
+            return TRUE;
+        }
+        elseif (!is_file($file) OR ( $fp = @fopen($file, 'ab')) === FALSE)
+        {
+            return FALSE;
+        }
+        fclose($fp);
+        return TRUE;
+    }
+
+}
+
+if (!function_exists('rmdirs'))
+{
+
+    /**
+     * 删除文件夹
+     * @param string $dirname 目录
+     * @param bool $withself 是否删除自身
+     * @return boolean
+     */
+    function rmdirs($dirname, $withself = true)
+    {
+        if (!is_dir($dirname))
+            return false;
+        $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dirname, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($files as $fileinfo)
+        {
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
+        }
+        if ($withself)
+        {
+            @rmdir($dirname);
+        }
+        return true;
+    }
+
+}
+
+if (!function_exists('copydirs'))
+{
+
+    /**
+     * 复制文件夹
+     * @param string $source 源文件夹
+     * @param string $dest 目标文件夹
+     */
+    function copydirs($source, $dest)
+    {
+        if (!is_dir($dest))
+        {
+            mkdir($dest, 0755);
+        }
+        foreach (
+        $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST) as $item
+        )
+        {
+            if ($item->isDir())
+            {
+                $sontDir = $dest . DS . $iterator->getSubPathName();
+                if (!is_dir($sontDir))
+                {
+                    mkdir($sontDir);
+                }
+            }
+            else
+            {
+                copy($item, $dest . DS . $iterator->getSubPathName());
+            }
+        }
+    }
+
+}

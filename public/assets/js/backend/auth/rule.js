@@ -32,7 +32,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
                         {field: 'ismenu', title: __('Ismenu'), align: 'center', formatter: Controller.api.formatter.menu},
                         {field: 'id', title: '<a href="javascript:;" class="btn btn-success btn-xs btn-toggle"><i class="fa fa-chevron-up"></i></a>', operate: false, formatter: Controller.api.formatter.subnode},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ],
                 pagination: false,

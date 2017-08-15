@@ -41,11 +41,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                         {field: 'pid', title: __('Parent')},
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: function (value, row, index) {
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: function (value, row, index) {
                                 if (row.id == 1) {
                                     return '';
                                 }
-                                return Table.api.formatter.operate.call(this, value, row, index, table);
+                                return Table.api.formatter.operate.call(this, value, row, index);
                             }}
                     ]
                 ],

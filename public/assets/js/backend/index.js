@@ -376,7 +376,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             }
 
             //让错误提示框居中
-            Backend.config.toastr.positionClass = "toast-top-center";
+            Fast.config.toastr.positionClass = "toast-top-center";
 
             //本地验证未通过时提示
             $("#login-form").data("validator-options", {

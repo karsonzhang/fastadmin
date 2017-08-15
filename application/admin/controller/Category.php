@@ -28,7 +28,7 @@ class Category extends Backend
         $tree = Tree::instance();
         $tree->init($this->model->order('weigh desc,id desc')->select(), 'pid');
         $this->categorylist = $tree->getTreeList($tree->getTreeArray(0), 'name');
-        $categorydata = [0 => ['type'=>'all', 'name'=>__('None')]];
+        $categorydata = [0 => ['type' => 'all', 'name' => __('None')]];
         foreach ($this->categorylist as $k => $v)
         {
             $categorydata[$v['id']] = $v;
@@ -45,11 +45,25 @@ class Category extends Backend
     {
         if ($this->request->isAjax())
         {
-
+            $search = $this->request->request("search");
             //构造父类select列表选项数据
-            $list = $this->categorylist;
+            $list = [];
+            if ($search)
+            {
+                foreach ($this->categorylist as $k => $v)
+                {
+                    if (stripos($v['name'], $search) !== false || stripos($v['nickname'], $search) !== false)
+                    {
+                        $list[] = $v;
+                    }
+                }
+            }
+            else
+            {
+                $list = $this->categorylist;
+            }
             $total = count($list);
-            $result = array("total" => 1, "rows" => $list);
+            $result = array("total" => $total, "rows" => $list);
 
             return json($result);
         }

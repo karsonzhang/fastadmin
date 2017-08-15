@@ -113,7 +113,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 table.on('post-body.bs.table', function (e, settings, json, xhr) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', true);
-
                     if ($(Table.config.firsttd, table).find("input[type='checkbox'][data-index]").size() > 0) {
                         // 挺拽选择,需要重新绑定事件
                         require(['drag', 'drop'], function () {
@@ -142,18 +141,15 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         });
                     }
                 });
-
                 // 处理选中筛选框后按钮的状态统一变更
                 table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table fa.event.check', function () {
                     var ids = Table.api.selectedids(table);
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !ids.length);
                 });
-
                 // 刷新按钮事件
                 $(toolbar).on('click', Table.config.refreshbtn, function () {
                     table.bootstrapTable('refresh');
                 });
-
                 // 添加按钮事件
                 $(toolbar).on('click', Table.config.addbtn, function () {
                     var ids = Table.api.selectedids(table);
@@ -242,9 +238,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                                 Layer.close(index);
                             }
                     );
-
                 });
-
                 var id = table.attr("id");
                 Table.list[id] = table;
                 return table;
@@ -291,6 +285,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                                 }
                         );
                     }
+                }
+            },
+            auth: {
+                check: function (name) {
+
                 }
             },
             // 单元格数据格式化
@@ -372,26 +371,32 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 datetime: function (value, row, index) {
                     return value ? Moment(parseInt(value) * 1000).format("YYYY-MM-DD HH:mm:ss") : __('None');
                 },
-                operate: function (value, row, index, table) {
-                    var showweigh = true;
-                    var showedit = true;
-                    var showdel = true;
-                    if (typeof table != 'undefined') {
-                        var options = table.bootstrapTable('getOptions');
-                        if (options.extend.del_url == '')
-                            showdel = false;
-                        if (options.extend.edit_url == '')
-                            showedit = false;
-                    }
-                    showweigh = typeof row[Table.config.dragsortfield] != 'undefined' ? true : false;
-                    //行操作
+                operate: function (value, row, index) {
+                    var table = this.table;
+                    // 操作配置
+                    var options = table ? table.bootstrapTable('getOptions') : {};
+                    // 默认按钮组
+                    var buttons = $.extend([], this.buttons || []);
+                    buttons.push({name: 'dragsort', icon: 'fa fa-arrows', classname: 'btn btn-xs btn-primary btn-dragsort'});
+                    buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone'});
+                    buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
                     var html = [];
-                    if (showweigh)
-                        html.push('<a href="javascript:;" class="btn btn-primary btn-dragsort btn-xs"><i class="fa fa-arrows"></i></a>');
-                    if (showedit)
-                        html.push('<a href="javascript:;" class="btn btn-success btn-editone btn-xs"><i class="fa fa-pencil"></i></a>');
-                    if (showdel)
-                        html.push('<a href="javascript:;" class="btn btn-danger btn-delone btn-xs"><i class="fa fa-trash"></i></a>');
+                    $.each(buttons, function (i, j) {
+                        var attr = table.data("operate-" + j.name);
+                        if ((typeof attr === 'undefined' || attr) || (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] == 'undefined')) {
+                            if (['add', 'edit', 'del', 'multi'].indexOf(j.name) > -1 && !options.extend[j.name + "_url"]) {
+                                return true;
+                            }
+                            //自动加上ids
+                            j.url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            url = j.url ? Fast.api.fixurl(j.url) : 'javascript:;';
+                            classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
+                            icon = j.icon ? j.icon : '';
+                            text = j.text ? j.text : '';
+                            title = j.title ? j.title : text;
+                            html.push('<a href="' + url + '" class="' + classname + '" title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                        }
+                    });
                     return html.join(' ');
                 }
             },

@@ -74,9 +74,9 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                             Fast.events.onAjaxError(ret, error);
                         }
                     },
-                    error: function (err) {
+                    error: function (xhr) {
                         Layer.close(index);
-                        var ret = {code: err.code, msg: err.message, data: null};
+                        var ret = {code: xhr.status, msg: xhr.statusText, data: null};
                         Fast.events.onAjaxError(ret, error);
                     }
                 }, options);
@@ -161,7 +161,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 }, options ? options : {});
                 if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").size() > 0) {
                     options.area = [top.$(".tab-pane.active").width() + "px", top.$(".tab-pane.active").height() + "px"];
-                    options.offset = "lt";
+                    options.offset = [ top.$(".tab-pane.active").scrollTop() + "px", "0px"];
                 }
                 Layer.open(options);
                 return false;

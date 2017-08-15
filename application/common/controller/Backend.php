@@ -165,6 +165,8 @@ class Backend extends Controller
         $this->assign('site', $site);
         //渲染配置信息
         $this->assign('config', $config);
+        //渲染权限对象
+        $this->assign('auth', $this->auth);
         //渲染管理员对象
         $this->assign('admin', Session::get('admin'));
     }

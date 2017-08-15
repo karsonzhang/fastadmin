@@ -46,7 +46,7 @@ class Addon extends Backend
         $name = $this->request->get("name");
         if (!$name)
         {
-            $this->error(__('Parameter %s can not be empty', $id ? 'id' : 'name'));
+            $this->error(__('Parameter %s can not be empty', $ids ? 'id' : 'name'));
         }
         if (!is_dir(ADDON_PATH . $name))
         {

@@ -22,6 +22,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 escape: false,
                 pk: 'id',
                 sortName: 'weigh',
+                pagination: false,
+                commonSearch: false,
                 columns: [
                     [
                         {checkbox: true},
@@ -33,7 +35,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'image', title: __('Image'), operate: false, formatter: Table.api.formatter.image},
                         {field: 'weigh', title: __('Weigh'), operate: false},
                         {field: 'status', title: __('Status'), operate: false, formatter: Table.api.formatter.status},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
