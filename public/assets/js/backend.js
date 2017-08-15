@@ -66,6 +66,10 @@ define(['fast', 'moment'], function (Fast, Moment) {
         },
         init: function () {
             //公共代码
+            //添加ios-fix兼容iOS下的iframe
+            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+                $("html").addClass("ios-fix");
+            }
             //配置Toastr的参数
             Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
             //点击包含.btn-dialog的元素时弹出dialog

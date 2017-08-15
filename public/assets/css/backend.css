@@ -50,6 +50,13 @@ body.is-dialog {
   /*width: 70%;*/
   max-width: 885px;
 }
+/*iOS兼容*/
+html.ios-fix,
+html.ios-fix body {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .content {
   min-height: 500px;
 }
@@ -69,15 +76,6 @@ body.is-dialog {
 .tab-addtabs .tab-pane {
   height: 100%;
   width: 100%;
-}
-.tab-addtabs.ios-iframe-fix .tab-pane {
-  -webkit-overflow-scrolling: touch;
-  overflow: auto;
-}
-.layui-layer-iframe .layui-layer-content.ios-iframe-fix {
-  -webkit-overflow-scrolling: touch;
-  overflow: auto;
-  overflow-y: auto!important;
 }
 @media only screen and (min-width: 481px) {
   .row-flex {
@@ -576,59 +574,59 @@ table.table-template {
   -moz-box-shadow: 0 0 3px #eee;
   box-shadow: 0 0 3px #eee;
 }
-.layui-layer-title {
+.layui-layer-fast {
+  /*自定义底部灰色操作区*/
+}
+.layui-layer-fast .layui-layer-title {
   background: #2c3e50!important;
   color: #fff!important;
+  border-bottom: none;
 }
-/*避免出现多滚动条*/
-.layui-layer-noborder {
+.layui-layer-fast .layui-layer-title ~ .layui-layer-setwin {
+  top: 0px;
+  height: 42px;
+}
+.layui-layer-fast .layui-layer-title ~ .layui-layer-setwin > a {
+  height: 42px;
+  line-height: 42px;
+  display: inline-block;
+}
+.layui-layer-fast.layui-layer-border {
   border: none!important;
   box-shadow: 1px 1px 50px rgba(0, 0, 0, 0.3) !important;
 }
-.layui-layer-moves {
+.layui-layer-fast .layui-layer-moves {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
-.layui-layer-iframe {
-  overflow: hidden!important;
-}
-.layui-layer-iframe .layui-layer-content {
-  -webkit-overflow-scrolling: touch;
-  overflow-y: hidden!important;
-  overflow: hidden;
-}
-/*自定义底部灰色操作区*/
-.layui-layer-btn {
+.layui-layer-fast .layui-layer-btn {
   text-align: center!important;
   padding: 10px!important;
   background: #ecf0f1;
 }
-.layui-layer-footer {
+.layui-layer-fast .layui-layer-btn a {
+  background-color: #95a5a6!important;
+  border-color: #95a5a6!important;
+  color: #fff!important;
+}
+.layui-layer-fast .layui-layer-btn .layui-layer-btn0 {
+  background-color: #18bc9c!important;
+  border-color: #18bc9c!important;
+}
+.layui-layer-fast .layui-layer-footer {
   padding: 8px 20px;
   background-color: #ecf0f1;
   height: auto;
   text-align: inherit!important;
 }
-.layui-layer-btn a {
-  background-color: #95a5a6!important;
-  border-color: #95a5a6!important;
-  color: #fff!important;
-}
-.layui-layer-btn .layui-layer-btn0 {
-  background-color: #18bc9c!important;
-  border-color: #18bc9c!important;
-}
-.layui-layer-setwin {
-  top: 10px!important;
-}
-.layui-layer-setwin > a {
+.layui-layer-fast .layui-layer-setwin > a {
   background: none!important;
 }
-.layui-layer-setwin > a cite {
+.layui-layer-fast .layui-layer-setwin > a cite {
   display: none;
 }
-.layui-layer-setwin > a:after {
+.layui-layer-fast .layui-layer-setwin > a:after {
   content: "\e625";
   font-family: iconfont;
   font-style: normal;
@@ -640,31 +638,42 @@ table.table-template {
   margin: 0;
   z-index: 1;
 }
-.layui-layer-setwin > a:hover {
+.layui-layer-fast .layui-layer-setwin > a:hover {
   text-decoration: none!important;
   background: none!important;
 }
-.layui-layer-setwin > a:focus {
+.layui-layer-fast .layui-layer-setwin > a:focus {
   text-decoration: none!important;
 }
-.layui-layer-setwin .layui-layer-min:after {
+.layui-layer-fast .layui-layer-setwin .layui-layer-min {
+  display: none;
+}
+.layui-layer-fast .layui-layer-setwin .layui-layer-min:after {
   content: "\e625";
 }
-.layui-layer-setwin .layui-layer-max:after {
+.layui-layer-fast .layui-layer-setwin .layui-layer-max {
+  display: none;
+}
+.layui-layer-fast .layui-layer-setwin .layui-layer-max:after {
   content: "\e623";
 }
-.layui-layer-setwin .layui-layer-maxmin:after {
+.layui-layer-fast .layui-layer-setwin .layui-layer-maxmin {
+  display: none;
+}
+.layui-layer-fast .layui-layer-setwin .layui-layer-maxmin:after {
   content: "\e624";
 }
-.layui-layer-setwin .layui-layer-close1:after {
+.layui-layer-fast .layui-layer-setwin .layui-layer-close1:after {
   content: "\e626";
 }
-.layui-layer-setwin .layui-layer-close2,
-.layui-layer-setwin .layui-layer-close2:hover {
+.layui-layer-fast .layui-layer-setwin .layui-layer-close2,
+.layui-layer-fast .layui-layer-setwin .layui-layer-close2:hover {
   background: url('../libs/layer/build/skin/default/icon.png') no-repeat -149px -31px !important;
+  top: -30px;
+  right: -30px;
 }
-.layui-layer-setwin .layui-layer-close2:after,
-.layui-layer-setwin .layui-layer-close2:hover:after {
+.layui-layer-fast .layui-layer-setwin .layui-layer-close2:after,
+.layui-layer-fast .layui-layer-setwin .layui-layer-close2:hover:after {
   display: none;
 }
 @media (min-width: 768px) {

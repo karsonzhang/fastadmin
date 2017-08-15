@@ -181,11 +181,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             //绑定tabs事件
             $('#nav').addtabs({iframeHeight: "100%"});
 
-            //修复iOS下iframe无法滚动的BUG
-            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-                $(".tab-addtabs").addClass("ios-iframe-fix");
-            }
-
             if ($("ul.sidebar-menu li.active a").size() > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
             } else {

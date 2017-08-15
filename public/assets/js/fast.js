@@ -126,7 +126,6 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     area: area,
                     content: url,
                     zIndex: Layer.zIndex,
-                    skin: 'layui-layer-noborder',
                     success: function (layero, index) {
                         var that = this;
                         //存储callback事件
@@ -159,9 +158,9 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         }
                     }
                 }, options ? options : {});
-                if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").size() > 0) {
+                if ($(window).width() < 480 || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").size() > 0)) {
                     options.area = [top.$(".tab-pane.active").width() + "px", top.$(".tab-pane.active").height() + "px"];
-                    options.offset = [ top.$(".tab-pane.active").scrollTop() + "px", "0px"];
+                    options.offset = [top.$(".tab-pane.active").scrollTop() + "px", "0px"];
                 }
                 Layer.open(options);
                 return false;
@@ -205,7 +204,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
                     var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
                     var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
-                    $("iframe", layero).parent().addClass("ios-iframe-fix").css("height", layero.height() - titHeight - btnHeight);
+                    $("iframe", layero).parent().css("height", layero.height() - titHeight - btnHeight);
                     $("iframe", layero).css("height", "100%");
                 }
             },
@@ -281,6 +280,9 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 beforeSend: function (xhr, setting) {
                     setting.url = Fast.api.fixurl(setting.url);
                 }
+            });
+            Layer.config({
+                skin: 'layui-layer-fast'
             });
             // 绑定ESC关闭窗口事件
             $(window).keyup(function (e) {
