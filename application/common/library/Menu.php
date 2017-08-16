@@ -4,6 +4,7 @@ namespace app\common\library;
 
 use app\admin\model\AuthRule;
 use fast\Tree;
+use think\Exception;
 use think\exception\PDOException;
 
 class Menu
@@ -46,7 +47,7 @@ class Menu
             }
             catch (PDOException $e)
             {
-                print_r($e);
+                throw new Exception($e->getMessage());
             }
         }
     }

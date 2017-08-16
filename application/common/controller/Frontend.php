@@ -2,26 +2,12 @@
 
 namespace app\common\controller;
 
-use app\common\library\Auth;
 use think\Config;
 use think\Controller;
 use think\Lang;
-use think\Session;
 
 class Frontend extends Controller
 {
-
-    /**
-     *
-     * @var Auth
-     */
-    protected $user = null;
-
-    /**
-     * 无需登录的方法，默认全部都无需登录
-     * @var array
-     */
-    protected $noNeedLogin = ['*'];
 
     /**
      * 布局模板
@@ -36,8 +22,6 @@ class Frontend extends Controller
         $modulename = $this->request->module();
         $controllername = strtolower($this->request->controller());
         $actionname = strtolower($this->request->action());
-
-        $path = '/' . $modulename . '/' . str_replace('.', '/', $controllername) . '/' . $actionname;
 
         // 如果有使用模板布局
         if ($this->layout)
@@ -64,17 +48,6 @@ class Frontend extends Controller
         $this->loadlang($controllername);
         $this->assign('site', $site);
         $this->assign('config', $config);
-    }
-
-    protected function checkLogin()
-    {
-        //检测是否登录
-        if (!$this->user->isLogin())
-        {
-            $url = Session::get('referer');
-            $url = $url ? $url : $this->request->url();
-            $this->error(__('Please login first'), url('/user/login', ['url' => $url]));
-        }
     }
 
     /**

@@ -51,6 +51,7 @@ class Install extends Command
         Db::getPdo()->exec($sql);
 
         file_put_contents($installLockFile, 1);
+        
         $output->info("Install Successed!");
     }
 

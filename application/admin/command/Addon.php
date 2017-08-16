@@ -40,7 +40,10 @@ class Addon extends Command
         {
             throw new Exception('Please input correct action name');
         }
-
+        
+        // 查询一次SQL,判断连接是否正常
+        Db::execute("SELECT 1");
+        
         $addonDir = ADDON_PATH . $name;
         switch ($action)
         {
