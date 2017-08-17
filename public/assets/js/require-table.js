@@ -287,11 +287,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                 }
             },
-            auth: {
-                check: function (name) {
-
-                }
-            },
             // 单元格数据格式化
             formatter: {
                 icon: function (value, row, index) {
@@ -382,8 +377,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
                     var html = [];
                     $.each(buttons, function (i, j) {
+                        if (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] === 'undefined') {
+                            return true;
+                        }
                         var attr = table.data("operate-" + j.name);
-                        if ((typeof attr === 'undefined' || attr) || (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] == 'undefined')) {
+                        if (typeof attr === 'undefined' || attr) {
                             if (['add', 'edit', 'del', 'multi'].indexOf(j.name) > -1 && !options.extend[j.name + "_url"]) {
                                 return true;
                             }

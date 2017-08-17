@@ -89,7 +89,7 @@ function build_category_select($name, $type, $selected = null, $attr = [], $head
 function build_toolbar($btns = NULL, $attr = [])
 {
     $auth = \app\admin\library\Auth::instance();
-    $controller = strtolower(think\Request::instance()->controller());
+    $controller = str_replace('.','/',strtolower(think\Request::instance()->controller()));
     $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del'];
     $btns = is_array($btns) ? $btns : explode(',', $btns);
     $index = array_search('delete', $btns);
