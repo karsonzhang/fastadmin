@@ -32,12 +32,14 @@ class Group extends Backend
         // 取出所有分组
         $grouplist = model('AuthGroup')->all(['status' => 'normal']);
         $objlist = [];
+        $group_ids = [];
         foreach ($groups as $K => $v)
         {
             // 取出包含自己的所有子节点
             $childrenlist = Tree::instance()->init($grouplist)->getChildren($v['id'], TRUE);
             $obj = Tree::instance()->init($childrenlist)->getTreeArray($v['pid']);
             $objlist = array_merge($objlist, Tree::instance()->getTreeList($obj));
+            $group_ids[] = (int) $v['group_id'];
         }
 
         $groupdata = [];
@@ -46,6 +48,7 @@ class Group extends Backend
             $groupdata[$v['id']] = $v['name'];
         }
         $this->groupdata = $groupdata;
+        $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $group_ids]);
         $this->childrenIds = array_keys($groupdata);
         $this->view->assign('groupdata', $groupdata);
     }
@@ -280,7 +283,7 @@ class Group extends Backend
                     $state = array('selected' => in_array($v['id'], $current_rule_ids) && !in_array($v['id'], $hasChildrens));
                     $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => $v['title'], 'type' => 'menu', 'state' => $state);
                 }
-                $this->success('',null,$nodelist);
+                $this->success('', null, $nodelist);
             }
             else
             {

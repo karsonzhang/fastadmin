@@ -7,10 +7,10 @@ use think\Config;
 class Common
 {
 
-    public function run(&$params)
+    public function run(&$request)
     {
         // 如果修改了index.php入口地址，则需要手动修改cdnurl的值
-        $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $params->root());
+        $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $request->root());
         // 如果未设置__CDN__则自动匹配得出
         if (!Config::get('view_replace_str.__CDN__'))
         {
@@ -35,6 +35,11 @@ class Common
         {
             // 如果是开发模式修改异常页的模板
             Config::set('exception_tmpl', APP_PATH . 'common' . DS . 'view' . DS . 'tpl' . DS . 'think_exception.tpl');
+        }
+        // 如果是trace模式且Ajax的情况下关闭trace
+        if (Config::get('app_trace') && $request->isAjax())
+        {
+            Config::set('app_trace', false);
         }
     }
 

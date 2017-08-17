@@ -34,13 +34,10 @@ class Ajax extends Backend
     public function lang()
     {
         header('Content-Type: application/javascript');
-        $callback = $this->request->get('callback');
         $controllername = input("controllername");
         //默认只加载了控制器对应的语言名，你还根据控制器名来加载额外的语言包
         $this->loadlang($controllername);
-        //强制输出JSON Object
-        $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
-        return $result;
+        return jsonp(Lang::get(), 200, [], ['json_encode_param' => JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE]);
     }
 
     /**
