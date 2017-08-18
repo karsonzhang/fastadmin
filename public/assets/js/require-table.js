@@ -376,6 +376,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone'});
                     buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
                     var html = [];
+                    var url, classname, icon, text, title;
                     $.each(buttons, function (i, j) {
                         if (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] === 'undefined') {
                             return true;
@@ -386,8 +387,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         var attr = table.data("operate-" + j.name);
                         if (typeof attr === 'undefined' || attr) {
                             //自动加上ids
-                            j.url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
-                            url = j.url ? Fast.api.fixurl(j.url) : 'javascript:;';
+                            url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            url = url ? Fast.api.fixurl(url) : 'javascript:;';
                             classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
                             icon = j.icon ? j.icon : '';
                             text = j.text ? j.text : '';
@@ -404,12 +405,13 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     // 默认按钮组
                     var buttons = $.extend([], this.buttons || []);
                     var html = [];
+                    var url, classname, icon, text, title;
                     $.each(buttons, function (i, j) {
                         var attr = table.data("buttons-" + j.name);
                         if (typeof attr === 'undefined' || attr) {
                             //自动加上ids
-                            j.url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
-                            url = j.url ? Fast.api.fixurl(j.url) : 'javascript:;';
+                            url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            url = url ? Fast.api.fixurl(url) : 'javascript:;';
                             classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
                             icon = j.icon ? j.icon : '';
                             text = j.text ? j.text : '';
