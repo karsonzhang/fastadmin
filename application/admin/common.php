@@ -36,7 +36,7 @@ function build_radios($name, $list = [], $selected = null)
     {
         $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::radio($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
     }
-    return implode(' ', $html);
+    return '<div class="radio">' . implode(' ', $html) . '</div>';
 }
 
 /**
@@ -55,7 +55,7 @@ function build_checkboxs($name, $list = [], $selected = null)
     {
         $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
     }
-    return implode(' ', $html);
+    return '<div class="checkbox">' . implode(' ', $html) . '</div>';
 }
 
 /**
