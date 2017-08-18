@@ -732,3 +732,13 @@ table.table-template{
 @media (max-width: @screen-tablet) {
 
 }
+
+/*修复radio和checkbox样式对齐*/
+.radio, .checkbox {
+    > label {
+        margin-right: 10px;
+        > input {
+            margin: 2px 0 0;
+        }
+    }
+}
