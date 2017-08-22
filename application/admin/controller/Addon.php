@@ -196,8 +196,6 @@ class Addon extends Backend
      */
     public function local()
     {
-        Config::set('default_return_type', 'json');
-        
         $file = $this->request->file('file');
         $addonTmpDir = RUNTIME_PATH . 'addons' . DS;
         if (!is_dir($addonTmpDir))
