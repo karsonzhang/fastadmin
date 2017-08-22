@@ -43,6 +43,7 @@ class Admin extends Backend
         }
         $this->childrenIds = array_keys($groupdata);
         $this->view->assign('groupdata', $groupdata);
+        $this->assignconfig("admin", ['id' => $this->auth->id]);
     }
 
     /**
@@ -59,7 +60,7 @@ class Admin extends Backend
                     ->field('uid,group_id')
                     ->where('group_id', 'in', $this->childrenIds)
                     ->select();
-            
+
             $adminGroupName = [];
             foreach ($authGroupList as $k => $v)
             {

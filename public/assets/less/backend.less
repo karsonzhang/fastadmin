@@ -621,7 +621,8 @@ table.table-template{
         box-shadow: 1px 1px 50px rgba(0,0,0,.3)!important;
     }
     &.layui-layer-iframe {
-        overflow:hidden!important;
+        //overflow:hidden!important;
+        overflow:visible;
     }
     .layui-layer-moves{
         .box-sizing(content-box);
@@ -631,6 +632,7 @@ table.table-template{
         text-align: center!important;
         padding: 10px!important;
         background: #ecf0f1;
+        overflow:hidden;
         a {
             background-color: #95a5a6!important;
             border-color: #95a5a6!important;
@@ -729,4 +731,14 @@ table.table-template{
 /*平板样式*/
 @media (max-width: @screen-tablet) {
 
+}
+
+/*修复radio和checkbox样式对齐*/
+.radio, .checkbox {
+    > label {
+        margin-right: 10px;
+        > input {
+            margin: 2px 0 0;
+        }
+    }
 }

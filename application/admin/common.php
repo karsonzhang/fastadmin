@@ -36,7 +36,7 @@ function build_radios($name, $list = [], $selected = null)
     {
         $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::radio($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
     }
-    return implode(' ', $html);
+    return '<div class="radio">' . implode(' ', $html) . '</div>';
 }
 
 /**
@@ -55,7 +55,7 @@ function build_checkboxs($name, $list = [], $selected = null)
     {
         $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
     }
-    return implode(' ', $html);
+    return '<div class="checkbox">' . implode(' ', $html) . '</div>';
 }
 
 /**
@@ -89,7 +89,7 @@ function build_category_select($name, $type, $selected = null, $attr = [], $head
 function build_toolbar($btns = NULL, $attr = [])
 {
     $auth = \app\admin\library\Auth::instance();
-    $controller = strtolower(think\Request::instance()->controller());
+    $controller = str_replace('.','/',strtolower(think\Request::instance()->controller()));
     $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del'];
     $btns = is_array($btns) ? $btns : explode(',', $btns);
     $index = array_search('delete', $btns);

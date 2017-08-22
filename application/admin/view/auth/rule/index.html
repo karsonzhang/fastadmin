@@ -9,8 +9,10 @@
                         {:build_toolbar()}
                         <a href="javascript:;" class="btn btn-danger btn-toggle-all"><i class="fa fa-plus"></i> {:__('Toggle all')}</a>
                     </div>
-                    <table id="table" class="table table-bordered table-hover" width="100%">
-
+                    <table id="table" class="table table-bordered table-hover" 
+                           data-operate-edit="{:$auth->check('auth/rule/edit')}" 
+                           data-operate-del="{:$auth->check('auth/rule/del')}" 
+                           width="100%">
                     </table>
                 </div>
             </div>

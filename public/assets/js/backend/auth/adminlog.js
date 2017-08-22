@@ -32,7 +32,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             events: Table.api.events.operate,
                             buttons: [{
                                     name: 'detail',
-                                    text: 'Detail',
+                                    text: __('Detail'),
                                     icon: 'fa fa-list',
                                     classname: 'btn btn-info btn-xs btn-detail btn-dialog',
                                     url: 'auth/adminlog/detail'

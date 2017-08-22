@@ -19,6 +19,10 @@ return [
     'module_init'  => [
         'app\\common\\behavior\\Common',
     ],
+    // 模块初始化
+    'addons_init'  => [
+        'app\\common\\behavior\\Common',
+    ],
     // 操作开始执行
     'action_begin' => [],
     // 视图内容过滤
