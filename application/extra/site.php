@@ -1,8 +1,8 @@
 <?php
 
 return array (
-  'name' => 'FastAdmin',
-  'beian' => '粤ICP备15054802号-4',
+  'name' => '黄河水厂设备管理系统',
+  'beian' => '',
   'cdnurl' => '',
   'version' => '1.0.1',
   'timezone' => 'Asia/Shanghai',
@@ -19,6 +19,7 @@ return array (
     'page' => '单页',
     'article' => '文章',
     'test' => '测试',
+    'mach' => '设备',
   ),
   'configgroup' => 
   array (
