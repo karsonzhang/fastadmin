@@ -376,7 +376,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone'});
                     buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
                     var html = [];
-                    var url, classname, icon, text, title;
+                    var url, classname, icon, text, title, extend;
                     $.each(buttons, function (i, j) {
                         if (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] === 'undefined') {
                             return true;
@@ -393,7 +393,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             icon = j.icon ? j.icon : '';
                             text = j.text ? j.text : '';
                             title = j.title ? j.title : text;
-                            html.push('<a href="' + url + '" class="' + classname + '" title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                            extend = j.extend ? j.extend : '';
+                            html.push('<a href="' + url + '" class="' + classname + '" ' + extend + ' title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
                         }
                     });
                     return html.join(' ');
@@ -405,7 +406,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     // 默认按钮组
                     var buttons = $.extend([], this.buttons || []);
                     var html = [];
-                    var url, classname, icon, text, title;
+                    var url, classname, icon, text, title, extend;
                     $.each(buttons, function (i, j) {
                         var attr = table.data("buttons-" + j.name);
                         if (typeof attr === 'undefined' || attr) {
@@ -416,7 +417,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             icon = j.icon ? j.icon : '';
                             text = j.text ? j.text : '';
                             title = j.title ? j.title : text;
-                            html.push('<a href="' + url + '" class="' + classname + '" title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                            extend = j.extend ? j.extend : '';
+                            html.push('<a href="' + url + '" class="' + classname + '" ' + extend + ' title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
                         }
                     });
                     return html.join(' ');

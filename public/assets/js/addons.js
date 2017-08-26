@@ -1,3 +1,3 @@
-define(['backend'], function (Backend) {
+define([], function () {
     
 });
