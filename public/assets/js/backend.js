@@ -63,24 +63,11 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     }
                 }
             },
-            replaceids: function (elem, url) {
-                //如果有需要替换ids的
-                if (url.indexOf("{ids}") > -1) {
-                    var ids = 0;
-                    var tableId = $(elem).data("table-id");
-                    if (tableId && $(tableId).size() > 0 && $(tableId).data("bootstrap.table")) {
-                        var Table = require("table");
-                        ids = Table.api.selectedids($(tableId)).join(",");
-                    }
-                    url = url.replace(/\{ids\}/g, ids);
-                }
-                return url;
-            }
         },
         init: function () {
             //公共代码
             //添加ios-fix兼容iOS下的iframe
-            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
                 $("html").addClass("ios-fix");
             }
             //配置Toastr的参数
@@ -88,31 +75,27 @@ define(['fast', 'moment'], function (Fast, Moment) {
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
                 e.preventDefault();
-                var options = $(this).data() || {};
-                Backend.api.open(Backend.api.replaceids(this, $(this).attr('href')), $(this).attr('title'), options);
+                var options = $(this).data();
+                options = options ? options : {};
+                Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'), options);
             });
-            //点击包含.btn-addtabs的元素时新增选项卡
+            //点击包含.btn-addtabs的元素时事件
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
                 e.preventDefault();
-                Backend.api.addtabs(Backend.api.replaceids(this, $(this).attr('href')), $(this).attr("title"));
+                Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
             });
-            //点击包含.btn-ajax的元素时发送Ajax请求
+            //点击包含.btn-ajax的元素时事件
             $(document).on('click', '.btn-ajax,.ajaxit', function (e) {
                 e.preventDefault();
                 var options = $(this).data();
                 if (typeof options.url === 'undefined' && $(this).attr("href")) {
                     options.url = $(this).attr("href");
                 }
-                options.url = Backend.api.replaceids(this, options.url);
                 Backend.api.ajax(options);
             });
             //修复含有fixed-footer类的body边距
             if ($(".fixed-footer").size() > 0) {
                 $(document.body).css("padding-bottom", $(".fixed-footer").height());
-            }
-            //修复不在iframe时layer-footer隐藏的问题
-            if ($(".layer-footer").size() > 0 && self === top) {
-                $(".layer-footer").show();
             }
         }
     };

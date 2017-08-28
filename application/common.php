@@ -90,7 +90,7 @@ if (!function_exists('cdnurl'))
      */
     function cdnurl($url)
     {
-        return preg_match("/^https?:\/\/(.*)/i", $url) ? $url : think\Config::get('site.cdnurl') . $url;
+        return preg_match("/^https?:\/\/(.*)/i", $url) ? $url : think\Config::get('cdnurl') . $url;
     }
 
 }

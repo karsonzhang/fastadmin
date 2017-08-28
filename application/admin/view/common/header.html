@@ -1,7 +1,7 @@
 <!-- Logo -->
 <a href="javascript:;" class="logo">
     <!-- 迷你模式下Logo的大小为50X50 -->
-    <span class="logo-mini">{$site.name|mb_substr=0,4,'utf-8'|mb_strtoupper='utf-8'}</span>
+    <span class="logo-mini">{$site.name|mb_substr=0,4,'utf-8'|strtoupper}</span>
     <!-- 普通模式下Logo -->
     <span class="logo-lg"><b>{$site.name|mb_substr=0,4,'utf-8'}</b>{$site.name|mb_substr=4,null,'utf-8'}</span>
 </a>

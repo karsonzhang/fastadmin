@@ -58,7 +58,7 @@ class Min extends Command
         {
             if (IS_WIN)
             {
-                throw new Exception("node environment not found!please check http://doc.fastadmin.net/docs/faq.html !");
+                throw new Exception("node environment not found!please check http://doc.fastadmin.net/faq.html !");
             }
 
             try
@@ -85,8 +85,8 @@ class Min extends Command
                     'jsBaseUrl'   => $this->options['jsBaseUrl'],
                     'cssBaseName' => str_replace('{module}', $mod, $this->options['cssBaseName']),
                     'cssBaseUrl'  => $this->options['cssBaseUrl'],
-                    'jsBasePath'  => str_replace('/', DS, ROOT_PATH . $this->options['jsBaseUrl']),
-                    'cssBasePath' => str_replace('/', DS, ROOT_PATH . $this->options['cssBaseUrl']),
+                    'jsBasePath'  => str_replace('\\', '/', ROOT_PATH) . $this->options['jsBaseUrl'],
+                    'cssBasePath' => str_replace('\\', '/', ROOT_PATH) . $this->options['cssBaseUrl'],
                     'ds'          => DS,
                 ];
 
@@ -156,7 +156,7 @@ class Min extends Command
      */
     protected function getStub($name)
     {
-        return __DIR__ . DS . 'Min' . DS . 'stubs' . DS . $name . '.stub';
+        return __DIR__ . '/Min/stubs/' . $name . '.stub';
     }
 
 }

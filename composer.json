@@ -22,8 +22,7 @@
         "topthink/think-captcha": "^1.0",
         "mtdowling/cron-expression": "^1.2",
         "phpmailer/phpmailer": "^5.2",
-        "karsonzhang/fastadmin-addons": "dev-master",
-        "overtrue/pinyin": "~3.0"
+        "karsonzhang/fastadmin-addons": "dev-master"
     },
     "config": {
         "preferred-install": "dist"
