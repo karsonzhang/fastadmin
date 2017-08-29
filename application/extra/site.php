@@ -19,7 +19,7 @@ return array (
     'page' => '单页',
     'article' => '文章',
     'test' => '测试',
-    'mach' => '设备',
+    'machine' => '设备',
   ),
   'configgroup' => 
   array (
