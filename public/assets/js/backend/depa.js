@@ -21,18 +21,19 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'weigh',
+                showToggle: false,
                 columns: [
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'name', title: __('Name')},
-                        {field: 'nickname', title: __('Nickname')},
-                        {field: 'description', title: __('Description')},
-                        {field: 'diyname', title: __('Diyname')},
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
-                        {field: 'updatetime', title: __('Updatetime'), formatter: Table.api.formatter.datetime},
+                        {field: 'nickname', title: __('Nickname'), visible: false, operate: false},
+                        {field: 'description', title: __('Description'), visible: false, operate: false},
+                        {field: 'diyname', title: __('Diyname'), visible: false, operate: false},
+                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: false},
+                        {field: 'updatetime', title: __('Updatetime'), formatter: Table.api.formatter.datetime, operate: 'BETWEEN', type: 'datetime', addclass: 'datetimepicker', data: 'data-date-format="YYYY-MM-DD"'},
                         {field: 'weigh', title: __('Weigh')},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
+                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status, searchList: {'normal': __('Normal'), 'hidden': __('Hidden')}, style: 'min-width:100px;'},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
