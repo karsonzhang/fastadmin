@@ -135,7 +135,7 @@ class Backend extends Controller
         }
 
         // 语言检测
-        $lang = Lang::detect();
+        $lang = strip_tags(Lang::detect());
 
         $site = Config::get("site");
 
