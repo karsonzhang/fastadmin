@@ -11,7 +11,7 @@
 // +----------------------------------------------------------------------
 
 //如果有定义绑定后台模块则禁用路由规则 
-if (defined('BIND_MODULE') && BIND_MODULE == 'admin')
+if (\think\Route::getBind('module') == 'admin')
     return [];
 
 return [

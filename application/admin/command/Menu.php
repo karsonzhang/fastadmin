@@ -31,7 +31,6 @@ class Menu extends Command
     {
         $this->model = new AuthRule();
         $adminPath = dirname(__DIR__) . DS;
-        $moduleName = 'admin';
         //控制器名
         $controller = $input->getOption('controller') ?: '';
         if (!$controller)
@@ -47,7 +46,7 @@ class Menu extends Command
                 throw new Exception("could not delete all menu");
             }
             $ids = [];
-            $list = $this->model->where('name', 'like', "/{$moduleName}/" . strtolower($controller) . "%")->select();
+            $list = $this->model->where('name', 'like', strtolower($controller) . "%")->select();
             foreach ($list as $k => $v)
             {
                 $output->warning($v->name);
