@@ -1,0 +1,183 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label for="c-category_id" class="control-label col-xs-12 col-sm-2">{:__('Category_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-category_id" data-rule="required" data-source="category/selectpage" data-params='{"custom[type]":"machine"}' class="form-control selectpage" name="row[category_id]" type="text" value="{$row.category_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-depa_id" class="control-label col-xs-12 col-sm-2">{:__('Depa_id')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-depa_id" data-rule="required" data-source="depa/index" class="form-control selectpage" name="row[depa_id]" type="text" value="{$row.depa_id}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" data-rule="required" class="form-control" name="row[name]" type="text" value="{$row.name}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-place" class="control-label col-xs-12 col-sm-2">{:__('Place')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-place" class="form-control" name="row[place]" type="text" value="{$row.place}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-spec" class="control-label col-xs-12 col-sm-2">{:__('Spec')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-spec" class="form-control" name="row[spec]" type="text" value="{$row.spec}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-models" class="control-label col-xs-12 col-sm-2">{:__('Models')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-models" class="form-control" name="row[models]" type="text" value="{$row.models}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-origin" class="control-label col-xs-12 col-sm-2">{:__('Origin')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-origin" class="form-control" name="row[origin]" type="text" value="{$row.origin}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-supplier" class="control-label col-xs-12 col-sm-2">{:__('Supplier')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-supplier" class="form-control" name="row[supplier]" type="text" value="{$row.supplier}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-power" class="control-label col-xs-12 col-sm-2">{:__('Power')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-power" class="form-control" name="row[power]" type="text" value="{$row.power}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-speed" class="control-label col-xs-12 col-sm-2">{:__('Speed')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-speed" class="form-control" name="row[speed]" type="text" value="{$row.speed}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-voltage" class="control-label col-xs-12 col-sm-2">{:__('Voltage')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-voltage" class="form-control" name="row[voltage]" type="text" value="{$row.voltage}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-current" class="control-label col-xs-12 col-sm-2">{:__('Current')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-current" class="form-control" name="row[current]" type="text" value="{$row.current}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-weight" class="control-label col-xs-12 col-sm-2">{:__('Weight')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-weight" class="form-control" step="0.01" name="row[weight]" type="number" value="{$row.weight}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-image" class="control-label col-xs-12 col-sm-2">{:__('Image')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="form-inline">
+                <input id="c-image" class="form-control" size="50" name="row[image]" type="text" value="{$row.image}">
+                <span><button type="button" id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="false" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-input-id="c-image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                <ul class="row list-inline plupload-preview" id="p-image"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-images" class="control-label col-xs-12 col-sm-2">{:__('Images')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="form-inline">
+                <input id="c-images" class="form-control" size="50" name="row[images]" type="text" value="{$row.images}">
+                <span><button type="button" id="plupload-images" class="btn btn-danger plupload" data-input-id="c-images" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="true" data-preview-id="p-images"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-images" class="btn btn-primary fachoose" data-input-id="c-images" data-mimetype="image/*" data-multiple="true"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                <ul class="row list-inline plupload-preview" id="p-images"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-attachfile" class="control-label col-xs-12 col-sm-2">{:__('Attachfile')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="form-inline">
+                <input id="c-attachfile" class="form-control" size="50" name="row[attachfile]" type="text" value="{$row.attachfile}">
+                <span><button type="button" id="plupload-attachfile" class="btn btn-danger plupload" data-input-id="c-attachfile" data-multiple="false"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-attachfile" class="btn btn-primary fachoose" data-input-id="c-attachfile" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-keywords" class="control-label col-xs-12 col-sm-2">{:__('Keywords')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-keywords" class="form-control" name="row[keywords]" type="text" value="{$row.keywords}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-description" class="control-label col-xs-12 col-sm-2">{:__('Description')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-description" class="form-control" name="row[description]" type="text" value="{$row.description}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-startdate" class="control-label col-xs-12 col-sm-2">{:__('Startdate')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-startdate" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[startdate]" type="text" value="{$row.startdate}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-number" class="control-label col-xs-12 col-sm-2">{:__('Number')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-number" data-rule="required" class="form-control" name="row[number]" type="text" value="{$row.number}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-enabledate" class="control-label col-xs-12 col-sm-2">{:__('Enabledate')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-enabledate" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[enabledate]" type="text" value="{$row.enabledate}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-year" class="control-label col-xs-12 col-sm-2">{:__('Year')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-year" class="form-control datetimepicker" data-date-format="YYYY" data-use-current="true" name="row[year]" type="text" value="{$row.year}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-weigh" data-rule="required" class="form-control" name="row[weigh]" type="number" value="{$row.weigh}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            {foreach name="statusList" item="vo"}
+            <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" type="radio" value="{$key}" {in name="key" value="$row.status"}checked{/in} /> {$vo}</label> 
+            {/foreach}
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-state" class="control-label col-xs-12 col-sm-2">{:__('State')}:</label>
+        <div class="col-xs-12 col-sm-8">
+                        
+            {foreach name="stateList" item="vo"}
+            <label for="row[state]-{$key}"><input id="row[state]-{$key}" name="row[state]" type="radio" value="{$key}" {in name="key" value="$row.state"}checked{/in} /> {$vo}</label> 
+            {/foreach}
+
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>
