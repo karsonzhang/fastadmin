@@ -20,6 +20,8 @@ class Profile extends Backend
      */
     public function index()
     {
+        //设置过滤方法
+        $this->request->filter(['strip_tags']);
         if ($this->request->isAjax())
         {
             $model = model('AdminLog');

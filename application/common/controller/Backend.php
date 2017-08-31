@@ -202,7 +202,7 @@ class Backend extends Controller
         $relationSearch = is_null($relationSearch) ? $this->relationSearch : $relationSearch;
         $search = $this->request->get("search", '');
         $filter = $this->request->get("filter", '');
-        $op = $this->request->get("op", '');
+        $op = $this->request->get("op", '', 'trim');
         $sort = $this->request->get("sort", "id");
         $order = $this->request->get("order", "DESC");
         $offset = $this->request->get("offset", 0);
