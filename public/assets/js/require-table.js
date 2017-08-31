@@ -296,12 +296,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     //渲染fontawesome图标
                     return '<i class="' + value + '"></i> ' + value;
                 },
-                image: function (value, row, index, custom) {
-                    var classname = typeof custom !== 'undefined' ? custom : 'img-sm img-center';
+                image: function (value, row, index) {
+                    var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
                     return '<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />';
                 },
-                images: function (value, row, index, custom) {
-                    var classname = typeof custom !== 'undefined' ? custom : 'img-sm img-center';
+                images: function (value, row, index) {
+                    var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
                     var arr = value.split(',');
                     var html = [];
                     $.each(arr, function (i, value) {
@@ -309,12 +309,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     });
                     return html.join(' ');
                 },
-                status: function (value, row, index, custom) {
+                status: function (value, row, index) {
                     //颜色状态数组,可使用red/yellow/aqua/blue/navy/teal/olive/lime/fuchsia/purple/maroon
                     var colorArr = {normal: 'success', hidden: 'grey', deleted: 'danger', locked: 'info'};
-                    //如果有自定义状态,可以按需传入
-                    if (typeof custom !== 'undefined') {
-                        colorArr = $.extend(colorArr, custom);
+                    //如果字段列有定义custom
+                    if (typeof this.custom !== 'undefined') {
+                        colorArr = $.extend(colorArr, this.custom);
                     }
                     value = value.toString();
                     var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
@@ -329,14 +329,21 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 search: function (value, row, index) {
                     return '<a href="javascript:;" class="searchit" data-field="' + this.field + '" data-value="' + value + '">' + value + '</a>';
                 },
-                addtabs: function (value, row, index, url) {
-                    return '<a href="' + url + '" class="addtabsit" title="' + __("Search %s", value) + '">' + value + '</a>';
+                addtabs: function (value, row, index) {
+                    var url = Table.api.replaceurl(this.url, value, row, this.table);
+                    var title = this.title ? this.title : __("Search %s", value);
+                    return '<a href="' + Fast.api.fixurl(url) + '" class="addtabsit" data-value="' + value + '" title="' + title + '">' + value + '</a>';
                 },
-                flag: function (value, row, index, custom) {
+                dialog: function (value, row, index) {
+                    var url = Table.api.replaceurl(this.url, value, row, this.table);
+                    var title = this.title ? this.title : value;
+                    return '<a href="' + Fast.api.fixurl(url) + '" class="dialogit" data-value="' + value + '" title="' + title + '">' + value + '</a>';
+                },
+                flag: function (value, row, index) {
                     var colorArr = {index: 'success', hot: 'warning', recommend: 'danger', 'new': 'info'};
-                    //如果有自定义状态,可以按需传入
-                    if (typeof custom !== 'undefined') {
-                        colorArr = $.extend(colorArr, custom);
+                    //如果字段列有定义custom
+                    if (typeof this.custom !== 'undefined') {
+                        colorArr = $.extend(colorArr, this.custom);
                     }
                     //渲染Flag
                     var html = [];
@@ -351,8 +358,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     });
                     return html.join(' ');
                 },
-                label: function (value, row, index, custom) {
+                label: function (value, row, index) {
                     var colorArr = ['success', 'warning', 'danger', 'info'];
+                    //如果字段列有定义custom
+                    if (typeof this.custom !== 'undefined') {
+                        colorArr = $.merge(colorArr, this.custom);
+                    }
                     //渲染Flag
                     var html = [];
                     var arr = value.split(',');
@@ -386,8 +397,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         }
                         var attr = table.data("operate-" + j.name);
                         if (typeof attr === 'undefined' || attr) {
-                            //自动加上ids
-                            url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            url = j.url ? j.url : '';
+                            if (url.indexOf("{ids}") === -1) {
+                                url = url ? url + (url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            }
+                            url = Table.api.replaceurl(url, value, row, table);
                             url = url ? Fast.api.fixurl(url) : 'javascript:;';
                             classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
                             icon = j.icon ? j.icon : '';
@@ -410,8 +424,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     $.each(buttons, function (i, j) {
                         var attr = table.data("buttons-" + j.name);
                         if (typeof attr === 'undefined' || attr) {
-                            //自动加上ids
-                            url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            url = j.url ? j.url : '';
+                            if (url.indexOf("{ids}") === -1) {
+                                url = url ? url + (url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            }
+                            url = Table.api.replaceurl(url, value, row, table);
                             url = url ? Fast.api.fixurl(url) : 'javascript:;';
                             classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
                             icon = j.icon ? j.icon : '';
@@ -423,6 +440,18 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     });
                     return html.join(' ');
                 }
+            },
+            //替换URL中的{ids}和{value}
+            replaceurl: function (url, value, row, table) {
+                url = url ? url : '';
+                url = url.replace(/\{value\}/ig, value);
+                if (table) {
+                    var options = table.bootstrapTable('getOptions');
+                    url = url.replace(/\{ids\}/ig, row[options.pk]);
+                } else {
+                    url = url.replace(/\{ids\}/ig, 0);
+                }
+                return url;
             },
             // 获取选中的条目ID集合
             selectedids: function (table) {

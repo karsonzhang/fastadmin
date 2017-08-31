@@ -1,5 +1,4 @@
 /nbproject/
-/addons/
 .idea
 composer.lock
 *.log
@@ -7,6 +6,7 @@ composer.lock
 thinkphp
 vendor
 runtime
+addons
 public/assets/libs/
 /application/admin/command/Install/*.lock
 /public/uploads
