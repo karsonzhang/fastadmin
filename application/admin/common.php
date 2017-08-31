@@ -89,7 +89,7 @@ function build_category_select($name, $type, $selected = null, $attr = [], $head
 function build_toolbar($btns = NULL, $attr = [])
 {
     $auth = \app\admin\library\Auth::instance();
-    $controller = str_replace('.','/',strtolower(think\Request::instance()->controller()));
+    $controller = str_replace('.', '/', strtolower(think\Request::instance()->controller()));
     $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del'];
     $btns = is_array($btns) ? $btns : explode(',', $btns);
     $index = array_search('delete', $btns);
@@ -125,12 +125,16 @@ function build_toolbar($btns = NULL, $attr = [])
  * @param string $content
  * @return string
  */
-function build_heading($title = NULL, $content = NULL)
+function build_heading($title = NULL, $content = NULL, $path = NULL)
 {
     if (is_null($title) && is_null($content))
     {
-        $path = request()->pathinfo();
-        $path = $path[0] == '/' ? $path : '/' . $path;
+        if (is_null($path))
+        {
+            $action = request()->action();
+            $controller = str_replace('.', '/', request()->controller());
+            $path = strtolower($controller . ($action && $action != 'index' ? '/' . $action : ''));
+        }
         // 根据当前的URI自动匹配父节点的标题和备注
         $data = Db::name('auth_rule')->where('name', $path)->field('title,remark')->find();
         if ($data)

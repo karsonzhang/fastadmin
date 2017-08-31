@@ -121,10 +121,12 @@ class Addon extends Backend
         }
         try
         {
-            Service::install($name, $force);
+            $uid = $this->request->post("uid");
+            $token = $this->request->post("token");
+            Service::install($name, $force, ['uid' => $uid, 'token' => $token]);
             $info = get_addon_info($name);
             $info['config'] = get_addon_config($name) ? 1 : 0;
-            $this->success("安装成功", null, ['addon' => $info]);
+            $this->success(__('Install successful'), null, ['addon' => $info]);
         }
         catch (AddonException $e)
         {
@@ -150,7 +152,7 @@ class Addon extends Backend
         try
         {
             Service::uninstall($name, $force);
-            $this->success("卸载成功");
+            $this->success(__('Uninstall successful'));
         }
         catch (AddonException $e)
         {
@@ -179,7 +181,7 @@ class Addon extends Backend
             $action = $action == 'enable' ? $action : 'disable';
             //调用启用、禁用的方法
             Service::$action($name, $force);
-            $this->success("操作成功");
+            $this->success(__('Operate successful'));
         }
         catch (AddonException $e)
         {
@@ -197,7 +199,7 @@ class Addon extends Backend
     public function local()
     {
         Config::set('default_return_type', 'json');
-        
+
         $file = $this->request->file('file');
         $addonTmpDir = RUNTIME_PATH . 'addons' . DS;
         if (!is_dir($addonTmpDir))
@@ -217,20 +219,20 @@ class Addon extends Backend
                 $infoFile = $tmpAddonDir . 'info.ini';
                 if (!is_file($infoFile))
                 {
-                    throw new Exception("插件配置文件未找到");
+                    throw new Exception(__('Addon info file was not found'));
                 }
 
                 $config = Config::parse($infoFile, '', $tmpName);
                 $name = isset($config['name']) ? $config['name'] : '';
                 if (!$name)
                 {
-                    throw new Exception("插件配置信息不正确");
+                    throw new Exception(__('Addon info file data incorrect'));
                 }
 
                 $newAddonDir = ADDON_PATH . $name . DS;
                 if (is_dir($newAddonDir))
                 {
-                    throw new Exception("上传的插件已经存在");
+                    throw new Exception(__('Addon already exists'));
                 }
 
                 //重命名插件文件夹
@@ -255,9 +257,9 @@ class Addon extends Backend
 
                     //导入SQL
                     Service::importsql($name);
-                    
+
                     $info['config'] = get_addon_config($name) ? 1 : 0;
-                    $this->success("插件安装成功，你需要手动启用该插件，使之生效", null, ['addon' => $info]);
+                    $this->success(__('Installed tips'), null, ['addon' => $info]);
                 }
                 catch (Exception $e)
                 {
@@ -287,12 +289,61 @@ class Addon extends Backend
         try
         {
             Service::refresh();
-            $this->success("操作成功");
+            $this->success(__('Operate successful'));
         }
         catch (Exception $e)
         {
             $this->error($e->getMessage());
         }
+    }
+
+    /**
+     * 已装插件
+     */
+    public function downloaded()
+    {
+        $offset = (int) $this->request->get("offset");
+        $limit = (int) $this->request->get("limit");
+        $filter = $this->request->get("filter");
+        $filter = (array) json_decode($filter, true);
+        foreach ($filter as $k => &$v)
+        {
+            $v = htmlspecialchars(strip_tags($v));
+        }
+        unset($v);
+        $where = ['status' => 'normal'];
+        if (isset($filter['id']))
+        {
+            $where['id'] = (int) $filter['id'];
+        }
+        if (isset($filter['name']))
+        {
+            $where['name'] = ['like', "%{$filter['name']}%"];
+        }
+        if (isset($filter['title']))
+        {
+            $where['title'] = ['like', "%{$filter['title']}%"];
+        }
+
+        $addons = get_addon_list();
+        $list = [];
+        foreach ($addons as $k => $v)
+        {
+            $v['flag'] = '';
+            $v['banner'] = '';
+            $v['image'] = '';
+            $v['donateimage'] = '';
+            $v['demourl'] = '';
+            $v['price'] = '0.00';
+            $v['url'] = '/addons/' . $v['name'];
+            $v['createtime'] = 0;
+            $list[] = $v;
+        }
+        $list = array_slice($list, $offset, $limit);
+        $result = array("total" => count($addons), "rows" => $list);
+
+        $callback = $this->request->get('callback') ? "jsonp" : "json";
+        return $callback($result);
     }
 
 }
