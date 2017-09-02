@@ -192,7 +192,7 @@ class Backend extends Controller
 
     /**
      * 生成查询所需要的条件,排序方式
-     * @param mixed $searchfields 查询条件
+     * @param mixed $searchfields 快速查询的字段
      * @param boolean $relationSearch 是否关联查询
      * @return array
      */
@@ -220,17 +220,14 @@ class Backend extends Controller
                 $name = basename(str_replace('\\', '/', $class));
                 $tableName = $this->model->getQuery()->getTable($name) . ".";
             }
-            if (stripos($sort, ".") === false)
-            {
-                $sort = $tableName . $sort;
-            }
+            $sort = stripos($sort, ".") === false ? $tableName . $sort : $sort;
         }
         if ($search)
         {
             $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
             foreach ($searcharr as $k => &$v)
             {
-                $v = $tableName . $v;
+                $v = stripos($v, ".") === false ? $tableName . $v : $v;
             }
             unset($v);
             $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
@@ -249,7 +246,7 @@ class Backend extends Controller
                 case '!=':
                 case 'LIKE':
                 case 'NOT LIKE':
-                    $where[] = [$k, $sym, $v];
+                    $where[] = [$k, $sym, (string) $v];
                     break;
                 case '>':
                 case '>=':
@@ -257,7 +254,9 @@ class Backend extends Controller
                 case '<=':
                     $where[] = [$k, $sym, intval($v)];
                     break;
+                case 'IN':
                 case 'IN(...)':
+                case 'NOT IN':
                 case 'NOT IN(...)':
                     $where[] = [$k, str_replace('(...)', '', $sym), explode(',', $v)];
                     break;
@@ -265,10 +264,13 @@ class Backend extends Controller
                 case 'NOT BETWEEN':
                     $where[] = [$k, $sym, array_slice(explode(',', $v), 0, 2)];
                     break;
+                case 'LIKE':
                 case 'LIKE %...%':
                     $where[] = [$k, 'LIKE', "%{$v}%"];
                     break;
+                case 'NULL':
                 case 'IS NULL':
+                case 'NOT NULL':
                 case 'IS NOT NULL':
                     $where[] = [$k, strtolower(str_replace('IS ', '', $sym))];
                     break;

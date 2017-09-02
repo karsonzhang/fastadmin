@@ -50,7 +50,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
                             title = typeof title !== 'undefined' ? title : leftlink.find("span:first").text();
                             leftlink.trigger("fa.event.toggleitem");
                         }
-                        var navnode = $(".nav-tabs ul li a[node-url='" + url + "']");
+                        var navnode = top.window.$(".nav-tabs ul li a[node-url='" + url + "']");
                         if (navnode.size() > 0) {
                             navnode.trigger("click");
                         } else {
@@ -60,6 +60,30 @@ define(['fast', 'moment'], function (Fast, Moment) {
                             title = typeof title !== 'undefined' ? title : '';
                             top.window.$("<a />").append('<i class="' + icon + '"></i> <span>' + title + '</span>').prop("href", url).attr({url: url, addtabs: id}).addClass("hide").appendTo(top.window.document.body).trigger("click");
                         }
+                    }
+                }
+            },
+            closetabs: function (url) {
+                if (typeof url === 'undefined') {
+                    top.window.$("ul.nav-addtabs li.active .close-tab").trigger("click");
+                } else {
+                    var dom = "a[url='{url}']"
+                    var navlink = top.window.$(dom.replace(/\{url\}/, url));
+                    if (navlink.size() === 0) {
+                        url = Fast.api.fixurl(url);
+                        navlink = top.window.$(dom.replace(/\{url\}/, url));
+                        if (navlink.size() === 0) {
+                        } else {
+                            var baseurl = url.substr(0, url.indexOf("?") > -1 ? url.indexOf("?") : url.length);
+                            navlink = top.window.$(dom.replace(/\{url\}/, baseurl));
+                            //能找到相对地址
+                            if (navlink.size() === 0) {
+                                navlink = top.window.$(".nav-tabs ul li a[node-url='" + url + "']");
+                            }
+                        }
+                    }
+                    if (navlink.size() > 0 && navlink.attr('addtabs')) {
+                        top.window.$("ul.nav-addtabs li#tab_" + navlink.attr('addtabs') + " .close-tab").trigger("click");
                     }
                 }
             },

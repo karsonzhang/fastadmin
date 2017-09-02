@@ -186,8 +186,15 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     }
                 }, function (data, ret) {
                     $('.form-group', form).removeClass('has-feedback has-success has-error');
-                    if (data && typeof data === 'object' && typeof data.token !== 'undefined') {
-                        $("input[name='__token__']", form).val(data.token);
+                    if (data && typeof data === 'object') {
+                        //刷新客户端token
+                        if (typeof data.token !== 'undefined') {
+                            $("input[name='__token__']", form).val(data.token);
+                        }
+                        //调用客户端事件
+                        if (typeof data.callback !== 'undefined' && typeof data.callback === 'function') {
+                            data.callback.call(form, data);
+                        }
                     }
                     if (typeof success === 'function') {
                         if (!success.call(form, data, ret)) {

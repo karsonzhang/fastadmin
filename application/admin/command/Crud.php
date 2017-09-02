@@ -255,7 +255,7 @@ class Crud extends Command
         $controller = str_replace('_', '', $controller);
         $controllerArr = !$controller ? explode('_', strtolower($table)) : explode('/', strtolower($controller));
         $controllerUrl = implode('/', $controllerArr);
-        $controllerName = ucfirst(array_pop($controllerArr));
+        $controllerName = mb_ucfirst(array_pop($controllerArr));
         $controllerDir = implode(DS, $controllerArr);
         $controllerFile = ($controllerDir ? $controllerDir . DS : '') . $controllerName . '.php';
         $viewDir = $adminPath . 'view' . DS . $controllerUrl . DS;
@@ -810,10 +810,10 @@ class Crud extends Command
         if (!in_array($inputType, ['datetime', 'select', 'multiple', 'checkbox', 'radio']))
             return;
         $fieldList = $this->getFieldListName($field);
-        $methodName = 'get' . ucfirst($fieldList);
+        $methodName = 'get' . mb_ucfirst($fieldList);
         foreach ($itemArr as $k => &$v)
         {
-            $v = "__('" . ucfirst($v) . "')";
+            $v = "__('" . mb_ucfirst($v) . "')";
         }
         unset($v);
         $itemString = $this->getArrayString($itemArr);
@@ -832,7 +832,7 @@ EOD;
     {
         if (!in_array($inputType, ['datetime', 'select', 'multiple', 'checkbox', 'radio']))
             return;
-        $attrField = ucfirst($this->getCamelizeName($field));
+        $attrField = mb_ucfirst($this->getCamelizeName($field));
         $getAttr[] = $this->getReplacedStub("mixins" . DS . $inputType, ['field' => $field, 'methodName' => "get{$attrField}TextAttr", 'listMethodName' => "get{$attrField}List"]);
     }
 
@@ -840,7 +840,7 @@ EOD;
     {
         if ($inputType != 'datetime')
             return;
-        $attrField = ucfirst($this->getCamelizeName($field));
+        $attrField = mb_ucfirst($this->getCamelizeName($field));
         if ($inputType == 'datetime')
         {
             $return = <<<EOD
@@ -868,13 +868,13 @@ EOD;
         {
             $modelarr = explode('_', strtolower($table));
             foreach ($modelarr as $k => &$v)
-                $v = ucfirst($v);
+                $v = mb_ucfirst($v);
             unset($v);
             $modelName = implode('', $modelarr);
         }
         else
         {
-            $modelName = ucfirst($model);
+            $modelName = mb_ucfirst($model);
         }
         return $modelName;
     }
@@ -960,7 +960,7 @@ EOD;
             $resultArr = [];
             foreach ($itemArr as $k => $v)
             {
-                $resultArr[] = "    '" . ucfirst($k) . "'  =>  '{$v}'";
+                $resultArr[] = "    '" . mb_ucfirst($k) . "'  =>  '{$v}'";
             }
             return implode(",\n", $resultArr);
         }
@@ -980,7 +980,7 @@ EOD;
         $langArr = [];
         foreach ($arr as $k => $v)
         {
-            $langArr[(is_numeric($k) ? $v : $k)] = is_numeric($k) ? ($withTpl ? "{:" : "") . "__('" . ucfirst($v) . "')" . ($withTpl ? "}" : "") : $v;
+            $langArr[(is_numeric($k) ? $v : $k)] = is_numeric($k) ? ($withTpl ? "{:" : "") . "__('" . mb_ucfirst($v) . "')" . ($withTpl ? "}" : "") : $v;
         }
         return $langArr;
     }
@@ -1129,7 +1129,7 @@ EOD;
      */
     protected function getFormGroup($field, $content)
     {
-        $langField = ucfirst($field);
+        $langField = mb_ucfirst($field);
         return<<<EOD
     <div class="form-group">
         <label for="c-{$field}" class="control-label col-xs-12 col-sm-2">{:__('{$langField}')}:</label>
@@ -1175,7 +1175,7 @@ EOD;
      */
     protected function getJsColumn($field, $datatype = '', $extend = '')
     {
-        $lang = ucfirst($field);
+        $lang = mb_ucfirst($field);
         $formatter = '';
         foreach ($this->fieldFormatterSuffix as $k => $v)
         {
