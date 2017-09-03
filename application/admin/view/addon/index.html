@@ -2,16 +2,13 @@
     .item-addon{margin-left:15px;margin-bottom:15px;}
     .item-addon img.img-responsive,.item-addon .noimage{width: 300px;height:200px;}
     .noimage {line-height: 200px;text-align: center;background:#18bc9c;color:#fff;}
-    .addon {
-        position: relative;
-    }
-    .addon > span {
-        position:absolute;left:15px;top:15px;
-    }
-    .layui-layer-pay .layui-layer-content {
-        padding:0;height:600px!important;
-    }
+    .addon {position: relative;}
+    .addon > span {position:absolute;left:15px;top:15px;}
+    .layui-layer-pay .layui-layer-content {padding:0;height:600px!important;}
     .layui-layer-pay {border:none;}
+    .payimg{position:relative;width:800px;height:600px;}
+    .payimg .alipaycode {position:absolute;left:265px;top:442px;}
+    .payimg .wechatcode {position:absolute;left:660px;top:442px;}
 </style>
 <div id="warmtips" class="alert alert-dismissable alert-danger hide">
     <button type="button" class="close" data-dismiss="alert">×</button>
@@ -79,13 +76,15 @@
     </div>
 </script>
 <script id="paytpl" type="text/html">
-    <div style="position:relative;width:800px;height:600px;background:url('<%=payimg%>') 0 0 no-repeat;">
-        <div style="position:absolute;left:265px;top:442px;">
+    <div class="payimg" style="background:url('<%=payimg%>') 0 0 no-repeat;background-size:cover;">
+        <%if(paycode){%>
+        <div class="alipaycode">
             <%=paycode%>
         </div>
-        <div style="position:absolute;left:660px;top:442px;">
+        <div class="wechatcode">
             <%=paycode%>
         </div>
+        <%}%>
     </div>
 </script>
 <script id="conflicttpl" type="text/html">
@@ -146,7 +145,7 @@
                 <p class="text-muted">{:__('Createtime')}: <%=Moment(item.createtime*1000).format("YYYY-MM-DD HH:mm:ss")%></p>
                 <p class="operate" data-id="<%=item.id%>" data-name="<%=item.name%>">
                     <% if(!addon){ %>
-                    <a href="javascript:;" class="btn btn-primary btn-success btn-install" data-type="<%=item.price<=0?'free':'price';%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a> 
+                    <a href="javascript:;" class="btn btn-primary btn-success btn-install" data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a> 
                     <% if(item.demourl){ %>
                     <a href="<%=item.demourl%>" class="btn btn-primary btn-info btn-demo" target="_blank"><i class="fa fa-flash"></i> {:__('Demo')}</a> 
                     <% } %>

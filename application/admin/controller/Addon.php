@@ -259,7 +259,7 @@ class Addon extends Backend
                     Service::importsql($name);
 
                     $info['config'] = get_addon_config($name) ? 1 : 0;
-                    $this->success(__('Installed tips'), null, ['addon' => $info]);
+                    $this->success(__('Offline installed tips'), null, ['addon' => $info]);
                 }
                 catch (Exception $e)
                 {

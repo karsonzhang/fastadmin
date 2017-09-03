@@ -262,7 +262,21 @@ class Backend extends Controller
                     break;
                 case 'BETWEEN':
                 case 'NOT BETWEEN':
-                    $where[] = [$k, $sym, array_slice(explode(',', $v), 0, 2)];
+                    $arr = array_slice(explode(',', $v), 0, 2);
+                    if (stripos($v, ',') === false || !array_filter($arr))
+                        continue;
+                    //当出现一边为空时改变操作符
+                    if ($arr[0] === '')
+                    {
+                        $sym = $sym == 'BETWEEN' ? '<=' : '>';
+                        $arr = $arr[1];
+                    }
+                    else if ($arr[1] === '')
+                    {
+                        $sym = $sym == 'BETWEEN' ? '>=' : '<';
+                        $arr = $arr[0];
+                    }
+                    $where[] = [$k, $sym, $arr];
                     break;
                 case 'LIKE':
                 case 'LIKE %...%':

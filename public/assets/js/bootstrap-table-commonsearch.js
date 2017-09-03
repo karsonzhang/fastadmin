@@ -3,6 +3,7 @@
  * @version: v0.0.1
  *
  * @update 2017-05-07 <http://git.oschina.net/pp/fastadmin>
+ * @update 2017-09-03 <http://git.oschina.net/karson/fastadmin>
  */
 
 !function ($) {
@@ -19,8 +20,8 @@
         vModal += vFormCommon.join('');
         vModal += "</div>";
         that.$container.prepend($(vModal));
-
-        var form = $("form.form-commonsearch", that.$container);
+        that.$commonsearch = $(".commonsearch-table", that.$container);
+        var form = $("form.form-commonsearch", that.$commonsearch);
 
         //绑定日期时间元素事件
         if ($(".datetimepicker", form).size() > 0) {
@@ -49,25 +50,26 @@
         // 表单提交
         form.on("submit", function (event) {
             event.preventDefault();
-            that.onColumnCommonSearch();
+            that.onCommonSearch();
             return false;
         });
 
         // 重置搜索
         form.on("click", "button[type=reset]", function (event) {
             form[0].reset();
-            that.onColumnCommonSearch();
+            that.onCommonSearch();
         });
 
     };
 
     var createFormCommon = function (pColumns, that) {
         var htmlForm = [];
-        var opList = ['=', '>', '>=', '<', '<=', '!=', 'LIKE', 'LIKE %...%', 'NOT LIKE', 'IN(...)', 'NOT IN(...)', 'BETWEEN', 'NOT BETWEEN', 'IS NULL', 'IS NOT NULL'];
-        htmlForm.push(sprintf('<form class="form-inline form-commonsearch" action="%s" >', that.options.actionForm));
+        var opList = ['=', '>', '>=', '<', '<=', '!=', 'LIKE', 'LIKE %...%', 'NOT LIKE', 'IN', 'NOT IN', 'IN(...)', 'NOT IN(...)', 'BETWEEN', 'NOT BETWEEN', 'IS NULL', 'IS NOT NULL'];
+        htmlForm.push(sprintf('<form class="form-horizontal form-commonsearch" action="%s" >', that.options.actionForm));
         htmlForm.push('<fieldset>');
         if (that.options.titleForm.length > 0)
             htmlForm.push(sprintf("<legend>%s</legend>", that.options.titleForm));
+        htmlForm.push('<div class="row">');
         for (var i in pColumns) {
             var vObjCol = pColumns[i];
             if (!vObjCol.checkbox && vObjCol.field !== 'operate' && vObjCol.searchable && vObjCol.operate !== false) {
@@ -75,8 +77,11 @@
                 query = query ? query : '';
                 vObjCol.defaultValue = that.options.renderDefault && query != '' ? query : (typeof vObjCol.defaultValue === 'undefined' ? '' : vObjCol.defaultValue);
                 ColumnsForSearch.push(vObjCol);
-                htmlForm.push('<div class="form-group" style="margin:5px">');
-                htmlForm.push(sprintf('<label for="%s" class="control-label" style="padding:0 10px">%s</label>', vObjCol.field, vObjCol.title));
+
+                htmlForm.push('<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">');
+                htmlForm.push(sprintf('<label for="%s" class="control-label col-xs-4">%s</label>', vObjCol.field, vObjCol.title));
+                htmlForm.push('<div class="col-xs-8">');
+
                 vObjCol.operate = (typeof vObjCol.operate === 'undefined' || $.inArray(vObjCol.operate, opList) === -1) ? '=' : vObjCol.operate;
                 htmlForm.push(sprintf('<input type="hidden" class="form-control operate" name="field-%s" data-name="%s" value="%s" readonly>', vObjCol.field, vObjCol.field, vObjCol.operate));
 
@@ -86,7 +91,7 @@
                         htmlForm.push(sprintf('<select class="form-control" name="%s" %s>%s</select>', vObjCol.field, style, sprintf('<option value="">%s</option>', that.options.formatCommonChoose())));
                         (function (vObjCol, that) {
                             $.when(vObjCol.searchList).done(function (ret) {
-                                
+
                                 var isArray = false;
                                 if (ret.data && ret.data.searchlist && $.isArray(ret.data.searchlist)) {
                                     var resultlist = {};
@@ -126,17 +131,26 @@
                     if (/BETWEEN$/.test(vObjCol.operate)) {
                         var defaultValueArr = /^.+|.+$/.test(defaultValue) ? defaultValue.split('|') : ['', ''];
                         htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, defaultValueArr[0], placeholder, vObjCol.field, style, data));
-                        htmlForm.push(sprintf('&nbsp;-&nbsp;<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, defaultValueArr[1], placeholder, vObjCol.field, style, data));
+
+                        htmlForm.push('</div>');
+                        htmlForm.push('</div>');
+                        htmlForm.push('<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">');
+                        htmlForm.push(sprintf('<label for="%s" class="control-label col-xs-4">%s</label>', vObjCol.field, "-"));
+                        htmlForm.push('<div class="col-xs-8">');
+                        htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, defaultValueArr[1], placeholder, vObjCol.field, style, data));
                     } else {
                         htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, defaultValue, placeholder, vObjCol.field, style, data));
                     }
                 }
 
                 htmlForm.push('</div>');
+                htmlForm.push('</div>');
             }
         }
-
+        htmlForm.push('<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">');
         htmlForm.push(createFormBtn(that).join(''));
+        htmlForm.push('</div>');
+        htmlForm.push('</div>');
         htmlForm.push('</fieldset>');
         htmlForm.push('</form>');
 
@@ -147,11 +161,9 @@
         var htmlBtn = [];
         var searchSubmit = that.options.formatCommonSubmitButton();
         var searchReset = that.options.formatCommonResetButton();
-        htmlBtn.push('<div class="form-group" style="margin:5px">');
-        htmlBtn.push('<div class="col-sm-12 text-center">');
+        htmlBtn.push('<div class="col-sm-8 col-xs-offset-4">');
         htmlBtn.push(sprintf('<button type="submit" class="btn btn-success" >%s</button> ', searchSubmit));
         htmlBtn.push(sprintf('<button type="reset" class="btn btn-default" >%s</button> ', searchReset));
-        htmlBtn.push('</div>');
         htmlBtn.push('</div>');
         return htmlBtn;
     };
@@ -179,7 +191,7 @@
             if (obj.size() > 1) {
                 if (/BETWEEN$/.test(sym)) {
                     var value_begin = $.trim($("[name='" + name + "']:first").val()), value_end = $.trim($("[name='" + name + "']:last").val());
-                    if (!value_begin.length || !value_end.length) {
+                    if (!value_begin.length && !value_end.length) {
                         return true;
                     }
                     if (typeof vObjCol.process === 'function') {
@@ -187,8 +199,8 @@
                         value_end = vObjCol.process(value_end, 'end');
                     } else if ($("[name='" + name + "']:first").attr('type') === 'datetime') { //datetime类型字段转换成时间戳
                         var Hms = Moment(value_begin).format("HH:mm:ss");
-                        value_begin = parseInt(Moment(value_begin) / 1000);
-                        value_end = parseInt(Moment(value_end) / 1000);
+                        value_begin = value_begin ? parseInt(Moment(value_begin) / 1000) : '';
+                        value_end = value_end ? parseInt(Moment(value_end) / 1000) : '';
                         if (value_begin === value_end && '00:00:00' === Hms) {
                             value_end += 86399;
                         }
@@ -217,7 +229,10 @@
         searchFormVisible: true,
         searchClass: 'searchit',
         renderDefault: true,
-        onColumnCommonSearch: function (field, text) {
+        onCommonSearch: function (field, text) {
+            return false;
+        },
+        onPostCommonSearch: function (table) {
             return false;
         }
     });
@@ -227,7 +242,8 @@
     });
 
     $.extend($.fn.bootstrapTable.Constructor.EVENTS, {
-        'column-common-search.bs.table': 'onColumnCommonSearch'
+        'common-search.bs.table': 'onCommonSearch',
+        'post-common-search.bs.table': 'onPostCommonSearch'
     });
 
     $.extend($.fn.bootstrapTable.locales[$.fn.bootstrapTable.defaults.locale], {
@@ -297,6 +313,7 @@
             params.op = JSON.stringify($.extend(params.op || {}, searchQuery.op));
             return params;
         };
+        this.trigger('post-common-search', that);
 
     };
 
@@ -335,40 +352,23 @@
         }) : this.data;
     };
 
-    BootstrapTable.prototype.onColumnCommonSearch = function (event) {
-        if (typeof event === 'undefined') {
-            var searchquery = getSearchQuery(this);
-            // 追加查询关键字
-            this.options.pageNumber = 1;
-            this.options.queryParams = function (params) {
-                return {
-                    search: params.search,
-                    sort: params.sort,
-                    order: params.order,
-                    filter: JSON.stringify(searchquery.filter),
-                    op: JSON.stringify(searchquery.op),
-                    offset: params.offset,
-                    limit: params.limit,
-                };
+    BootstrapTable.prototype.onCommonSearch = function () {
+        var searchquery = getSearchQuery(this);
+        this.trigger('common-search', this, searchquery);
+
+        // 追加查询关键字
+        this.options.pageNumber = 1;
+        this.options.queryParams = function (params) {
+            return {
+                search: params.search,
+                sort: params.sort,
+                order: params.order,
+                filter: JSON.stringify(searchquery.filter),
+                op: JSON.stringify(searchquery.op),
+                offset: params.offset,
+                limit: params.limit,
             };
-            this.refresh({query: {filter: JSON.stringify(searchquery.filter), op: JSON.stringify(searchquery.op)}});
-
-        } else {
-            var text = $.trim($(event.currentTarget).val());
-            var $field = $(event.currentTarget)[0].id;
-
-            if ($.isEmptyObject(this.filterColumnsPartial)) {
-                this.filterColumnsPartial = {};
-            }
-            if (text) {
-                this.filterColumnsPartial[$field] = text;
-            } else {
-                delete this.filterColumnsPartial[$field];
-            }
-            this.options.pageNumber = 1;
-            this.onSearch(event);
-//        this.updatePagination();
-            this.trigger('column-common-search', $field, text);
-        }
+        };
+        this.refresh({query: {filter: JSON.stringify(searchquery.filter), op: JSON.stringify(searchquery.op)}});
     };
 }(jQuery);

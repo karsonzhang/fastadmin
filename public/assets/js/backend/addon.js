@@ -120,6 +120,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             // 点击安装
             $(document).on("click", ".btn-install", function () {
+                var that = this;
                 var name = $(this).closest(".operate").data("name");
                 var userinfo = Controller.api.userinfo.get();
                 var uid = userinfo ? userinfo.id : 0;
@@ -131,6 +132,24 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     }, function (data, ret) {
                         Layer.closeAll();
                         Config['addons'][data.addon.name] = ret.data.addon;
+                        Layer.alert(__('Online installed tips'), {
+                            btn: [__('OK'), __('Donate')],
+                            title: __('Warning'),
+                            icon: 1,
+                            btn2: function () {
+                                //打赏
+                                Layer.open({
+                                    content: Template("paytpl", {payimg: $(that).data("donateimage")}),
+                                    shade: 0.8,
+                                    area: ['800px', '600px'],
+                                    skin: 'layui-layer-msg layui-layer-pay',
+                                    title: false,
+                                    closeBtn: true,
+                                    btn: false,
+                                    resize: false,
+                                });
+                            }
+                        });
                         $('.btn-refresh').trigger('click');
                     }, function (data, ret) {
                         //如果是需要购买的插件则弹出二维码提示
@@ -183,6 +202,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         return false;
                     });
                 };
+                if ($(that).data("type") !== 'free') {
+                    if (parseInt(uid) === 0) {
+                        return Layer.alert(__('Not login tips'), {
+                            title: __('Warning'),
+                            btn: [__('Login now'), __('Continue install')],
+                            yes: function (index, layero) {
+                                $(".btn-userinfo").trigger("click");
+                            },
+                            btn2: function () {
+                                install(name, false);
+                            }
+                        });
+                    }
+                }
                 install(name, false);
             });
 

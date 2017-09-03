@@ -8,7 +8,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             //双击重新加载页面
             $(document).on("dblclick", ".sidebar-menu li > a", function (e) {
-                $("#tab_" + $(this).attr("addtabs") + " iframe").attr('src', function (i, val) {
+                $("#con_" + $(this).attr("addtabs") + " iframe").attr('src', function (i, val) {
                     return val;
                 });
                 e.stopPropagation();
