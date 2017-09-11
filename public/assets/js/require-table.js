@@ -298,6 +298,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return '<i class="' + value + '"></i> ' + value;
                 },
                 image: function (value, row, index) {
+		    value=value?value:'/assets/img/blank.gif';
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
                     return '<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />';
                 },
@@ -307,6 +308,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var arr = value.split(',');
                     var html = [];
                     $.each(arr, function (i, value) {
+			value=value?value:'/assets/img/blank.gif';
                         html.push('<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />');
                     });
                     return html.join(' ');
