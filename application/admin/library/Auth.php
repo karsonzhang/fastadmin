@@ -205,6 +205,95 @@ class Auth extends \fast\Auth
     }
 
     /**
+     * 获取管理员所属于的分组ID
+     * @param int $uid
+     * @return array
+     */
+    public function getGroupIds($uid = null)
+    {
+        $groups = $this->getGroups($uid);
+        $groupIds = [];
+        foreach ($groups as $K => $v)
+        {
+            $groupIds[] = (int) $v['group_id'];
+        }
+        return $groupIds;
+    }
+
+    /**
+     * 取出当前管理员所拥有权限的分组
+     * @param boolean $withself 是否包含当前所在的分组
+     * @return array
+     */
+    public function getChildrenGroupIds($withself = false)
+    {
+        //取出当前管理员所有的分组
+        $groups = $this->getGroups();
+        $groupIds = [];
+        foreach ($groups as $k => $v)
+        {
+            $groupIds[] = $v['id'];
+        }
+        // 取出所有分组
+        $groupList = model('AuthGroup')->all(['status' => 'normal']);
+        $objList = [];
+        foreach ($groups as $K => $v)
+        {
+            if ($v['rules'] === '*')
+            {
+                $objList = $groupList;
+                break;
+            }
+            // 取出包含自己的所有子节点
+            $childrenList = Tree::instance()->init($groupList)->getChildren($v['id'], true);
+            $obj = Tree::instance()->init($childrenList)->getTreeArray($v['pid']);
+            $objList = array_merge($objList, Tree::instance()->getTreeList($obj));
+        }
+        $childrenGroupIds = [];
+        foreach ($objList as $k => $v)
+        {
+            $childrenGroupIds[] = $v['id'];
+        }
+        if (!$withself)
+        {
+            $childrenGroupIds = array_diff($childrenGroupIds, $groupIds);
+        }
+        return $childrenGroupIds;
+    }
+
+    /**
+     * 取出当前管理员所拥有权限的管理员
+     * @param boolean $withself 是否包含自身
+     * @return array
+     */
+    public function getChildrenAdminIds($withself = false)
+    {
+        $groupIds = $this->getChildrenGroupIds(false);
+        $childrenAdminIds = [];
+        $authGroupList = model('AuthGroupAccess')
+                ->field('uid,group_id')
+                ->where('group_id', 'in', $groupIds)
+                ->select();
+
+        foreach ($authGroupList as $k => $v)
+        {
+            $childrenAdminIds[] = $v['uid'];
+        }
+        if ($withself)
+        {
+            if (!in_array($this->id, $childrenAdminIds))
+            {
+                $childrenAdminIds[] = $this->id;
+            }
+        }
+        else
+        {
+            $childrenAdminIds = array_diff($childrenAdminIds, [$this->id]);
+        }
+        return $childrenAdminIds;
+    }
+
+    /**
      * 获得面包屑导航
      * @param string $path
      * @return array

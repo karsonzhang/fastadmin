@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\auth;
 
+use app\admin\model\AuthGroup;
 use app\common\controller\Backend;
 use fast\Tree;
 
@@ -15,8 +16,8 @@ class Group extends Backend
 {
 
     protected $model = null;
-    //当前登录管理员所有子节点组别
-    protected $childrenIds = [];
+    //当前登录管理员所有子组别
+    protected $childrenGroupIds = [];
     //当前组别列表数据
     protected $groupdata = [];
     //无需要权限判断的方法
@@ -27,30 +28,15 @@ class Group extends Backend
         parent::_initialize();
         $this->model = model('AuthGroup');
 
-        $groups = $this->auth->getGroups();
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
-        // 取出所有分组
-        $grouplist = model('AuthGroup')->all(['status' => 'normal']);
-        $objlist = [];
-        $group_ids = [];
-        foreach ($groups as $K => $v)
-        {
-            // 取出包含自己的所有子节点
-            $childrenlist = Tree::instance()->init($grouplist)->getChildren($v['id'], TRUE);
-            $obj = Tree::instance()->init($childrenlist)->getTreeArray($v['pid']);
-            $objlist = array_merge($objlist, Tree::instance()->getTreeList($obj));
-            $group_ids[] = (int) $v['group_id'];
-        }
+        $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
+                ->column('id,name');
 
-        $groupdata = [];
-        foreach ($objlist as $k => $v)
-        {
-            $groupdata[$v['id']] = $v['name'];
-        }
-        $this->groupdata = $groupdata;
-        $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $group_ids]);
-        $this->childrenIds = array_keys($groupdata);
-        $this->view->assign('groupdata', $groupdata);
+        $this->groupdata = $groupName;
+        $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $this->auth->getGroupIds()]);
+
+        $this->view->assign('groupdata', $this->groupdata);
     }
 
     /**
@@ -84,7 +70,7 @@ class Group extends Backend
         {
             $params = $this->request->post("row/a", [], 'strip_tags');
             $params['rules'] = explode(',', $params['rules']);
-            if (!in_array($params['pid'], $this->childrenIds))
+            if (!in_array($params['pid'], $this->childrenGroupIds))
             {
                 $this->error(__('The parent group can not be its own child'));
             }
@@ -125,7 +111,7 @@ class Group extends Backend
         {
             $params = $this->request->post("row/a", [], 'strip_tags');
             // 父节点不能是它自身的子节点
-            if (!in_array($params['pid'], $this->childrenIds))
+            if (!in_array($params['pid'], $this->childrenGroupIds))
             {
                 $this->error(__('The parent group can not be its own child'));
             }

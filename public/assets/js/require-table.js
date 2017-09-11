@@ -302,6 +302,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return '<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />';
                 },
                 images: function (value, row, index) {
+                    value = value.toString();
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
                     var arr = value.split(',');
                     var html = [];
@@ -332,12 +333,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 },
                 addtabs: function (value, row, index) {
                     var url = Table.api.replaceurl(this.url, value, row, this.table);
-                    var title = this.title ? this.title : __("Search %s", value);
+                    var title = this.atitle ? this.atitle : __("Search %s", value);
                     return '<a href="' + Fast.api.fixurl(url) + '" class="addtabsit" data-value="' + value + '" title="' + title + '">' + value + '</a>';
                 },
                 dialog: function (value, row, index) {
                     var url = Table.api.replaceurl(this.url, value, row, this.table);
-                    var title = this.title ? this.title : value;
+                    var title = this.atitle ? this.atitle : __("View %s", value);
                     return '<a href="' + Fast.api.fixurl(url) + '" class="dialogit" data-value="' + value + '" title="' + title + '">' + value + '</a>';
                 },
                 flag: function (value, row, index) {
@@ -360,20 +361,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return html.join(' ');
                 },
                 label: function (value, row, index) {
-                    var colorArr = ['success', 'warning', 'danger', 'info'];
-                    //如果字段列有定义custom
-                    if (typeof this.custom !== 'undefined') {
-                        colorArr = $.merge(colorArr, this.custom);
-                    }
-                    //渲染Flag
-                    var html = [];
-                    var arr = value.split(',');
-                    $.each(arr, function (i, value) {
-                        value = value.toString();
-                        var color = colorArr[i % colorArr.length];
-                        html.push('<span class="label label-' + color + '">' + __(value) + '</span>');
-                    });
-                    return html.join(' ');
+                    return Table.api.formatter.flag.call(this, value, row, index);
                 },
                 datetime: function (value, row, index) {
                     return value ? Moment(parseInt(value) * 1000).format("YYYY-MM-DD HH:mm:ss") : __('None');

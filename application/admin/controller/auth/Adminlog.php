@@ -2,8 +2,8 @@
 
 namespace app\admin\controller\auth;
 
+use app\admin\model\AuthGroup;
 use app\common\controller\Backend;
-use fast\Tree;
 
 /**
  * 管理员日志
@@ -15,33 +15,21 @@ class Adminlog extends Backend
 {
 
     protected $model = null;
-    //当前登录管理员所有子节点组别
-    protected $childrenIds = [];
+    protected $childrenGroupIds = [];
+    protected $childrenAdminIds = [];
 
     public function _initialize()
     {
         parent::_initialize();
         $this->model = model('AdminLog');
 
-        $groups = $this->auth->getGroups();
+        $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds();
 
-        // 取出所有分组
-        $grouplist = model('AuthGroup')->all(['status' => 'normal']);
-        $objlist = [];
-        foreach ($groups as $K => $v)
-        {
-            // 取出包含自己的所有子节点
-            $childrenlist = Tree::instance()->init($grouplist)->getChildren($v['id'], TRUE);
-            $obj = Tree::instance()->init($childrenlist)->getTreeArray($v['pid']);
-            $objlist = array_merge($objlist, Tree::instance()->getTreeList($obj));
-        }
-        $groupdata = [];
-        foreach ($objlist as $k => $v)
-        {
-            $groupdata[$v['id']] = $v['name'];
-        }
-        $this->childrenIds = array_keys($groupdata);
-        $this->view->assign('groupdata', $groupdata);
+        $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
+                ->column('id,name');
+
+        $this->view->assign('groupdata', $groupName);
     }
 
     /**
@@ -51,20 +39,16 @@ class Adminlog extends Backend
     {
         if ($this->request->isAjax())
         {
-            $childrenAdminIds = model('AuthGroupAccess')
-                    ->field('uid')
-                    ->where('group_id', 'in', $this->childrenIds)
-                    ->column('uid');
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
                     ->where($where)
-                    ->where('admin_id', 'in', $childrenAdminIds)
+                    ->where('admin_id', 'in', $this->childrenAdminIds)
                     ->order($sort, $order)
                     ->count();
 
             $list = $this->model
                     ->where($where)
-                    ->where('admin_id', 'in', $childrenAdminIds)
+                    ->where('admin_id', 'in', $this->childrenAdminIds)
                     ->order($sort, $order)
                     ->limit($offset, $limit)
                     ->select();
@@ -112,7 +96,7 @@ class Adminlog extends Backend
     {
         if ($ids)
         {
-            $childrenGroupIds = $this->childrenIds;
+            $childrenGroupIds = $this->childrenGroupIds;
             $adminList = $this->model->where('id', 'in', $ids)->where('admin_id', 'in', function($query) use($childrenGroupIds) {
                         $query->name('auth_group_access')->field('uid');
                     })->select();
@@ -141,6 +125,11 @@ class Adminlog extends Backend
     {
         // 管理员禁止批量操作
         $this->error();
+    }
+    
+    public function selectpage()
+    {
+        return parent::selectpage();
     }
 
 }

@@ -3,7 +3,7 @@
  * @version: v0.0.1
  *
  * @update 2017-05-07 <http://git.oschina.net/pp/fastadmin>
- * @update 2017-09-03 <http://git.oschina.net/karson/fastadmin>
+ * @update 2017-09-09 <http://git.oschina.net/karson/fastadmin>
  */
 
 !function ($) {
@@ -178,41 +178,43 @@
         return true;
     };
 
-    var getSearchQuery = function (that) {
+    var getSearchQuery = function (that, removeempty) {
         var op = {};
         var filter = {};
-        $("form.form-commonsearch input.operate", that.$container).each(function (i) {
+        var value = '';
+        $("form.form-commonsearch input.operate", that.$commonsearch).each(function (i) {
             var name = $(this).data("name");
             var sym = $(this).val();
-            var obj = $("[name='" + name + "']");
+            var obj = $("[name='" + name + "']", that.$commonsearch);
             if (obj.size() == 0)
                 return true;
             var vObjCol = ColumnsForSearch[i];
             if (obj.size() > 1) {
                 if (/BETWEEN$/.test(sym)) {
-                    var value_begin = $.trim($("[name='" + name + "']:first").val()), value_end = $.trim($("[name='" + name + "']:last").val());
-                    if (!value_begin.length && !value_end.length) {
-                        return true;
-                    }
-                    if (typeof vObjCol.process === 'function') {
-                        value_begin = vObjCol.process(value_begin, 'begin');
-                        value_end = vObjCol.process(value_end, 'end');
-                    } else if ($("[name='" + name + "']:first").attr('type') === 'datetime') { //datetime类型字段转换成时间戳
-                        var Hms = Moment(value_begin).format("HH:mm:ss");
-                        value_begin = value_begin ? parseInt(Moment(value_begin) / 1000) : '';
-                        value_end = value_end ? parseInt(Moment(value_end) / 1000) : '';
-                        if (value_begin === value_end && '00:00:00' === Hms) {
-                            value_end += 86399;
+                    var value_begin = $.trim($("[name='" + name + "']:first", that.$commonsearch).val()), value_end = $.trim($("[name='" + name + "']:last", that.$commonsearch).val());
+                    if (value_begin.length || value_end.length) {
+                        if (typeof vObjCol.process === 'function') {
+                            value_begin = vObjCol.process(value_begin, 'begin');
+                            value_end = vObjCol.process(value_end, 'end');
+                        } else if ($("[name='" + name + "']:first", that.$commonsearch).attr('type') === 'datetime') { //datetime类型字段转换成时间戳
+                            var Hms = Moment(value_begin).format("HH:mm:ss");
+                            value_begin = value_begin ? parseInt(Moment(value_begin) / 1000) : '';
+                            value_end = value_end ? parseInt(Moment(value_end) / 1000) : '';
+                            if (value_begin === value_end && '00:00:00' === Hms) {
+                                value_end += 86399;
+                            }
                         }
+                        value = value_begin + ',' + value_end;
+                    } else {
+                        value = '';
                     }
-                    var value = value_begin + ',' + value_end;
                 } else {
-                    var value = $("[name='" + name + "']:checked").val();
+                    value = $("[name='" + name + "']:checked", that.$commonsearch).val();
                 }
             } else {
-                var value = (typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : (sym == 'LIKE %...%' ? obj.val().replace(/\*/g, '%') : obj.val());
+                value = (typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : (sym == 'LIKE %...%' ? obj.val().replace(/\*/g, '%') : obj.val());
             }
-            if (value == '' && sym.indexOf("NULL") == -1) {
+            if (removeempty && value == '' && sym.indexOf("NULL") == -1) {
                 return true;
             }
 
@@ -220,6 +222,25 @@
             filter[name] = value;
         });
         return {op: op, filter: filter};
+    };
+
+    var getQueryParams = function (params, searchQuery, removeempty) {
+        params.filter = typeof params.filter === 'Object' ? params.filter : (params.filter ? JSON.parse(params.filter) : {});
+        params.op = typeof params.op === 'Object' ? params.op : (params.op ? JSON.parse(params.op) : {});
+        params.filter = $.extend(params.filter, searchQuery.filter);
+        params.op = $.extend(params.op, searchQuery.op);
+        //移除empty的值
+        if (removeempty) {
+            $.each(params.filter, function (i, j) {
+                if (j === '') {
+                    delete params.filter[i];
+                    delete params.op[i];
+                }
+            });
+        }
+        params.filter = JSON.stringify(params.filter);
+        params.op = JSON.stringify(params.op);
+        return params;
     };
 
     $.extend($.fn.bootstrapTable.defaults, {
@@ -289,32 +310,39 @@
 
         initCommonSearch(that.columns, that);
 
-        var searchContainer = $(".commonsearch-table", that.$container);
-
         that.$toolbar.find('button[name="commonSearch"]')
                 .off('click').on('click', function () {
-            searchContainer.toggleClass("hidden");
+            that.$commonsearch.toggleClass("hidden");
             return;
         });
 
         that.$container.on("click", "." + that.options.searchClass, function () {
-            var obj = $("form [name='" + $(this).data("field") + "']", searchContainer);
+            var obj = $("form [name='" + $(this).data("field") + "']", that.$commonsearch);
             if (obj.size() > 0) {
                 obj.val($(this).data("value"));
-                $("form", searchContainer).trigger("submit");
+                $("form", that.$commonsearch).trigger("submit");
             }
         });
-
-        var searchQuery = getSearchQuery(this);
-        var queryParams = this.options.queryParams;
-        this.options.queryParams = function () {
-            var params = queryParams.apply(this, arguments);
-            params.filter = JSON.stringify($.extend(params.filter || {}, searchQuery.filter));
-            params.op = JSON.stringify($.extend(params.op || {}, searchQuery.op));
+        var searchQuery = getSearchQuery(that, true);
+        var queryParams = that.options.queryParams;
+        //匹配默认搜索值
+        this.options.queryParams = function (params) {
+            var params = getQueryParams(queryParams(params), searchQuery);
             return params;
         };
         this.trigger('post-common-search', that);
 
+    };
+
+    BootstrapTable.prototype.onCommonSearch = function () {
+        var searchQuery = getSearchQuery(this);
+        var params = getQueryParams(this.options.queryParams({}), searchQuery, true);
+        this.trigger('common-search', this, params, searchQuery);
+        this.options.pageNumber = 1;
+        this.options.queryParams = function () {
+            return params;
+        };
+        this.refresh({query: params});
     };
 
     BootstrapTable.prototype.load = function (data) {
@@ -350,25 +378,5 @@
             }
             return true;
         }) : this.data;
-    };
-
-    BootstrapTable.prototype.onCommonSearch = function () {
-        var searchquery = getSearchQuery(this);
-        this.trigger('common-search', this, searchquery);
-
-        // 追加查询关键字
-        this.options.pageNumber = 1;
-        this.options.queryParams = function (params) {
-            return {
-                search: params.search,
-                sort: params.sort,
-                order: params.order,
-                filter: JSON.stringify(searchquery.filter),
-                op: JSON.stringify(searchquery.op),
-                offset: params.offset,
-                limit: params.limit,
-            };
-        };
-        this.refresh({query: {filter: JSON.stringify(searchquery.filter), op: JSON.stringify(searchquery.op)}});
     };
 }(jQuery);

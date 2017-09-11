@@ -239,14 +239,18 @@ class Backend extends Controller
             {
                 $k = $tableName . $k;
             }
-            $sym = isset($op[$k]) ? $op[$k] : $sym;
+            $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
             switch ($sym)
             {
                 case '=':
                 case '!=':
+                    $where[] = [$k, $sym, (string) $v];
+                    break;
                 case 'LIKE':
                 case 'NOT LIKE':
-                    $where[] = [$k, $sym, (string) $v];
+                case 'LIKE %...%':
+                case 'NOT LIKE %...%':
+                    $where[] = [$k, trim(str_replace('%...%', '', $sym)), "%{$v}%"];
                     break;
                 case '>':
                 case '>=':
@@ -348,7 +352,7 @@ class Backend extends Controller
         $field = $field ? $field : 'name';
 
         //如果有primaryvalue,说明当前是初始化传值
-        if ($primaryvalue)
+        if ($primaryvalue !== null)
         {
             $where = [$primarykey => ['in', $primaryvalue]];
         }

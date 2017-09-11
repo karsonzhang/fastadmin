@@ -91,6 +91,7 @@ return [
     'Wechat manager'                                        => '微信管理',
     'Common search'                                         => '普通搜索',
     'Search %s'                                             => '搜索 %s',
+    'View %s'                                               => '查看 %s',
     '%d second%s ago'                                       => '%d秒前',
     '%d minute%s ago'                                       => '%d分钟前',
     '%d hour%s ago'                                         => '%d小时前',
