@@ -50,6 +50,19 @@ class Backend extends Controller
     protected $relationSearch = false;
 
     /**
+     * 是否开启数据限制
+     * 支持auth/personal
+     * 表示按权限判断/仅限个人 
+     * 默认为禁用,若启用请务必保证表中存在admin_id字段
+     */
+    protected $dataLimit = false;
+
+    /**
+     * 数据限制字段
+     */
+    protected $dataLimitField = 'admin_id';
+
+    /**
      * 是否开启Validate验证
      */
     protected $modelValidate = false;
@@ -222,6 +235,11 @@ class Backend extends Controller
             }
             $sort = stripos($sort, ".") === false ? $tableName . $sort : $sort;
         }
+        $adminIds = $this->getDataLimitAdminIds();
+        if (is_array($adminIds))
+        {
+            $where[] = [$this->dataLimitField, 'in', $adminIds];
+        }
         if ($search)
         {
             $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
@@ -313,6 +331,25 @@ class Backend extends Controller
     }
 
     /**
+     * 获取数据限制的管理员ID
+     * 禁用数据限制时返回的是null
+     * @return mixed
+     */
+    protected function getDataLimitAdminIds()
+    {
+        if (!$this->dataLimit)
+        {
+            return null;
+        }
+        $adminIds = [];
+        if (in_array($this->dataLimit, ['auth', 'personal']))
+        {
+            $adminIds = $this->dataLimit == 'auth' ? $this->auth->getChildrenAdminIds(true) : [$this->auth->id];
+        }
+        return $adminIds;
+    }
+
+    /**
      * Selectpage的实现方法
      * 
      * 当前方法只是一个比较通用的搜索匹配,请按需重载此方法来编写自己的搜索逻辑,$where按自己的需求写即可
@@ -375,10 +412,19 @@ class Backend extends Controller
                 }
             };
         }
+        $adminIds = $this->getDataLimitAdminIds();
+        if (is_array($adminIds))
+        {
+            $this->model->where($this->dataLimitField, 'in', $adminIds);
+        }
         $list = [];
         $total = $this->model->where($where)->count();
         if ($total > 0)
         {
+            if (is_array($adminIds))
+            {
+                $this->model->where($this->dataLimitField, 'in', $adminIds);
+            }
             $list = $this->model->where($where)
                     ->order($order)
                     ->page($page, $pagesize)
@@ -386,7 +432,6 @@ class Backend extends Controller
                     ->field("password,salt", true)
                     ->select();
         }
-
         //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
         return json(['list' => $list, 'total' => $total]);
     }

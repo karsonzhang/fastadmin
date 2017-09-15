@@ -313,6 +313,7 @@ class Auth extends \fast\Auth
             foreach ($this->breadcrumb as $k => &$v)
             {
                 $v['url'] = url($v['name']);
+                $v['title'] = __($v['title']);
             }
         }
         return $this->breadcrumb;
@@ -373,6 +374,7 @@ class Auth extends \fast\Auth
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
             $v['py'] = $pinyin->abbr($v['title'], '');
             $v['pinyin'] = $pinyin->permalink($v['title'], '');
+            $v['title'] = __($v['title']);
         }
         // 构造菜单数据
         Tree::instance()->init($ruleList);

@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="role_id" class="control-label col-xs-12 col-sm-2">{:__('Group')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_select('group[]', $groupdata, null, ['class'=>'form-control selectpicker', 'multiple'=>'', 'required'=>''])}
+            {:build_select('group[]', $groupdata, null, ['class'=>'form-control selectpicker', 'multiple'=>'', 'data-rule'=>'required'])}
         </div>
     </div>
     <div class="form-group">

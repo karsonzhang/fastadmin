@@ -15,7 +15,6 @@ class Category Extends Model
     // 定义时间戳字段名
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
-    
     // 追加属性
     protected $append = [
         'type_text',
@@ -28,8 +27,12 @@ class Category Extends Model
      */
     public static function getTypeList()
     {
-        $typelist = config('site.categorytype');
-        return $typelist;
+        $typeList = config('site.categorytype');
+        foreach ($typeList as $k => &$v)
+        {
+            $v = __($v);
+        }
+        return $typeList;
     }
 
     public function getTypeTextAttr($value, $data)

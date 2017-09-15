@@ -14,7 +14,7 @@ if (!function_exists('__'))
      */
     function __($name, $vars = [], $lang = '')
     {
-        if (is_numeric($name))
+        if (is_numeric($name) || !$name)
             return $name;
         if (!is_array($vars))
         {

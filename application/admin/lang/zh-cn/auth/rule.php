@@ -9,6 +9,7 @@ return [
     'Name'                                                 => '规则URL',
     'Controller/Action'                                    => '控制器名/方法名',
     'Ismenu'                                               => '菜单',
+    'Search icon'                                          => '搜索图标',
     'The non-menu rule must have parent'                   => '非菜单规则节点必须有父级',
     'If not necessary, use the command line to build rule' => '非必要情况下请直接使用命令行php think menu来生成',
 ];

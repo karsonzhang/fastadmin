@@ -52,6 +52,10 @@ trait Backend
                 {
                     $v = is_array($v) ? implode(',', $v) : $v;
                 }
+                if ($this->dataLimitType)
+                {
+                    $params[$this->dataLimitField] = $this->auth->id;
+                }
                 try
                 {
                     //是否采用模型验证
@@ -89,6 +93,14 @@ trait Backend
         $row = $this->model->get($ids);
         if (!$row)
             $this->error(__('No Results were found'));
+        $adminIds = $this->getDataLimitAdminIds();
+        if (is_array($adminIds))
+        {
+            if (!in_array($row[$this->dataLimitField], $adminIds))
+            {
+                $this->error(__('You have no permission'));
+            }
+        }
         if ($this->request->isPost())
         {
             $params = $this->request->post("row/a");
@@ -135,7 +147,15 @@ trait Backend
     {
         if ($ids)
         {
-            $count = $this->model->destroy($ids);
+            $adminIds = $this->getDataLimitAdminIds();
+            if (is_array($adminIds))
+            {
+                $count = $this->model->where($this->dataLimitField, 'in', $adminIds)->delete($ids);
+            }
+            else
+            {
+                $count = $this->model->destory($ids);
+            }
             if ($count)
             {
                 $this->success();
@@ -158,6 +178,11 @@ trait Backend
                 $values = array_intersect_key($values, array_flip(is_array($this->multiFields) ? $this->multiFields : explode(',', $this->multiFields)));
                 if ($values)
                 {
+                    $adminIds = $this->getDataLimitAdminIds();
+                    if (is_array($adminIds))
+                    {
+                        $this->model->where($this->dataLimitField, 'in', $adminIds);
+                    }
                     $count = $this->model->where($this->model->getPk(), 'in', $ids)->update($values);
                     if ($count)
                     {

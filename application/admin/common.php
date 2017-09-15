@@ -121,29 +121,31 @@ function build_toolbar($btns = NULL, $attr = [])
 /**
  * 生成页面Heading
  *
- * @param string $title
- * @param string $content
+ * @param string $path 指定的path
  * @return string
  */
-function build_heading($title = NULL, $content = NULL, $path = NULL)
+function build_heading($path = NULL, $container = TRUE)
 {
-    if (is_null($title) && is_null($content))
+    $title = $content = '';
+    if (is_null($path))
     {
-        if (is_null($path))
-        {
-            $action = request()->action();
-            $controller = str_replace('.', '/', request()->controller());
-            $path = strtolower($controller . ($action && $action != 'index' ? '/' . $action : ''));
-        }
-        // 根据当前的URI自动匹配父节点的标题和备注
-        $data = Db::name('auth_rule')->where('name', $path)->field('title,remark')->find();
-        if ($data)
-        {
-            $title = $data['title'];
-            $content = $data['remark'];
-        }
+        $action = request()->action();
+        $controller = str_replace('.', '/', request()->controller());
+        $path = strtolower($controller . ($action && $action != 'index' ? '/' . $action : ''));
+    }
+    // 根据当前的URI自动匹配父节点的标题和备注
+    $data = Db::name('auth_rule')->where('name', $path)->field('title,remark')->find();
+    if ($data)
+    {
+        $title = __($data['title']);
+        $content = __($data['remark']);
     }
     if (!$content)
         return '';
-    return '<div class="panel-heading"><div class="panel-lead"><em>' . $title . '</em>' . $content . '</div></div>';
+    $result = '<div class="panel-lead"><em>' . $title . '</em>' . $content . '</div>';
+    if ($container)
+    {
+        $result = '<div class="panel-heading">' . $result . '</div>';
+    }
+    return $result;
 }

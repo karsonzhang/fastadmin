@@ -24,10 +24,17 @@ class Rule extends Backend
         parent::_initialize();
         $this->model = model('AuthRule');
         // 必须将结果集转换为数组
-        Tree::instance()->init(collection($this->model->order('weigh', 'desc')->select())->toArray());
+        $ruleList = collection($this->model->order('weigh', 'desc')->select())->toArray();
+        foreach ($ruleList as $k => &$v)
+        {
+            $v['title'] = __($v['title']);
+            $v['remark'] = __($v['remark']);
+        }
+        unset($v);
+        Tree::instance()->init($ruleList);
         $this->rulelist = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'title');
         $ruledata = [0 => __('None')];
-        foreach ($this->rulelist as $k => $v)
+        foreach ($this->rulelist as $k => &$v)
         {
             if (!$v['ismenu'])
                 continue;

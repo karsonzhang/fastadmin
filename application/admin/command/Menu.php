@@ -225,7 +225,7 @@ class Menu extends Command
             $title = (!isset($controllerArr[$key]) ? $controllerTitle : '');
             $icon = (!isset($controllerArr[$key]) ? $controllerIcon : 'fa fa-list');
             $remark = (!isset($controllerArr[$key]) ? $controllerRemark : '');
-            $title = $title ? $title : __(ucfirst($v) . ' manager');
+            $title = $title ? $title : ucfirst($v);
             $rulemodel = $this->model->get(['name' => $name]);
             if (!$rulemodel)
             {
@@ -262,8 +262,10 @@ class Menu extends Command
             }
             //过滤掉其它字符
             $comment = preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $comment);
-
-            $ruleArr[] = array('pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $comment ? $comment : $n->name, 'ismenu' => 0, 'status' => 'normal');
+            
+            $title = $comment ? $comment : $n->name;
+            
+            $ruleArr[] = array('pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => ucfirst($name), 'ismenu' => 0, 'status' => 'normal');
         }
         $this->model->saveAll($ruleArr);
     }

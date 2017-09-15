@@ -32,6 +32,11 @@ class Group extends Backend
 
         $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
                 ->column('id,name');
+        foreach ($groupName as $k => &$v)
+        {
+            $v = __($v);
+        }
+        unset($v);
 
         $this->groupdata = $groupName;
         $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $this->auth->getGroupIds()]);
