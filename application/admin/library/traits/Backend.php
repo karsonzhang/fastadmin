@@ -52,7 +52,7 @@ trait Backend
                 {
                     $v = is_array($v) ? implode(',', $v) : $v;
                 }
-                if ($this->dataLimitType)
+                if ($this->dataLimit)
                 {
                     $params[$this->dataLimitField] = $this->auth->id;
                 }
