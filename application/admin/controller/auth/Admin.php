@@ -31,6 +31,11 @@ class Admin extends Backend
 
         $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
                 ->column('id,name');
+        foreach ($groupName as $k => &$v)
+        {
+            $v = __($v);
+        }
+        unset($v);
 
         $this->view->assign('groupdata', $groupName);
         $this->assignconfig("admin", ['id' => $this->auth->id]);
