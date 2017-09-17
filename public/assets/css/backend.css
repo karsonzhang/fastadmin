@@ -7,6 +7,7 @@
 @import url("../libs/layer/build/skin/default/layer.css");
 @import url("../libs/bootstrap-table/dist/bootstrap-table.min.css");
 @import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
+@import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/selectpage/selectpage.css");
 body {
@@ -76,6 +77,12 @@ html.ios-fix body {
 .tab-addtabs .tab-pane {
   height: 100%;
   width: 100%;
+}
+.row-between .col-xs-6 + .col-xs-6:before {
+  content: "-";
+  position: absolute;
+  left: -2%;
+  top: 6px;
 }
 @media only screen and (min-width: 481px) {
   .row-flex {

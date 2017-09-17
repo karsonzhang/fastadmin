@@ -30,7 +30,8 @@
     "Sortable": "^1.5.0",
     "nice-validator": "^1.1.1",
     "art-template": "^3.0.1",
-    "requirejs-plugins": "^1.0.3"
+    "requirejs-plugins": "^1.0.3",
+    "bootstrap-daterangepicker": "^2.1.25"
   },
   "devDependencies": {
     "dragsort": "https://github.com/karsonzhang/dragsort.git",

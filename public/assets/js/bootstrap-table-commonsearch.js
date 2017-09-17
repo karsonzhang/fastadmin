@@ -3,7 +3,7 @@
  * @version: v0.0.1
  *
  * @update 2017-05-07 <http://git.oschina.net/pp/fastadmin>
- * @update 2017-09-09 <http://git.oschina.net/karson/fastadmin>
+ * @update 2017-09-17 <http://git.oschina.net/karson/fastadmin>
  */
 
 !function ($) {
@@ -46,6 +46,46 @@
                 });
             });
         }
+        if ($(".datetimerange", form).size() > 0) {
+            var ranges = {};
+            ranges[__('Today')] = [Moment().startOf('day'), Moment().endOf('day')];
+            ranges[__('Yesterday')] = [Moment().subtract(1, 'days').startOf('day'), Moment().subtract(1, 'days').endOf('day')];
+            ranges[__('Last 7 Days')] = [Moment().subtract(6, 'days').startOf('day'), Moment().endOf('day')];
+            ranges[__('Last 30 Days')] = [Moment().subtract(29, 'days').startOf('day'), Moment().endOf('day')];
+            ranges[__('This Month')] = [Moment().startOf('month'), Moment().endOf('month')];
+            ranges[__('Last Month')] = [Moment().subtract(1, 'month').startOf('month'), Moment().subtract(1, 'month').endOf('month')];
+            var options = {
+                timePicker: false,
+                autoUpdateInput: false,
+                timePickerSeconds: true,
+                timePicker24Hour: true,
+                autoApply: true,
+                locale: {
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    customRangeLabel: __("Custom Range"),
+                    applyLabel: __("Apply"),
+                    cancelLabel: __("Clear"),
+                },
+                ranges: ranges,
+            };
+            var callback = function (start, end) {
+                $(this.element).val(start.format(options.locale.format) + " - " + end.format(options.locale.format));
+            };
+            var column, index;
+            require(['bootstrap-daterangepicker'], function () {
+                $(".datetimerange").each(function () {
+                    $(this).on('apply.daterangepicker', function (ev, picker) {
+                        callback.call(picker, picker.startDate, picker.endDate);
+                    });
+                    $(this).on('cancel.daterangepicker', function (ev, picker) {
+                        $(this).val('');
+                    });
+                    index = $(this).data("index");
+                    column = pColumns[index];
+                    $(this).daterangepicker($.extend({}, options, column.options || {}), callback);
+                });
+            });
+        }
 
         // 表单提交
         form.on("submit", function (event) {
@@ -64,7 +104,7 @@
 
     var createFormCommon = function (pColumns, that) {
         var htmlForm = [];
-        var opList = ['=', '>', '>=', '<', '<=', '!=', 'LIKE', 'LIKE %...%', 'NOT LIKE', 'IN', 'NOT IN', 'IN(...)', 'NOT IN(...)', 'BETWEEN', 'NOT BETWEEN', 'IS NULL', 'IS NOT NULL'];
+        var opList = ['=', '>', '>=', '<', '<=', '!=', 'LIKE', 'LIKE %...%', 'NOT LIKE', 'IN', 'NOT IN', 'IN(...)', 'NOT IN(...)', 'BETWEEN', 'NOT BETWEEN', 'RANGE', 'NOT RANGE', 'IS NULL', 'IS NOT NULL'];
         htmlForm.push(sprintf('<form class="form-horizontal form-commonsearch" action="%s" >', that.options.actionForm));
         htmlForm.push('<fieldset>');
         if (that.options.titleForm.length > 0)
@@ -130,16 +170,12 @@
                     var defaultValue = typeof vObjCol.defaultValue === 'undefined' ? '' : vObjCol.defaultValue;
                     if (/BETWEEN$/.test(vObjCol.operate)) {
                         var defaultValueArr = /^.+|.+$/.test(defaultValue) ? defaultValue.split('|') : ['', ''];
-                        htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, defaultValueArr[0], placeholder, vObjCol.field, style, data));
-
+                        htmlForm.push('<div class="row row-between">');
+                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[0], placeholder, vObjCol.field, i, style, data));
+                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[1], placeholder, vObjCol.field, i, style, data));
                         htmlForm.push('</div>');
-                        htmlForm.push('</div>');
-                        htmlForm.push('<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">');
-                        htmlForm.push(sprintf('<label for="%s" class="control-label col-xs-4">%s</label>', vObjCol.field, "-"));
-                        htmlForm.push('<div class="col-xs-8">');
-                        htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, defaultValueArr[1], placeholder, vObjCol.field, style, data));
                     } else {
-                        htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" %s %s>', type, addclass, vObjCol.field, defaultValue, placeholder, vObjCol.field, style, data));
+                        htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s>', type, addclass, vObjCol.field, defaultValue, placeholder, vObjCol.field, i, style, data));
                     }
                 }
 
@@ -196,13 +232,6 @@
                         if (typeof vObjCol.process === 'function') {
                             value_begin = vObjCol.process(value_begin, 'begin');
                             value_end = vObjCol.process(value_end, 'end');
-                        } else if ($("[name='" + name + "']:first", that.$commonsearch).attr('type') === 'datetime') { //datetime类型字段转换成时间戳
-                            var Hms = Moment(value_begin).format("HH:mm:ss");
-                            value_begin = value_begin ? parseInt(Moment(value_begin) / 1000) : '';
-                            value_end = value_end ? parseInt(Moment(value_end) / 1000) : '';
-                            if (value_begin === value_end && '00:00:00' === Hms) {
-                                value_end += 86399;
-                            }
                         }
                         value = value_begin + ',' + value_end;
                     } else {
@@ -266,7 +295,6 @@
         'common-search.bs.table': 'onCommonSearch',
         'post-common-search.bs.table': 'onPostCommonSearch'
     });
-
     $.extend($.fn.bootstrapTable.locales[$.fn.bootstrapTable.defaults.locale], {
         formatCommonSearch: function () {
             return "Common search";

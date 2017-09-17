@@ -300,6 +300,14 @@ class Backend extends Controller
                     }
                     $where[] = [$k, $sym, $arr];
                     break;
+                case 'RANGE':
+                case 'NOT RANGE':
+                    $v = str_replace(' - ', ',', $v);
+                    $arr = array_slice(explode(',', $v), 0, 2);
+                    if (stripos($v, ',') === false || !array_filter($arr))
+                        continue;
+                    $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
+                    break;
                 case 'LIKE':
                 case 'LIKE %...%':
                     $where[] = [$k, 'LIKE', "%{$v}%"];

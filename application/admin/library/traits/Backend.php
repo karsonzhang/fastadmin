@@ -154,7 +154,7 @@ trait Backend
             }
             else
             {
-                $count = $this->model->destory($ids);
+                $count = $this->model->destroy($ids);
             }
             if ($count)
             {
