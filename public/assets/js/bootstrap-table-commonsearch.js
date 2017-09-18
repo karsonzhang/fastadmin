@@ -367,8 +367,8 @@
         var params = getQueryParams(this.options.queryParams({}), searchQuery, true);
         this.trigger('common-search', this, params, searchQuery);
         this.options.pageNumber = 1;
-        this.options.queryParams = function () {
-            return params;
+        this.options.queryParams = function (options) {
+            return $.extend({}, options, params);
         };
         this.refresh({query: params});
     };
