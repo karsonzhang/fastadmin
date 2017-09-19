@@ -170,9 +170,10 @@
                     var defaultValue = typeof vObjCol.defaultValue === 'undefined' ? '' : vObjCol.defaultValue;
                     if (/BETWEEN$/.test(vObjCol.operate)) {
                         var defaultValueArr = /^.+|.+$/.test(defaultValue) ? defaultValue.split('|') : ['', ''];
+                        var placeholderArr = /^.+|.+$/.test(placeholder) ? placeholder.split('|') : [placeholder, placeholder];
                         htmlForm.push('<div class="row row-between">');
-                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[0], placeholder, vObjCol.field, i, style, data));
-                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[1], placeholder, vObjCol.field, i, style, data));
+                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[0], placeholderArr[0], vObjCol.field, i, style, data));
+                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[1], placeholderArr[1], vObjCol.field, i, style, data));
                         htmlForm.push('</div>');
                     } else {
                         htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s>', type, addclass, vObjCol.field, defaultValue, placeholder, vObjCol.field, i, style, data));
