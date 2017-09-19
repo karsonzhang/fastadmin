@@ -122,7 +122,7 @@
                 htmlForm.push(sprintf('<label for="%s" class="control-label col-xs-4">%s</label>', vObjCol.field, vObjCol.title));
                 htmlForm.push('<div class="col-xs-8">');
 
-                vObjCol.operate = (typeof vObjCol.operate === 'undefined' || $.inArray(vObjCol.operate, opList) === -1) ? '=' : vObjCol.operate;
+                vObjCol.operate = (typeof vObjCol.operate === 'undefined' || $.inArray(vObjCol.operate.toUpperCase(), opList) === -1) ? '=' : vObjCol.operate.toUpperCase();
                 htmlForm.push(sprintf('<input type="hidden" class="form-control operate" name="field-%s" data-name="%s" value="%s" readonly>', vObjCol.field, vObjCol.field, vObjCol.operate));
 
                 var style = typeof vObjCol.style === 'undefined' ? '' : sprintf('style="%s"', vObjCol.style);
@@ -169,11 +169,11 @@
                     var data = typeof vObjCol.data === 'undefined' ? '' : vObjCol.data;
                     var defaultValue = typeof vObjCol.defaultValue === 'undefined' ? '' : vObjCol.defaultValue;
                     if (/BETWEEN$/.test(vObjCol.operate)) {
-                        var defaultValueArr = /^.+|.+$/.test(defaultValue) ? defaultValue.split('|') : ['', ''];
-                        var placeholderArr = /^.+|.+$/.test(placeholder) ? placeholder.split('|') : [placeholder, placeholder];
+                        var defaultValueArr = defaultValue.toString().match(/\|/) ? defaultValue.split('|') : ['', ''];
+                        var placeholderArr = placeholder.toString().match(/\|/) ? placeholder.split('|') : [placeholder, placeholder];
                         htmlForm.push('<div class="row row-between">');
-                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[0], placeholderArr[0], vObjCol.field, i, style, data));
-                        htmlForm.push(sprintf('<div class="col-xs-6"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[1], placeholderArr[1], vObjCol.field, i, style, data));
+                        htmlForm.push(sprintf('<div class="col-xs-6 11"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[0], placeholderArr[0], vObjCol.field, i, style, data));
+                        htmlForm.push(sprintf('<div class="col-xs-6 22"><input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s></div>', type, addclass, vObjCol.field, defaultValueArr[1], placeholderArr[1], vObjCol.field, i, style, data));
                         htmlForm.push('</div>');
                     } else {
                         htmlForm.push(sprintf('<input type="%s" class="%s" name="%s" value="%s" placeholder="%s" id="%s" data-index="%s" %s %s>', type, addclass, vObjCol.field, defaultValue, placeholder, vObjCol.field, i, style, data));
@@ -221,7 +221,7 @@
         var value = '';
         $("form.form-commonsearch input.operate", that.$commonsearch).each(function (i) {
             var name = $(this).data("name");
-            var sym = $(this).val();
+            var sym = $(this).val().toUpperCase();
             var obj = $("[name='" + name + "']", that.$commonsearch);
             if (obj.size() == 0)
                 return true;
@@ -237,6 +237,10 @@
                         value = value_begin + ',' + value_end;
                     } else {
                         value = '';
+                    }
+                    //如果是时间筛选，将operate置为RANGE
+                    if ($("[name='" + name + "']:first", that.$commonsearch).hasClass("datetimepicker")) {
+                        sym = 'RANGE';
                     }
                 } else {
                     value = $("[name='" + name + "']:checked", that.$commonsearch).val();

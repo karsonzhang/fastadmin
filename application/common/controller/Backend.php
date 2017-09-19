@@ -306,6 +306,17 @@ class Backend extends Controller
                     $arr = array_slice(explode(',', $v), 0, 2);
                     if (stripos($v, ',') === false || !array_filter($arr))
                         continue;
+                    //当出现一边为空时改变操作符
+                    if ($arr[0] === '')
+                    {
+                        $sym = $sym == 'RANGE' ? '<=' : '>';
+                        $arr = $arr[1];
+                    }
+                    else if ($arr[1] === '')
+                    {
+                        $sym = $sym == 'RANGE' ? '>=' : '<';
+                        $arr = $arr[0];
+                    }
                     $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
                     break;
                 case 'LIKE':
