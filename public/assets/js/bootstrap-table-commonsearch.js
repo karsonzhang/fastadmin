@@ -246,7 +246,7 @@
                     value = $("[name='" + name + "']:checked", that.$commonsearch).val();
                 }
             } else {
-                value = (typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : (sym == 'LIKE %...%' ? obj.val().replace(/\*/g, '%') : obj.val());
+                value = (vObjCol && typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : (sym == 'LIKE %...%' ? obj.val().replace(/\*/g, '%') : obj.val());
             }
             if (removeempty && value == '' && sym.indexOf("NULL") == -1) {
                 return true;
