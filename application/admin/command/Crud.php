@@ -1158,13 +1158,15 @@ EOD;
         $preview = $uploadfilter ? ' data-preview-id="p-' . $field . '"' : '';
         $previewcontainer = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $field . '"></ul>' : '';
         return <<<EOD
-<div class="form-inline">
+<div class="input-group">
                 {$content}
-                <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
-                <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
                 <span class="msg-box n-right" for="c-{$field}"></span>
-               {$previewcontainer}
             </div>
+            {$previewcontainer}
 EOD;
     }
 

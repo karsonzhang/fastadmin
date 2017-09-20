@@ -463,11 +463,11 @@ table.table-template {
 }
 /*预览区域*/
 .plupload-preview {
-  padding: 10px;
+  padding: 0 10px;
   margin-bottom: 0;
 }
 .plupload-preview li {
-  margin-bottom: 10px;
+  margin-top: 15px;
 }
 .plupload-preview .thumbnail {
   margin-bottom: 10px;
@@ -692,6 +692,9 @@ table.table-template {
     padding-right: 20px;
   }
 }
+.n-bootstrap .input-group > .n-right {
+  position: absolute;
+}
 /*手机版样式*/
 @media (max-width: 480px) {
   .nav-addtabs {
@@ -702,6 +705,22 @@ table.table-template {
   }
 }
 /*平板样式*/
+@media (max-width: 768px) {
+  .n-bootstrap .n-right {
+    margin-top: 0;
+    top: -20px;
+    position: absolute;
+    left: 0;
+    text-align: right;
+    width: 100%;
+  }
+  .n-bootstrap .n-right .msg-wrap {
+    position: relative;
+  }
+  .n-bootstrap .col-xs-12 > .n-right .msg-wrap {
+    margin-right: 15px;
+  }
+}
 /*修复radio和checkbox样式对齐*/
 .radio > label,
 .checkbox > label {
