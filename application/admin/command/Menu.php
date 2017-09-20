@@ -215,7 +215,7 @@ class Menu extends Command
 
         //导入中文语言包
         \think\Lang::load(dirname(__DIR__) . DS . 'lang/zh-cn.php');
-
+        
         //先定入菜单的数据
         $pid = 0;
         foreach ($controllerArr as $k => $v)
@@ -225,7 +225,7 @@ class Menu extends Command
             $title = (!isset($controllerArr[$key]) ? $controllerTitle : '');
             $icon = (!isset($controllerArr[$key]) ? $controllerIcon : 'fa fa-list');
             $remark = (!isset($controllerArr[$key]) ? $controllerRemark : '');
-            $title = $title ? $title : ucfirst($v);
+            $title = $title ? $title : $v;
             $rulemodel = $this->model->get(['name' => $name]);
             if (!$rulemodel)
             {
@@ -263,9 +263,9 @@ class Menu extends Command
             //过滤掉其它字符
             $comment = preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $comment);
             
-            $title = $comment ? $comment : $n->name;
+            $title = $comment ? $comment : ucfirst($n->name);
             
-            $ruleArr[] = array('pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => ucfirst($name), 'ismenu' => 0, 'status' => 'normal');
+            $ruleArr[] = array('pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $title, 'ismenu' => 0, 'status' => 'normal');
         }
         $this->model->saveAll($ruleArr);
     }

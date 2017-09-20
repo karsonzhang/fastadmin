@@ -255,7 +255,7 @@ class Crud extends Command
         $controller = str_replace('_', '', $controller);
         $controllerArr = !$controller ? explode('_', strtolower($table)) : explode('/', strtolower($controller));
         $controllerUrl = implode('/', $controllerArr);
-        $controllerName = mb_ucfirst(array_pop($controllerArr));
+        $controllerName = ucfirst(array_pop($controllerArr));
         $controllerDir = implode(DS, $controllerArr);
         $controllerFile = ($controllerDir ? $controllerDir . DS : '') . $controllerName . '.php';
         $viewDir = $adminPath . 'view' . DS . $controllerUrl . DS;
@@ -810,7 +810,7 @@ class Crud extends Command
         if (!in_array($inputType, ['datetime', 'select', 'multiple', 'checkbox', 'radio']))
             return;
         $fieldList = $this->getFieldListName($field);
-        $methodName = 'get' . mb_ucfirst($fieldList);
+        $methodName = 'get' . ucfirst($fieldList);
         foreach ($itemArr as $k => &$v)
         {
             $v = "__('" . mb_ucfirst($v) . "')";
@@ -832,7 +832,7 @@ EOD;
     {
         if (!in_array($inputType, ['datetime', 'select', 'multiple', 'checkbox', 'radio']))
             return;
-        $attrField = mb_ucfirst($this->getCamelizeName($field));
+        $attrField = ucfirst($this->getCamelizeName($field));
         $getAttr[] = $this->getReplacedStub("mixins" . DS . $inputType, ['field' => $field, 'methodName' => "get{$attrField}TextAttr", 'listMethodName' => "get{$attrField}List"]);
     }
 
@@ -840,7 +840,7 @@ EOD;
     {
         if ($inputType != 'datetime')
             return;
-        $attrField = mb_ucfirst($this->getCamelizeName($field));
+        $attrField = ucfirst($this->getCamelizeName($field));
         if ($inputType == 'datetime')
         {
             $return = <<<EOD
@@ -868,13 +868,13 @@ EOD;
         {
             $modelarr = explode('_', strtolower($table));
             foreach ($modelarr as $k => &$v)
-                $v = mb_ucfirst($v);
+                $v = ucfirst($v);
             unset($v);
             $modelName = implode('', $modelarr);
         }
         else
         {
-            $modelName = mb_ucfirst($model);
+            $modelName = ucfirst($model);
         }
         return $modelName;
     }
