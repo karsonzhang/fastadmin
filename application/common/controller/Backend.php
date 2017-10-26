@@ -170,6 +170,9 @@ class Backend extends Controller
             'fastadmin'      => Config::get('fastadmin'),
             'referer'        => Session::get("referer")
         ];
+            
+        Config::set('upload', array_merge(Config::get('upload'), $upload));
+        
         // 配置信息后
         Hook::listen("config_init", $config);
         //加载当前控制器语言包

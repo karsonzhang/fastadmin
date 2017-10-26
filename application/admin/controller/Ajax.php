@@ -107,7 +107,8 @@ class Ajax extends Backend
                 'sha1'        => $sha1,
             );
             $attachment = model("attachment");
-            $attachment->create(array_filter($params));
+            $attachment->data(array_filter($params));
+            $attachment->save();
             \think\Hook::listen("upload_after", $attachment);
             $this->success('上传成功', null, [
                 'url' => $uploadDir . $splInfo->getSaveName()

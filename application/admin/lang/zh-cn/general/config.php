@@ -16,6 +16,7 @@ return [
     'Extend'                      => '扩展属性',
     'String'                      => '字符',
     'Text'                        => '文本',
+    'Editor'                      => '编辑器',
     'Number'                      => '数字',
     'Date'                        => '日期',
     'Time'                        => '时间',

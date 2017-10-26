@@ -27,15 +27,28 @@ class Admin extends Backend
         $this->model = model('Admin');
 
         $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
-        $this->childrenGroupIds = $this->auth->getChildrenGroupIds();
-
-        $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
-                ->column('id,name');
-        foreach ($groupName as $k => &$v)
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin() ? true : false);
+        
+        $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
+        $groupIds = $this->auth->getGroupIds();
+        Tree::instance()->init($groupList);
+        $result = [];
+        if ($this->auth->isSuperAdmin())
         {
-            $v = __($v);
+            $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
         }
-        unset($v);
+        else
+        {
+            foreach ($groupIds as $m => $n)
+            {
+                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n)));
+            }
+        }
+        $groupName = [];
+        foreach ($result as $k => $v)
+        {
+            $groupName[$v['id']] = $v['name'];
+        }
 
         $this->view->assign('groupdata', $groupName);
         $this->assignconfig("admin", ['id' => $this->auth->id]);

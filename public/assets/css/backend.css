@@ -176,7 +176,7 @@ table.table-template {
 .is-dialog #main {
   background: #fff;
 }
-.is-dialog form label {
+form.form-horizontal .control-label {
   font-weight: normal;
 }
 .user-panel > .image img {
@@ -442,14 +442,6 @@ table.table-template {
 #treeview .jstree-children:after {
   clear: both;
 }
-#treeview .jstree-children:before,
-#treeview .jstree-children:after {
-  content: " ";
-  display: table;
-}
-#treeview .jstree-children:after {
-  clear: both;
-}
 #treeview .jstree-themeicon {
   display: none;
 }
@@ -498,6 +490,19 @@ table.table-template {
 }
 .bootstrap-table .fixed-table-toolbar .dropdown-menu {
   overflow: auto;
+}
+.toolbar {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.fixed-table-toolbar .bs-bars,
+.fixed-table-toolbar .columns,
+.fixed-table-toolbar .search {
+  line-height: inherit;
+}
+.fixed-table-toolbar .toolbar {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .bootstrap-table table tbody tr:first-child td .bs-checkbox {
   vertical-align: middle;
@@ -686,11 +691,6 @@ table.table-template {
 .layui-layer-fast .layui-layer-setwin .layui-layer-close2:after,
 .layui-layer-fast .layui-layer-setwin .layui-layer-close2:hover:after {
   display: none;
-}
-@media (min-width: 768px) {
-  .form-inline .form-control {
-    padding-right: 20px;
-  }
 }
 .n-bootstrap .input-group > .n-right {
   position: absolute;

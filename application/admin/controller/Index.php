@@ -28,10 +28,10 @@ class Index extends Backend
     {
         //
         $menulist = $this->auth->getSidebar([
-            'dashboard'  => 'hot',
-            'addon'       => ['new', 'red', 'badge'],
-            'auth/rule'  => 'side',
-            'general'    => ['18', 'purple'],
+            'dashboard' => 'hot',
+            'addon'     => ['new', 'red', 'badge'],
+            'auth/rule' => 'side',
+            'general'   => ['18', 'purple'],
                 ], $this->view->site['fixedpage']);
         $this->view->assign('menulist', $menulist);
         $this->view->assign('title', __('Home'));
@@ -87,8 +87,6 @@ class Index extends Backend
         {
             $this->redirect($url);
         }
-        $background = cdnurl("/assets/img/loginbg.jpg");
-        $this->view->assign('background', $background);
         \think\Hook::listen("login_init", $this->request);
         return $this->view->fetch();
     }

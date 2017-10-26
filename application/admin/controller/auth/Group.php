@@ -30,13 +30,26 @@ class Group extends Backend
 
         $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
-        $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
-                ->column('id,name');
-        foreach ($groupName as $k => &$v)
+        $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
+        $groupIds = $this->auth->getGroupIds();
+        Tree::instance()->init($groupList);
+        $result = [];
+        if ($this->auth->isSuperAdmin())
         {
-            $v = __($v);
+            $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
         }
-        unset($v);
+        else
+        {
+            foreach ($groupIds as $m => $n)
+            {
+                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n)));
+            }
+        }
+        $groupName = [];
+        foreach ($result as $k => $v)
+        {
+            $groupName[$v['id']] = $v['name'];
+        }
 
         $this->groupdata = $groupName;
         $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $this->auth->getGroupIds()]);
@@ -51,12 +64,21 @@ class Group extends Backend
     {
         if ($this->request->isAjax())
         {
+            $list = AuthGroup::all(array_keys($this->groupdata));
+            $list = collection($list)->toArray();
+            $groupList = [];
+            foreach ($list as $k => $v)
+            {
+                $groupList[$v['id']] = $v;
+            }
             $list = [];
             foreach ($this->groupdata as $k => $v)
             {
-                $data = $this->model->get($k);
-                $data->name = $v;
-                $list[] = $data;
+                if (isset($groupList[$k]))
+                {
+                    $groupList[$k]['name'] = $v;
+                    $list[] = $groupList[$k];
+                }
             }
             $total = count($list);
             $result = array("total" => $total, "rows" => $list);

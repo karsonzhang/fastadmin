@@ -90,7 +90,7 @@ function build_toolbar($btns = NULL, $attr = [])
 {
     $auth = \app\admin\library\Auth::instance();
     $controller = str_replace('.', '/', strtolower(think\Request::instance()->controller()));
-    $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del'];
+    $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del', 'import'];
     $btns = is_array($btns) ? $btns : explode(',', $btns);
     $index = array_search('delete', $btns);
     if ($index !== FALSE)
@@ -98,10 +98,11 @@ function build_toolbar($btns = NULL, $attr = [])
         $btns[$index] = 'del';
     }
     $btnAttr = [
-        'refresh' => ['javascript:;', 'btn btn-primary btn-refresh', 'fa fa-refresh', ''],
-        'add'     => ['javascript:;', 'btn btn-success btn-add', 'fa fa-plus', __('Add')],
-        'edit'    => ['javascript:;', 'btn btn-success btn-edit btn-disabled disabled', 'fa fa-pencil', __('Edit')],
-        'del'     => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete')],
+        'refresh' => ['javascript:;', 'btn btn-primary btn-refresh', 'fa fa-refresh', '', __('Refresh')],
+        'add'     => ['javascript:;', 'btn btn-success btn-add', 'fa fa-plus', __('Add'), __('Add')],
+        'edit'    => ['javascript:;', 'btn btn-success btn-edit btn-disabled disabled', 'fa fa-pencil', __('Edit'), __('Edit')],
+        'del'     => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete'), __('Delete')],
+        'import'  => ['javascript:;', 'btn btn-danger btn-import', 'fa fa-upload', __('Import'), __('Import')],
     ];
     $btnAttr = array_merge($btnAttr, $attr);
     $html = [];
@@ -112,8 +113,9 @@ function build_toolbar($btns = NULL, $attr = [])
         {
             continue;
         }
-        list($href, $class, $icon, $text) = $btnAttr[$v];
-        $html[] = '<a href="' . $href . '" class="' . $class . '" ><i class="' . $icon . '"></i> ' . $text . '</a>';
+        list($href, $class, $icon, $text, $title) = $btnAttr[$v];
+        $extend = $v == 'import' ? 'id="btn-import-' . \fast\Random::alpha() . '" data-url="ajax/upload" data-mimetype="csv,xsl,xslx" data-multiple="false"' : '';
+        $html[] = '<a href="' . $href . '" class="' . $class . '" title="' . $title . '" ' . $extend . '><i class="' . $icon . '"></i> ' . $text . '</a>';
     }
     return implode(' ', $html);
 }

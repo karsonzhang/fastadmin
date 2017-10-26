@@ -17,17 +17,6 @@
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/selectpage/selectpage.css");
 
-.clearfix() {
-    &:before,
-        &:after {
-        content: " "; // 1
-        display: table; // 2
-    }
-    &:after {
-        clear: both;
-    }
-}
-
 @main-bg:           #f1f4f6;
 @panel-intro-bg:    darken(@main-bg,3%);
 @panel-nav-bg:    #fff;
@@ -210,10 +199,9 @@ table.table-template{
     #main {
         background:#fff;
     }
-
-    form label {
-        font-weight: normal;
-    }
+}
+form.form-horizontal .control-label {
+    font-weight: normal;
 }
 
 .user-panel > .image img{
@@ -533,6 +521,17 @@ table.table-template{
 .bootstrap-table .fixed-table-toolbar .dropdown-menu{
     overflow:auto;
 }
+.toolbar{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search{
+    line-height:inherit;
+}
+.fixed-table-toolbar .toolbar{
+    margin-top:0;
+    margin-bottom:0;
+}
 
 .bootstrap-table table tbody tr:first-child td .bs-checkbox {
     vertical-align: middle;
@@ -718,12 +717,6 @@ table.table-template{
                 display:none;
             }
         }
-    }
-}
-
-@media (min-width: 768px){
-    .form-inline .form-control {
-        padding-right:20px;
     }
 }
 

@@ -111,28 +111,28 @@ define(['fast', 'moment'], function (Fast, Moment) {
             Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
-                e.preventDefault();
                 var options = $(this).data() || {};
                 Backend.api.open(Backend.api.replaceids(this, $(this).attr('href')), $(this).attr('title'), options);
+                return false;
             });
             //点击包含.btn-addtabs的元素时新增选项卡
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
-                e.preventDefault();
                 Backend.api.addtabs(Backend.api.replaceids(this, $(this).attr('href')), $(this).attr("title"));
+                return false;
             });
             //点击包含.btn-ajax的元素时发送Ajax请求
             $(document).on('click', '.btn-ajax,.ajaxit', function (e) {
-                e.preventDefault();
                 var options = $(this).data();
                 if (typeof options.url === 'undefined' && $(this).attr("href")) {
                     options.url = $(this).attr("href");
                 }
                 options.url = Backend.api.replaceids(this, options.url);
                 Backend.api.ajax(options);
+                return false;
             });
             //修复含有fixed-footer类的body边距
             if ($(".fixed-footer").size() > 0) {
-                $(document.body).css("padding-bottom", $(".fixed-footer").height());
+                $(document.body).css("padding-bottom", $(".fixed-footer").outerHeight());
             }
             //修复不在iframe时layer-footer隐藏的问题
             if ($(".layer-footer").size() > 0 && self === top) {

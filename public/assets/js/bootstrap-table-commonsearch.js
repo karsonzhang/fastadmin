@@ -321,10 +321,20 @@
     $.extend($.fn.bootstrapTable.defaults, $.fn.bootstrapTable.locales);
 
     var BootstrapTable = $.fn.bootstrapTable.Constructor,
+            _initHeader = BootstrapTable.prototype.initHeader,
             _initToolbar = BootstrapTable.prototype.initToolbar,
             _load = BootstrapTable.prototype.load,
             _initSearch = BootstrapTable.prototype.initSearch;
 
+    BootstrapTable.prototype.initHeader = function () {
+        _initHeader.apply(this, Array.prototype.slice.apply(arguments));
+        this.$header.find('th[data-field]').each(function (i) {
+            var column = $(this).data();
+            if (typeof column['width'] !== 'undefined') {
+                $(this).css("min-width", column['width']);
+            }
+        });
+    };
     BootstrapTable.prototype.initToolbar = function () {
         _initToolbar.apply(this, Array.prototype.slice.apply(arguments));
 

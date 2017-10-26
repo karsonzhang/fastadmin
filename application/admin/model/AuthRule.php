@@ -13,4 +13,8 @@ class AuthRule extends Model
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
 
+    public function getTitleAttr($value, $data)
+    {
+        return __($value);
+    }
 }

@@ -39,6 +39,36 @@ trait Backend
     }
 
     /**
+     * 回收站
+     */
+    public function recyclebin()
+    {
+        //设置过滤方法
+        $this->request->filter(['strip_tags']);
+        if ($this->request->isAjax())
+        {
+            list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $total = $this->model
+                    ->onlyTrashed()
+                    ->where($where)
+                    ->order($sort, $order)
+                    ->count();
+
+            $list = $this->model
+                    ->onlyTrashed()
+                    ->where($where)
+                    ->order($sort, $order)
+                    ->limit($offset, $limit)
+                    ->select();
+
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+        }
+        return $this->view->fetch();
+    }
+
+    /**
      * 添加
      */
     public function add()
@@ -48,10 +78,13 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
-                foreach ($params as $k => &$v)
-                {
-                    $v = is_array($v) ? implode(',', $v) : $v;
-                }
+                /*
+                 * 已经弃用,如果为了兼容老版可取消注释
+                  foreach ($params as $k => &$v)
+                  {
+                  $v = is_array($v) ? implode(',', $v) : $v;
+                  }
+                 */
                 if ($this->dataLimit)
                 {
                     $params[$this->dataLimitField] = $this->auth->id;
@@ -65,7 +98,7 @@ trait Backend
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
                         $this->model->validate($validate);
                     }
-                    $result = $this->model->save($params);
+                    $result = $this->model->allowField(true)->save($params);
                     if ($result !== false)
                     {
                         $this->success();
@@ -106,10 +139,13 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
-                foreach ($params as $k => &$v)
-                {
-                    $v = is_array($v) ? implode(',', $v) : $v;
-                }
+                /*
+                 * 已经弃用,如果为了兼容老版可取消注释
+                  foreach ($params as $k => &$v)
+                  {
+                  $v = is_array($v) ? implode(',', $v) : $v;
+                  }
+                 */
                 try
                 {
                     //是否采用模型验证
@@ -119,7 +155,7 @@ trait Backend
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.edit' : true) : $this->modelValidate;
                         $row->validate($validate);
                     }
-                    $result = $row->save($params);
+                    $result = $row->allowField(true)->save($params);
                     if ($result !== false)
                     {
                         $this->success();
@@ -129,7 +165,7 @@ trait Backend
                         $this->error($row->getError());
                     }
                 }
-                catch (think\exception\PDOException $e)
+                catch (\think\exception\PDOException $e)
                 {
                     $this->error($e->getMessage());
                 }
@@ -147,21 +183,83 @@ trait Backend
     {
         if ($ids)
         {
+            $pk = $this->model->getPk();
             $adminIds = $this->getDataLimitAdminIds();
             if (is_array($adminIds))
             {
-                $count = $this->model->where($this->dataLimitField, 'in', $adminIds)->delete($ids);
+                $count = $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
-            else
+            $list = $this->model->where($pk, 'in', $ids)->select();
+            $count = 0;
+            foreach ($list as $k => $v)
             {
-                $count = $this->model->destroy($ids);
+                $count += $v->delete();
             }
             if ($count)
             {
                 $this->success();
             }
+            else
+            {
+                $this->error(__('No rows were deleted'));
+            }
         }
         $this->error(__('Parameter %s can not be empty', 'ids'));
+    }
+
+    /**
+     * 真实删除
+     */
+    public function destroy($ids = "")
+    {
+        $pk = $this->model->getPk();
+        $adminIds = $this->getDataLimitAdminIds();
+        if (is_array($adminIds))
+        {
+            $count = $this->model->where($this->dataLimitField, 'in', $adminIds);
+        }
+        if ($ids)
+        {
+            $this->model->where($pk, 'in', $ids);
+        }
+        $count = 0;
+        $list = $this->model->onlyTrashed()->select();
+        foreach ($list as $k => $v)
+        {
+            $count += $v->delete(true);
+        }
+        if ($count)
+        {
+            $this->success();
+        }
+        else
+        {
+            $this->error(__('No rows were deleted'));
+        }
+        $this->error(__('Parameter %s can not be empty', 'ids'));
+    }
+
+    /**
+     * 还原
+     */
+    public function restore($ids = "")
+    {
+        $pk = $this->model->getPk();
+        $adminIds = $this->getDataLimitAdminIds();
+        if (is_array($adminIds))
+        {
+            $this->model->where($this->dataLimitField, 'in', $adminIds);
+        }
+        if ($ids)
+        {
+            $this->model->where($pk, 'in', $ids);
+        }
+        $count = $this->model->restore('1=1');
+        if ($count)
+        {
+            $this->success();
+        }
+        $this->error(__('No rows were updated'));
     }
 
     /**
@@ -188,6 +286,10 @@ trait Backend
                     {
                         $this->success();
                     }
+                    else
+                    {
+                        $this->error(__('No rows were updated'));
+                    }
                 }
                 else
                 {
@@ -196,6 +298,97 @@ trait Backend
             }
         }
         $this->error(__('Parameter %s can not be empty', 'ids'));
+    }
+
+    /**
+     * 导入
+     */
+    protected function import()
+    {
+        $file = $this->request->request('file');
+        if (!$file)
+        {
+            $this->error(__('Parameter %s can not be empty', 'file'));
+        }
+        $filePath = ROOT_PATH . DS . 'public' . DS . $file;
+        if (!is_file($filePath))
+        {
+            $this->error(__('No results were found'));
+        }
+        $PHPReader = new \PHPExcel_Reader_Excel2007();
+        if (!$PHPReader->canRead($filePath))
+        {
+            $PHPReader = new \PHPExcel_Reader_Excel5();
+            if (!$PHPReader->canRead($filePath))
+            {
+                $PHPReader = new \PHPExcel_Reader_CSV();
+                if (!$PHPReader->canRead($filePath))
+                {
+                    $this->error(__('Unknown data format'));
+                }
+            }
+        }
+
+        $table = $this->model->getQuery()->getTable();
+        $database = \think\Config::get('database.database');
+        $fieldArr = [];
+        $list = db()->query("SELECT COLUMN_NAME,COLUMN_COMMENT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?", [$table, $database]);
+        foreach ($list as $k => $v)
+        {
+            $fieldArr[$v['COLUMN_COMMENT']] = $v['COLUMN_NAME'];
+        }
+
+        $PHPExcel = $PHPReader->load($filePath); //加载文件
+        $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
+        $allColumn = $currentSheet->getHighestColumn(); //取得最大的列号
+        $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
+
+        for ($currentRow = 1; $currentRow <= 1; $currentRow++)
+        {
+            for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++)
+            {
+                $val = $currentSheet->getCellByColumnAndRow(ord($currentColumn) - 65, $currentRow)->getValue();
+                $fields[] = $val;
+            }
+        }
+        $insert = [];
+        for ($currentRow = 2; $currentRow <= $allRow; $currentRow++)
+        {
+            $values = [];
+            for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++)
+            {
+                $val = $currentSheet->getCellByColumnAndRow(ord($currentColumn) - 65, $currentRow)->getValue(); /*                 * ord()将字符转为十进制数 */
+                $values[] = is_null($val) ? '' : $val;
+                //echo iconv('utf-8','gb2312', $val)."\t"; 
+            }
+            $row = [];
+            $temp = array_combine($fields, $values);
+            foreach ($temp as $k => $v)
+            {
+                if (isset($fieldArr[$k]) && $k !== '')
+                {
+                    $row[$fieldArr[$k]] = $v;
+                }
+            }
+            if ($row)
+            {
+                $insert[] = $row;
+            }
+        }
+        if (!$insert)
+        {
+            $this->error(__('No rows were updated'));
+        }
+        try
+        {
+            $this->model->saveAll($insert);
+        }
+        catch (\think\exception\PDOException $exception)
+        {
+            $this->error($exception->getMessage());
+        }
+
+        $this->success();
     }
 
 }

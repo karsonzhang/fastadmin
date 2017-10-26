@@ -82,19 +82,9 @@ class Config extends Backend
                 }
                 try
                 {
-                    if ($params['content'] && in_array($params['type'], ['select', 'selects', 'checkbox', 'radio']))
+                    if (in_array($params['type'], ['select', 'selects', 'checkbox', 'radio', 'array']))
                     {
-                        $content = explode("\r\n", $params['content']);
-                        $arr = [];
-                        foreach ($content as $k => &$v)
-                        {
-                            if (stripos($v, "|") !== false)
-                            {
-                                $item = explode('|', $v);
-                                $arr[$item[0]] = $item[1];
-                            }
-                        }
-                        $params['content'] = $arr ? json_encode($arr, JSON_UNESCAPED_UNICODE) : '';
+                        $params['content'] = ConfigModel::decode($params['content']);
                     }
                     else
                     {
@@ -132,40 +122,28 @@ class Config extends Backend
     {
         if ($this->request->isPost())
         {
-            $params = $this->request->post("row/a");
-            if ($params)
+            $row = $this->request->post("row/a");
+            if ($row)
             {
                 $configList = [];
-                foreach ($this->model->all() as $k => $v)
+                foreach ($this->model->all() as $v)
                 {
-                    if (isset($params[$v['name']]))
+                    if (isset($row[$v['name']]))
                     {
-                        if ($v['type'] == 'array')
+                        $value = $row[$v['name']];
+                        if (is_array($value) && isset($value['field']))
                         {
-                            $fieldarr = $valuearr = [];
-                            $field = $params[$v['name']]['field'];
-                            $value = $params[$v['name']]['value'];
-
-                            foreach ($field as $m => $n)
-                            {
-                                if ($n != '')
-                                {
-                                    $fieldarr[] = $field[$m];
-                                    $valuearr[] = $value[$m];
-                                }
-                            }
-                            $params[$v['name']] = array_combine($fieldarr, $valuearr);
-                            $value = json_encode($params[$v['name']], JSON_UNESCAPED_UNICODE);
+                            $value = json_encode(\app\common\model\Config::getArrayData($value), JSON_UNESCAPED_UNICODE);
                         }
                         else
                         {
-                            $value = is_array($params[$v['name']]) ? implode(',', $params[$v['name']]) : $params[$v['name']];
+                            $value = is_array($value) ? implode(',', $value) : $value;
                         }
-
-                        $configList[] = ['id' => $v['id'], 'value' => $value];
+                        $v['value'] = $value;
+                        $configList[] = $v;
                     }
                 }
-                $this->model->saveAll($configList);
+                $this->model->allowField(true)->saveAll($configList);
                 try
                 {
                     $this->refreshFile();

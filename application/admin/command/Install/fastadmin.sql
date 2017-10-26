@@ -68,11 +68,11 @@ CREATE TABLE `fa_attachment` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT '物理路径',
   `imagewidth` varchar(30) NOT NULL DEFAULT '' COMMENT '宽度',
-  `imageheight` varchar(30) NOT NULL DEFAULT '' COMMENT '宽度',
+  `imageheight` varchar(30) NOT NULL DEFAULT '' COMMENT '高度',
   `imagetype` varchar(30) NOT NULL DEFAULT '' COMMENT '图片类型',
   `imageframes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '图片帧数',
   `filesize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
-  `mimetype` varchar(30) NOT NULL DEFAULT '' COMMENT 'mime类型',
+  `mimetype` varchar(50) NOT NULL DEFAULT '' COMMENT 'mime类型',
   `extparam` varchar(255) NOT NULL DEFAULT '' COMMENT '透传数据',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
@@ -301,13 +301,13 @@ CREATE TABLE `fa_config` (
 BEGIN;
 INSERT INTO `fa_config` VALUES (1, 'name', 'basic', 'Site name', '请填写站点名称', 'string', 'FastAdmin', '', 'required', '');
 INSERT INTO `fa_config` VALUES (2, 'beian', 'basic', 'Beian', '粤ICP备15054802号-4', 'string', '', '', '', '');
-INSERT INTO `fa_config` VALUES (3, 'cdnurl', 'basic', 'Cdn url', '如果使用CDN云储存请配置该值', 'string', '', '', '', '');
+INSERT INTO `fa_config` VALUES (3, 'cdnurl', 'basic', 'Cdn url', '如果静态资源使用第三方云储存请配置该值', 'string', '', '', '', '');
 INSERT INTO `fa_config` VALUES (4, 'version', 'basic', 'Version', '如果静态资源有变动请重新配置该值', 'string', '1.0.1', '', 'required', '');
 INSERT INTO `fa_config` VALUES (5, 'timezone', 'basic', 'Timezone', '', 'string', 'Asia/Shanghai', '', 'required', '');
 INSERT INTO `fa_config` VALUES (6, 'forbiddenip', 'basic', 'Forbidden ip', '一行一条记录', 'text', '', '', '', '');
 INSERT INTO `fa_config` VALUES (7, 'languages', 'basic', 'Languages', '', 'array', '{\"backend\":\"zh-cn\",\"frontend\":\"zh-cn\"}', '', 'required', '');
 INSERT INTO `fa_config` VALUES (8, 'fixedpage', 'basic', 'Fixed page', '请尽量输入左侧菜单栏存在的链接', 'string', 'dashboard', '', 'required', '');
-INSERT INTO `fa_config` VALUES (9, 'categorytype', 'dictionary', 'Cateogry type', '', 'array', '{\"default\":\"Default\",\"page\":\"Page\",\"article\":\"Article\",\"test\":\"Test\"}', '', '', '');
+INSERT INTO `fa_config` VALUES (9, 'categorytype', 'dictionary', 'Category type', '', 'array', '{\"default\":\"Default\",\"page\":\"Page\",\"article\":\"Article\",\"test\":\"Test\"}', '', '', '');
 INSERT INTO `fa_config` VALUES (10, 'configgroup', 'dictionary', 'Config group', '', 'array', '{\"basic\":\"Basic\",\"email\":\"Email\",\"dictionary\":\"Dictionary\",\"user\":\"User\",\"example\":\"Example\"}', '', '', '');
 INSERT INTO `fa_config` VALUES (11, 'mail_type', 'email', 'Mail type', '选择邮件发送方式', 'select', '1', '[\"Please select\",\"SMTP\",\"Mail\"]', '', '');
 INSERT INTO `fa_config` VALUES (12, 'mail_smtp_host', 'email', 'Mail smtp host', '错误的配置发送邮件会导致服务器超时', 'string', 'smtp.qq.com', '', '', '');

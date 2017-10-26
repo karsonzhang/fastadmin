@@ -85,7 +85,7 @@ class Crud extends Command
     /**
      * 保留字段
      */
-    protected $reservedField = ['createtime', 'updatetime'];
+    protected $reservedField = ['admin_id', 'createtime', 'updatetime'];
 
     /**
      * 排序字段
@@ -95,7 +95,7 @@ class Crud extends Command
     /**
      * 编辑器的Class
      */
-    protected $editorClass = 'summernote';
+    protected $editorClass = 'editor';
 
     protected function configure()
     {
@@ -478,6 +478,10 @@ class Crud extends Command
                         $itemArr = $this->getLangArray($itemArr, FALSE);
                         //添加一个获取器
                         $this->getAttr($getAttrArr, $field, $v['DATA_TYPE'] == 'set' ? 'multiple' : 'select');
+                        if ($v['DATA_TYPE'] == 'set')
+                        {
+                            $this->setAttr($setAttrArr, $field, $inputType);
+                        }
                         $this->appendAttr($appendAttrList, $field);
                         $formAddElement = $this->getReplacedStub('html/select', ['field' => $field, 'fieldName' => $fieldName, 'fieldList' => $this->getFieldListName($field), 'attrStr' => Form::attributes($attrArr), 'selectedValue' => $defaultValue]);
                         $formEditElement = $this->getReplacedStub('html/select', ['field' => $field, 'fieldName' => $fieldName, 'fieldList' => $this->getFieldListName($field), 'attrStr' => Form::attributes($attrArr), 'selectedValue' => "\$row.{$field}"]);
@@ -533,6 +537,10 @@ class Crud extends Command
                         $itemArr = $this->getLangArray($itemArr, FALSE);
                         //添加一个获取器
                         $this->getAttr($getAttrArr, $field, $inputType);
+                        if ($inputType == 'checkbox')
+                        {
+                            $this->setAttr($setAttrArr, $field, $inputType);
+                        }
                         $this->appendAttr($appendAttrList, $field);
                         $defaultValue = $inputType == 'radio' && !$defaultValue ? key($itemArr) : $defaultValue;
 
@@ -838,13 +846,19 @@ EOD;
 
     protected function setAttr(&$setAttr, $field, $inputType = '')
     {
-        if ($inputType != 'datetime')
+        if (!in_array($inputType, ['datetime', 'checkbox', 'select']))
             return;
         $attrField = ucfirst($this->getCamelizeName($field));
         if ($inputType == 'datetime')
         {
             $return = <<<EOD
 return \$value && !is_numeric(\$value) ? strtotime(\$value) : \$value;
+EOD;
+        }
+        else if (in_array($inputType, ['checkbox', 'select']))
+        {
+            $return = <<<EOD
+return is_array(\$value) ? implode(',', \$value) : \$value;
 EOD;
         }
         $setAttr[] = <<<EOD

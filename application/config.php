@@ -130,6 +130,7 @@ return [
         'taglib_begin' => '{',
         // 标签库标签结束标记
         'taglib_end'   => '}',
+        'tpl_cache'    => true,
     ],
     // 视图输出字符串内容替换
     'view_replace_str'       => [
@@ -242,7 +243,7 @@ return [
     ],
     //FastAdmin配置
     'fastadmin'              => [
-        'version'   => '1.0.0.20170915_beta',
-        'api_url'   => 'http://api.fastadmin.net',
+        'version' => '1.0.0.20171026_beta',
+        'api_url' => 'http://api.fastadmin.net',
     ],
 ];

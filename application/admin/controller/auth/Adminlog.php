@@ -24,7 +24,7 @@ class Adminlog extends Backend
         $this->model = model('AdminLog');
 
         $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
-        $this->childrenGroupIds = $this->auth->getChildrenGroupIds();
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin() ? true : false);
 
         $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
                 ->column('id,name');
