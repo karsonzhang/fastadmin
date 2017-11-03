@@ -34,7 +34,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             that.holdSubmit(false);
                             submitBtn.removeClass("disabled");
                             if (typeof success === 'function') {
-                                if (!success.call($(this), data, ret)) {
+                                if (false === success.call($(this), data, ret)) {
                                     return false;
                                 }
                             }
@@ -48,7 +48,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             that.holdSubmit(false);
                             submitBtn.removeClass("disabled");
                             if (typeof error === 'function') {
-                                if (!error.call($(this), data, ret)) {
+                                if (false === error.call($(this), data, ret)) {
                                     return false;
                                 }
                             }
@@ -205,7 +205,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 if (form.size() === 0)
                     return Toastr.error("表单未初始化完成,无法提交");
                 if (typeof submit === 'function') {
-                    if (!submit.call(form)) {
+                    if (false === submit.call(form)) {
                         return false;
                     }
                 }
@@ -251,7 +251,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         }
                     }
                     if (typeof success === 'function') {
-                        if (!success.call(form, data, ret)) {
+                        if (false === success.call(form, data, ret)) {
                             return false;
                         }
                     }
@@ -260,7 +260,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         $("input[name='__token__']", form).val(data.token);
                     }
                     if (typeof error === 'function') {
-                        if (!error.call(form, data, ret)) {
+                        if (false === error.call(form, data, ret)) {
                             return false;
                         }
                     }

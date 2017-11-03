@@ -161,7 +161,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 // 导入按钮事件
                 if ($(Table.config.importbtn, toolbar).size() > 0) {
                     require(['upload'], function (Upload) {
-                        console.log($(Table.config.importbtn, toolbar));
                         Upload.api.plupload($(Table.config.importbtn, toolbar), function (data, ret) {
                             Fast.api.ajax({
                                 url: options.extend.import_url,

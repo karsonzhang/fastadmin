@@ -21,6 +21,11 @@ class Category Extends Model
         'flag_text',
     ];
 
+    public function setFlagAttr($value, $data)
+    {
+        return is_array($value) ? implode(',', $value) : $value;
+    }
+
     /**
      * 读取分类类型
      * @return array
