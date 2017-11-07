@@ -44,6 +44,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             parent.$(".btn-refresh").trigger("click");
                             var index = parent.Layer.getFrameIndex(window.name);
                             parent.Layer.close(index);
+                            return false;
                         }, function (data, ret) {
                             that.holdSubmit(false);
                             submitBtn.removeClass("disabled");

@@ -114,7 +114,7 @@ function build_toolbar($btns = NULL, $attr = [])
             continue;
         }
         list($href, $class, $icon, $text, $title) = $btnAttr[$v];
-        $extend = $v == 'import' ? 'id="btn-import-' . \fast\Random::alpha() . '" data-url="ajax/upload" data-mimetype="csv,xsl,xslx" data-multiple="false"' : '';
+        $extend = $v == 'import' ? 'id="btn-import-' . \fast\Random::alpha() . '" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"' : '';
         $html[] = '<a href="' . $href . '" class="' . $class . '" title="' . $title . '" ' . $extend . '><i class="' . $icon . '"></i> ' . $text . '</a>';
     }
     return implode(' ', $html);
