@@ -38,7 +38,7 @@ $sitename = "FastAdmin";
 
 $link = array(
     'qqun'  => "https://jq.qq.com/?_wv=1027&amp;k=487PNBb",
-    'osc'   => 'https://git.oschina.net/karson/fastadmin/attach_files',
+    'gitee' => 'https://gitee.com/karson/fastadmin/attach_files',
     'home'  => 'http://www.fastadmin.net?ref=install',
     'forum' => 'http://forum.fastadmin.net?ref=install',
     'doc'   => 'http://doc.fastadmin.net?ref=install',
@@ -84,7 +84,7 @@ else
     {
         if (!is_dir(ROOT_PATH . $v))
         {
-            $errInfo = '请先下载完整包覆盖后再安装，<a href="' . $link['qqun'] . '" target="_blank">群共享下载</a> <a href="' . $link['osc'] . '" target="_blank">码云下载</a>';
+            $errInfo = '请先下载完整包覆盖后再安装，<a href="' . $link['qqun'] . '" target="_blank">群共享下载</a> <a href="' . $link['gitee'] . '" target="_blank">码云下载</a>';
             break;
         }
     }
@@ -104,6 +104,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
     $mysqlUsername = isset($_POST['mysqlUsername']) ? $_POST['mysqlUsername'] : 'root';
     $mysqlPassword = isset($_POST['mysqlPassword']) ? $_POST['mysqlPassword'] : '';
     $mysqlDatabase = isset($_POST['mysqlDatabase']) ? $_POST['mysqlDatabase'] : 'fastadmin';
+    $mysqlPrefix = isset($_POST['mysqlPrefix']) ? $_POST['mysqlPrefix'] : 'fa_';
     $adminUsername = isset($_POST['adminUsername']) ? $_POST['adminUsername'] : 'admin';
     $adminPassword = isset($_POST['adminPassword']) ? $_POST['adminPassword'] : '123456';
     $adminPasswordConfirmation = isset($_POST['adminPasswordConfirmation']) ? $_POST['adminPasswordConfirmation'] : '123456';
@@ -143,6 +144,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
         {
             throw new Exception("无法读取application/admin/command/Install/fastadmin.sql文件，请检查是否有读权限");
         }
+        $sql = str_replace("`fa_", "`{$mysqlPrefix}", $sql);
         $pdo = new PDO("mysql:host={$mysqlHostname};port={$mysqlHostport}", $mysqlUsername, $mysqlPassword, array(
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
@@ -155,17 +157,16 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
         $pdo->exec($sql);
 
         $config = @file_get_contents($dbConfigFile);
-        $callback = function($matches) use($mysqlHostname, $mysqlHostport, $mysqlUsername, $mysqlPassword, $mysqlDatabase) {
+        $callback = function($matches) use($mysqlHostname, $mysqlHostport, $mysqlUsername, $mysqlPassword, $mysqlDatabase, $mysqlPrefix) {
             $field = ucfirst($matches[1]);
             $replace = ${"mysql{$field}"};
             if ($matches[1] == 'hostport' && $mysqlHostport == 3306)
             {
                 $replace = '';
             }
-            return "'{$matches[1]}'{$matches[2]}=>{$matches[3]}'{$replace}',";
+            return "'{$matches[1]}'{$matches[2]}=>{$matches[3]}Env::get('database.{$matches[1]}', '{$replace}'),";
         };
-        $config = preg_replace_callback("/'(hostname|database|username|password|hostport)'(\s+)=>(\s+)'(.*)'\,/", $callback, $config);
-
+        $config = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $config);
         //检测能否成功写入数据库配置
         $result = @file_put_contents($dbConfigFile, $config);
         if (!$result)
@@ -181,7 +182,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
         }
         $newSalt = substr(md5(uniqid(true)), 0, 6);
         $newPassword = md5(md5($adminPassword) . $newSalt);
-        $pdo->query("UPDATE fa_admin SET username = '{$adminUsername}', email = '{$adminEmail}',password = '{$newPassword}', salt = '{$newSalt}' WHERE username = 'admin'");
+        $pdo->query("UPDATE {$mysqlPrefix}admin SET username = '{$adminUsername}', email = '{$adminEmail}',password = '{$newPassword}', salt = '{$newSalt}' WHERE username = 'admin'");
         echo "success";
     }
     catch (Exception $e)
@@ -328,7 +329,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
             <div>
 
                 <p>若你在安装中遇到麻烦可点击  <a href="<?php echo $link['doc']; ?>" target="_blank">安装文档</a> <a href="<?php echo $link['forum']; ?>" target="_blank">交流论坛</a> <a href="<?php echo $link['qqun']; ?>">QQ交流群</a></p>
-                <p><?php echo $sitename; ?>还支持在命令行php think install一键安装</p>
+                <!--<p><?php echo $sitename; ?>还支持在命令行php think install一键安装</p>-->
 
                 <form method="post">
                     <?php if ($errInfo): ?>
@@ -342,22 +343,27 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
                     <div class="form-group">
                         <div class="form-field">
                             <label>MySQL 数据库地址</label>
-                            <input name="mysqlHost" value="localhost" required="">
+                            <input type="text" name="mysqlHost" value="localhost" required="">
                         </div>
 
                         <div class="form-field">
                             <label>MySQL 数据库名</label>
-                            <input name="mysqlDatabase" value="fastadmin" required="">
+                            <input type="text" name="mysqlDatabase" value="fastadmin" required="">
                         </div>
 
                         <div class="form-field">
                             <label>MySQL 用户名</label>
-                            <input name="mysqlUsername" value="root" required="">
+                            <input type="text" name="mysqlUsername" value="root" required="">
                         </div>
 
                         <div class="form-field">
                             <label>MySQL 密码</label>
                             <input type="password" name="mysqlPassword">
+                        </div>
+
+                        <div class="form-field">
+                            <label>MySQL 数据表前缀</label>
+                            <input type="text" name="mysqlPrefix" value="fa_">
                         </div>
                     </div>
 
