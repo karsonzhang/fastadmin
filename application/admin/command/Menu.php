@@ -264,10 +264,25 @@ class Menu extends Command
             $comment = preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $comment);
             
             $title = $comment ? $comment : ucfirst($n->name);
-            
-            $ruleArr[] = array('pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $title, 'ismenu' => 0, 'status' => 'normal');
+
+            //获取主键，作为AuthRule更新依据
+            $id = $this->getAuthRulePK($name . "/" . strtolower($n->name));
+
+            $ruleArr[] = array('id' => $id, 'pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $title, 'ismenu' => 0, 'status' => 'normal');
         }
         $this->model->saveAll($ruleArr);
+    }
+
+    //获取主键
+    protected function getAuthRulePK($name) {
+        if (!empty($name))
+        {
+            $PK = $this->model
+                            ->where('name', $name)
+                            ->value('id');
+
+        }
+        return $PK;
     }
 
 }
