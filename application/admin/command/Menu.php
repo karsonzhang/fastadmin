@@ -277,12 +277,11 @@ class Menu extends Command
     protected function getAuthRulePK($name) {
         if (!empty($name))
         {
-            $PK = $this->model
+            return $this->model
                             ->where('name', $name)
                             ->value('id');
 
         }
-        return $PK;
     }
 
 }
