@@ -102,7 +102,7 @@ class Min extends Command
                 if ($res == "js")
                 {
                     $content = file_get_contents($from);
-                    preg_match("/require\.config\(\{[\n]+(.*?)\n\}\);/is", $content, $matches);
+                    preg_match("/require\.config\(\{[\r\n]?[\n]?+(.*?)[\r\n]?[\n]?}\);/is", $content, $matches);
                     if (!isset($matches[1]))
                     {
                         $output->error("js config not found!");
