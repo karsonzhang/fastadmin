@@ -62,7 +62,7 @@ class Admin extends Backend
         if ($this->request->isAjax())
         {
 
-            $childrenGroupIds = $this->auth->getChildrenAdminIds(true);
+            $childrenGroupIds = $this->childrenGroupIds;
             $groupName = AuthGroup::where('id', 'in', $childrenGroupIds)
                     ->column('id,name');
             $authGroupList = AuthGroupAccess::where('group_id', 'in', $childrenGroupIds)
