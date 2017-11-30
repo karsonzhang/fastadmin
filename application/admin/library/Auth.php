@@ -14,6 +14,7 @@ class Auth extends \fast\Auth
 
     protected $requestUri = '';
     protected $breadcrumb = [];
+    protected $loginUnique = false; //是否同一账号同一时间只能在一个地方登录
 
     public function __construct()
     {
@@ -153,7 +154,21 @@ class Auth extends \fast\Auth
      */
     public function isLogin()
     {
-        return Session::get('admin') ? true : false;
+        $admin = Session::get('admin');
+        if (!$admin)
+        {
+            return false;
+        }
+        //判断是否同一时间同一账号只能在一个地方登录
+        if ($this->loginUnique)
+        {
+            $my = Admin::get($admin->id);
+            if (!$my || $my->token != $admin->token)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

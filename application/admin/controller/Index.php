@@ -87,6 +87,8 @@ class Index extends Backend
         {
             $this->redirect($url);
         }
+        $background = cdnurl("/assets/img/loginbg.jpg");
+        $this->view->assign('background', $background);
         \think\Hook::listen("login_init", $this->request);
         return $this->view->fetch();
     }

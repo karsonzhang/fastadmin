@@ -84,7 +84,7 @@ class Config extends Backend
                 {
                     if (in_array($params['type'], ['select', 'selects', 'checkbox', 'radio', 'array']))
                     {
-                        $params['content'] = ConfigModel::decode($params['content']);
+                        $params['content'] = json_encode(ConfigModel::decode($params['content']), JSON_UNESCAPED_UNICODE);
                     }
                     else
                     {
@@ -133,7 +133,7 @@ class Config extends Backend
                         $value = $row[$v['name']];
                         if (is_array($value) && isset($value['field']))
                         {
-                            $value = json_encode(\app\common\model\Config::getArrayData($value), JSON_UNESCAPED_UNICODE);
+                            $value = json_encode(ConfigModel::getArrayData($value), JSON_UNESCAPED_UNICODE);
                         }
                         else
                         {
