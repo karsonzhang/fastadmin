@@ -178,15 +178,23 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
-            //绑定tabs事件
-            $('#nav').addtabs({iframeHeight: "100%"});
+            //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true
+            $('#nav').addtabs({iframeHeight: "100%", iframeForceRefresh: false});
 
+            var addtabs = localStorage.getItem("addtabs");
             if ($("ul.sidebar-menu li.active a").size() > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
             } else {
                 $("ul.sidebar-menu li a[url!='javascript:;']:first").trigger("click");
             }
-            if (Config.referer) {
+            if (addtabs) {
+                var active = $("ul.sidebar-menu li a[addtabs=" + $(addtabs).attr("addtabs") + "]");
+                if (active.size() > 0) {
+                    active.trigger("click");
+                } else {
+                    $(addtabs).appendTo(document.body).addClass("hide").trigger("click");
+                }
+            } else if (Config.referer) {
                 //刷新页面后跳到到刷新前的页面
                 Backend.api.addtabs(Config.referer);
             }

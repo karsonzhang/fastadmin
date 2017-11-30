@@ -31,7 +31,7 @@ class Index extends Backend
             'dashboard' => 'hot',
             'addon'     => ['new', 'red', 'badge'],
             'auth/rule' => 'side',
-            'general'   => ['18', 'purple'],
+            'general'   => ['new', 'purple'],
                 ], $this->view->site['fixedpage']);
         $this->view->assign('menulist', $menulist);
         $this->view->assign('title', __('Home'));
