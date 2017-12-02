@@ -72,7 +72,7 @@ CREATE TABLE `fa_attachment` (
   `imagetype` varchar(30) NOT NULL DEFAULT '' COMMENT '图片类型',
   `imageframes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '图片帧数',
   `filesize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
-  `mimetype` varchar(50) NOT NULL DEFAULT '' COMMENT 'mime类型',
+  `mimetype` varchar(100) NOT NULL DEFAULT '' COMMENT 'mime类型',
   `extparam` varchar(255) NOT NULL DEFAULT '' COMMENT '透传数据',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
