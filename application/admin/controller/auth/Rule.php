@@ -74,7 +74,11 @@ class Rule extends Backend
                 {
                     $this->error(__('The non-menu rule must have parent'));
                 }
-                $this->model->create($params);
+                $result = $this->model->validate()->save($params);
+                if ($result === FALSE)
+                {
+                    $this->error($this->model->getError());
+                }
                 Cache::rm('__menu__');
                 $this->success();
             }
@@ -100,7 +104,16 @@ class Rule extends Backend
                 {
                     $this->error(__('The non-menu rule must have parent'));
                 }
-                $row->save($params);
+                //这里需要针对name做唯一验证
+                $ruleValidate = \think\Loader::validate('AuthRule');
+                $ruleValidate->rule([
+                    'name' => 'require|format|unique:AuthRule,name,' . $row->id,
+                ]);
+                $result = $row->validate()->save($params);
+                if ($result === FALSE)
+                {
+                    $this->error($row->getError());
+                }
                 Cache::rm('__menu__');
                 $this->success();
             }

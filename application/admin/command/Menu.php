@@ -86,7 +86,7 @@ class Menu extends Command
         }
         else
         {
-            $this->model->destroy([]);
+            $this->model->where('id', '>', 0)->delete();
             $controllerDir = $adminPath . 'controller' . DS;
             // 扫描新的节点信息并导入
             $treelist = $this->import($this->scandir($controllerDir));
@@ -215,7 +215,7 @@ class Menu extends Command
 
         //导入中文语言包
         \think\Lang::load(dirname(__DIR__) . DS . 'lang/zh-cn.php');
-        
+
         //先定入菜单的数据
         $pid = 0;
         foreach ($controllerArr as $k => $v)
@@ -262,7 +262,7 @@ class Menu extends Command
             }
             //过滤掉其它字符
             $comment = preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $comment);
-            
+
             $title = $comment ? $comment : ucfirst($n->name);
 
             //获取主键，作为AuthRule更新依据
@@ -274,13 +274,13 @@ class Menu extends Command
     }
 
     //获取主键
-    protected function getAuthRulePK($name) {
+    protected function getAuthRulePK($name)
+    {
         if (!empty($name))
         {
             return $this->model
                             ->where('name', $name)
                             ->value('id');
-
         }
     }
 

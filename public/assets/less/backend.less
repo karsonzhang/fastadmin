@@ -476,6 +476,15 @@ form.form-horizontal .control-label {
     border:none!important;
 }
 
+/*修复nice-validator新版下的一处BUG*/
+.nice-validator {
+    input, select, textarea, [contenteditable]{
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+    }
+}
+
 /*修复nice-validator和summernote的编辑框冲突*/
 .nice-validator .note-editor .note-editing-area .note-editable{
     display:inherit;

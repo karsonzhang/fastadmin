@@ -28,7 +28,7 @@ class Admin extends Backend
 
         $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
         $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin() ? true : false);
-        
+
         $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
         $groupIds = $this->auth->getGroupIds();
         Tree::instance()->init($groupList);
@@ -117,8 +117,11 @@ class Admin extends Backend
                 $params['salt'] = Random::alnum();
                 $params['password'] = md5(md5($params['password']) . $params['salt']);
                 $params['avatar'] = '/assets/img/avatar.png'; //设置新管理员默认头像。
-
-                $admin = $this->model->create($params);
+                $result = $this->model->validate('Admin.add')->save($params);
+                if ($result === false)
+                {
+                    $this->error($this->model->getError());
+                }
                 $group = $this->request->post("group/a");
 
                 //过滤不允许的组别,避免越权
@@ -126,7 +129,7 @@ class Admin extends Backend
                 $dataset = [];
                 foreach ($group as $value)
                 {
-                    $dataset[] = ['uid' => $admin->id, 'group_id' => $value];
+                    $dataset[] = ['uid' => $this->model->id, 'group_id' => $value];
                 }
                 model('AuthGroupAccess')->saveAll($dataset);
                 $this->success();
@@ -158,7 +161,17 @@ class Admin extends Backend
                 {
                     unset($params['password'], $params['salt']);
                 }
-                $row->save($params);
+                //这里需要针对username和email做唯一验证
+                $adminValidate = \think\Loader::validate('Admin');
+                $adminValidate->rule([
+                    'username' => 'require|max:50|unique:admin,username,' . $row->id,
+                    'email'    => 'require|email|unique:admin,email,' . $row->id
+                ]);
+                $result = $row->validate('Admin.edit')->save($params);
+                if ($result === false)
+                {
+                    $this->error($row->getError());
+                }
 
                 // 先移除所有权限
                 model('AuthGroupAccess')->where('uid', $row->id)->delete();
