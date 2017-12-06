@@ -5,6 +5,7 @@ namespace app\admin\library;
 use app\admin\model\Admin;
 use fast\Random;
 use fast\Tree;
+use think\Config;
 use think\Cookie;
 use think\Request;
 use think\Session;
@@ -14,7 +15,6 @@ class Auth extends \fast\Auth
 
     protected $requestUri = '';
     protected $breadcrumb = [];
-    protected $loginUnique = false; //是否同一账号同一时间只能在一个地方登录
     protected $logined = false; //登录状态
 
     public function __construct()
@@ -165,7 +165,7 @@ class Auth extends \fast\Auth
             return false;
         }
         //判断是否同一时间同一账号只能在一个地方登录
-        if ($this->loginUnique)
+        if (Config::get('fastadmin.login_unique'))
         {
             $my = Admin::get($admin->id);
             if (!$my || $my->token != $admin->token)

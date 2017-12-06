@@ -39,4 +39,5 @@ return [
     'Docs'                                                       => '官方文档',
     'Forum'                                                      => '交流社区',
     'QQ qun'                                                     => 'QQ交流群',
+    'Captcha'                                                    => '验证码',
 ];

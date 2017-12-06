@@ -375,7 +375,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             if (lastlogin) {
                 lastlogin = JSON.parse(lastlogin);
                 $("#profile-img").attr("src", Backend.api.cdnurl(lastlogin.avatar));
-                $("#pd-form-username").val(lastlogin.username);
+                $("#profile-name").val(lastlogin.username);
             }
 
             //让错误提示框居中
