@@ -18,7 +18,6 @@ use think\Db;
 use think\Config;
 use think\Session;
 use think\Request;
-use think\Loader;
 
 /**
  * 权限认证类

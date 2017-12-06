@@ -2,7 +2,7 @@
 
 return array (
   'name' => 'FastAdmin',
-  'beian' => '粤ICP备15054802号-4',
+  'beian' => '',
   'cdnurl' => '',
   'version' => '1.0.1',
   'timezone' => 'Asia/Shanghai',
@@ -15,18 +15,18 @@ return array (
   'fixedpage' => 'dashboard',
   'categorytype' => 
   array (
-    'default' => '默认',
-    'page' => '单页',
-    'article' => '文章',
-    'test' => '测试',
+    'default' => 'Default',
+    'page' => 'Page',
+    'article' => 'Article',
+    'test' => 'Test',
   ),
   'configgroup' => 
   array (
-    'basic' => '基础配置',
-    'email' => '邮件配置',
-    'dictionary' => '字典配置',
-    'user' => '会员配置',
-    'example' => '示例分组',
+    'basic' => 'Basic',
+    'email' => 'Email',
+    'dictionary' => 'Dictionary',
+    'user' => 'User',
+    'example' => 'Example',
   ),
   'mail_type' => '1',
   'mail_smtp_host' => 'smtp.qq.com',

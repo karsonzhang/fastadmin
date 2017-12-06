@@ -15,6 +15,7 @@ class Auth extends \fast\Auth
     protected $requestUri = '';
     protected $breadcrumb = [];
     protected $loginUnique = false; //是否同一账号同一时间只能在一个地方登录
+    protected $logined = false; //登录状态
 
     public function __construct()
     {
@@ -89,7 +90,7 @@ class Auth extends \fast\Auth
             {
                 return false;
             }
-            Session::set("admin", $admin);
+            Session::set("admin", $admin->toArray());
             //刷新自动登录的时效
             $this->keeplogin($keeptime);
             return true;
@@ -154,6 +155,10 @@ class Auth extends \fast\Auth
      */
     public function isLogin()
     {
+        if ($this->logined)
+        {
+            return true;
+        }
         $admin = Session::get('admin');
         if (!$admin)
         {
@@ -168,6 +173,7 @@ class Auth extends \fast\Auth
                 return false;
             }
         }
+        $this->logined = true;
         return true;
     }
 
