@@ -289,16 +289,24 @@ class Auth extends \fast\Auth
      */
     public function getChildrenAdminIds($withself = false)
     {
-        $groupIds = $this->getChildrenGroupIds(false);
         $childrenAdminIds = [];
-        $authGroupList = model('AuthGroupAccess')
-                ->field('uid,group_id')
-                ->where('group_id', 'in', $groupIds)
-                ->select();
-
-        foreach ($authGroupList as $k => $v)
+        if (!$this->isSuperAdmin())
         {
-            $childrenAdminIds[] = $v['uid'];
+            $groupIds = $this->getChildrenGroupIds(false);
+            $authGroupList = model('AuthGroupAccess')
+                    ->field('uid,group_id')
+                    ->where('group_id', 'in', $groupIds)
+                    ->select();
+
+            foreach ($authGroupList as $k => $v)
+            {
+                $childrenAdminIds[] = $v['uid'];
+            }
+        }
+        else
+        {
+            //超级管理员拥有所有人的权限
+            $childrenAdminIds = Admin::column('id');
         }
         if ($withself)
         {
