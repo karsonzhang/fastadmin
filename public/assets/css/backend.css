@@ -4,7 +4,7 @@
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
-@import url("../libs/layer/build/skin/default/layer.css");
+@import url("../libs/layer/dist/theme/default/layer.css");
 @import url("../libs/bootstrap-table/dist/bootstrap-table.min.css");
 @import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
 @import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
@@ -693,7 +693,7 @@ form.form-horizontal .control-label {
 }
 .layui-layer-fast .layui-layer-setwin .layui-layer-close2,
 .layui-layer-fast .layui-layer-setwin .layui-layer-close2:hover {
-  background: url('../libs/layer/build/skin/default/icon.png') no-repeat -149px -31px !important;
+  background: url('../libs/layer/dist/theme/default/icon.png') no-repeat -149px -31px !important;
   top: -30px;
   right: -30px;
 }
