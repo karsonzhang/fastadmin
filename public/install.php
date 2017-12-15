@@ -6,6 +6,8 @@
  * @author Karson
  * @website http://www.fastadmin.net
  */
+// error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+// ini_set('display_errors', '1');
 // 定义目录分隔符
 define('DS', DIRECTORY_SEPARATOR);
 
@@ -332,11 +334,11 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
                 <!--<p><?php echo $sitename; ?>还支持在命令行php think install一键安装</p>-->
 
                 <form method="post">
-                    <?php if ($errInfo): ?>
+<?php if ($errInfo): ?>
                         <div class="error">
-                            <?php echo $errInfo; ?>
+                        <?php echo $errInfo; ?>
                         </div>
-                    <?php endif; ?>
+                        <?php endif; ?>
                     <div id="error" style="display:none"></div>
                     <div id="success" style="display:none"></div>
 

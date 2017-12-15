@@ -57,6 +57,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             //切换URL
             $(document).on("click", ".btn-switch", function () {
+                $(".btn-switch").removeClass("active");
+                $(this).addClass("active");
                 table.bootstrapTable('refresh', {url: $(this).data("url"), pageNumber: 1});
             });
             // 会员信息

@@ -11,6 +11,7 @@ use think\Exception;
  * 系统配置
  *
  * @icon fa fa-circle-o
+ * @remark 可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除
  */
 class Config extends Backend
 {

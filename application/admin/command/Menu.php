@@ -270,7 +270,7 @@ class Menu extends Command
 
             $ruleArr[] = array('id' => $id, 'pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $title, 'ismenu' => 0, 'status' => 'normal');
         }
-        $this->model->saveAll($ruleArr);
+        $this->model->isUpdate(false)->saveAll($ruleArr);
     }
 
     //获取主键
@@ -278,9 +278,10 @@ class Menu extends Command
     {
         if (!empty($name))
         {
-            return $this->model
-                            ->where('name', $name)
-                            ->value('id');
+            $id = $this->model
+                    ->where('name', $name)
+                    ->value('id');
+            return $id ? $id : null;
         }
     }
 
