@@ -189,10 +189,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 $(toolbar).on('click', Table.config.delbtn, function () {
                     var that = this;
                     var ids = Table.api.selectedids(table);
-                    var index = Layer.confirm(
+                    Layer.confirm(
                             __('Are you sure you want to delete the %s selected item?', ids.length),
                             {icon: 3, title: __('Warning'), offset: 0, shadeClose: true},
-                            function () {
+                            function (index) {
                                 Table.api.multi("del", ids, table, that);
                                 Layer.close(index);
                             }
@@ -247,10 +247,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     e.preventDefault();
                     var id = $(this).data("id");
                     var that = this;
-                    var index = Layer.confirm(
+                    Layer.confirm(
                             __('Are you sure you want to delete this item?'),
                             {icon: 3, title: __('Warning'), shadeClose: true},
-                            function () {
+                            function (index) {
                                 Table.api.multi("del", id, table, that);
                                 Layer.close(index);
                             }
@@ -293,10 +293,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         if ($(window).width() < 480) {
                             top = left = undefined;
                         }
-                        var index = Layer.confirm(
+                        Layer.confirm(
                                 __('Are you sure you want to delete this item?'),
                                 {icon: 3, title: __('Warning'), offset: [top, left], shadeClose: true},
-                                function () {
+                                function (index) {
                                     var table = $(that).closest('table');
                                     var options = table.bootstrapTable('getOptions');
                                     Table.api.multi("del", row[options.pk], table, that);
@@ -398,65 +398,68 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     buttons.push({name: 'dragsort', icon: 'fa fa-arrows', classname: 'btn btn-xs btn-primary btn-dragsort'});
                     buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone', url: options.extend.edit_url});
                     buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
-                    var html = [];
-                    var url, classname, icon, text, title, extend;
-                    $.each(buttons, function (i, j) {
+                    return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
+                },
+                buttons: function (value, row, index) {
+                    // 默认按钮组
+                    var buttons = $.extend([], this.buttons || []);
+                    return Table.api.buttonlink(this, buttons, value, row, index, 'buttons');
+                }
+            },
+            buttonlink: function (column, buttons, value, row, index, type) {
+                var table = column.table;
+                type = typeof type === 'undefined' ? 'buttons' : type;
+                var options = table ? table.bootstrapTable('getOptions') : {};
+                var html = [];
+                var url, classname, icon, text, title, extend;
+                var columnIndex = options.columns[0].findIndex(function (element) {
+                    return element === column;
+                });
+                $.each(buttons, function (i, j) {
+                    if (type === 'operate') {
                         if (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] === 'undefined') {
                             return true;
                         }
                         if (['add', 'edit', 'del', 'multi', 'dragsort'].indexOf(j.name) > -1 && !options.extend[j.name + "_url"]) {
                             return true;
                         }
-                        var attr = table.data("operate-" + j.name);
-                        if (typeof attr === 'undefined' || attr) {
-                            url = j.url ? j.url : '';
-                            if (url.indexOf("{ids}") === -1) {
-                                url = url ? url + (url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
-                            }
-                            url = Table.api.replaceurl(url, value, row, table);
-                            url = url ? Fast.api.fixurl(url) : 'javascript:;';
-                            classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
-                            icon = j.icon ? j.icon : '';
-                            text = j.text ? j.text : '';
-                            title = j.title ? j.title : text;
-                            extend = j.extend ? j.extend : '';
-                            html.push('<a href="' + url + '" class="' + classname + '" ' + extend + ' title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                    }
+                    var attr = table.data(type + "-" + j.name);
+                    if (typeof attr === 'undefined' || attr) {
+                        url = j.url ? j.url : '';
+                        if (!url.match(/\{(.*?)\}/i)) {
+                            url = url ? url + (url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
                         }
-                    });
-                    return html.join(' ');
-                },
-                buttons: function (value, row, index) {
-                    var table = this.table;
-                    // 操作配置
-                    var options = table ? table.bootstrapTable('getOptions') : {};
-                    // 默认按钮组
-                    var buttons = $.extend([], this.buttons || []);
-                    var html = [];
-                    var url, classname, icon, text, title, extend;
-                    $.each(buttons, function (i, j) {
-                        var attr = table.data("buttons-" + j.name);
-                        if (typeof attr === 'undefined' || attr) {
-                            url = j.url ? j.url : '';
-                            if (url.indexOf("{ids}") === -1) {
-                                url = url ? url + (url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
-                            }
-                            url = Table.api.replaceurl(url, value, row, table);
-                            url = url ? Fast.api.fixurl(url) : 'javascript:;';
-                            classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
-                            icon = j.icon ? j.icon : '';
-                            text = j.text ? j.text : '';
-                            title = j.title ? j.title : text;
-                            extend = j.extend ? j.extend : '';
-                            html.push('<a href="' + url + '" class="' + classname + '" ' + extend + ' title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
-                        }
-                    });
-                    return html.join(' ');
-                }
+                        url = Table.api.replaceurl(url, value, row, table);
+                        url = url ? Fast.api.fixurl(url) : 'javascript:;';
+                        classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
+                        icon = j.icon ? j.icon : '';
+                        text = j.text ? j.text : '';
+                        title = j.title ? j.title : text;
+                        confirm = j.confirm ? 'data-confirm="' + j.confirm + '"' : '';
+                        extend = j.extend ? j.extend : '';
+                        html.push('<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-column-index="' + columnIndex + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                    }
+                });
+                return html.join(' ');
             },
-            //替换URL中的{ids}和{value}
+            //替换URL中的数据
             replaceurl: function (url, value, row, table) {
-                url = url ? url : '';
                 url = url.replace(/\{value\}/ig, value);
+                url = url.replace(/\{(.*?)\}/gi, function (matched) {
+                    matched = matched.substring(1, matched.length - 1);
+                    if (matched.indexOf(".") !== -1) {
+                        var temp = row;
+                        var arr = matched.split(/\./);
+                        for (var i = 0; i < arr.length; i++) {
+                            if (typeof temp[arr[i]] !== 'undefined') {
+                                temp = temp[arr[i]];
+                            }
+                        }
+                        return typeof temp === 'object' ? '' : temp;
+                    }
+                    return row[matched];
+                });
                 if (table) {
                     var options = table.bootstrapTable('getOptions');
                     url = url.replace(/\{ids\}/ig, row[options.pk]);
