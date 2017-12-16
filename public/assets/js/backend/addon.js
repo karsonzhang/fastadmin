@@ -22,9 +22,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 url: location.protocol === "https:" ? "addon/downloaded" : $.fn.bootstrapTable.defaults.extend.index_url,
                 columns: [
                     [
-                        {field: 'id', title: 'ID'},
-                        {field: 'name', title: __('Name')},
-                        {field: 'title', title: __('Title')}
+                        {field: 'id', title: 'ID', operate: false},
+                        {field: 'name', title: __('Name'), operate: false},
+                        {field: 'title', title: __('Title'), operate: 'LIKE'}
                     ]
                 ],
                 dataType: 'jsonp',

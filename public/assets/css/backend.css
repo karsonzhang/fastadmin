@@ -98,6 +98,16 @@ html.ios-fix body {
     display: flex;
   }
 }
+@media (max-width: 991px) {
+  .main-header .navbar-custom-menu a.btn-danger {
+    color: #fff;
+    background-color: #e74c3c;
+  }
+  .main-header .navbar-custom-menu a.btn-primary {
+    color: #fff;
+    background-color: #2c3e50;
+  }
+}
 .common-search-table {
   min-height: 20px;
   padding: 15px;

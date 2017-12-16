@@ -110,6 +110,18 @@ html.ios-fix,html.ios-fix body {
         display: flex;
     }
 }
+@media (max-width: 991px){
+    .main-header .navbar-custom-menu a{
+        &.btn-danger {
+            color:#fff;
+            background-color: @brand-danger;
+        }
+        &.btn-primary {
+            color:#fff;
+            background-color: @brand-primary;
+        }
+    }
+}
 .common-search-table {
     min-height: 20px;
     padding: 15px;
