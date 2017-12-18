@@ -73,7 +73,7 @@
             };
             var column, index;
             require(['bootstrap-daterangepicker'], function () {
-                $(".datetimerange").each(function () {
+                $(".datetimerange", form).each(function () {
                     $(this).on('apply.daterangepicker', function (ev, picker) {
                         callback.call(picker, picker.startDate, picker.endDate);
                     });

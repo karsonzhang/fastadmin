@@ -438,7 +438,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         title = j.title ? j.title : text;
                         confirm = j.confirm ? 'data-confirm="' + j.confirm + '"' : '';
                         extend = j.extend ? j.extend : '';
-                        html.push('<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-column-index="' + columnIndex + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                        html.push('<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-column-index="' + columnIndex + '" data-row-index="' + index + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
                     }
                 });
                 return html.join(' ');
@@ -484,6 +484,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             // 切换复选框状态
             toggleattr: function (table) {
                 $("input[type='checkbox']", table).trigger('click');
+            },
+            // 根据行索引获取行数据
+            getrowdata: function (table, index) {
+                index = parseInt(index);
+                var data = table.bootstrapTable('getData');
+                return typeof data[index] !== 'undefined' ? data[index] : null;
             }
         },
     };
