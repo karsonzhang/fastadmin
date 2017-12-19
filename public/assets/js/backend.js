@@ -112,7 +112,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
                 var that = this;
-                var options = $(that).data() || {};
+                var options = $.extend({}, $(that).data() || {});
                 if (typeof options.tableId !== 'undefined' && typeof options.columnIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
                     var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
                     if (tableOptions) {
@@ -135,7 +135,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
             //点击包含.btn-addtabs的元素时新增选项卡
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
                 var that = this;
-                var options = $(that).data() || {};
+                var options = $.extend({}, $(that).data() || {});
                 if (typeof options.confirm !== 'undefined') {
                     Layer.confirm(options.confirm, function (index) {
                         Backend.api.addtabs(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr("title"));
@@ -150,7 +150,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
             //点击包含.btn-ajax的元素时发送Ajax请求
             $(document).on('click', '.btn-ajax,.ajaxit', function (e) {
                 var that = this;
-                var options = $(that).data() || {};
+                var options = $.extend({}, $(that).data() || {});
                 if (typeof options.url === 'undefined' && $(that).attr("href")) {
                     options.url = $(that).attr("href");
                 }
@@ -170,6 +170,10 @@ define(['fast', 'moment'], function (Fast, Moment) {
                             error = button.error;
                         }
                     }
+                }
+                //如果未设备成功的回调,设定了自动刷新的情况下自动进行刷新
+                if (!success && typeof options.tableId !== 'undefined' && typeof options.refresh !== 'undefined' && options.refresh) {
+                    $("#" + options.tableId).bootstrapTable('refresh');
                 }
                 if (typeof options.confirm !== 'undefined') {
                     Layer.confirm(options.confirm, function (index) {

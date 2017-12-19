@@ -170,9 +170,9 @@ class Backend extends Controller
             'fastadmin'      => Config::get('fastadmin'),
             'referer'        => Session::get("referer")
         ];
-            
+
         Config::set('upload', array_merge(Config::get('upload'), $upload));
-        
+
         // 配置信息后
         Hook::listen("config_init", $config);
         //加载当前控制器语言包
@@ -232,16 +232,14 @@ class Backend extends Controller
         {
             if (!empty($this->model))
             {
-                $class = get_class($this->model);
-                $name = basename(str_replace('\\', '/', $class));
-                $tableName = $this->model->getQuery()->getTable($name) . ".";
+                $tableName = $this->model->getQuery()->getTable() . ".";
             }
             $sort = stripos($sort, ".") === false ? $tableName . $sort : $sort;
         }
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds))
         {
-            $where[] = [$this->dataLimitField, 'in', $adminIds];
+            $where[] = [$tableName . $this->dataLimitField, 'in', $adminIds];
         }
         if ($search)
         {
@@ -360,6 +358,10 @@ class Backend extends Controller
     protected function getDataLimitAdminIds()
     {
         if (!$this->dataLimit)
+        {
+            return null;
+        }
+        if ($this->auth->isSuperAdmin())
         {
             return null;
         }
