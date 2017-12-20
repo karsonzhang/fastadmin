@@ -35,7 +35,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 showExport: false,
                 commonSearch: true,
                 searchFormVisible: false,
-                pageSize: 10
+                pageSize: 12
             });
 
             // 为表格绑定事件
