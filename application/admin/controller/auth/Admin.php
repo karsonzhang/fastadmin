@@ -49,9 +49,14 @@ class Admin extends Backend
         {
             $groupName[$v['id']] = $v['name'];
         }
+<<<<<<< HEAD
+        $this->childrenIds = array_keys($groupdata);
+        $this->view->assign('groupdata', $groupdata);
+=======
 
         $this->view->assign('groupdata', $groupName);
         $this->assignconfig("admin", ['id' => $this->auth->id]);
+>>>>>>> master
     }
 
     /**
@@ -68,7 +73,7 @@ class Admin extends Backend
             $authGroupList = AuthGroupAccess::where('group_id', 'in', $childrenGroupIds)
                     ->field('uid,group_id')
                     ->select();
-
+            
             $adminGroupName = [];
             foreach ($authGroupList as $k => $v)
             {

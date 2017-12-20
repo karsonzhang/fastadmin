@@ -30,6 +30,17 @@ class Group extends Backend
 
         $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
+<<<<<<< HEAD
+        // 取出所有分组
+        $grouplist = model('AuthGroup')->all(['status' => 'normal']);
+        $objlist = [];
+        foreach ($groups as $K => $v)
+        {
+            // 取出包含自己的所有子节点
+            $childrenlist = Tree::instance()->init($grouplist)->getChildren($v['id'], TRUE);
+            $obj = Tree::instance()->init($childrenlist)->getTreeArray($v['pid']);
+            $objlist = array_merge($objlist, Tree::instance()->getTreeList($obj));
+=======
         $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
         $groupIds = $this->auth->getGroupIds();
         Tree::instance()->init($groupList);
@@ -37,6 +48,7 @@ class Group extends Backend
         if ($this->auth->isSuperAdmin())
         {
             $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
+>>>>>>> master
         }
         else
         {
@@ -50,11 +62,17 @@ class Group extends Backend
         {
             $groupName[$v['id']] = $v['name'];
         }
+<<<<<<< HEAD
+        $this->groupdata = $groupdata;
+        $this->childrenIds = array_keys($groupdata);
+        $this->view->assign('groupdata', $groupdata);
+=======
 
         $this->groupdata = $groupName;
         $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $this->auth->getGroupIds()]);
 
         $this->view->assign('groupdata', $this->groupdata);
+>>>>>>> master
     }
 
     /**
@@ -296,7 +314,7 @@ class Group extends Backend
                     $state = array('selected' => in_array($v['id'], $current_rule_ids) && !in_array($v['id'], $hasChildrens));
                     $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => __($v['title']), 'type' => 'menu', 'state' => $state);
                 }
-                $this->success('', null, $nodelist);
+                $this->success('',null,$nodelist);
             }
             else
             {

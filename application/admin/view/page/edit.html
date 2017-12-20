@@ -1,0 +1,81 @@
+<form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label for="c-category_id" class="control-label col-xs-12 col-sm-2">{:__('Category')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-category_id" class="form-control selectpage" data-source="category/selectpage" data-params='{"custom[type]":"page"}' name="row[category_id]" type="text" value="{$row.category_id}" data-rule="required">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-title" class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title}" data-rule="required" >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-keywords" class="control-label col-xs-12 col-sm-2">{:__('Keywords')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-keywords" class="form-control" name="row[keywords]" type="text" value="{$row.keywords}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-flag" class="control-label col-xs-12 col-sm-2">{:__('Flag')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_select('row[flag]', ['recommend'=>__('Recommend'), 'index'=>__('Index'), 'hot'=>__('Hot')], $row['flag'], ['id'=>'c-flag','class'=>'form-control selectpicker','data-rule'=>'required'])}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-image" class="control-label col-xs-12 col-sm-2">{:__('Image')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="form-inline">
+                <input id="c-image" class="form-control" size="50" name="row[image]" type="text" value="{$row.image}">
+                <span><button type="button" id="plupload-image" class="btn btn-danger plupload" data-multiple="false" data-input-id="c-image" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-multiple="false" data-input-id="c-image"><i class="fa fa-list-ul"></i> {:__('Choose')}</button></span>
+                <ul class="row list-inline plupload-preview" id="p-image"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-content" class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-content" class="form-control editor" name="row[content]" cols="50" rows="10">{$row.content}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-icon" class="control-label col-xs-12 col-sm-2">{:__('Icon')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-icon" class="form-control" name="row[icon]" type="text" value="{$row.icon}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-views" class="control-label col-xs-12 col-sm-2">{:__('Views')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-views" class="form-control" name="row[views]" type="number" value="{$row.views}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-comments" class="control-label col-xs-12 col-sm-2">{:__('Comments')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-comments" class="form-control" name="row[comments]" type="number" value="{$row.comments}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-weigh" class="form-control" name="row[weigh]" type="number" value="{$row.weigh}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')], $row['status'])}
+        </div>
+    </div>
+    <div class="form-group hide layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

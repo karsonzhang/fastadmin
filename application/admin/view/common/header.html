@@ -1,7 +1,7 @@
 <!-- Logo -->
 <a href="javascript:;" class="logo">
     <!-- 迷你模式下Logo的大小为50X50 -->
-    <span class="logo-mini">{$site.name|mb_substr=0,4,'utf-8'|mb_strtoupper='utf-8'}</span>
+    <span class="logo-mini">{$site.name|mb_substr=4,2,'utf-8'|strtoupper}</span>
     <!-- 普通模式下Logo -->
     <span class="logo-lg"><b>{$site.name|mb_substr=0,4,'utf-8'}</b>{$site.name|mb_substr=4,null,'utf-8'}</span>
 </a>
@@ -42,11 +42,11 @@
                 </ul>
             </li>
             
-            <li>
+            <!-- <li>
                 <a href="javascript:;" data-toggle="checkupdate" title="{:__('Check for updates')}">
                     <i class="fa fa-refresh"></i>
                 </a>
-            </li>
+            </li> -->
             
             <li>
                 <a href="javascript:;" data-toggle="wipecache" title="{:__('Wipe cache')}">
@@ -54,7 +54,7 @@
                 </a>
             </li>
 
-            <li class="hidden-xs">
+            <!-- <li class="hidden-xs">
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-language"></i></a>
                 <ul class="dropdown-menu">
                     <li class="{$config['language']=='zh-cn'?'active':''}">
@@ -64,7 +64,7 @@
                         <a href="?ref=addtabs&lang=en">English</a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
 
             <li class="hidden-xs">
                 <a href="#" data-toggle="fullscreen"><i class="fa fa-arrows-alt"></i></a>
@@ -87,7 +87,7 @@
                         </p>
                     </li>
                     <!-- Menu Body -->
-                    <li class="user-body">
+                    <!-- <li class="user-body">
                         <div class="row">
                             <div class="col-xs-4 text-center">
                                 <a href="http://www.fastadmin.net" target="_blank">官网</a>
@@ -99,7 +99,7 @@
                                 <a href="http://doc.fastadmin.net" target="_blank">文档</a>
                             </div>
                         </div>
-                    </li>
+                    </li> -->
                     <!-- Menu Footer-->
                     <li class="user-footer">
                         <div class="pull-left">

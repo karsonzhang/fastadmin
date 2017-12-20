@@ -627,7 +627,7 @@ form.form-horizontal .control-label {
   box-shadow: 1px 1px 50px rgba(0, 0, 0, 0.3) !important;
 }
 .layui-layer-fast.layui-layer-iframe {
-  overflow: visible;
+  overflow: hidden!important;
 }
 .layui-layer-fast .layui-layer-moves {
   -webkit-box-sizing: content-box;
@@ -638,7 +638,6 @@ form.form-horizontal .control-label {
   text-align: center!important;
   padding: 10px!important;
   background: #ecf0f1;
-  overflow: hidden;
 }
 .layui-layer-fast .layui-layer-btn a {
   background-color: #95a5a6!important;
@@ -724,6 +723,8 @@ form.form-horizontal .control-label {
   }
 }
 /*平板样式*/
+<<<<<<< HEAD
+=======
 @media (max-width: 768px) {
   .n-bootstrap .n-right {
     margin-top: 0;
@@ -749,4 +750,5 @@ form.form-horizontal .control-label {
 .checkbox > label > input {
   margin: 2px 0 0;
 }
+>>>>>>> master
 /*# sourceMappingURL=backend.css.map */

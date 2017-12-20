@@ -8,7 +8,6 @@ use think\console\Command;
 use think\console\Input;
 use think\console\input\Option;
 use think\console\Output;
-use think\Db;
 use think\Exception;
 
 class Addon extends Command

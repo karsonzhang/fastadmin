@@ -156,7 +156,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 // 添加按钮事件
                 $(toolbar).on('click', Table.config.addbtn, function () {
                     var ids = Table.api.selectedids(table);
-                    Fast.api.open(options.extend.add_url + (ids.length > 0 ? (options.extend.add_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + ids.join(",") : ''), __('Add'), $(this).data() || {});
+                    Fast.api.open(options.extend.add_url + (ids.length > 0 ? (options.extend.add_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + ids.join(",") : ''), __('Add'));
                 });
                 // 导入按钮事件
                 if ($(Table.config.importbtn, toolbar).size() > 0) {
@@ -177,7 +177,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var that = this;
                     //循环弹出多个编辑框
                     $.each(ids, function (i, j) {
+<<<<<<< HEAD
+                        Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + j, __('Edit'));
+=======
                         Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + j, __('Edit'), $(that).data() || {});
+>>>>>>> master
                     });
                 });
                 // 批量操作按钮事件
@@ -241,7 +245,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 });
                 $(table).on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
-                    Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + $(this).data("id"), __('Edit'), $(this).data() || {});
+                    Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + $(this).data("id"), __('Edit'));
                 });
                 $(table).on("click", "[data-id].btn-del", function (e) {
                     e.preventDefault();
@@ -279,7 +283,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         e.stopPropagation();
                         e.preventDefault();
                         var options = $(this).closest('table').bootstrapTable('getOptions');
-                        Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk], __('Edit'), $(this).data() || {});
+                        Fast.api.open(options.extend.edit_url + (options.extend.edit_url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk], __('Edit'));
                     },
                     'click .btn-delone': function (e, value, row, index) {
                         e.stopPropagation();
@@ -304,6 +308,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                                 }
                         );
                     }
+                }
+            },
+            auth: {
+                check: function (name) {
+
                 }
             },
             // 单元格数据格式化
@@ -398,6 +407,23 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     buttons.push({name: 'dragsort', icon: 'fa fa-arrows', classname: 'btn btn-xs btn-primary btn-dragsort'});
                     buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone', url: options.extend.edit_url});
                     buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
+<<<<<<< HEAD
+                    var html = [];
+                    $.each(buttons, function (i, j) {
+                        var attr = table.data("operate-" + j.name);
+                        if ((typeof attr === 'undefined' || attr) || (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] == 'undefined')) {
+                            if (['add', 'edit', 'del', 'multi'].indexOf(j.name) > -1 && !options.extend[j.name + "_url"]) {
+                                return true;
+                            }
+                            //自动加上ids
+                            j.url = j.url ? j.url + (j.url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + row[options.pk] : '';
+                            url = j.url ? Fast.api.fixurl(j.url) : 'javascript:;';
+                            classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
+                            icon = j.icon ? j.icon : '';
+                            text = j.text ? j.text : '';
+                            title = j.title ? j.title : text;
+                            html.push('<a href="' + url + '" class="' + classname + '" title="' + title + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+=======
                     return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
                 },
                 buttons: function (value, row, index) {
@@ -456,6 +482,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             if (typeof temp[arr[i]] !== 'undefined') {
                                 temp = temp[arr[i]];
                             }
+>>>>>>> master
                         }
                         return typeof temp === 'object' ? '' : temp;
                     }

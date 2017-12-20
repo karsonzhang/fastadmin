@@ -1174,11 +1174,17 @@ EOD;
         return <<<EOD
 <div class="input-group">
                 {$content}
+<<<<<<< HEAD
+                <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                {$previewcontainer}
+=======
                 <div class="input-group-addon no-border no-padding">
                     <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                     <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                 </div>
                 <span class="msg-box n-right" for="c-{$field}"></span>
+>>>>>>> master
             </div>
             {$previewcontainer}
 EOD;

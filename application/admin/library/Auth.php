@@ -388,7 +388,6 @@ class Auth extends \fast\Auth
         // 读取管理员当前拥有的权限节点
         $userRule = $this->getRuleList();
         $select_id = 0;
-        $pinyin = new \Overtrue\Pinyin\Pinyin('Overtrue\Pinyin\MemoryFileDictLoader');
         // 必须将结果集转换为数组
         $ruleList = collection(model('AuthRule')->where('ismenu', 1)->order('weigh', 'desc')->cache("__menu__")->select())->toArray();
         foreach ($ruleList as $k => &$v)
@@ -401,9 +400,14 @@ class Auth extends \fast\Auth
             $select_id = $v['name'] == $fixedPage ? $v['id'] : $select_id;
             $v['url'] = '/' . $module . '/' . $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
+<<<<<<< HEAD
+            $v['py'] = \fast\Pinyin::get($v['title'], true);
+            $v['pinyin'] = \fast\Pinyin::get($v['title']);
+=======
             $v['py'] = $pinyin->abbr($v['title'], '');
             $v['pinyin'] = $pinyin->permalink($v['title'], '');
             $v['title'] = __($v['title']);
+>>>>>>> master
         }
         // 构造菜单数据
         Tree::instance()->init($ruleList);

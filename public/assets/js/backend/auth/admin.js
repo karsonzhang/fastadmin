@@ -29,7 +29,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'status', title: __("Status"), formatter: Table.api.formatter.status},
                         {field: 'logintime', title: __('Login time'), formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: function (value, row, index) {
-                                if(row.id == Config.admin.id){
+                                if(row.id == 1){
                                     return '';
                                 }
                                 return Table.api.formatter.operate.call(this, value, row, index);

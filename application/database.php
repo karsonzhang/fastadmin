@@ -16,13 +16,23 @@ return [
     // 数据库类型
     'type'            => Env::get('database.type', 'mysql'),
     // 服务器地址
+<<<<<<< HEAD
+    'hostname'        => 'localhost',
+    // 数据库名
+    'database'        => 'machine',
+=======
     'hostname'        => Env::get('database.hostname', '127.0.0.1'),
     // 数据库名
     'database'        => Env::get('database.database', 'fastadmin'),
+>>>>>>> master
     // 用户名
     'username'        => Env::get('database.username', 'root'),
     // 密码
+<<<<<<< HEAD
+    'password'        => 'root',
+=======
     'password'        => Env::get('database.password', ''),
+>>>>>>> master
     // 端口
     'hostport'        => Env::get('database.hostport', ''),
     // 连接dsn

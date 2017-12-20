@@ -57,8 +57,12 @@ class Min extends Command
         {
             if (IS_WIN)
             {
+<<<<<<< HEAD
+                throw new Exception("node environment not found!please check http://doc.fastadmin.net/faq.html !");
+=======
                 // Winsows下请手动配置配置该值,一般将该值配置为 '"C:/Program Files/nodejs/node.exe"'，除非你的Node安装路径有变更
                 $nodeExec = '"C:/Program Files/nodejs/node.exe"';
+>>>>>>> master
             }
             else
             {
@@ -87,8 +91,13 @@ class Min extends Command
                     'jsBaseUrl'   => $this->options['jsBaseUrl'],
                     'cssBaseName' => str_replace('{module}', $mod, $this->options['cssBaseName']),
                     'cssBaseUrl'  => $this->options['cssBaseUrl'],
+<<<<<<< HEAD
+                    'jsBasePath'  => str_replace('\\', '/', ROOT_PATH) . $this->options['jsBaseUrl'],
+                    'cssBasePath' => str_replace('\\', '/', ROOT_PATH) . $this->options['cssBaseUrl'],
+=======
                     'jsBasePath'  => str_replace(DS, '/', ROOT_PATH . $this->options['jsBaseUrl']),
                     'cssBasePath' => str_replace(DS, '/', ROOT_PATH . $this->options['cssBaseUrl']),
+>>>>>>> master
                     'ds'          => DS,
                 ];
 
@@ -158,7 +167,7 @@ class Min extends Command
      */
     protected function getStub($name)
     {
-        return __DIR__ . DS . 'Min' . DS . 'stubs' . DS . $name . '.stub';
+        return __DIR__ . '/Min/stubs/' . $name . '.stub';
     }
 
 }

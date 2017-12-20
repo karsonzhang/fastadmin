@@ -1,7 +1,11 @@
 <?php
 
 return array (
+<<<<<<< HEAD
+  'name' => '黄河水厂设备管理系统',
+=======
   'name' => 'FastAdmin',
+>>>>>>> master
   'beian' => '',
   'cdnurl' => '',
   'version' => '1.0.1',
@@ -15,10 +19,18 @@ return array (
   'fixedpage' => 'dashboard',
   'categorytype' => 
   array (
+<<<<<<< HEAD
+    'default' => '默认',
+    'page' => '单页',
+    'article' => '文章',
+    'test' => '测试',
+    'machine' => '设备',
+=======
     'default' => 'Default',
     'page' => 'Page',
     'article' => 'Article',
     'test' => 'Test',
+>>>>>>> master
   ),
   'configgroup' => 
   array (

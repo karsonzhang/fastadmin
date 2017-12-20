@@ -63,6 +63,8 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     }
                 }
             },
+<<<<<<< HEAD
+=======
             closetabs: function (url) {
                 if (typeof url === 'undefined') {
                     top.window.$("ul.nav-addtabs li.active .close-tab").trigger("click");
@@ -100,17 +102,24 @@ define(['fast', 'moment'], function (Fast, Moment) {
                 }
                 return url;
             }
+>>>>>>> master
         },
         init: function () {
             //公共代码
             //添加ios-fix兼容iOS下的iframe
-            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+            if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
                 $("html").addClass("ios-fix");
             }
             //配置Toastr的参数
             Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
+<<<<<<< HEAD
+                e.preventDefault();
+                var options = $(this).data();
+                options = options ? options : {};
+                Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'), options);
+=======
                 var that = this;
                 var options = $.extend({}, $(that).data() || {});
                 if (typeof options.tableId !== 'undefined' && typeof options.columnIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
@@ -131,9 +140,14 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     Backend.api.open(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr('title'), options);
                 }
                 return false;
+>>>>>>> master
             });
-            //点击包含.btn-addtabs的元素时新增选项卡
+            //点击包含.btn-addtabs的元素时事件
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
+<<<<<<< HEAD
+                e.preventDefault();
+                Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
+=======
                 var that = this;
                 var options = $.extend({}, $(that).data() || {});
                 if (typeof options.confirm !== 'undefined') {
@@ -146,14 +160,18 @@ define(['fast', 'moment'], function (Fast, Moment) {
                 }
 
                 return false;
+>>>>>>> master
             });
-            //点击包含.btn-ajax的元素时发送Ajax请求
+            //点击包含.btn-ajax的元素时事件
             $(document).on('click', '.btn-ajax,.ajaxit', function (e) {
                 var that = this;
                 var options = $.extend({}, $(that).data() || {});
                 if (typeof options.url === 'undefined' && $(that).attr("href")) {
                     options.url = $(that).attr("href");
                 }
+<<<<<<< HEAD
+                Backend.api.ajax(options);
+=======
                 options.url = Backend.api.replaceids(this, options.url);
                 var success = typeof options.success === 'function' ? options.success : null;
                 var error = typeof options.error === 'function' ? options.error : null;
@@ -184,14 +202,11 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     Backend.api.ajax(options, success, error);
                 }
                 return false;
+>>>>>>> master
             });
             //修复含有fixed-footer类的body边距
             if ($(".fixed-footer").size() > 0) {
                 $(document.body).css("padding-bottom", $(".fixed-footer").outerHeight());
-            }
-            //修复不在iframe时layer-footer隐藏的问题
-            if ($(".layer-footer").size() > 0 && self === top) {
-                $(".layer-footer").show();
             }
         }
     };
