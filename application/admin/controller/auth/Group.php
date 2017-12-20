@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\auth;
 
+use app\admin\model\AuthGroup;
 use app\common\controller\Backend;
 use fast\Tree;
 
@@ -15,8 +16,8 @@ class Group extends Backend
 {
 
     protected $model = null;
-    //当前登录管理员所有子节点组别
-    protected $childrenIds = [];
+    //当前登录管理员所有子组别
+    protected $childrenGroupIds = [];
     //当前组别列表数据
     protected $groupdata = [];
     //无需要权限判断的方法
@@ -27,8 +28,9 @@ class Group extends Backend
         parent::_initialize();
         $this->model = model('AuthGroup');
 
-        $groups = $this->auth->getGroups();
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
+<<<<<<< HEAD
         // 取出所有分组
         $grouplist = model('AuthGroup')->all(['status' => 'normal']);
         $objlist = [];
@@ -38,16 +40,39 @@ class Group extends Backend
             $childrenlist = Tree::instance()->init($grouplist)->getChildren($v['id'], TRUE);
             $obj = Tree::instance()->init($childrenlist)->getTreeArray($v['pid']);
             $objlist = array_merge($objlist, Tree::instance()->getTreeList($obj));
-        }
-
-        $groupdata = [];
-        foreach ($objlist as $k => $v)
+=======
+        $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
+        $groupIds = $this->auth->getGroupIds();
+        Tree::instance()->init($groupList);
+        $result = [];
+        if ($this->auth->isSuperAdmin())
         {
-            $groupdata[$v['id']] = $v['name'];
+            $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
+>>>>>>> master
         }
+        else
+        {
+            foreach ($groupIds as $m => $n)
+            {
+                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n)));
+            }
+        }
+        $groupName = [];
+        foreach ($result as $k => $v)
+        {
+            $groupName[$v['id']] = $v['name'];
+        }
+<<<<<<< HEAD
         $this->groupdata = $groupdata;
         $this->childrenIds = array_keys($groupdata);
         $this->view->assign('groupdata', $groupdata);
+=======
+
+        $this->groupdata = $groupName;
+        $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $this->auth->getGroupIds()]);
+
+        $this->view->assign('groupdata', $this->groupdata);
+>>>>>>> master
     }
 
     /**
@@ -57,12 +82,21 @@ class Group extends Backend
     {
         if ($this->request->isAjax())
         {
+            $list = AuthGroup::all(array_keys($this->groupdata));
+            $list = collection($list)->toArray();
+            $groupList = [];
+            foreach ($list as $k => $v)
+            {
+                $groupList[$v['id']] = $v;
+            }
             $list = [];
             foreach ($this->groupdata as $k => $v)
             {
-                $data = $this->model->get($k);
-                $data->name = $v;
-                $list[] = $data;
+                if (isset($groupList[$k]))
+                {
+                    $groupList[$k]['name'] = $v;
+                    $list[] = $groupList[$k];
+                }
             }
             $total = count($list);
             $result = array("total" => $total, "rows" => $list);
@@ -81,7 +115,7 @@ class Group extends Backend
         {
             $params = $this->request->post("row/a", [], 'strip_tags');
             $params['rules'] = explode(',', $params['rules']);
-            if (!in_array($params['pid'], $this->childrenIds))
+            if (!in_array($params['pid'], $this->childrenGroupIds))
             {
                 $this->error(__('The parent group can not be its own child'));
             }
@@ -122,7 +156,7 @@ class Group extends Backend
         {
             $params = $this->request->post("row/a", [], 'strip_tags');
             // 父节点不能是它自身的子节点
-            if (!in_array($params['pid'], $this->childrenIds))
+            if (!in_array($params['pid'], $this->childrenGroupIds))
             {
                 $this->error(__('The parent group can not be its own child'));
             }
@@ -278,7 +312,7 @@ class Group extends Backend
                     if (!$superadmin && !in_array($v['id'], $admin_rule_ids))
                         continue;
                     $state = array('selected' => in_array($v['id'], $current_rule_ids) && !in_array($v['id'], $hasChildrens));
-                    $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => $v['title'], 'type' => 'menu', 'state' => $state);
+                    $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => __($v['title']), 'type' => 'menu', 'state' => $state);
                 }
                 $this->success('',null,$nodelist);
             }

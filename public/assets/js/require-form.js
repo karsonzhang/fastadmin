@@ -4,6 +4,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
         },
         events: {
             validator: function (form, success, error, submit) {
+                if (!form.is("form"))
+                    return;
                 //绑定表单事件
                 form.validator($.extend({
                     validClass: 'has-success',
@@ -24,10 +26,15 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         return $msgbox;
                     },
                     valid: function (ret) {
+                        var that = this, submitBtn = $(".layer-footer [type=submit]", form);
+                        that.holdSubmit();
+                        $(".layer-footer [type=submit]", form).addClass("disabled");
                         //验证通过提交表单
                         Form.api.submit($(ret), function (data, ret) {
+                            that.holdSubmit(false);
+                            submitBtn.removeClass("disabled");
                             if (typeof success === 'function') {
-                                if (!success.call($(this), data, ret)) {
+                                if (false === success.call($(this), data, ret)) {
                                     return false;
                                 }
                             }
@@ -37,13 +44,22 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             parent.$(".btn-refresh").trigger("click");
                             var index = parent.Layer.getFrameIndex(window.name);
                             parent.Layer.close(index);
-                        }, error, submit);
+                            return false;
+                        }, function (data, ret) {
+                            that.holdSubmit(false);
+                            submitBtn.removeClass("disabled");
+                            if (typeof error === 'function') {
+                                if (false === error.call($(this), data, ret)) {
+                                    return false;
+                                }
+                            }
+                        }, submit);
                         return false;
                     }
                 }, form.data("validator-options") || {}));
 
                 //移除提交按钮的disabled类
-                $(".layer-footer .btn.disabled", form).removeClass("disabled");
+                $(".layer-footer [type=submit],.fixed-footer [type=submit],.normal-footer [type=submit]", form).removeClass("disabled");
             },
             selectpicker: function (form) {
                 //绑定select元素事件
@@ -112,33 +128,72 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
             plupload: function (form) {
                 //绑定plupload上传元素事件
                 if ($(".plupload", form).size() > 0) {
-                    Upload.api.plupload();
+                    Upload.api.plupload($(".plupload", form));
                 }
             },
             faselect: function (form) {
                 //绑定fachoose选择附件事件
                 if ($(".fachoose", form).size() > 0) {
-                    $(document).on('click', ".fachoose", function () {
+                    $(".fachoose", form).on('click', function () {
                         var that = this;
                         var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
                         var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
                         parent.Fast.api.open("general/attachment/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype, __('Choose'), {
                             callback: function (data) {
-                                var input_id = $("#" + $(that).attr("id")).data("input-id");
-                                if (data.multiple) {
+                                var button = $("#" + $(that).attr("id"));
+                                var maxcount = $(button).data("maxcount");
+                                var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
+                                maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
+                                if (input_id && data.multiple) {
                                     var urlArr = [];
                                     var inputObj = $("#" + input_id);
-                                    if (inputObj.val() !== "") {
+                                    var value = $.trim(inputObj.val());
+                                    if (value !== "") {
                                         urlArr.push(inputObj.val());
                                     }
-                                    urlArr.push(data.url);
-                                    inputObj.val(urlArr.join(",")).trigger("change");
+                                    urlArr.push(data.url)
+                                    var result = urlArr.join(",");
+                                    if (maxcount > 0) {
+                                        var nums = value === '' ? 0 : value.split(/\,/).length;
+                                        var files = data.url !== "" ? data.url.split(/\,/) : [];
+                                        var remains = maxcount - nums;
+                                        if (files.length > remains) {
+                                            Toastr.error(__('You can choose up to %d file%s', remains));
+                                            return false;
+                                        }
+                                    }
+                                    inputObj.val(result).trigger("change");
                                 } else {
                                     $("#" + input_id).val(data.url).trigger("change");
                                 }
                             }
                         });
                         return false;
+                    });
+                }
+            },
+            fieldlist: function (form) {
+                if ($(".fieldlist", form).size() > 0) {
+                    $(".fieldlist", form).on("click", ".append", function () {
+                        var rel = parseInt($(this).closest("dl").attr("rel")) + 1;
+                        var name = $(this).closest("dl").data("name");
+                        $(this).closest("dl").attr("rel", rel);
+                        $('<dd class="form-inline"><input type="text" name="' + name + '[field][' + rel + ']" class="form-control" value="" size="10" /> <input type="text" name="' + name + '[value][' + rel + ']" class="form-control" value="" size="40" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>').insertBefore($(this).parent());
+                    });
+                    $(".fieldlist", form).on("click", "dd .btn-remove", function () {
+                        $(this).parent().remove();
+                    });
+                    //拖拽排序
+                    require(['dragsort'], function () {
+                        //绑定拖动排序
+                        $("dl.fieldlist", form).dragsort({
+                            itemSelector: 'dd',
+                            dragSelector: ".btn-dragsort",
+                            dragEnd: function () {
+
+                            },
+                            placeHolderTemplate: "<dd></dd>"
+                        });
                     });
                 }
             },
@@ -151,7 +206,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 if (form.size() === 0)
                     return Toastr.error("表单未初始化完成,无法提交");
                 if (typeof submit === 'function') {
-                    if (!submit.call(form)) {
+                    if (false === submit.call(form)) {
                         return false;
                     }
                 }
@@ -161,7 +216,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 url = url ? url : location.href;
                 //修复当存在多选项元素时提交的BUG
                 var params = {};
-                var multipleList = $("[name$='[]']");
+                var multipleList = $("[name$='[]']", form);
                 if (multipleList.size() > 0) {
                     var postFields = form.serializeArray().map(function (obj) {
                         return $(obj).prop("name");
@@ -176,7 +231,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 Fast.api.ajax({
                     type: type,
                     url: url,
-                    data: form.serialize() + (params ? '&' + $.param(params) : ''),
+                    data: form.serialize() + (Object.keys(params).length > 0 ? '&' + $.param(params) : ''),
                     dataType: 'json',
                     complete: function (xhr) {
                         var token = xhr.getResponseHeader('__token__');
@@ -186,11 +241,18 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     }
                 }, function (data, ret) {
                     $('.form-group', form).removeClass('has-feedback has-success has-error');
-                    if (data && typeof data === 'object' && typeof data.token !== 'undefined') {
-                        $("input[name='__token__']", form).val(data.token);
+                    if (data && typeof data === 'object') {
+                        //刷新客户端token
+                        if (typeof data.token !== 'undefined') {
+                            $("input[name='__token__']", form).val(data.token);
+                        }
+                        //调用客户端事件
+                        if (typeof data.callback !== 'undefined' && typeof data.callback === 'function') {
+                            data.callback.call(form, data);
+                        }
                     }
                     if (typeof success === 'function') {
-                        if (!success.call(form, data, ret)) {
+                        if (false === success.call(form, data, ret)) {
                             return false;
                         }
                     }
@@ -199,7 +261,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         $("input[name='__token__']", form).val(data.token);
                     }
                     if (typeof error === 'function') {
-                        if (!error.call(form, data, ret)) {
+                        if (false === error.call(form, data, ret)) {
                             return false;
                         }
                     }
@@ -229,6 +291,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 events.plupload(form);
 
                 events.faselect(form);
+
+                events.fieldlist(form);
             },
             custom: {}
         },

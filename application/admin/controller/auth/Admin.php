@@ -2,6 +2,8 @@
 
 namespace app\admin\controller\auth;
 
+use app\admin\model\AuthGroup;
+use app\admin\model\AuthGroupAccess;
 use app\common\controller\Backend;
 use fast\Random;
 use fast\Tree;
@@ -16,33 +18,45 @@ class Admin extends Backend
 {
 
     protected $model = null;
-    //当前登录管理员所有子节点组别
-    protected $childrenIds = [];
+    protected $childrenGroupIds = [];
+    protected $childrenAdminIds = [];
 
     public function _initialize()
     {
         parent::_initialize();
         $this->model = model('Admin');
 
-        $groups = $this->auth->getGroups();
+        $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin() ? true : false);
 
-        // 取出所有分组
-        $grouplist = model('AuthGroup')->all(['status' => 'normal']);
-        $objlist = [];
-        foreach ($groups as $K => $v)
+        $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
+        $groupIds = $this->auth->getGroupIds();
+        Tree::instance()->init($groupList);
+        $result = [];
+        if ($this->auth->isSuperAdmin())
         {
-            // 取出包含自己的所有子节点
-            $childrenlist = Tree::instance()->init($grouplist)->getChildren($v['id'], TRUE);
-            $obj = Tree::instance()->init($childrenlist)->getTreeArray($v['pid']);
-            $objlist = array_merge($objlist, Tree::instance()->getTreeList($obj));
+            $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
         }
-        $groupdata = [];
-        foreach ($objlist as $k => $v)
+        else
         {
-            $groupdata[$v['id']] = $v['name'];
+            foreach ($groupIds as $m => $n)
+            {
+                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n)));
+            }
         }
+        $groupName = [];
+        foreach ($result as $k => $v)
+        {
+            $groupName[$v['id']] = $v['name'];
+        }
+<<<<<<< HEAD
         $this->childrenIds = array_keys($groupdata);
         $this->view->assign('groupdata', $groupdata);
+=======
+
+        $this->view->assign('groupdata', $groupName);
+        $this->assignconfig("admin", ['id' => $this->auth->id]);
+>>>>>>> master
     }
 
     /**
@@ -52,31 +66,31 @@ class Admin extends Backend
     {
         if ($this->request->isAjax())
         {
-            $groupData = model('AuthGroup')->where('status', 'normal')->column('id,name');
 
-            $childrenAdminIds = [];
-            $authGroupList = model('AuthGroupAccess')
+            $childrenGroupIds = $this->childrenGroupIds;
+            $groupName = AuthGroup::where('id', 'in', $childrenGroupIds)
+                    ->column('id,name');
+            $authGroupList = AuthGroupAccess::where('group_id', 'in', $childrenGroupIds)
                     ->field('uid,group_id')
-                    ->where('group_id', 'in', $this->childrenIds)
                     ->select();
             
             $adminGroupName = [];
             foreach ($authGroupList as $k => $v)
             {
-                $childrenAdminIds[] = $v['uid'];
-                if (isset($groupData[$v['group_id']]))
-                    $adminGroupName[$v['uid']][$v['group_id']] = $groupData[$v['group_id']];
+                if (isset($groupName[$v['group_id']]))
+                    $adminGroupName[$v['uid']][$v['group_id']] = $groupName[$v['group_id']];
             }
+
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
                     ->where($where)
-                    ->where('id', 'in', $childrenAdminIds)
+                    ->where('id', 'in', $this->childrenAdminIds)
                     ->order($sort, $order)
                     ->count();
 
             $list = $this->model
                     ->where($where)
-                    ->where('id', 'in', $childrenAdminIds)
+                    ->where('id', 'in', $this->childrenAdminIds)
                     ->field(['password', 'salt', 'token'], true)
                     ->order($sort, $order)
                     ->limit($offset, $limit)
@@ -87,6 +101,7 @@ class Admin extends Backend
                 $v['groups'] = implode(',', array_keys($groups));
                 $v['groups_text'] = implode(',', array_values($groups));
             }
+            unset($v);
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
@@ -107,16 +122,19 @@ class Admin extends Backend
                 $params['salt'] = Random::alnum();
                 $params['password'] = md5(md5($params['password']) . $params['salt']);
                 $params['avatar'] = '/assets/img/avatar.png'; //设置新管理员默认头像。
-
-                $admin = $this->model->create($params);
+                $result = $this->model->validate('Admin.add')->save($params);
+                if ($result === false)
+                {
+                    $this->error($this->model->getError());
+                }
                 $group = $this->request->post("group/a");
 
                 //过滤不允许的组别,避免越权
-                $group = array_intersect($this->childrenIds, $group);
+                $group = array_intersect($this->childrenGroupIds, $group);
                 $dataset = [];
                 foreach ($group as $value)
                 {
-                    $dataset[] = ['uid' => $admin->id, 'group_id' => $value];
+                    $dataset[] = ['uid' => $this->model->id, 'group_id' => $value];
                 }
                 model('AuthGroupAccess')->saveAll($dataset);
                 $this->success();
@@ -148,7 +166,17 @@ class Admin extends Backend
                 {
                     unset($params['password'], $params['salt']);
                 }
-                $row->save($params);
+                //这里需要针对username和email做唯一验证
+                $adminValidate = \think\Loader::validate('Admin');
+                $adminValidate->rule([
+                    'username' => 'require|max:50|unique:admin,username,' . $row->id,
+                    'email'    => 'require|email|unique:admin,email,' . $row->id
+                ]);
+                $result = $row->validate('Admin.edit')->save($params);
+                if ($result === false)
+                {
+                    $this->error($row->getError());
+                }
 
                 // 先移除所有权限
                 model('AuthGroupAccess')->where('uid', $row->id)->delete();
@@ -156,7 +184,7 @@ class Admin extends Backend
                 $group = $this->request->post("group/a");
 
                 // 过滤不允许的组别,避免越权
-                $group = array_intersect($this->childrenIds, $group);
+                $group = array_intersect($this->childrenGroupIds, $group);
 
                 $dataset = [];
                 foreach ($group as $value)
@@ -187,7 +215,7 @@ class Admin extends Backend
         if ($ids)
         {
             // 避免越权删除管理员
-            $childrenGroupIds = $this->childrenIds;
+            $childrenGroupIds = $this->childrenGroupIds;
             $adminList = $this->model->where('id', 'in', $ids)->where('id', 'in', function($query) use($childrenGroupIds) {
                         $query->name('auth_group_access')->where('group_id', 'in', $childrenGroupIds)->field('uid');
                     })->select();

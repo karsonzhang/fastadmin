@@ -50,7 +50,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
                             title = typeof title !== 'undefined' ? title : leftlink.find("span:first").text();
                             leftlink.trigger("fa.event.toggleitem");
                         }
-                        var navnode = $(".nav-tabs ul li a[node-url='" + url + "']");
+                        var navnode = top.window.$(".nav-tabs ul li a[node-url='" + url + "']");
                         if (navnode.size() > 0) {
                             navnode.trigger("click");
                         } else {
@@ -63,6 +63,46 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     }
                 }
             },
+<<<<<<< HEAD
+=======
+            closetabs: function (url) {
+                if (typeof url === 'undefined') {
+                    top.window.$("ul.nav-addtabs li.active .close-tab").trigger("click");
+                } else {
+                    var dom = "a[url='{url}']"
+                    var navlink = top.window.$(dom.replace(/\{url\}/, url));
+                    if (navlink.size() === 0) {
+                        url = Fast.api.fixurl(url);
+                        navlink = top.window.$(dom.replace(/\{url\}/, url));
+                        if (navlink.size() === 0) {
+                        } else {
+                            var baseurl = url.substr(0, url.indexOf("?") > -1 ? url.indexOf("?") : url.length);
+                            navlink = top.window.$(dom.replace(/\{url\}/, baseurl));
+                            //能找到相对地址
+                            if (navlink.size() === 0) {
+                                navlink = top.window.$(".nav-tabs ul li a[node-url='" + url + "']");
+                            }
+                        }
+                    }
+                    if (navlink.size() > 0 && navlink.attr('addtabs')) {
+                        top.window.$("ul.nav-addtabs li#tab_" + navlink.attr('addtabs') + " .close-tab").trigger("click");
+                    }
+                }
+            },
+            replaceids: function (elem, url) {
+                //如果有需要替换ids的
+                if (url.indexOf("{ids}") > -1) {
+                    var ids = 0;
+                    var tableId = $(elem).data("table-id");
+                    if (tableId && $(tableId).size() > 0 && $(tableId).data("bootstrap.table")) {
+                        var Table = require("table");
+                        ids = Table.api.selectedids($(tableId)).join(",");
+                    }
+                    url = url.replace(/\{ids\}/g, ids);
+                }
+                return url;
+            }
+>>>>>>> master
         },
         init: function () {
             //公共代码
@@ -74,28 +114,99 @@ define(['fast', 'moment'], function (Fast, Moment) {
             Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
+<<<<<<< HEAD
                 e.preventDefault();
                 var options = $(this).data();
                 options = options ? options : {};
                 Backend.api.open(Backend.api.fixurl($(this).attr('href')), $(this).attr('title'), options);
+=======
+                var that = this;
+                var options = $.extend({}, $(that).data() || {});
+                if (typeof options.tableId !== 'undefined' && typeof options.columnIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
+                    var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
+                    if (tableOptions) {
+                        var button = tableOptions.columns[0][options.columnIndex]['buttons'][options.buttonIndex];
+                        if (button && typeof button.callback === 'function') {
+                            options.callback = button.callback;
+                        }
+                    }
+                }
+                if (typeof options.confirm !== 'undefined') {
+                    Layer.confirm(options.confirm, function (index) {
+                        Backend.api.open(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr('title'), options);
+                        Layer.close(index);
+                    });
+                } else {
+                    Backend.api.open(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr('title'), options);
+                }
+                return false;
+>>>>>>> master
             });
             //点击包含.btn-addtabs的元素时事件
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
+<<<<<<< HEAD
                 e.preventDefault();
                 Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
+=======
+                var that = this;
+                var options = $.extend({}, $(that).data() || {});
+                if (typeof options.confirm !== 'undefined') {
+                    Layer.confirm(options.confirm, function (index) {
+                        Backend.api.addtabs(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr("title"));
+                        Layer.close(index);
+                    });
+                } else {
+                    Backend.api.addtabs(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr("title"));
+                }
+
+                return false;
+>>>>>>> master
             });
             //点击包含.btn-ajax的元素时事件
             $(document).on('click', '.btn-ajax,.ajaxit', function (e) {
-                e.preventDefault();
-                var options = $(this).data();
-                if (typeof options.url === 'undefined' && $(this).attr("href")) {
-                    options.url = $(this).attr("href");
+                var that = this;
+                var options = $.extend({}, $(that).data() || {});
+                if (typeof options.url === 'undefined' && $(that).attr("href")) {
+                    options.url = $(that).attr("href");
                 }
+<<<<<<< HEAD
                 Backend.api.ajax(options);
+=======
+                options.url = Backend.api.replaceids(this, options.url);
+                var success = typeof options.success === 'function' ? options.success : null;
+                var error = typeof options.error === 'function' ? options.error : null;
+                delete options.success;
+                delete options.error;
+                if (typeof options.tableId !== 'undefined' && typeof options.columnIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
+                    var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
+                    if (tableOptions) {
+                        var button = tableOptions.columns[0][options.columnIndex]['buttons'][options.buttonIndex];
+                        if (button && typeof button.success === 'function') {
+                            success = button.success;
+                        }
+                        if (button && typeof button.error === 'function') {
+                            error = button.error;
+                        }
+                    }
+                }
+                //如果未设备成功的回调,设定了自动刷新的情况下自动进行刷新
+                if (!success && typeof options.tableId !== 'undefined' && typeof options.refresh !== 'undefined' && options.refresh) {
+                    $("#" + options.tableId).bootstrapTable('refresh');
+                }
+                if (typeof options.confirm !== 'undefined') {
+                    Layer.confirm(options.confirm, function (index) {
+                        Backend.api.ajax(options, success, error);
+                        Layer.close(index);
+                    });
+                } else {
+                    Backend.api.ajax(options, success, error);
+                }
+                return false;
+>>>>>>> master
             });
             //修复含有fixed-footer类的body边距
             if ($(".fixed-footer").size() > 0) {
-                $(document.body).css("padding-bottom", $(".fixed-footer").height());
+                $(document.body).css("padding-bottom", $(".fixed-footer").outerHeight());
             }
         }
     };

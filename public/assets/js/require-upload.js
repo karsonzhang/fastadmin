@@ -7,6 +7,40 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
             previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
         },
         events: {
+            //初始化完成
+            onPostInit: function (up) {
+
+            },
+            //文件添加成功后
+            onFileAdded: function (up, files) {
+                var button = up.settings.button;
+                $(button).data("bakup-html", $(button).html());
+                var maxcount = $(button).data("maxcount");
+                var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
+                maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
+                if (maxcount > 0 && input_id) {
+                    var inputObj = $("#" + input_id);
+                    if (inputObj.size() > 0) {
+                        var value = $.trim(inputObj.val());
+                        var nums = value === '' ? 0 : value.split(/\,/).length;
+                        var remains = maxcount - nums;
+                        if (files.length > remains) {
+                            for (var i = 0; i < files.length; i++) {
+                                up.removeFile(files[i]);
+                            }
+                            Toastr.error(__('You can upload up to %d file%s', remains));
+                            return false;
+                        }
+                    }
+                }
+                //添加后立即上传
+                setTimeout(function () {
+                    up.start();
+                }, 1);
+            },
+            onBeforeUpload: function (up, file) {
+                console.log("before", up.settings);
+            },
             //上传成功的回调
             onUploadSuccess: function (ret, onUploadSuccess, button) {
                 var data = typeof ret.data !== 'undefined' ? ret.data : null;
@@ -86,6 +120,9 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
             plupload: function (element, onUploadSuccess, onUploadError) {
                 element = typeof element === 'undefined' ? Upload.config.classname : element;
                 $(element, Upload.config.container).each(function () {
+                    if ($(this).attr("initialized")) {
+                        return true;
+                    }
                     $(this).attr("initialized", true);
                     var that = this;
                     var id = $(this).prop("id");
@@ -103,7 +140,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     //上传URL
                     url = url ? url : Config.upload.uploadurl;
                     url = Fast.api.fixurl(url);
-                    //最大可上传
+                    //最大可上传文件大小
                     maxsize = typeof maxsize !== "undefined" ? maxsize : Config.upload.maxsize;
                     //文件类型
                     mimetype = typeof mimetype !== "undefined" ? mimetype : Config.upload.mimetype;
@@ -111,6 +148,17 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     multipart = typeof multipart !== "undefined" ? multipart : Config.upload.multipart;
                     //是否支持批量上传
                     multiple = typeof multiple !== "undefined" ? multiple : Config.upload.multiple;
+                    var mimetypeArr = new Array();
+                    //支持后缀和Mimetype格式,以,分隔
+                    if (mimetype && mimetype !== "*" && mimetype.indexOf("/") === -1)
+                    {
+                        var tempArr = mimetype.split(',');
+                        for (var i = 0; i < tempArr.length; i++)
+                        {
+                            mimetypeArr.push({title: __('Files'), extensions: tempArr[i]});
+                        }
+                        mimetype = mimetypeArr;
+                    }
                     //生成Plupload实例
                     Upload.list[id] = new Plupload.Uploader({
                         runtimes: 'html5,flash,silverlight,html4',
@@ -121,22 +169,14 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                         silverlight_xap_url: '/assets/libs/plupload/js/Moxie.xap',
                         filters: {
                             max_file_size: maxsize,
-                            mime_types: mimetype
+                            mime_types: mimetype,
                         },
                         url: url,
-                        multipart_params: multipart,
+                        multipart_params: $.isArray(multipart) ? {} : multipart,
                         init: {
-                            PostInit: function () {
-
-                            },
-                            FilesAdded: function (up, files) {
-                                var button = up.settings.button;
-                                $(button).data("bakup-html", $(button).html());
-                                //添加后立即上传
-                                setTimeout(function () {
-                                    up.start();
-                                }, 1);
-                            },
+                            PostInit: Upload.events.onPostInit,
+                            FilesAdded: Upload.events.onFileAdded,
+                            BeforeUpload: Upload.events.onBeforeUpload,
                             UploadProgress: function (up, file) {
                                 var button = up.settings.button;
                                 //这里可以改成其它的表现形式
@@ -147,18 +187,18 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                                 var button = up.settings.button;
                                 //还原按钮文字及状态
                                 $(button).prop("disabled", false).html($(button).data("bakup-html"));
-                                var ret = Upload.events.onUploadResponse(info.response);
+                                var ret = Upload.events.onUploadResponse(info.response, info, up, file);
                                 if (ret.code === 1) {
-                                    Upload.events.onUploadSuccess(ret, onUploadSuccess, button);
+                                    Upload.events.onUploadSuccess(ret, onUploadSuccess, button, up, file);
                                 } else {
-                                    Upload.events.onUploadError(ret, onUploadError, button);
+                                    Upload.events.onUploadError(ret, onUploadError, button, up, file);
                                 }
                             },
                             Error: function (up, err) {
                                 var button = up.settings.button;
                                 $(button).prop("disabled", false).html($(button).data("bakup-html"));
                                 var ret = {code: err.code, msg: err.message, data: null};
-                                Upload.events.onUploadError(ret, onUploadError, button);
+                                Upload.events.onUploadError(ret, onUploadError, button, up, null);
                             }
                         },
                         onUploadSuccess: onUploadSuccess,
@@ -193,7 +233,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                                 $("#" + preview_id).append(html);
                             });
                         });
-                        $("#" + input_id).trigger("keyup");
+                        $("#" + input_id).trigger("change");
                     }
                     if (preview_id) {
                         // 监听事件
