@@ -4,6 +4,7 @@ namespace app\common\controller;
 
 use think\Config;
 use think\Controller;
+use think\Hook;
 use think\Lang;
 
 class Frontend extends Controller
@@ -34,10 +35,15 @@ class Frontend extends Controller
 
         $site = Config::get("site");
 
+        $upload = \app\common\model\Config::upload();
+
+        // 上传信息配置后
+        Hook::listen("upload_config_init", $upload);
+        
         // 配置信息
         $config = [
             'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
-            'upload'         => \app\common\model\Config::upload(),
+            'upload'         => $upload,
             'modulename'     => $modulename,
             'controllername' => $controllername,
             'actionname'     => $actionname,
@@ -45,6 +51,11 @@ class Frontend extends Controller
             'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang
         ];
+        
+        Config::set('upload', array_merge(Config::get('upload'), $upload));
+        
+        // 配置信息后
+        Hook::listen("config_init", $config);
         $this->loadlang($controllername);
         $this->assign('site', $site);
         $this->assign('config', $config);

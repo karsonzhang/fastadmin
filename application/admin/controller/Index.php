@@ -2,7 +2,10 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\AdminLog;
 use app\common\controller\Backend;
+use think\Config;
+use think\Hook;
 use think\Validate;
 
 /**
@@ -28,10 +31,10 @@ class Index extends Backend
     {
         //
         $menulist = $this->auth->getSidebar([
-            'dashboard'  => 'hot',
-            'addon'       => ['new', 'red', 'badge'],
-            'auth/rule'  => 'side',
-            'general'    => ['18', 'purple'],
+            'dashboard' => 'hot',
+            'addon'     => ['new', 'red', 'badge'],
+            'auth/rule' => 'side',
+            'general'   => ['new', 'purple'],
                 ], $this->view->site['fixedpage']);
         $this->view->assign('menulist', $menulist);
         $this->view->assign('title', __('Home'));
@@ -64,13 +67,18 @@ class Index extends Backend
                 'password'  => $password,
                 '__token__' => $token,
             ];
-            $validate = new Validate($rule);
+            if (Config::get('fastadmin.login_captcha'))
+            {
+                $rule['captcha'] = 'require|captcha';
+                $data['captcha'] = $this->request->post('captcha');
+            }
+            $validate = new Validate($rule, [], ['username' => __('Username'), 'password' => __('Password'), 'captcha' => __('Captcha')]);
             $result = $validate->check($data);
             if (!$result)
             {
                 $this->error($validate->getError(), $url, ['token' => $this->request->token()]);
             }
-            \app\admin\model\AdminLog::setTitle(__('Login'));
+            AdminLog::setTitle(__('Login'));
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
             if ($result === true)
             {
@@ -87,9 +95,9 @@ class Index extends Backend
         {
             $this->redirect($url);
         }
-        $background = cdnurl("/assets/img/loginbg.jpg");
+        $background = cdnurl(Config::get('fastadmin.login_background'));
         $this->view->assign('background', $background);
-        \think\Hook::listen("login_init", $this->request);
+        Hook::listen("login_init", $this->request);
         return $this->view->fetch();
     }
 

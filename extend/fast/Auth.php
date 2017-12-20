@@ -18,7 +18,6 @@ use think\Db;
 use think\Config;
 use think\Session;
 use think\Request;
-use think\Loader;
 
 /**
  * 权限认证类
@@ -172,16 +171,15 @@ class Auth
         {
             return $groups[$uid];
         }
-        // 转换表名
-        $auth_group_access = Loader::parseName($this->config['auth_group_access'], 1);
-        $auth_group = Loader::parseName($this->config['auth_group'], 1);
+
         // 执行查询
-        $user_groups = Db::view($auth_group_access, 'uid,group_id')
-                ->view($auth_group, 'id,pid,name,rules', "{$auth_group_access}.group_id={$auth_group}.id", 'LEFT')
-                ->where("{$auth_group_access}.uid='{$uid}' and {$auth_group}.status='normal'")
+        $user_groups = Db::name($this->config['auth_group_access'])
+                ->alias('aga')
+                ->join('__' . strtoupper($this->config['auth_group']) . '__ ag', 'aga.group_id = ag.id', 'LEFT')
+                ->field('aga.uid,aga.group_id,ag.id,ag.pid,ag.name,ag.rules')
+                ->where("aga.uid='{$uid}' and ag.status='normal'")
                 ->select();
         $groups[$uid] = $user_groups ?: [];
-
         return $groups[$uid];
     }
 
@@ -220,7 +218,7 @@ class Auth
         }
         //读取用户组所有权限规则
         $this->rules = Db::name($this->config['auth_rule'])->where($where)->field('id,pid,condition,icon,name,title,ismenu')->select();
-        
+
         //循环规则，判断结果。
         $rulelist = []; //
         if (in_array('*', $ids))

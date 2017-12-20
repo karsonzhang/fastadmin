@@ -9,6 +9,7 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
+use think\Env;
 
 return [
     // +----------------------------------------------------------------------
@@ -17,9 +18,9 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => true,
+    'app_debug'              => Env::get('app.debug', true),
     // 应用Trace
-    'app_trace'              => false,
+    'app_trace'              => Env::get('app.trace', false),
     // 应用模式状态
     'app_status'             => '',
     // 是否支持多模块
@@ -130,11 +131,12 @@ return [
         'taglib_begin' => '{',
         // 标签库标签结束标记
         'taglib_end'   => '}',
+        'tpl_cache'    => true,
     ],
-    // 视图输出字符串内容替换
+    // 视图输出字符串内容替换,留空则会自动进行计算
     'view_replace_str'       => [
-        '__PUBLIC__' => '/public/',
-        '__ROOT__'   => '/',
+        '__PUBLIC__' => '',
+        '__ROOT__'   => '',
         '__CDN__'    => '',
     ],
     // 默认跳转页面对应的模板文件
@@ -242,7 +244,14 @@ return [
     ],
     //FastAdmin配置
     'fastadmin'              => [
-        'version'   => '1.0.0.20170816_beta',
-        'api_url'   => 'http://api.fastadmin.net',
+        //登录验证码
+        'login_captcha'    => false,
+        //是否同一账号同一时间只能在一个地方登录
+        'login_unique'     => false,
+        //登录页默认背景图
+        'login_background' => "/assets/img/loginbg.jpg",
+        //版本号
+        'version'          => '1.0.0.20171206_beta',
+        'api_url'          => 'http://api.fastadmin.net',
     ],
 ];

@@ -14,7 +14,7 @@ if (!function_exists('__'))
      */
     function __($name, $vars = [], $lang = '')
     {
-        if (is_numeric($name))
+        if (is_numeric($name) || !$name)
             return $name;
         if (!is_array($vars))
         {
@@ -83,14 +83,13 @@ if (!function_exists('cdnurl'))
 {
 
     /**
-     * 获取CDN的地址
-     * @param int $time 时间戳
-     * @param string $format 日期时间格式
+     * 获取上传资源的CDN的地址
+     * @param string $url 资源相对地址
      * @return string
      */
     function cdnurl($url)
     {
-        return preg_match("/^https?:\/\/(.*)/i", $url) ? $url : think\Config::get('site.cdnurl') . $url;
+        return preg_match("/^https?:\/\/(.*)/i", $url) ? $url : think\Config::get('upload.cdnurl') . $url;
     }
 
 }
@@ -195,6 +194,109 @@ if (!function_exists('copydirs'))
                 copy($item, $dest . DS . $iterator->getSubPathName());
             }
         }
+    }
+
+}
+
+if (!function_exists('mb_ucfirst'))
+{
+
+    function mb_ucfirst($string)
+    {
+        return mb_strtoupper(mb_substr($string, 0, 1)) . mb_strtolower(mb_substr($string, 1));
+    }
+
+}
+
+
+if (!function_exists('addtion'))
+{
+
+    /**
+     * 附加关联字段数据
+     * @param array $items 数据列表
+     * @param mixed $fields 渲染的来源字段
+     * @return array
+     */
+    function addtion($items, $fields)
+    {
+        if (!$items || !$fields)
+            return $items;
+        $fieldsArr = [];
+        if (!is_array($fields))
+        {
+            $arr = explode(',', $fields);
+            foreach ($arr as $k => $v)
+            {
+                $fieldsArr[$v] = ['field' => $v];
+            }
+        }
+        else
+        {
+            foreach ($fields as $k => $v)
+            {
+                if (is_array($v))
+                {
+                    $v['field'] = isset($v['field']) ? $v['field'] : $k;
+                }
+                else
+                {
+                    $v = ['field' => $v];
+                }
+                $fieldsArr[$v['field']] = $v;
+            }
+        }
+        foreach ($fieldsArr as $k => &$v)
+        {
+            $v = is_array($v) ? $v : ['field' => $v];
+            $v['display'] = isset($v['display']) ? $v['display'] : str_replace(['_ids', '_id'], ['_names', '_name'], $v['field']);
+            $v['primary'] = isset($v['primary']) ? $v['primary'] : '';
+            $v['column'] = isset($v['column']) ? $v['column'] : 'name';
+            $v['model'] = isset($v['model']) ? $v['model'] : '';
+            $v['table'] = isset($v['table']) ? $v['table'] : '';
+            $v['name'] = isset($v['name']) ? $v['name'] : str_replace(['_ids', '_id'], '', $v['field']);
+        }
+        unset($v);
+        $ids = [];
+        $fields = array_keys($fieldsArr);
+        foreach ($items as $k => $v)
+        {
+            foreach ($fields as $m => $n)
+            {
+                if (isset($v[$n]))
+                {
+                    $ids[$n] = array_merge(isset($ids[$n]) && is_array($ids[$n]) ? $ids[$n] : [], explode(',', $v[$n]));
+                }
+            }
+        }
+        $result = [];
+        foreach ($fieldsArr as $k => $v)
+        {
+            if ($v['model'])
+            {
+                $model = new $v['model'];
+            }
+            else
+            {
+                $model = $v['name'] ? \think\Db::name($v['name']) : \think\Db::table($v['table']);
+            }
+            $primary = $v['primary'] ? $v['primary'] : $model->getPk();
+            $result[$v['field']] = $model->where($primary, 'in', $ids[$v['field']])->column("{$primary},{$v['column']}");
+        }
+
+        foreach ($items as $k => &$v)
+        {
+            foreach ($fields as $m => $n)
+            {
+                if (isset($v[$n]))
+                {
+                    $curr = array_flip(explode(',', $v[$n]));
+
+                    $v[$fieldsArr[$n]['display']] = implode(',', array_intersect_key($result[$n], $curr));
+                }
+            }
+        }
+        return $items;
     }
 
 }

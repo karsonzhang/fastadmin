@@ -10,22 +10,12 @@
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
-@import url("../libs/layer/build/skin/default/layer.css");
+@import url("../libs/layer/dist/theme/default/layer.css");
 @import url("../libs/bootstrap-table/dist/bootstrap-table.min.css");
 @import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
+@import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/selectpage/selectpage.css");
-
-.clearfix() {
-    &:before,
-        &:after {
-        content: " "; // 1
-        display: table; // 2
-    }
-    &:after {
-        clear: both;
-    }
-}
 
 @main-bg:           #f1f4f6;
 @panel-intro-bg:    darken(@main-bg,3%);
@@ -97,6 +87,15 @@ html.ios-fix,html.ios-fix body {
     }
 }
 
+.row-between{
+    .col-xs-6 + .col-xs-6:before {
+        content: "-";
+        position: absolute;
+        left: -2%;
+        top: 6px;
+    }
+}
+
 @media only screen and (min-width : 481px) {
     .row-flex {
         display: flex;
@@ -109,6 +108,18 @@ html.ios-fix,html.ios-fix body {
     .row-flex.row:after, 
     .row-flex.row:before {
         display: flex;
+    }
+}
+@media (max-width: 991px){
+    .main-header .navbar-custom-menu a{
+        &.btn-danger {
+            color:#fff;
+            background-color: @brand-danger;
+        }
+        &.btn-primary {
+            color:#fff;
+            background-color: @brand-primary;
+        }
     }
 }
 .common-search-table {
@@ -200,10 +211,9 @@ table.table-template{
     #main {
         background:#fff;
     }
-
-    form label {
-        font-weight: normal;
-    }
+}
+form.form-horizontal .control-label {
+    font-weight: normal;
 }
 
 .user-panel > .image img{
@@ -478,6 +488,15 @@ table.table-template{
     border:none!important;
 }
 
+/*修复nice-validator新版下的一处BUG*/
+.nice-validator {
+    input, select, textarea, [contenteditable]{
+        display: inline-block;
+        *display: inline;
+        *zoom: 1;
+    }
+}
+
 /*修复nice-validator和summernote的编辑框冲突*/
 .nice-validator .note-editor .note-editing-area .note-editable{
     display:inherit;
@@ -485,10 +504,10 @@ table.table-template{
 
 /*预览区域*/
 .plupload-preview {
-    padding:10px;
+    padding:0 10px;
     margin-bottom:0;
     li {
-        margin-bottom:10px;
+        margin-top:15px;
     }
     .thumbnail {
         margin-bottom:10px;
@@ -522,6 +541,17 @@ table.table-template{
 }
 .bootstrap-table .fixed-table-toolbar .dropdown-menu{
     overflow:auto;
+}
+.toolbar{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.fixed-table-toolbar .bs-bars, .fixed-table-toolbar .columns, .fixed-table-toolbar .search{
+    line-height:inherit;
+}
+.fixed-table-toolbar .toolbar{
+    margin-top:0;
+    margin-bottom:0;
 }
 
 .bootstrap-table table tbody tr:first-child td .bs-checkbox {
@@ -701,7 +731,7 @@ table.table-template{
         }
         //样式二关闭按钮
         .layui-layer-close2,.layui-layer-close2:hover{
-            background:url('../libs/layer/build/skin/default/icon.png') no-repeat -149px -31px !important;
+            background:url('../libs/layer/dist/theme/default/icon.png') no-repeat -149px -31px !important;
             top:-30px;
             right:-30px;
             &:after {
@@ -711,9 +741,9 @@ table.table-template{
     }
 }
 
-@media (min-width: 768px){
-    .form-inline .form-control {
-        padding-right:20px;
+.n-bootstrap {
+    .input-group > .n-right {
+        position:absolute;
     }
 }
 
@@ -731,6 +761,24 @@ table.table-template{
 /*平板样式*/
 @media (max-width: @screen-tablet) {
 
+    .n-bootstrap {
+        .n-right {
+            margin-top:0;
+            top:-20px;
+            position:absolute;
+            left:0;
+            text-align:right;
+            width:100%;
+            .msg-wrap {
+                position:relative;
+            }
+        }
+        .col-xs-12 > .n-right {
+            .msg-wrap {
+                margin-right:15px;
+            }
+        }
+    }
 }
 
 /*修复radio和checkbox样式对齐*/

@@ -5,4 +5,7 @@ return array (
   'hooks' => 
   array (
   ),
+  'route' => 
+  array (
+  ),
 );

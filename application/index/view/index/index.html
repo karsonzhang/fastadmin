@@ -181,7 +181,7 @@
                     console.log(installed);
                     if (!installed) {
                         $.ajax({
-                            url: "http://fast/api/statistics/installed",
+                            url: "{$Think.config.fastadmin.api_url}/statistics/installed",
                             data: {
                                 version: "{:config('fastadmin.version')}",
                                 os: "{$Think.PHP_OS}",
@@ -215,4 +215,3 @@
     </body>
 
 </html>
-

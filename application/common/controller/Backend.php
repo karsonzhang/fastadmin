@@ -50,6 +50,19 @@ class Backend extends Controller
     protected $relationSearch = false;
 
     /**
+     * 是否开启数据限制
+     * 支持auth/personal
+     * 表示按权限判断/仅限个人 
+     * 默认为禁用,若启用请务必保证表中存在admin_id字段
+     */
+    protected $dataLimit = false;
+
+    /**
+     * 数据限制字段
+     */
+    protected $dataLimitField = 'admin_id';
+
+    /**
      * 是否开启Validate验证
      */
     protected $modelValidate = false;
@@ -157,6 +170,9 @@ class Backend extends Controller
             'fastadmin'      => Config::get('fastadmin'),
             'referer'        => Session::get("referer")
         ];
+
+        Config::set('upload', array_merge(Config::get('upload'), $upload));
+
         // 配置信息后
         Hook::listen("config_init", $config);
         //加载当前控制器语言包
@@ -192,7 +208,7 @@ class Backend extends Controller
 
     /**
      * 生成查询所需要的条件,排序方式
-     * @param mixed $searchfields 查询条件
+     * @param mixed $searchfields 快速查询的字段
      * @param boolean $relationSearch 是否关联查询
      * @return array
      */
@@ -202,7 +218,7 @@ class Backend extends Controller
         $relationSearch = is_null($relationSearch) ? $this->relationSearch : $relationSearch;
         $search = $this->request->get("search", '');
         $filter = $this->request->get("filter", '');
-        $op = $this->request->get("op", '');
+        $op = $this->request->get("op", '', 'trim');
         $sort = $this->request->get("sort", "id");
         $order = $this->request->get("order", "DESC");
         $offset = $this->request->get("offset", 0);
@@ -216,21 +232,21 @@ class Backend extends Controller
         {
             if (!empty($this->model))
             {
-                $class = get_class($this->model);
-                $name = basename(str_replace('\\', '/', $class));
-                $tableName = $this->model->getQuery()->getTable($name) . ".";
+                $tableName = $this->model->getQuery()->getTable() . ".";
             }
-            if (stripos($sort, ".") === false)
-            {
-                $sort = $tableName . $sort;
-            }
+            $sort = stripos($sort, ".") === false ? $tableName . $sort : $sort;
+        }
+        $adminIds = $this->getDataLimitAdminIds();
+        if (is_array($adminIds))
+        {
+            $where[] = [$tableName . $this->dataLimitField, 'in', $adminIds];
         }
         if ($search)
         {
             $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
             foreach ($searcharr as $k => &$v)
             {
-                $v = $tableName . $v;
+                $v = stripos($v, ".") === false ? $tableName . $v : $v;
             }
             unset($v);
             $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
@@ -242,14 +258,18 @@ class Backend extends Controller
             {
                 $k = $tableName . $k;
             }
-            $sym = isset($op[$k]) ? $op[$k] : $sym;
+            $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
             switch ($sym)
             {
                 case '=':
                 case '!=':
+                    $where[] = [$k, $sym, (string) $v];
+                    break;
                 case 'LIKE':
                 case 'NOT LIKE':
-                    $where[] = [$k, $sym, $v];
+                case 'LIKE %...%':
+                case 'NOT LIKE %...%':
+                    $where[] = [$k, trim(str_replace('%...%', '', $sym)), "%{$v}%"];
                     break;
                 case '>':
                 case '>=':
@@ -257,18 +277,56 @@ class Backend extends Controller
                 case '<=':
                     $where[] = [$k, $sym, intval($v)];
                     break;
+                case 'IN':
                 case 'IN(...)':
+                case 'NOT IN':
                 case 'NOT IN(...)':
                     $where[] = [$k, str_replace('(...)', '', $sym), explode(',', $v)];
                     break;
                 case 'BETWEEN':
                 case 'NOT BETWEEN':
-                    $where[] = [$k, $sym, array_slice(explode(',', $v), 0, 2)];
+                    $arr = array_slice(explode(',', $v), 0, 2);
+                    if (stripos($v, ',') === false || !array_filter($arr))
+                        continue;
+                    //当出现一边为空时改变操作符
+                    if ($arr[0] === '')
+                    {
+                        $sym = $sym == 'BETWEEN' ? '<=' : '>';
+                        $arr = $arr[1];
+                    }
+                    else if ($arr[1] === '')
+                    {
+                        $sym = $sym == 'BETWEEN' ? '>=' : '<';
+                        $arr = $arr[0];
+                    }
+                    $where[] = [$k, $sym, $arr];
                     break;
+                case 'RANGE':
+                case 'NOT RANGE':
+                    $v = str_replace(' - ', ',', $v);
+                    $arr = array_slice(explode(',', $v), 0, 2);
+                    if (stripos($v, ',') === false || !array_filter($arr))
+                        continue;
+                    //当出现一边为空时改变操作符
+                    if ($arr[0] === '')
+                    {
+                        $sym = $sym == 'RANGE' ? '<=' : '>';
+                        $arr = $arr[1];
+                    }
+                    else if ($arr[1] === '')
+                    {
+                        $sym = $sym == 'RANGE' ? '>=' : '<';
+                        $arr = $arr[0];
+                    }
+                    $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
+                    break;
+                case 'LIKE':
                 case 'LIKE %...%':
                     $where[] = [$k, 'LIKE', "%{$v}%"];
                     break;
+                case 'NULL':
                 case 'IS NULL':
+                case 'NOT NULL':
                 case 'IS NOT NULL':
                     $where[] = [$k, strtolower(str_replace('IS ', '', $sym))];
                     break;
@@ -290,6 +348,29 @@ class Backend extends Controller
             }
         };
         return [$where, $sort, $order, $offset, $limit];
+    }
+
+    /**
+     * 获取数据限制的管理员ID
+     * 禁用数据限制时返回的是null
+     * @return mixed
+     */
+    protected function getDataLimitAdminIds()
+    {
+        if (!$this->dataLimit)
+        {
+            return null;
+        }
+        if ($this->auth->isSuperAdmin())
+        {
+            return null;
+        }
+        $adminIds = [];
+        if (in_array($this->dataLimit, ['auth', 'personal']))
+        {
+            $adminIds = $this->dataLimit == 'auth' ? $this->auth->getChildrenAdminIds(true) : [$this->auth->id];
+        }
+        return $adminIds;
     }
 
     /**
@@ -332,7 +413,7 @@ class Backend extends Controller
         $field = $field ? $field : 'name';
 
         //如果有primaryvalue,说明当前是初始化传值
-        if ($primaryvalue)
+        if ($primaryvalue !== null)
         {
             $where = [$primarykey => ['in', $primaryvalue]];
         }
@@ -355,10 +436,19 @@ class Backend extends Controller
                 }
             };
         }
+        $adminIds = $this->getDataLimitAdminIds();
+        if (is_array($adminIds))
+        {
+            $this->model->where($this->dataLimitField, 'in', $adminIds);
+        }
         $list = [];
         $total = $this->model->where($where)->count();
         if ($total > 0)
         {
+            if (is_array($adminIds))
+            {
+                $this->model->where($this->dataLimitField, 'in', $adminIds);
+            }
             $list = $this->model->where($where)
                     ->order($order)
                     ->page($page, $pagesize)
@@ -366,7 +456,6 @@ class Backend extends Controller
                     ->field("password,salt", true)
                     ->select();
         }
-
         //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
         return json(['list' => $list, 'total' => $total]);
     }

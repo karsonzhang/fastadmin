@@ -37,7 +37,6 @@ class Ajax extends Frontend
      */
     public function upload()
     {
-        $this->checkLogin();
         $file = $this->request->file('file');
 
         //判断是否已经存在附件

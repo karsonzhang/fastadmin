@@ -13,4 +13,9 @@ class AuthGroup extends Model
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
 
+    public function getNameAttr($value, $data)
+    {
+        return __($value);
+    }
+
 }
