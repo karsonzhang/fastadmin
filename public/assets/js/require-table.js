@@ -432,9 +432,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];
                 var url, classname, icon, text, title, extend;
-                var columnIndex = options.columns[0].findIndex(function (element) {
-                    return element === column;
-                });
+                var fieldIndex = column.fieldIndex;
+
                 $.each(buttons, function (i, j) {
                     if (type === 'operate') {
                         if (j.name === 'dragsort' && typeof row[Table.config.dragsortfield] === 'undefined') {
@@ -455,7 +454,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         refresh = j.refresh ? 'data-refresh="' + j.refresh + '"' : '';
                         confirm = j.confirm ? 'data-confirm="' + j.confirm + '"' : '';
                         extend = j.extend ? j.extend : '';
-                        html.push('<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + (refresh ? refresh + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-column-index="' + columnIndex + '" data-row-index="' + index + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                        html.push('<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + (refresh ? refresh + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-field-index="' + fieldIndex + '" data-row-index="' + index + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
                     }
                 });
                 return html.join(' ');

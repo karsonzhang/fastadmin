@@ -113,12 +113,26 @@ define(['fast', 'moment'], function (Fast, Moment) {
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
                 var that = this;
                 var options = $.extend({}, $(that).data() || {});
-                if (typeof options.tableId !== 'undefined' && typeof options.columnIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
+                if (typeof options.tableId !== 'undefined' && typeof options.fieldIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
                     var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
                     if (tableOptions) {
-                        var button = tableOptions.columns[0][options.columnIndex]['buttons'][options.buttonIndex];
-                        if (button && typeof button.callback === 'function') {
-                            options.callback = button.callback;
+                        var columnObj = null;
+                        $.each(tableOptions.columns, function (i, columns) {
+                            $.each(columns, function (j, column) {
+                                if (typeof column.fieldIndex !== 'undefined' && column.fieldIndex === options.fieldIndex) {
+                                    columnObj = column;
+                                    return false;
+                                }
+                            });
+                            if (columnObj) {
+                                return false;
+                            }
+                        });
+                        if (columnObj) {
+                            var button = columnObj['buttons'][options.buttonIndex];
+                            if (button && typeof button.callback === 'function') {
+                                options.callback = button.callback;
+                            }
                         }
                     }
                 }
@@ -159,15 +173,29 @@ define(['fast', 'moment'], function (Fast, Moment) {
                 var error = typeof options.error === 'function' ? options.error : null;
                 delete options.success;
                 delete options.error;
-                if (typeof options.tableId !== 'undefined' && typeof options.columnIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
+                if (typeof options.tableId !== 'undefined' && typeof options.fieldIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
                     var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
                     if (tableOptions) {
-                        var button = tableOptions.columns[0][options.columnIndex]['buttons'][options.buttonIndex];
-                        if (button && typeof button.success === 'function') {
-                            success = button.success;
-                        }
-                        if (button && typeof button.error === 'function') {
-                            error = button.error;
+                        var columnObj = null;
+                        $.each(tableOptions.columns, function (i, columns) {
+                            $.each(columns, function (j, column) {
+                                if (typeof column.fieldIndex !== 'undefined' && column.fieldIndex === options.fieldIndex) {
+                                    columnObj = column;
+                                    return false;
+                                }
+                            });
+                            if (columnObj) {
+                                return false;
+                            }
+                        });
+                        if (columnObj) {
+                            var button = columnObj['buttons'][options.buttonIndex];
+                            if (button && typeof button.success === 'function') {
+                                success = button.success;
+                            }
+                            if (button && typeof button.error === 'function') {
+                                error = button.error;
+                            }
                         }
                     }
                 }
