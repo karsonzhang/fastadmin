@@ -31,7 +31,7 @@ class Group extends Backend
         $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
         $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
-        $groupIds = $this->auth->getGroupIds();
+
         Tree::instance()->init($groupList);
         $result = [];
         if ($this->auth->isSuperAdmin())
@@ -40,9 +40,10 @@ class Group extends Backend
         }
         else
         {
-            foreach ($groupIds as $m => $n)
+            $groups = $this->auth->getGroups();
+            foreach ($groups as $m => $n)
             {
-                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n)));
+                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['pid'])));
             }
         }
         $groupName = [];

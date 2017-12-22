@@ -30,7 +30,6 @@ class Admin extends Backend
         $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin() ? true : false);
 
         $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
-        $groupIds = $this->auth->getGroupIds();
         Tree::instance()->init($groupList);
         $result = [];
         if ($this->auth->isSuperAdmin())
@@ -39,9 +38,10 @@ class Admin extends Backend
         }
         else
         {
-            foreach ($groupIds as $m => $n)
+            $groups = $this->auth->getGroups();
+            foreach ($groups as $m => $n)
             {
-                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n)));
+                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['pid'])));
             }
         }
         $groupName = [];
@@ -61,7 +61,6 @@ class Admin extends Backend
     {
         if ($this->request->isAjax())
         {
-
             $childrenGroupIds = $this->childrenGroupIds;
             $groupName = AuthGroup::where('id', 'in', $childrenGroupIds)
                     ->column('id,name');
@@ -75,7 +74,11 @@ class Admin extends Backend
                 if (isset($groupName[$v['group_id']]))
                     $adminGroupName[$v['uid']][$v['group_id']] = $groupName[$v['group_id']];
             }
-
+            $groups = $this->auth->getGroups();
+            foreach ($groups as $m => $n)
+            {
+                $adminGroupName[$this->auth->id][$n['id']] = $n['name'];
+            }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
                     ->where($where)
