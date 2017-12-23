@@ -49,7 +49,7 @@ class Ajax extends Backend
         $file = $this->request->file('file');
         if (empty($file))
         {
-            $this->error("未上传文件或超出服务器上传限制");
+            $this->error(__('No file upload or server upload limit exceeded'));
         }
 
         //判断是否已经存在附件
@@ -64,6 +64,14 @@ class Ajax extends Backend
         $fileInfo = $file->getInfo();
         $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
         $suffix = $suffix ? $suffix : 'file';
+
+        $mimetypeArr = explode(',', $upload['mimetype']);
+        $typeArr = explode('/', $fileInfo['type']);
+        //验证文件后缀
+        if ($upload['mimetype'] !== '*' && !in_array($suffix, $mimetypeArr) && !in_array($fileInfo['type'], $mimetypeArr) && !in_array($typeArr[0] . '/*', $mimetypeArr))
+        {
+            $this->error(__('Uploaded file format is limited'));
+        }
         $replaceArr = [
             '{year}'     => date("Y"),
             '{mon}'      => date("m"),
@@ -110,7 +118,7 @@ class Ajax extends Backend
             $attachment->data(array_filter($params));
             $attachment->save();
             \think\Hook::listen("upload_after", $attachment);
-            $this->success('上传成功', null, [
+            $this->success(__('Upload successful'), null, [
                 'url' => $uploadDir . $splInfo->getSaveName()
             ]);
         }

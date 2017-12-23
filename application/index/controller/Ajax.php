@@ -37,17 +37,15 @@ class Ajax extends Frontend
      */
     public function upload()
     {
+        Config::set('default_return_type', 'json');
         $file = $this->request->file('file');
+        if (empty($file))
+        {
+            $this->error(__('No file upload or server upload limit exceeded'));
+        }
 
         //判断是否已经存在附件
         $sha1 = $file->hash();
-        $uploaded = model("attachment")->where('sha1', $sha1)->find();
-        if ($uploaded)
-        {
-            $this->success('', null, [
-                'url' => $uploaded['url']
-            ]);
-        }
 
         $upload = Config::get('upload');
 
@@ -58,6 +56,14 @@ class Ajax extends Frontend
         $fileInfo = $file->getInfo();
         $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
         $suffix = $suffix ? $suffix : 'file';
+
+        $mimetypeArr = explode(',', $upload['mimetype']);
+        $typeArr = explode('/', $fileInfo['type']);
+        //验证文件后缀
+        if ($upload['mimetype'] !== '*' && !in_array($suffix, $mimetypeArr) && !in_array($fileInfo['type'], $mimetypeArr) && !in_array($typeArr[0] . '/*', $mimetypeArr))
+        {
+            $this->error(__('Uploaded file format is limited'));
+        }
         $replaceArr = [
             '{year}'     => date("Y"),
             '{mon}'      => date("m"),
@@ -97,10 +103,14 @@ class Ajax extends Frontend
                 'mimetype'    => $fileInfo['type'],
                 'url'         => $uploadDir . $splInfo->getSaveName(),
                 'uploadtime'  => time(),
+                'storage'     => 'local',
                 'sha1'        => $sha1,
             );
-            model("attachment")->create(array_filter($params));
-            $this->success('', null, [
+            $attachment = model("attachment");
+            $attachment->data(array_filter($params));
+            $attachment->save();
+            \think\Hook::listen("upload_after", $attachment);
+            $this->success(__('Upload successful'), null, [
                 'url' => $uploadDir . $splInfo->getSaveName()
             ]);
         }
