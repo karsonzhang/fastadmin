@@ -78,6 +78,13 @@ class Backend extends Controller
     protected $multiFields = 'status';
 
     /**
+     * 导入文件首行类型
+     * 支持comment/name
+     * 表示注释或字段名
+     */
+    protected $importHeadType = 'comment';
+
+    /**
      * 引入后台控制器的traits
      */
     use \app\admin\library\traits\Backend;

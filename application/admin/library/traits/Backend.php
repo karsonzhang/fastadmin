@@ -329,25 +329,35 @@ trait Backend
             }
         }
 
+        //导入文件首行类型,默认是注释,如果需要使用字段名称请使用name
+        $importHeadType = isset($this->importHeadType) ? $this->importHeadType : 'comment';
+
         $table = $this->model->getQuery()->getTable();
         $database = \think\Config::get('database.database');
         $fieldArr = [];
         $list = db()->query("SELECT COLUMN_NAME,COLUMN_COMMENT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?", [$table, $database]);
         foreach ($list as $k => $v)
         {
-            $fieldArr[$v['COLUMN_COMMENT']] = $v['COLUMN_NAME'];
+            if ($importHeadType == 'comment')
+            {
+                $fieldArr[$v['COLUMN_COMMENT']] = $v['COLUMN_NAME'];
+            }
+            else
+            {
+                $fieldArr[$v['COLUMN_NAME']] = $v['COLUMN_NAME'];
+            }
         }
 
         $PHPExcel = $PHPReader->load($filePath); //加载文件
         $currentSheet = $PHPExcel->getSheet(0);  //读取文件中的第一个工作表
-        $allColumn = $currentSheet->getHighestColumn(); //取得最大的列号
+        $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
         $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
-
+        $maxColumnNumber = \PHPExcel_Cell::columnIndexFromString($allColumn);
         for ($currentRow = 1; $currentRow <= 1; $currentRow++)
         {
-            for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++)
+            for ($currentColumn = 0; $currentColumn < $maxColumnNumber; $currentColumn++)
             {
-                $val = $currentSheet->getCellByColumnAndRow(ord($currentColumn) - 65, $currentRow)->getValue();
+                $val = $currentSheet->getCellByColumnAndRow($currentColumn, $currentRow)->getValue();
                 $fields[] = $val;
             }
         }
@@ -355,11 +365,10 @@ trait Backend
         for ($currentRow = 2; $currentRow <= $allRow; $currentRow++)
         {
             $values = [];
-            for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++)
+            for ($currentColumn = 0; $currentColumn < $maxColumnNumber; $currentColumn++)
             {
-                $val = $currentSheet->getCellByColumnAndRow(ord($currentColumn) - 65, $currentRow)->getValue(); /*                 * ord()将字符转为十进制数 */
+                $val = $currentSheet->getCellByColumnAndRow($currentColumn, $currentRow)->getValue();
                 $values[] = is_null($val) ? '' : $val;
-                //echo iconv('utf-8','gb2312', $val)."\t"; 
             }
             $row = [];
             $temp = array_combine($fields, $values);

@@ -341,9 +341,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return '<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />';
                 },
                 images: function (value, row, index) {
-                    value = value.toString();
+                    value = value === null ? '' : value.toString();
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    var arr = value.toString().split(',');
+                    var arr = value.split(',');
                     var html = [];
                     $.each(arr, function (i, value) {
                         value = value ? value : '/assets/img/blank.gif';
@@ -358,7 +358,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     if (typeof this.custom !== 'undefined') {
                         colorArr = $.extend(colorArr, this.custom);
                     }
-                    value = value.toString();
+                    value = value === null ? '' : value.toString();
                     var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
                     value = value.charAt(0).toUpperCase() + value.slice(1);
                     //渲染状态
@@ -382,6 +382,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return '<a href="' + Fast.api.fixurl(url) + '" class="dialogit" data-value="' + value + '" title="' + title + '">' + value + '</a>';
                 },
                 flag: function (value, row, index) {
+                    value = value === null ? '' : value.toString();
                     var colorArr = {index: 'success', hot: 'warning', recommend: 'danger', 'new': 'info'};
                     //如果字段列有定义custom
                     if (typeof this.custom !== 'undefined') {
@@ -392,9 +393,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                     //渲染Flag
                     var html = [];
-                    var arr = value.toString().split(',');
+                    var arr = value.split(',');
                     $.each(arr, function (i, value) {
-                        value = value.toString();
+                        value = value === null ? '' : value.toString();
                         if (value == '')
                             return true;
                         var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
