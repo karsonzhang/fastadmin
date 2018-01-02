@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "^5.0",
+        "topthink/framework": "5.0.*",
         "overtrue/wechat": "~3.1",
         "endroid/qrcode": "^1.9",
         "topthink/think-captcha": "^1.0",
