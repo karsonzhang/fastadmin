@@ -26,8 +26,11 @@ class Attachment extends Backend
      */
     public function index()
     {
+<<<<<<< HEAD
         //设置过滤方法
         $this->request->filter(['strip_tags']);
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         if ($this->request->isAjax())
         {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();

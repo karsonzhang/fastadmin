@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 <?php
 
 // +----------------------------------------------------------------------
@@ -145,7 +148,11 @@ return [
     // | 异常及错误设置
     // +----------------------------------------------------------------------
     // 异常页面的模板文件
+<<<<<<< HEAD
     'exception_tmpl'         => THINK_PATH . 'tpl' . DS . 'think_exception.tpl',
+=======
+    'exception_tmpl'         => APP_PATH . 'common' . DS . 'view' . DS . 'tpl' . DS . 'think_exception.tpl',
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     // 错误显示信息,非调试模式有效
     'error_message'          => '你所浏览的页面暂时无法访问',
     // 显示错误信息
@@ -247,6 +254,7 @@ return [
         'api_url'   => 'http://api.fastadmin.net',
     ],
 ];
+<<<<<<< HEAD
 =======
 <?php
 
@@ -506,3 +514,5 @@ return [
     ],
 ];
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

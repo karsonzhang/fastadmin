@@ -26,6 +26,7 @@ class Dashboard extends Backend
             $createlist[$day] = mt_rand(20, 200);
             $paylist[$day] = mt_rand(1, mt_rand(1, $createlist[$day]));
         }
+<<<<<<< HEAD
         $hooks = config('addons.hooks');
         $uploadmode = isset($hooks['upload_config_init']) && $hooks['upload_config_init'] ? implode(',', $hooks['upload_config_init']) : 'local';
         $this->view->assign([
@@ -44,6 +45,24 @@ class Dashboard extends Backend
             'uploadmode'       => $uploadmode
         ]);
 
+=======
+        $this->view->assign([
+            'totaluser'          => 35200,
+            'totalviews'         => 219390,
+            'totalorder'         => 32143,
+            'totalorderamount'   => 174800,
+            'todayuserlogin'     => 321,
+            'todayusersignup'    => 430,
+            'todayorder'         => 2324,
+            'todayunsettleorder' => 132,
+            'sevendnu'           => '80%',
+            'sevendau'           => '32%',
+            'paylist'            => $paylist,
+            'createlist'         => $createlist,
+        ]);
+
+
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         return $this->view->fetch();
     }
 

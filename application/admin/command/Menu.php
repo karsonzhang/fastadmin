@@ -86,7 +86,7 @@ class Menu extends Command
         }
         else
         {
-            $this->model->where('id', '>', 0)->delete();
+            $this->model->destroy([]);
             $controllerDir = $adminPath . 'controller' . DS;
             // 扫描新的节点信息并导入
             $treelist = $this->import($this->scandir($controllerDir));
@@ -225,7 +225,7 @@ class Menu extends Command
             $title = (!isset($controllerArr[$key]) ? $controllerTitle : '');
             $icon = (!isset($controllerArr[$key]) ? $controllerIcon : 'fa fa-list');
             $remark = (!isset($controllerArr[$key]) ? $controllerRemark : '');
-            $title = $title ? $title : $v;
+            $title = $title ? $title : __(ucfirst($v) . ' manager');
             $rulemodel = $this->model->get(['name' => $name]);
             if (!$rulemodel)
             {
@@ -263,26 +263,9 @@ class Menu extends Command
             //过滤掉其它字符
             $comment = preg_replace(array('/^\/\*\*(.*)[\n\r\t]/u', '/[\s]+\*\//u', '/\*\s@(.*)/u', '/[\s|\*]+/u'), '', $comment);
 
-            $title = $comment ? $comment : ucfirst($n->name);
-
-            //获取主键，作为AuthRule更新依据
-            $id = $this->getAuthRulePK($name . "/" . strtolower($n->name));
-
-            $ruleArr[] = array('id' => $id, 'pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $title, 'ismenu' => 0, 'status' => 'normal');
+            $ruleArr[] = array('pid' => $pid, 'name' => $name . "/" . strtolower($n->name), 'icon' => 'fa fa-circle-o', 'title' => $comment ? $comment : $n->name, 'ismenu' => 0, 'status' => 'normal');
         }
-        $this->model->isUpdate(false)->saveAll($ruleArr);
-    }
-
-    //获取主键
-    protected function getAuthRulePK($name)
-    {
-        if (!empty($name))
-        {
-            $id = $this->model
-                    ->where('name', $name)
-                    ->value('id');
-            return $id ? $id : null;
-        }
+        $this->model->saveAll($ruleArr);
     }
 
 }

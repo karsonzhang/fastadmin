@@ -37,6 +37,10 @@ class Ajax extends Frontend
      */
     public function upload()
     {
+<<<<<<< HEAD
+=======
+        $this->checkLogin();
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         $file = $this->request->file('file');
 
         //判断是否已经存在附件

@@ -26,7 +26,6 @@ require.config({
         'jquery': '../libs/jquery/dist/jquery.min',
         'bootstrap': '../libs/bootstrap/dist/js/bootstrap.min',
         'bootstrap-datetimepicker': '../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
-        'bootstrap-daterangepicker': '../libs/bootstrap-daterangepicker/daterangepicker',
         'bootstrap-select': '../libs/bootstrap-select/dist/js/bootstrap-select.min',
         'bootstrap-select-lang': '../libs/bootstrap-select/dist/js/i18n/defaults-zh_CN',
         'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
@@ -113,7 +112,7 @@ require.config({
             deps: ['../libs/plupload/js/moxie.min'],
             exports: "plupload"
         },
-//        'layer': ['css!../libs/layer/dist/theme/default/layer.css'],
+//        'layer': ['css!../libs/layer/build/skin/default/layer.css'],
 //        'validator-core': ['css!../libs/nice-validator/dist/jquery.validator.css'],
         'validator-lang': ['validator-core'],
 //        'selectpage': ['css!../libs/selectpage/selectpage.css'],

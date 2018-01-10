@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 <?php
 
 // 公共助手函数
@@ -91,7 +94,11 @@ if (!function_exists('cdnurl'))
      */
     function cdnurl($url)
     {
+<<<<<<< HEAD
         return preg_match("/^https?:\/\/(.*)/i", $url) ? $url : think\Config::get('cdnurl') . $url;
+=======
+        return preg_match("/^https?:\/\/(.*)/i", $url) ? $url : think\Config::get('site.cdnurl') . $url;
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     }
 
 }
@@ -199,6 +206,7 @@ if (!function_exists('copydirs'))
     }
 
 }
+<<<<<<< HEAD
 =======
 <?php
 
@@ -503,3 +511,5 @@ if (!function_exists('addtion'))
 
 }
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

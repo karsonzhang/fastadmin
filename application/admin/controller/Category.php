@@ -26,7 +26,11 @@ class Category extends Backend
         $this->model = model('Category');
 
         $tree = Tree::instance();
+<<<<<<< HEAD
         $tree->init(collection($this->model->order('weigh desc,id desc')->select())->toArray(), 'pid');
+=======
+        $tree->init($this->model->order('weigh desc,id desc')->select(), 'pid');
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         $this->categorylist = $tree->getTreeList($tree->getTreeArray(0), 'name');
         $categorydata = [0 => ['type' => 'all', 'name' => __('None')]];
         foreach ($this->categorylist as $k => $v)

@@ -51,33 +51,36 @@ class Min extends Command
         $publicPath = ROOT_PATH . 'public' . DS;
         $tempFile = $minPath . 'temp.js';
 
-        $nodeExec = '';
+        // Winsows下请手动配置配置该值
+        $nodeExec = "";
 
         if (!$nodeExec)
         {
             if (IS_WIN)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 throw new Exception("node environment not found!please check http://doc.fastadmin.net/faq.html !");
 =======
                 // Winsows下请手动配置配置该值,一般将该值配置为 '"C:/Program Files/nodejs/node.exe"'，除非你的Node安装路径有变更
                 $nodeExec = '"C:/Program Files/nodejs/node.exe"';
 >>>>>>> master
+=======
+                throw new Exception("node environment not found!please check http://doc.fastadmin.net/docs/faq.html !");
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             }
-            else
+
+            try
             {
-                try
+                $nodeExec = exec("which node");
+                if (!$nodeExec)
                 {
-                    $nodeExec = exec("which node");
-                    if (!$nodeExec)
-                    {
-                        throw new Exception("node environment not found!please install node first!");
-                    }
+                    throw new Exception("node environment not found!please install node first!");
                 }
-                catch (Exception $e)
-                {
-                    throw new Exception($e->getMessage());
-                }
+            }
+            catch (Exception $e)
+            {
+                throw new Exception($e->getMessage());
             }
         }
 
@@ -92,12 +95,17 @@ class Min extends Command
                     'cssBaseName' => str_replace('{module}', $mod, $this->options['cssBaseName']),
                     'cssBaseUrl'  => $this->options['cssBaseUrl'],
 <<<<<<< HEAD
+<<<<<<< HEAD
                     'jsBasePath'  => str_replace('\\', '/', ROOT_PATH) . $this->options['jsBaseUrl'],
                     'cssBasePath' => str_replace('\\', '/', ROOT_PATH) . $this->options['cssBaseUrl'],
 =======
                     'jsBasePath'  => str_replace(DS, '/', ROOT_PATH . $this->options['jsBaseUrl']),
                     'cssBasePath' => str_replace(DS, '/', ROOT_PATH . $this->options['cssBaseUrl']),
 >>>>>>> master
+=======
+                    'jsBasePath'  => str_replace('/', DS, ROOT_PATH . $this->options['jsBaseUrl']),
+                    'cssBasePath' => str_replace('/', DS, ROOT_PATH . $this->options['cssBaseUrl']),
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                     'ds'          => DS,
                 ];
 
@@ -111,7 +119,7 @@ class Min extends Command
                 if ($res == "js")
                 {
                     $content = file_get_contents($from);
-                    preg_match("/require\.config\(\{[\r\n]?[\n]?+(.*?)[\r\n]?[\n]?}\);/is", $content, $matches);
+                    preg_match("/require\.config\(\{[\n]+(.*?)\n\}\);/is", $content, $matches);
                     if (!isset($matches[1]))
                     {
                         $output->error("js config not found!");

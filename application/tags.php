@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 <?php
 
 // +----------------------------------------------------------------------
@@ -20,6 +23,13 @@ return [
     'module_init'  => [
         'app\\common\\behavior\\Common',
     ],
+<<<<<<< HEAD
+=======
+    // 模块初始化
+    'addons_init'  => [
+        'app\\common\\behavior\\Common',
+    ],
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     // 操作开始执行
     'action_begin' => [],
     // 视图内容过滤
@@ -29,6 +39,7 @@ return [
     // 应用结束
     'app_end'      => [],
 ];
+<<<<<<< HEAD
 =======
 <?php
 
@@ -65,3 +76,5 @@ return [
     'app_end'      => [],
 ];
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

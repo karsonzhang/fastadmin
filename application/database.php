@@ -10,12 +10,11 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-use think\Env;
-
 return [
     // 数据库类型
-    'type'            => Env::get('database.type', 'mysql'),
+    'type'            => 'mysql',
     // 服务器地址
+<<<<<<< HEAD
 <<<<<<< HEAD
     'hostname'        => 'localhost',
     // 数据库名
@@ -25,26 +24,35 @@ return [
     // 数据库名
     'database'        => Env::get('database.database', 'fastadmin'),
 >>>>>>> master
+=======
+    'hostname'        => '127.0.0.1',
+    // 数据库名
+    'database'        => 'fastadmin',
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     // 用户名
-    'username'        => Env::get('database.username', 'root'),
+    'username'        => 'root',
     // 密码
+<<<<<<< HEAD
 <<<<<<< HEAD
     'password'        => 'root',
 =======
     'password'        => Env::get('database.password', ''),
 >>>>>>> master
+=======
+    'password'        => '',
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     // 端口
-    'hostport'        => Env::get('database.hostport', ''),
+    'hostport'        => '',
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数
     'params'          => [],
     // 数据库编码默认采用utf8
-    'charset'         => Env::get('database.charset', 'utf8'),
+    'charset'         => 'utf8',
     // 数据库表前缀
-    'prefix'          => Env::get('database.prefix', 'fa_'),
+    'prefix'          => 'fa_',
     // 数据库调试模式
-    'debug'           => Env::get('database.debug', true),
+    'debug'           => true,
     // 数据库部署方式:0 集中式(单一服务器),1 分布式(主从服务器)
     'deploy'          => 0,
     // 数据库读写是否分离 主从式有效

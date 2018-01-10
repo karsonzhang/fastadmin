@@ -90,12 +90,17 @@ function build_toolbar($btns = NULL, $attr = [])
 {
     $auth = \app\admin\library\Auth::instance();
 <<<<<<< HEAD
+<<<<<<< HEAD
     $controller = strtolower(think\Request::instance()->controller());
     $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del'];
 =======
     $controller = str_replace('.', '/', strtolower(think\Request::instance()->controller()));
     $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del', 'import'];
 >>>>>>> master
+=======
+    $controller = str_replace('.','/',strtolower(think\Request::instance()->controller()));
+    $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del'];
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     $btns = is_array($btns) ? $btns : explode(',', $btns);
     $index = array_search('delete', $btns);
     if ($index !== FALSE)
@@ -103,11 +108,10 @@ function build_toolbar($btns = NULL, $attr = [])
         $btns[$index] = 'del';
     }
     $btnAttr = [
-        'refresh' => ['javascript:;', 'btn btn-primary btn-refresh', 'fa fa-refresh', '', __('Refresh')],
-        'add'     => ['javascript:;', 'btn btn-success btn-add', 'fa fa-plus', __('Add'), __('Add')],
-        'edit'    => ['javascript:;', 'btn btn-success btn-edit btn-disabled disabled', 'fa fa-pencil', __('Edit'), __('Edit')],
-        'del'     => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete'), __('Delete')],
-        'import'  => ['javascript:;', 'btn btn-danger btn-import', 'fa fa-upload', __('Import'), __('Import')],
+        'refresh' => ['javascript:;', 'btn btn-primary btn-refresh', 'fa fa-refresh', ''],
+        'add'     => ['javascript:;', 'btn btn-success btn-add', 'fa fa-plus', __('Add')],
+        'edit'    => ['javascript:;', 'btn btn-success btn-edit btn-disabled disabled', 'fa fa-pencil', __('Edit')],
+        'del'     => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete')],
     ];
     $btnAttr = array_merge($btnAttr, $attr);
     $html = [];
@@ -118,9 +122,8 @@ function build_toolbar($btns = NULL, $attr = [])
         {
             continue;
         }
-        list($href, $class, $icon, $text, $title) = $btnAttr[$v];
-        $extend = $v == 'import' ? 'id="btn-import-' . \fast\Random::alpha() . '" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"' : '';
-        $html[] = '<a href="' . $href . '" class="' . $class . '" title="' . $title . '" ' . $extend . '><i class="' . $icon . '"></i> ' . $text . '</a>';
+        list($href, $class, $icon, $text) = $btnAttr[$v];
+        $html[] = '<a href="' . $href . '" class="' . $class . '" ><i class="' . $icon . '"></i> ' . $text . '</a>';
     }
     return implode(' ', $html);
 }
@@ -128,31 +131,25 @@ function build_toolbar($btns = NULL, $attr = [])
 /**
  * 生成页面Heading
  *
- * @param string $path 指定的path
+ * @param string $title
+ * @param string $content
  * @return string
  */
-function build_heading($path = NULL, $container = TRUE)
+function build_heading($title = NULL, $content = NULL)
 {
-    $title = $content = '';
-    if (is_null($path))
+    if (is_null($title) && is_null($content))
     {
-        $action = request()->action();
-        $controller = str_replace('.', '/', request()->controller());
-        $path = strtolower($controller . ($action && $action != 'index' ? '/' . $action : ''));
-    }
-    // 根据当前的URI自动匹配父节点的标题和备注
-    $data = Db::name('auth_rule')->where('name', $path)->field('title,remark')->find();
-    if ($data)
-    {
-        $title = __($data['title']);
-        $content = __($data['remark']);
+        $path = request()->pathinfo();
+        $path = $path[0] == '/' ? $path : '/' . $path;
+        // 根据当前的URI自动匹配父节点的标题和备注
+        $data = Db::name('auth_rule')->where('name', $path)->field('title,remark')->find();
+        if ($data)
+        {
+            $title = $data['title'];
+            $content = $data['remark'];
+        }
     }
     if (!$content)
         return '';
-    $result = '<div class="panel-lead"><em>' . $title . '</em>' . $content . '</div>';
-    if ($container)
-    {
-        $result = '<div class="panel-heading">' . $result . '</div>';
-    }
-    return $result;
+    return '<div class="panel-heading"><div class="panel-lead"><em>' . $title . '</em>' . $content . '</div></div>';
 }

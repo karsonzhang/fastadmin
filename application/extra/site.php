@@ -5,8 +5,12 @@ return array (
   'name' => '黄河水厂设备管理系统',
 =======
   'name' => 'FastAdmin',
+<<<<<<< HEAD
 >>>>>>> master
   'beian' => '',
+=======
+  'beian' => '粤ICP备15054802号-4',
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
   'cdnurl' => '',
   'version' => '1.0.1',
   'timezone' => 'Asia/Shanghai',
@@ -20,10 +24,14 @@ return array (
   'categorytype' => 
   array (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     'default' => '默认',
     'page' => '单页',
     'article' => '文章',
     'test' => '测试',
+<<<<<<< HEAD
     'machine' => '设备',
 =======
     'default' => 'Default',
@@ -31,14 +39,16 @@ return array (
     'article' => 'Article',
     'test' => 'Test',
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
   ),
   'configgroup' => 
   array (
-    'basic' => 'Basic',
-    'email' => 'Email',
-    'dictionary' => 'Dictionary',
-    'user' => 'User',
-    'example' => 'Example',
+    'basic' => '基础配置',
+    'email' => '邮件配置',
+    'dictionary' => '字典配置',
+    'user' => '会员配置',
+    'example' => '示例分组',
   ),
   'mail_type' => '1',
   'mail_smtp_host' => 'smtp.qq.com',

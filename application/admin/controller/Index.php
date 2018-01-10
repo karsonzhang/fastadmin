@@ -2,10 +2,14 @@
 
 namespace app\admin\controller;
 
+<<<<<<< HEAD
 use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use think\Config;
 use think\Hook;
+=======
+use app\common\controller\Backend;
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 use think\Validate;
 
 /**
@@ -31,10 +35,17 @@ class Index extends Backend
     {
         //
         $menulist = $this->auth->getSidebar([
+<<<<<<< HEAD
             'dashboard' => 'hot',
             'addon'     => ['new', 'red', 'badge'],
             'auth/rule' => 'side',
             'general'   => ['new', 'purple'],
+=======
+            'dashboard'  => 'hot',
+            'addon'       => ['new', 'red', 'badge'],
+            'auth/rule'  => 'side',
+            'general'    => ['18', 'purple'],
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                 ], $this->view->site['fixedpage']);
         $this->view->assign('menulist', $menulist);
         $this->view->assign('title', __('Home'));
@@ -67,18 +78,26 @@ class Index extends Backend
                 'password'  => $password,
                 '__token__' => $token,
             ];
+<<<<<<< HEAD
             if (Config::get('fastadmin.login_captcha'))
             {
                 $rule['captcha'] = 'require|captcha';
                 $data['captcha'] = $this->request->post('captcha');
             }
             $validate = new Validate($rule, [], ['username' => __('Username'), 'password' => __('Password'), 'captcha' => __('Captcha')]);
+=======
+            $validate = new Validate($rule);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             $result = $validate->check($data);
             if (!$result)
             {
                 $this->error($validate->getError(), $url, ['token' => $this->request->token()]);
             }
+<<<<<<< HEAD
             AdminLog::setTitle(__('Login'));
+=======
+            \app\admin\model\AdminLog::setTitle(__('Login'));
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
             if ($result === true)
             {
@@ -95,9 +114,15 @@ class Index extends Backend
         {
             $this->redirect($url);
         }
+<<<<<<< HEAD
         $background = cdnurl(Config::get('fastadmin.login_background'));
         $this->view->assign('background', $background);
         Hook::listen("login_init", $this->request);
+=======
+        $background = cdnurl("/assets/img/loginbg.jpg");
+        $this->view->assign('background', $background);
+        \think\Hook::listen("login_init", $this->request);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         return $this->view->fetch();
     }
 

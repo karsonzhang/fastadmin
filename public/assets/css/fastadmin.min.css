@@ -923,7 +923,7 @@ a:focus {
   border-color: #eee;
 }
 .dropdown-menu > li > a {
-  /*color: #777;*/
+  color: #777;
 }
 .dropdown-menu > li > a > .glyphicon,
 .dropdown-menu > li > a > .fa,
@@ -1241,43 +1241,6 @@ a:focus {
     border: 1px solid #ddd;
     background: #fff;
   }
-}
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu > .dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 3px 0 3px 3px;
-}
-.dropdown-submenu:hover > .dropdown-menu {
-  display: block;
-}
-.dropdown-submenu:hover > a:after {
-  border-left-color: #fff;
-}
-.dropdown-submenu > a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #ccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left > .dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 3px 0 3px 3px;
 }
 /*
  * Component: Form
@@ -2693,6 +2656,14 @@ table.text-center th {
 }
 .table.align td {
   text-align: right;
+}
+/*
+ * Component: Label
+ * ----------------
+ */
+.label-default {
+  background-color: #d2d6de;
+  color: #444;
 }
 /*
  * Component: Direct Chat
@@ -4965,6 +4936,56 @@ fieldset[disabled] .btn-yahoo.active {
 .select2-container .select2-selection--single .select2-selection__rendered {
   padding-right: 10px;
 }
+span.twitter-typeahead {
+  width: 100%;
+}
+span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .tt-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-clip: padding-box;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 0;
+}
+span.twitter-typeahead .tt-menu .tt-suggestion,
+span.twitter-typeahead .tt-dropdown-menu .tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.428571429;
+  color: #333333;
+  white-space: nowrap;
+}
+span.twitter-typeahead .tt-menu .tt-suggestion:hover,
+span.twitter-typeahead .tt-dropdown-menu .tt-suggestion:hover,
+span.twitter-typeahead .tt-menu .tt-suggestion:focus,
+span.twitter-typeahead .tt-dropdown-menu .tt-suggestion:focus {
+  color: #ffffff;
+  text-decoration: none;
+  outline: 0;
+  background-color: #428bca;
+}
+span.twitter-typeahead .tt-menu li.notfound,
+span.twitter-typeahead .tt-dropdown-menu li.notfound {
+  text-indent: 10px;
+}
+.bootstrap-tagsinput {
+  border-radius: 0!important;
+}
 /*
  * General: Miscellaneous
  * ----------------------
@@ -5043,6 +5064,11 @@ fieldset[disabled] .btn-yahoo.active {
 .alert-error,
 .alert-warning,
 .alert-info,
+.label-danger,
+.label-info,
+.label-warning,
+.label-primary,
+.label-success,
 .modal-primary .modal-body,
 .modal-primary .modal-header,
 .modal-primary .modal-footer,
@@ -5074,18 +5100,21 @@ fieldset[disabled] .btn-yahoo.active {
 .callout.callout-danger,
 .alert-danger,
 .alert-error,
+.label-danger,
 .modal-danger .modal-body {
   background-color: #e74c3c !important;
 }
 .bg-yellow,
 .callout.callout-warning,
 .alert-warning,
+.label-warning,
 .modal-warning .modal-body {
   background-color: #f39c12 !important;
 }
 .bg-aqua,
 .callout.callout-info,
 .alert-info,
+.label-info,
 .modal-info .modal-body {
   background-color: #3498db !important;
 }
@@ -5093,12 +5122,14 @@ fieldset[disabled] .btn-yahoo.active {
   background-color: #0073b7 !important;
 }
 .bg-light-blue,
+.label-primary,
 .modal-primary .modal-body {
   background-color: #3c8dbc !important;
 }
 .bg-green,
 .callout.callout-success,
 .alert-success,
+.label-success,
 .modal-success .modal-body {
   background-color: #18bc9c !important;
 }

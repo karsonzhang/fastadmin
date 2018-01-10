@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 {
     "name": "karsonzhang/fastadmin",
     "description": "the fastest admin framework",
@@ -23,12 +26,18 @@
         "topthink/think-captcha": "^1.0",
         "mtdowling/cron-expression": "^1.2",
         "phpmailer/phpmailer": "^5.2",
+<<<<<<< HEAD
         "karsonzhang/fastadmin-addons": "dev-master"
+=======
+        "karsonzhang/fastadmin-addons": "dev-master",
+        "overtrue/pinyin": "~3.0"
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     },
     "config": {
         "preferred-install": "dist"
     }
 }
+<<<<<<< HEAD
 =======
 {
     "name": "karsonzhang/fastadmin",
@@ -63,3 +72,5 @@
     }
 }
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

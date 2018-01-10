@@ -11,34 +11,28 @@ class Common
     {
         // 如果修改了index.php入口地址，则需要手动修改cdnurl的值
 <<<<<<< HEAD
+<<<<<<< HEAD
         $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $params->root());
 =======
         $url = preg_replace("/\/(\w+)\.php$/i", '', $request->root());
 >>>>>>> master
+=======
+        $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $request->root());
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         // 如果未设置__CDN__则自动匹配得出
         if (!Config::get('view_replace_str.__CDN__'))
         {
-            Config::set('view_replace_str.__CDN__', $url);
-        }
-        // 如果未设置__PUBLIC__则自动匹配得出
-        if (!Config::get('view_replace_str.__PUBLIC__'))
-        {
-            Config::set('view_replace_str.__PUBLIC__', $url . '/');
-        }
-        // 如果未设置__ROOT__则自动匹配得出
-        if (!Config::get('view_replace_str.__ROOT__'))
-        {
-            Config::set('view_replace_str.__ROOT__', preg_replace("/\/public\/$/", '', $url . '/'));
+            Config::set('view_replace_str.__CDN__', $cdnurl);
         }
         // 如果未设置cdnurl则自动匹配得出
         if (!Config::get('site.cdnurl'))
         {
-            Config::set('site.cdnurl', $url);
+            Config::set('site.cdnurl', $cdnurl);
         }
         // 如果未设置cdnurl则自动匹配得出
         if (!Config::get('upload.cdnurl'))
         {
-            Config::set('upload.cdnurl', $url);
+            Config::set('upload.cdnurl', $cdnurl);
         }
         if (Config::get('app_debug'))
         {

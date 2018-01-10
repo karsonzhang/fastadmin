@@ -19,15 +19,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             // 初始化表格
             table.bootstrapTable({
-                url: location.protocol === "https:" ? "addon/downloaded" : $.fn.bootstrapTable.defaults.extend.index_url,
+                url: $.fn.bootstrapTable.defaults.extend.index_url,
                 columns: [
                     [
-                        {field: 'id', title: 'ID', operate: false},
-                        {field: 'name', title: __('Name'), operate: false},
-                        {field: 'title', title: __('Title'), operate: 'LIKE'}
+                        {field: 'id', title: 'ID'},
+                        {field: 'name', title: __('Name')},
+                        {field: 'title', title: __('Title')}
                     ]
                 ],
-                dataType: 'jsonp',
                 templateView: true,
                 search: false,
                 showColumns: false,
@@ -35,17 +34,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 showExport: false,
                 commonSearch: true,
                 searchFormVisible: false,
-                pageSize: 10
+                pageSize: 12
             });
 
             // 为表格绑定事件
             Table.api.bindevent(table);
-
-            // 如果是https则启用提示
-            if (location.protocol === "https:") {
-                $("#warmtips").removeClass("hide");
-                $(".btn-switch,.btn-userinfo").addClass("disabled");
-            }
 
             require(['upload'], function (Upload) {
                 Upload.api.plupload("#plupload-addon", function (data, ret) {
@@ -55,103 +48,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 });
             });
 
-            //切换URL
-            $(document).on("click", ".btn-switch", function () {
-                $(".btn-switch").removeClass("active");
-                $(this).addClass("active");
-                table.bootstrapTable('refresh', {url: $(this).data("url"), pageNumber: 1});
-            });
-            // 会员信息
-            $(document).on("click", ".btn-userinfo", function () {
-                var userinfo = Controller.api.userinfo.get();
-                if (!userinfo) {
-                    Layer.open({
-                        content: Template("logintpl", {}),
-                        area: ['400px', '330px'],
-                        title: __('Login FastAdmin'),
-                        resize: false,
-                        btn: [__('Login'), __('Register')],
-                        yes: function (index, layero) {
-                            Fast.api.ajax({
-                                url: Config.fastadmin.api_url + '/user/login',
-                                dataType: 'jsonp',
-                                data: {account: $("#inputAccount", layero).val(), password: $("#inputPassword", layero).val(), _method: 'POST'}
-                            }, function (data, ret) {
-                                Controller.api.userinfo.set(data);
-                                Layer.closeAll();
-                                Layer.alert(ret.msg);
-                            }, function (data, ret) {
-                                Layer.alert(ret.msg);
-                            });
-                        },
-                        btn2: function () {
-                            return false;
-                        },
-                        success: function (layero, index) {
-                            $(".layui-layer-btn1", layero).prop("href", "http://www.fastadmin.net/user/register.html").prop("target", "_blank");
-                        }
-                    });
-                } else {
-                    var userinfo = Controller.api.userinfo.get();
-                    if (!userinfo) {
-                        Layer.alert(__('You\'re not login'));
-                        return false;
-                    }
-                    Layer.open({
-                        content: Template("userinfotpl", userinfo),
-                        area: ['400px', '330px'],
-                        title: __('Userinfo'),
-                        resize: false,
-                        btn: [__('Logout'), __('Cancel')],
-                        yes: function () {
-                            Fast.api.ajax({
-                                url: Config.fastadmin.api_url + '/user/logout',
-                                dataType: 'jsonp',
-                                data: {uid: userinfo.id, token: userinfo.token}
-                            }, function (data, ret) {
-                                Controller.api.userinfo.set(null);
-                                Layer.closeAll();
-                                Layer.alert(ret.msg);
-                            }, function (data, ret) {
-                                Layer.alert(ret.msg);
-                            });
-                        }
-                    });
-                }
-            });
-
-            // 点击安装
+            //点击安装
             $(document).on("click", ".btn-install", function () {
-                var that = this;
                 var name = $(this).closest(".operate").data("name");
-                var userinfo = Controller.api.userinfo.get();
-                var uid = userinfo ? userinfo.id : 0;
-                var token = userinfo ? userinfo.token : '';
                 var install = function (name, force) {
                     Fast.api.ajax({
                         url: 'addon/install',
-                        data: {name: name, force: force ? 1 : 0, uid: uid, token: token}
+                        data: {name: name, force: force ? 1 : 0}
                     }, function (data, ret) {
                         Layer.closeAll();
                         Config['addons'][data.addon.name] = ret.data.addon;
-                        Layer.alert(__('Online installed tips'), {
-                            btn: [__('OK'), __('Donate')],
-                            title: __('Warning'),
-                            icon: 1,
-                            btn2: function () {
-                                //打赏
-                                Layer.open({
-                                    content: Template("paytpl", {payimg: $(that).data("donateimage")}),
-                                    shade: 0.8,
-                                    area: ['800px', '600px'],
-                                    skin: 'layui-layer-msg layui-layer-pay',
-                                    title: false,
-                                    closeBtn: true,
-                                    btn: false,
-                                    resize: false,
-                                });
-                            }
-                        });
                         $('.btn-refresh').trigger('click');
                     }, function (data, ret) {
                         //如果是需要购买的插件则弹出二维码提示
@@ -167,19 +73,19 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                 btn: false,
                                 resize: false,
                                 end: function () {
-                                    Layer.alert(__('Pay tips'));
+                                    Layer.alert("支付完成后请稍等1~5分钟后再尝试安装，请不要重复支付，如果仍然无法安装，请加<a href='https://jq.qq.com/?_wv=1027&k=487PNBb' target='_blank'>QQ群：636393962</a>向管理员反馈");
                                 }
                             });
                         } else if (ret && ret.code === -2) {
                             //跳转支付
-                            Layer.alert(__('Pay click tips'), {
-                                btn: [__('Pay now'), __('Cancel')],
+                            Layer.alert('请点击这里在新窗口中进行支付！', {
+                                btn: ['立即支付', '取消'],
                                 icon: 0,
                                 success: function (layero) {
                                     $(".layui-layer-btn0", layero).attr("href", ret.data.payurl).attr("target", "_blank");
                                 }
                             }, function () {
-                                Layer.alert(__('Pay new window tips'), {icon: 0});
+                                Layer.alert("请在新弹出的窗口中进行支付，支付完成后再重新点击安装按钮进行安装！", {icon: 0});
                             });
 
                         } else if (ret && ret.code === -3) {
@@ -188,8 +94,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                 content: Template("conflicttpl", ret.data),
                                 shade: 0.8,
                                 area: ['800px', '600px'],
-                                title: __('Warning'),
-                                btn: [__('Continue install'), __('Cancel')],
+                                title: "温馨提示",
+                                btn: ['继续安装', '取消'],
                                 end: function () {
 
                                 },
@@ -204,20 +110,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         return false;
                     });
                 };
-                if ($(that).data("type") !== 'free') {
-                    if (parseInt(uid) === 0) {
-                        return Layer.alert(__('Not login tips'), {
-                            title: __('Warning'),
-                            btn: [__('Login now'), __('Continue install')],
-                            yes: function (index, layero) {
-                                $(".btn-userinfo").trigger("click");
-                            },
-                            btn2: function () {
-                                install(name, false);
-                            }
-                        });
-                    }
-                }
                 install(name, false);
             });
 
@@ -239,8 +131,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                 content: Template("conflicttpl", ret.data),
                                 shade: 0.8,
                                 area: ['800px', '600px'],
-                                title: __('Warning'),
-                                btn: [__('Continue uninstall'), __('Cancel')],
+                                title: "温馨提示",
+                                btn: ['继续卸载', '取消'],
                                 end: function () {
 
                                 },
@@ -255,7 +147,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         return false;
                     });
                 };
-                Layer.confirm(__('Uninstall tips'), function () {
+                Layer.confirm("确认卸载插件？<p class='text-danger'>卸载将会删除所有插件文件且不可找回!!! 插件如果有创建数据库表请手动删除!!!</p>如有重要数据请备份后再操作！", function () {
                     uninstall(name, false);
                 });
             });
@@ -263,7 +155,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             //点击配置
             $(document).on("click", ".btn-config", function () {
                 var name = $(this).closest(".operate").data("name");
-                Fast.api.open("addon/config?name=" + name, __('Setting'));
+                Fast.api.open("addon/config?name=" + name, "修改配置");
             });
 
             //点击启用/禁用
@@ -286,8 +178,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                 content: Template("conflicttpl", ret.data),
                                 shade: 0.8,
                                 area: ['800px', '600px'],
-                                title: __('Warning'),
-                                btn: [__('Continue operate'), __('Cancel')],
+                                title: "温馨提示",
+                                btn: ['继续操作', '取消'],
                                 end: function () {
 
                                 },
@@ -314,19 +206,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
-            },
-            userinfo: {
-                get: function () {
-                    var userinfo = localStorage.getItem("fastadmin_userinfo");
-                    return userinfo ? JSON.parse(userinfo) : null;
-                },
-                set: function (data) {
-                    if (data) {
-                        localStorage.setItem("fastadmin_userinfo", JSON.stringify(data));
-                    } else {
-                        localStorage.removeItem("fastadmin_userinfo");
-                    }
-                }
             }
         }
     };

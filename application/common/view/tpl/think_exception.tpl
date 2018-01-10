@@ -66,8 +66,8 @@
 
             </div>
             <div class="buttons-container">
-                <a href="<?php echo function_exists('url') ? url('/') : '/';?>">返回主页</a>
-                <a href="<?php echo function_exists('url') ? url('/') : '/';?>">反馈错误</a>
+                <a href="<?php echo url('/');?>">返回主页</a>
+                <a href="<?php echo url('/');?>">反馈错误</a>
             </div>
         </div>
     </body>

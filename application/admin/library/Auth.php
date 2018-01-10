@@ -5,7 +5,6 @@ namespace app\admin\library;
 use app\admin\model\Admin;
 use fast\Random;
 use fast\Tree;
-use think\Config;
 use think\Cookie;
 use think\Request;
 use think\Session;
@@ -15,7 +14,6 @@ class Auth extends \fast\Auth
 
     protected $requestUri = '';
     protected $breadcrumb = [];
-    protected $logined = false; //登录状态
 
     public function __construct()
     {
@@ -90,7 +88,7 @@ class Auth extends \fast\Auth
             {
                 return false;
             }
-            Session::set("admin", $admin->toArray());
+            Session::set("admin", $admin);
             //刷新自动登录的时效
             $this->keeplogin($keeptime);
             return true;
@@ -155,26 +153,7 @@ class Auth extends \fast\Auth
      */
     public function isLogin()
     {
-        if ($this->logined)
-        {
-            return true;
-        }
-        $admin = Session::get('admin');
-        if (!$admin)
-        {
-            return false;
-        }
-        //判断是否同一时间同一账号只能在一个地方登录
-        if (Config::get('fastadmin.login_unique'))
-        {
-            $my = Admin::get($admin->id);
-            if (!$my || $my->token != $admin->token)
-            {
-                return false;
-            }
-        }
-        $this->logined = true;
-        return true;
+        return Session::get('admin') ? true : false;
     }
 
     /**
@@ -226,103 +205,6 @@ class Auth extends \fast\Auth
     }
 
     /**
-     * 获取管理员所属于的分组ID
-     * @param int $uid
-     * @return array
-     */
-    public function getGroupIds($uid = null)
-    {
-        $groups = $this->getGroups($uid);
-        $groupIds = [];
-        foreach ($groups as $K => $v)
-        {
-            $groupIds[] = (int) $v['group_id'];
-        }
-        return $groupIds;
-    }
-
-    /**
-     * 取出当前管理员所拥有权限的分组
-     * @param boolean $withself 是否包含当前所在的分组
-     * @return array
-     */
-    public function getChildrenGroupIds($withself = false)
-    {
-        //取出当前管理员所有的分组
-        $groups = $this->getGroups();
-        $groupIds = [];
-        foreach ($groups as $k => $v)
-        {
-            $groupIds[] = $v['id'];
-        }
-        // 取出所有分组
-        $groupList = model('AuthGroup')->all(['status' => 'normal']);
-        $objList = [];
-        foreach ($groups as $K => $v)
-        {
-            if ($v['rules'] === '*')
-            {
-                $objList = $groupList;
-                break;
-            }
-            // 取出包含自己的所有子节点
-            $childrenList = Tree::instance()->init($groupList)->getChildren($v['id'], true);
-            $obj = Tree::instance()->init($childrenList)->getTreeArray($v['pid']);
-            $objList = array_merge($objList, Tree::instance()->getTreeList($obj));
-        }
-        $childrenGroupIds = [];
-        foreach ($objList as $k => $v)
-        {
-            $childrenGroupIds[] = $v['id'];
-        }
-        if (!$withself)
-        {
-            $childrenGroupIds = array_diff($childrenGroupIds, $groupIds);
-        }
-        return $childrenGroupIds;
-    }
-
-    /**
-     * 取出当前管理员所拥有权限的管理员
-     * @param boolean $withself 是否包含自身
-     * @return array
-     */
-    public function getChildrenAdminIds($withself = false)
-    {
-        $childrenAdminIds = [];
-        if (!$this->isSuperAdmin())
-        {
-            $groupIds = $this->getChildrenGroupIds(false);
-            $authGroupList = model('AuthGroupAccess')
-                    ->field('uid,group_id')
-                    ->where('group_id', 'in', $groupIds)
-                    ->select();
-
-            foreach ($authGroupList as $k => $v)
-            {
-                $childrenAdminIds[] = $v['uid'];
-            }
-        }
-        else
-        {
-            //超级管理员拥有所有人的权限
-            $childrenAdminIds = Admin::column('id');
-        }
-        if ($withself)
-        {
-            if (!in_array($this->id, $childrenAdminIds))
-            {
-                $childrenAdminIds[] = $this->id;
-            }
-        }
-        else
-        {
-            $childrenAdminIds = array_diff($childrenAdminIds, [$this->id]);
-        }
-        return $childrenAdminIds;
-    }
-
-    /**
      * 获得面包屑导航
      * @param string $path
      * @return array
@@ -342,7 +224,6 @@ class Auth extends \fast\Auth
             foreach ($this->breadcrumb as $k => &$v)
             {
                 $v['url'] = url($v['name']);
-                $v['title'] = __($v['title']);
             }
         }
         return $this->breadcrumb;
@@ -406,12 +287,15 @@ class Auth extends \fast\Auth
 =======
             $v['py'] = $pinyin->abbr($v['title'], '');
             $v['pinyin'] = $pinyin->permalink($v['title'], '');
+<<<<<<< HEAD
             $v['title'] = __($v['title']);
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         }
         // 构造菜单数据
         Tree::instance()->init($ruleList);
-        $menu = Tree::instance()->getTreeMenu(0, '<li class="@class"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
+        $menu = Tree::instance()->getTreeMenu(0, '<li class="@class"><a href="@url" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
         return $menu;
     }
 

@@ -39,6 +39,7 @@ trait Backend
     }
 
     /**
+<<<<<<< HEAD
      * 回收站
      */
     public function recyclebin()
@@ -69,6 +70,8 @@ trait Backend
     }
 
     /**
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
      * 添加
      */
     public function add()
@@ -78,6 +81,7 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
+<<<<<<< HEAD
                 /*
                  * 已经弃用,如果为了兼容老版可取消注释
                   foreach ($params as $k => &$v)
@@ -88,6 +92,11 @@ trait Backend
                 if ($this->dataLimit)
                 {
                     $params[$this->dataLimitField] = $this->auth->id;
+=======
+                foreach ($params as $k => &$v)
+                {
+                    $v = is_array($v) ? implode(',', $v) : $v;
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                 }
                 try
                 {
@@ -98,7 +107,11 @@ trait Backend
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
                         $this->model->validate($validate);
                     }
+<<<<<<< HEAD
                     $result = $this->model->allowField(true)->save($params);
+=======
+                    $result = $this->model->save($params);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                     if ($result !== false)
                     {
                         $this->success();
@@ -126,6 +139,7 @@ trait Backend
         $row = $this->model->get($ids);
         if (!$row)
             $this->error(__('No Results were found'));
+<<<<<<< HEAD
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds))
         {
@@ -134,11 +148,14 @@ trait Backend
                 $this->error(__('You have no permission'));
             }
         }
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         if ($this->request->isPost())
         {
             $params = $this->request->post("row/a");
             if ($params)
             {
+<<<<<<< HEAD
                 /*
                  * 已经弃用,如果为了兼容老版可取消注释
                   foreach ($params as $k => &$v)
@@ -146,6 +163,12 @@ trait Backend
                   $v = is_array($v) ? implode(',', $v) : $v;
                   }
                  */
+=======
+                foreach ($params as $k => &$v)
+                {
+                    $v = is_array($v) ? implode(',', $v) : $v;
+                }
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                 try
                 {
                     //是否采用模型验证
@@ -155,7 +178,11 @@ trait Backend
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.edit' : true) : $this->modelValidate;
                         $row->validate($validate);
                     }
+<<<<<<< HEAD
                     $result = $row->allowField(true)->save($params);
+=======
+                    $result = $row->save($params);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                     if ($result !== false)
                     {
                         $this->success();
@@ -165,7 +192,11 @@ trait Backend
                         $this->error($row->getError());
                     }
                 }
+<<<<<<< HEAD
                 catch (\think\exception\PDOException $e)
+=======
+                catch (think\exception\PDOException $e)
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                 {
                     $this->error($e->getMessage());
                 }
@@ -183,6 +214,7 @@ trait Backend
     {
         if ($ids)
         {
+<<<<<<< HEAD
             $pk = $this->model->getPk();
             $adminIds = $this->getDataLimitAdminIds();
             if (is_array($adminIds))
@@ -195,10 +227,14 @@ trait Backend
             {
                 $count += $v->delete();
             }
+=======
+            $count = $this->model->destroy($ids);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             if ($count)
             {
                 $this->success();
             }
+<<<<<<< HEAD
             else
             {
                 $this->error(__('No rows were deleted'));
@@ -235,11 +271,14 @@ trait Backend
         else
         {
             $this->error(__('No rows were deleted'));
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         }
         $this->error(__('Parameter %s can not be empty', 'ids'));
     }
 
     /**
+<<<<<<< HEAD
      * 还原
      */
     public function restore($ids = "")
@@ -263,6 +302,8 @@ trait Backend
     }
 
     /**
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
      * 批量更新
      */
     public function multi($ids = "")
@@ -276,20 +317,26 @@ trait Backend
                 $values = array_intersect_key($values, array_flip(is_array($this->multiFields) ? $this->multiFields : explode(',', $this->multiFields)));
                 if ($values)
                 {
+<<<<<<< HEAD
                     $adminIds = $this->getDataLimitAdminIds();
                     if (is_array($adminIds))
                     {
                         $this->model->where($this->dataLimitField, 'in', $adminIds);
                     }
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                     $count = $this->model->where($this->model->getPk(), 'in', $ids)->update($values);
                     if ($count)
                     {
                         $this->success();
                     }
+<<<<<<< HEAD
                     else
                     {
                         $this->error(__('No rows were updated'));
                     }
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                 }
                 else
                 {
@@ -300,6 +347,7 @@ trait Backend
         $this->error(__('Parameter %s can not be empty', 'ids'));
     }
 
+<<<<<<< HEAD
     /**
      * 导入
      */
@@ -391,4 +439,6 @@ trait Backend
         $this->success();
     }
 
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 }

@@ -16,7 +16,11 @@
 define('APP_PATH', __DIR__ . '/../application/');
 
 // 判断是否安装FastAdmin
+<<<<<<< HEAD
 if (!is_file(APP_PATH . 'admin/command/Install/install.lock'))
+=======
+if (!file_exists(APP_PATH . 'admin/command/Install/install.lock'))
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 {
     header("location:./install.php");
     exit;
@@ -32,4 +36,8 @@ require __DIR__ . '/../thinkphp/base.php';
 \think\Url::root('');
 
 // 执行应用
+<<<<<<< HEAD
 \think\App::run()->send();
+=======
+\think\App::run()->send();
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

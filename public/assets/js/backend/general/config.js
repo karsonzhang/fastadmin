@@ -50,6 +50,28 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 location.reload();
             });
 
+            $(document).on("click", ".fieldlist .append", function () {
+                var rel = parseInt($(this).closest("dl").attr("rel")) + 1;
+                var name = $(this).closest("dl").data("name");
+                $(this).closest("dl").attr("rel", rel);
+                $('<dd class="form-inline"><input type="text" name="' + name + '[field][' + rel + ']" class="form-control" value="" size="10" /> <input type="text" name="' + name + '[value][' + rel + ']" class="form-control" value="" size="40" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>').insertBefore($(this).parent());
+            });
+            $(document).on("click", ".fieldlist dd .btn-remove", function () {
+                $(this).parent().remove();
+            });
+            //拖拽排序
+            require(['dragsort'], function () {
+                //绑定拖动排序
+                $("dl.fieldlist").dragsort({
+                    itemSelector: 'dd',
+                    dragSelector: ".btn-dragsort",
+                    dragEnd: function () {
+
+                    },
+                    placeHolderTemplate: "<dd></dd>"
+                });
+            });
+
             //切换显示隐藏变量字典列表
             $(document).on("change", "form#add-form select[name='row[type]']", function (e) {
                 $("#add-content-container").toggleClass("hide", ['select', 'selects', 'checkbox', 'radio'].indexOf($(this).val()) > -1 ? false : true);

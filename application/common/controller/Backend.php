@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 <?php
 
 namespace app\common\controller;
@@ -43,7 +46,11 @@ class Backend extends Controller
     /**
      * 快速搜索时执行查找的字段
      */
+<<<<<<< HEAD
     protected $searchFields = 'id,name';
+=======
+    protected $searchFields = 'id';
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 
     /**
      * 是否是关联查询
@@ -373,6 +380,7 @@ class Backend extends Controller
     }
 
 }
+<<<<<<< HEAD
 =======
 <?php
 
@@ -838,3 +846,5 @@ class Backend extends Controller
 
 }
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

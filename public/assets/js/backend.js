@@ -50,7 +50,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
                             title = typeof title !== 'undefined' ? title : leftlink.find("span:first").text();
                             leftlink.trigger("fa.event.toggleitem");
                         }
-                        var navnode = top.window.$(".nav-tabs ul li a[node-url='" + url + "']");
+                        var navnode = $(".nav-tabs ul li a[node-url='" + url + "']");
                         if (navnode.size() > 0) {
                             navnode.trigger("click");
                         } else {
@@ -63,6 +63,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     }
                 }
             },
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
             closetabs: function (url) {
@@ -89,6 +90,8 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     }
                 }
             },
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             replaceids: function (elem, url) {
                 //如果有需要替换ids的
                 if (url.indexOf("{ids}") > -1) {
@@ -114,6 +117,7 @@ define(['fast', 'moment'], function (Fast, Moment) {
             Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
             //点击包含.btn-dialog的元素时弹出dialog
             $(document).on('click', '.btn-dialog,.dialogit', function (e) {
+<<<<<<< HEAD
 <<<<<<< HEAD
                 e.preventDefault();
                 var options = $(this).data();
@@ -141,9 +145,15 @@ define(['fast', 'moment'], function (Fast, Moment) {
                 }
                 return false;
 >>>>>>> master
+=======
+                e.preventDefault();
+                var options = $(this).data() || {};
+                Backend.api.open(Backend.api.replaceids(this, $(this).attr('href')), $(this).attr('title'), options);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             });
             //点击包含.btn-addtabs的元素时事件
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
+<<<<<<< HEAD
 <<<<<<< HEAD
                 e.preventDefault();
                 Backend.api.addtabs($(this).attr("href"), $(this).attr("title"));
@@ -161,18 +171,23 @@ define(['fast', 'moment'], function (Fast, Moment) {
 
                 return false;
 >>>>>>> master
+=======
+                e.preventDefault();
+                Backend.api.addtabs(Backend.api.replaceids(this, $(this).attr('href')), $(this).attr("title"));
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             });
             //点击包含.btn-ajax的元素时事件
             $(document).on('click', '.btn-ajax,.ajaxit', function (e) {
-                var that = this;
-                var options = $.extend({}, $(that).data() || {});
-                if (typeof options.url === 'undefined' && $(that).attr("href")) {
-                    options.url = $(that).attr("href");
+                e.preventDefault();
+                var options = $(this).data();
+                if (typeof options.url === 'undefined' && $(this).attr("href")) {
+                    options.url = $(this).attr("href");
                 }
 <<<<<<< HEAD
                 Backend.api.ajax(options);
 =======
                 options.url = Backend.api.replaceids(this, options.url);
+<<<<<<< HEAD
                 var success = typeof options.success === 'function' ? options.success : null;
                 var error = typeof options.error === 'function' ? options.error : null;
                 delete options.success;
@@ -203,10 +218,13 @@ define(['fast', 'moment'], function (Fast, Moment) {
                 }
                 return false;
 >>>>>>> master
+=======
+                Backend.api.ajax(options);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             });
             //修复含有fixed-footer类的body边距
             if ($(".fixed-footer").size() > 0) {
-                $(document.body).css("padding-bottom", $(".fixed-footer").outerHeight());
+                $(document.body).css("padding-bottom", $(".fixed-footer").height());
             }
         }
     };

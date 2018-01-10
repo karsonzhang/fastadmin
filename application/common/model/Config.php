@@ -27,10 +27,14 @@ class Config extends Model
         $typeList = [
             'string'   => __('String'),
             'text'     => __('Text'),
+<<<<<<< HEAD
             'editor'   => __('Editor'),
             'number'   => __('Number'),
             'date'     => __('Date'),
             'time'     => __('Time'),
+=======
+            'number'   => __('Number'),
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             'datetime' => __('Datetime'),
             'select'   => __('Select'),
             'selects'  => __('Selects'),
@@ -41,11 +45,15 @@ class Config extends Model
             'checkbox' => __('Checkbox'),
             'radio'    => __('Radio'),
             'array'    => __('Array'),
+<<<<<<< HEAD
             'custom'   => __('Custom'),
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         ];
         return $typeList;
     }
 
+<<<<<<< HEAD
     public static function getRegexList()
     {
         $regexList = [
@@ -68,6 +76,8 @@ class Config extends Model
         return $regexList;
     }
 
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     /**
      * 读取分类分组列表
      * @return array
@@ -75,6 +85,7 @@ class Config extends Model
     public static function getGroupList()
     {
         $groupList = config('site.configgroup');
+<<<<<<< HEAD
         foreach ($groupList as $k => &$v)
         {
             $v = __($v);
@@ -138,6 +149,11 @@ class Config extends Model
         return $content;
     }
 
+=======
+        return $groupList;
+    }
+    
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
     /**
      * 本地上传配置信息
      * @return array

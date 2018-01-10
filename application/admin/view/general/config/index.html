@@ -11,10 +11,10 @@
 </style>
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
-        {:build_heading(null, false)}
+        <div class="panel-lead"><em>系统配置</em>可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除</div>
         <ul class="nav nav-tabs">
             {foreach $siteList as $index=>$vo} 
-            <li class="{$vo.active?'active':''}"><a href="#{$vo.name}" data-toggle="tab">{:__($vo.title)}</a></li>
+            <li class="{$vo.active?'active':''}"><a href="#{$vo.name}" data-toggle="tab">{$vo.title}</a></li>
             {/foreach}
             <li>
                 <a href="#addcfg" data-toggle="tab"><i class="fa fa-plus"></i></a>

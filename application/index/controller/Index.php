@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 <?php
 
 namespace app\index\controller;
@@ -23,6 +26,7 @@ class Index extends Frontend
     public function news()
     {
         $newslist = [];
+<<<<<<< HEAD
         return jsonp(['newslist' => $newslist, 'new' => count($newslist), 'url' => 'http://www.ckido.com']);
     }
 
@@ -57,3 +61,9 @@ class Index extends Frontend
 
 }
 >>>>>>> master
+=======
+        return jsonp(['newslist' => $newslist, 'new' => count($newslist), 'url' => 'http://www.fastadmin.net?ref=news']);
+    }
+
+}
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

@@ -85,7 +85,7 @@ class Crud extends Command
     /**
      * 保留字段
      */
-    protected $reservedField = ['admin_id', 'createtime', 'updatetime'];
+    protected $reservedField = ['createtime', 'updatetime'];
 
     /**
      * 排序字段
@@ -95,7 +95,7 @@ class Crud extends Command
     /**
      * 编辑器的Class
      */
-    protected $editorClass = 'editor';
+    protected $editorClass = 'summernote';
 
     protected function configure()
     {
@@ -249,7 +249,7 @@ class Crud extends Command
 
         //根据表名匹配对应的Fontawesome图标
         $iconPath = ROOT_PATH . str_replace('/', DS, '/public/assets/libs/font-awesome/less/variables.less');
-        $iconName = is_file($iconPath) && stripos(file_get_contents($iconPath), '@fa-var-' . $table . ':') ? 'fa fa-' . $table : 'fa fa-circle-o';
+        $iconName = is_file($iconPath) && stripos(file_get_contents($iconPath), '@fa-var-' . $table . ':') ? $table : 'fa fa-circle-o';
 
         //控制器默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入controller,格式为目录层级
         $controller = str_replace('_', '', $controller);
@@ -478,10 +478,6 @@ class Crud extends Command
                         $itemArr = $this->getLangArray($itemArr, FALSE);
                         //添加一个获取器
                         $this->getAttr($getAttrArr, $field, $v['DATA_TYPE'] == 'set' ? 'multiple' : 'select');
-                        if ($v['DATA_TYPE'] == 'set')
-                        {
-                            $this->setAttr($setAttrArr, $field, $inputType);
-                        }
                         $this->appendAttr($appendAttrList, $field);
                         $formAddElement = $this->getReplacedStub('html/select', ['field' => $field, 'fieldName' => $fieldName, 'fieldList' => $this->getFieldListName($field), 'attrStr' => Form::attributes($attrArr), 'selectedValue' => $defaultValue]);
                         $formEditElement = $this->getReplacedStub('html/select', ['field' => $field, 'fieldName' => $fieldName, 'fieldList' => $this->getFieldListName($field), 'attrStr' => Form::attributes($attrArr), 'selectedValue' => "\$row.{$field}"]);
@@ -537,10 +533,6 @@ class Crud extends Command
                         $itemArr = $this->getLangArray($itemArr, FALSE);
                         //添加一个获取器
                         $this->getAttr($getAttrArr, $field, $inputType);
-                        if ($inputType == 'checkbox')
-                        {
-                            $this->setAttr($setAttrArr, $field, $inputType);
-                        }
                         $this->appendAttr($appendAttrList, $field);
                         $defaultValue = $inputType == 'radio' && !$defaultValue ? key($itemArr) : $defaultValue;
 
@@ -821,7 +813,7 @@ class Crud extends Command
         $methodName = 'get' . ucfirst($fieldList);
         foreach ($itemArr as $k => &$v)
         {
-            $v = "__('" . mb_ucfirst($v) . "')";
+            $v = "__('" . ucfirst($v) . "')";
         }
         unset($v);
         $itemString = $this->getArrayString($itemArr);
@@ -846,19 +838,13 @@ EOD;
 
     protected function setAttr(&$setAttr, $field, $inputType = '')
     {
-        if (!in_array($inputType, ['datetime', 'checkbox', 'select']))
+        if ($inputType != 'datetime')
             return;
         $attrField = ucfirst($this->getCamelizeName($field));
         if ($inputType == 'datetime')
         {
             $return = <<<EOD
 return \$value && !is_numeric(\$value) ? strtotime(\$value) : \$value;
-EOD;
-        }
-        else if (in_array($inputType, ['checkbox', 'select']))
-        {
-            $return = <<<EOD
-return is_array(\$value) ? implode(',', \$value) : \$value;
 EOD;
         }
         $setAttr[] = <<<EOD
@@ -974,7 +960,7 @@ EOD;
             $resultArr = [];
             foreach ($itemArr as $k => $v)
             {
-                $resultArr[] = "    '" . mb_ucfirst($k) . "'  =>  '{$v}'";
+                $resultArr[] = "    '" . ucfirst($k) . "'  =>  '{$v}'";
             }
             return implode(",\n", $resultArr);
         }
@@ -994,7 +980,7 @@ EOD;
         $langArr = [];
         foreach ($arr as $k => $v)
         {
-            $langArr[(is_numeric($k) ? $v : $k)] = is_numeric($k) ? ($withTpl ? "{:" : "") . "__('" . mb_ucfirst($v) . "')" . ($withTpl ? "}" : "") : $v;
+            $langArr[(is_numeric($k) ? $v : $k)] = is_numeric($k) ? ($withTpl ? "{:" : "") . "__('" . ucfirst($v) . "')" . ($withTpl ? "}" : "") : $v;
         }
         return $langArr;
     }
@@ -1143,7 +1129,7 @@ EOD;
      */
     protected function getFormGroup($field, $content)
     {
-        $langField = mb_ucfirst($field);
+        $langField = ucfirst($field);
         return<<<EOD
     <div class="form-group">
         <label for="c-{$field}" class="control-label col-xs-12 col-sm-2">{:__('{$langField}')}:</label>
@@ -1172,8 +1158,9 @@ EOD;
         $preview = $uploadfilter ? ' data-preview-id="p-' . $field . '"' : '';
         $previewcontainer = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $field . '"></ul>' : '';
         return <<<EOD
-<div class="input-group">
+<div class="form-inline">
                 {$content}
+<<<<<<< HEAD
 <<<<<<< HEAD
                 <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                 <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
@@ -1185,8 +1172,13 @@ EOD;
                 </div>
                 <span class="msg-box n-right" for="c-{$field}"></span>
 >>>>>>> master
+=======
+                <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                <span class="msg-box n-right" for="c-{$field}"></span>
+               {$previewcontainer}
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             </div>
-            {$previewcontainer}
 EOD;
     }
 
@@ -1197,7 +1189,7 @@ EOD;
      */
     protected function getJsColumn($field, $datatype = '', $extend = '')
     {
-        $lang = mb_ucfirst($field);
+        $lang = ucfirst($field);
         $formatter = '';
         foreach ($this->fieldFormatterSuffix as $k => $v)
         {

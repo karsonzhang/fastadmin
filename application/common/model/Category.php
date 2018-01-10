@@ -15,16 +15,12 @@ class Category Extends Model
     // 定义时间戳字段名
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
+    
     // 追加属性
     protected $append = [
         'type_text',
         'flag_text',
     ];
-
-    public function setFlagAttr($value, $data)
-    {
-        return is_array($value) ? implode(',', $value) : $value;
-    }
 
     /**
      * 读取分类类型
@@ -32,12 +28,8 @@ class Category Extends Model
      */
     public static function getTypeList()
     {
-        $typeList = config('site.categorytype');
-        foreach ($typeList as $k => &$v)
-        {
-            $v = __($v);
-        }
-        return $typeList;
+        $typelist = config('site.categorytype');
+        return $typelist;
     }
 
     public function getTypeTextAttr($value, $data)

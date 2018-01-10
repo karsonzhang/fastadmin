@@ -11,7 +11,10 @@ use think\Exception;
  * 系统配置
  *
  * @icon fa fa-circle-o
+<<<<<<< HEAD
  * @remark 可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
  */
 class Config extends Backend
 {
@@ -43,7 +46,10 @@ class Config extends Backend
                 continue;
             }
             $value = $v->toArray();
+<<<<<<< HEAD
             $value['title'] = __($value['title']);
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             if (in_array($value['type'], ['select', 'selects', 'checkbox', 'radio']))
             {
                 $value['value'] = explode(',', $value['value']);
@@ -83,9 +89,25 @@ class Config extends Backend
                 }
                 try
                 {
+<<<<<<< HEAD
                     if (in_array($params['type'], ['select', 'selects', 'checkbox', 'radio', 'array']))
                     {
                         $params['content'] = json_encode(ConfigModel::decode($params['content']), JSON_UNESCAPED_UNICODE);
+=======
+                    if ($params['content'] && in_array($params['type'], ['select', 'selects', 'checkbox', 'radio']))
+                    {
+                        $content = explode("\r\n", $params['content']);
+                        $arr = [];
+                        foreach ($content as $k => &$v)
+                        {
+                            if (stripos($v, "|") !== false)
+                            {
+                                $item = explode('|', $v);
+                                $arr[$item[0]] = $item[1];
+                            }
+                        }
+                        $params['content'] = $arr ? json_encode($arr, JSON_UNESCAPED_UNICODE) : '';
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                     }
                     else
                     {
@@ -123,6 +145,7 @@ class Config extends Backend
     {
         if ($this->request->isPost())
         {
+<<<<<<< HEAD
             $row = $this->request->post("row/a");
             if ($row)
             {
@@ -145,6 +168,42 @@ class Config extends Backend
                     }
                 }
                 $this->model->allowField(true)->saveAll($configList);
+=======
+            $params = $this->request->post("row/a");
+            if ($params)
+            {
+                $configList = [];
+                foreach ($this->model->all() as $k => $v)
+                {
+                    if (isset($params[$v['name']]))
+                    {
+                        if ($v['type'] == 'array')
+                        {
+                            $fieldarr = $valuearr = [];
+                            $field = $params[$v['name']]['field'];
+                            $value = $params[$v['name']]['value'];
+
+                            foreach ($field as $m => $n)
+                            {
+                                if ($n != '')
+                                {
+                                    $fieldarr[] = $field[$m];
+                                    $valuearr[] = $value[$m];
+                                }
+                            }
+                            $params[$v['name']] = array_combine($fieldarr, $valuearr);
+                            $value = json_encode($params[$v['name']], JSON_UNESCAPED_UNICODE);
+                        }
+                        else
+                        {
+                            $value = is_array($params[$v['name']]) ? implode(',', $params[$v['name']]) : $params[$v['name']];
+                        }
+
+                        $configList[] = ['id' => $v['id'], 'value' => $value];
+                    }
+                }
+                $this->model->saveAll($configList);
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
                 try
                 {
                     $this->refreshFile();

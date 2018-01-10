@@ -4,7 +4,10 @@ namespace app\common\controller;
 
 use think\Config;
 use think\Controller;
+<<<<<<< HEAD
 use think\Hook;
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 use think\Lang;
 
 class Frontend extends Controller
@@ -35,6 +38,7 @@ class Frontend extends Controller
 
         $site = Config::get("site");
 
+<<<<<<< HEAD
         $upload = \app\common\model\Config::upload();
 
         // 上传信息配置后
@@ -44,6 +48,12 @@ class Frontend extends Controller
         $config = [
             'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
             'upload'         => $upload,
+=======
+        // 配置信息
+        $config = [
+            'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
+            'upload'         => \app\common\model\Config::upload(),
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             'modulename'     => $modulename,
             'controllername' => $controllername,
             'actionname'     => $actionname,
@@ -51,11 +61,14 @@ class Frontend extends Controller
             'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang
         ];
+<<<<<<< HEAD
         
         Config::set('upload', array_merge(Config::get('upload'), $upload));
         
         // 配置信息后
         Hook::listen("config_init", $config);
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         $this->loadlang($controllername);
         $this->assign('site', $site);
         $this->assign('config', $config);

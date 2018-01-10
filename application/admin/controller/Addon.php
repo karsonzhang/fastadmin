@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 <?php
 
 namespace app\admin\controller;
@@ -197,6 +200,11 @@ class Addon extends Backend
      */
     public function local()
     {
+<<<<<<< HEAD
+=======
+        Config::set('default_return_type', 'json');
+        
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         $file = $this->request->file('file');
         $addonTmpDir = RUNTIME_PATH . 'addons' . DS;
         if (!is_dir($addonTmpDir))
@@ -295,6 +303,7 @@ class Addon extends Backend
     }
 
 }
+<<<<<<< HEAD
 =======
 <?php
 
@@ -647,3 +656,5 @@ class Addon extends Backend
 
 }
 >>>>>>> master
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master

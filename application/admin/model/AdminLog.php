@@ -2,7 +2,10 @@
 
 namespace app\admin\model;
 
+<<<<<<< HEAD
 use app\admin\library\Auth;
+=======
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
 use think\Model;
 
 class AdminLog extends Model
@@ -30,9 +33,15 @@ class AdminLog extends Model
 
     public static function record($title = '')
     {
+<<<<<<< HEAD
         $auth = Auth::instance();
         $admin_id = $auth->isLogin() ? $auth->id : 0;
         $username = $auth->isLogin() ? $auth->username : __('Unknown');
+=======
+        $admin = \think\Session::get('admin');
+        $admin_id = $admin ? $admin->id : 0;
+        $username = $admin ? $admin->username : __('Unknown');
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
         $content = self::$content;
         if (!$content)
         {
@@ -49,7 +58,11 @@ class AdminLog extends Model
         if (!$title)
         {
             $title = [];
+<<<<<<< HEAD
             $breadcrumb = Auth::instance()->getBreadcrumb();
+=======
+            $breadcrumb = \app\admin\library\Auth::instance()->getBreadcrumb();
+>>>>>>> parent of c7e97ae... Merge pull request #7 from karsonzhang/master
             foreach ($breadcrumb as $k => $v)
             {
                 $title[] = $v['title'];
