@@ -50,6 +50,9 @@
                                                 {case text}
                                                 <textarea name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
                                                 {/case}
+                                                {case editor}
+                                                <textarea name="row[{$item.name}]" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
+                                                {/case}
                                                 {case array}
                                                 <dl class="fieldlist" rel="{$item.value|count}" data-name="row[{$item.name}]">
                                                     <dd>
