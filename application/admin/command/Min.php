@@ -57,8 +57,8 @@ class Min extends Command
         {
             if (IS_WIN)
             {
-                // Winsows下请手动配置配置该值,一般将该值配置为 '"C:/Program Files/nodejs/node.exe"'，除非你的Node安装路径有变更
-                $nodeExec = '"C:/Program Files/nodejs/node.exe"';
+                // Winsows下请手动配置配置该值,一般将该值配置为 '"C:\Program Files\nodejs\node.exe"'，除非你的Node安装路径有变更
+                $nodeExec = '"C:\Program Files\nodejs\node.exe"';
             }
             else
             {
@@ -117,7 +117,7 @@ class Min extends Command
                 $output->info("Compress " . $data["{$res}BaseName"] . ".{$res}");
 
                 // 执行压缩
-                echo exec("{$nodeExec} {$minPath}r.js -o {$tempFile} >> {$minPath}node.log");
+                echo exec("{$nodeExec} \"{$minPath}r.js\" -o \"{$tempFile}\" >> \"{$minPath}node.log\"");
             }
         }
 

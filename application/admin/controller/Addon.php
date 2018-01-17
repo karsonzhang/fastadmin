@@ -305,31 +305,15 @@ class Addon extends Backend
     {
         $offset = (int) $this->request->get("offset");
         $limit = (int) $this->request->get("limit");
-        $filter = $this->request->get("filter");
-        $filter = (array) json_decode($filter, true);
-        foreach ($filter as $k => &$v)
-        {
-            $v = htmlspecialchars(strip_tags($v));
-        }
-        unset($v);
-        $where = ['status' => 'normal'];
-        if (isset($filter['id']))
-        {
-            $where['id'] = (int) $filter['id'];
-        }
-        if (isset($filter['name']))
-        {
-            $where['name'] = ['like', "%{$filter['name']}%"];
-        }
-        if (isset($filter['title']))
-        {
-            $where['title'] = ['like', "%{$filter['title']}%"];
-        }
+        $search = $this->request->get("search");
+        $search = htmlspecialchars(strip_tags($search));
 
         $addons = get_addon_list();
         $list = [];
         foreach ($addons as $k => $v)
         {
+            if ($search && stripos($v['name'], $search) === FALSE && stripos($v['intro'], $search) === FALSE)
+                continue;
             $v['flag'] = '';
             $v['banner'] = '';
             $v['image'] = '';
@@ -340,8 +324,9 @@ class Addon extends Backend
             $v['createtime'] = 0;
             $list[] = $v;
         }
+        $total = count($list);
         $list = array_slice($list, $offset, $limit);
-        $result = array("total" => count($addons), "rows" => $list);
+        $result = array("total" => $total, "rows" => $list);
 
         $callback = $this->request->get('callback') ? "jsonp" : "json";
         return $callback($result);

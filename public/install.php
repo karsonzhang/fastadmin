@@ -86,7 +86,7 @@ else
     {
         if (!is_dir(ROOT_PATH . $v))
         {
-            $errInfo = '请先下载完整包覆盖后再安装，<a href="' . $link['qqun'] . '" target="_blank">群共享下载</a> <a href="' . $link['gitee'] . '" target="_blank">码云下载</a>';
+            $errInfo = '当前代码不完整，请加入QQ群(<a href="' . $link['qqun'] . '" target="_blank">636393962</a>)，在群共享免费下载FastAdmin完整包后再尝试安装';
             break;
         }
     }
@@ -334,7 +334,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
                 <!--<p><?php echo $sitename; ?>还支持在命令行php think install一键安装</p>-->
 
                 <form method="post">
-<?php if ($errInfo): ?>
+                        <?php if ($errInfo): ?>
                         <div class="error">
                         <?php echo $errInfo; ?>
                         </div>

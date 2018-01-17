@@ -398,6 +398,10 @@ form.form-horizontal .control-label {
   .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
     top: 41px;
   }
+  .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
+    top: 7px!important;
+    height: 17px;
+  }
 }
 .fieldlist dd {
   display: block;

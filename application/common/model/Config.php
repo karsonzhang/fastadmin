@@ -4,6 +4,9 @@ namespace app\common\model;
 
 use think\Model;
 
+/**
+ * 配置模型
+ */
 class Config extends Model
 {
 

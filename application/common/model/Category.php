@@ -62,8 +62,8 @@ class Category Extends Model
 
     /**
      * 读取分类列表
-     * @param string $type 指定类型
-     * @param string $status 指定状态
+     * @param string $type      指定类型
+     * @param string $status    指定状态
      * @return array
      */
     public static function getCategoryArray($type = NULL, $status = NULL)

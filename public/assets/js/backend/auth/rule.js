@@ -25,7 +25,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     [
                         {field: 'state', checkbox: true, },
                         {field: 'id', title: 'ID'},
-                        {field: 'title', title: __('Title'), align: 'left', align: 'left', formatter: Controller.api.formatter.title},
+                        {field: 'title', title: __('Title'), align: 'left', formatter: Controller.api.formatter.title},
                         {field: 'icon', title: __('Icon'), formatter: Controller.api.formatter.icon},
                         {field: 'name', title: __('Name'), align: 'left', formatter: Controller.api.formatter.name},
                         {field: 'weigh', title: __('Weigh')},
@@ -106,6 +106,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 }
             },
             bindevent: function () {
+                $(document).on('click', "input[name='row[ismenu]']", function () {
+                    var name = $("input[name='row[name]']");
+                    name.prop("placeholder", $(this).val() == 1 ? name.data("placeholder-menu") : name.data("placeholder-node"));
+                });
+                $("input[name='row[ismenu]']:checked").trigger("click");
+                
                 var iconlist = [];
                 Form.api.bindevent($("form[role=form]"));
                 $(document).on('click', ".btn-search-icon", function () {

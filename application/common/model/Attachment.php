@@ -15,8 +15,10 @@ class Attachment extends Model
     // 定义字段类型
     protected $type = [
     ];
-	public function setUploadtimeAttr($value)
-	{
-		return strtotime($value);
-	}
+
+    public function setUploadtimeAttr($value)
+    {
+        return strtotime($value);
+    }
+
 }

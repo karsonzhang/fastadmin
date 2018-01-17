@@ -88,6 +88,11 @@ class Crud extends Command
     protected $reservedField = ['admin_id', 'createtime', 'updatetime'];
 
     /**
+     * 排除字段
+     */
+    protected $ignoreFields = [];
+
+    /**
      * 排序字段
      */
     protected $sortField = 'weigh';
@@ -122,6 +127,7 @@ class Crud extends Command
                 ->addOption('citysuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate citypicker component with suffix', null)
                 ->addOption('selectpagesuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate selectpage component with suffix', null)
                 ->addOption('selectpagessuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate multiple selectpage component with suffix', null)
+                ->addOption('ignorefields', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'ignore fields', null)
                 ->addOption('sortfield', null, Option::VALUE_OPTIONAL, 'sort field', null)
                 ->addOption('editorclass', null, Option::VALUE_OPTIONAL, 'automatically generate editor class', null)
                 ->setDescription('Build CRUD controller and model from table');
@@ -174,6 +180,8 @@ class Crud extends Command
         $selectpagesuffix = $input->getOption('selectpagesuffix');
         //selectpage多选后缀
         $selectpagessuffix = $input->getOption('selectpagessuffix');
+        //排除字段
+        $ignoreFields = $input->getOption('ignorefields');
         //排序字段
         $sortfield = $input->getOption('sortfield');
         //编辑器Class
@@ -196,6 +204,8 @@ class Crud extends Command
             $this->selectpageSuffix = $selectpagesuffix;
         if ($selectpagessuffix)
             $this->selectpagesSuffix = $selectpagessuffix;
+        if ($ignoreFields)
+            $this->ignoreFields = $ignoreFields;
         if ($editorclass)
             $this->editorClass = $editorclass;
         if ($sortfield)
@@ -444,7 +454,7 @@ class Crud extends Command
                 }
                 $inputType = '';
                 //createtime和updatetime是保留字段不能修改和添加
-                if ($v['COLUMN_KEY'] != 'PRI' && !in_array($field, $this->reservedField))
+                if ($v['COLUMN_KEY'] != 'PRI' && !in_array($field, $this->reservedField) && !in_array($field, $this->ignoreFields))
                 {
                     $inputType = $this->getFieldType($v);
 

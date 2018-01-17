@@ -208,13 +208,13 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
              */
             var my_skins = [
                 "skin-blue",
-                "skin-black",
+                "skin-white",
                 "skin-red",
                 "skin-yellow",
                 "skin-purple",
                 "skin-green",
                 "skin-blue-light",
-                "skin-black-light",
+                "skin-white-light",
                 "skin-red-light",
                 "skin-yellow-light",
                 "skin-purple-light",

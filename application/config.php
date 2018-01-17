@@ -251,7 +251,7 @@ return [
         //登录页默认背景图
         'login_background' => "/assets/img/loginbg.jpg",
         //版本号
-        'version'          => '1.0.0.20171206_beta',
+        'version'          => '1.0.0.20180117_beta',
         'api_url'          => 'http://api.fastadmin.net',
     ],
 ];

@@ -14,6 +14,24 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             var table = $("#table");
 
+            table.on('post-body.bs.table', function (e, settings, json, xhr) {
+                var parenttable = table.closest('.bootstrap-table');
+                var d = $(".fixed-table-toolbar", parenttable).find(".search input");
+                d.off("keyup drop blur");
+                d.on("keyup", function (e) {
+                    if (e.keyCode == 13) {
+                        var that = this;
+                        var options = table.bootstrapTable('getOptions');
+                        options.pageNumber = 1;
+                        options.queryParams = function (params) {
+                            params.search = $(that).val();
+                            return params;
+                        };
+                        table.bootstrapTable('refresh', {});
+                    }
+                });
+            });
+
             Template.helper("Moment", Moment);
             Template.helper("addons", Config['addons']);
 
@@ -29,11 +47,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 ],
                 dataType: 'jsonp',
                 templateView: true,
-                search: false,
+                search: true,
                 showColumns: false,
                 showToggle: false,
                 showExport: false,
-                commonSearch: true,
+                commonSearch: false,
                 searchFormVisible: false,
                 pageSize: 12
             });
