@@ -1,0 +1,17 @@
+h2.page-header {
+    margin:10px 0  25px 0;
+    padding-bottom:15px;
+}
+.user-baseinfo {
+    margin-bottom:25px;
+}
+.user-baseinfo table tr td {color:#999;}
+@media (min-width: 767px) {
+    .user-center .avatar-text,.user-center .avatar-img {
+        height:150px;width:150px;border-radius: 150px;line-height:150px;font-size:70px;
+    }
+    .user-center .avatar-img  {font-size:0;}
+    .user-center .avatar-img img {
+        height:150px;width:150px;border-radius:150px;
+    }
+}

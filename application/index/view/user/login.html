@@ -1,0 +1,72 @@
+<div id="content-container" class="container">
+    <div class="user-section login-section">
+        <div class="logon-tab clearfix"> <a class="active">{:__('Sign in')}</a> <a href="{:url('user/register')}">{:__('Sign up')}</a> </div>
+        <div class="login-main"> 
+            <form name="form" id="login-form" class="form-vertical" method="POST" action="">
+                <div class="form-group">
+                    <label class="control-label" for="account">{:__('Account')}</label>
+                    <div class="controls">
+                        <input class="form-control input-lg" id="account" type="text" name="account" value="" required="" placeholder="{:__('Email/Mobile/Username')}" autocomplete="off">
+                        <div class="help-block"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">{:__('Password')}</label>
+                    <div class="controls">
+                        <input class="form-control input-lg" id="password" type="password" name="password" required="" placeholder="{:__('Password')}" autocomplete="off">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <input type="checkbox" name="keeptime" checked="checked" value="86400"> {:__('Keep login')} 
+                        <div class="pull-right"><a href="javascript:;" class="btn-forgot">{:__('Forgot password')}</a></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">{:__('Sign in')}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="resetpwdtpl">
+    <div style="padding:30px;">
+        <div class="row">
+            <form id="resetpwd-form" class="form-horizontal" method="POST" action="{:url('api/user/resetpwd')}">
+                <input type="hidden" name="action" value="changemobile" />
+                <div class="form-group">
+                    <label for="c-mobile" class="control-label col-xs-12 col-sm-3">{:__('Mobile')}:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <input type="text" class="form-control" id="mobile" name="mobile" value="" data-rule="required;mobile;remote({:url('api/validate/check_mobile_exist')}, event=resetpwd, id={$user.id})" placeholder="">
+                        <span class="msg-box"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="c-captcha" class="control-label col-xs-12 col-sm-3">{:__('Captcha')}:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <div class="input-group">
+                            <input type="text" name="captcha" class="form-control" data-rule="required;length(4);integer[+];remote({:url('api/validate/check_sms_correct')}, event=resetpwd, mobile:#mobile)" />
+                            <span class="input-group-btn" style="padding:0;border:none;">
+                                <a href="javascript:;" class="btn btn-info btn-captcha" data-url="{:url('api/sms/send')}" data-event="resetpwd">{:__('Send verification code')}</a>
+                            </span>
+                        </div>
+                        <span class="msg-box"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="c-newpassword" class="control-label col-xs-12 col-sm-3">{:__('New password')}:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <input type="password" class="form-control" id="newpassword" name="newpassword" value="" data-rule="required;password" placeholder="">
+                        <span class="msg-box"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3"></label>
+                    <div class="col-xs-12 col-sm-8">
+                        <button type="submit" class="btn btn-md btn-info">{:__('Ok')}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>

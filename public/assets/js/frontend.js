@@ -2,26 +2,6 @@ define(['fast'], function (Fast) {
     var Frontend = {
         api: Fast.api,
         init: function () {
-            //发送邮箱验证码
-            $(document).on("click", ".btn-email", function (e) {
-                var email = $(this).closest("form").find("#email");
-                if (email.val() == "") {
-                    Layer.alert("邮箱不能为空！");
-                    return false;
-                }
-                var that = this;
-                email.isValid(function (v) {
-                    if (v) {
-                        Frontend.api.ajax({url: "sms/sendemail", data: {type: $(that).data("type"), email: email.val()}}, function () {
-                            $(that).val("已发送");
-                        });
-                    } else {
-                        Layer.alert("请确认已经输入了正解的邮箱！");
-                    }
-                });
-
-                return false;
-            });
             //发送手机验证码
             $(document).on("click", ".btn-captcha", function (e) {
                 var mobile = $(this).closest("form").find("#mobile");
@@ -37,8 +17,7 @@ define(['fast'], function (Fast) {
                     if (v) {
                         $(that).addClass("disabled", true).text("获取中...");
                         var si;
-                        Frontend.api.ajax({url: "sms/send", data: {type: $(that).data("type"), mobile: mobile.val()}}, function () {
-                            Layer.msg("验证码已发送");
+                        Frontend.api.ajax({url: $(that).data("url"), data: {event: $(that).data("event"), mobile: mobile.val()}}, function () {
                             clearInterval(si);
                             var seconds = 60;
                             si = setInterval(function () {

@@ -22,8 +22,6 @@ class Demo extends Api
     /**
      * 无需登录的接口
      * 
-     * 必选参数:无<br>
-     * 可选参数:无
      */
     public function test1()
     {
@@ -33,8 +31,6 @@ class Demo extends Api
     /**
      * 需要登录的接口
      * 
-     * 必选参数:token<br>
-     * 可选参数:无
      */
     public function test2()
     {
@@ -44,8 +40,6 @@ class Demo extends Api
     /**
      * 需要登录且需要验证有相应组的权限
      * 
-     * 必选参数:token<br>
-     * 可选参数:无
      */
     public function test3()
     {

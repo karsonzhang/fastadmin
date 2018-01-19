@@ -63,7 +63,7 @@ class Crud extends Command
      * 以指定字符结尾的字段格式化函数
      */
     protected $fieldFormatterSuffix = [
-        'status' => 'status',
+        'status' => ['type' => ['varchar'], 'name' => 'status'],
         'icon'   => 'icon',
         'flag'   => 'flag',
         'url'    => 'url',
@@ -672,7 +672,7 @@ class Crud extends Command
                         $javascriptList[] = "{checkbox: true}";
                     }
                     //构造JS列信息
-                    $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '');
+                    $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '', $itemArr);
 
                     //排序方式,如果有指定排序字段,否则按主键排序
                     $order = $field == $this->sortField ? $this->sortField : $order;
@@ -1197,9 +1197,12 @@ EOD;
     /**
      * 获取JS列数据
      * @param string $field
+     * @param string $datatype
+     * @param string $extend
+     * @param array $itemArr
      * @return string
      */
-    protected function getJsColumn($field, $datatype = '', $extend = '')
+    protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [])
     {
         $lang = mb_ucfirst($field);
         $formatter = '';
@@ -1236,10 +1239,41 @@ EOD;
                 $formatter = 'label';
             }
         }
+        foreach ($itemArr as $k => &$v)
+        {
+            if (substr($v, 0, 3) !== '__(')
+                $v = "__('" . $v . "')";
+        }
+        unset($v);
+        $searchList = json_encode($itemArr);
+        $searchList = str_replace(['":"', '"}', ')","'], ['":', '}', '),"'], $searchList);
+        if ($itemArr && !$extend)
+        {
+            $html .= ", searchList: " . $searchList;
+        }
+        echo $datatype, "\n";
+        if (in_array($datatype, ['date', 'datetime']) || $formatter === 'datetime')
+        {
+            $html .= ", operate:'RANGE', addclass:'datetimerange'";
+        }
+        else if (in_array($datatype,['float', 'double', 'decimal']))
+        {
+            $html .= ", operate:'BETWEEN'";
+        }
         if ($formatter)
             $html .= ", formatter: Table.api.formatter." . $formatter . "}";
         else
             $html .= "}";
+        if ($extend)
+        {
+            $origin = str_repeat(" ", 24) . "{field: '{$field}', title: __('{$lang}'), visible:false";
+            if ($searchList)
+            {
+                $origin .= ", searchList: " . $searchList;
+            }
+            $origin .= "}";
+            $html = $origin . ",\n" . $html;
+        }
         return $html;
     }
 

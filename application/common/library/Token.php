@@ -10,20 +10,21 @@ class Token
 
     /**
      * 存储Token
-     * @param string    $token      Token
-     * @param int       $user_id    会员ID
-     * @param int       $expire     过期时长,0表示无限,单位秒
+     * @param   string    $token      Token
+     * @param   int       $user_id    会员ID
+     * @param   int       $expire     过期时长,0表示无限,单位秒
      */
     public static function set($token, $user_id, $expire = 0)
     {
         $expiretime = $expire ? time() + $expire : 0;
         \app\common\model\Token::create(['token' => $token, 'user_id' => $user_id, 'expiretime' => $expiretime]);
+        return TRUE;
     }
 
     /**
      * 获取Token内的信息
-     * @param string $token 
-     * @return array
+     * @param   string  $token 
+     * @return  array
      */
     public static function get($token)
     {
@@ -44,9 +45,9 @@ class Token
 
     /**
      * 判断Token是否可用
-     * @param string    $token      Token
-     * @param int       $user_id    会员ID
-     * @return boolean
+     * @param   string    $token      Token
+     * @param   int       $user_id    会员ID
+     * @return  boolean
      */
     public static function check($token, $user_id)
     {
@@ -56,8 +57,8 @@ class Token
 
     /**
      * 删除Token
-     * @param string $token
-     * @return boolean
+     * @param   string  $token
+     * @return  boolean
      */
     public static function delete($token)
     {
@@ -72,8 +73,8 @@ class Token
 
     /**
      * 删除指定用户的所有Token
-     * @param int $user_id
-     * @return boolean
+     * @param   int     $user_id
+     * @return  boolean
      */
     public static function clear($user_id)
     {

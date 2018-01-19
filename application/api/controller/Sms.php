@@ -23,35 +23,40 @@ class Sms extends Api
     /**
      * 发送验证码
      *
-     * 必选参数:mobile,type<br>
-     * 可选参数:无
+     * @param string $mobile 手机号
+     * @param string $event 事件名称
      */
     public function send()
     {
         $mobile = $this->request->request("mobile");
-        $type = $this->request->request("type");
-        $type = $type ? $type : 'register';
+        $event = $this->request->request("event");
+        $event = $event ? $event : 'register';
 
-        $last = Smslib::get($mobile, $type);
+        $last = Smslib::get($mobile, $event);
         if ($last && time() - $last['createtime'] < 60)
         {
             $this->error(__('发送频繁'));
         }
-        if ($type)
+        if ($event)
         {
             $userinfo = User::getByMobile($mobile);
-            if ($type == 'register' && $userinfo)
+            if ($event == 'register' && $userinfo)
             {
                 //已被注册
                 $this->error(__('已被注册'));
             }
-            else if (in_array($type, ['changepwd', 'resetpwd']) && !$userinfo)
+            else if (in_array($event, ['changemobile']) && $userinfo)
+            {
+                //被占用
+                $this->error(__('已被占用'));
+            }
+            else if (in_array($event, ['changepwd', 'resetpwd']) && !$userinfo)
             {
                 //未注册
                 $this->error(__('未注册'));
             }
         }
-        $ret = Smslib::send($mobile, '', $type);
+        $ret = Smslib::send($mobile, NULL, $event);
         if ($ret)
         {
             $this->success(__('发送成功'));
@@ -65,31 +70,37 @@ class Sms extends Api
     /**
      * 检测验证码
      *
-     * 必选参数:mobile,type,captcha<br>
-     * 可选参数:无
+     * @param string $mobile 手机号
+     * @param string $event 事件名称
+     * @param string $captcha 验证码
      */
     public function check()
     {
         $mobile = $this->request->request("mobile");
-        $type = $this->request->request("type");
-        $type = $type ? $type : 'register';
+        $event = $this->request->request("event");
+        $event = $event ? $event : 'register';
         $captcha = $this->request->request("captcha");
 
-        if ($type)
+        if ($event)
         {
             $userinfo = User::getByMobile($mobile);
-            if ($type == 'register' && $userinfo)
+            if ($event == 'register' && $userinfo)
             {
                 //已被注册
                 $this->error(__('已被注册'));
             }
-            else if (in_array($type, ['changepwd', 'resetpwd']) && !$userinfo)
+            else if (in_array($event, ['changemobile']) && $userinfo)
+            {
+                //被占用
+                $this->error(__('已被占用'));
+            }
+            else if (in_array($event, ['changepwd', 'resetpwd']) && !$userinfo)
             {
                 //未注册
                 $this->error(__('未注册'));
             }
         }
-        $ret = Smslib::check($mobile, $captcha, $type);
+        $ret = Smslib::check($mobile, $captcha, $event);
         if ($ret)
         {
             $this->success(__('成功'));

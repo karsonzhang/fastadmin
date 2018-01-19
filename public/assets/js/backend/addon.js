@@ -59,6 +59,42 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 为表格绑定事件
             Table.api.bindevent(table);
 
+            table.on('click', '.btn-addoninfo', function (event) {
+                var index = parseInt($(this).data("index"));
+                var data = table.bootstrapTable("getData");
+                var item = data[index];
+                var addon = typeof Config.addons[item.name] != 'undefined' ? Config.addons[item.name] : null;
+                console.log(item, addon);
+                Layer.alert(Template("addoninfotpl", {item: item, addon: addon}), {
+                    btn: [__('OK'), __('Donate'), __('Feedback'), __('Document')],
+                    title: __('Detail'),
+                    area: ['450px', '490px'],
+                    btn2: function () {
+                        //打赏
+                        Layer.open({
+                            content: Template("paytpl", {payimg: item.donateimage}),
+                            shade: 0.8,
+                            area: ['800px', '600px'],
+                            skin: 'layui-layer-msg layui-layer-pay',
+                            title: false,
+                            closeBtn: true,
+                            btn: false,
+                            resize: false,
+                        });
+                    },
+                    btn3: function () {
+                        return false;
+                    },
+                    btn4: function () {
+                        return false;
+                    },
+                    success: function (layero, index) {
+                        $(".layui-layer-btn2", layero).attr("href", "http://forum.fastadmin.net/t/bug?ref=addon&name=" + item.name).attr("target", "_blank");
+                        $(".layui-layer-btn3", layero).attr("href", "http://www.fastadmin.net/store/" + item.name + ".html?ref=addon").attr("target", "_blank");
+                    }
+                });
+            });
+
             // 如果是https则启用提示
             if (location.protocol === "https:") {
                 $("#warmtips").removeClass("hide");
@@ -73,6 +109,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 });
             });
 
+            //查看插件首页
+            $(document).on("click", ".btn-addonindex", function () {
+                if ($(this).attr("href") == 'javascript:;') {
+                    Layer.msg(__('Not installed tips'), {icon: 7});
+                } else if ($(this).parent().find("a.btn-enable").size() > 0) {
+                    Layer.msg(__('Not enabled tips'), {icon: 7});
+                    return false;
+                }
+            });
             //切换URL
             $(document).on("click", ".btn-switch", function () {
                 $(".btn-switch").removeClass("active");

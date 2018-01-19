@@ -231,6 +231,25 @@ INSERT INTO `fa_auth_rule` VALUES (62, 'file', 4, 'addon/uninstall', 'Uninstall'
 INSERT INTO `fa_auth_rule` VALUES (63, 'file', 4, 'addon/config', 'Setting', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
 INSERT INTO `fa_auth_rule` VALUES (64, 'file', 4, 'addon/refresh', 'Refresh', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
 INSERT INTO `fa_auth_rule` VALUES (65, 'file', 4, 'addon/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (66, 'file', 0, 'user', 'User', 'fa fa-list', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (67, 'file', 66, 'user/user', 'User', 'fa fa-user', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (68, 'file', 67, 'user/user/index', 'View', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (69, 'file', 67, 'user/user/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (70, 'file', 67, 'user/user/add', 'Add', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (71, 'file', 67, 'user/user/del', 'Del', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (72, 'file', 67, 'user/user/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (73, 'file', 66, 'user/group', 'User group', 'fa fa-users', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (74, 'file', 73, 'user/group/add', 'Add', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (75, 'file', 73, 'user/group/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (76, 'file', 73, 'user/group/index', 'View', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (77, 'file', 73, 'user/group/del', 'Del', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (78, 'file', 73, 'user/group/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (79, 'file', 66, 'user/rule', 'User rule', 'fa fa-circle-o', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (80, 'file', 79, 'user/rule/index', 'View', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (81, 'file', 79, 'user/rule/del', 'Del', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (82, 'file', 79, 'user/rule/add', 'Add', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (83, 'file', 79, 'user/rule/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (84, 'file', 79, 'user/rule/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
 COMMIT;
 
 -- ----------------------------
@@ -361,5 +380,109 @@ CREATE TABLE `fa_test` (
 BEGIN;
 INSERT INTO `fa_test` VALUES (1, 0, 12, '12,13', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '广西壮族自治区/百色市/平果县', 0.00, 0, '2017-07-10', '2017-07-10 18:24:45', 2017, '18:24:45', 1499682285, 1499682526, 1499682526, 0, 1, 'normal', '1');
 COMMIT;
+
+DROP TABLE IF EXISTS `fa_user`;
+CREATE TABLE `fa_user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `group_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '组别ID',
+  `username` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
+  `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '昵称',
+  `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
+  `salt` varchar(30) NOT NULL DEFAULT '' COMMENT '密码盐',
+  `email` varchar(100) NOT NULL DEFAULT '' COMMENT '电子邮箱',
+  `mobile` varchar(11) NOT NULL DEFAULT '' COMMENT '手机号',
+  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
+  `level` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '等级',
+  `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
+  `birthday` date NOT NULL COMMENT '生日',
+  `bio` varchar(100) NOT NULL COMMENT '格言',
+  `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
+  `successions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '连续登录天数',
+  `maxsuccessions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '最大连续登录天数',
+  `prevtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次登录时间',
+  `logintime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '登录时间',
+  `loginip` varchar(50) NOT NULL DEFAULT '' COMMENT '登录IP',
+  `loginfailure` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '失败次数',
+  `joinip` varchar(50) NOT NULL DEFAULT '' COMMENT '加入IP',
+  `jointime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入时间',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `token` varchar(50) NOT NULL DEFAULT '' COMMENT 'Token',
+  `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
+  PRIMARY KEY (`id`),
+  KEY `username` (`username`),
+  KEY `email` (`email`),
+  KEY `mobile` (`mobile`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员表';
+
+BEGIN;
+INSERT INTO `fa_user` VALUES (1, 1, 'admin', 'admin', 'c13f62012fd6a8fdf06b3452a94430e5', 'rpR6Bv', 'admin@163.com', '13888888888', '/assets/img/avatar.png', 0, 0, '2017-04-15', '', 0, 1, 1, 1516170492, 1516171614, '127.0.0.1', 0, '127.0.0.1', 1491461418, 0, 1516171614, '', 'normal');
+COMMIT;
+
+DROP TABLE IF EXISTS `fa_user_group`;
+CREATE TABLE `fa_user_group` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '' COMMENT '组名',
+  `rules` text COMMENT '权限节点',
+  `createtime` int(10) DEFAULT NULL COMMENT '添加时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
+  `status` enum('normal','hidden') DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员组表';
+
+BEGIN;
+INSERT INTO `fa_user_group` VALUES (1, '默认组', '1,2,3,4,5,6,7,8,9,10,11,12', 1515386468, 1516168298, 'normal');
+COMMIT;
+
+DROP TABLE IF EXISTS `fa_user_rule`;
+CREATE TABLE `fa_user_rule` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(10) DEFAULT NULL COMMENT '父ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '名称',
+  `title` varchar(50) DEFAULT '' COMMENT '标题',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注',
+  `ismenu` tinyint(1) DEFAULT NULL COMMENT '是否菜单',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
+  `weigh` int(10) DEFAULT '0' COMMENT '权重',
+  `status` enum('normal','hidden') DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='会员规则表';
+
+BEGIN;
+INSERT INTO `fa_user_rule` VALUES (1, 0, 'index', '前台', '', 1, 1516168079, 1516168079, 1, 'normal');
+INSERT INTO `fa_user_rule` VALUES (2, 0, 'api', 'API接口', '', 1, 1516168062, 1516168062, 2, 'normal');
+INSERT INTO `fa_user_rule` VALUES (3, 1, 'user', '会员模块', '', 1, 1515386221, 1516168103, 12, 'normal');
+INSERT INTO `fa_user_rule` VALUES (4, 2, 'user', '会员模块', '', 1, 1515386221, 1516168092, 11, 'normal');
+INSERT INTO `fa_user_rule` VALUES (5, 3, 'index/user/login', '登录', '', 0, 1515386247, 1515386247, 5, 'normal');
+INSERT INTO `fa_user_rule` VALUES (6, 3, 'index/user/register', '注册', '', 0, 1515386262, 1516015236, 7, 'normal');
+INSERT INTO `fa_user_rule` VALUES (7, 3, 'index/user/index', '会员中心', '', 0, 1516015012, 1516015012, 9, 'normal');
+INSERT INTO `fa_user_rule` VALUES (8, 3, 'index/user/profile', '个人资料', '', 0, 1516015012, 1516015012, 4, 'normal');
+INSERT INTO `fa_user_rule` VALUES (9, 4, 'api/user/login', '登录', '', 0, 1515386247, 1515386247, 6, 'normal');
+INSERT INTO `fa_user_rule` VALUES (10, 4, 'api/user/register', '注册', '', 0, 1515386262, 1516015236, 8, 'normal');
+INSERT INTO `fa_user_rule` VALUES (11, 4, 'api/user/index', '会员中心', '', 0, 1516015012, 1516015012, 10, 'normal');
+INSERT INTO `fa_user_rule` VALUES (12, 4, 'api/user/profile', '个人资料', '', 0, 1516015012, 1516015012, 3, 'normal');
+COMMIT;
+
+DROP TABLE IF EXISTS `fa_user_score_log`;
+CREATE TABLE `fa_user_score_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `score` int(10) NOT NULL DEFAULT '0' COMMENT '变更积分',
+  `before` int(10) NOT NULL DEFAULT '0' COMMENT '变更前积分',
+  `after` int(10) NOT NULL DEFAULT '0' COMMENT '变更后积分',
+  `memo` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会员积分变动表';
+
+DROP TABLE IF EXISTS `fa_user_token`;
+CREATE TABLE `fa_user_token` (
+  `token` varchar(50) NOT NULL COMMENT 'Token',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `expiretime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
+  PRIMARY KEY (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员Token表';
 
 SET FOREIGN_KEY_CHECKS = 1;

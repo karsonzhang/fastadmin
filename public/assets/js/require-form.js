@@ -17,6 +17,13 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     display: function (elem) {
                         return $(elem).closest('.form-group').find(".control-label").text().replace(/\:/, '');
                     },
+                    dataFilter: function (data) {
+                        if (data.code === 1) {
+                            return "";
+                        } else {
+                            return data.msg;
+                        }
+                    },
                     target: function (input) {
                         var $formitem = $(input).closest('.form-group'),
                                 $msgbox = $formitem.find('span.msg-box');

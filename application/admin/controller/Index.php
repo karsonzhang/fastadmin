@@ -49,7 +49,7 @@ class Index extends Backend
         $url = $this->request->get('url', 'index/index');
         if ($this->auth->isLogin())
         {
-            $this->error(__("You've logged in, do not login again"), $url);
+            $this->success(__("You've logged in, do not login again"), $url);
         }
         if ($this->request->isPost())
         {

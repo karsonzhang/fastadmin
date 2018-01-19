@@ -77,6 +77,51 @@
         </form>
     </div>
 </script>
+<script id="addoninfotpl" type="text/html">
+    <div style="font-size:13px;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2"><h4><%=item.title%></h4></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">{:__('Price')}</th>
+                    <td><div class="text-<%=item.price>0?'danger':'success'%>"><b>￥<%=item.price%></b></div></td>
+                </tr>
+                <tr>
+                    <th scope="row">{:__('Author')}</th>
+                    <td><a href="<%=item.url?item.url:'javascript:;'%>" target="_blank"><%=item.author%></a></td>
+                </tr>
+                <tr>
+                    <th scope="row">{:__('Identify')}</th>
+                    <td><%=item.name%></td>
+                </tr>
+                <tr>
+                    <th scope="row">{:__('Homepage')}</th>
+                    <td><a href="http://www.fastadmin.net/store/<%=item.name%>.html" target="_blank">http://www.fastadmin.net/store/<%=item.name%>.html</a></td>
+                </tr>
+                <tr>
+                    <th scope="row">{:__('Intro')}</th>
+                    <td><%=item.intro%></td>
+                </tr>
+                <tr>
+                    <th scope="row">{:__('Version')}</th>
+                    <td><%=# addon && item && addon.version!=item.version?'<span class="label label-danger">'+addon.version+'</span> -> <span class="label label-success">'+item.version+'</span>':item.version%></td>
+                </tr>
+                <tr>
+                    <th scope="row">{:__('Createtime')}</th>
+                    <td><%=Moment(item.createtime*1000).format("YYYY-MM-DD HH:mm:ss")%></td>
+                </tr>
+                <tr>
+                    <th scope="row">{:__('Releasetime')}</th>
+                    <td><%=Moment(item.releasetime*1000).format("YYYY-MM-DD HH:mm:ss")%></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</script>
 <script id="paytpl" type="text/html">
     <div class="payimg" style="background:url('<%=payimg%>') 0 0 no-repeat;background-size:cover;">
         <%if(paycode){%>
@@ -117,8 +162,8 @@
         <% var label = labelarr[item.id % 5]; %>
         <% var addon = typeof addons[item.name]!= 'undefined' ? addons[item.name] : null; %>
         <div class="thumbnail addon">
-            <!--<span class="btn btn-<%=label%>">ID:<%=item.id%></span>-->
-            <a href="<%=addon?addon.url:'javascript:;'%>" target="_blank">
+            <!--<span class="btn btn-primary"><%=item.name%></span>-->
+            <a href="<%=addon?addon.url:'javascript:;'%>" class="btn-addonindex" target="_blank">
                 <%if(item.image){%>
                 <img src="<%=item.image%>" class="img-responsive" alt="<%=item.title%>">
                 <%}else{%>
@@ -164,11 +209,11 @@
                     <a href="javascript:;" class="btn btn-danger btn-uninstall"><i class="fa fa-times"></i> {:__('Uninstall')}</a>
                     <% } %>
                     <% } %>
-                    <!--                    
+
                     <span class="pull-right" style="margin-top:10px;">
-                        <input name="checkbox" data-id="<%=item.id%>" type="checkbox" />
+                        <a href="javascript:;" class="btn-addoninfo text-gray" data-index="<%=i%>" title="<%=item.title?item.title:'{:__('None')}'%>"><i class="fa fa-bars"></i></a>
                     </span>
-                    -->
+
                 </p>
             </div>
         </div>

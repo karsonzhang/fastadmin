@@ -320,6 +320,8 @@ class Auth
 
             $this->_token = Random::uuid();
             Token::set($this->_token, $user->id);
+            
+            $this->_logined = TRUE;
 
             //登录成功的事件
             Hook::listen("user_login_successed", $this->_user);

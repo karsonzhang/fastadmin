@@ -44,7 +44,7 @@ class Auth extends \fast\Auth
         $admin->logintime = time();
         $admin->token = Random::uuid();
         $admin->save();
-        Session::set("admin", $admin);
+        Session::set("admin", $admin->toArray());
         $this->keeplogin($keeptime);
         return true;
     }

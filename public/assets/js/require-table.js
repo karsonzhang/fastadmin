@@ -101,7 +101,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 //Bootstrap操作区
                 var toolbar = $(options.toolbar, parenttable);
                 //当刷新表格时
-                table.on('load-error.bs.table', function (status, res) {
+                table.on('load-error.bs.table', function (status, res, e) {
+                    if (e.status === 0) {
+                        return;
+                    }
                     Toastr.error(__('Unknown data format'));
                 });
                 //当刷新表格时
@@ -416,9 +419,16 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var options = table ? table.bootstrapTable('getOptions') : {};
                     // 默认按钮组
                     var buttons = $.extend([], this.buttons || []);
-                    buttons.push({name: 'dragsort', icon: 'fa fa-arrows', classname: 'btn btn-xs btn-primary btn-dragsort'});
-                    buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone', url: options.extend.edit_url});
-                    buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
+
+                    if (options.extend.dragsort_url !== '') {
+                        buttons.push({name: 'dragsort', icon: 'fa fa-arrows', classname: 'btn btn-xs btn-primary btn-dragsort'});
+                    }
+                    if (options.extend.edit_url !== '') {
+                        buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone', url: options.extend.edit_url});
+                    }
+                    if (options.extend.del_url !== '') {
+                        buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
+                    }
                     return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
                 },
                 buttons: function (value, row, index) {

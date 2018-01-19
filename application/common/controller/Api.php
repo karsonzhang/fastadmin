@@ -47,7 +47,7 @@ class Api
      * @var array
      */
     protected $noNeedRight = [];
-    
+
     /**
      * 权限Auth
      * @var Auth 
@@ -89,9 +89,9 @@ class Api
         $modulename = $this->request->module();
         $controllername = strtolower($this->request->controller());
         $actionname = strtolower($this->request->action());
-        
+
         // token
-        $token = $this->request->request('token');
+        $token = $this->request->request('token') ?: $this->request->cookie('token');
 
         $path = str_replace('.', '/', $controllername) . '/' . $actionname;
         // 设置当前请求的URI

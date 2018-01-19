@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {include file="common/meta" /}
+        <link href="__CDN__/assets/css/user.css?v={$Think.config.site.version}" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{:url('/')}" style="padding:6px 15px;"><img src="/assets/img/logo.png" style="height:40px;" alt=""></a>
+                </div>
+                <div class="collapse navbar-collapse" id="header-navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://www.fastadmin.net" target="_blank">{:__('Home')}</a></li>
+                        <li><a href="http://www.fastadmin.net/store.html" target="_blank">{:__('Store')}</a></li>
+                        <li><a href="http://www.fastadmin.net/service.html" target="_blank">{:__('Services')}</a></li>
+                        <li><a href="http://www.fastadmin.net/download.html" target="_blank">{:__('Download')}</a></li>
+                        <li><a href="http://www.fastadmin.net/demo.html" target="_blank">{:__('Demo')}</a></li>
+                        <li><a href="http://www.fastadmin.net/donate.html" target="_blank">{:__('Donation')}</a></li>
+                        <li><a href="http://forum.fastadmin.net" target="_blank">{:__('Forum')}</a></li>
+                        <li><a href="http://doc.fastadmin.net" target="_blank">{:__('Docs')}</a></li>
+                        <li class="dropdown">
+                            {if $user}
+                            <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown" style="padding-top: 10px;height: 50px;">
+                                <span class="avatar-img"><img src="{$user.avatar}" alt=""></span>
+                            </a>
+                            {else /}
+                            <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown">{:__('User center')} <b class="caret"></b></a>
+                            {/if}
+                            <ul class="dropdown-menu">
+                                {if $user}
+                                <li><a href="{:url('user/index')}"><i class="fa fa-user-circle"></i>{:__('User center')}</a></li>
+                                <li><a href="{:url('user/profile')}"><i class="fa fa-user-o"></i>{:__('Profile')}</a></li>
+                                <li><a href="{:url('user/changepwd')}"><i class="fa fa-key"></i>{:__('Change password')}</a></li>
+                                <li><a href="{:url('user/logout')}"><i class="fa fa-sign-out"></i>{:__('Sign out')}</a></li>
+                                {else /}
+                                <li><a href="{:url('user/login')}"><i class="fa fa-sign-in"></i> {:__('Sign in')}</a></li>
+                                <li><a href="{:url('user/register')}"><i class="fa fa-user-o"></i> {:__('Sign up')}</a></li>
+                                {/if}
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {__CONTENT__}
+
+        <footer class="footer" style="clear:both">
+            
+            <p class="address">Copyright&nbsp;©&nbsp;2017-2018 fastadmin.net All Rights Reserved {$site.name} {:__('Copyrights')} <a href="http://www.miibeian.gov.cn" target="_blank">{$site.beian}</a></p>
+        </footer>
+
+        {include file="common/script" /}
+
+    </body>
+
+</html>
