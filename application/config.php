@@ -254,6 +254,6 @@ return [
         'checkupdate'      => false,
         //版本号
         'version'          => '1.0.0.20180119_beta',
-        'api_url'          => '//api.fastadmin.net',
+        'api_url'          => 'http://api.fastadmin.net',
     ],
 ];
