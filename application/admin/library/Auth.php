@@ -167,8 +167,9 @@ class Auth extends \fast\Auth
         //判断是否同一时间同一账号只能在一个地方登录
         if (Config::get('fastadmin.login_unique'))
         {
-            $my = Admin::get($admin->id);
-            if (!$my || $my->token != $admin->token)
+            
+            $my = Admin::get($admin['id']);
+            if (!$my || $my['token'] != $admin['token'])
             {
                 return false;
             }
