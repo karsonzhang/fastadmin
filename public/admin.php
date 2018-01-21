@@ -28,6 +28,9 @@ require __DIR__ . '/../thinkphp/base.php';
 // 绑定到admin模块
 \think\Route::bind('admin');
 
+// 关闭路由
+\think\App::route(false);
+
 // 设置根url
 \think\Url::root('');
 

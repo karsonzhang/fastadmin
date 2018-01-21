@@ -178,6 +178,9 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
+            //这一行需要放在点击左侧链接事件之前
+            var addtabs = Config.referer ? localStorage.getItem("addtabs") : null;
+
             //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true
             $('#nav').addtabs({iframeHeight: "100%", iframeForceRefresh: false});
             if ($("ul.sidebar-menu li.active a").size() > 0) {
@@ -186,7 +189,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 $("ul.sidebar-menu li a[url!='javascript:;']:first").trigger("click");
             }
             //如果是刷新操作则直接返回刷新前的页面
-            var addtabs = Config.referer ? localStorage.getItem("addtabs") : null;
             if (Config.referer) {
                 if (Config.referer === $(addtabs).attr("url")) {
                     var active = $("ul.sidebar-menu li a[addtabs=" + $(addtabs).attr("addtabs") + "]");
