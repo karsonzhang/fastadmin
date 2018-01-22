@@ -35,8 +35,8 @@ class Sms
                 where(['mobile' => $mobile, 'event' => $event])
                 ->order('id', 'DESC')
                 ->find();
-        $result = Hook::listen('sms_get', $sms);
-        return $result ? $result : NULL;
+        Hook::listen('sms_get', $sms, null, true);
+        return $sms ? $sms : NULL;
     }
 
     /**
@@ -52,7 +52,7 @@ class Sms
         $code = is_null($code) ? mt_rand(1000, 9999) : $code;
         $time = time();
         $sms = \app\common\model\Sms::create(['event' => $event, 'mobile' => $mobile, 'code' => $code, 'createtime' => $time]);
-        $result = Hook::listen('sms_send', $sms);
+        $result = Hook::listen('sms_send', $sms, null, true);
         if (!$result)
         {
             $sms->delete();
@@ -69,7 +69,7 @@ class Sms
      */
     public static function notice($params = [])
     {
-        $result = Hook::listen('sms_notice', $params);
+        $result = Hook::listen('sms_notice', $params, null, true);
         return $result ? TRUE : FALSE;
     }
 
@@ -100,7 +100,7 @@ class Sms
                 }
                 else
                 {
-                    $result = Hook::listen('sms_check', $sms);
+                    $result = Hook::listen('sms_check', $sms, null, true);
                     return $result;
                 }
             }

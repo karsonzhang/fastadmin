@@ -191,16 +191,16 @@ class Config extends Backend
             $config = $this->model->get($params);
             if (!$config)
             {
-                return json(['ok' => '']);
+                return $this->success();
             }
             else
             {
-                return json(['error' => __('Name already exist')]);
+                return $this->error(__('Name already exist'));
             }
         }
         else
         {
-            return json(['error' => __('Invalid parameters')]);
+            return $this->error(__('Invalid parameters'));
         }
     }
 

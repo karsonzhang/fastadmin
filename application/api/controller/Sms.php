@@ -23,8 +23,8 @@ class Sms extends Api
     /**
      * 发送验证码
      *
-     * @param string $mobile 手机号
-     * @param string $event 事件名称
+     * @param string    $mobile     手机号
+     * @param string    $event      事件名称
      */
     public function send()
     {
@@ -70,9 +70,9 @@ class Sms extends Api
     /**
      * 检测验证码
      *
-     * @param string $mobile 手机号
-     * @param string $event 事件名称
-     * @param string $captcha 验证码
+     * @param string    $mobile     手机号
+     * @param string    $event      事件名称
+     * @param string    $captcha    验证码
      */
     public function check()
     {
