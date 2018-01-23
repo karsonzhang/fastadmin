@@ -209,7 +209,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 require(['dragsort'], function () {
                     //绑定拖动排序
                     $("tbody", table).dragsort({
-                        itemSelector: 'tr',
+                        itemSelector: 'tr:visible',
                         dragSelector: "a.btn-dragsort",
                         dragEnd: function () {
                             var data = table.bootstrapTable('getData');
