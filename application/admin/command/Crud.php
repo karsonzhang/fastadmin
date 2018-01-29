@@ -1251,7 +1251,6 @@ EOD;
         {
             $html .= ", searchList: " . $searchList;
         }
-        echo $datatype, "\n";
         if (in_array($datatype, ['date', 'datetime']) || $formatter === 'datetime')
         {
             $html .= ", operate:'RANGE', addclass:'datetimerange'";

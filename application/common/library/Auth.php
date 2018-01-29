@@ -174,6 +174,23 @@ class Auth
         $params['password'] = $this->getEncryptPassword($password, $params['salt']);
         $params = array_merge($params, $extend);
 
+        ////////////////同步到Ucenter////////////////
+        if (defined('UC_STATUS') && UC_STATUS)
+        {
+            $uc = new \addons\ucenter\library\client\Client();
+            $user_id = $uc->uc_user_register($username, $password, $email);
+            // 如果小于0则说明发生错误
+            if ($user_id <= 0)
+            {
+                $this->setError($user_id > -4 ? 'Username is incorrect' : 'Email is incorrect');
+                return FALSE;
+            }
+            else
+            {
+                $params['id'] = $user_id;
+            }
+        }
+
         //账号注册时需要开启事务,避免出现垃圾数据
         Db::startTrans();
         try
@@ -299,9 +316,22 @@ class Auth
         $user = User::get($user_id);
         if ($user)
         {
+            ////////////////同步到Ucenter////////////////
+            if (defined('UC_STATUS') && UC_STATUS)
+            {
+                $uc = new \addons\ucenter\library\client\Client();
+                $re = $uc->uc_user_login($this->user->id, $this->user->password . '#split#' . $this->user->salt, 3);
+                // 如果小于0则说明发生错误
+                if ($re <= 0)
+                {
+                    $this->setError('Username or password is incorrect');
+                    return FALSE;
+                }
+            }
+
             $ip = request()->ip();
             $time = time();
-            
+
             //判断连续登录和最大连续登录
             if ($user->logintime < \fast\Date::unixtime('day'))
             {
@@ -320,7 +350,7 @@ class Auth
 
             $this->_token = Random::uuid();
             Token::set($this->_token, $user->id);
-            
+
             $this->_logined = TRUE;
 
             //登录成功的事件
@@ -452,6 +482,19 @@ class Auth
         if (!$user)
         {
             return FALSE;
+        }
+
+        ////////////////同步到Ucenter////////////////
+        if (defined('UC_STATUS') && UC_STATUS)
+        {
+            $uc = new \addons\ucenter\library\client\Client();
+            $re = $uc->uc_user_delete($user['id']);
+            // 如果小于0则说明发生错误
+            if ($re <= 0)
+            {
+                $this->setError('Account is locked');
+                return FALSE;
+            }
         }
 
         // 调用事务删除账号

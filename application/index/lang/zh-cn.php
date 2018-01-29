@@ -96,6 +96,7 @@ return [
     'Donation'                                               => '捐赠',
     'Forum'                                                  => '社区',
     'Docs'                                                   => '文档',
+    'Please login first'                                     => '请登录后再操作',
     'Send verification code'                                 => '发磅验证码',
     'Redirect now'                                           => '立即跳转',
     'Operation completed'                                    => '操作成功!',

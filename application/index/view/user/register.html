@@ -2,7 +2,7 @@
     <div class="user-section login-section">
         <div class="logon-tab clearfix"> <a href="{:url('user/login')}">{:__('Sign in')}</a> <a class="active">{:__('Sign up')}</a> </div>
         <div class="login-main"> 
-            <form name="form1" id="login-form" class="form-vertical" method="POST" action="">
+            <form name="form1" id="register-form" class="form-vertical" method="POST" action="">
                 <input type="hidden" name="invite_user_id" value="0" />
                 <div class="form-group">
                     <label class="control-label required">{:__('Email')}<span class="text-success"></span></label>
@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <label class="control-label">{:__('Password')}</label>
                     <div class="controls">
-                        <input type="password" id="repassword" name="repassword" required class="form-control input-lg" placeholder="{:__('Password must be 6 to 30 characters')}">
+                        <input type="password" id="password" name="password" required class="form-control input-lg" placeholder="{:__('Password must be 6 to 30 characters')}">
                         <p class="help-block"></p>
                     </div>
                 </div>

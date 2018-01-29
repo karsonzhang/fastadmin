@@ -261,8 +261,9 @@
     var getQueryParams = function (params, searchQuery, removeempty) {
         params.filter = typeof params.filter === 'Object' ? params.filter : (params.filter ? JSON.parse(params.filter) : {});
         params.op = typeof params.op === 'Object' ? params.op : (params.op ? JSON.parse(params.op) : {});
-        params.filter = $.extend(params.filter, searchQuery.filter);
-        params.op = $.extend(params.op, searchQuery.op);
+
+        params.filter = $.extend({}, params.filter, searchQuery.filter);
+        params.op = $.extend({}, params.op, searchQuery.op);
         //移除empty的值
         if (removeempty) {
             $.each(params.filter, function (i, j) {
@@ -366,12 +367,10 @@
                 $("form", that.$commonsearch).trigger("submit");
             }
         });
-        var searchQuery = getSearchQuery(that, true);
         var queryParams = that.options.queryParams;
         //匹配默认搜索值
         this.options.queryParams = function (params) {
-            var params = getQueryParams(queryParams(params), searchQuery);
-            return params;
+            return queryParams(getQueryParams(params, getSearchQuery(this, true)));
         };
         this.trigger('post-common-search', that);
 
@@ -379,13 +378,9 @@
 
     BootstrapTable.prototype.onCommonSearch = function () {
         var searchQuery = getSearchQuery(this);
-        var params = getQueryParams(this.options.queryParams({}), searchQuery, true);
-        this.trigger('common-search', this, params, searchQuery);
+        this.trigger('common-search', this, searchQuery);
         this.options.pageNumber = 1;
-        this.options.queryParams = function (options) {
-            return $.extend({}, options, params);
-        };
-        this.refresh({query: params});
+        this.refresh({});
     };
 
     BootstrapTable.prototype.load = function (data) {

@@ -78,14 +78,7 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
-                /*
-                 * 已经弃用,如果为了兼容老版可取消注释
-                  foreach ($params as $k => &$v)
-                  {
-                  $v = is_array($v) ? implode(',', $v) : $v;
-                  }
-                 */
-                if ($this->dataLimit)
+                if ($this->dataLimit && $this->dataLimitFieldAutoFill)
                 {
                     $params[$this->dataLimitField] = $this->auth->id;
                 }
@@ -139,13 +132,6 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
-                /*
-                 * 已经弃用,如果为了兼容老版可取消注释
-                  foreach ($params as $k => &$v)
-                  {
-                  $v = is_array($v) ? implode(',', $v) : $v;
-                  }
-                 */
                 try
                 {
                     //是否采用模型验证

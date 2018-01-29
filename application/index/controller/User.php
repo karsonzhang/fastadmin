@@ -23,6 +23,12 @@ class User extends Frontend
         parent::_initialize();
         $auth = $this->auth;
 
+        $ucenter = get_addon_info('ucenter');
+        if ($ucenter && $ucenter['state'])
+        {
+            include ADDON_PATH . 'ucenter' . DS . 'uc.php';
+        }
+
         //监听注册登录注销的事件
         Hook::add('user_login_successed', function($user) use($auth) {
             Cookie::set('uid', $user->id);
@@ -109,8 +115,7 @@ class User extends Frontend
                     $uc = new \addons\ucenter\library\client\Client();
                     $synchtml = $uc->uc_user_synregister($this->auth->id, $password);
                 }
-                $referer = Cookie::get('referer_url');
-                $this->success(__('Sign up successful') . $synchtml, $referer);
+                $this->success(__('Sign up successful') . $synchtml, $url);
             }
             else
             {

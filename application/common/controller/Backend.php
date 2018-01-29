@@ -61,6 +61,11 @@ class Backend extends Controller
      * 数据限制字段
      */
     protected $dataLimitField = 'admin_id';
+    
+    /**
+     * 数据限制开启时自动填充限制字段值
+     */
+    protected $dataLimitFieldAutoFill = true;
 
     /**
      * 是否开启Validate验证

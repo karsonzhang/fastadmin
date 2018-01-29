@@ -39,7 +39,7 @@ return [
     'Account can not be empty'              => '账户不能为空',
     'Username or password is incorrect'     => '用户名或密码不正确',
     'You are not logged in'                 => '你当前还未登录',
-    'You\'ve logged in, do not login again' => '你已经存在，请不要重复登录',
+    'You\'ve logged in, do not login again' => '你已经登录,请不要重复登录',
     'Profile'                               => '个人资料',
     'Old password'                          => '旧密码',
     'New password'                          => '新密码',
