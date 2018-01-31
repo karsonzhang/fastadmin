@@ -116,6 +116,7 @@ class Frontend extends Controller
             'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang
         ];
+        $config = array_merge($config, Config::get("view_replace_str"));
 
         Config::set('upload', array_merge(Config::get('upload'), $upload));
 

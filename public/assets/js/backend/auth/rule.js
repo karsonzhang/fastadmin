@@ -111,7 +111,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     name.prop("placeholder", $(this).val() == 1 ? name.data("placeholder-menu") : name.data("placeholder-node"));
                 });
                 $("input[name='row[ismenu]']:checked").trigger("click");
-                
+
                 var iconlist = [];
                 Form.api.bindevent($("form[role=form]"));
                 $(document).on('click', ".btn-search-icon", function () {

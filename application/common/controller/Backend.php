@@ -61,7 +61,7 @@ class Backend extends Controller
      * 数据限制字段
      */
     protected $dataLimitField = 'admin_id';
-    
+
     /**
      * 数据限制开启时自动填充限制字段值
      */
@@ -171,7 +171,7 @@ class Backend extends Controller
 
         // 配置信息
         $config = [
-            'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
+            'site'           => array_intersect_key($site, array_flip(['name', 'indexurl', 'cdnurl', 'version', 'timezone', 'languages'])),
             'upload'         => $upload,
             'modulename'     => $modulename,
             'controllername' => $controllername,
@@ -182,6 +182,7 @@ class Backend extends Controller
             'fastadmin'      => Config::get('fastadmin'),
             'referer'        => Session::get("referer")
         ];
+        $config = array_merge($config, Config::get("view_replace_str"));
 
         Config::set('upload', array_merge(Config::get('upload'), $upload));
 

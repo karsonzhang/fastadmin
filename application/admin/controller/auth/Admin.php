@@ -257,6 +257,7 @@ class Admin extends Backend
     protected function selectpage()
     {
         $this->dataLimit = 'auth';
+        $this->dataLimitField = 'id';
         return parent::selectpage();
     }
 

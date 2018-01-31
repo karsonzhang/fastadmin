@@ -23,7 +23,7 @@ class Category extends Backend
     {
         parent::_initialize();
         $this->request->filter(['strip_tags']);
-        $this->model = model('Category');
+        $this->model = model('app\common\model\Category');
 
         $tree = Tree::instance();
         $tree->init(collection($this->model->order('weigh desc,id desc')->select())->toArray(), 'pid');

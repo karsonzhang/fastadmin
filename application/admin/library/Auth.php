@@ -27,10 +27,22 @@ class Auth extends \fast\Auth
         return Session::get('admin.' . $name);
     }
 
+    /**
+     * 管理员登录
+     * 
+     * @param   string  $username   用户名
+     * @param   string  $password   密码
+     * @param   int     $keeptime   有效时长
+     * @return  boolean
+     */
     public function login($username, $password, $keeptime = 0)
     {
         $admin = Admin::get(['username' => $username]);
         if (!$admin)
+        {
+            return false;
+        }
+        if ($admin->loginfailure >= 3 && time() - $admin->updatetime < 86400)
         {
             return false;
         }
@@ -103,8 +115,9 @@ class Auth extends \fast\Auth
 
     /**
      * 刷新保持登录的Cookie
-     * @param int $keeptime
-     * @return boolean
+     * 
+     * @param   int     $keeptime
+     * @return  boolean
      */
     protected function keeplogin($keeptime = 0)
     {
@@ -167,7 +180,6 @@ class Auth extends \fast\Auth
         //判断是否同一时间同一账号只能在一个地方登录
         if (Config::get('fastadmin.login_unique'))
         {
-            
             $my = Admin::get($admin['id']);
             if (!$my || $my['token'] != $admin['token'])
             {
