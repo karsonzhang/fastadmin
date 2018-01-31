@@ -358,7 +358,7 @@ CREATE TABLE `fa_sms` (
 DROP TABLE IF EXISTS `fa_test`;
 CREATE TABLE `fa_test` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `admin_id` int(10) NOT NULL COMMENT '管理员ID',
+  `admin_id` int(10) NOT NULL DEFAULT '0' COMMENT '管理员ID',
   `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID(单选)',
   `category_ids` varchar(100) NOT NULL COMMENT '分类ID(多选)',
   `week` enum('monday','tuesday','wednesday') NOT NULL COMMENT '星期(单选):monday=星期一,tuesday=星期二,wednesday=星期三',
