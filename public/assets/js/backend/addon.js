@@ -22,8 +22,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     if (e.keyCode == 13) {
                         var that = this;
                         var options = table.bootstrapTable('getOptions');
+                        var queryParams = options.queryParams;
                         options.pageNumber = 1;
                         options.queryParams = function (params) {
+                            var params = queryParams(params);
                             params.search = $(that).val();
                             return params;
                         };
@@ -53,7 +55,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 showExport: false,
                 commonSearch: false,
                 searchFormVisible: false,
-                pageSize: 12
+                pageSize: 12,
+                queryParams: function (params) {
+                    var filter = params.filter ? JSON.parse(params.filter) : {};
+                    var op = params.op ? JSON.parse(params.op) : {};
+                    filter.faversion = Config.fastadmin.version;
+                    op.faversion = "=";
+                    params.filter = JSON.stringify(filter);
+                    params.op = JSON.stringify(op);
+                    return params;
+                }
             });
 
             // 为表格绑定事件
@@ -64,7 +75,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 var data = table.bootstrapTable("getData");
                 var item = data[index];
                 var addon = typeof Config.addons[item.name] != 'undefined' ? Config.addons[item.name] : null;
-                console.log(item, addon);
                 Layer.alert(Template("addoninfotpl", {item: item, addon: addon}), {
                     btn: [__('OK'), __('Donate'), __('Feedback'), __('Document')],
                     title: __('Detail'),
@@ -113,7 +123,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             $(document).on("click", ".btn-addonindex", function () {
                 if ($(this).attr("href") == 'javascript:;') {
                     Layer.msg(__('Not installed tips'), {icon: 7});
-                } else if ($(this).parent().find("a.btn-enable").size() > 0) {
+                } else if ($(this).closest(".operate").find("a.btn-enable").size() > 0) {
                     Layer.msg(__('Not enabled tips'), {icon: 7});
                     return false;
                 }
@@ -187,13 +197,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             $(document).on("click", ".btn-install", function () {
                 var that = this;
                 var name = $(this).closest(".operate").data("name");
+                var version = $(this).data("version");
                 var userinfo = Controller.api.userinfo.get();
                 var uid = userinfo ? userinfo.id : 0;
                 var token = userinfo ? userinfo.token : '';
                 var install = function (name, force) {
                     Fast.api.ajax({
                         url: 'addon/install',
-                        data: {name: name, force: force ? 1 : 0, uid: uid, token: token}
+                        data: {name: name, force: force ? 1 : 0, uid: uid, token: token, version: version, faversion: Config.fastadmin.version}
                     }, function (data, ret) {
                         Layer.closeAll();
                         Config['addons'][data.addon.name] = ret.data.addon;
@@ -366,6 +377,39 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     });
                 };
                 operate(name, action, false);
+            });
+
+            //点击升级
+            $(document).on("click", ".btn-upgrade", function () {
+                if ($(this).closest(".operate").find("a.btn-disable").size() > 0) {
+                    Layer.alert(__('Please disable addon first'), {icon: 7});
+                    return false;
+                }
+                var name = $(this).closest(".operate").data("name");
+                var version = $(this).data("version");
+                var userinfo = Controller.api.userinfo.get();
+                var uid = userinfo ? userinfo.id : 0;
+                var token = userinfo ? userinfo.token : '';
+                var upgrade = function (name) {
+                    Fast.api.ajax({
+                        url: 'addon/upgrade',
+                        data: {name: name, uid: uid, token: token, version: version, faversion: Config.fastadmin.version}
+                    }, function (data, ret) {
+                        Config['addons'][name].version = version;
+                        Layer.closeAll();
+                        $('.btn-refresh').trigger('click');
+                    }, function (data, ret) {
+                        Layer.alert(ret.msg);
+                        return false;
+                    });
+                };
+                Layer.confirm(__('Upgrade tips'), function () {
+                    upgrade(name);
+                });
+            });
+
+            $(document).on("click", ".operate .btn-group .dropdown-toggle", function () {
+                $(this).closest(".btn-group").toggleClass("dropup", $(document).height() - $(this).offset().top <= 200);
             });
         },
         add: function () {

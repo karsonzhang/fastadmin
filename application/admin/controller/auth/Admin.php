@@ -27,30 +27,38 @@ class Admin extends Backend
         $this->model = model('Admin');
 
         $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
-        $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin() ? true : false);
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
         $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
+
         Tree::instance()->init($groupList);
-        $result = [];
+        $groupdata = [];
         if ($this->auth->isSuperAdmin())
         {
             $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
+            foreach ($result as $k => $v)
+            {
+                $groupdata[$v['id']] = $v['name'];
+            }
         }
         else
         {
+            $result = [];
             $groups = $this->auth->getGroups();
             foreach ($groups as $m => $n)
             {
-                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['pid'])));
+                $childlist = Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['id']));
+                $temp = [];
+                foreach ($childlist as $k => $v)
+                {
+                    $temp[$v['id']] = $v['name'];
+                }
+                $result[__($n['name'])] = $temp;
             }
-        }
-        $groupName = [];
-        foreach ($result as $k => $v)
-        {
-            $groupName[$v['id']] = $v['name'];
+            $groupdata = $result;
         }
 
-        $this->view->assign('groupdata', $groupName);
+        $this->view->assign('groupdata', $groupdata);
         $this->assignconfig("admin", ['id' => $this->auth->id]);
     }
 

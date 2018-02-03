@@ -62,7 +62,6 @@ class Addon extends Backend
             $params = $this->request->post("row/a");
             if ($params)
             {
-                $configList = [];
                 foreach ($config as $k => &$v)
                 {
                     if (isset($params[$v['name']]))
@@ -124,9 +123,18 @@ class Addon extends Backend
         {
             $uid = $this->request->post("uid");
             $token = $this->request->post("token");
-            Service::install($name, $force, ['uid' => $uid, 'token' => $token]);
+            $version = $this->request->post("version");
+            $faversion = $this->request->post("faversion");
+            $extend = [
+                'uid'       => $uid,
+                'token'     => $token,
+                'version'   => $version,
+                'faversion' => $faversion
+            ];
+            Service::install($name, $force, $extend);
             $info = get_addon_info($name);
             $info['config'] = get_addon_config($name) ? 1 : 0;
+            $info['state'] = 1;
             $this->success(__('Install successful'), null, ['addon' => $info]);
         }
         catch (AddonException $e)
@@ -283,6 +291,42 @@ class Addon extends Backend
     }
 
     /**
+     * 更新插件
+     */
+    public function upgrade()
+    {
+        $name = $this->request->post("name");
+        if (!$name)
+        {
+            $this->error(__('Parameter %s can not be empty', 'name'));
+        }
+        try
+        {
+            $uid = $this->request->post("uid");
+            $token = $this->request->post("token");
+            $version = $this->request->post("version");
+            $faversion = $this->request->post("faversion");
+            $extend = [
+                'uid'       => $uid,
+                'token'     => $token,
+                'version'   => $version,
+                'faversion' => $faversion
+            ];
+            //调用更新的方法
+            Service::upgrade($name, $extend);
+            $this->success(__('Operate successful'));
+        }
+        catch (AddonException $e)
+        {
+            $this->result($e->getData(), $e->getCode(), $e->getMessage());
+        }
+        catch (Exception $e)
+        {
+            $this->error($e->getMessage());
+        }
+    }
+
+    /**
      * 刷新缓存
      */
     public function refresh()
@@ -314,14 +358,15 @@ class Addon extends Backend
         {
             if ($search && stripos($v['name'], $search) === FALSE && stripos($v['intro'], $search) === FALSE)
                 continue;
+
             $v['flag'] = '';
             $v['banner'] = '';
             $v['image'] = '';
             $v['donateimage'] = '';
             $v['demourl'] = '';
             $v['price'] = '0.00';
-            $v['url'] = '/addons/' . $v['name'];
-            $v['createtime'] = 0;
+            $v['url'] = addon_url($v['name']);
+            $v['createtime'] = filemtime(ADDON_PATH . $v['name']);
             $list[] = $v;
         }
         $total = count($list);

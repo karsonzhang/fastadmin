@@ -160,7 +160,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 $(toolbar).on('click', Table.config.addbtn, function () {
                     var ids = Table.api.selectedids(table);
                     var url = options.extend.add_url;
-                    url = Table.api.replaceurl(url, {ids: ids.length > 0 ? ids.join(",") : 0}, table);
+                    if (url.indexOf("{ids}") !== -1) {
+                        url = Table.api.replaceurl(url, {ids: ids.length > 0 ? ids.join(",") : 0}, table);
+                    }
                     Fast.api.open(url, __('Add'), $(this).data() || {});
                 });
                 // 导入按钮事件
