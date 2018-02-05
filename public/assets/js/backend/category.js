@@ -49,7 +49,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 // var options = table.bootstrapTable(tableOptions);
                 var typeStr = $(this).attr("href");
-                console.log(typeStr);
                 var options = table.bootstrapTable('getOptions');
                 options.pageNumber = 1;
                 options.queryParams = function (params) {
