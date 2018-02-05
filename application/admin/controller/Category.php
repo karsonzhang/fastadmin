@@ -46,22 +46,33 @@ class Category extends Backend
         if ($this->request->isAjax())
         {
             $search = $this->request->request("search");
+            $type = $this->request->request("type");
+
             //构造父类select列表选项数据
             $list = [];
-            if ($search)
-            {
+
                 foreach ($this->categorylist as $k => $v)
                 {
-                    if (stripos($v['name'], $search) !== false || stripos($v['nickname'], $search) !== false)
-                    {
-                        $list[] = $v;
+                    if ($search) {
+                        if ($v['type'] == $type && stripos($v['name'], $search) !== false || stripos($v['nickname'], $search) !== false)
+                        {
+                            if($type == "all" || $type == null) {
+                                $list = $this->categorylist;
+                            } else {
+                                $list[] = $v;
+                            }
+                        }
+                    } else {
+                        if($type == "all" || $type == null) {
+                            $list = $this->categorylist;
+                        } else if ($v['type'] == $type){
+                            $list[] = $v;
+                        }
+
                     }
+
                 }
-            }
-            else
-            {
-                $list = $this->categorylist;
-            }
+
             $total = count($list);
             $result = array("total" => $total, "rows" => $list);
 

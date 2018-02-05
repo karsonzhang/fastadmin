@@ -15,10 +15,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 }
             });
 
-            var table = $("#table");
 
-            // 初始化表格
-            table.bootstrapTable({
+            var table = $("#table");
+            var tableOptions = {
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 escape: false,
                 pk: 'id',
@@ -39,10 +38,34 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
-            });
+            };
+            // 初始化表格
+            table.bootstrapTable(tableOptions);
 
             // 为表格绑定事件
             Table.api.bindevent(table);
+
+            //绑定TAB事件
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                // var options = table.bootstrapTable(tableOptions);
+                var typeStr = $(this).attr("href");
+                console.log(typeStr);
+                var options = table.bootstrapTable('getOptions');
+                options.pageNumber = 1;
+                options.queryParams = function (params) {
+                    // params.filter = JSON.stringify({type: typeStr});
+                    params.type = typeStr;
+
+                    return params;
+                };
+                table.bootstrapTable('refresh', {});
+                return false;
+
+            });
+
+            //必须默认触发shown.bs.tab事件
+            // $('ul.nav-tabs li.active a[data-toggle="tab"]').trigger("shown.bs.tab");
+
         },
         add: function () {
             Controller.api.bindevent();
