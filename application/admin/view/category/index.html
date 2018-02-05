@@ -2,7 +2,7 @@
     <div class="panel-heading">
         {:build_heading()}
         <ul class="nav nav-tabs">
-            <li class="active"><a href="all" data-toggle="tab">全部</a></li>
+            <li class="active"><a href="all" data-toggle="tab">{:__('All')}</a></li>
             {foreach name="typeList" item="vo"}
                 <li><a href="{$key}" data-toggle="tab">{$vo}</a></li>
             {/foreach}
