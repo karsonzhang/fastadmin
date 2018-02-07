@@ -126,7 +126,7 @@ class Auth extends \fast\Auth
             $expiretime = time() + $keeptime;
             $key = md5(md5($this->id) . md5($keeptime) . md5($expiretime) . $this->token);
             $data = [$this->id, $keeptime, $expiretime, $key];
-            Cookie::set('keeplogin', implode('|', $data));
+            Cookie::set('keeplogin', implode('|', $data), 86400 * 30);
             return true;
         }
         return false;

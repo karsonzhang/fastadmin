@@ -1,12 +1,11 @@
 /nbproject/
 /thinkphp/
 /vendor/
-/runtime/
+/runtime/*
 /addons/*
-/application/admin/command/Install/*.lock
 /public/assets/libs/
 /public/assets/addons/*
-/public/uploads/
+/public/uploads/*
 .idea
 composer.lock
 *.log

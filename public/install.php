@@ -77,7 +77,7 @@ else if (!extension_loaded("PDO"))
 }
 else if (!is_really_writable($dbConfigFile))
 {
-    $errInfo = "当前权限不足，无法写入配置文件application/database.php";
+    $errInfo = '当前权限不足，无法写入配置文件application/database.php<br><a href="http://forum.fastadmin.net/?q=%E6%9D%83%E9%99%90%E4%B8%8D%E8%B6%B3" target="_blank">点击查看解决办法</a>';
 }
 else
 {
@@ -86,7 +86,7 @@ else
     {
         if (!is_dir(ROOT_PATH . $v))
         {
-            $errInfo = '当前代码不完整，请加入QQ群(<a href="' . $link['qqun'] . '" target="_blank">636393962</a>)，在群共享免费下载FastAdmin完整包后再尝试安装';
+            $errInfo = '当前代码仅包含核心代码，请前往官网下载完整包或资源包覆盖后再尝试安装，<a href="http://www.fastadmin.net/download.html?ref=install" target="_blank">立即前往下载</a>';
             break;
         }
     }
@@ -95,7 +95,7 @@ else
 if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
     $err = '';
-    $mysqlHostname = isset($_POST['mysqlHost']) ? $_POST['mysqlHost'] : 'localhost';
+    $mysqlHostname = isset($_POST['mysqlHost']) ? $_POST['mysqlHost'] : '127.0.0.1';
     $mysqlHostport = 3306;
     $hostArr = explode(':', $mysqlHostname);
     if (count($hostArr) > 1)
@@ -330,7 +330,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
             <h2>安装 <?php echo $sitename; ?></h2>
             <div>
 
-                <p>若你在安装中遇到麻烦可点击  <a href="<?php echo $link['doc']; ?>" target="_blank">安装文档</a> <a href="<?php echo $link['forum']; ?>" target="_blank">交流论坛</a> <a href="<?php echo $link['qqun']; ?>">QQ交流群</a></p>
+                <p>若你在安装中遇到麻烦可点击  <a href="<?php echo $link['doc']; ?>" target="_blank">安装文档</a> <a href="<?php echo $link['forum']; ?>" target="_blank">交流社区</a> <a href="<?php echo $link['qqun']; ?>">QQ交流群</a></p>
                 <!--<p><?php echo $sitename; ?>还支持在命令行php think install一键安装</p>-->
 
                 <form method="post">
@@ -345,7 +345,7 @@ if (!$errInfo && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']
                     <div class="form-group">
                         <div class="form-field">
                             <label>MySQL 数据库地址</label>
-                            <input type="text" name="mysqlHost" value="localhost" required="">
+                            <input type="text" name="mysqlHost" value="127.0.0.1" required="">
                         </div>
 
                         <div class="form-field">
