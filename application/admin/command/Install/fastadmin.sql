@@ -424,6 +424,7 @@ CREATE TABLE `fa_user` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `token` varchar(50) NOT NULL DEFAULT '' COMMENT 'Token',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
+  `verification` varchar(255) NOT NULL DEFAULT '' COMMENT '验证',
   PRIMARY KEY (`id`),
   KEY `username` (`username`),
   KEY `email` (`email`),
@@ -431,7 +432,7 @@ CREATE TABLE `fa_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员表';
 
 BEGIN;
-INSERT INTO `fa_user` VALUES (1, 1, 'admin', 'admin', 'c13f62012fd6a8fdf06b3452a94430e5', 'rpR6Bv', 'admin@163.com', '13888888888', '/assets/img/avatar.png', 0, 0, '2017-04-15', '', 0, 1, 1, 1516170492, 1516171614, '127.0.0.1', 0, '127.0.0.1', 1491461418, 0, 1516171614, '', 'normal');
+INSERT INTO `fa_user` VALUES (1, 1, 'admin', 'admin', 'c13f62012fd6a8fdf06b3452a94430e5', 'rpR6Bv', 'admin@163.com', '13888888888', '/assets/img/avatar.png', 0, 0, '2017-04-15', '', 0, 1, 1, 1516170492, 1516171614, '127.0.0.1', 0, '127.0.0.1', 1491461418, 0, 1516171614, '', 'normal','');
 COMMIT;
 
 DROP TABLE IF EXISTS `fa_user_group`;
