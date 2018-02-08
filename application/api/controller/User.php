@@ -72,11 +72,11 @@ class User extends Api
         }
         if (!Validate::regex($mobile, "^1\d{10}$"))
         {
-            $this->error(__('Mobile incorrect'));
+            $this->error(__('Mobile is incorrect'));
         }
         if (!Sms::check($mobile, $captcha, 'mobilelogin'))
         {
-            $this->error(__('Captcha invalid'));
+            $this->error(__('Captcha is incorrect'));
         }
         $user = \app\common\model\User::getByMobile($mobile);
         if ($user)
@@ -120,11 +120,11 @@ class User extends Api
         }
         if ($email && !Validate::is($email, "email"))
         {
-            $this->error(__('Email incorrect'));
+            $this->error(__('Email is incorrect'));
         }
         if ($mobile && !Validate::regex($mobile, "^1\d{10}$"))
         {
-            $this->error(__('Mobile incorrect'));
+            $this->error(__('Mobile is incorrect'));
         }
         $ret = $this->auth->register($username, $password, $email, $mobile, []);
         if ($ret)
@@ -190,7 +190,7 @@ class User extends Api
         }
         if (!Validate::is($email, "email"))
         {
-            $this->error(__('Mobile incorrect'));
+            $this->error(__('Email is incorrect'));
         }
         if (\app\common\model\User::where('email', $email)->where('id', '<>', $user->id)->find())
         {
@@ -227,7 +227,7 @@ class User extends Api
         }
         if (!Validate::regex($mobile, "^1\d{10}$"))
         {
-            $this->error(__('Mobile incorrect'));
+            $this->error(__('Mobile is incorrect'));
         }
         if (\app\common\model\User::where('mobile', $mobile)->where('id', '<>', $user->id)->find())
         {
@@ -236,7 +236,7 @@ class User extends Api
         $result = Sms::check($mobile, $captcha, 'changemobile');
         if (!$result)
         {
-            $this->error(__('Captcha invalid'));
+            $this->error(__('Captcha is incorrect'));
         }
         $verification = $user->verification;
         $verification->mobile = 1;
@@ -300,7 +300,7 @@ class User extends Api
         }
         if ($mobile && !Validate::regex($mobile, "^1\d{10}$"))
         {
-            $this->error(__('Mobile incorrect'));
+            $this->error(__('Mobile is incorrect'));
         }
         $user = \app\common\model\User::getByMobile($mobile);
         if (!$user)
@@ -310,7 +310,7 @@ class User extends Api
         $ret = Sms::check($mobile, $captcha, 'resetpwd');
         if (!$ret)
         {
-            $this->error(__('Captcha invalid'));
+            $this->error(__('Captcha is incorrect'));
         }
         Sms::flush($mobile, 'resetpwd');
 
