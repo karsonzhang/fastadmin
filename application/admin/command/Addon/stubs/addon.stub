@@ -29,6 +29,24 @@ class {%addonClassName%} extends Addons
     }
 
     /**
+     * 插件启用方法
+     * @return bool
+     */
+    public function enable()
+    {
+        return true;
+    }
+
+    /**
+     * 插件禁用方法
+     * @return bool
+     */
+    public function disable()
+    {
+        return true;
+    }
+
+    /**
      * 实现钩子方法
      * @return mixed
      */

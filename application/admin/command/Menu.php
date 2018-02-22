@@ -187,6 +187,19 @@ class Menu extends Command
         //只匹配公共的方法
         $methods = $reflector->getMethods(ReflectionMethod::IS_PUBLIC);
         $classComment = $reflector->getDocComment();
+        //判断是否有启用软删除
+        $softDeleteMethods = ['destroy', 'restore', 'recyclebin'];
+        $withSofeDelete = false;
+        preg_match_all("/\\\$this\->model\s*=\s*model\('(\w+)'\);/", $classContent, $matches);
+        if (isset($matches[1]) && isset($matches[1][0]) && $matches[1][0])
+        {
+            \think\Request::instance()->module('admin');
+            $model = model($matches[1][0]);
+            if (in_array('trashed', get_class_methods($model)))
+            {
+                $withSofeDelete = true;
+            }
+        }
         //忽略的类
         if (stripos($classComment, "@internal") !== FALSE)
         {
@@ -216,7 +229,7 @@ class Menu extends Command
         //导入中文语言包
         \think\Lang::load(dirname(__DIR__) . DS . 'lang/zh-cn.php');
 
-        //先定入菜单的数据
+        //先导入菜单的数据
         $pid = 0;
         foreach ($controllerArr as $k => $v)
         {
@@ -245,6 +258,11 @@ class Menu extends Command
         {
             //过滤特殊的类
             if (substr($n->name, 0, 2) == '__' || $n->name == '_initialize')
+            {
+                continue;
+            }
+            //未启用软删除时过滤相关方法
+            if (!$withSofeDelete && in_array($n->name, $softDeleteMethods))
             {
                 continue;
             }

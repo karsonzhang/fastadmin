@@ -97,6 +97,7 @@ return [
     'Create time'                                           => '创建时间',
     'Update time'                                           => '更新时间',
     'Flag'                                                  => '标志',
+    'Drag to sort'                                          => '拖动进行排序',
     'Redirect now'                                          => '立即跳转',
     'Common search'                                         => '普通搜索',
     'Search %s'                                             => '搜索 %s',

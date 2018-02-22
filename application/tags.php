@@ -19,8 +19,8 @@ return [
     'module_init'  => [
         'app\\common\\behavior\\Common',
     ],
-    // 模块初始化
-    'addons_init'  => [
+    // 插件开始
+    'addon_begin'  => [
         'app\\common\\behavior\\Common',
     ],
     // 操作开始执行

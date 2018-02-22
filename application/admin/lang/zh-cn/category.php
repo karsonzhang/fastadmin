@@ -4,6 +4,7 @@ return [
     'Id'          => 'ID',
     'Pid'         => '父ID',
     'Type'        => '栏目类型',
+    'All'         => '全部',
     'Image'       => '图片',
     'Keywords'    => '关键字',
     'Description' => '描述',

@@ -59,6 +59,55 @@ class Menu
      */
     public static function delete($name)
     {
+        $ids = self::getAuthRuleIdsByName($name);
+        if (!$ids)
+        {
+            return false;
+        }
+        AuthRule::destroy($ids);
+        return true;
+    }
+    
+    /**
+     * 启用菜单
+     * @param string $name
+     * @return boolean
+     */
+    public static function enable($name)
+    {
+        $ids = self::getAuthRuleIdsByName($name);
+        if (!$ids)
+        {
+            return false;
+        }
+        AuthRule::where('id', 'in', $ids)->update(['status' => 'normal']);
+        return true;
+    }
+    
+    /**
+     * 禁用菜单
+     * @param string $name
+     * @return boolean
+     */
+    public static function disable($name)
+    {
+        $ids = self::getAuthRuleIdsByName($name);
+        if (!$ids)
+        {
+            return false;
+        }
+        AuthRule::where('id', 'in', $ids)->update(['status' => 'hidden']);
+        return true;
+    }
+
+    /**
+     * 根据名称获取规则IDS
+     * @param string $name
+     * @return array
+     */
+    public static function getAuthRuleIdsByName($name)
+    {
+        $ids = [];
         $menu = AuthRule::getByName($name);
         if ($menu)
         {
@@ -66,13 +115,8 @@ class Menu
             $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->field('id,pid,name')->select())->toArray();
             // 构造菜单数据
             $ids = Tree::instance()->init($ruleList)->getChildrenIds($menu['id'], true);
-            if ($ids)
-            {
-                AuthRule::destroy($ids);
-            }
-            return true;
         }
-        return false;
+        return $ids;
     }
 
 }

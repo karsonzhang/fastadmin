@@ -69,6 +69,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 defaults = defaults ? defaults : {};
                 columnDefaults = columnDefaults ? columnDefaults : {};
                 locales = locales ? locales : {};
+                // 如果是iOS设备则启用卡片视图
+                if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+                    Table.defaults.cardView = true;
+                }
                 // 写入bootstrap-table默认配置
                 $.extend(true, $.fn.bootstrapTable.defaults, Table.defaults, defaults);
                 // 写入bootstrap-table column配置
@@ -423,13 +427,13 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var buttons = $.extend([], this.buttons || []);
 
                     if (options.extend.dragsort_url !== '') {
-                        buttons.push({name: 'dragsort', icon: 'fa fa-arrows', classname: 'btn btn-xs btn-primary btn-dragsort'});
+                        buttons.push({name: 'dragsort', icon: 'fa fa-arrows', title: __('Drag to sort'), classname: 'btn btn-xs btn-primary btn-dragsort'});
                     }
                     if (options.extend.edit_url !== '') {
-                        buttons.push({name: 'edit', icon: 'fa fa-pencil', classname: 'btn btn-xs btn-success btn-editone', url: options.extend.edit_url});
+                        buttons.push({name: 'edit', icon: 'fa fa-pencil', title: __('Edit'), classname: 'btn btn-xs btn-success btn-editone', url: options.extend.edit_url});
                     }
                     if (options.extend.del_url !== '') {
-                        buttons.push({name: 'del', icon: 'fa fa-trash', classname: 'btn btn-xs btn-danger btn-delone'});
+                        buttons.push({name: 'del', icon: 'fa fa-trash', title: __('Del'), classname: 'btn btn-xs btn-danger btn-delone'});
                     }
                     return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
                 },

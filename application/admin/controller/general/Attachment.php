@@ -78,16 +78,28 @@ class Attachment extends Backend
         return $this->view->fetch();
     }
 
+    /**
+     * 删除附件
+     * @param array $ids
+     */
     public function del($ids = "")
     {
         if ($ids)
         {
-            $count = $this->model->destroy($ids);
-            if ($count)
+            \think\Hook::add('upload_delete', function($params) {
+                $attachmentFile = ROOT_PATH . '/public' . $params['url'];
+                if (is_file($attachmentFile))
+                {
+                    @unlink($attachmentFile);
+                }
+            });
+            $attachmentlist = $this->model->where('id', 'in', $ids)->select();
+            foreach ($attachmentlist as $attachment)
             {
-                \think\Hook::listen("upload_after", $this);
-                $this->success();
+                \think\Hook::listen("upload_delete", $attachment);
+                $attachment->delete();
             }
+            $this->success();
         }
         $this->error(__('Parameter %s can not be empty', 'ids'));
     }

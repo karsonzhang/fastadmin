@@ -345,12 +345,16 @@
 
         var that = this,
                 html = [];
-        html.push(sprintf('<div class="columns-%s pull-%s" style="margin-top:10px;">', this.options.buttonsAlign, this.options.buttonsAlign));
+        html.push(sprintf('<div class="columns-%s pull-%s" style="margin-top:10px;margin-bottom:10px;">', this.options.buttonsAlign, this.options.buttonsAlign));
         html.push(sprintf('<button class="btn btn-default%s' + '" type="button" name="commonSearch" title="%s">', that.options.iconSize === undefined ? '' : ' btn-' + that.options.iconSize, that.options.formatCommonSearch()));
         html.push(sprintf('<i class="%s %s"></i>', that.options.iconsPrefix, that.options.icons.commonSearchIcon))
         html.push('</button></div>');
 
-        that.$toolbar.prepend(html.join(''));
+        if (that.$toolbar.find(".pull-right").size() > 0) {
+            $(html.join('')).insertBefore(that.$toolbar.find(".pull-right:first"));
+        } else {
+            that.$toolbar.append(html.join(''));
+        }
 
         initCommonSearch(that.columns, that);
 

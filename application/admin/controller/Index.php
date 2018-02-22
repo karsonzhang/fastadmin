@@ -97,6 +97,7 @@ class Index extends Backend
         }
         $background = cdnurl(Config::get('fastadmin.login_background'));
         $this->view->assign('background', $background);
+        $this->view->assign('title', __('Login'));
         Hook::listen("login_init", $this->request);
         return $this->view->fetch();
     }

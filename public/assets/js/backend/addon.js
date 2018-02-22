@@ -186,6 +186,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                 Layer.closeAll();
                                 Layer.alert(ret.msg);
                             }, function (data, ret) {
+                                Controller.api.userinfo.set(null);
+                                Layer.closeAll();
                                 Layer.alert(ret.msg);
                             });
                         }
