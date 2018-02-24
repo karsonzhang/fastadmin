@@ -16,7 +16,6 @@ return [
     'Seven dnu'             => '七日新增',
     'Seven dau'             => '七日活跃',
     'Custom zone'           => '这里是你的自定义数据',
-    'Custom zone'           => '这里是你的自定义数据',
     'Sales'                 => '成交数',
     'Orders'                => '订单数',
     'Real time'             => '实时',
