@@ -48,7 +48,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             //绑定TAB事件
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 // var options = table.bootstrapTable(tableOptions);
-                var typeStr = $(this).attr("href");
+                var typeStr = $(this).attr("href").replace('#','');
                 var options = table.bootstrapTable('getOptions');
                 options.pageNumber = 1;
                 options.queryParams = function (params) {
