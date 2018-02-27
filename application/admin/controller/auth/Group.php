@@ -242,28 +242,28 @@ class Group extends Backend
         $model = model('AuthGroup');
         $id = $this->request->post("id");
         $pid = $this->request->post("pid");
-        $parentgroupmodel = $model->get($pid);
-        $currentgroupmodel = NULL;
+        $parentGroupModel = $model->get($pid);
+        $currentGroupModel = NULL;
         if ($id)
         {
-            $currentgroupmodel = $model->get($id);
+            $currentGroupModel = $model->get($id);
         }
-        if (($pid || $parentgroupmodel) && (!$id || $currentgroupmodel))
+        if (($pid || $parentGroupModel) && (!$id || $currentGroupModel))
         {
             $id = $id ? $id : NULL;
             $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->select())->toArray();
             //读取父类角色所有节点列表
             $parentRuleList = [];
-            if (in_array('*', explode(',', $parentgroupmodel->rules)))
+            if (in_array('*', explode(',', $parentGroupModel->rules)))
             {
                 $parentRuleList = $ruleList;
             }
             else
             {
-                $parent_rule_ids = explode(',', $parentgroupmodel->rules);
+                $parentRuleIds = explode(',', $parentGroupModel->rules);
                 foreach ($ruleList as $k => $v)
                 {
-                    if (in_array($v['id'], $parent_rule_ids))
+                    if (in_array($v['id'], $parentRuleIds))
                     {
                         $parentRuleList[] = $v;
                     }
@@ -271,33 +271,38 @@ class Group extends Backend
             }
 
             //当前所有正常规则列表
-            Tree::instance()->init($ruleList);
+            Tree::instance()->init($parentRuleList);
 
             //读取当前角色下规则ID集合
-            $admin_rule_ids = $this->auth->getRuleIds();
+            $adminRuleIds = $this->auth->getRuleIds();
             //是否是超级管理员
             $superadmin = $this->auth->isSuperAdmin();
             //当前拥有的规则ID集合
-            $current_rule_ids = $id ? explode(',', $currentgroupmodel->rules) : [];
+            $currentRuleIds = $id ? explode(',', $currentGroupModel->rules) : [];
 
             if (!$id || !in_array($pid, Tree::instance()->getChildrenIds($id, TRUE)))
             {
-                $ruleList = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'name');
+                $parentRuleList = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'name');
                 $hasChildrens = [];
-                foreach ($ruleList as $k => $v)
+                foreach ($parentRuleList as $k => $v)
                 {
                     if ($v['haschild'])
                         $hasChildrens[] = $v['id'];
                 }
-                $nodelist = [];
+                $parentRuleIds = array_map(function($item) {
+                    return $item['id'];
+                }, $parentRuleList);
+                $nodeList = [];
                 foreach ($parentRuleList as $k => $v)
                 {
-                    if (!$superadmin && !in_array($v['id'], $admin_rule_ids))
+                    if (!$superadmin && !in_array($v['id'], $adminRuleIds))
                         continue;
-                    $state = array('selected' => in_array($v['id'], $current_rule_ids) && !in_array($v['id'], $hasChildrens));
-                    $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => __($v['title']), 'type' => 'menu', 'state' => $state);
+                    if ($v['pid'] && !in_array($v['pid'], $parentRuleIds))
+                        continue;
+                    $state = array('selected' => in_array($v['id'], $currentRuleIds) && !in_array($v['id'], $hasChildrens));
+                    $nodeList[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => __($v['title']), 'type' => 'menu', 'state' => $state);
                 }
-                $this->success('', null, $nodelist);
+                $this->success('', null, $nodeList);
             }
             else
             {

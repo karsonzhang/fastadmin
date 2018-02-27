@@ -715,6 +715,19 @@ form.form-horizontal .control-label {
 .layui-layer-fast .layui-layer-setwin .layui-layer-close2:hover:after {
   display: none;
 }
+.layui-layer-content {
+  clear: both;
+}
+.layui-layer-fast-msg {
+  min-width: 100px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+}
+.layui-layer-fast-msg .layui-layer-content {
+  padding: 12px 25px;
+  text-align: center;
+}
 .n-bootstrap .input-group > .n-right {
   position: absolute;
 }

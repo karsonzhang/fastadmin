@@ -38,11 +38,18 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     up.start();
                 }, 1);
             },
+            //上传进行中的回调
+            onUploadProgress: function (up, file) {
+
+            },
+            //上传之前的回调
             onBeforeUpload: function (up, file) {
-                console.log("before", up.settings);
+
             },
             //上传成功的回调
-            onUploadSuccess: function (ret, onUploadSuccess, button) {
+            onUploadSuccess: function (up, ret) {
+                var button = up.settings.button;
+                var onUploadSuccess = up.settings.onUploadSuccess;
                 var data = typeof ret.data !== 'undefined' ? ret.data : null;
                 //上传成功后回调
                 if (button) {
@@ -78,7 +85,9 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                 }
             },
             //上传错误的回调
-            onUploadError: function (ret, onUploadError, button) {
+            onUploadError: function (up, ret) {
+                var button = up.settings.button;
+                var onUploadError = up.settings.onUploadError;
                 var data = typeof ret.data !== 'undefined' ? ret.data : null;
                 if (button) {
                     var onDomUploadError = $(button).data("upload-error");
@@ -113,11 +122,36 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     var ret = {code: -1, msg: e.message, data: null};
                 }
                 return ret;
+            },
+            //上传全部结束后
+            onUploadComplete: function (up, files) {
+                var button = up.settings.button;
+                var onUploadComplete = up.settings.onUploadComplete;
+                if (button) {
+                    var onDomUploadComplete = $(button).data("upload-complete");
+                    if (onDomUploadComplete) {
+                        if (typeof onDomUploadComplete !== 'function' && typeof Upload.api.custom[onDomUploadComplete] === 'function') {
+                            onDomUploadComplete = Upload.api.custom[onDomUploadComplete];
+                        }
+                        if (typeof onDomUploadComplete === 'function') {
+                            var result = onDomUploadComplete.call(button, files);
+                            if (result === false)
+                                return;
+                        }
+                    }
+                }
+
+                if (typeof onUploadComplete === 'function') {
+                    var result = onUploadComplete.call(button, files);
+                    if (result === false) {
+                        return;
+                    }
+                }
             }
         },
         api: {
             //Plupload上传
-            plupload: function (element, onUploadSuccess, onUploadError) {
+            plupload: function (element, onUploadSuccess, onUploadError, onUploadComplete) {
                 element = typeof element === 'undefined' ? Upload.config.classname : element;
                 $(element, Upload.config.container).each(function () {
                     if ($(this).attr("initialized")) {
@@ -179,30 +213,32 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                             BeforeUpload: Upload.events.onBeforeUpload,
                             UploadProgress: function (up, file) {
                                 var button = up.settings.button;
-                                //这里可以改成其它的表现形式
-                                //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
                                 $(button).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + file.percent + "%");
+                                Upload.events.onUploadProgress(up, file);
                             },
                             FileUploaded: function (up, file, info) {
                                 var button = up.settings.button;
                                 //还原按钮文字及状态
                                 $(button).prop("disabled", false).html($(button).data("bakup-html"));
                                 var ret = Upload.events.onUploadResponse(info.response, info, up, file);
+                                file.ret = ret;
                                 if (ret.code === 1) {
-                                    Upload.events.onUploadSuccess(ret, onUploadSuccess, button, up, file);
+                                    Upload.events.onUploadSuccess(up, ret, file);
                                 } else {
-                                    Upload.events.onUploadError(ret, onUploadError, button, up, file);
+                                    Upload.events.onUploadError(up, ret, file);
                                 }
                             },
+                            UploadComplete: Upload.events.onUploadComplete,
                             Error: function (up, err) {
                                 var button = up.settings.button;
                                 $(button).prop("disabled", false).html($(button).data("bakup-html"));
                                 var ret = {code: err.code, msg: err.message, data: null};
-                                Upload.events.onUploadError(ret, onUploadError, button, up, null);
+                                Upload.events.onUploadError(up, ret);
                             }
                         },
                         onUploadSuccess: onUploadSuccess,
                         onUploadError: onUploadError,
+                        onUploadComplete: onUploadComplete,
                         button: that
                     });
 
@@ -256,31 +292,21 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                 });
             },
             // AJAX异步上传
-            send: function (file, onUploadSuccess, onUploadError) {
-                var data = new FormData();
-                data.append("file", file);
-                $.each(Config.upload.multipart, function (k, v) {
-                    data.append(k, v);
+            send: function (file, onUploadSuccess, onUploadError, onUploadComplete) {
+                var index = Layer.msg(__('Uploading'), {offset: 't', time: 0});
+                var id = Plupload.guid();
+                var _onPostInit = Upload.events.onPostInit;
+                Upload.events.onPostInit = function () {
+                    // 当加载完成后添加文件并上传
+                    Upload.list[id].addFile(file);
+                    //Upload.list[id].start();
+                };
+                $('<button type="button" id="' + id + '" class="btn btn-danger hidden plupload" />').appendTo("body");
+                $("#" + id).data("upload-complete", function (files) {
+                    Upload.events.onPostInit = _onPostInit;
+                    Layer.close(index);
                 });
-                $.ajax({
-                    url: Config.upload.uploadurl,
-                    data: data,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST',
-                    success: function (ret) {
-                        ret = Upload.events.onUploadResponse(ret);
-                        if (ret.code === 1) {
-                            Upload.events.onUploadSuccess(ret, onUploadSuccess);
-                        } else {
-                            Upload.events.onUploadError(ret, onUploadError);
-                        }
-                    }, error: function (e) {
-                        var ret = {code: 500, msg: e.message, data: null};
-                        Upload.events.onUploadError(ret, onUploadError);
-                    }
-                });
+                Upload.api.plupload("#" + id, onUploadSuccess, onUploadError, onUploadComplete);
             },
             custom: {
                 //自定义上传完成回调

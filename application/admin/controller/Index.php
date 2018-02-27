@@ -86,7 +86,9 @@ class Index extends Backend
             }
             else
             {
-                $this->error(__('Username or password is incorrect'), $url, ['token' => $this->request->token()]);
+                $msg = $this->auth->getError();
+                $msg = $msg ? $msg : __('Username or password is incorrect');
+                $this->error($msg, $url, ['token' => $this->request->token()]);
             }
         }
 

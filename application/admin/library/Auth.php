@@ -13,6 +13,7 @@ use think\Session;
 class Auth extends \fast\Auth
 {
 
+    protected $_error = '';
     protected $requestUri = '';
     protected $breadcrumb = [];
     protected $logined = false; //登录状态
@@ -40,16 +41,19 @@ class Auth extends \fast\Auth
         $admin = Admin::get(['username' => $username]);
         if (!$admin)
         {
+            $this->setError('Username is incorrect');
             return false;
         }
         if ($admin->loginfailure >= 3 && time() - $admin->updatetime < 86400)
         {
+            $this->setError('Please try again after 1 day');
             return false;
         }
         if ($admin->password != md5(md5($password) . $admin->salt))
         {
             $admin->loginfailure++;
             $admin->save();
+            $this->setError('Password is incorrect');
             return false;
         }
         $admin->loginfailure = 0;
@@ -422,6 +426,26 @@ class Auth extends \fast\Auth
         Tree::instance()->init($ruleList);
         $menu = Tree::instance()->getTreeMenu(0, '<li class="@class"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
         return $menu;
+    }
+
+    /**
+     * 设置错误信息
+     *
+     * @param $error 错误信息
+     */
+    public function setError($error)
+    {
+        $this->_error = $error;
+        return $this;
+    }
+
+    /**
+     * 获取错误信息
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->_error ? __($this->_error) : '';
     }
 
 }

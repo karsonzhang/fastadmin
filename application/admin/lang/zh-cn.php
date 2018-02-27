@@ -72,6 +72,7 @@ return [
     'Recommend'                                             => '推荐',
     'Dashboard'                                             => '控制台',
     'Upload'                                                => '上传',
+    'Uploading'                                             => '上传中',
     'Code'                                                  => '编号',
     'Message'                                               => '内容',
     'Line'                                                  => '行号',
