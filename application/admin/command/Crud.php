@@ -1004,7 +1004,7 @@ EOD;
         $langArr = [];
         foreach ($arr as $k => $v)
         {
-            $langArr[(is_numeric($k) ? $v : $k)] = is_numeric($k) ? ($withTpl ? "{:" : "") . "__('" . mb_ucfirst($v) . "')" . ($withTpl ? "}" : "") : $v;
+            $langArr[$k] = is_numeric($k) ? ($withTpl ? "{:" : "") . "__('" . mb_ucfirst($v) . "')" . ($withTpl ? "}" : "") : $v;
         }
         return $langArr;
     }
@@ -1245,7 +1245,7 @@ EOD;
                 $v = "__('" . $v . "')";
         }
         unset($v);
-        $searchList = json_encode($itemArr);
+        $searchList = json_encode($itemArr, JSON_FORCE_OBJECT);
         $searchList = str_replace(['":"', '"}', ')","'], ['":', '}', '),"'], $searchList);
         if ($itemArr && !$extend)
         {
