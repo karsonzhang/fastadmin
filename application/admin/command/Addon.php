@@ -2,7 +2,6 @@
 
 namespace app\admin\command;
 
-use app\common\library\Menu;
 use think\addons\AddonException;
 use think\addons\Service;
 use think\Config;
@@ -67,7 +66,7 @@ class Addon extends Command
                 }
                 mkdir($addonDir);
                 mkdir($addonDir . DS . 'controller');
-                $menuList = Menu::export($name);
+                $menuList = \app\common\library\Menu::export($name);
                 $createMenu = $this->getCreateMenu($menuList);
                 $prefix = Config::get('database.prefix');
                 $createTableSql = '';

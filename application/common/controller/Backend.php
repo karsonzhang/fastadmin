@@ -144,7 +144,14 @@ class Backend extends Controller
             $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function($matches) {
                 return $matches[2] == '&' ? $matches[1] : '';
             }, $this->request->url());
-            $url = url($url, '', false);
+            if (Config::get('url_domain_deploy'))
+            {
+                if (stripos($url, $this->request->server('SCRIPT_NAME')) === 0)
+                {
+                    $url = substr($url, strlen($this->request->server('SCRIPT_NAME')));
+                }
+                $url = url($url, '', false);
+            }
             $this->redirect('index/index', [], 302, ['referer' => $url]);
             exit;
         }
