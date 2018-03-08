@@ -15,7 +15,7 @@
 @import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
 @import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
-@import url("../libs/selectpage/selectpage.css");
+@import url("../libs/fastadmin-selectpage/selectpage.css");
 
 @main-bg:           #f1f4f6;
 @panel-intro-bg:    darken(@main-bg,3%);
@@ -54,7 +54,6 @@ body.is-dialog {
         }
     }
 }
-.note-dialog .modal {z-index:1060;}
 
 .bootstrap-dialog .modal-dialog {
     /*width: 70%;*/
@@ -668,13 +667,16 @@ form.form-horizontal .control-label {
         background: #ecf0f1;
         overflow:hidden;
         a {
-            background-color: #95a5a6!important;
-            border-color: #95a5a6!important;
+            background-color: #95a5a6;
+            border-color: #95a5a6;
             color:#fff!important;
+            height:31px;
+            margin-top:0;
+            border: 1px solid transparent;
         }
         .layui-layer-btn0{
-            background-color: #18bc9c!important;
-            border-color: #18bc9c!important;
+            background-color: #18bc9c;
+            border-color: #18bc9c;
         }
     }
     .layui-layer-footer {
@@ -763,6 +765,14 @@ form.form-horizontal .control-label {
         position:absolute;
     }
 }
+@media (min-width: 564px){
+    body.is-dialog .daterangepicker  {
+        min-width: 130px;
+    }
+    body.is-dialog .daterangepicker .ranges ul {
+        width: 130px;
+    }
+}
 
 /*手机版样式*/
 @media (max-width: @screen-phone) {
@@ -773,6 +783,9 @@ form.form-horizontal .control-label {
         .columns-right.btn-group{
             display:none;
         }
+    }
+    .fixed .content-wrapper, .fixed .right-side {
+        padding-top: 50px;
     }
 }
 /*平板样式*/

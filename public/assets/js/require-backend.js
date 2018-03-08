@@ -7,7 +7,7 @@ require.config({
         }
     ],
     //在打包压缩时将会把include中的模块合并到主文件中
-    include: ['css', 'layer', 'toastr', 'fast', 'backend', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs', 'selectpage'],
+    include: ['css', 'layer', 'toastr', 'fast', 'backend', 'backend-init', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs', 'selectpage'],
     paths: {
         'lang': "empty:",
         'form': 'require-form',
@@ -34,22 +34,20 @@ require.config({
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
         'tableexport': '../libs/tableExport.jquery.plugin/tableExport.min',
-        'dragsort': '../libs/dragsort/jquery.dragsort',
-        'qrcode': '../libs/jquery-qrcode/jquery.qrcode.min',
+        'dragsort': '../libs/fastadmin-dragsort/jquery.dragsort',
         'sortable': '../libs/Sortable/Sortable.min',
-        'addtabs': '../libs/jquery-addtabs/jquery.addtabs',
+        'addtabs': '../libs/fastadmin-addtabs/jquery.addtabs',
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
-        'summernote': '../libs/summernote/dist/lang/summernote-zh-CN.min',
         'validator-core': '../libs/nice-validator/dist/jquery.validator',
         'validator-lang': '../libs/nice-validator/dist/local/zh-CN',
         'plupload': '../libs/plupload/js/plupload.min',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
-        'layer': '../libs/layer/src/layer',
+        'layer': '../libs/layer/dist/layer',
         'cookie': '../libs/jquery.cookie/jquery.cookie',
-        'cxselect': '../libs/jquery-cxselect/js/jquery.cxselect',
+        'cxselect': '../libs/fastadmin-cxselect/js/jquery.cxselect',
         'template': '../libs/art-template/dist/template-native',
-        'selectpage': '../libs/selectpage/selectpage',
+        'selectpage': '../libs/fastadmin-selectpage/selectpage',
         'citypicker': '../libs/city-picker/dist/js/city-picker.min',
         'citypicker-data': '../libs/city-picker/dist/js/city-picker.data',
     },
@@ -106,7 +104,6 @@ require.config({
         ],
         'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
         'bootstrap-select-lang': ['bootstrap-select'],
-        'summernote': ['../libs/summernote/dist/summernote.min', 'css!../libs/summernote/dist/summernote.css'],
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],
         'plupload': {
@@ -116,7 +113,7 @@ require.config({
 //        'layer': ['css!../libs/layer/dist/theme/default/layer.css'],
 //        'validator-core': ['css!../libs/nice-validator/dist/jquery.validator.css'],
         'validator-lang': ['validator-core'],
-//        'selectpage': ['css!../libs/selectpage/selectpage.css'],
+//        'selectpage': ['css!../libs/fastadmin-selectpage/selectpage.css'],
         'citypicker': ['citypicker-data', 'css!../libs/city-picker/dist/css/city-picker.css']
     },
     baseUrl: requirejs.s.contexts._.config.config.site.cdnurl + '/assets/js/', //资源基础路径
@@ -144,7 +141,7 @@ require(['jquery', 'bootstrap'], function ($, undefined) {
     // 初始化
     $(function () {
         require(['fast'], function (Fast) {
-            require(['backend', 'addons'], function (Backend, Addons) {
+            require(['backend', 'backend-init', 'addons'], function (Backend, undefined, Addons) {
                 //加载相应模块
                 if (Config.jsname) {
                     require([Config.jsname], function (Controller) {

@@ -67,7 +67,7 @@ class Menu
         AuthRule::destroy($ids);
         return true;
     }
-    
+
     /**
      * 启用菜单
      * @param string $name
@@ -83,7 +83,7 @@ class Menu
         AuthRule::where('id', 'in', $ids)->update(['status' => 'normal']);
         return true;
     }
-    
+
     /**
      * 禁用菜单
      * @param string $name
@@ -101,6 +101,28 @@ class Menu
     }
 
     /**
+     * 导出指定名称的菜单规则
+     * @param string $name
+     * @return array
+     */
+    public static function export($name)
+    {
+        $ids = self::getAuthRuleIdsByName($name);
+        if (!$ids)
+        {
+            return [];
+        }
+        $menuList = [];
+        $menu = AuthRule::getByName($name);
+        if ($menu)
+        {
+            $ruleList = collection(AuthRule::where('id', 'in', $ids)->select())->toArray();
+            $menuList = Tree::instance()->init($ruleList)->getTreeArray($menu['id']);
+        }
+        return $menuList;
+    }
+
+    /**
      * 根据名称获取规则IDS
      * @param string $name
      * @return array
@@ -112,7 +134,7 @@ class Menu
         if ($menu)
         {
             // 必须将结果集转换为数组
-            $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->field('id,pid,name')->select())->toArray();
+            $ruleList = collection(AuthRule::order('weigh', 'desc')->field('id,pid,name')->select())->toArray();
             // 构造菜单数据
             $ids = Tree::instance()->init($ruleList)->getChildrenIds($menu['id'], true);
         }

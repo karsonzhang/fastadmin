@@ -12,6 +12,8 @@ return [
     'Avatar'         => '头像',
     'Level'          => '等级',
     'Gender'         => '性别',
+    'Male'           => '男',
+    'FeMale'         => '女',
     'Birthday'       => '生日',
     'Bio'            => '格言',
     'Score'          => '积分',

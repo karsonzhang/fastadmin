@@ -104,7 +104,7 @@
 
     var createFormCommon = function (pColumns, that) {
         var htmlForm = [];
-        var opList = ['=', '>', '>=', '<', '<=', '!=', 'LIKE', 'LIKE %...%', 'NOT LIKE', 'IN', 'NOT IN', 'IN(...)', 'NOT IN(...)', 'BETWEEN', 'NOT BETWEEN', 'RANGE', 'NOT RANGE', 'IS NULL', 'IS NOT NULL'];
+        var opList = ['=', '>', '>=', '<', '<=', '!=', 'FIND_IN_SET', 'LIKE', 'LIKE %...%', 'NOT LIKE', 'IN', 'NOT IN', 'IN(...)', 'NOT IN(...)', 'BETWEEN', 'NOT BETWEEN', 'RANGE', 'NOT RANGE', 'IS NULL', 'IS NOT NULL'];
         htmlForm.push(sprintf('<form class="form-horizontal form-commonsearch" action="%s" >', that.options.actionForm));
         htmlForm.push('<fieldset>');
         if (that.options.titleForm.length > 0)

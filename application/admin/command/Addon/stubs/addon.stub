@@ -2,6 +2,7 @@
 
 namespace addons\{%name%};
 
+use app\common\library\Menu;
 use think\Addons;
 
 /**
@@ -16,6 +17,7 @@ class {%addonClassName%} extends Addons
      */
     public function install()
     {
+        {%addonInstallMenu%}
         return true;
     }
 
@@ -25,6 +27,7 @@ class {%addonClassName%} extends Addons
      */
     public function uninstall()
     {
+        {%addonUninstallMenu%}
         return true;
     }
 
@@ -34,6 +37,7 @@ class {%addonClassName%} extends Addons
      */
     public function enable()
     {
+        {%addonEnableMenu%}
         return true;
     }
 
@@ -43,6 +47,7 @@ class {%addonClassName%} extends Addons
      */
     public function disable()
     {
+        {%addonDisableMenu%}
         return true;
     }
 

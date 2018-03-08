@@ -2,7 +2,8 @@
     {%config%}
     ,
     optimizeCss: "standard",
-    optimize: "none",   //可使用uglify|closure|none
+    optimize: "{%optimize%}",   //可使用uglify|closure|none
+    preserveLicenseComments: false,
     removeCombined: false,
     baseUrl: "{%jsBasePath%}",    //JS文件所在的基础目录
     name: "{%jsBaseName%}", //来源文件,不包含后缀

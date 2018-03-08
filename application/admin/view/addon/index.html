@@ -10,6 +10,12 @@
     .payimg .alipaycode {position:absolute;left:265px;top:442px;}
     .payimg .wechatcode {position:absolute;left:660px;top:442px;}
     .thumbnail img{width:100%;}
+    .fixed-table-toolbar .pull-right.search {
+        min-width: 300px;
+    }
+    .status-disabled .noimage {
+        background:#d2d6de;
+    }
 </style>
 <div id="warmtips" class="alert alert-dismissable alert-danger hide">
     <button type="button" class="close" data-dismiss="alert">×</button>
@@ -158,10 +164,10 @@
     </table>
 </script>
 <script id="itemtpl" type="text/html">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 mt-4">
-        <% var labelarr = ['primary', 'success', 'info', 'danger', 'warning']; %>
-        <% var label = labelarr[item.id % 5]; %>
-        <% var addon = typeof addons[item.name]!= 'undefined' ? addons[item.name] : null; %>
+    <% var labelarr = ['primary', 'success', 'info', 'danger', 'warning']; %>
+    <% var label = labelarr[item.id % 5]; %>
+    <% var addon = typeof addons[item.name]!= 'undefined' ? addons[item.name] : null; %>
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 mt-4 status-<%=addon ? (addon.state==1?'enabled':'disabled') : 'uninstalled'%>">
         <div class="thumbnail addon">
             <%if(addon){%>
             <span>

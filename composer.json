@@ -10,7 +10,7 @@
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "karson",
+            "name": "Karson",
             "email": "karsonzhang@163.com"
         }
     ],
@@ -22,7 +22,7 @@
         "topthink/think-captcha": "^1.0",
         "mtdowling/cron-expression": "^1.2",
         "phpmailer/phpmailer": "^5.2",
-        "karsonzhang/fastadmin-addons": "dev-master",
+        "karsonzhang/fastadmin-addons": "~1.1.0",
         "overtrue/pinyin": "~3.0",
         "phpoffice/phpexcel": "^1.8"
     },

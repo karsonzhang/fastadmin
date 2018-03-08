@@ -28,7 +28,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: __('Id')},
                         {field: 'pid', title: __('Pid'), visible: false},
                         {field: 'title', title: __('Title'), align: 'left'},
-                        {field: 'name', title: __('Name')},
+                        {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'remark', title: __('Remark')},
                         {field: 'ismenu', title: __('Ismenu'), formatter: Controller.api.formatter.toggle},
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, visible: false},

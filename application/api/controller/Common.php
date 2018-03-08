@@ -2,9 +2,9 @@
 
 namespace app\api\controller;
 
-use app\api\model\Area;
 use app\common\controller\Api;
-use fast\Version;
+use app\common\model\Area;
+use app\common\model\Version;
 use fast\Random;
 use think\Config;
 

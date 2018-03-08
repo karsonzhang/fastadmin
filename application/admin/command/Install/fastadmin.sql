@@ -4,7 +4,7 @@
  官网: http://www.fastadmin.net
  演示: http://demo.fastadmin.net
 
- Date: 2017年09月15日
+ Date: 2018年03月07日
 */
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -396,6 +396,9 @@ BEGIN;
 INSERT INTO `fa_test` VALUES (1, 0, 12, '12,13', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '广西壮族自治区/百色市/平果县', 0.00, 0, '2017-07-10', '2017-07-10 18:24:45', 2017, '18:24:45', 1499682285, 1499682526, 1499682526, 0, 1, 'normal', '1');
 COMMIT;
 
+-- ----------------------------
+-- Table structure for fa_user
+-- ----------------------------
 DROP TABLE IF EXISTS `fa_user`;
 CREATE TABLE `fa_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -431,10 +434,16 @@ CREATE TABLE `fa_user` (
   KEY `mobile` (`mobile`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员表';
 
+-- ----------------------------
+-- Records of fa_user
+-- ----------------------------
 BEGIN;
 INSERT INTO `fa_user` VALUES (1, 1, 'admin', 'admin', 'c13f62012fd6a8fdf06b3452a94430e5', 'rpR6Bv', 'admin@163.com', '13888888888', '/assets/img/avatar.png', 0, 0, '2017-04-15', '', 0, 1, 1, 1516170492, 1516171614, '127.0.0.1', 0, '127.0.0.1', 1491461418, 0, 1516171614, '', 'normal','');
 COMMIT;
 
+-- ----------------------------
+-- Table structure for fa_user_group
+-- ----------------------------
 DROP TABLE IF EXISTS `fa_user_group`;
 CREATE TABLE `fa_user_group` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -446,10 +455,16 @@ CREATE TABLE `fa_user_group` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员组表';
 
+-- ----------------------------
+-- Records of fa_user_group
+-- ----------------------------
 BEGIN;
 INSERT INTO `fa_user_group` VALUES (1, '默认组', '1,2,3,4,5,6,7,8,9,10,11,12', 1515386468, 1516168298, 'normal');
 COMMIT;
 
+-- ----------------------------
+-- Table structure for fa_user_rule
+-- ----------------------------
 DROP TABLE IF EXISTS `fa_user_rule`;
 CREATE TABLE `fa_user_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -465,6 +480,9 @@ CREATE TABLE `fa_user_rule` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='会员规则表';
 
+-- ----------------------------
+-- Records of fa_user_rule
+-- ----------------------------
 BEGIN;
 INSERT INTO `fa_user_rule` VALUES (1, 0, 'index', '前台', '', 1, 1516168079, 1516168079, 1, 'normal');
 INSERT INTO `fa_user_rule` VALUES (2, 0, 'api', 'API接口', '', 1, 1516168062, 1516168062, 2, 'normal');
@@ -480,6 +498,9 @@ INSERT INTO `fa_user_rule` VALUES (11, 4, 'api/user/index', '会员中心', '', 
 INSERT INTO `fa_user_rule` VALUES (12, 4, 'api/user/profile', '个人资料', '', 0, 1516015012, 1516015012, 3, 'normal');
 COMMIT;
 
+-- ----------------------------
+-- Table structure for fa_user_score_log
+-- ----------------------------
 DROP TABLE IF EXISTS `fa_user_score_log`;
 CREATE TABLE `fa_user_score_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -492,6 +513,9 @@ CREATE TABLE `fa_user_score_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会员积分变动表';
 
+-- ----------------------------
+-- Table structure for fa_user_token
+-- ----------------------------
 DROP TABLE IF EXISTS `fa_user_token`;
 CREATE TABLE `fa_user_token` (
   `token` varchar(50) NOT NULL COMMENT 'Token',
@@ -501,4 +525,30 @@ CREATE TABLE `fa_user_token` (
   PRIMARY KEY (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员Token表';
 
+-- ----------------------------
+-- Table structure for fa_version
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_version`;
+CREATE TABLE `fa_version`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `oldversion` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '旧版本号',
+  `newversion` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '新版本号',
+  `packagesize` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '包大小',
+  `content` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '升级内容',
+  `downloadurl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '下载地址',
+  `enforce` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '强制更新',
+  `createtime` int(10) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `updatetime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `weigh` int(10) NOT NULL DEFAULT 0 COMMENT '权重',
+  `status` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '版本表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for fa_version
+-- ----------------------------
+BEGIN;
+INSERT INTO `fa_version` (`id`, `oldversion`, `newversion`, `packagesize`, `content`, `downloadurl`, `enforce`, `createtime`, `updatetime`, `weigh`, `status`) VALUES
+(1, '1.1.1,2', '1.2.1', '20M', '更新内容', 'http://www.fastadmin.net/download.html', 1, 1520425318, 0, 0, 'normal');
+COMMIT;
 SET FOREIGN_KEY_CHECKS = 1;

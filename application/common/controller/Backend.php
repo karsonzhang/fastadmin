@@ -144,6 +144,7 @@ class Backend extends Controller
             $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function($matches) {
                 return $matches[2] == '&' ? $matches[1] : '';
             }, $this->request->url());
+            $url = url($url, '', false);
             $this->redirect('index/index', [], 302, ['referer' => $url]);
             exit;
         }
@@ -290,6 +291,10 @@ class Backend extends Controller
                 case '<=':
                     $where[] = [$k, $sym, intval($v)];
                     break;
+                case 'FINDIN':
+                case 'FIND_IN_SET':
+                    $where[] = "FIND_IN_SET('{$v}', `{$k}`)";
+                    break;
                 case 'IN':
                 case 'IN(...)':
                 case 'NOT IN':
@@ -401,21 +406,21 @@ class Backend extends Controller
         //搜索关键词,客户端输入以空格分开,这里接收为数组
         $word = (array) $this->request->request("q_word/a");
         //当前页
-        $page = $this->request->request("page");
+        $page = $this->request->request("pageNumber");
         //分页大小
-        $pagesize = $this->request->request("per_page");
+        $pagesize = $this->request->request("pageSize");
         //搜索条件
-        $andor = $this->request->request("and_or");
+        $andor = $this->request->request("andOr");
         //排序方式
-        $orderby = (array) $this->request->request("order_by/a");
+        $orderby = (array) $this->request->request("orderBy/a");
         //显示的字段
-        $field = $this->request->request("field");
+        $field = $this->request->request("showField");
         //主键
-        $primarykey = $this->request->request("pkey_name");
+        $primarykey = $this->request->request("keyField");
         //主键值
-        $primaryvalue = $this->request->request("pkey_value");
+        $primaryvalue = $this->request->request("keyValue");
         //搜索字段
-        $searchfield = (array) $this->request->request("search_field/a");
+        $searchfield = (array) $this->request->request("searchField/a");
         //自定义搜索条件
         $custom = (array) $this->request->request("custom/a");
         $order = [];

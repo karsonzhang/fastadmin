@@ -99,6 +99,9 @@ define(['fast', 'moment'], function (Fast, Moment) {
                     url = url.replace(/\{ids\}/g, ids);
                 }
                 return url;
+            },
+            refreshmenu: function () {
+                top.window.$(".sidebar-menu").trigger("refresh");
             }
         },
         init: function () {

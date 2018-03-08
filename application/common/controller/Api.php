@@ -91,7 +91,7 @@ class Api
         $actionname = strtolower($this->request->action());
 
         // token
-        $token = $this->request->request('token') ?: $this->request->cookie('token');
+        $token = $this->request->server('HTTP_TOKEN', $this->request->request('token', \think\Cookie::get('token')));
 
         $path = str_replace('.', '/', $controllername) . '/' . $actionname;
         // 设置当前请求的URI
@@ -104,7 +104,7 @@ class Api
             //检测是否登录
             if (!$this->auth->isLogin())
             {
-                $this->error(__('Please login first'));
+                $this->error(__('Please login first'), null, 401);
             }
             // 判断是否需要验证权限
             if (!$this->auth->match($this->noNeedRight))
@@ -112,7 +112,7 @@ class Api
                 // 判断控制器和方法判断是否有对应权限
                 if (!$this->auth->check($path))
                 {
-                    $this->error(__('You have no permission'));
+                    $this->error(__('You have no permission'), null, 403);
                 }
             }
         }
@@ -141,38 +141,40 @@ class Api
      * 操作成功返回的数据
      * @param string $msg   提示信息
      * @param mixed $data   要返回的数据
+     * @param int   $code   错误码，默认为1
      * @param string $type  输出类型
      * @param array $header 发送的 Header 信息
      */
-    protected function success($msg = '', $data = '', $type = 'json', array $header = [])
+    protected function success($msg = '', $data = null, $code = 1, $type = 'json', array $header = [])
     {
-        $this->result($data, 1, $msg, $type, $header);
+        $this->result($msg, $data, $code, $type, $header);
     }
 
     /**
      * 操作失败返回的数据
      * @param string $msg   提示信息
      * @param mixed $data   要返回的数据
+     * @param int   $code   错误码，默认为0
      * @param string $type  输出类型
      * @param array $header 发送的 Header 信息
      */
-    protected function error($msg = '', $data = '', $type = 'json', array $header = [])
+    protected function error($msg = '', $data = null, $code = 0, $type = 'json', array $header = [])
     {
-        $this->result($data, 0, $msg, $type, $header);
+        $this->result($msg, $data, $code, $type, $header);
     }
 
     /**
      * 返回封装后的 API 数据到客户端
      * @access protected
+     * @param mixed  $msg    提示信息
      * @param mixed  $data   要返回的数据
      * @param int    $code   返回的 code
-     * @param mixed  $msg    提示信息
      * @param string $type   返回数据格式
      * @param array  $header 发送的 Header 信息
      * @return void
      * @throws HttpResponseException
      */
-    protected function result($data, $code = 0, $msg = '', $type = '', array $header = [])
+    protected function result($msg, $data = null, $code = 0, $type = 'json', array $header = [])
     {
         $result = [
             'code' => $code,
@@ -181,17 +183,18 @@ class Api
             'data' => $data,
         ];
         $type = $type ?: $this->getResponseType();
-        $response = Response::create($result, $type)->header($header);
+        if (isset($header['statuscode']))
+        {
+            $code = $header['statuscode'];
+            unset($header['statuscode']);
+        }
+        else
+        {
+            $code = $code >= 1000 ? 200 : $code;
+        }
+        $response = Response::create($result, $type, $code)->header($header);
 
         throw new HttpResponseException($response);
-    }
-
-    /**
-     * 未找到请求的接口
-     */
-    public function _empty()
-    {
-        return $this->error('Api not found');
     }
 
     /**

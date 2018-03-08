@@ -20,7 +20,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'weigh',
-                escape:false, 
+                escape: false,
                 columns: [
                     [
                         {field: 'state', checkbox: true, },
@@ -41,10 +41,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             });
 
             // 为表格绑定事件
-            Table.api.bindevent(table);//当内容渲染完成后
+            Table.api.bindevent(table);
 
-            //默认隐藏所有子节点
+            //当内容渲染完成后
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
+                //默认隐藏所有子节点
                 //$("a.btn[data-id][data-pid][data-pid!=0]").closest("tr").hide();
                 $(".btn-node-sub.disabled").closest("tr").hide();
 
@@ -57,7 +58,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     $(this).data("shown", !status);
                     return false;
                 });
+                $(".btn-change[data-id],.btn-delone,.btn-dragsort").data("success", function (data, ret) {
+                    Fast.api.refreshmenu();
+                });
 
+            });
+            //批量删除后的回调
+            $(".toolbar > .btn-del,.toolbar .btn-more~ul>li>a").data("success", function (e) {
+                Fast.api.refreshmenu();
             });
             //展开隐藏一级
             $(document.body).on("click", ".btn-toggle", function (e) {
@@ -88,21 +96,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
         api: {
             formatter: {
                 title: function (value, row, index) {
-                    return !row.ismenu ? "<span class='text-muted'>" + value + "</span>" : value;
+                    return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
                 },
                 name: function (value, row, index) {
-                    return !row.ismenu ? "<span class='text-muted'>" + value + "</span>" : value;
+                    return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
                 },
                 menu: function (value, row, index) {
                     return "<a href='javascript:;' class='btn btn-" + (value ? "info" : "default") + " btn-xs btn-change' data-id='"
                             + row.id + "' data-params='ismenu=" + (value ? 0 : 1) + "'>" + (value ? __('Yes') : __('No')) + "</a>";
                 },
                 icon: function (value, row, index) {
-                    return '<i class="' + value + '"></i>';
+                    return '<span class="' + (!row.ismenu || row.status == 'hidden' ? 'text-muted' : '') + '"><i class="' + value + '"></i></span>';
                 },
                 subnode: function (value, row, index) {
-                    return '<a href="javascript:;" data-id="' + row['id'] + '" data-pid="' + row['pid'] + '" class="btn btn-xs '
-                            + (row['haschild'] == 1 ? 'btn-success' : 'btn-default disabled') + ' btn-node-sub"><i class="fa fa-sitemap"></i></a>';
+                    return '<a href="javascript:;" data-id="' + row.id + '" data-pid="' + row.pid + '" class="btn btn-xs '
+                            + (row.haschild == 1 || row.ismenu == 1 ? 'btn-success' : 'btn-default disabled') + ' btn-node-sub"><i class="fa fa-sitemap"></i></a>';
                 }
             },
             bindevent: function () {
@@ -113,7 +121,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 $("input[name='row[ismenu]']:checked").trigger("click");
 
                 var iconlist = [];
-                Form.api.bindevent($("form[role=form]"));
+                Form.api.bindevent($("form[role=form]"), function (data) {
+                    Fast.api.refreshmenu();
+                });
                 $(document).on('click', ".btn-search-icon", function () {
                     if (iconlist.length == 0) {
                         $.get(Config.site.cdnurl + "/assets/libs/font-awesome/less/variables.less", function (ret) {

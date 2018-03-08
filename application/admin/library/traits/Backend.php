@@ -267,7 +267,8 @@ trait Backend
                     {
                         $this->model->where($this->dataLimitField, 'in', $adminIds);
                     }
-                    $count = $this->model->where($this->model->getPk(), 'in', $ids)->update($values);
+                    $this->model->where($this->model->getPk(), 'in', $ids);
+                    $count = $this->model->allowField(true)->isUpdate(true)->save($values);
                     if ($count)
                     {
                         $this->success();

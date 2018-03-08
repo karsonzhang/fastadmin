@@ -2,14 +2,17 @@
 
 namespace app\admin\command;
 
+use app\common\library\Menu;
 use think\addons\AddonException;
 use think\addons\Service;
+use think\Config;
 use think\console\Command;
 use think\console\Input;
 use think\console\input\Option;
 use think\console\Output;
 use think\Db;
 use think\Exception;
+use think\exception\PDOException;
 
 class Addon extends Command
 {
@@ -63,14 +66,43 @@ class Addon extends Command
                     rmdirs($addonDir);
                 }
                 mkdir($addonDir);
+                mkdir($addonDir . DS . 'controller');
+                $menuList = Menu::export($name);
+                $createMenu = $this->getCreateMenu($menuList);
+                $prefix = Config::get('database.prefix');
+                $createTableSql = '';
+                try
+                {
+                    $result = Db::query("SHOW CREATE TABLE `" . $prefix . $name . "`;");
+                    if (isset($result[0]) && isset($result[0]['Create Table']))
+                    {
+                        $createTableSql = $result[0]['Create Table'];
+                    }
+                }
+                catch (PDOException $e)
+                {
+                    
+                }
+
                 $data = [
-                    'name'           => $name,
-                    'addon'          => $name,
-                    'addonClassName' => ucfirst($name)
+                    'name'               => $name,
+                    'addon'              => $name,
+                    'addonClassName'     => ucfirst($name),
+                    'addonInstallMenu'   => $createMenu ? "\$menu = " . var_export_short($createMenu, "\t") . ";\n\tMenu::create(\$menu);" : '',
+                    'addonUninstallMenu' => $menuList ? 'Menu::delete("' . $name . '");' : '',
+                    'addonEnableMenu'    => $menuList ? 'Menu::enable("' . $name . '");' : '',
+                    'addonDisableMenu'   => $menuList ? 'Menu::disable("' . $name . '");' : '',
                 ];
                 $this->writeToFile("addon", $data, $addonDir . ucfirst($name) . '.php');
                 $this->writeToFile("config", $data, $addonDir . 'config.php');
                 $this->writeToFile("info", $data, $addonDir . 'info.ini');
+                $this->writeToFile("controller", $data, $addonDir . 'controller' . DS . 'Index.php');
+                if ($createTableSql)
+                {
+                    $createTableSql = str_replace("`" . $prefix, '`__PREFIX__', $createTableSql);
+                    file_put_contents($addonDir . 'install.sql', $createTableSql);
+                }
+
                 $output->info("Create Successed!");
                 break;
             case 'disable':
@@ -254,6 +286,37 @@ class Addon extends Command
             default :
                 break;
         }
+    }
+
+    /**
+     * 获取创建菜单的数组
+     * @param array $menu
+     * @return array
+     */
+    protected function getCreateMenu($menu)
+    {
+        $result = [];
+        foreach ($menu as $k => & $v)
+        {
+            $arr = [
+                'name'  => $v['name'],
+                'title' => $v['title'],
+            ];
+            if ($v['icon'] != 'fa fa-circle-o')
+            {
+                $arr['icon'] = $v['icon'];
+            }
+            if ($v['ismenu'])
+            {
+                $arr['ismenu'] = $v['ismenu'];
+            }
+            if (isset($v['childlist']) && $v['childlist'])
+            {
+                $arr['sublist'] = $this->getCreateMenu($v['childlist']);
+            }
+            $result[] = $arr;
+        }
+        return $result;
     }
 
     /**

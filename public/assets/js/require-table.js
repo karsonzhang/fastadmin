@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-mobile', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Moment) {
+define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Moment) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -32,7 +32,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             paginationPreText: __("Previous"),
             paginationNextText: __("Next"),
             paginationLastText: __("Last"),
-            mobileResponsive: true, //是否自适应移动端
             cardView: false, //卡片视图
             checkOnInit: true, //是否在初始化时判断
             escape: true, //是否对内容进行转义
@@ -152,7 +151,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                 });
                 // 处理选中筛选框后按钮的状态统一变更
-                table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table fa.event.check', function () {
+                table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
                     var ids = Table.api.selectedids(table);
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !ids.length);
                 });
@@ -176,7 +175,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             Fast.api.ajax({
                                 url: options.extend.import_url,
                                 data: {file: data.url},
-                            }, function () {
+                            }, function (data, ret) {
                                 table.bootstrapTable('refresh');
                             });
                         });
@@ -217,7 +216,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     $("tbody", table).dragsort({
                         itemSelector: 'tr:visible',
                         dragSelector: "a.btn-dragsort",
-                        dragEnd: function () {
+                        dragEnd: function (a, b) {
+                            var element = $("a.btn-dragsort", this);
                             var data = table.bootstrapTable('getData');
                             var current = data[parseInt($(this).data("index"))];
                             var options = table.bootstrapTable('getOptions');
@@ -238,7 +238,21 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                                     table: options.extend.table
                                 }
                             };
-                            Fast.api.ajax(params, function (data) {
+                            Fast.api.ajax(params, function (data, ret) {
+                                var success = $(element).data("success") || $.noop;
+                                if (typeof success === 'function') {
+                                    if (false === success.call(element, data, ret)) {
+                                        return false;
+                                    }
+                                }
+                                table.bootstrapTable('refresh');
+                            }, function () {
+                                var error = $(element).data("error") || $.noop;
+                                if (typeof error === 'function') {
+                                    if (false === error.call(element, data, ret)) {
+                                        return false;
+                                    }
+                                }
                                 table.bootstrapTable('refresh');
                             });
                         },
@@ -246,7 +260,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     });
                 });
                 $(table).on("click", "input[data-id][name='checkbox']", function (e) {
-                    table.trigger('fa.event.check');
+                    var ids = $(this).data("id");
+                    var row = Table.api.getrowbyid(ids);
+                    table.trigger('check.bs.table', [row, this]);
                 });
                 $(table).on("click", "[data-id].btn-change", function (e) {
                     e.preventDefault();
@@ -255,14 +271,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 $(table).on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
                     var ids = $(this).data("id");
-                    var row = {};
-                    var options = table.bootstrapTable("getOptions");
-                    $.each(table.bootstrapTable('getData'), function (i, j) {
-                        if (j[options.pk] == ids) {
-                            row = j;
-                            return false;
-                        }
-                    });
+                    var row = Table.api.getrowbyid(ids);
                     row.ids = ids;
                     var url = Table.api.replaceurl(options.extend.edit_url, row, table);
                     Fast.api.open(url, __('Edit'), $(this).data() || {});
@@ -293,8 +302,21 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 url = this.replaceurl(url, {ids: ids}, table);
                 var params = typeof data.params !== "undefined" ? (typeof data.params == 'object' ? $.param(data.params) : data.params) : '';
                 var options = {url: url, data: {action: action, ids: ids, params: params}};
-                Fast.api.ajax(options, function (data) {
+                Fast.api.ajax(options, function (data, ret) {
+                    var success = $(element).data("success") || $.noop;
+                    if (typeof success === 'function') {
+                        if (false === success.call(element, data, ret)) {
+                            return false;
+                        }
+                    }
                     table.bootstrapTable('refresh');
+                }, function (data, ret) {
+                    var error = $(element).data("error") || $.noop;
+                    if (typeof error === 'function') {
+                        if (false === error.call(element, data, ret)) {
+                            return false;
+                        }
+                    }
                 });
             },
             // 单元格元素事件
@@ -521,6 +543,22 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 index = parseInt(index);
                 var data = table.bootstrapTable('getData');
                 return typeof data[index] !== 'undefined' ? data[index] : null;
+            },
+            // 根据行索引获取行数据
+            getrowbyindex: function (table, index) {
+                return Table.api.getrowdata(table, index);
+            },
+            // 根据主键ID获取行数据
+            getrowbyid: function (table, id) {
+                var row = {};
+                var options = table.bootstrapTable("getOptions");
+                $.each(table.bootstrapTable('getData'), function (i, j) {
+                    if (j[options.pk] == id) {
+                        row = j;
+                        return false;
+                    }
+                });
+                return row;
             }
         },
     };

@@ -178,6 +178,21 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
+            //刷新菜单事件
+            $(document).on('refresh', '.sidebar-menu', function () {
+                Fast.api.ajax({
+                    url: 'index/index',
+                    data: {action: 'refreshmenu'}
+                }, function (data) {
+                    $(".sidebar-menu li:not([data-rel='external'])").remove();
+                    $(data.menulist).insertBefore($(".sidebar-menu li:first"));
+                    $("#nav ul li[role='presentation'].active a").trigger('click');
+                    return false;
+                }, function () {
+                    return false;
+                });
+            });
+
             //这一行需要放在点击左侧链接事件之前
             var addtabs = Config.referer ? localStorage.getItem("addtabs") : null;
 
@@ -188,6 +203,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             } else {
                 $("ul.sidebar-menu li a[url!='javascript:;']:first").trigger("click");
             }
+
             //如果是刷新操作则直接返回刷新前的页面
             if (Config.referer) {
                 if (Config.referer === $(addtabs).attr("url")) {
@@ -203,11 +219,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             }
 
-            /**
-             * List of all the available skins
-             *
-             * @type Array
-             */
             var my_skins = [
                 "skin-blue",
                 "skin-white",
@@ -224,19 +235,13 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             ];
             setup();
 
-            /**
-             * Toggles layout classes
-             *
-             * @param String cls the layout class to toggle
-             * @returns void
-             */
             function change_layout(cls) {
                 $("body").toggleClass(cls);
                 AdminLTE.layout.fixSidebar();
                 //Fix the problem with right sidebar and layout boxed
                 if (cls == "layout-boxed")
                     AdminLTE.controlSidebar._fix($(".control-sidebar-bg"));
-                if ($('body').hasClass('fixed') && cls == 'fixed' && false) {
+                if ($('body').hasClass('fixed') && cls == 'fixed') {
                     AdminLTE.pushMenu.expandOnHover();
                     AdminLTE.layout.activate();
                 }
@@ -244,61 +249,18 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 AdminLTE.controlSidebar._fix($(".control-sidebar"));
             }
 
-            /**
-             * Replaces the old skin with the new skin
-             * @param String cls the new skin class
-             * @returns Boolean false to prevent link's default action
-             */
             function change_skin(cls) {
                 if (!$("body").hasClass(cls)) {
-                    $.each(my_skins, function (i) {
-                        $("body").removeClass(my_skins[i]);
-                    });
-
-                    $("body").addClass(cls);
-                    store('skin', cls);
+                    $("body").removeClass(my_skins.join(' ')).addClass(cls);
+                    localStorage.setItem('skin', cls);
                     var cssfile = Config.site.cdnurl + "/assets/css/skins/" + cls + ".css";
                     $('head').append('<link rel="stylesheet" href="' + cssfile + '" type="text/css" />');
                 }
                 return false;
             }
 
-            /**
-             * Store a new settings in the browser
-             *
-             * @param String name Name of the setting
-             * @param String val Value of the setting
-             * @returns void
-             */
-            function store(name, val) {
-                if (typeof (Storage) !== "undefined") {
-                    localStorage.setItem(name, val);
-                } else {
-                    window.alert('Please use a modern browser to properly view this template!');
-                }
-            }
-
-            /**
-             * Get a prestored setting
-             *
-             * @param String name Name of of the setting
-             * @returns String The value of the setting | null
-             */
-            function get(name) {
-                if (typeof (Storage) !== "undefined") {
-                    return localStorage.getItem(name);
-                } else {
-                    window.alert('Please use a modern browser to properly view this template!');
-                }
-            }
-
-            /**
-             * Retrieve default settings and apply them to the template
-             *
-             * @returns void
-             */
             function setup() {
-                var tmp = get('skin');
+                var tmp = localStorage.getItem('skin');
                 if (tmp && $.inArray(tmp, my_skins))
                     change_skin(tmp);
 

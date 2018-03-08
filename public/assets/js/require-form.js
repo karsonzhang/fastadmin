@@ -40,6 +40,9 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         Form.api.submit($(ret), function (data, ret) {
                             that.holdSubmit(false);
                             submitBtn.removeClass("disabled");
+                            if (false === $(this).triggerHandler("success.form", [data, ret])) {
+                                return false;
+                            }
                             if (typeof success === 'function') {
                                 if (false === success.call($(this), data, ret)) {
                                     return false;
@@ -54,6 +57,9 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             return false;
                         }, function (data, ret) {
                             that.holdSubmit(false);
+                            if (false === $(this).triggerHandler("error.form", [data, ret])) {
+                                return false;
+                            }
                             submitBtn.removeClass("disabled");
                             if (typeof error === 'function') {
                                 if (false === error.call($(this), data, ret)) {
@@ -81,12 +87,24 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 if ($(".selectpage", form).size() > 0) {
                     require(['selectpage'], function () {
                         $('.selectpage', form).selectPage({
-                            source: 'ajax/selectpage',
+                            eAjaxSuccess: function (data) {
+                                data.list = typeof data.rows !== 'undefined' ? data.rows : (typeof data.list !== 'undefined' ? data.list : []);
+                                data.totalRow = typeof data.total !== 'undefined' ? data.total : (typeof data.totalRow !== 'undefined' ? data.totalRow : data.list.length);
+                                return data;
+                            }
                         });
                     });
                     //给隐藏的元素添加上validate验证触发事件
-                    $(form).on("change", ".selectpage-input-hidden", function () {
+                    $(document).on("change", ".sp_hidden", function () {
                         $(this).trigger("validate");
+                    });
+                    $(document).on("change", ".sp_input", function () {
+                        $(this).closest(".sp_container").find(".sp_hidden").trigger("change");
+                    });
+                    $(form).on("reset", function () {
+                        setTimeout(function () {
+                            $('.selectpage', form).selectPageClear();
+                        }, 1);
                     });
                 }
             },
@@ -129,6 +147,48 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         };
                         $('.datetimepicker', form).parent().css('position', 'relative');
                         $('.datetimepicker', form).datetimepicker(options);
+                    });
+                }
+            },
+            daterangepicker: function (form) {
+                //绑定日期时间元素事件
+                if ($(".datetimerange", form).size() > 0) {
+                    require(['bootstrap-daterangepicker'], function () {
+                        var ranges = {};
+                        ranges[__('Today')] = [Moment().startOf('day'), Moment().endOf('day')];
+                        ranges[__('Yesterday')] = [Moment().subtract(1, 'days').startOf('day'), Moment().subtract(1, 'days').endOf('day')];
+                        ranges[__('Last 7 Days')] = [Moment().subtract(6, 'days').startOf('day'), Moment().endOf('day')];
+                        ranges[__('Last 30 Days')] = [Moment().subtract(29, 'days').startOf('day'), Moment().endOf('day')];
+                        ranges[__('This Month')] = [Moment().startOf('month'), Moment().endOf('month')];
+                        ranges[__('Last Month')] = [Moment().subtract(1, 'month').startOf('month'), Moment().subtract(1, 'month').endOf('month')];
+                        var options = {
+                            timePicker: false,
+                            autoUpdateInput: false,
+                            timePickerSeconds: true,
+                            timePicker24Hour: true,
+                            autoApply: true,
+                            locale: {
+                                format: 'YYYY-MM-DD HH:mm:ss',
+                                customRangeLabel: __("Custom Range"),
+                                applyLabel: __("Apply"),
+                                cancelLabel: __("Clear"),
+                            },
+                            ranges: ranges,
+                        };
+                        var origincallback = function (start, end) {
+                            $(this.element).val(start.format(options.locale.format) + " - " + end.format(options.locale.format));
+                            $(this.element).trigger('blur');
+                        };
+                        $(".datetimerange", form).each(function () {
+                            var callback = typeof $(this).data('callback') == 'function' ? $(this).data('callback') : origincallback;
+                            $(this).on('apply.daterangepicker', function (ev, picker) {
+                                callback.call(picker, picker.startDate, picker.endDate);
+                            });
+                            $(this).on('cancel.daterangepicker', function (ev, picker) {
+                                $(this).val('').trigger('blur');
+                            });
+                            $(this).daterangepicker($.extend({}, options, $(this).data()), callback);
+                        });
                     });
                 }
             },
@@ -286,6 +346,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 events.validator(form, success, error, submit);
 
                 events.selectpicker(form);
+
+                events.daterangepicker(form);
 
                 events.selectpage(form);
 

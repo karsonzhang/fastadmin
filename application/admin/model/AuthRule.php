@@ -2,6 +2,7 @@
 
 namespace app\admin\model;
 
+use think\Cache;
 use think\Model;
 
 class AuthRule extends Model
@@ -13,8 +14,16 @@ class AuthRule extends Model
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
 
+    protected static function init()
+    {
+        self::afterWrite(function ($row) {
+            Cache::rm('__menu__');
+        });
+    }
+
     public function getTitleAttr($value, $data)
     {
         return __($value);
     }
+
 }

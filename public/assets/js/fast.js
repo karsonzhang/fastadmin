@@ -164,8 +164,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     options.area = [top.$(".tab-pane.active").width() + "px", top.$(".tab-pane.active").height() + "px"];
                     options.offset = [top.$(".tab-pane.active").scrollTop() + "px", "0px"];
                 }
-                Layer.open(options);
-                return false;
+                return Layer.open(options);
             },
             //关闭窗口并回传数据
             close: function (data) {

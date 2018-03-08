@@ -80,6 +80,8 @@ class Install extends Command
         $config = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $config);
         // 写入数据库配置
         file_put_contents($dbConfigFile, $config);
+        
+        \think\Cache::rm('__menu__');
 
         $output->info("Install Successed!");
     }

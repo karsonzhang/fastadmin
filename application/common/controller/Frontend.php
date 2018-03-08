@@ -58,8 +58,7 @@ class Frontend extends Controller
         $actionname = strtolower($this->request->action());
 
         // token
-        $token = $this->request->request('token');
-        $token = $token ? $token : \think\Cookie::get('token');
+        $token = $this->request->server('HTTP_TOKEN', $this->request->request('token', \think\Cookie::get('token')));
 
         $path = str_replace('.', '/', $controllername) . '/' . $actionname;
         // 设置当前请求的URI

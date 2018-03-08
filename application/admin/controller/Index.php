@@ -29,13 +29,21 @@ class Index extends Backend
      */
     public function index()
     {
-        //
+        //左侧菜单
         $menulist = $this->auth->getSidebar([
             'dashboard' => 'hot',
             'addon'     => ['new', 'red', 'badge'],
-            'auth/rule' => 'side',
+            'auth/rule' => __('Menu'),
             'general'   => ['new', 'purple'],
                 ], $this->view->site['fixedpage']);
+        $action = $this->request->request('action');
+        if ($this->request->isPost())
+        {
+            if ($action == 'refreshmenu')
+            {
+                $this->success('', null, ['menulist' => $menulist]);
+            }
+        }
         $this->view->assign('menulist', $menulist);
         $this->view->assign('title', __('Home'));
         return $this->view->fetch();

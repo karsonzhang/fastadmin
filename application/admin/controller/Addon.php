@@ -5,6 +5,7 @@ namespace app\admin\controller;
 use app\common\controller\Backend;
 use think\addons\AddonException;
 use think\addons\Service;
+use think\Cache;
 use think\Config;
 use think\Exception;
 
@@ -190,6 +191,7 @@ class Addon extends Backend
             $action = $action == 'enable' ? $action : 'disable';
             //调用启用、禁用的方法
             Service::$action($name, $force);
+            Cache::rm('__menu__');
             $this->success(__('Operate successful'));
         }
         catch (AddonException $e)
@@ -314,6 +316,7 @@ class Addon extends Backend
             ];
             //调用更新的方法
             Service::upgrade($name, $extend);
+            Cache::rm('__menu__');
             $this->success(__('Operate successful'));
         }
         catch (AddonException $e)
@@ -370,7 +373,10 @@ class Addon extends Backend
             $list[] = $v;
         }
         $total = count($list);
-        $list = array_slice($list, $offset, $limit);
+        if ($limit)
+        {
+            $list = array_slice($list, $offset, $limit);
+        }
         $result = array("total" => $total, "rows" => $list);
 
         $callback = $this->request->get('callback') ? "jsonp" : "json";

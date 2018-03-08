@@ -56,7 +56,6 @@ class Menu extends Command
             {
                 throw new Exception("There is no menu to delete");
             }
-            $readyMenu = [];
             $output->info("Are you sure you want to delete all those menu?  Type 'yes' to continue: ");
             $line = fgets(STDIN);
             if (trim($line) != 'yes')

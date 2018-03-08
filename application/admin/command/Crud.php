@@ -580,8 +580,8 @@ class Crud extends Command
                         }
                         $formAddElement = $formEditElement = Form::hidden($fieldName, $no, array_merge(['checked' => ''], $attrArr));
                         $attrArr['id'] = $fieldName . "-switch";
-                        $formAddElement .= sprintf(Form::label("{$attrArr['id']}", "%s abcdefg"), Form::checkbox($fieldName, $yes, $defaultValue === $yes, $attrArr));
-                        $formEditElement .= sprintf(Form::label("{$attrArr['id']}", "%s abcdefg"), Form::checkbox($fieldName, $yes, 0, $attrArr));
+                        $formAddElement .= sprintf(Form::label("{$attrArr['id']}", "%s {:__('Yes')}", ['class'=>'control-label']), Form::checkbox($fieldName, $yes, $defaultValue === $yes, $attrArr));
+                        $formEditElement .= sprintf(Form::label("{$attrArr['id']}", "%s {:__('Yes')}", ['class'=>'control-label']), Form::checkbox($fieldName, $yes, 0, $attrArr));
                         $formEditElement = str_replace('type="checkbox"', 'type="checkbox" {in name="' . "\$row.{$field}" . '" value="' . $yes . '"}checked{/in}', $formEditElement);
                     }
                     else if ($inputType == 'citypicker')
@@ -963,6 +963,7 @@ EOD;
         if ($content || !Lang::has($field))
         {
             $itemArr = [];
+            $content = str_replace('，', ',', $content);
             if (stripos($content, ':') !== false && stripos($content, ',') && stripos($content, '=') !== false)
             {
                 list($fieldLang, $item) = explode(':', $content);
@@ -997,6 +998,7 @@ EOD;
     /**
      * 读取数据和语言数组列表
      * @param array $arr
+     * @param boolean $withTpl
      * @return array
      */
     protected function getLangArray($arr, $withTpl = TRUE)
@@ -1035,6 +1037,7 @@ EOD;
     protected function getItemArray($item, $field, $comment)
     {
         $itemArr = [];
+        $comment = str_replace('，', ',', $comment);
         if (stripos($comment, ':') !== false && stripos($comment, ',') && stripos($comment, '=') !== false)
         {
             list($fieldLang, $item) = explode(':', $comment);
@@ -1255,7 +1258,7 @@ EOD;
         {
             $html .= ", operate:'RANGE', addclass:'datetimerange'";
         }
-        else if (in_array($datatype,['float', 'double', 'decimal']))
+        else if (in_array($datatype, ['float', 'double', 'decimal']))
         {
             $html .= ", operate:'BETWEEN'";
         }

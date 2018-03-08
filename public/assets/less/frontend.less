@@ -61,15 +61,6 @@ body {
     .box-shadow(none);
 }
 
-.layui-layer-fast {
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-    -webkit-animation-duration: .3s;
-    animation-duration: .3s;
-    -webkit-animation-name: layer-bounceIn;
-    animation-name: layer-bounceIn;
-}
-
 /*修复nice-validator和summernote的编辑框冲突*/
 .nice-validator .note-editor .note-editing-area .note-editable{
     display:inherit;
@@ -329,7 +320,7 @@ body {
     }
 }
 
-footer.footer{width:100%;color: #aaa;background: #555;margin-top:25px;}
+footer.footer{width:100%;color: #aaa;background: #555;margin-top:25px;position: fixed;bottom: 0;}
 footer.footer ul{margin:60px 0 30px 0;padding:0;}
 footer.footer ul li.f-tit{margin-bottom:10px;font-size: 14px;color: #fff;}
 footer.footer ul li{line-height: 26px;white-space: nowrap;list-style: none;margin:0;padding:0;}

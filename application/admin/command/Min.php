@@ -27,6 +27,7 @@ class Min extends Command
                 ->setName('min')
                 ->addOption('module', 'm', Option::VALUE_REQUIRED, 'module name(frontend or backend),use \'all\' when build all modules', null)
                 ->addOption('resource', 'r', Option::VALUE_REQUIRED, 'resource name(js or css),use \'all\' when build all resources', null)
+                ->addOption('optimize', 'o', Option::VALUE_OPTIONAL, 'optimize type(uglify|closure|none)', 'none')
                 ->setDescription('Compress js and css file');
     }
 
@@ -34,6 +35,7 @@ class Min extends Command
     {
         $module = $input->getOption('module') ?: '';
         $resource = $input->getOption('resource') ?: '';
+        $optimize = $input->getOption('optimize') ?: 'none';
 
         if (!$module || !in_array($module, ['frontend', 'backend', 'all']))
         {
@@ -89,6 +91,7 @@ class Min extends Command
                     'cssBaseUrl'  => $this->options['cssBaseUrl'],
                     'jsBasePath'  => str_replace(DS, '/', ROOT_PATH . $this->options['jsBaseUrl']),
                     'cssBasePath' => str_replace(DS, '/', ROOT_PATH . $this->options['cssBaseUrl']),
+                    'optimize'    => $optimize,
                     'ds'          => DS,
                 ];
 
@@ -117,11 +120,19 @@ class Min extends Command
                 $output->info("Compress " . $data["{$res}BaseName"] . ".{$res}");
 
                 // 执行压缩
-                echo exec("{$nodeExec} \"{$minPath}r.js\" -o \"{$tempFile}\" >> \"{$minPath}node.log\"");
+                $command = "{$nodeExec} \"{$minPath}r.js\" -o \"{$tempFile}\" >> \"{$minPath}node.log\"";
+                if ($output->isDebug())
+                {
+                    $output->warning($command);
+                }
+                echo exec($command);
             }
         }
 
-        @unlink($tempFile);
+        if (!$output->isDebug())
+        {
+            @unlink($tempFile);
+        }
 
         $output->info("Build Successed!");
     }

@@ -174,11 +174,9 @@
                     $("#mainNav").toggleClass("affix", $(window).height() - $(window).scrollTop() <= 50);
                 });
 
-
                 //发送版本统计信息
                 try {
                     var installed = localStorage.getItem("installed");
-                    console.log(installed);
                     if (!installed) {
                         $.ajax({
                             url: "{$Think.config.fastadmin.api_url}/statistics/installed",

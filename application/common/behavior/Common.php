@@ -52,6 +52,11 @@ class Common
         {
             Config::set('app_trace', false);
         }
+        // 切换多语言
+        if (Config::get('lang_switch_on') && $request->get('lang'))
+        {
+            \think\Cookie::set('think_var', $request->get('lang'));
+        }
     }
 
     public function addonBegin(&$request)

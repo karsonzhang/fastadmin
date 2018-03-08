@@ -273,7 +273,7 @@ class Auth extends \fast\Auth
             $groupIds[] = $v['id'];
         }
         // 取出所有分组
-        $groupList = model('AuthGroup')->all(['status' => 'normal']);
+        $groupList = \app\admin\model\AuthGroup::where(['status' => 'normal'])->select();
         $objList = [];
         foreach ($groups as $K => $v)
         {
@@ -310,8 +310,8 @@ class Auth extends \fast\Auth
         if (!$this->isSuperAdmin())
         {
             $groupIds = $this->getChildrenGroupIds(false);
-            $authGroupList = model('AuthGroupAccess')
-                    ->field('uid,group_id')
+            $authGroupList = \app\admin\model\AuthGroupAccess::
+                    field('uid,group_id')
                     ->where('group_id', 'in', $groupIds)
                     ->select();
 
@@ -407,7 +407,7 @@ class Auth extends \fast\Auth
         $select_id = 0;
         $pinyin = new \Overtrue\Pinyin\Pinyin('Overtrue\Pinyin\MemoryFileDictLoader');
         // 必须将结果集转换为数组
-        $ruleList = collection(model('AuthRule')->where('status', 'normal')->where('ismenu', 1)->order('weigh', 'desc')->cache("__menu__")->select())->toArray();
+        $ruleList = collection(\app\admin\model\AuthRule::where('status', 'normal')->where('ismenu', 1)->order('weigh', 'desc')->cache("__menu__")->select())->toArray();
         foreach ($ruleList as $k => &$v)
         {
             if (!in_array($v['name'], $userRule))
