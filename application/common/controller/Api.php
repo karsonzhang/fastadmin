@@ -55,6 +55,12 @@ class Api
     protected $auth = null;
 
     /**
+     * 默认响应输出类型,支持json/xml
+     * @var string 
+     */
+    protected $responseType = 'json';
+
+    /**
      * 构造方法
      * @access public
      * @param Request $request Request 对象
@@ -145,7 +151,7 @@ class Api
      * @param string $type  输出类型
      * @param array $header 发送的 Header 信息
      */
-    protected function success($msg = '', $data = null, $code = 1, $type = 'json', array $header = [])
+    protected function success($msg = '', $data = null, $code = 1, $type = null, array $header = [])
     {
         $this->result($msg, $data, $code, $type, $header);
     }
@@ -158,7 +164,7 @@ class Api
      * @param string $type  输出类型
      * @param array $header 发送的 Header 信息
      */
-    protected function error($msg = '', $data = null, $code = 0, $type = 'json', array $header = [])
+    protected function error($msg = '', $data = null, $code = 0, $type = null, array $header = [])
     {
         $this->result($msg, $data, $code, $type, $header);
     }
@@ -168,13 +174,13 @@ class Api
      * @access protected
      * @param mixed  $msg    提示信息
      * @param mixed  $data   要返回的数据
-     * @param int    $code   返回的 code
-     * @param string $type   返回数据格式
+     * @param int    $code   错误码，默认为0
+     * @param string $type   输出类型，支持json/xml/jsonp
      * @param array  $header 发送的 Header 信息
      * @return void
      * @throws HttpResponseException
      */
-    protected function result($msg, $data = null, $code = 0, $type = 'json', array $header = [])
+    protected function result($msg, $data = null, $code = 0, $type = null, array $header = [])
     {
         $result = [
             'code' => $code,
@@ -182,7 +188,9 @@ class Api
             'time' => Request::instance()->server('REQUEST_TIME'),
             'data' => $data,
         ];
-        $type = $type ?: $this->getResponseType();
+        // 如果未设置类型则自动判断
+        $type = $type ? $type : ($this->request->param(config('var_jsonp_handler')) ? 'jsonp' : $this->responseType);
+
         if (isset($header['statuscode']))
         {
             $code = $header['statuscode'];
@@ -190,10 +198,10 @@ class Api
         }
         else
         {
-            $code = $code >= 1000 ? 200 : $code;
+            //未设置状态码,根据code值判断
+            $code = $code >= 1000 || $code < 200 ? 200 : $code;
         }
         $response = Response::create($result, $type, $code)->header($header);
-
         throw new HttpResponseException($response);
     }
 
