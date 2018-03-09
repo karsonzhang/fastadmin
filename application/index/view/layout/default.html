@@ -54,11 +54,12 @@
             </div>
         </nav>
 
-        {__CONTENT__}
+        <main class="content">
+            {__CONTENT__}
+        </main>
 
         <footer class="footer" style="clear:both">
-            
-            <p class="address">Copyright&nbsp;©&nbsp;2017-2018 fastadmin.net All Rights Reserved {$site.name} {:__('Copyrights')} <a href="http://www.miibeian.gov.cn" target="_blank">{$site.beian}</a></p>
+            <p class="copyright">Copyright&nbsp;©&nbsp;2017-2018 fastadmin.net All Rights Reserved {$site.name} {:__('Copyrights')} <a href="http://www.miibeian.gov.cn" target="_blank">{$site.beian}</a></p>
         </footer>
 
         {include file="common/script" /}

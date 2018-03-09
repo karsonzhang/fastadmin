@@ -185,7 +185,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     data: {action: 'refreshmenu'}
                 }, function (data) {
                     $(".sidebar-menu li:not([data-rel='external'])").remove();
-                    $(data.menulist).insertBefore($(".sidebar-menu li:first"));
+                    $(".sidebar-menu").prepend(data.menulist);
                     $("#nav ul li[role='presentation'].active a").trigger('click');
                     return false;
                 }, function () {

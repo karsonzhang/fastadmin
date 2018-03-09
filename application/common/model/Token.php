@@ -21,6 +21,16 @@ class Token Extends Model
     protected $pk = 'token';
     // 追加属性
     protected $append = [
+        'expires_in'
     ];
+    
+    /**
+     * 获取Token剩余有效期
+     * @return int
+     */
+    public function getExpiresInAttr($value, $data)
+    {
+        return $data['expiretime'] ? max(0, $data['expiretime'] - time()) : 365 * 86400;
+    }
 
 }

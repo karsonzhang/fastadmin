@@ -413,7 +413,7 @@
 
                     var token = $('#token').val();
                     if (token.length > 0) {
-                        headers[token] = token;
+                        headers['token'] = token;
                     }
 
                     $("#sandbox" + theId + " .headers input[type=text]").each(function () {

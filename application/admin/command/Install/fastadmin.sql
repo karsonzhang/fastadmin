@@ -338,6 +338,21 @@ INSERT INTO `fa_config` VALUES (17, 'mail_from', 'email', 'Mail from', '', 'stri
 COMMIT;
 
 -- ----------------------------
+-- Table structure for fa_ems
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_ems`;
+CREATE TABLE `fa_ems`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `event` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '事件',
+  `email` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+  `code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '验证码',
+  `times` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '验证次数',
+  `ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'IP',
+  `createtime` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='邮箱验证码表';
+
+-- ----------------------------
 -- Table structure for fa_sms
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_sms`;
@@ -412,8 +427,8 @@ CREATE TABLE `fa_user` (
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `level` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '等级',
   `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
-  `birthday` date NOT NULL COMMENT '生日',
-  `bio` varchar(100) NOT NULL COMMENT '格言',
+  `birthday` date COMMENT '生日',
+  `bio` varchar(100) NOT NULL DEFAULT '' COMMENT '格言',
   `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
   `successions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '连续登录天数',
   `maxsuccessions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '最大连续登录天数',

@@ -253,7 +253,7 @@ return [
         //自动检测更新
         'checkupdate'      => false,
         //版本号
-        'version'          => '1.0.0.20180308_beta',
+        'version'          => '1.0.0.20180310_beta',
         'api_url'          => 'http://api.fastadmin.net',
     ],
 ];

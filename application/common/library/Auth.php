@@ -19,7 +19,8 @@ class Auth
     protected $_logined = FALSE;
     protected $_user = NULL;
     protected $_token = '';
-    protected $keeptime = 0;
+    //Token默认有效时长
+    protected $keeptime = 2592000;
     protected $requestUri = '';
     protected $rules = [];
     //默认配置
@@ -203,7 +204,7 @@ class Auth
 
             //设置Token
             $this->_token = Random::uuid();
-            Token::set($this->_token, $user->id);
+            Token::set($this->_token, $user->id, $this->keeptime);
 
             //注册成功的事件
             Hook::listen("user_register_successed", $this->_user);
@@ -349,7 +350,7 @@ class Auth
             $this->_user = $user;
 
             $this->_token = Random::uuid();
-            Token::set($this->_token, $user->id);
+            Token::set($this->_token, $user->id, $this->keeptime);
 
             $this->_logined = TRUE;
 

@@ -31,8 +31,9 @@ class User extends Frontend
 
         //监听注册登录注销的事件
         Hook::add('user_login_successed', function($user) use($auth) {
-            Cookie::set('uid', $user->id);
-            Cookie::set('token', $auth->getToken());
+            $expire = input('post.keeplogin') ? 30 * 86400 : 0;
+            Cookie::set('uid', $user->id, $expire);
+            Cookie::set('token', $auth->getToken(), $expire);
         });
         Hook::add('user_register_successed', function($user) use($auth) {
             Cookie::set('uid', $user->id);
@@ -139,7 +140,7 @@ class User extends Frontend
         {
             $account = $this->request->post('account');
             $password = $this->request->post('password');
-            $keeptime = (int) $this->request->post('keeptime');
+            $keeplogin = (int) $this->request->post('keeplogin');
             $token = $this->request->post('__token__');
             $rule = [
                 'account'   => 'require|length:3,50',
@@ -165,7 +166,7 @@ class User extends Frontend
                 $this->error(__($validate->getError()));
                 return FALSE;
             }
-            if ($this->auth->login($account, $password, $keeptime))
+            if ($this->auth->login($account, $password))
             {
                 $synchtml = '';
                 ////////////////同步到Ucenter////////////////
@@ -260,39 +261,6 @@ class User extends Frontend
     {
         $this->view->assign('title', __('Profile'));
         return $this->view->fetch();
-    }
-
-    /**
-     * 激活邮箱
-     */
-    public function activeemail()
-    {
-        $code = $this->request->request('code');
-        $code = base64_decode($code);
-        parse_str($code, $params);
-        if (!isset($params['id']) || !isset($params['time']) || !isset($params['key']))
-        {
-            $this->error(__('Invalid parameters'));
-        }
-        $user = \app\common\model\User::get($params['id']);
-        if (!$user)
-        {
-            $this->error(__('User not found'));
-        }
-        if ($user->verification->email)
-        {
-            $this->error(__('Email already activation'));
-        }
-        if ($key !== md5(md5($user->id . $user->email . $time) . $user->salt) || time() - $params['time'] > 1800)
-        {
-            $this->error(__('Secrity code already invalid'));
-        }
-        $verification = $user->verification;
-        $verification->email = 1;
-        $user->verification = $verification;
-        $user->save();
-        $this->success(__('Active email successful'), url('user/index'));
-        return;
     }
 
     /**

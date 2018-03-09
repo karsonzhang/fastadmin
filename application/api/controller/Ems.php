@@ -3,13 +3,13 @@
 namespace app\api\controller;
 
 use app\common\controller\Api;
-use app\common\library\Sms as Smslib;
+use app\common\library\Ems as Emslib;
 use app\common\model\User;
 
 /**
- * 手机短信接口
+ * 邮箱验证码接口
  */
-class Sms extends Api
+class Ems extends Api
 {
 
     protected $noNeedLogin = '*';
@@ -18,34 +18,43 @@ class Sms extends Api
     public function _initialize()
     {
         parent::_initialize();
+        \think\Hook::add('ems_send', function($params) {
+            $obj = \app\common\library\Email::instance();
+            $result = $obj
+                    ->to($params->email)
+                    ->subject('验证码')
+                    ->message("你的验证码是：" . $params->code)
+                    ->send();
+            return $result;
+        });
     }
 
     /**
      * 发送验证码
      *
-     * @param string    $mobile     手机号
+     * @param string    $email      邮箱
      * @param string    $event      事件名称
      */
     public function send()
     {
-        $mobile = $this->request->request("mobile");
+        $email = $this->request->request("email");
         $event = $this->request->request("event");
         $event = $event ? $event : 'register';
 
-        $last = Smslib::get($mobile, $event);
+        $last = Emslib::get($email, $event);
         if ($last && time() - $last['createtime'] < 60)
         {
             $this->error(__('发送频繁'));
         }
         if ($event)
         {
-            $userinfo = User::getByMobile($mobile);
+            $userinfo = User::getByEmail($email);
             if ($event == 'register' && $userinfo)
             {
                 //已被注册
                 $this->error(__('已被注册'));
             }
-            else if (in_array($event, ['changemobile']) && $userinfo)
+            else if (in_array($event, ['changeemail']) && $userinfo)
             {
                 //被占用
                 $this->error(__('已被占用'));
@@ -56,7 +65,7 @@ class Sms extends Api
                 $this->error(__('未注册'));
             }
         }
-        $ret = Smslib::send($mobile, NULL, $event);
+        $ret = Emslib::send($email, NULL, $event);
         if ($ret)
         {
             $this->success(__('发送成功'));
@@ -70,26 +79,26 @@ class Sms extends Api
     /**
      * 检测验证码
      *
-     * @param string    $mobile     手机号
+     * @param string    $email      邮箱
      * @param string    $event      事件名称
      * @param string    $captcha    验证码
      */
     public function check()
     {
-        $mobile = $this->request->request("mobile");
+        $email = $this->request->request("email");
         $event = $this->request->request("event");
         $event = $event ? $event : 'register';
         $captcha = $this->request->request("captcha");
 
         if ($event)
         {
-            $userinfo = User::getByMobile($mobile);
+            $userinfo = User::getByEmail($email);
             if ($event == 'register' && $userinfo)
             {
                 //已被注册
                 $this->error(__('已被注册'));
             }
-            else if (in_array($event, ['changemobile']) && $userinfo)
+            else if (in_array($event, ['changeemail']) && $userinfo)
             {
                 //被占用
                 $this->error(__('已被占用'));
@@ -100,7 +109,7 @@ class Sms extends Api
                 $this->error(__('未注册'));
             }
         }
-        $ret = Smslib::check($mobile, $captcha, $event);
+        $ret = Emslib::check($email, $captcha, $event);
         if ($ret)
         {
             $this->success(__('成功'));

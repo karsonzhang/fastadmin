@@ -42,7 +42,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         return;
                     }
                 }
-                Toastr.error(ret.msg + "(code:" + ret.code + ")");
+                Toastr.error(ret.msg);
             },
             //服务器响应数据后
             onAjaxResponse: function (response) {

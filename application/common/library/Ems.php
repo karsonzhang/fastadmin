@@ -5,9 +5,9 @@ namespace app\common\library;
 use think\Hook;
 
 /**
- * 短信验证码类
+ * 邮箱验证码类
  */
-class Sms
+class Ems
 {
 
     /**
@@ -23,40 +23,40 @@ class Sms
     protected static $maxCheckNums = 10;
 
     /**
-     * 获取最后一次手机发送的数据
+     * 获取最后一次邮箱发送的数据
      *
-     * @param   int       $mobile   手机号
+     * @param   int       $email   邮箱
      * @param   string    $event    事件
-     * @return  Sms
+     * @return  Ems
      */
-    public static function get($mobile, $event = 'default')
+    public static function get($email, $event = 'default')
     {
-        $sms = \app\common\model\Sms::
-                where(['mobile' => $mobile, 'event' => $event])
+        $ems = \app\common\model\Ems::
+                where(['email' => $email, 'event' => $event])
                 ->order('id', 'DESC')
                 ->find();
-        Hook::listen('sms_get', $sms, null, true);
-        return $sms ? $sms : NULL;
+        Hook::listen('ems_get', $ems, null, true);
+        return $ems ? $ems : NULL;
     }
 
     /**
      * 发送验证码
      *
-     * @param   int       $mobile   手机号
+     * @param   int       $email   邮箱
      * @param   int       $code     验证码,为空时将自动生成4位数字
      * @param   string    $event    事件
      * @return  boolean
      */
-    public static function send($mobile, $code = NULL, $event = 'default')
+    public static function send($email, $code = NULL, $event = 'default')
     {
         $code = is_null($code) ? mt_rand(1000, 9999) : $code;
         $time = time();
         $ip = request()->ip();
-        $sms = \app\common\model\Sms::create(['event' => $event, 'mobile' => $mobile, 'code' => $code, 'ip' => $ip, 'createtime' => $time]);
-        $result = Hook::listen('sms_send', $sms, null, true);
+        $ems = \app\common\model\Ems::create(['event' => $event, 'email' => $email, 'code' => $code, 'ip' => $ip, 'createtime' => $time]);
+        $result = Hook::listen('ems_send', $ems, null, true);
         if (!$result)
         {
-            $sms->delete();
+            $ems->delete();
             return FALSE;
         }
         return TRUE;
@@ -65,57 +65,57 @@ class Sms
     /**
      * 发送通知
      * 
-     * @param   mixed     $mobile   手机号,多个以,分隔
+     * @param   mixed     $email   邮箱,多个以,分隔
      * @param   string    $msg      消息内容
      * @param   string    $template 消息模板
      * @return  boolean
      */
-    public static function notice($mobile, $msg = '', $template = NULL)
+    public static function notice($email, $msg = '', $template = NULL)
     {
         $params = [
-            'mobile'   => $mobile,
+            'email'    => $email,
             'msg'      => $msg,
             'template' => $template
         ];
-        $result = Hook::listen('sms_notice', $params, null, true);
+        $result = Hook::listen('ems_notice', $params, null, true);
         return $result ? TRUE : FALSE;
     }
 
     /**
      * 校验验证码
      *
-     * @param   int       $mobile     手机号
+     * @param   int       $email     邮箱
      * @param   int       $code       验证码
      * @param   string    $event      事件
      * @return  boolean
      */
-    public static function check($mobile, $code, $event = 'default')
+    public static function check($email, $code, $event = 'default')
     {
         $time = time() - self::$expire;
-        $sms = \app\common\model\Sms::where(['mobile' => $mobile, 'event' => $event])
+        $ems = \app\common\model\Ems::where(['email' => $email, 'event' => $event])
                 ->order('id', 'DESC')
                 ->find();
-        if ($sms)
+        if ($ems)
         {
-            if ($sms['createtime'] > $time && $sms['times'] <= self::$maxCheckNums)
+            if ($ems['createtime'] > $time && $ems['times'] <= self::$maxCheckNums)
             {
-                $correct = $code == $sms['code'];
+                $correct = $code == $ems['code'];
                 if (!$correct)
                 {
-                    $sms->times = $sms->times + 1;
-                    $sms->save();
+                    $ems->times = $ems->times + 1;
+                    $ems->save();
                     return FALSE;
                 }
                 else
                 {
-                    $result = Hook::listen('sms_check', $sms, null, true);
-                    return $result;
+                    $result = Hook::listen('ems_check', $ems, null, true);
+                    return TRUE;
                 }
             }
             else
             {
-                // 过期则清空该手机验证码
-                self::flush($mobile, $event);
+                // 过期则清空该邮箱验证码
+                self::flush($email, $event);
                 return FALSE;
             }
         }
@@ -126,18 +126,18 @@ class Sms
     }
 
     /**
-     * 清空指定手机号验证码
+     * 清空指定邮箱验证码
      *
-     * @param   int       $mobile     手机号
+     * @param   int       $email     邮箱
      * @param   string    $event      事件
      * @return  boolean
      */
-    public static function flush($mobile, $event = 'default')
+    public static function flush($email, $event = 'default')
     {
-        \app\common\model\Sms::
-                where(['mobile' => $mobile, 'event' => $event])
+        \app\common\model\Ems::
+                where(['email' => $email, 'event' => $event])
                 ->delete();
-        Hook::listen('sms_flush');
+        Hook::listen('ems_flush');
         return TRUE;
     }
 
