@@ -128,7 +128,7 @@ class Auth
      * @param string $password  密码
      * @param string $email     邮箱
      * @param string $mobile    手机号
-     * @param string $extend    扩展参数
+     * @param array $extend    扩展参数
      * @return boolean
      */
     public function register($username, $password, $email = '', $mobile = '', $extend = [])
@@ -224,7 +224,7 @@ class Auth
      *
      * @param string    $account    账号,用户名、邮箱、手机号
      * @param string    $password   密码
-     * @return array
+     * @return boolean
      */
     public function login($account, $password)
     {
@@ -256,7 +256,7 @@ class Auth
     /**
      * 注销
      * 
-     * @return bool
+     * @return boolean
      */
     public function logout()
     {
@@ -476,6 +476,7 @@ class Auth
     /**
      * 删除一个指定会员
      * @param int $user_id 会员ID
+     * @return boolean
      */
     public function delete($user_id)
     {
@@ -528,6 +529,7 @@ class Auth
      * 检测当前控制器和方法是否匹配传递的数组
      *
      * @param array $arr 需要验证权限的数组
+     * @return boolean
      */
     public function match($arr = [])
     {
@@ -600,6 +602,7 @@ class Auth
      * 设置错误信息
      *
      * @param $error 错误信息
+     * @return Auth
      */
     public function setError($error)
     {

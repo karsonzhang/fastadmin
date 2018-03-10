@@ -204,57 +204,6 @@ class User extends Frontend
     }
 
     /**
-     * 第三方登录跳转和回调处理
-     */
-    public function third()
-    {
-        $url = url('user/index');
-        $action = $this->request->param('action');
-        $platform = $this->request->param('platform');
-        $config = get_addon_config('third');
-        if (!$config || !isset($config[$platform]))
-        {
-            $this->error(__('Invalid parameters'));
-        }
-        foreach ($config as $k => &$v)
-        {
-            $v['callback'] = url('user/third', ['action' => 'callback', 'platform' => $k], false, true);
-        }
-        unset($v);
-        $app = new \addons\third\library\Application($config);
-        if ($action == 'redirect')
-        {
-            // 跳转到登录授权页面
-            $this->redirect($app->{$platform}->getAuthorizeUrl());
-        }
-        else if ($action == 'callback')
-        {
-            // 授权成功后的回调
-            $result = $app->{$platform}->getUserInfo();
-            if ($result)
-            {
-                $loginret = \addons\third\library\Service::connect($platform, $result);
-                if ($loginret)
-                {
-                    $synchtml = '';
-                    ////////////////同步到Ucenter////////////////
-                    if (defined('UC_STATUS') && UC_STATUS)
-                    {
-                        $uc = new \addons\ucenter\library\client\Client();
-                        $synchtml = $uc->uc_user_synlogin($this->auth->id);
-                    }
-                    $this->success(__('Logged in successful') . $synchtml, $url);
-                }
-            }
-            $this->error(__('Operation failed'), $url);
-        }
-        else
-        {
-            $this->error(__('Invalid parameters'));
-        }
-    }
-
-    /**
      * 个人信息
      */
     public function profile()

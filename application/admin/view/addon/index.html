@@ -212,8 +212,8 @@
                             <span class="fa fa-caret-down"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <% for(var i=0;i< item.releaselist.length;i++){ %>
-                            <li><a href="javascript:;" class="btn-install" data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>" data-version="<%=item.releaselist[i].version%>"><%=item.releaselist[i].version%></a></li>
+                            <% for(var j=0;j< item.releaselist.length;j++){ %>
+                            <li><a href="javascript:;" class="btn-install" data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>" data-version="<%=item.releaselist[j].version%>"><%=item.releaselist[j].version%></a></li>
                             <% } %>
                         </ul>
                     </span>
@@ -244,8 +244,8 @@
                             <span class="fa fa-caret-down"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <% for(var i=0;i< item.releaselist.length;i++){ %>
-                            <li><a href="javascript:;" class="btn-upgrade" data-version="<%=item.releaselist[i].version%>"><%=item.releaselist[i].version%></a></li>
+                            <% for(var j=0;j< item.releaselist.length;j++){ %>
+                            <li><a href="javascript:;" class="btn-upgrade" data-version="<%=item.releaselist[j].version%>"><%=item.releaselist[j].version%></a></li>
                             <% } %>
                         </ul>
                     </span>

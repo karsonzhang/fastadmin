@@ -36,7 +36,7 @@
                     <label class="control-label">{:__('Captcha')}</label>
                     <div class="controls">
                         <div class="input-group input-group-lg">
-                            <input type="text" name="captcha" class="form-control" placeholder="{:__('Captcha')}" data-rule="required;length(4);integer[+]" style="border-radius: 0;" />
+                            <input type="text" name="captcha" class="form-control" placeholder="{:__('Captcha')}" data-rule="required;length(4)" style="border-radius: 0;" />
                             <span class="input-group-addon" style="padding:0;border:none;">
                                 <img src="{:captcha_src()}" width="140" height="42" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
                             </span>

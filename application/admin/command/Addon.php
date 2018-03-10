@@ -24,6 +24,8 @@ class Addon extends Command
                 ->addOption('action', 'c', Option::VALUE_REQUIRED, 'action(create/enable/disable/install/uninstall/refresh/upgrade/package)', 'create')
                 ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', null)
                 ->addOption('release', 'r', Option::VALUE_OPTIONAL, 'addon release version', null)
+                ->addOption('uid', 'u', Option::VALUE_OPTIONAL, 'fastadmin uid', null)
+                ->addOption('token', 't', Option::VALUE_OPTIONAL, 'fastadmin token', null)
                 ->setDescription('Addon manager');
     }
 
@@ -35,6 +37,10 @@ class Addon extends Command
         $force = $input->getOption('force');
         //版本
         $release = $input->getOption('release') ?: '';
+        //uid
+        $uid = $input->getOption('uid') ?: '';
+        //token
+        $token = $input->getOption('token') ?: '';
 
         include dirname(__DIR__) . DS . 'common.php';
 
@@ -80,7 +86,7 @@ class Addon extends Command
                 }
                 catch (PDOException $e)
                 {
-                    
+
                 }
 
                 $data = [
@@ -171,7 +177,7 @@ class Addon extends Command
                     {
                         throw new Exception("Operation is aborted!");
                     }
-                    Service::install($name, 1, ['version' => $release]);
+                    Service::install($name, 1, ['version' => $release, 'uid' => $uid, 'token' => $token]);
                 }
                 catch (Exception $e)
                 {
@@ -222,7 +228,7 @@ class Addon extends Command
                 $output->info("Refresh Successed!");
                 break;
             case 'upgrade':
-                Service::upgrade($name, ['version' => $release]);
+                Service::upgrade($name, ['version' => $release, 'uid' => $uid, 'token' => $token]);
                 $output->info("Upgrade Successed!");
                 break;
             case 'package':
