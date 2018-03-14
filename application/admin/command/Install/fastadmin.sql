@@ -50,7 +50,7 @@ CREATE TABLE `fa_admin_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
   `username` varchar(30) NOT NULL DEFAULT '' COMMENT '管理员名字',
-  `url` varchar(100) NOT NULL DEFAULT '' COMMENT '操作页面',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '操作页面',
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '日志标题',
   `content` text NOT NULL COMMENT '内容',
   `ip` varchar(50) NOT NULL DEFAULT '' COMMENT 'IP',
@@ -58,7 +58,7 @@ CREATE TABLE `fa_admin_log` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=1317 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员日志表';
 
 -- ----------------------------
 -- Table structure for fa_attachment

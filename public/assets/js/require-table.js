@@ -202,12 +202,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var that = this;
                     var ids = Table.api.selectedids(table);
                     Layer.confirm(
-                            __('Are you sure you want to delete the %s selected item?', ids.length),
-                            {icon: 3, title: __('Warning'), offset: 0, shadeClose: true},
-                            function (index) {
-                                Table.api.multi("del", ids, table, that);
-                                Layer.close(index);
-                            }
+                        __('Are you sure you want to delete the %s selected item?', ids.length),
+                        {icon: 3, title: __('Warning'), offset: 0, shadeClose: true},
+                        function (index) {
+                            Table.api.multi("del", ids, table, that);
+                            Layer.close(index);
+                        }
                     );
                 });
                 // 拖拽排序
@@ -281,12 +281,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var id = $(this).data("id");
                     var that = this;
                     Layer.confirm(
-                            __('Are you sure you want to delete this item?'),
-                            {icon: 3, title: __('Warning'), shadeClose: true},
-                            function (index) {
-                                Table.api.multi("del", id, table, that);
-                                Layer.close(index);
-                            }
+                        __('Are you sure you want to delete this item?'),
+                        {icon: 3, title: __('Warning'), shadeClose: true},
+                        function (index) {
+                            Table.api.multi("del", id, table, that);
+                            Layer.close(index);
+                        }
                     );
                 });
                 var id = table.attr("id");
@@ -345,14 +345,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             top = left = undefined;
                         }
                         Layer.confirm(
-                                __('Are you sure you want to delete this item?'),
-                                {icon: 3, title: __('Warning'), offset: [top, left], shadeClose: true},
-                                function (index) {
-                                    var table = $(that).closest('table');
-                                    var options = table.bootstrapTable('getOptions');
-                                    Table.api.multi("del", row[options.pk], table, that);
-                                    Layer.close(index);
-                                }
+                            __('Are you sure you want to delete this item?'),
+                            {icon: 3, title: __('Warning'), offset: [top, left], shadeClose: true},
+                            function (index) {
+                                var table = $(that).closest('table');
+                                var options = table.bootstrapTable('getOptions');
+                                Table.api.multi("del", row[options.pk], table, that);
+                                Layer.close(index);
+                            }
                         );
                     }
                 }
@@ -449,13 +449,29 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var buttons = $.extend([], this.buttons || []);
 
                     if (options.extend.dragsort_url !== '') {
-                        buttons.push({name: 'dragsort', icon: 'fa fa-arrows', title: __('Drag to sort'), classname: 'btn btn-xs btn-primary btn-dragsort'});
+                        buttons.push({
+                            name: 'dragsort',
+                            icon: 'fa fa-arrows',
+                            title: __('Drag to sort'),
+                            classname: 'btn btn-xs btn-primary btn-dragsort'
+                        });
                     }
                     if (options.extend.edit_url !== '') {
-                        buttons.push({name: 'edit', icon: 'fa fa-pencil', title: __('Edit'), classname: 'btn btn-xs btn-success btn-editone', url: options.extend.edit_url});
+                        buttons.push({
+                            name: 'edit',
+                            icon: 'fa fa-pencil',
+                            title: __('Edit'),
+                            classname: 'btn btn-xs btn-success btn-editone',
+                            url: options.extend.edit_url
+                        });
                     }
                     if (options.extend.del_url !== '') {
-                        buttons.push({name: 'del', icon: 'fa fa-trash', title: __('Del'), classname: 'btn btn-xs btn-danger btn-delone'});
+                        buttons.push({
+                            name: 'del',
+                            icon: 'fa fa-trash',
+                            title: __('Del'),
+                            classname: 'btn btn-xs btn-danger btn-delone'
+                        });
                     }
                     return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
                 },
@@ -470,7 +486,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 type = typeof type === 'undefined' ? 'buttons' : type;
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];
-                var url, classname, icon, text, title, extend;
+                var hidden, url, classname, icon, text, title, refresh, confirm, extend;
                 var fieldIndex = column.fieldIndex;
 
                 $.each(buttons, function (i, j) {
@@ -484,8 +500,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                     var attr = table.data(type + "-" + j.name);
                     if (typeof attr === 'undefined' || attr) {
+                        hidden = typeof j.hidden === 'function' ? j.hidden.call(table, row, j) : (j.hidden ? j.hidden : false);
+                        if (hidden) {
+                            return true;
+                        }
                         url = j.url ? j.url : '';
-                        url = url ? Fast.api.fixurl(Table.api.replaceurl(url, row, table)) : 'javascript:;';
+                        url = typeof url === 'function' ? url.call(table, row, j) : (url ? Fast.api.fixurl(Table.api.replaceurl(url, row, table)) : 'javascript:;');
                         classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
                         icon = j.icon ? j.icon : '';
                         text = j.text ? j.text : '';

@@ -7,7 +7,7 @@ use think\Model;
 class {%modelName%} extends Model
 {
     // 表名
-    protected ${%modelTableType%} = '{%modelTableName%}';
+    protected ${%modelTableType%} = '{%modelTableTypeName%}';
     
     // 自动写入时间戳字段
     protected $autoWriteTimestamp = {%modelAutoWriteTimestamp%};
@@ -29,5 +29,5 @@ class {%modelName%} extends Model
 
 {%setAttrList%}
 
-{%modelRelationMethod%}
+{%relationMethodList%}
 }

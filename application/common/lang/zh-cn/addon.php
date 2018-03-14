@@ -85,6 +85,8 @@ return [
     'Donation'                                    => '捐赠',
     'Forum'                                       => '社区',
     'Docs'                                        => '文档',
+    'Go back'                                     => '返回首页',
+    'Jump now'                                    => '立即跳转',
     'Please login first'                          => '请登录后再操作',
     'Send verification code'                      => '发送验证码',
     'Redirect now'                                => '立即跳转',

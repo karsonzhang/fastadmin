@@ -37,7 +37,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                 var content = Template(id, {});
                 Layer.open({
                     type: 1,
-                    title: "修改",
+                    title: __('Reset password'),
                     area: ["450px", "355px"],
                     content: content,
                     success: function (layero) {
@@ -75,7 +75,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
             $("#plupload-avatar").data("upload-success", function (data) {
                 var url = Fast.api.cdnurl(data.url);
                 $(".profile-user-img").prop("src", url);
-                Toastr.success("上传成功！");
+                Toastr.success(__('Upload successful'));
             });
             Form.api.bindevent($("#profile-form"));
             $(document).on("click", ".btn-change", function () {
@@ -91,7 +91,6 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                         var form = $("form", layero);
                         Form.api.bindevent(form, function (data) {
                             Layer.closeAll();
-                            console.log(123);
                         });
                     }
                 });

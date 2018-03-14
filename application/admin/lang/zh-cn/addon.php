@@ -23,7 +23,7 @@ return [
     'Pay new window tips'            => '请在新弹出的窗口中进行支付，支付完成后再重新点击安装按钮进行安装！',
     'Uninstall tips'                 => '确认卸载插件？<p class="text-danger">卸载将会删除所有插件文件且不可找回!!! 插件如果有创建数据库表请手动删除!!!</p>如有重要数据请备份后再操作！',
     'Upgrade tips'                   => '确认升级插件？<p class="text-danger">如果之前购买插件时未登录，此次升级可能出现购买后才可以下载的提示!!!<br>升级后可能出现部分冗余数据记录,请根据需要移除即可!!!</p>如有重要数据请备份后再操作！',
-    'Offline installed tips'         => '插件安装成功！你需要手动启用该插件，并清除缓存使之生效',
+    'Offline installed tips'         => '插件安装成功！清除插件缓存和框架缓存后生效！',
     'Online installed tips'          => '插件安装成功！清除插件缓存和框架缓存后生效！',
     'Not login tips'                 => '你当前未登录FastAdmin，登录后将同步已购买的记录，下载时无需二次付费！',
     'Not installed tips'             => '请安装后再访问插件前台页面！',

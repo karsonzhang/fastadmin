@@ -37,8 +37,8 @@
                 <label for="" class="control-label col-xs-12 col-sm-3">{:__('Type')}:</label>
                 <div class="col-xs-12 col-sm-8">
                     <div class="radio">
-                        <label for="type-email"><input id="type-email" checked="checked" name="type" data-send-url="{:url('api/ems/send')}" data-check-url="{:url('api/validate/check_ems_correct')}" type="radio" value="email"> 通过邮箱找回</label> 
-                        <label for="type-mobile"><input id="type-mobile" name="type" type="radio" data-send-url="{:url('api/sms/send')}" data-check-url="{:url('api/validate/check_sms_correct')}" value="mobile"> 通过手机找回</label>
+                        <label for="type-email"><input id="type-email" checked="checked" name="type" data-send-url="{:url('api/ems/send')}" data-check-url="{:url('api/validate/check_ems_correct')}" type="radio" value="email"> {:__('Reset password by email')}</label>
+                        <label for="type-mobile"><input id="type-mobile" name="type" type="radio" data-send-url="{:url('api/sms/send')}" data-check-url="{:url('api/validate/check_sms_correct')}" value="mobile"> {:__('Reset password by mobile')}</label>
                     </div>        
                 </div>
             </div>

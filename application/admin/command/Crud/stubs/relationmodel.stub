@@ -4,9 +4,9 @@ namespace {%modelNamespace%};
 
 use think\Model;
 
-class {%relationModelName%} extends Model
+class {%relationName%} extends Model
 {
     // 表名
-    protected ${%relationModelTableType%} = '{%relationModelTableName%}';
+    protected ${%relationTableType%} = '{%relationTableTypeName%}';
     
 }
