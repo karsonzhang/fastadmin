@@ -36,6 +36,7 @@ return [
     'Reset password'                        => '修改密码',
     'Reset password by email'               => '通过邮箱',
     'Reset password by mobile'              => '通过手机重置',
+    'Reset password successful'             => '修改密码成功',
     'Account is locked'                     => '账户已经被锁定',
     'Password is incorrect'                 => '密码不正确',
     'Account is incorrect'                  => '账户不正确',
