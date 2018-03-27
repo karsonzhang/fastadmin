@@ -3,8 +3,10 @@
 namespace app\common\controller;
 
 use app\common\library\Auth;
+use think\Config;
 use think\exception\HttpResponseException;
 use think\exception\ValidateException;
+use think\Hook;
 use think\Lang;
 use think\Loader;
 use think\Request;
