@@ -39,7 +39,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             // 初始化表格
             table.bootstrapTable({
-                url: location.protocol === "https:" ? "addon/downloaded" : $.fn.bootstrapTable.defaults.extend.index_url,
+                url: $.fn.bootstrapTable.defaults.extend.index_url,
                 columns: [
                     [
                         {field: 'id', title: 'ID', operate: false},
@@ -106,12 +106,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 });
             });
 
-            // 如果是https则启用提示
-            if (location.protocol === "https:") {
-                $("#warmtips").removeClass("hide");
-                $(".btn-switch,.btn-userinfo").addClass("disabled");
-            }
-            
             // 离线安装
             require(['upload'], function (Upload) {
                 Upload.api.plupload("#plupload-addon", function (data, ret) {
@@ -270,7 +264,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
                             },
                             yes: function () {
-                                install(name, true);
+                                install(name, version, true);
                             }
                         });
 

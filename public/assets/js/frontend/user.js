@@ -90,6 +90,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                     success: function (layero) {
                         var form = $("form", layero);
                         Form.api.bindevent(form, function (data) {
+                            location.reload();
                             Layer.closeAll();
                         });
                     }

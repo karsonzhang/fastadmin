@@ -1,8 +1,8 @@
 /*
  FastAdmin Install SQL
 
- 官网: http://www.fastadmin.net
- 演示: http://demo.fastadmin.net
+ 官网: https://www.fastadmin.net
+ 演示: https://demo.fastadmin.net
 
  Date: 2018年03月07日
 */
@@ -564,6 +564,6 @@ CREATE TABLE `fa_version`  (
 -- ----------------------------
 BEGIN;
 INSERT INTO `fa_version` (`id`, `oldversion`, `newversion`, `packagesize`, `content`, `downloadurl`, `enforce`, `createtime`, `updatetime`, `weigh`, `status`) VALUES
-(1, '1.1.1,2', '1.2.1', '20M', '更新内容', 'http://www.fastadmin.net/download.html', 1, 1520425318, 0, 0, 'normal');
+(1, '1.1.1,2', '1.2.1', '20M', '更新内容', 'https://www.fastadmin.net/download.html', 1, 1520425318, 0, 0, 'normal');
 COMMIT;
 SET FOREIGN_KEY_CHECKS = 1;

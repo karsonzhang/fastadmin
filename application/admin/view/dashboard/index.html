@@ -336,7 +336,7 @@
                             <div class="box-header">
                                 <h3 class="box-title">{:__('Recent news')}</h3>
                                 <div class="box-tools pull-right">
-                                    <a href="http://www.fastadmin.net" target="_blank" class="btn btn-box-tool">{:__('More')}</a>
+                                    <a href="https://www.fastadmin.net" target="_blank" class="btn btn-box-tool">{:__('More')}</a>
                                 </div>
                             </div>
                             <div class="box-body" id="news-list">
@@ -349,7 +349,7 @@
                             <div class="box-header">
                                 <h3 class="box-title">{:__('Recent discussion')}</h3>
                                 <div class="box-tools pull-right">
-                                    <a href="http://forum.fastadmin.net" class="btn btn-box-tool">{:__('More')}</a>
+                                    <a href="https://forum.fastadmin.net" class="btn btn-box-tool">{:__('More')}</a>
                                 </div>
                             </div>
                             <div class="box-body" id="discussion-list">
@@ -364,39 +364,47 @@
                                 <table class="table table-striped">
                                     <tbody>
                                         <tr>
-                                            <td width="120px">{:__('PHP version')}</td>
-                                            <td>{$Think.const.PHP_VERSION}</td>
+                                            <td width="140">{:__('FastAdmin version')}</td>
+                                            <td>{$Think.config.fastadmin.version} <a href="javascript:;" class="btn btn-xs btn-checkversion">检查最新版</a></td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('FastAdmin version')}</td>
-                                            <td>{$Think.config.fastadmin.version}</td>
+                                            <td>{:__('FastAdmin addon version')}</td>
+                                            <td>{$addonversion}</td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('Sapi name')}</td>
+                                            <td>{:__('Sapi name')}</td>
                                             <td>{:php_sapi_name()}</td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('Debug mode')}</td>
+                                            <td>{:__('Debug mode')}</td>
                                             <td>{$Think.config.app_debug?__('Yes'):__('No')}</td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('Software')}</td>
+                                            <td>{:__('Software')}</td>
                                             <td>{$Think.server.SERVER_SOFTWARE}</td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('Upload mode')}</td>
+                                            <td>{:__('Upload mode')}</td>
                                             <td>{$uploadmode}</td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('Upload url')}</td>
+                                            <td>{:__('Upload url')}</td>
                                             <td>{$config.upload.uploadurl}</td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('Timezone')}</td>
+                                            <td>{:__('Upload Cdn url')}</td>
+                                            <td>{$config.upload.cdnurl}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Timezone')}</td>
                                             <td>{:date_default_timezone_get()}</td>
                                         </tr>
                                         <tr>
-                                            <td width="120px">{:__('Language')}</td>
+                                            <td>{:__('Cdn url')}</td>
+                                            <td>__CDN__</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Language')}</td>
                                             <td>{$config.language}</td>
                                         </tr>
                                     </tbody></table>

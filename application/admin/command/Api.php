@@ -75,10 +75,10 @@ class Api extends Command
                 $directives = $configuration['directives'];
                 $configName = request()->isCli() ? 'opcache.enable_cli' : 'opcache.enable';
                 if (!$directives[$configName]) {
-                    throw new Exception("Please make sure {$configName} is turned on, Get help:http://forum.fastadmin.net/d/1321");
+                    throw new Exception("Please make sure {$configName} is turned on, Get help:https://forum.fastadmin.net/d/1321");
                 }
             } else {
-                throw new Exception("Please make sure opcache already enabled, Get help:http://forum.fastadmin.net/d/1321");
+                throw new Exception("Please make sure opcache already enabled, Get help:https://forum.fastadmin.net/d/1321");
             }
         }
 

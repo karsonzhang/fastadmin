@@ -164,7 +164,7 @@ return [
     'Config tips'                                           => '可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除',
     'Category tips'                                         => '用于统一管理网站的所有分类,分类可进行无限级分类',
     'Attachment tips'                                       => '主要用于管理上传到服务器或第三方存储的数据',
-    'Addon tips'                                            => '可在线安装、卸载、禁用、启用插件，同时支持添加本地插件。FastAdmin已上线插件商店 ，你可以发布你的免费或付费插件：<a href="http://www.fastadmin.net/store.html" target="_blank">http://www.fastadmin.net/store.html</a>',
+    'Addon tips'                                            => '可在线安装、卸载、禁用、启用插件，同时支持添加本地插件。FastAdmin已上线插件商店 ，你可以发布你的免费或付费插件：<a href="https://www.fastadmin.net/store.html" target="_blank">https://www.fastadmin.net/store.html</a>',
     'Admin tips'                                            => '一个管理员可以有多个角色组,左侧的菜单根据管理员所拥有的权限进行生成',
     'Admin log tips'                                        => '管理员可以查看自己所拥有的权限的管理员日志',
     'Group tips'                                            => '角色组可以有多个,角色有上下级层级关系,如果子角色有角色组和管理员的权限则可以派生属于自己组别的下级角色组或管理员',

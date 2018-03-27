@@ -18,7 +18,7 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => Env::get('app.debug', true),
+    'app_debug'              => Env::get('app.debug', false),
     // 应用Trace
     'app_trace'              => Env::get('app.trace', false),
     // 应用模式状态
@@ -253,7 +253,7 @@ return [
         //自动检测更新
         'checkupdate'      => false,
         //版本号
-        'version'          => '1.0.0.20180314_beta',
-        'api_url'          => 'http://api.fastadmin.net',
+        'version'          => '1.0.0.20180327_beta',
+        'api_url'          => 'https://api.fastadmin.net',
     ],
 ];

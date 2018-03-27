@@ -2,6 +2,6 @@ name = {%name%}
 title = 插件名称{%name%}
 intro = FastAdmin插件
 author = yourname
-website = http://www.fastadmin.net
+website = https://www.fastadmin.net
 version = 1.0.0
 state = 1

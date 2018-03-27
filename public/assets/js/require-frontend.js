@@ -141,7 +141,7 @@ require(['jquery', 'bootstrap'], function ($, undefined) {
     // 初始化
     $(function () {
         require(['fast'], function (Fast) {
-            require(['frontend', 'addons'], function (Frontend, Addons) {
+            require(['frontend', 'frontend-init', 'addons'], function (Frontend, Addons) {
                 //加载相应模块
                 if (Config.jsname) {
                     require([Config.jsname], function (Controller) {

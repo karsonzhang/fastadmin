@@ -79,6 +79,42 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
+            //读取首次登录推荐插件列表
+            if (localStorage.getItem("fastep") == "installed") {
+                $.ajax({
+                    url: Config.fastadmin.api_url + '/addon/recommend',
+                    type: 'post',
+                    dataType: 'jsonp',
+                    success: function (ret) {
+                        require(['template'], function (Template) {
+                            var install = function (name, title) {
+                                Fast.api.ajax({
+                                    url: 'addon/install',
+                                    data: {name: name, faversion: Config.fastadmin.version}
+                                }, function (data, ret) {
+                                    Fast.api.refreshmenu();
+                                });
+                            };
+                            $(document).on('click', '.btn-install', function () {
+                                $(this).prop("disabled", true).addClass("disabled");
+                                $("input[name=addon]:checked").each(function () {
+                                    install($(this).data("name"));
+                                });
+                                return false;
+                            });
+                            $(document).on('click', '.btn-notnow', function () {
+                                Layer.closeAll();
+                            });
+                            Layer.open({
+                                type: 1, skin: 'layui-layer-page', area: ["860px", "620px"], title: '',
+                                content: Template.render(ret.tpl, {addonlist: ret.rows})
+                            });
+                            localStorage.setItem("fastep", "dashboard");
+                        });
+                    }
+                });
+            }
+
             //版本检测
             var checkupdate = function (ignoreversion, tips) {
                 $.ajax({
@@ -335,6 +371,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             }
 
             $(window).resize();
+
         },
         login: function () {
             var lastlogin = localStorage.getItem("lastlogin");
@@ -359,7 +396,11 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             //为表单绑定事件
             Form.api.bindevent($("#login-form"), function (data) {
-                localStorage.setItem("lastlogin", JSON.stringify({id: data.id, username: data.username, avatar: data.avatar}));
+                localStorage.setItem("lastlogin", JSON.stringify({
+                    id: data.id,
+                    username: data.username,
+                    avatar: data.avatar
+                }));
                 location.href = Backend.api.fixurl(data.url);
             });
         }

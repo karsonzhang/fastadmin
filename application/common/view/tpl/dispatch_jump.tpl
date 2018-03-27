@@ -42,7 +42,7 @@
             </p>
         </div>
         <div class="copyright">
-            <p>Powered by <a href="http://www.fastadmin.net/?ref=jump">FastAdmin</a></p>
+            <p>Powered by <a href="https://www.fastadmin.net/?ref=jump">FastAdmin</a></p>
         </div>
         <script type="text/javascript">
             (function () {
