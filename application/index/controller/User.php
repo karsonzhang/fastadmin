@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use app\common\controller\Frontend;
+use think\Config;
 use think\Cookie;
 use think\Hook;
 use think\Session;
@@ -23,27 +24,30 @@ class User extends Frontend
         parent::_initialize();
         $auth = $this->auth;
 
+        if (!Config::get('fastadmin.usercenter')) {
+            $this->error(__('User center already closed'));
+        }
+
         $ucenter = get_addon_info('ucenter');
-        if ($ucenter && $ucenter['state'])
-        {
+        if ($ucenter && $ucenter['state']) {
             include ADDON_PATH . 'ucenter' . DS . 'uc.php';
         }
 
         //监听注册登录注销的事件
-        Hook::add('user_login_successed', function($user) use($auth) {
+        Hook::add('user_login_successed', function ($user) use ($auth) {
             $expire = input('post.keeplogin') ? 30 * 86400 : 0;
             Cookie::set('uid', $user->id, $expire);
             Cookie::set('token', $auth->getToken(), $expire);
         });
-        Hook::add('user_register_successed', function($user) use($auth) {
+        Hook::add('user_register_successed', function ($user) use ($auth) {
             Cookie::set('uid', $user->id);
             Cookie::set('token', $auth->getToken());
         });
-        Hook::add('user_delete_successed', function($user) use($auth) {
+        Hook::add('user_delete_successed', function ($user) use ($auth) {
             Cookie::delete('uid');
             Cookie::delete('token');
         });
-        Hook::add('user_logout_successed', function($user) use($auth) {
+        Hook::add('user_logout_successed', function ($user) use ($auth) {
             Cookie::delete('uid');
             Cookie::delete('token');
         });
@@ -66,8 +70,7 @@ class User extends Frontend
         $url = $this->request->request('url', url('user/index'));
         if ($this->auth->id)
             $this->success(__('You\'ve logged in, do not login again'), $url);
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $username = $this->request->post('username');
             $password = $this->request->post('password');
             $email = $this->request->post('email');
@@ -103,23 +106,18 @@ class User extends Frontend
             ];
             $validate = new Validate($rule, $msg);
             $result = $validate->check($data);
-            if (!$result)
-            {
+            if (!$result) {
                 $this->error(__($validate->getError()));
             }
-            if ($this->auth->register($username, $password, $email, $mobile))
-            {
+            if ($this->auth->register($username, $password, $email, $mobile)) {
                 $synchtml = '';
                 ////////////////同步到Ucenter////////////////
-                if (defined('UC_STATUS') && UC_STATUS)
-                {
+                if (defined('UC_STATUS') && UC_STATUS) {
                     $uc = new \addons\ucenter\library\client\Client();
                     $synchtml = $uc->uc_user_synregister($this->auth->id, $password);
                 }
                 $this->success(__('Sign up successful') . $synchtml, $url);
-            }
-            else
-            {
+            } else {
                 $this->error($this->auth->getError());
             }
         }
@@ -136,11 +134,10 @@ class User extends Frontend
         $url = $this->request->request('url', url('user/index'));
         if ($this->auth->id)
             $this->success(__('You\'ve logged in, do not login again'), $url);
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $account = $this->request->post('account');
             $password = $this->request->post('password');
-            $keeplogin = (int) $this->request->post('keeplogin');
+            $keeplogin = (int)$this->request->post('keeplogin');
             $token = $this->request->post('__token__');
             $rule = [
                 'account'   => 'require|length:3,50',
@@ -161,24 +158,19 @@ class User extends Frontend
             ];
             $validate = new Validate($rule, $msg);
             $result = $validate->check($data);
-            if (!$result)
-            {
+            if (!$result) {
                 $this->error(__($validate->getError()));
                 return FALSE;
             }
-            if ($this->auth->login($account, $password))
-            {
+            if ($this->auth->login($account, $password)) {
                 $synchtml = '';
                 ////////////////同步到Ucenter////////////////
-                if (defined('UC_STATUS') && UC_STATUS)
-                {
+                if (defined('UC_STATUS') && UC_STATUS) {
                     $uc = new \addons\ucenter\library\client\Client();
                     $synchtml = $uc->uc_user_synlogin($this->auth->id);
                 }
                 $this->success(__('Logged in successful') . $synchtml, $url);
-            }
-            else
-            {
+            } else {
                 $this->error($this->auth->getError());
             }
         }
@@ -195,8 +187,7 @@ class User extends Frontend
         $this->auth->logout();
         $synchtml = '';
         ////////////////同步到Ucenter////////////////
-        if (defined('UC_STATUS') && UC_STATUS)
-        {
+        if (defined('UC_STATUS') && UC_STATUS) {
             $uc = new \addons\ucenter\library\client\Client();
             $synchtml = $uc->uc_user_synlogout();
         }
@@ -217,8 +208,7 @@ class User extends Frontend
      */
     public function changepwd()
     {
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $oldpassword = $this->request->post("oldpassword");
             $newpassword = $this->request->post("newpassword");
             $renewpassword = $this->request->post("renewpassword");
@@ -245,26 +235,21 @@ class User extends Frontend
             ];
             $validate = new Validate($rule, $msg, $field);
             $result = $validate->check($data);
-            if (!$result)
-            {
+            if (!$result) {
                 $this->error(__($validate->getError()));
                 return FALSE;
             }
 
             $ret = $this->auth->changepwd($newpassword, $oldpassword);
-            if ($ret)
-            {
+            if ($ret) {
                 $synchtml = '';
                 ////////////////同步到Ucenter////////////////
-                if (defined('UC_STATUS') && UC_STATUS)
-                {
+                if (defined('UC_STATUS') && UC_STATUS) {
                     $uc = new \addons\ucenter\library\client\Client();
                     $synchtml = $uc->uc_user_synlogout();
                 }
                 $this->success(__('Reset password successful') . $synchtml, url('user/login'));
-            }
-            else
-            {
+            } else {
                 $this->error($this->auth->getError());
             }
         }

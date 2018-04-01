@@ -4,7 +4,7 @@
  * 
  * 安装完成后建议删除此文件
  * @author Karson
- * @website http://www.fastadmin.net
+ * @website https://www.fastadmin.net
  */
 // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 // ini_set('display_errors', '1');
@@ -41,9 +41,9 @@ $sitename = "FastAdmin";
 $link = array(
     'qqun'  => "https://jq.qq.com/?_wv=1027&amp;k=487PNBb",
     'gitee' => 'https://gitee.com/karson/fastadmin/attach_files',
-    'home'  => 'http://www.fastadmin.net?ref=install',
-    'forum' => 'http://forum.fastadmin.net?ref=install',
-    'doc'   => 'http://doc.fastadmin.net?ref=install',
+    'home'  => 'https://www.fastadmin.net?ref=install',
+    'forum' => 'https://forum.fastadmin.net?ref=install',
+    'doc'   => 'https://doc.fastadmin.net?ref=install',
 );
 
 // 检测目录是否存在
@@ -77,7 +77,7 @@ else if (!extension_loaded("PDO"))
 }
 else if (!is_really_writable($dbConfigFile))
 {
-    $errInfo = '当前权限不足，无法写入配置文件application/database.php<br><a href="http://forum.fastadmin.net/?q=%E6%9D%83%E9%99%90%E4%B8%8D%E8%B6%B3" target="_blank">点击查看解决办法</a>';
+    $errInfo = '当前权限不足，无法写入配置文件application/database.php<br><a href="https://forum.fastadmin.net/?q=%E6%9D%83%E9%99%90%E4%B8%8D%E8%B6%B3" target="_blank">点击查看解决办法</a>';
 }
 else
 {
@@ -86,7 +86,7 @@ else
     {
         if (!is_dir(ROOT_PATH . $v))
         {
-            $errInfo = '当前代码仅包含核心代码，请前往官网下载完整包或资源包覆盖后再尝试安装，<a href="http://www.fastadmin.net/download.html?ref=install" target="_blank">立即前往下载</a>';
+            $errInfo = '当前代码仅包含核心代码，请前往官网下载完整包或资源包覆盖后再尝试安装，<a href="https://www.fastadmin.net/download.html?ref=install" target="_blank">立即前往下载</a>';
             break;
         }
     }

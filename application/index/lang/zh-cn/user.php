@@ -59,6 +59,7 @@ return [
     'Sign up successful'                    => '注册成功',
     'Logged in successful'                  => '登录成功',
     'Logout successful'                     => '注销成功',
+    'User center already closed'            => '会员中心已经关闭',
     'Operation failed'                      => '操作失败',
     'Invalid parameters'                    => '参数不正确',
     'Change password failure'               => '修改密码失败',

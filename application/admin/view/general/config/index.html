@@ -54,20 +54,13 @@
                                                 <textarea name="row[{$item.name}]" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
                                                 {/case}
                                                 {case array}
-                                                <dl class="fieldlist" rel="{$item.value|count}" data-name="row[{$item.name}]">
+                                                <dl class="fieldlist" data-name="row[{$item.name}]">
                                                     <dd>
                                                         <ins>{:__('Array key')}</ins>
                                                         <ins>{:__('Array value')}</ins>
                                                     </dd>
-                                                    {foreach $item.value as $key => $vo}
-                                                    <dd class="form-inline">
-                                                        <input type="text" name="row[{$item.name}][field][{$key}]" class="form-control" value="{$key}" size="10" />
-                                                        <input type="text" name="row[{$item.name}][value][{$key}]" class="form-control" value="{$vo}" size="40" />
-                                                        <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
-                                                        <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
-                                                    </dd>
-                                                    {/foreach}
-                                                    <dd><a href="javascript:;" class="append btn btn-sm btn-success"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                                    <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                                    <textarea name="row[{$item.name}]" class="form-control hide" cols="30" rows="5">{$item.value}</textarea>
                                                 </dl>
                                                 {/case}
                                                 {case datetime}

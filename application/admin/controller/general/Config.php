@@ -25,6 +25,9 @@ class Config extends Backend
         $this->model = model('Config');
     }
 
+    /**
+     * 查看
+     */
     public function index()
     {
         $siteList = [];
@@ -47,10 +50,6 @@ class Config extends Backend
             if (in_array($value['type'], ['select', 'selects', 'checkbox', 'radio']))
             {
                 $value['value'] = explode(',', $value['value']);
-            }
-            if ($value['type'] == 'array')
-            {
-                $value['value'] = (array) json_decode($value['value'], TRUE);
             }
             $value['content'] = json_decode($value['content'], TRUE);
             $siteList[$v['group']]['list'][] = $value;
@@ -119,6 +118,10 @@ class Config extends Backend
         return $this->view->fetch();
     }
 
+    /**
+     * 编辑
+     * @param null $ids
+     */
     public function edit($ids = NULL)
     {
         if ($this->request->isPost())

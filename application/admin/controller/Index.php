@@ -105,7 +105,8 @@ class Index extends Backend
         {
             $this->redirect($url);
         }
-        $background = cdnurl(Config::get('fastadmin.login_background'));
+        $background = Config::get('fastadmin.login_background');
+        $background = stripos($background, 'http')===0 ? $background : config('site.cdnurl') . $background;
         $this->view->assign('background', $background);
         $this->view->assign('title', __('Login'));
         Hook::listen("login_init", $this->request);

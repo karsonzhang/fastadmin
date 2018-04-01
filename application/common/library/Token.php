@@ -2,84 +2,158 @@
 
 namespace app\common\library;
 
+use app\common\library\token\Driver;
+use think\App;
+use think\Config;
+use think\Log;
+
 /**
  * Token操作类
  */
 class Token
 {
+    /**
+     * @var array Token的实例
+     */
+    public static $instance = [];
 
     /**
-     * 存储Token
-     * @param   string    $token      Token
-     * @param   int       $user_id    会员ID
-     * @param   int       $expire     过期时长,0表示无限,单位秒
+     * @var object 操作句柄
      */
-    public static function set($token, $user_id, $expire = 0)
+    public static $handler;
+
+    /**
+     * 连接Token驱动
+     * @access public
+     * @param  array $options 配置数组
+     * @param  bool|string $name Token连接标识 true 强制重新连接
+     * @return Driver
+     */
+    public static function connect(array $options = [], $name = false)
     {
-        $expiretime = $expire ? time() + $expire : 0;
-        \app\common\model\Token::create(['token' => $token, 'user_id' => $user_id, 'expiretime' => $expiretime]);
-        return TRUE;
+        $type = !empty($options['type']) ? $options['type'] : 'File';
+
+        if (false === $name) {
+            $name = md5(serialize($options));
+        }
+
+        if (true === $name || !isset(self::$instance[$name])) {
+            $class = false === strpos($type, '\\') ?
+                '\\app\\common\\library\\token\\driver\\' . ucwords($type) :
+                $type;
+
+            // 记录初始化信息
+            App::$debug && Log::record('[ TOKEN ] INIT ' . $type, 'info');
+
+            if (true === $name) {
+                return new $class($options);
+            }
+
+            self::$instance[$name] = new $class($options);
+        }
+
+        return self::$instance[$name];
     }
 
     /**
-     * 获取Token内的信息
-     * @param   string  $token 
-     * @return  array
+     * 自动初始化Token
+     * @access public
+     * @param  array $options 配置数组
+     * @return Driver
      */
-    public static function get($token)
+    public static function init(array $options = [])
     {
-        $data = \app\common\model\Token::get($token);
-        if ($data)
-        {
-            if (!$data['expiretime'] || $data['expiretime'] > time())
-            {
-                return $data;
+        if (is_null(self::$handler)) {
+            if (empty($options) && 'complex' == Config::get('token.type')) {
+                $default = Config::get('token.default');
+                // 获取默认Token配置，并连接
+                $options = Config::get('token.' . $default['type']) ?: $default;
+            } elseif (empty($options)) {
+                $options = Config::get('token');
             }
-            else
-            {
-                self::delete($token);
-            }
+
+            self::$handler = self::connect($options);
         }
-        return [];
+
+        return self::$handler;
+    }
+
+    /**
+     * 判断Token是否可用(check别名)
+     * @access public
+     * @param  string $token Token标识
+     * @return bool
+     */
+    public static function has($token, $user_id)
+    {
+        return self::check($token, $user_id);
     }
 
     /**
      * 判断Token是否可用
-     * @param   string    $token      Token
-     * @param   int       $user_id    会员ID
-     * @return  boolean
+     * @param string $token Token标识
+     * @return bool
      */
     public static function check($token, $user_id)
     {
-        $data = self::get($token);
-        return $data && $data['user_id'] == $user_id ? true : false;
+        return self::init()->check($token, $user_id);
+    }
+
+    /**
+     * 读取Token
+     * @access public
+     * @param  string $token Token标识
+     * @param  mixed $default 默认值
+     * @return mixed
+     */
+    public static function get($token, $default = false)
+    {
+        return self::init()->get($token, $default);
+    }
+
+    /**
+     * 写入Token
+     * @access public
+     * @param  string $token Token标识
+     * @param  mixed $user_id 存储数据
+     * @param  int|null $expire 有效时间 0为永久
+     * @return boolean
+     */
+    public static function set($token, $user_id, $expire = null)
+    {
+        return self::init()->set($token, $user_id, $expire);
+    }
+
+    /**
+     * 删除Token(delete别名)
+     * @access public
+     * @param  string $token Token标识
+     * @return boolean
+     */
+    public static function rm($token)
+    {
+        return self::delete($token);
     }
 
     /**
      * 删除Token
-     * @param   string  $token
-     * @return  boolean
+     * @param string $token 标签名
+     * @return bool
      */
     public static function delete($token)
     {
-        $data = \app\common\model\Token::get($token);
-        if ($data)
-        {
-            $data->delete();
-            return true;
-        }
-        return false;
+        return self::init()->delete($token);
     }
 
     /**
-     * 删除指定用户的所有Token
-     * @param   int     $user_id
-     * @return  boolean
+     * 清除Token
+     * @access public
+     * @param  string $token Token标记
+     * @return boolean
      */
-    public static function clear($user_id)
+    public static function clear($user_id = null)
     {
-        \app\common\model\Token::where('user_id', $user_id)->delete();
-        return true;
+        return self::init()->clear($user_id);
     }
 
 }

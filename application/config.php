@@ -242,8 +242,23 @@ return [
         // 验证成功后是否重置
         'reset'    => true
     ],
+    // +----------------------------------------------------------------------
+    // | Token设置
+    // +----------------------------------------------------------------------
+    'token'                  => [
+        // 驱动方式
+        'type'     => 'Redis',
+        // 缓存前缀
+        'key'      => 'i3d6o32wo8fvs1fvdpwens',
+        // 加密方式
+        'hashalgo' => 'ripemd160',
+        // 缓存有效期 0表示永久缓存
+        'expire'   => 0,
+    ],
     //FastAdmin配置
     'fastadmin'              => [
+        //是否开启前台会员中心
+        'usercenter'       => true,
         //登录验证码
         'login_captcha'    => false,
         //是否同一账号同一时间只能在一个地方登录
@@ -253,7 +268,8 @@ return [
         //自动检测更新
         'checkupdate'      => false,
         //版本号
-        'version'          => '1.0.0.20180327_beta',
+        'version'          => '1.0.0.20180401_beta',
+        //API接口地址
         'api_url'          => 'https://api.fastadmin.net',
     ],
 ];
