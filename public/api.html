@@ -33,7 +33,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="http://www.fastadmin.net" target="_blank">FastAdmin</a>
+                    <a class="navbar-brand" href="https://www.fastadmin.net" target="_blank">FastAdmin</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <form class="navbar-form navbar-right">
@@ -3351,9 +3351,9 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2018-03-16 14:43:16                </div>
+                    Generated on 2018-04-01 15:11:14                </div>
                 <div class="col-md-6" align="right">
-                    <a href="http://www.fastadmin.net" target="_blank">FastAdmin</a>
+                    <a href="https://www.fastadmin.net" target="_blank">FastAdmin</a>
                 </div>
             </div>
 
@@ -3476,27 +3476,31 @@
                     //instead of the initial attribute
                     var url = $(form).attr('action');
 
-                    var serializedData = new FormData();
+                    var formData = new FormData();
 
                     $(form).find('input').each(function (i, input) {
                         if ($(input).attr('type') == 'file') {
-                            serializedData.append($(input).attr('name'), $(input)[0].files[0]);
+                            formData.append($(input).attr('name'), $(input)[0].files[0]);
                         } else {
-                            serializedData.append($(input).attr('name'), $(input).val())
+                            formData.append($(input).attr('name'), $(input).val())
                         }
                     });
 
                     var index, key, value;
 
                     if (matchedParamsInRoute) {
+                        var params = {};
+                        formData.forEach(function(value, key){
+                            params[key] = value;
+                        });
                         for (index = 0; index < matchedParamsInRoute.length; ++index) {
                             try {
                                 key = matchedParamsInRoute[index];
-                                value = serializedData[key];
+                                value = params[key];
                                 if (typeof value == "undefined")
                                     value = "";
-                                url = url.replace("{" + key + "}", value);
-                                delete serializedData[key];
+                                url = url.replace("\{" + key + "\}", value);
+                                formData.delete(key);
                             } catch (err) {
                                 console.log(err);
                             }
@@ -3519,7 +3523,7 @@
 
                     $.ajax({
                         url: $('#apiUrl').val() + url,
-                        data: $(form).attr('method') == 'get' ? $(form).serialize() : serializedData,
+                        data: $(form).attr('method') == 'get' ? $(form).serialize() : formData,
                         type: $(form).attr('method') + '',
                         dataType: 'json',
                         contentType: false,

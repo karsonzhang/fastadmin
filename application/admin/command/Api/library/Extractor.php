@@ -322,7 +322,6 @@ class Extractor
         if (preg_match_all('/@(?<name>[A-Za-z_-]+)[\s\t]*\((?<args>(?:(?!\)).)*)\)\r?/s', $docblock, $matches))
         {
             $numMatches = count($matches[0]);
-
             for ($i = 0; $i < $numMatches; ++$i)
             {
                 // annotations has arguments
@@ -330,7 +329,12 @@ class Extractor
                 {
                     $argsParts = trim($matches['args'][$i]);
                     $name = $matches['name'][$i];
+                    $argsParts = preg_replace("/\{(\w+)\}/", '#$1#', $argsParts);
                     $value = self::parseArgs($argsParts);
+                    if(is_string($value))
+                    {
+                        $value = preg_replace("/\#(\w+)\#/", '{$1}', $argsParts);
+                    }
                 }
                 else
                 {

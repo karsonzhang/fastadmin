@@ -5,6 +5,7 @@ namespace fast;
 use ArrayAccess;
 
 /**
+ * 表单元素生成
  * @class Form
  * @package fast
  * @method mixed token() static token
@@ -45,6 +46,12 @@ class Form
 
 }
 
+/**
+ *
+ * 表单元素生成
+ * @from https://github.com/illuminate/html
+ * @package fast
+ */
 class FormBuilder
 {
 

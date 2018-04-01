@@ -62,6 +62,7 @@ class Date
      * @param   string  $output formatting string
      * @return  string   when only a single output is requested
      * @return  array    associative list of all outputs requested
+     * @from https://github.com/kohana/ohanzee-helpers/blob/master/src/Date.php
      */
     public static function span($remote, $local = NULL, $output = 'years,months,weeks,days,hours,minutes,seconds')
     {
