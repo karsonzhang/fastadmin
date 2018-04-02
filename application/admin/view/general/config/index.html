@@ -51,7 +51,7 @@
                                                 <textarea name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
                                                 {/case}
                                                 {case editor}
-                                                <textarea name="row[{$item.name}]" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
+                                                <textarea name="row[{$item.name}]" id="editor-{$item.name}" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
                                                 {/case}
                                                 {case array}
                                                 <dl class="fieldlist" data-name="row[{$item.name}]">
@@ -176,8 +176,8 @@
                     <div class="form-group hide" id="add-content-container">
                         <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
                         <div class="col-xs-12 col-sm-4">
-                            <textarea name="row[content]" id="content" cols="30" rows="5" class="form-control" data-rule="required">key1|value1
-key2|value2</textarea>
+                            <textarea name="row[content]" id="content" cols="30" rows="5" class="form-control" data-rule="required">value1|title1
+value2|title2</textarea>
                         </div>
                     </div>
                     <div class="form-group">

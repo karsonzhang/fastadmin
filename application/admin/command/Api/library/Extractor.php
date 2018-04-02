@@ -2,6 +2,8 @@
 
 namespace app\admin\command\Api\library;
 
+use Exception;
+
 /**
  * Class imported from https://github.com/eriknyk/Annotations
  * @author  Erik Amaru Ortiz https://github.com/eriknyk‎
@@ -329,11 +331,16 @@ class Extractor
                 {
                     $argsParts = trim($matches['args'][$i]);
                     $name = $matches['name'][$i];
-                    $argsParts = preg_replace("/\{(\w+)\}/", '#$1#', $argsParts);
-                    $value = self::parseArgs($argsParts);
-                    if(is_string($value))
+                    if($name == 'ApiReturn')
                     {
-                        $value = preg_replace("/\#(\w+)\#/", '{$1}', $argsParts);
+                        $value = $argsParts;
+                    } else {
+                        $argsParts = preg_replace("/\{(\w+)\}/", '#$1#', $argsParts);
+                        $value = self::parseArgs($argsParts);
+                        if(is_string($value))
+                        {
+                            $value = preg_replace("/\#(\w+)\#/", '{$1}', $argsParts);
+                        }
                     }
                 }
                 else
