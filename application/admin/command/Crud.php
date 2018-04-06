@@ -654,9 +654,10 @@ class Crud extends Command
                         $priDefined = TRUE;
                         $javascriptList[] = "{checkbox: true}";
                     }
-                    //构造JS列信息
-                    $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '', $itemArr);
-
+                    if (!$fields || in_array($field, explode(',', $fields))) {
+                        //构造JS列信息
+                        $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '', $itemArr);
+                    }
                     //排序方式,如果有指定排序字段,否则按主键排序
                     $order = $field == $this->sortField ? $this->sortField : $order;
                 }
@@ -766,6 +767,11 @@ class Crud extends Command
 
                     //构造关联模型的方法
                     $relationMethodList[] = $this->getReplacedStub('mixins' . DS . 'modelrelationmethod', $relation);
+
+                    //如果设置了显示主表字段，则必须显式将关联表字段显示
+                    if ($fields) {
+                        $relationVisibleFieldList[] = "\$row->visible(['{$relation['relationMethod']}']);";
+                    }
 
                     //显示的字段
                     if ($relation['relationFields']) {

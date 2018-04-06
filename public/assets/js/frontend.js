@@ -1,4 +1,4 @@
-define(['fast'], function (Fast) {
+define(['fast', 'template'], function (Fast, Template) {
     var Frontend = {
         api: Fast.api,
         init: function () {
@@ -53,6 +53,8 @@ define(['fast'], function (Fast) {
         }
     };
     Frontend.api = $.extend(Fast.api, Frontend.api);
+    //将Template渲染至全局,以便于在子框架中调用
+    window.Template = Template;
     //将Frontend渲染至全局,以便于在子框架中调用
     window.Frontend = Frontend;
 

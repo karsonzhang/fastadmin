@@ -279,6 +279,7 @@ class Backend extends Controller
             {
                 $k = $tableName . $k;
             }
+            $v = !is_array($v) ? trim($v) : $v;
             $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
             switch ($sym)
             {
@@ -306,7 +307,7 @@ class Backend extends Controller
                 case 'IN(...)':
                 case 'NOT IN':
                 case 'NOT IN(...)':
-                    $where[] = [$k, str_replace('(...)', '', $sym), explode(',', $v)];
+                    $where[] = [$k, str_replace('(...)', '', $sym), is_array($v) ? $v : explode(',', $v)];
                     break;
                 case 'BETWEEN':
                 case 'NOT BETWEEN':

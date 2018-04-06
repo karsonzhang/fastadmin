@@ -1,7 +1,7 @@
 <style type="text/css">
     .noimage {width:100%;text-align: center;background:#18bc9c;color:#fff;padding-bottom:66.66%;position:relative;}
     .noimage > div {position: absolute;top:48%;width:100%;text-align:center;}
-    .addon {position: relative;}
+    .addon {position: relative;border-color:#e4e4e4;}
     .addon > span {position:absolute;left:15px;top:15px;z-index:9;}
     .addon > span a{opacity: 0.5;border:none;color:#fff;}
     .layui-layer-pay .layui-layer-content {padding:0;height:600px!important;}
@@ -16,9 +16,34 @@
     .status-disabled .noimage {
         background:#d2d6de;
     }
+    @media (min-width: 992px) {
+        .addon {
+            -webkit-transition:all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
+        .addon:hover {
+            border-color: #dddddd;
+            -webkit-box-shadow: 0 26px 40px -24px rgba(0,36,100,0.3);
+            -moz-box-shadow: 0 26px 40px -24px rgba(0,36,100,0.3);
+            box-shadow: 0 26px 40px -24px rgba(0,36,100,0.3);
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
+    }
 </style>
 <div class="panel panel-default panel-intro">
-    {:build_heading()}
+    <div class="panel-heading">
+        {:build_heading(null,FALSE)}
+        <ul class="nav nav-tabs nav-category">
+            <li class="active"><a href="javascript:;" data-id="">{:__('All')}</a></li>
+            <li><a href="javascript:;" data-id="0">{:__('Uncategoried')}</a></li>
+        </ul>
+
+    </div>
 
     <div class="panel-body">
         <div id="myTabContent" class="tab-content">
@@ -27,10 +52,11 @@
                     <div id="toolbar" class="toolbar">
                         {:build_toolbar('refresh')}
                         <button type="button" id="plupload-addon" class="btn btn-danger plupload" data-url="addon/local" data-mimetype="application/zip" data-multiple="false"><i class="fa fa-upload"></i> {:__('Offline install')}</button>
-                        <a class="btn btn-success btn-ajax" href="addon/refresh"><i class="fa fa-refresh"></i> {:__('Refresh addon cache')}</a>
                         <div class="btn-group">
-                            <a href="#" class="btn btn-info btn-switch active" data-url="{$config.fastadmin.api_url}/addon/index"><i class="fa fa-cloud"></i> {:__('Online store')}</a>
-                            <a href="#" class="btn btn-info btn-switch" data-url="addon/downloaded"><i class="fa fa-laptop"></i> {:__('Local addon')}</a>
+                            <a href="#" class="btn btn-info btn-switch active" data-type="all" data-url="{$config.fastadmin.api_url}/addon/index"><i class="fa fa-list"></i> {:__('全部')}</a>
+                            <a href="#" class="btn btn-info btn-switch" data-type="free" data-url="{$config.fastadmin.api_url}/addon/index"><i class="fa fa-gift"></i> {:__('免费')}</a>
+                            <a href="#" class="btn btn-info btn-switch" data-type="price" data-url="{$config.fastadmin.api_url}/addon/index"><i class="fa fa-rmb"></i> {:__('付费')}</a>
+                            <a href="#" class="btn btn-info btn-switch" data-type="local" data-url="addon/downloaded"><i class="fa fa-laptop"></i> {:__('Local addon')}</a>
                         </div>
                         <a class="btn btn-primary btn-userinfo" href="javascript:;"><i class="fa fa-user"></i> {:__('Userinfo')}</a>
                     </div>
@@ -44,6 +70,55 @@
         </div>
     </div>
 </div>
+<script id="searchformtpl" type="text/html">
+    <form action="" class="form-commonsearch hide">
+        <div class="well" style="box-shadow:none;border-radius:2px;margin-bottom:10px;">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">标题</label>
+                        <input class="operate" type="hidden" data-name="title" value="like"/>
+                        <input class="form-control" type="text" name="title" placeholder="请输入查找的标题" value=""/>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">类型</label>
+                        <input class="operate" type="hidden" data-name="type" value="="/>
+                        <input class="form-control" type="text" name="type" placeholder="all" value=""/>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">分类</label>
+                        <input type="hidden" class="operate" data-name="category_id" value="="/>
+                        <input class="form-control" name="category_id" type="text" value="">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">版本号</label>
+                        <input type="hidden" class="operate" data-name="faversion" value="="/>
+                        <input class="form-control" name="faversion" type="text" value="{$config.fastadmin.version}">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <input type="submit" class="btn btn-success btn-block" value="提交"/>
+                            </div>
+                            <div class="col-xs-6">
+                                <input type="reset" class="btn btn-primary btn-block" value="重置"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
 <script id="logintpl" type="text/html">
     <div>
         <form class="form-horizontal">
@@ -180,7 +255,7 @@
                 <%}%>
             </a>
             <div class="caption">
-                <h4><%=item.title?item.title:'{:__('None')}'%> 
+                <h4><%=item.title?item.title:'{:__('None')}'%>
                     <% if(item.flag.indexOf("recommend")>-1){%>
                     <span class="label label-success">{:__('Recommend')}</span>
                     <% } %>
@@ -203,7 +278,7 @@
                     <% if(!addon){ %>
                     <% if(typeof item.releaselist !="undefined" && item.releaselist.length>1){%>
                     <span class="btn-group">
-                        <a href="javascript:;" class="btn btn-primary btn-success btn-install" data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>" data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a> 
+                        <a href="javascript:;" class="btn btn-primary btn-success btn-install" data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>" data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
                         <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="javascript:;">
                             <span class="fa fa-caret-down"></span>
                         </a>
@@ -214,10 +289,10 @@
                         </ul>
                     </span>
                     <% }else{%>
-                    <a href="javascript:;" class="btn btn-primary btn-success btn-install" data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>" data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a> 
+                    <a href="javascript:;" class="btn btn-primary btn-success btn-install" data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>" data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
                     <% } %>
                     <% if(item.demourl){ %>
-                    <a href="<%=item.demourl%>" class="btn btn-primary btn-info btn-demo" target="_blank"><i class="fa fa-flash"></i> {:__('Demo')}</a> 
+                    <a href="<%=item.demourl%>" class="btn btn-primary btn-info btn-demo" target="_blank"><i class="fa fa-flash"></i> {:__('Demo')}</a>
                     <% } %>
                     <% } %>
 
@@ -235,7 +310,7 @@
                     <% if(addon && item && addon.version!=item.version){%>
                     <% if(typeof item.releaselist !="undefined" && item.releaselist.length>1){%>
                     <span class="btn-group">
-                        <a href="javascript:;" class="btn btn-info btn-success btn-upgrade" data-version="<%=item.version%>"><i class="fa fa-cloud"></i> {:__('Upgrade')}</a> 
+                        <a href="javascript:;" class="btn btn-info btn-success btn-upgrade" data-version="<%=item.version%>"><i class="fa fa-cloud"></i> {:__('Upgrade')}</a>
                         <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="javascript:;">
                             <span class="fa fa-caret-down"></span>
                         </a>

@@ -1,4 +1,4 @@
-define(['fast', 'moment'], function (Fast, Moment) {
+define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
     var Backend = {
         api: {
             sidebar: function (params) {
@@ -8,13 +8,11 @@ define(['fast', 'moment'], function (Fast, Moment) {
                 $.each(params, function (k, v) {
                     $url = Fast.api.fixurl(k);
 
-                    if ($.isArray(v))
-                    {
+                    if ($.isArray(v)) {
                         $nums = typeof v[0] !== 'undefined' ? v[0] : 0;
                         $color = typeof v[1] !== 'undefined' ? v[1] : colorArr[(!isNaN($nums) ? $nums : $nums.length) % $colorNums];
                         $class = typeof v[2] !== 'undefined' ? v[2] : 'label';
-                    } else
-                    {
+                    } else {
                         $nums = v;
                         $color = colorArr[(!isNaN($nums) ? $nums : $nums.length) % $colorNums];
                         $class = 'label';
@@ -58,7 +56,10 @@ define(['fast', 'moment'], function (Fast, Moment) {
                             var id = Math.floor(new Date().valueOf() * Math.random());
                             icon = typeof icon !== 'undefined' ? icon : 'fa fa-circle-o';
                             title = typeof title !== 'undefined' ? title : '';
-                            top.window.$("<a />").append('<i class="' + icon + '"></i> <span>' + title + '</span>').prop("href", url).attr({url: url, addtabs: id}).addClass("hide").appendTo(top.window.document.body).trigger("click");
+                            top.window.$("<a />").append('<i class="' + icon + '"></i> <span>' + title + '</span>').prop("href", url).attr({
+                                url: url,
+                                addtabs: id
+                            }).addClass("hide").appendTo(top.window.document.body).trigger("click");
                         }
                     }
                 }
@@ -227,6 +228,8 @@ define(['fast', 'moment'], function (Fast, Moment) {
         }
     };
     Backend.api = $.extend(Fast.api, Backend.api);
+    //将Template渲染至全局,以便于在子框架中调用
+    window.Template = Template;
     //将Moment渲染至全局,以便于在子框架中调用
     window.Moment = Moment;
     //将Backend渲染至全局,以便于在子框架中调用

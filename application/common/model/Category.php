@@ -21,6 +21,13 @@ class Category Extends Model
         'flag_text',
     ];
 
+    protected static function init()
+    {
+        self::afterInsert(function ($row) {
+            $row->save(['weigh' => $row['id']]);
+        });
+    }
+
     public function setFlagAttr($value, $data)
     {
         return is_array($value) ? implode(',', $value) : $value;

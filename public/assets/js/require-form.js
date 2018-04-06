@@ -1,7 +1,7 @@
 define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, Upload, Validator) {
     var Form = {
         config: {
-            fieldlisttpl: '<dd class="form-inline"><input type="text" name="<%=name%>[<%=index%>][key]" class="form-control" value="<%=row.key%>" size="10" /> <input type="text" name="<%=name%>[<%=index%>][value]" class="form-control" value="<%=row.value%>" size="40" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>'
+            fieldlisttpl: '<dd class="form-inline"><input type="text" name="<%=name%>[<%=index%>][key]" class="form-control" value="<%=row.key%>" size="10" /> <input type="text" name="<%=name%>[<%=index%>][value]" class="form-control" value="<%=row.value%>" size="30" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>'
         },
         events: {
             validator: function (form, success, error, submit) {
@@ -26,6 +26,10 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         }
                     },
                     target: function (input) {
+                        var target = $(input).data("target");
+                        if (target && $(target).size() > 0) {
+                            return $(target);
+                        }
                         var $formitem = $(input).closest('.form-group'),
                             $msgbox = $formitem.find('span.msg-box');
                         if (!$msgbox.length) {
@@ -282,7 +286,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             refresh($(this).closest("dl").data("name"));
                         });
                         //追加控制
-                        $(".fieldlist", form).on("click", ".btn-append", function (e, row) {
+                        $(".fieldlist", form).on("click", ".btn-append,.append", function (e, row) {
                             var container = $(this).closest("dl");
                             var index = container.data("index");
                             var name = container.data("name");
@@ -305,7 +309,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         //拖拽排序
                         $("dl.fieldlist", form).dragsort({
                             itemSelector: 'dd',
-                            dragSelector: ".btn-fdragsort",
+                            dragSelector: ".btn-dragsort",
                             dragEnd: function () {
                                 refresh($(this).closest("dl").data("name"));
                             },
@@ -319,8 +323,13 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                                 return true;
                             }
                             var template = $(this).data("template");
-                            $.each(JSON.parse(textarea.val()), function (i, j) {
-                                $(".btn-append", container).trigger('click', template ? j : {
+                            var json = {};
+                            try {
+                                json = JSON.parse(textarea.val());
+                            } catch (e) {
+                            }
+                            $.each(json, function (i, j) {
+                                $(".btn-append,.append", container).trigger('click', template ? j : {
                                     key: i,
                                     value: j
                                 });

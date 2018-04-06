@@ -30,7 +30,7 @@ class Auth extends \fast\Auth
 
     /**
      * 管理员登录
-     * 
+     *
      * @param   string  $username   用户名
      * @param   string  $password   密码
      * @param   int     $keeptime   有效时长
@@ -44,7 +44,7 @@ class Auth extends \fast\Auth
             $this->setError('Username is incorrect');
             return false;
         }
-        if ($admin->loginfailure >= 3 && time() - $admin->updatetime < 86400)
+        if (Config::get('fastadmin.login_failure_retry') && $admin->loginfailure >= 10 && time() - $admin->updatetime < 86400)
         {
             $this->setError('Please try again after 1 day');
             return false;
@@ -119,7 +119,7 @@ class Auth extends \fast\Auth
 
     /**
      * 刷新保持登录的Cookie
-     * 
+     *
      * @param   int     $keeptime
      * @return  boolean
      */
@@ -155,6 +155,7 @@ class Auth extends \fast\Auth
             return FALSE;
         }
 
+        $arr = array_map('strtolower', $arr);
         // 是否存在
         if (in_array(strtolower($request->action()), $arr) || in_array('*', $arr))
         {

@@ -30,6 +30,8 @@ return [
     'Please disable addon first'     => '请先禁用插件再进行升级',
     'Login now'                      => '立即登录',
     'Continue install'               => '不登录,继续安装',
+    'All'                            => '全部',
+    'Uncategoried'                   => '未归类',
     'Recommend'                      => '推荐',
     'Hot'                            => '热门',
     'New'                            => '新',

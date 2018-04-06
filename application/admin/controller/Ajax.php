@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use app\common\controller\Backend;
 use fast\Random;
+use think\addons\Service;
 use think\Cache;
 use think\Config;
 use think\Db;
@@ -47,8 +48,7 @@ class Ajax extends Backend
     {
         Config::set('default_return_type', 'json');
         $file = $this->request->file('file');
-        if (empty($file))
-        {
+        if (empty($file)) {
             $this->error(__('No file upload or server upload limit exceeded'));
         }
 
@@ -60,7 +60,7 @@ class Ajax extends Backend
         preg_match('/(\d+)(\w+)/', $upload['maxsize'], $matches);
         $type = strtolower($matches[2]);
         $typeDict = ['b' => 0, 'k' => 1, 'kb' => 1, 'm' => 2, 'mb' => 2, 'gb' => 3, 'g' => 3];
-        $size = (int) $upload['maxsize'] * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0);
+        $size = (int)$upload['maxsize'] * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0);
         $fileInfo = $file->getInfo();
         $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
         $suffix = $suffix ? $suffix : 'file';
@@ -68,8 +68,7 @@ class Ajax extends Backend
         $mimetypeArr = explode(',', $upload['mimetype']);
         $typeArr = explode('/', $fileInfo['type']);
         //验证文件后缀
-        if ($upload['mimetype'] !== '*' && !in_array($suffix, $mimetypeArr) && !in_array($fileInfo['type'], $mimetypeArr) && !in_array($typeArr[0] . '/*', $mimetypeArr))
-        {
+        if ($upload['mimetype'] !== '*' && !in_array($suffix, $mimetypeArr) && !in_array($fileInfo['type'], $mimetypeArr) && !in_array($typeArr[0] . '/*', $mimetypeArr)) {
             $this->error(__('Uploaded file format is limited'));
         }
         $replaceArr = [
@@ -93,11 +92,9 @@ class Ajax extends Backend
         $fileName = substr($savekey, strripos($savekey, '/') + 1);
         //
         $splInfo = $file->validate(['size' => $size])->move(ROOT_PATH . '/public' . $uploadDir, $fileName);
-        if ($splInfo)
-        {
+        if ($splInfo) {
             $imagewidth = $imageheight = 0;
-            if (in_array($suffix, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf']))
-            {
+            if (in_array($suffix, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf'])) {
                 $imgInfo = getimagesize($splInfo->getPathname());
                 $imagewidth = isset($imgInfo[0]) ? $imgInfo[0] : $imagewidth;
                 $imageheight = isset($imgInfo[1]) ? $imgInfo[1] : $imageheight;
@@ -121,9 +118,7 @@ class Ajax extends Backend
             $this->success(__('Upload successful'), null, [
                 'url' => $uploadDir . $splInfo->getSaveName()
             ]);
-        }
-        else
-        {
+        } else {
             // 上传失败获取错误信息
             $this->error($file->getError());
         }
@@ -153,12 +148,10 @@ class Ajax extends Backend
         $field = in_array($field, ['weigh']) ? $field : 'weigh';
 
         // 如果设定了pid的值,此时只匹配满足条件的ID,其它忽略
-        if ($pid !== '')
-        {
+        if ($pid !== '') {
             $hasids = [];
             $list = Db::name($table)->where($prikey, 'in', $ids)->where('pid', 'in', $pid)->field('id,pid')->select();
-            foreach ($list as $k => $v)
-            {
+            foreach ($list as $k => $v) {
                 $hasids[] = $v['id'];
             }
             $ids = array_values(array_intersect($ids, $hasids));
@@ -166,20 +159,15 @@ class Ajax extends Backend
 
         //直接修复排序
         $one = Db::name($table)->field("{$field},COUNT(*) AS nums")->group($field)->having('nums > 1')->find();
-        if ($one)
-        {
+        if ($one) {
             $list = Db::name($table)->field("$prikey,$field")->order($field, $orderway)->select();
-            foreach ($list as $k => $v)
-            {
+            foreach ($list as $k => $v) {
                 Db::name($table)->where($prikey, $v[$prikey])->update([$field => $k + 1]);
             }
             $this->success();
-        }
-        else
-        {
+        } else {
             $list = Db::name($table)->field("$prikey,$field")->where($prikey, 'in', $ids)->order($field, $orderway)->select();
-            foreach ($list as $k => $v)
-            {
+            foreach ($list as $k => $v) {
                 $sour[] = $v[$prikey];
                 $weighdata[$v[$prikey]] = $v[$field];
             }
@@ -192,20 +180,13 @@ class Ajax extends Backend
             //echo "替换的ID:{$desc_id}\n";
             $weighids = array();
             $temp = array_values(array_diff_assoc($ids, $sour));
-            foreach ($temp as $m => $n)
-            {
-                if ($n == $sour_id)
-                {
+            foreach ($temp as $m => $n) {
+                if ($n == $sour_id) {
                     $offset = $desc_id;
-                }
-                else
-                {
-                    if ($sour_id == $temp[0])
-                    {
+                } else {
+                    if ($sour_id == $temp[0]) {
                         $offset = isset($temp[$m + 1]) ? $temp[$m + 1] : $sour_id;
-                    }
-                    else
-                    {
+                    } else {
                         $offset = isset($temp[$m - 1]) ? $temp[$m - 1] : $sour_id;
                     }
                 }
@@ -221,15 +202,23 @@ class Ajax extends Backend
      */
     public function wipecache()
     {
-        $wipe_cache_type = ['TEMP_PATH', 'LOG_PATH', 'CACHE_PATH'];
-        foreach ($wipe_cache_type as $item)
-        {
-            $dir = constant($item);
-            if (!is_dir($dir))
-                continue;
-            rmdirs($dir);
+        $type = $this->request->request("type");
+        switch ($type) {
+            case 'content' || 'all':
+                rmdirs(CACHE_PATH, false);
+                Cache::clear();
+                if ($type == 'content')
+                    break;
+            case 'template' || 'all':
+                rmdirs(TEMP_PATH, false);
+                if ($type == 'template')
+                    break;
+            case 'addons' || 'all':
+                Service::refresh();
+                if ($type == 'addons')
+                    break;
         }
-        Cache::clear();
+
         \think\Hook::listen("wipecache_after");
         $this->success();
     }
@@ -243,14 +232,11 @@ class Ajax extends Backend
         $pid = $this->request->get('pid');
         $where = ['status' => 'normal'];
         $categorylist = null;
-        if ($pid !== '')
-        {
-            if ($type)
-            {
+        if ($pid !== '') {
+            if ($type) {
                 $where['type'] = $type;
             }
-            if ($pid)
-            {
+            if ($pid) {
                 $where['pid'] = $pid;
             }
 
@@ -268,17 +254,13 @@ class Ajax extends Backend
         $city = $this->request->get('city');
         $where = ['pid' => 0, 'level' => 1];
         $provincelist = null;
-        if ($province !== '')
-        {
-            if ($province)
-            {
+        if ($province !== '') {
+            if ($province) {
                 $where['pid'] = $province;
                 $where['level'] = 2;
             }
-            if ($city !== '')
-            {
-                if ($city)
-                {
+            if ($city !== '') {
+                if ($city) {
                     $where['pid'] = $city;
                     $where['level'] = 3;
                 }

@@ -807,4 +807,6 @@ form.form-horizontal .control-label {
 .checkbox > label > input {
   margin: 2px 0 0;
 }
-/*# sourceMappingURL=backend.css.map */
+.wipecache li a {
+  color: #444444!important;
+}

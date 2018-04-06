@@ -382,6 +382,7 @@ class Auth
             $rules[] = $v['name'];
         }
         $url = ($module ? $module : request()->module()) . '/' . (is_null($path) ? $this->getRequestUri() : $path);
+        $url = strtolower(str_replace('.', '/', $url));
         return in_array($url, $rules) ? TRUE : FALSE;
     }
 
@@ -539,6 +540,7 @@ class Auth
         {
             return FALSE;
         }
+        $arr = array_map('strtolower', $arr);
         // 是否存在
         if (in_array(strtolower($request->action()), $arr) || in_array('*', $arr))
         {

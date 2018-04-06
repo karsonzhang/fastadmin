@@ -14,6 +14,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             var table = $("#table");
 
+            table.on('load-success.bs.table', function (e, json) {
+                if (json && typeof json.category != 'undefined' && $(".nav-category li").size() == 2) {
+                    $.each(json.category, function (i, j) {
+                        $("<li><a href='javascript:;' data-id='" + j.id + "'>" + j.name + "</a></li>").insertBefore($(".nav-category li:last"));
+                    });
+                }
+            });
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
                 var parenttable = table.closest('.bootstrap-table');
                 var d = $(".fixed-table-toolbar", parenttable).find(".search input");
@@ -53,19 +60,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 showColumns: false,
                 showToggle: false,
                 showExport: false,
-                commonSearch: false,
-                searchFormVisible: false,
+                showSearch: false,
+                commonSearch: true,
+                searchFormVisible: true,
+                searchFormTemplate: 'searchformtpl',
                 pageSize: 12,
                 pagination: false,
-                queryParams: function (params) {
-                    var filter = params.filter ? JSON.parse(params.filter) : {};
-                    var op = params.op ? JSON.parse(params.op) : {};
-                    filter.faversion = Config.fastadmin.version;
-                    op.faversion = "=";
-                    params.filter = JSON.stringify(filter);
-                    params.op = JSON.stringify(op);
-                    return params;
-                }
             });
 
             // 为表格绑定事件
@@ -124,14 +124,23 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     return false;
                 }
             });
-            
-            // 切换URL
+
+            // 切换
             $(document).on("click", ".btn-switch", function () {
                 $(".btn-switch").removeClass("active");
                 $(this).addClass("active");
+                $("form.form-commonsearch input[name='type']").val($(this).data("type"));
                 table.bootstrapTable('refresh', {url: $(this).data("url"), pageNumber: 1});
+                return false;
             });
-            
+            $(document).on("click", ".nav-category li a", function () {
+                $(".nav-category li").removeClass("active");
+                $(this).parent().addClass("active");
+                $("form.form-commonsearch input[name='category_id']").val($(this).data("id"));
+                table.bootstrapTable('refresh', {url: $(this).data("url"), pageNumber: 1});
+                return false;
+            });
+
             // 会员信息
             $(document).on("click", ".btn-userinfo", function () {
                 var userinfo = Controller.api.userinfo.get();
@@ -146,7 +155,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             Fast.api.ajax({
                                 url: Config.fastadmin.api_url + '/user/login',
                                 dataType: 'jsonp',
-                                data: {account: $("#inputAccount", layero).val(), password: $("#inputPassword", layero).val(), _method: 'POST'}
+                                data: {
+                                    account: $("#inputAccount", layero).val(),
+                                    password: $("#inputPassword", layero).val(),
+                                    _method: 'POST'
+                                }
                             }, function (data, ret) {
                                 Controller.api.userinfo.set(data);
                                 Layer.closeAll();
@@ -199,7 +212,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 var token = userinfo ? userinfo.token : '';
                 Fast.api.ajax({
                     url: 'addon/install',
-                    data: {name: name, force: force ? 1 : 0, uid: uid, token: token, version: version, faversion: Config.fastadmin.version}
+                    data: {
+                        name: name,
+                        force: force ? 1 : 0,
+                        uid: uid,
+                        token: token,
+                        version: version,
+                        faversion: Config.fastadmin.version
+                    }
                 }, function (data, ret) {
                     Layer.closeAll();
                     Config['addons'][data.addon.name] = ret.data.addon;

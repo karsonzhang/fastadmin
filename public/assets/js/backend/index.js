@@ -180,10 +180,11 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             });
 
             //清除缓存
-            $(document).on('click', "[data-toggle='wipecache']", function () {
+            $(document).on('click', "ul.wipecache li a", function () {
                 $.ajax({
                     url: 'ajax/wipecache',
                     dataType: 'json',
+                    data: {type: $(this).data("type")},
                     cache: false,
                     success: function (ret) {
                         if (ret.hasOwnProperty("code")) {

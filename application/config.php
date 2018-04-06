@@ -258,18 +258,20 @@ return [
     //FastAdmin配置
     'fastadmin'              => [
         //是否开启前台会员中心
-        'usercenter'       => true,
+        'usercenter'          => true,
         //登录验证码
-        'login_captcha'    => false,
+        'login_captcha'       => true,
+        //登录失败超过10则1天后重试
+        'login_failure_retry' => true,
         //是否同一账号同一时间只能在一个地方登录
-        'login_unique'     => false,
+        'login_unique'        => false,
         //登录页默认背景图
-        'login_background' => "/assets/img/loginbg.jpg",
+        'login_background'    => "/assets/img/loginbg.jpg",
         //自动检测更新
-        'checkupdate'      => false,
+        'checkupdate'         => false,
         //版本号
-        'version'          => '1.0.0.20180401_beta',
+        'version'             => '1.0.0.20180406_beta',
         //API接口地址
-        'api_url'          => 'https://api.fastadmin.net',
+        'api_url'             => 'https://api.fastadmin.net',
     ],
 ];

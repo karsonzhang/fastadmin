@@ -80,7 +80,7 @@
                                 <div class="input-group">
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></div>
                                     <input type="text" name="captcha" class="form-control" placeholder="{:__('Captcha')}" data-rule="{:__('Captcha')}:required;length(4)" />
-                                    <span class="input-group-addon" style="padding:0;border:none;">
+                                    <span class="input-group-addon" style="padding:0;border:none;cursor:pointer;">
                                         <img src="{:captcha_src()}" width="100" height="30" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
                                     </span>
                                 </div>
@@ -97,7 +97,7 @@
                             </form>
                         </div>
                     </div>
-                    <p class="copyright"><a href="https://www.fastadmin.net?ref=demo">Powered By FastAdmin</a></p>
+                    <p class="copyright"><a href="https://www.fastadmin.net">Powered By FastAdmin</a></p>
                 </div>
             </div>
         </div>
