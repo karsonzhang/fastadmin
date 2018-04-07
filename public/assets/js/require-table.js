@@ -261,7 +261,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 });
                 $(table).on("click", "input[data-id][name='checkbox']", function (e) {
                     var ids = $(this).data("id");
-                    var row = Table.api.getrowbyid(ids);
+                    var row = Table.api.getrowbyid(table, ids);
                     table.trigger('check.bs.table', [row, this]);
                 });
                 $(table).on("click", "[data-id].btn-change", function (e) {
@@ -271,7 +271,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 $(table).on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
                     var ids = $(this).data("id");
-                    var row = Table.api.getrowbyid(ids);
+                    var row = Table.api.getrowbyid(table, ids);
                     row.ids = ids;
                     var url = Table.api.replaceurl(options.extend.edit_url, row, table);
                     Fast.api.open(url, __('Edit'), $(this).data() || {});

@@ -61,7 +61,12 @@ class Addon extends Backend
             if ($params) {
                 foreach ($config as $k => &$v) {
                     if (isset($params[$v['name']])) {
-                        $value = is_array($params[$v['name']]) ? implode(',', $params[$v['name']]) : $params[$v['name']];
+                        if ($v['type'] == 'array') {
+                            $params[$v['name']] = is_array($params[$v['name']]) ? $params[$v['name']] : (array)json_decode($params[$v['name']], true);
+                            $value = $params[$v['name']];
+                        } else {
+                            $value = is_array($params[$v['name']]) ? implode(',', $params[$v['name']]) : $params[$v['name']];
+                        }
                         $v['value'] = $value;
                     }
                 }
