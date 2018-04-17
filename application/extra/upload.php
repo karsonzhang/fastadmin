@@ -21,7 +21,7 @@ return [
     /**
      * 可上传的文件类型
      */
-    'mimetype'  => '*',
+    'mimetype'  => 'jpg,png,bmp,jpeg,gif,zip,rar,xls,xlsx',
     /**
      * 是否支持批量上传
      */

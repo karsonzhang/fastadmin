@@ -75,11 +75,16 @@ class Common extends Api
         $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
         $suffix = $suffix ? $suffix : 'file';
 
-        $mimetypeArr = explode(',', $upload['mimetype']);
+        $mimetypeArr = explode(',', strtolower($upload['mimetype']));
         $typeArr = explode('/', $fileInfo['type']);
+
         //验证文件后缀
-        if ($upload['mimetype'] !== '*' && !in_array($suffix, $mimetypeArr) && !in_array($fileInfo['type'], $mimetypeArr) && !in_array($typeArr[0] . '/*', $mimetypeArr))
-        {
+        if ($upload['mimetype'] !== '*' &&
+            (
+                !in_array($suffix, $mimetypeArr)
+                || (stripos($typeArr[0] . '/', $upload['mimetype']) !== false && (!in_array($fileInfo['type'], $mimetypeArr) && !in_array($typeArr[0] . '/*', $mimetypeArr)))
+            )
+        ) {
             $this->error(__('Uploaded file format is limited'));
         }
         $replaceArr = [

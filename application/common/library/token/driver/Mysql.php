@@ -47,7 +47,7 @@ class Mysql extends Driver
      */
     public function set($token, $user_id, $expire = null)
     {
-        $expiretime = !is_null($expire) ? time() + $expire : ($expire === 0 ? 0 : time() + $this->options['expire']);
+        $expiretime = !is_null($expire) && $expire !== 0 ? time() + $expire : 0;
         $token = $this->getEncryptedToken($token);
         $this->handler->insert(['token' => $token, 'user_id' => $user_id, 'createtime' => time(), 'expiretime' => $expiretime]);
         return TRUE;
@@ -66,7 +66,7 @@ class Mysql extends Driver
                 //返回未加密的token给客户端使用
                 $data['token'] = $token;
                 //返回剩余有效时间
-                $data['expired_in'] = $this->getExpiredIn($data['expiretime']);
+                $data['expires_in'] = $this->getExpiredIn($data['expiretime']);
                 return $data;
             } else {
                 self::delete($token);
