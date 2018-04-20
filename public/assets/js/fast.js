@@ -142,21 +142,23 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         if (layerfooter.size() > 0) {
                             // 监听窗口内的元素及属性变化
                             // Firefox和Chrome早期版本中带有前缀
-                            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
-                            // 选择目标节点
-                            var target = layerfooter[0];
-                            // 创建观察者对象
-                            var observer = new MutationObserver(function (mutations) {
-                                Fast.api.layerfooter(layero, index, that);
-                                mutations.forEach(function (mutation) {
+                            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+                            if (MutationObserver) {
+                                // 选择目标节点
+                                var target = layerfooter[0];
+                                // 创建观察者对象
+                                var observer = new MutationObserver(function (mutations) {
+                                    Fast.api.layerfooter(layero, index, that);
+                                    mutations.forEach(function (mutation) {
+                                    });
                                 });
-                            });
-                            // 配置观察选项:
-                            var config = {attributes: true, childList: true, characterData: true, subtree: true}
-                            // 传入目标节点和观察选项
-                            observer.observe(target, config);
-                            // 随后,你还可以停止观察
-                            // observer.disconnect();
+                                // 配置观察选项:
+                                var config = {attributes: true, childList: true, characterData: true, subtree: true}
+                                // 传入目标节点和观察选项
+                                observer.observe(target, config);
+                                // 随后,你还可以停止观察
+                                // observer.disconnect();
+                            }
                         }
                     }
                 }, options ? options : {});

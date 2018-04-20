@@ -53,10 +53,6 @@ class Frontend extends Controller
         }
         $this->auth = Auth::instance();
 
-        $modulename = $this->request->module();
-        $controllername = strtolower($this->request->controller());
-        $actionname = strtolower($this->request->action());
-
         // token
         $token = $this->request->server('HTTP_TOKEN', $this->request->request('token', \think\Cookie::get('token')));
 

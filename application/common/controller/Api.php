@@ -92,6 +92,9 @@ class Api
      */
     protected function _initialize()
     {
+        //移除HTML标签
+        $this->request->filter('strip_tags');
+
         $this->auth = Auth::instance();
 
         $modulename = $this->request->module();

@@ -34,7 +34,7 @@ class Mysql extends Driver
         if ($this->options['connection']) {
             $this->handler = \think\Db::connect($this->options['connection'])->name($this->options['table']);
         } else {
-            $this->handler = \think\Db::name('user_token');
+            $this->handler = \think\Db::name($this->options['table']);
         }
     }
 

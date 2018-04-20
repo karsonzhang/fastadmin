@@ -920,7 +920,7 @@ EOD;
         $content = $this->getReplacedStub($name, $data);
 
         if (!is_dir(dirname($pathname))) {
-            mkdir(strtolower(dirname($pathname)), 0755, true);
+            mkdir(dirname($pathname), 0755, true);
         }
         return file_put_contents($pathname, $content);
     }
