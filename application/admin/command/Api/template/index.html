@@ -437,8 +437,8 @@
 
                     $.ajax({
                         url: $('#apiUrl').val() + url,
-                        data: $(form).attr('method') == 'get' ? $(form).serialize() : formData,
-                        type: $(form).attr('method') + '',
+                        data: $(form).prop('method').toLowerCase() == 'get' ? $(form).serialize() : formData,
+                        type: $(form).prop('method') + '',
                         dataType: 'json',
                         contentType: false,
                         processData: false,

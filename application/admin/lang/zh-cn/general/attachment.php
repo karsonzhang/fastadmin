@@ -1,9 +1,10 @@
 <?php
 
 return [
+    'Id'                 => 'ID',
     'Url'                => '物理路径',
     'Imagewidth'         => '宽度',
-    'Imageheight'        => '宽度',
+    'Imageheight'        => '高度',
     'Imagetype'          => '图片类型',
     'Imageframes'        => '图片帧数',
     'Preview'            => '预览',

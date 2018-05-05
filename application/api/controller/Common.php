@@ -24,15 +24,14 @@ class Common extends Api
 
     /**
      * 加载初始化
-     * 
+     *
      * @param string $version 版本号
      * @param string $lng 经度
      * @param string $lat 纬度
      */
     public function init()
     {
-        if ($version = $this->request->request('version'))
-        {
+        if ($version = $this->request->request('version')) {
             $lng = $this->request->request('lng');
             $lat = $this->request->request('lat');
             $content = [
@@ -42,23 +41,20 @@ class Common extends Api
                 'coverdata'   => Config::get("cover"),
             ];
             $this->success('', $content);
-        }
-        else
-        {
+        } else {
             $this->error(__('Invalid parameters'));
         }
     }
 
     /**
      * 上传文件
-     * 
+     *
      * @param File $file 文件流
      */
     public function upload()
     {
         $file = $this->request->file('file');
-        if (empty($file))
-        {
+        if (empty($file)) {
             $this->error(__('No file upload or server upload limit exceeded'));
         }
 
@@ -70,7 +66,7 @@ class Common extends Api
         preg_match('/(\d+)(\w+)/', $upload['maxsize'], $matches);
         $type = strtolower($matches[2]);
         $typeDict = ['b' => 0, 'k' => 1, 'kb' => 1, 'm' => 2, 'mb' => 2, 'gb' => 3, 'g' => 3];
-        $size = (int) $upload['maxsize'] * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0);
+        $size = (int)$upload['maxsize'] * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0);
         $fileInfo = $file->getInfo();
         $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
         $suffix = $suffix ? $suffix : 'file';
@@ -108,16 +104,16 @@ class Common extends Api
         $fileName = substr($savekey, strripos($savekey, '/') + 1);
         //
         $splInfo = $file->validate(['size' => $size])->move(ROOT_PATH . '/public' . $uploadDir, $fileName);
-        if ($splInfo)
-        {
+        if ($splInfo) {
             $imagewidth = $imageheight = 0;
-            if (in_array($suffix, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf']))
-            {
+            if (in_array($suffix, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf'])) {
                 $imgInfo = getimagesize($splInfo->getPathname());
                 $imagewidth = isset($imgInfo[0]) ? $imgInfo[0] : $imagewidth;
                 $imageheight = isset($imgInfo[1]) ? $imgInfo[1] : $imageheight;
             }
             $params = array(
+                'admin_id'    => 0,
+                'user_id'     => (int)$this->auth->id,
                 'filesize'    => $fileInfo['size'],
                 'imagewidth'  => $imagewidth,
                 'imageheight' => $imageheight,
@@ -136,9 +132,7 @@ class Common extends Api
             $this->success(__('Upload successful'), [
                 'url' => $uploadDir . $splInfo->getSaveName()
             ]);
-        }
-        else
-        {
+        } else {
             // 上传失败获取错误信息
             $this->error($file->getError());
         }

@@ -559,6 +559,9 @@ form.form-horizontal .control-label {
 .bootstrap-table td.bs-checkbox {
   vertical-align: middle;
 }
+.fixed-table-container thead th .sortable {
+  padding-right: 0;
+}
 .dropdown-submenu {
   position: relative;
 }

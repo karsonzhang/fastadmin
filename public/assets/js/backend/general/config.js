@@ -29,7 +29,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'intro', title: __('Intro')},
                         {field: 'group', title: __('Group')},
                         {field: 'type', title: __('Type')},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            formatter: Table.api.formatter.operate
+                        }
                     ]
                 ]
             });
@@ -58,7 +64,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             //添加向发件人发送测试邮件按钮和方法
             $('input[name="row[mail_from]"]').parent().next().append('<a class="btn btn-info testmail">' + __('Send a test message') + '</a>');
             $(document).on("click", ".testmail", function () {
-                Backend.api.ajax({url: "general/config/emailtest", data: {receiver: $('input[name="row[mail_from]"]').val()}});
+                var that = this;
+                Layer.prompt({title: __('Please input your email'), formType: 0}, function (value, index) {
+                    Backend.api.ajax({
+                        url: "general/config/emailtest?receiver=" + value,
+                        data: $(that).closest("form").serialize()
+                    });
+                });
+
             });
         },
         add: function () {

@@ -53,8 +53,7 @@ class User extends Backend
                     ->select();
             foreach ($list as $k => $v)
             {
-                $v->password = '';
-                $v->salt = '';
+                $v->hidden(['password', 'salt']);
             }
             $result = array("total" => $total, "rows" => $list);
 

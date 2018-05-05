@@ -20,6 +20,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             pageList: [10, 25, 50, 'All'],
             pagination: true,
             clickToSelect: true, //是否启用点击选中
+            dblClickToEdit: true, //是否启用双击编辑
             singleSelect: false, //是否启用单选
             showRefresh: false,
             locale: 'zh-CN',
@@ -114,10 +115,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 table.on('refresh.bs.table', function (e, settings, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").addClass("fa-spin");
                 });
-                //当双击单元格时
-                table.on('dbl-click-row.bs.table', function (e, row, element, field) {
-                    $(Table.config.editonebtn, element).trigger("click");
-                });
+                if (options.dblClickToEdit) {
+                    //当双击单元格时
+                    table.on('dbl-click-row.bs.table', function (e, row, element, field) {
+                        $(Table.config.editonebtn, element).trigger("click");
+                    });
+                }
                 //当内容渲染完成后
                 table.on('post-body.bs.table', function (e, settings, json, xhr) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
@@ -400,7 +403,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return '<div class="input-group input-group-sm" style="width:250px;margin:0 auto;"><input type="text" class="form-control input-sm" value="' + value + '"><span class="input-group-btn input-group-sm"><a href="' + value + '" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-link"></i></a></span></div>';
                 },
                 search: function (value, row, index) {
-                    return '<a href="javascript:;" class="searchit" data-field="' + this.field + '" data-value="' + value + '">' + value + '</a>';
+                    return '<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', value) + '" data-field="' + this.field + '" data-value="' + value + '">' + value + '</a>';
                 },
                 addtabs: function (value, row, index) {
                     var url = Table.api.replaceurl(this.url, row, this.table);
@@ -453,6 +456,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             name: 'dragsort',
                             icon: 'fa fa-arrows',
                             title: __('Drag to sort'),
+                            extend: 'data-toggle="tooltip"',
                             classname: 'btn btn-xs btn-primary btn-dragsort'
                         });
                     }
@@ -461,6 +465,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             name: 'edit',
                             icon: 'fa fa-pencil',
                             title: __('Edit'),
+                            extend: 'data-toggle="tooltip"',
                             classname: 'btn btn-xs btn-success btn-editone',
                             url: options.extend.edit_url
                         });
@@ -470,6 +475,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             name: 'del',
                             icon: 'fa fa-trash',
                             title: __('Del'),
+                            extend: 'data-toggle="tooltip"',
                             classname: 'btn btn-xs btn-danger btn-delone'
                         });
                     }

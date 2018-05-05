@@ -22,18 +22,31 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 sortName: 'id',
                 columns: [
                     [
-                        {field: 'state', checkbox: true, },
+                        {field: 'state', checkbox: true,},
                         {field: 'id', title: __('Id')},
-                        {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb},
+                        {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
                         {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url},
-                        {field: 'imagewidth', title: __('Imagewidth')},
-                        {field: 'imageheight', title: __('Imageheight')},
-                        {field: 'imagetype', title: __('Imagetype')},
-                        {field: 'storage', title: __('Storage')},
-                        {field: 'filesize', title: __('Filesize')},
-                        {field: 'mimetype', title: __('Mimetype')},
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'imagewidth', title: __('Imagewidth'), sortable: true},
+                        {field: 'imageheight', title: __('Imageheight'), sortable: true},
+                        {field: 'imagetype', title: __('Imagetype'), formatter:Table.api.formatter.search},
+                        {field: 'storage', title: __('Storage'), formatter: Table.api.formatter.search},
+                        {field: 'filesize', title: __('Filesize'), operate: 'BETWEEN', sortable: true},
+                        {field: 'mimetype', title: __('Mimetype'), formatter:Table.api.formatter.search},
+                        {
+                            field: 'createtime',
+                            title: __('Createtime'),
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            sortable: true
+                        },
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            formatter: Table.api.formatter.operate
+                        }
                     ]
                 ],
             });
@@ -58,17 +71,20 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 sortName: 'id',
                 columns: [
                     [
-                        {field: 'state', checkbox: true, },
+                        {field: 'state', checkbox: true,},
                         {field: 'id', title: __('Id')},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb},
                         {field: 'imagewidth', title: __('Imagewidth')},
                         {field: 'imageheight', title: __('Imageheight')},
-                        {field: 'mimetype', title: __('Mimetype'), operate: 'LIKE %...%',
+                        {
+                            field: 'mimetype', title: __('Mimetype'), operate: 'LIKE %...%',
                             process: function (value, arg) {
                                 return value.replace(/\*/g, '%');
-                            }},
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
-                        {field: 'operate', title: __('Operate'), events: {
+                            }
+                        },
+                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                        {
+                            field: 'operate', title: __('Operate'), events: {
                                 'click .btn-chooseone': function (e, value, row, index) {
                                     var multiple = Backend.api.query('multiple');
                                     multiple = multiple == 'true' ? true : false;
@@ -76,7 +92,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                                 },
                             }, formatter: function () {
                                 return '<a href="javascript:;" class="btn btn-danger btn-chooseone btn-xs"><i class="fa fa-check"></i> ' + __('Choose') + '</a>';
-                            }}
+                            }
+                        }
                     ]
                 ]
             });

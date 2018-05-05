@@ -33,6 +33,9 @@ class Addon extends Command
     {
         $name = $input->getOption('name') ?: '';
         $action = $input->getOption('action') ?: '';
+        if(stripos($name, 'addons/')!==false){
+            $name = explode('/', $name)[1];
+        }
         //强制覆盖
         $force = $input->getOption('force');
         //版本
@@ -65,8 +68,8 @@ class Addon extends Command
                 if (is_dir($addonDir)) {
                     rmdirs($addonDir);
                 }
-                mkdir($addonDir);
-                mkdir($addonDir . DS . 'controller');
+                mkdir($addonDir, 0755, true);
+                mkdir($addonDir . DS . 'controller', 0755, true);
                 $menuList = \app\common\library\Menu::export($name);
                 $createMenu = $this->getCreateMenu($menuList);
                 $prefix = Config::get('database.prefix');

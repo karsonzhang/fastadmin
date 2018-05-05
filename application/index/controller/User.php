@@ -107,7 +107,7 @@ class User extends Frontend
             $validate = new Validate($rule, $msg);
             $result = $validate->check($data);
             if (!$result) {
-                $this->error(__($validate->getError()));
+                $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
             }
             if ($this->auth->register($username, $password, $email, $mobile)) {
                 $synchtml = '';
@@ -118,7 +118,7 @@ class User extends Frontend
                 }
                 $this->success(__('Sign up successful') . $synchtml, $url ? $url : url('user/index'));
             } else {
-                $this->error($this->auth->getError());
+                $this->error($this->auth->getError(), null, ['token' => $this->request->token()]);
             }
         }
         //判断来源
@@ -165,7 +165,7 @@ class User extends Frontend
             $validate = new Validate($rule, $msg);
             $result = $validate->check($data);
             if (!$result) {
-                $this->error(__($validate->getError()));
+                $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
                 return FALSE;
             }
             if ($this->auth->login($account, $password)) {
@@ -177,7 +177,7 @@ class User extends Frontend
                 }
                 $this->success(__('Logged in successful') . $synchtml, $url ? $url : url('user/index'));
             } else {
-                $this->error($this->auth->getError());
+                $this->error($this->auth->getError(), null, ['token' => $this->request->token()]);
             }
         }
         //判断来源
@@ -249,7 +249,7 @@ class User extends Frontend
             $validate = new Validate($rule, $msg, $field);
             $result = $validate->check($data);
             if (!$result) {
-                $this->error(__($validate->getError()));
+                $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
                 return FALSE;
             }
 
@@ -263,7 +263,7 @@ class User extends Frontend
                 }
                 $this->success(__('Reset password successful') . $synchtml, url('user/login'));
             } else {
-                $this->error($this->auth->getError());
+                $this->error($this->auth->getError(), null, ['token' => $this->request->token()]);
             }
         }
         $this->view->assign('title', __('Change password'));

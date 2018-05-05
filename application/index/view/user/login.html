@@ -4,6 +4,7 @@
         <div class="login-main"> 
             <form name="form" id="login-form" class="form-vertical" method="POST" action="">
                 <input type="hidden" name="url" value="{$url}" />
+                {:token()}
                 <div class="form-group">
                     <label class="control-label" for="account">{:__('Account')}</label>
                     <div class="controls">

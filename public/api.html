@@ -356,7 +356,7 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/demo/test1" method="get" name="form2" id="form2">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/demo/test1" method="GET" name="form2" id="form2">
                                                                                                                 <div class="form-group">
                                                             无
                                                         </div>
@@ -3359,7 +3359,7 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2018-04-06 19:15:01                </div>
+                    Generated on 2018-05-04 11:06:48                </div>
                 <div class="col-md-6" align="right">
                     <a href="https://www.fastadmin.net" target="_blank">FastAdmin</a>
                 </div>
@@ -3531,8 +3531,8 @@
 
                     $.ajax({
                         url: $('#apiUrl').val() + url,
-                        data: $(form).attr('method') == 'get' ? $(form).serialize() : formData,
-                        type: $(form).attr('method') + '',
+                        data: $(form).prop('method').toLowerCase() == 'get' ? $(form).serialize() : formData,
+                        type: $(form).prop('method') + '',
                         dataType: 'json',
                         contentType: false,
                         processData: false,

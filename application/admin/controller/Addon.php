@@ -76,7 +76,7 @@ class Addon extends Backend
                     Service::refresh();
                     $this->success();
                 } catch (Exception $e) {
-                    $this->error($e->getMessage());
+                    $this->error(__($e->getMessage()));
                 }
             }
             $this->error(__('Parameter %s can not be empty', ''));
@@ -112,9 +112,9 @@ class Addon extends Backend
             $info['state'] = 1;
             $this->success(__('Install successful'), null, ['addon' => $info]);
         } catch (AddonException $e) {
-            $this->result($e->getData(), $e->getCode(), $e->getMessage());
+            $this->result($e->getData(), $e->getCode(), __($e->getMessage()));
         } catch (Exception $e) {
-            $this->error($e->getMessage(), $e->getCode());
+            $this->error(__($e->getMessage()), $e->getCode());
         }
     }
 
@@ -132,9 +132,9 @@ class Addon extends Backend
             Service::uninstall($name, $force);
             $this->success(__('Uninstall successful'));
         } catch (AddonException $e) {
-            $this->result($e->getData(), $e->getCode(), $e->getMessage());
+            $this->result($e->getData(), $e->getCode(), __($e->getMessage()));
         } catch (Exception $e) {
-            $this->error($e->getMessage());
+            $this->error(__($e->getMessage()));
         }
     }
 
@@ -156,9 +156,9 @@ class Addon extends Backend
             Cache::rm('__menu__');
             $this->success(__('Operate successful'));
         } catch (AddonException $e) {
-            $this->result($e->getData(), $e->getCode(), $e->getMessage());
+            $this->result($e->getData(), $e->getCode(), __($e->getMessage()));
         } catch (Exception $e) {
-            $this->error($e->getMessage());
+            $this->error(__($e->getMessage()));
         }
     }
 
@@ -222,16 +222,16 @@ class Addon extends Backend
                     $this->success(__('Offline installed tips'), null, ['addon' => $info]);
                 } catch (Exception $e) {
                     @rmdirs($newAddonDir);
-                    throw new Exception($e->getMessage());
+                    throw new Exception(__($e->getMessage()));
                 }
             } catch (Exception $e) {
                 @unlink($tmpFile);
                 @rmdirs($tmpAddonDir);
-                $this->error($e->getMessage());
+                $this->error(__($e->getMessage()));
             }
         } else {
             // 上传失败获取错误信息
-            $this->error($file->getError());
+            $this->error(__($file->getError()));
         }
     }
 
@@ -260,9 +260,9 @@ class Addon extends Backend
             Cache::rm('__menu__');
             $this->success(__('Operate successful'));
         } catch (AddonException $e) {
-            $this->result($e->getData(), $e->getCode(), $e->getMessage());
+            $this->result($e->getData(), $e->getCode(), __($e->getMessage()));
         } catch (Exception $e) {
-            $this->error($e->getMessage());
+            $this->error(__($e->getMessage()));
         }
     }
 
@@ -297,7 +297,7 @@ class Addon extends Backend
                 continue;
 
             if (isset($onlineaddons[$v['name']])) {
-                $v = array_merge($onlineaddons[$v['name']], $v);
+                $v = array_merge($v, $onlineaddons[$v['name']]);
             } else {
                 $v['category_id'] = 0;
                 $v['flag'] = '';
@@ -306,6 +306,8 @@ class Addon extends Backend
                 $v['donateimage'] = '';
                 $v['demourl'] = '';
                 $v['price'] = '0.00';
+                $v['screenshots'] = [];
+                $v['releaselist'] = [];
             }
             $v['url'] = addon_url($v['name']);
             $v['createtime'] = filemtime(ADDON_PATH . $v['name']);

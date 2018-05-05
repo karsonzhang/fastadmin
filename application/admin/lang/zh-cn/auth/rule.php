@@ -10,9 +10,10 @@ return [
     'Controller/Action'                                         => '控制器名/方法名',
     'Ismenu'                                                    => '菜单',
     'Search icon'                                               => '搜索图标',
-    'Menu tips'                                                 => '规则任意,不可重复,仅做层级显示,无需匹配控制器和方法',
-    'Node tips'                                                 => '控制器/方法名',
+    'Toggle menu visible'                                       => '点击切换菜单显示',
+    'Toggle sub menu'                                           => '点击切换子菜单',
+    'Menu tips'                                                 => '父级菜单无需匹配控制器和方法,子级菜单请使用控制器名',
+    'Node tips'                                                 => '控制器/方法名,如果有目录请使用 目录名/控制器名/方法名',
     'The non-menu rule must have parent'                        => '非菜单规则节点必须有父级',
-    'If not necessary, use the command line to build rule'      => '非必要情况下请直接使用命令行<a href="https://doc.fastadmin.net/docs/command.html#一键生成菜单" target="_blank">php think menu</a>来生成',
     'Name only supports letters, numbers, underscore and slash' => 'URL规则只能是小写字母、数字、下划线和/组成',
 ];

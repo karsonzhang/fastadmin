@@ -30,6 +30,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
 
             var table = $("#table");
 
+            //在表格内容渲染完成后回调的事件
+            table.on('post-body.bs.table', function (e, json) {
+                $("tbody tr[data-index]", this).each(function () {
+                    if (Config.admin.group_ids.indexOf(parseInt(parseInt($("td:eq(1)", this).text()))) > -1) {
+                        $("input[type=checkbox]", this).prop("disabled", true);
+                    }
+                });
+            });
+
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,

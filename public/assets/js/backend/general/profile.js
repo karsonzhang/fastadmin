@@ -27,8 +27,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
                         {field: 'id', title: 'ID'},
                         {field: 'title', title: __('Title')},
                         {field: 'url', title: __('Url'), align: 'left', formatter: Table.api.formatter.url},
-                        {field: 'ip', title: __('ip')},
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime},
+                        {field: 'ip', title: __('ip'), formatter:Table.api.formatter.search},
+                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                     ]
                 ],
                 commonSearch: false

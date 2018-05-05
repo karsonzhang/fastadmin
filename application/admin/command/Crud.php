@@ -1137,7 +1137,7 @@ EOD;
         $langField = mb_ucfirst($field);
         return <<<EOD
     <div class="form-group">
-        <label for="c-{$field}" class="control-label col-xs-12 col-sm-2">{:__('{$langField}')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('{$langField}')}:</label>
         <div class="col-xs-12 col-sm-8">
             {$content}
         </div>
@@ -1149,7 +1149,7 @@ EOD;
      * 获取图片模板数据
      * @param string $field
      * @param string $content
-     * @return array
+     * @return string
      */
     protected function getImageUpload($field, $content)
     {

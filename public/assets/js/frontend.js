@@ -49,7 +49,9 @@ define(['fast', 'template'], function (Fast, Template) {
 
                 return false;
             });
-
+            //tooltip和popover
+            $('body').tooltip({selector: '[data-toggle="tooltip"]'});
+            $('body').tooltip({selector: '[data-toggle="popover"]'});
         }
     };
     Frontend.api = $.extend(Fast.api, Frontend.api);

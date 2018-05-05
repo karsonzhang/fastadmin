@@ -90,6 +90,7 @@ class Index extends Backend
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
             if ($result === true)
             {
+                Hook::listen("admin_login_after", $this->request);
                 $this->success(__('Login successful'), $url, ['url' => $url, 'id' => $this->auth->id, 'username' => $username, 'avatar' => $this->auth->avatar]);
             }
             else
@@ -109,7 +110,7 @@ class Index extends Backend
         $background = stripos($background, 'http')===0 ? $background : config('site.cdnurl') . $background;
         $this->view->assign('background', $background);
         $this->view->assign('title', __('Login'));
-        Hook::listen("login_init", $this->request);
+        Hook::listen("admin_login_init", $this->request);
         return $this->view->fetch();
     }
 
@@ -119,6 +120,7 @@ class Index extends Backend
     public function logout()
     {
         $this->auth->logout();
+        Hook::listen("admin_logout_after", $this->request);
         $this->success(__('Logout successful'), 'index/login');
     }
 

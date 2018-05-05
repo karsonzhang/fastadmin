@@ -23,16 +23,32 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 escape: false,
                 columns: [
                     [
-                        {field: 'state', checkbox: true, },
+                        {field: 'state', checkbox: true,},
                         {field: 'id', title: 'ID'},
                         {field: 'title', title: __('Title'), align: 'left', formatter: Controller.api.formatter.title},
                         {field: 'icon', title: __('Icon'), formatter: Controller.api.formatter.icon},
                         {field: 'name', title: __('Name'), align: 'left', formatter: Controller.api.formatter.name},
                         {field: 'weigh', title: __('Weigh')},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'ismenu', title: __('Ismenu'), align: 'center', formatter: Controller.api.formatter.menu},
-                        {field: 'id', title: '<a href="javascript:;" class="btn btn-success btn-xs btn-toggle"><i class="fa fa-chevron-up"></i></a>', operate: false, formatter: Controller.api.formatter.subnode},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {
+                            field: 'ismenu',
+                            title: __('Ismenu'),
+                            align: 'center',
+                            formatter: Controller.api.formatter.menu
+                        },
+                        {
+                            field: 'id',
+                            title: '<a href="javascript:;" class="btn btn-success btn-xs btn-toggle"><i class="fa fa-chevron-up"></i></a>',
+                            operate: false,
+                            formatter: Controller.api.formatter.subnode
+                        },
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            formatter: Table.api.formatter.operate
+                        }
                     ]
                 ],
                 pagination: false,
@@ -102,15 +118,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
                 },
                 menu: function (value, row, index) {
-                    return "<a href='javascript:;' class='btn btn-" + (value ? "info" : "default") + " btn-xs btn-change' data-id='"
-                            + row.id + "' data-params='ismenu=" + (value ? 0 : 1) + "'>" + (value ? __('Yes') : __('No')) + "</a>";
+                    return "<a href='javascript:;' data-toggle='tooltip' title='" + __('Toggle menu visible') + "' class='btn btn-" + (value ? "info" : "default") + " btn-xs btn-change' data-id='"
+                        + row.id + "' data-params='ismenu=" + (value ? 0 : 1) + "'>" + (value ? __('Yes') : __('No')) + "</a>";
                 },
                 icon: function (value, row, index) {
                     return '<span class="' + (!row.ismenu || row.status == 'hidden' ? 'text-muted' : '') + '"><i class="' + value + '"></i></span>';
                 },
                 subnode: function (value, row, index) {
-                    return '<a href="javascript:;" data-id="' + row.id + '" data-pid="' + row.pid + '" class="btn btn-xs '
-                            + (row.haschild == 1 || row.ismenu == 1 ? 'btn-success' : 'btn-default disabled') + ' btn-node-sub"><i class="fa fa-sitemap"></i></a>';
+                    return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Toggle sub menu') + '" data-id="' + row.id + '" data-pid="' + row.pid + '" class="btn btn-xs '
+                        + (row.haschild == 1 || row.ismenu == 1 ? 'btn-success' : 'btn-default disabled') + ' btn-node-sub"><i class="fa fa-sitemap"></i></a>';
                 }
             },
             bindevent: function () {
@@ -121,6 +137,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 $("input[name='row[ismenu]']:checked").trigger("click");
 
                 var iconlist = [];
+                var iconfunc = function () {
+                    Layer.open({
+                        type: 1,
+                        area: ['99%', '98%'], //宽高
+                        content: Template('chooseicontpl', {iconlist: iconlist})
+                    });
+                };
                 Form.api.bindevent($("form[role=form]"), function (data) {
                     Fast.api.refreshmenu();
                 });
@@ -132,18 +155,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             while ((result = exp.exec(ret)) != null) {
                                 iconlist.push(result[1]);
                             }
-                            Layer.open({
-                                type: 1,
-                                area: ['460px', '300px'], //宽高
-                                content: Template('chooseicontpl', {iconlist: iconlist})
-                            });
+                            iconfunc();
                         });
                     } else {
-                        Layer.open({
-                            type: 1,
-                            area: ['460px', '300px'], //宽高
-                            content: Template('chooseicontpl', {iconlist: iconlist})
-                        });
+                        iconfunc();
                     }
                 });
                 $(document).on('click', '#chooseicon ul li', function () {

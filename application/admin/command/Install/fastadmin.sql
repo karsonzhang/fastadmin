@@ -50,7 +50,7 @@ CREATE TABLE `fa_admin_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
   `username` varchar(30) NOT NULL DEFAULT '' COMMENT '管理员名字',
-  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '操作页面',
+  `url` varchar(1500) NOT NULL DEFAULT '' COMMENT '操作页面',
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '日志标题',
   `content` text NOT NULL COMMENT '内容',
   `ip` varchar(50) NOT NULL DEFAULT '' COMMENT 'IP',
@@ -66,6 +66,8 @@ CREATE TABLE `fa_admin_log` (
 DROP TABLE IF EXISTS `fa_attachment`;
 CREATE TABLE `fa_attachment` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT '物理路径',
   `imagewidth` varchar(30) NOT NULL DEFAULT '' COMMENT '宽度',
   `imageheight` varchar(30) NOT NULL DEFAULT '' COMMENT '高度',
@@ -77,7 +79,7 @@ CREATE TABLE `fa_attachment` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `uploadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
-  `storage` enum('local','upyun','qiniu') NOT NULL DEFAULT 'local' COMMENT '存储位置',
+  `storage` varchar(100) NOT NULL DEFAULT 'local' COMMENT '存储位置',
   `sha1` varchar(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='附件表';
@@ -86,7 +88,7 @@ CREATE TABLE `fa_attachment` (
 -- Records of fa_attachment
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_attachment` VALUES (1, '/assets/img/qrcode.png', '150', '150', 'png', 0, 21859, 'image/png', '', 1499681848, 1499681848, 1499681848, 'local', '17163603d0263e4838b9387ff2cd4877e8b018f6');
+INSERT INTO `fa_attachment` VALUES (1, 1, 0, '/assets/img/qrcode.png', '150', '150', 'png', 0, 21859, 'image/png', '', 1499681848, 1499681848, 1499681848, 'local', '17163603d0263e4838b9387ff2cd4877e8b018f6');
 COMMIT;
 
 -- ----------------------------
@@ -344,7 +346,7 @@ DROP TABLE IF EXISTS `fa_ems`;
 CREATE TABLE `fa_ems`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `event` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '事件',
-  `email` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
   `code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '验证码',
   `times` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '验证次数',
   `ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'IP',

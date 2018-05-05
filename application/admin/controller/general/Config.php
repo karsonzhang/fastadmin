@@ -10,7 +10,7 @@ use think\Exception;
 /**
  * 系统配置
  *
- * @icon fa fa-circle-o
+ * @icon fa fa-cogs
  * @remark 可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除
  */
 class Config extends Backend
@@ -32,31 +32,26 @@ class Config extends Backend
     {
         $siteList = [];
         $groupList = ConfigModel::getGroupList();
-        foreach ($groupList as $k => $v)
-        {
+        foreach ($groupList as $k => $v) {
             $siteList[$k]['name'] = $k;
             $siteList[$k]['title'] = $v;
             $siteList[$k]['list'] = [];
         }
 
-        foreach ($this->model->all() as $k => $v)
-        {
-            if (!isset($siteList[$v['group']]))
-            {
+        foreach ($this->model->all() as $k => $v) {
+            if (!isset($siteList[$v['group']])) {
                 continue;
             }
             $value = $v->toArray();
             $value['title'] = __($value['title']);
-            if (in_array($value['type'], ['select', 'selects', 'checkbox', 'radio']))
-            {
+            if (in_array($value['type'], ['select', 'selects', 'checkbox', 'radio'])) {
                 $value['value'] = explode(',', $value['value']);
             }
             $value['content'] = json_decode($value['content'], TRUE);
             $siteList[$v['group']]['list'][] = $value;
         }
         $index = 0;
-        foreach ($siteList as $k => &$v)
-        {
+        foreach ($siteList as $k => &$v) {
             $v['active'] = !$index ? true : false;
             $index++;
         }
@@ -71,45 +66,30 @@ class Config extends Backend
      */
     public function add()
     {
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
-            if ($params)
-            {
-                foreach ($params as $k => &$v)
-                {
+            if ($params) {
+                foreach ($params as $k => &$v) {
                     $v = is_array($v) ? implode(',', $v) : $v;
                 }
-                try
-                {
-                    if (in_array($params['type'], ['select', 'selects', 'checkbox', 'radio', 'array']))
-                    {
+                try {
+                    if (in_array($params['type'], ['select', 'selects', 'checkbox', 'radio', 'array'])) {
                         $params['content'] = json_encode(ConfigModel::decode($params['content']), JSON_UNESCAPED_UNICODE);
-                    }
-                    else
-                    {
+                    } else {
                         $params['content'] = '';
                     }
                     $result = $this->model->create($params);
-                    if ($result !== false)
-                    {
-                        try
-                        {
+                    if ($result !== false) {
+                        try {
                             $this->refreshFile();
                             $this->success();
-                        }
-                        catch (Exception $e)
-                        {
+                        } catch (Exception $e) {
                             $this->error($e->getMessage());
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $this->error($this->model->getError());
                     }
-                }
-                catch (Exception $e)
-                {
+                } catch (Exception $e) {
                     $this->error($e->getMessage());
                 }
             }
@@ -124,23 +104,16 @@ class Config extends Backend
      */
     public function edit($ids = NULL)
     {
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $row = $this->request->post("row/a");
-            if ($row)
-            {
+            if ($row) {
                 $configList = [];
-                foreach ($this->model->all() as $v)
-                {
-                    if (isset($row[$v['name']]))
-                    {
+                foreach ($this->model->all() as $v) {
+                    if (isset($row[$v['name']])) {
                         $value = $row[$v['name']];
-                        if (is_array($value) && isset($value['field']))
-                        {
+                        if (is_array($value) && isset($value['field'])) {
                             $value = json_encode(ConfigModel::getArrayData($value), JSON_UNESCAPED_UNICODE);
-                        }
-                        else
-                        {
+                        } else {
                             $value = is_array($value) ? implode(',', $value) : $value;
                         }
                         $v['value'] = $value;
@@ -148,13 +121,10 @@ class Config extends Backend
                     }
                 }
                 $this->model->allowField(true)->saveAll($configList);
-                try
-                {
+                try {
                     $this->refreshFile();
                     $this->success();
-                }
-                catch (Exception $e)
-                {
+                } catch (Exception $e) {
                     $this->error($e->getMessage());
                 }
             }
@@ -162,20 +132,20 @@ class Config extends Backend
         }
     }
 
+    /**
+     * 刷新配置文件
+     */
     protected function refreshFile()
     {
         $config = [];
-        foreach ($this->model->all() as $k => $v)
-        {
+        foreach ($this->model->all() as $k => $v) {
 
             $value = $v->toArray();
-            if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files']))
-            {
+            if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files'])) {
                 $value['value'] = explode(',', $value['value']);
             }
-            if ($value['type'] == 'array')
-            {
-                $value['value'] = (array) json_decode($value['value'], TRUE);
+            if ($value['type'] == 'array') {
+                $value['value'] = (array)json_decode($value['value'], TRUE);
             }
             $config[$value['name']] = $value['value'];
         }
@@ -183,26 +153,21 @@ class Config extends Backend
     }
 
     /**
+     * 检测配置项是否存在
      * @internal
      */
     public function check()
     {
         $params = $this->request->post("row/a");
-        if ($params)
-        {
+        if ($params) {
 
             $config = $this->model->get($params);
-            if (!$config)
-            {
+            if (!$config) {
                 return $this->success();
-            }
-            else
-            {
+            } else {
                 return $this->error(__('Name already exist'));
             }
-        }
-        else
-        {
+        } else {
             return $this->error(__('Invalid parameters'));
         }
     }
@@ -213,19 +178,18 @@ class Config extends Backend
      */
     public function emailtest()
     {
+        $row = $this->request->post('row/a');
+        \think\Config::set('site', array_merge(\think\Config::get('site'), $row));
         $receiver = $this->request->request("receiver");
         $email = new Email;
         $result = $email
-                ->to($receiver)
-                ->subject(__("This is a test mail"))
-                ->message('<div style="min-height:550px; padding: 100px 55px 200px;">' . __('This is a test mail content') . '</div>')
-                ->send();
-        if ($result)
-        {
+            ->to($receiver)
+            ->subject(__("This is a test mail"))
+            ->message('<div style="min-height:550px; padding: 100px 55px 200px;">' . __('This is a test mail content') . '</div>')
+            ->send();
+        if ($result) {
             $this->success();
-        }
-        else
-        {
+        } else {
             $this->error($email->getError());
         }
     }

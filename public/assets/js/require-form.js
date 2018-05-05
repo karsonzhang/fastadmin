@@ -39,10 +39,10 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     },
                     valid: function (ret) {
                         var that = this, submitBtn = $(".layer-footer [type=submit]", form);
-                        that.holdSubmit();
-                        $(".layer-footer [type=submit]", form).addClass("disabled");
+                        that.holdSubmit(true);
+                        submitBtn.addClass("disabled");
                         //验证通过提交表单
-                        Form.api.submit($(ret), function (data, ret) {
+                        var submitResult = Form.api.submit($(ret), function (data, ret) {
                             that.holdSubmit(false);
                             submitBtn.removeClass("disabled");
                             if (false === $(this).triggerHandler("success.form", [data, ret])) {
@@ -72,6 +72,11 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                                 }
                             }
                         }, submit);
+                        //如果提交失败则释放锁定
+                        if (!submitResult) {
+                            that.holdSubmit(false);
+                            submitBtn.removeClass("disabled");
+                        }
                         return false;
                     }
                 }, form.data("validator-options") || {}));
@@ -255,7 +260,6 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             var textarea = $("textarea[name='" + name + "']", form);
                             var container = textarea.closest("dl");
                             var template = container.data("template");
-                            console.log(name, container);
                             $.each($("input,select", container).serializeArray(), function (i, j) {
                                 var reg = /\[(\w+)\]\[(\w+)\]$/g;
                                 var match = reg.exec(j.name);
@@ -344,10 +348,12 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
         },
         api: {
             submit: function (form, success, error, submit) {
-                if (form.size() === 0)
-                    return Toastr.error("表单未初始化完成,无法提交");
+                if (form.size() === 0) {
+                    Toastr.error("表单未初始化完成,无法提交");
+                    return false;
+                }
                 if (typeof submit === 'function') {
-                    if (false === submit.call(form)) {
+                    if (false === submit.call(form, success, error)) {
                         return false;
                     }
                 }
@@ -407,7 +413,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         }
                     }
                 });
-                return false;
+                return true;
             },
             bindevent: function (form, success, error, submit) {
 

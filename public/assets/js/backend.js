@@ -103,20 +103,8 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
             },
             refreshmenu: function () {
                 top.window.$(".sidebar-menu").trigger("refresh");
-            }
-        },
-        init: function () {
-            //公共代码
-            //添加ios-fix兼容iOS下的iframe
-            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-                $("html").addClass("ios-fix");
-            }
-            //配置Toastr的参数
-            Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
-            //点击包含.btn-dialog的元素时弹出dialog
-            $(document).on('click', '.btn-dialog,.dialogit', function (e) {
-                var that = this;
-                var options = $.extend({}, $(that).data() || {});
+            },
+            gettablecolumnbutton: function(options){
                 if (typeof options.tableId !== 'undefined' && typeof options.fieldIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
                     var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
                     if (tableOptions) {
@@ -133,20 +121,38 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                             }
                         });
                         if (columnObj) {
-                            var button = columnObj['buttons'][options.buttonIndex];
-                            if (button && typeof button.callback === 'function') {
-                                options.callback = button.callback;
-                            }
+                            return columnObj['buttons'][options.buttonIndex];
                         }
                     }
                 }
+                return null;
+            },
+        },
+        init: function () {
+            //公共代码
+            //添加ios-fix兼容iOS下的iframe
+            if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                $("html").addClass("ios-fix");
+            }
+            //配置Toastr的参数
+            Toastr.options.positionClass = Config.controllername === 'index' ? "toast-top-right-index" : "toast-top-right";
+            //点击包含.btn-dialog的元素时弹出dialog
+            $(document).on('click', '.btn-dialog,.dialogit', function (e) {
+                var that = this;
+                var options = $.extend({}, $(that).data() || {});
+                var url = Backend.api.replaceids(that, $(that).attr('href'));
+                var title = $(that).attr("title") || $(that).data("title") || $(that).data('original-title');
+                var button = Backend.api.gettablecolumnbutton(options);
+                if (button && typeof button.callback === 'function') {
+                    options.callback = button.callback;
+                }
                 if (typeof options.confirm !== 'undefined') {
                     Layer.confirm(options.confirm, function (index) {
-                        Backend.api.open(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr('title'), options);
+                        Backend.api.open(url, title, options);
                         Layer.close(index);
                     });
                 } else {
-                    Backend.api.open(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr('title'), options);
+                    Backend.api.open(url, title, options);
                 }
                 return false;
             });
@@ -154,15 +160,16 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
             $(document).on('click', '.btn-addtabs,.addtabsit', function (e) {
                 var that = this;
                 var options = $.extend({}, $(that).data() || {});
+                var url = Backend.api.replaceids(that, $(that).attr('href'));
+                var title = $(that).attr("title") || $(that).data("title") || $(that).data('original-title');
                 if (typeof options.confirm !== 'undefined') {
                     Layer.confirm(options.confirm, function (index) {
-                        Backend.api.addtabs(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr("title"));
+                        Backend.api.addtabs(url, title);
                         Layer.close(index);
                     });
                 } else {
-                    Backend.api.addtabs(Backend.api.replaceids(that, $(that).attr('href')), $(that).attr("title"));
+                    Backend.api.addtabs(url, title);
                 }
-
                 return false;
             });
             //点击包含.btn-ajax的元素时发送Ajax请求
@@ -177,30 +184,13 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                 var error = typeof options.error === 'function' ? options.error : null;
                 delete options.success;
                 delete options.error;
-                if (typeof options.tableId !== 'undefined' && typeof options.fieldIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
-                    var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
-                    if (tableOptions) {
-                        var columnObj = null;
-                        $.each(tableOptions.columns, function (i, columns) {
-                            $.each(columns, function (j, column) {
-                                if (typeof column.fieldIndex !== 'undefined' && column.fieldIndex === options.fieldIndex) {
-                                    columnObj = column;
-                                    return false;
-                                }
-                            });
-                            if (columnObj) {
-                                return false;
-                            }
-                        });
-                        if (columnObj) {
-                            var button = columnObj['buttons'][options.buttonIndex];
-                            if (button && typeof button.success === 'function') {
-                                success = button.success;
-                            }
-                            if (button && typeof button.error === 'function') {
-                                error = button.error;
-                            }
-                        }
+                var button = Backend.api.gettablecolumnbutton(options);
+                if (button) {
+                    if (typeof button.success === 'function') {
+                        success = button.success;
+                    }
+                    if (typeof button.error === 'function') {
+                        error = button.error;
                     }
                 }
                 //如果未设备成功的回调,设定了自动刷新的情况下自动进行刷新
@@ -225,6 +215,19 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
             if ($(".layer-footer").size() > 0 && self === top) {
                 $(".layer-footer").show();
             }
+            //优化在多个弹窗下点击不能切换的操作体验
+            if (Fast.api.query("dialog") == "1" && self != top && self.frameElement && self.frameElement.tagName == "IFRAME") {
+                $(window).on('click', function () {
+                    var layero = self.frameElement.parentNode.parentElement;
+                    if (parent.Layer.zIndex != parseInt(parent.window.$(layero).css("z-index"))) {
+                        parent.window.$(layero).trigger("mousedown");
+                        parent.Layer.zIndex = parseInt(parent.window.$(layero).css("z-index"));
+                    }
+                });
+            }
+            //tooltip和popover
+            $('body').tooltip({selector: '[data-toggle="tooltip"]'});
+            $('body').tooltip({selector: '[data-toggle="popover"]'});
         }
     };
     Backend.api = $.extend(Fast.api, Backend.api);

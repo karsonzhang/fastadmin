@@ -53,6 +53,7 @@ return [
     'Mail from'                   => '发件人邮箱',
     'Name already exist'          => '变量名称已经存在',
     'Send a test message'         => '发送测试邮件',
-    'This is a test mail content' => '这是一封测试邮件,用于测试邮件配置是否正常!',
-    'This is a test mail'         => '这是一封测试邮件',
+    'This is a test mail content' => '这是一封来自FastAdmin校验邮件,用于校验邮件配置是否正常!',
+    'This is a test mail'         => '这是一封来自FastAdmin的邮件',
+    'Please input your email'     => '请输入测试接收者邮箱',
 ];

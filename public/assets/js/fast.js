@@ -105,7 +105,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 }
                 name = name.replace(/[\[\]]/g, "\\$&");
                 var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                        results = regex.exec(url);
+                    results = regex.exec(url);
                 if (!results)
                     return null;
                 if (!results[2])
@@ -134,31 +134,42 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         $(layero).data("callback", that.callback);
                         //$(layero).removeClass("layui-layer-border");
                         Layer.setTop(layero);
-                        var frame = Layer.getChildFrame('html', index);
-                        var layerfooter = frame.find(".layer-footer");
-                        Fast.api.layerfooter(layero, index, that);
+                        try {
+                            var frame = Layer.getChildFrame('html', index);
+                            var layerfooter = frame.find(".layer-footer");
+                            Fast.api.layerfooter(layero, index, that);
 
-                        //绑定事件
-                        if (layerfooter.size() > 0) {
-                            // 监听窗口内的元素及属性变化
-                            // Firefox和Chrome早期版本中带有前缀
-                            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-                            if (MutationObserver) {
-                                // 选择目标节点
-                                var target = layerfooter[0];
-                                // 创建观察者对象
-                                var observer = new MutationObserver(function (mutations) {
-                                    Fast.api.layerfooter(layero, index, that);
-                                    mutations.forEach(function (mutation) {
+                            //绑定事件
+                            if (layerfooter.size() > 0) {
+                                // 监听窗口内的元素及属性变化
+                                // Firefox和Chrome早期版本中带有前缀
+                                var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+                                if (MutationObserver) {
+                                    // 选择目标节点
+                                    var target = layerfooter[0];
+                                    // 创建观察者对象
+                                    var observer = new MutationObserver(function (mutations) {
+                                        Fast.api.layerfooter(layero, index, that);
+                                        mutations.forEach(function (mutation) {
+                                        });
                                     });
-                                });
-                                // 配置观察选项:
-                                var config = {attributes: true, childList: true, characterData: true, subtree: true}
-                                // 传入目标节点和观察选项
-                                observer.observe(target, config);
-                                // 随后,你还可以停止观察
-                                // observer.disconnect();
+                                    // 配置观察选项:
+                                    var config = {attributes: true, childList: true, characterData: true, subtree: true}
+                                    // 传入目标节点和观察选项
+                                    observer.observe(target, config);
+                                    // 随后,你还可以停止观察
+                                    // observer.disconnect();
+                                }
                             }
+                        } catch (e) {
+
+                        }
+                        if ($(layero).height() > $(window).height()) {
+                            //当弹出窗口大于浏览器可视高度时,重定位
+                            Layer.style(index, {
+                                top: 0,
+                                height: $(window).height()
+                            });
                         }
                     }
                 }, options ? options : {});
@@ -234,8 +245,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
         },
         lang: function () {
             var args = arguments,
-                    string = args[0],
-                    i = 1;
+                string = args[0],
+                i = 1;
             string = string.toLowerCase();
             //string = typeof Lang[string] != 'undefined' ? Lang[string] : string;
             if (typeof Lang[string] != 'undefined') {

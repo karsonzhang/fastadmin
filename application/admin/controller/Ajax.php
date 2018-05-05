@@ -106,6 +106,8 @@ class Ajax extends Backend
                 $imageheight = isset($imgInfo[1]) ? $imgInfo[1] : $imageheight;
             }
             $params = array(
+                'admin_id'    => (int)$this->auth->id,
+                'user_id'     => 0,
                 'filesize'    => $fileInfo['size'],
                 'imagewidth'  => $imagewidth,
                 'imageheight' => $imageheight,
