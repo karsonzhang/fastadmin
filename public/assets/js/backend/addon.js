@@ -64,7 +64,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             align: 'left',
                             formatter: Controller.api.formatter.title
                         },
-                        {field: 'intro', title: __('Intro'), operate: 'LIKE', align: 'left', class:'visible-lg'},
+                        {field: 'intro', title: __('Intro'), operate: 'LIKE', align: 'left', class: 'visible-lg'},
                         {
                             field: 'author',
                             title: __('Author'),
@@ -278,10 +278,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             }
                         });
                     } else if (ret && ret.code === -2) {
-                        Fast.api.open(ret.data.payurl, __('Pay now'), {
+                        top.Fast.api.open(ret.data.payurl, __('Pay now'), {
                             area: ["650px", "700px"],
                             end: function () {
-                                Layer.alert(__('Pay tips'));
+                                top.Layer.alert(__('Pay tips'));
                             }
                         });
                     } else if (ret && ret.code === -3) {
@@ -486,7 +486,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             formatter: {
                 title: function (value, row, index) {
                     var title = '<a class="title" href="' + row.url + '" data-toggle="tooltip" title="' + __('View addon home page') + '" target="_blank">' + value + '</a>';
-                    if (row.screenshots.length > 0) {
+                    if (row.screenshots && row.screenshots.length > 0) {
                         title += ' <a href="javascript:;" data-index="' + index + '" class="view-screenshots text-success" title="' + __('View addon screenshots') + '" data-toggle="tooltip"><i class="fa fa-image"></i></a>';
                     }
                     return title;
@@ -501,7 +501,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Click to toggle status') + '" class="btn-' + (row.addon.state == 1 ? "disable" : "enable") + '" data-action="' + (row.addon.state == 1 ? "disable" : "enable") + '" data-name="' + row.name + '"><i class="fa ' + (row.addon.state == 0 ? 'fa-toggle-on fa-rotate-180 text-gray' : 'fa-toggle-on text-success') + ' fa-2x"></i></a>';
                 },
                 author: function (value, row, index) {
-                    return '<a href="https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes" target="_blank" data-toggle="tooltip" title="'+__('Click to contact developer')+'" class="text-primary">' + value + '</a>';
+                    return '<a href="https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes" target="_blank" data-toggle="tooltip" title="' + __('Click to contact developer') + '" class="text-primary">' + value + '</a>';
                 },
                 price: function (value, row, index) {
                     return parseFloat(value) == 0 ? '<span class="text-success">' + __('Free') + '</span>' : '<span class="text-danger">￥' + value + '</span>';
