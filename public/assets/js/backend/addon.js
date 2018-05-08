@@ -466,7 +466,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 var data = [];
                 $.each(row.screenshots, function (i, j) {
                     data.push({
-                        "src": "http://www.fh.com" + j
+                        "src": j
                     });
                 });
                 var json = {
