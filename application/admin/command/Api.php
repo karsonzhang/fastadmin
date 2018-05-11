@@ -70,7 +70,7 @@ class Api extends Command
         }
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            if (extension_loaded('opcache')) {
+            if (extension_loaded('Zend OPcache')) {
                 $configuration = opcache_get_configuration();
                 $directives = $configuration['directives'];
                 $configName = request()->isCli() ? 'opcache.enable_cli' : 'opcache.enable';
