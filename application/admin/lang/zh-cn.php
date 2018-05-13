@@ -111,6 +111,7 @@ return [
     'Go back'                                               => '返回首页',
     'Jump now'                                              => '立即跳转',
     'Click to search %s'                                    => '点击搜索 %s',
+    'Click to toggle'                                       => '点击切换',
     'Operation completed'                                   => '操作成功!',
     'Operation failed'                                      => '操作失败!',
     'Unknown data format'                                   => '未知的数据格式!',

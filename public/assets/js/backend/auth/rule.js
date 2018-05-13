@@ -34,7 +34,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             field: 'ismenu',
                             title: __('Ismenu'),
                             align: 'center',
-                            formatter: Controller.api.formatter.menu
+                            formatter: Table.api.formatter.toggle
                         },
                         {
                             field: 'id',
@@ -116,10 +116,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 },
                 name: function (value, row, index) {
                     return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
-                },
-                menu: function (value, row, index) {
-                    return "<a href='javascript:;' data-toggle='tooltip' title='" + __('Toggle menu visible') + "' class='btn btn-" + (value ? "info" : "default") + " btn-xs btn-change' data-id='"
-                        + row.id + "' data-params='ismenu=" + (value ? 0 : 1) + "'>" + (value ? __('Yes') : __('No')) + "</a>";
                 },
                 icon: function (value, row, index) {
                     return '<span class="' + (!row.ismenu || row.status == 'hidden' ? 'text-muted' : '') + '"><i class="' + value + '"></i></span>';

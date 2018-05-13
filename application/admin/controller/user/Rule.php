@@ -18,6 +18,7 @@ class Rule extends Backend
      */
     protected $model = null;
     protected $rulelist = [];
+    protected $multiFields = 'ismenu,status';
 
     public function _initialize()
     {

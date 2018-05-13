@@ -30,7 +30,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'title', title: __('Title'), align: 'left'},
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'remark', title: __('Remark')},
-                        {field: 'ismenu', title: __('Ismenu'), formatter: Controller.api.formatter.toggle},
+                        {field: 'ismenu', title: __('Ismenu'), formatter: Table.api.formatter.toggle},
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true, visible: false},
                         {field: 'updatetime', title: __('Updatetime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true, visible: false},
                         {field: 'weigh', title: __('Weigh')},
@@ -60,12 +60,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 });
                 $("input[name='row[ismenu]']:checked").trigger("click");
                 Form.api.bindevent($("form[role=form]"));
-            },
-            formatter: {
-                toggle: function (value, row, index) {
-                    //添加上btn-change可以自定义请求的URL进行数据处理
-                    return '<i class="fa ' + (value == 0 ? 'fa-toggle-off' : 'fa-toggle-on') + ' fa-2x"></i>';
-                },
             }
         }
     };

@@ -646,6 +646,9 @@ form.form-horizontal .control-label {
 .bootstrap-table .fixed-table-toolbar .dropdown-menu {
   overflow: auto;
 }
+.bootstrap-table .fa-toggle-on.fa-2x {
+  font-size: 1.86em;
+}
 .toolbar {
   margin-top: 10px;
   margin-bottom: 10px;
