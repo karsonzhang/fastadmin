@@ -372,7 +372,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 image: function (value, row, index) {
                     value = value ? value : '/assets/img/blank.gif';
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    return '<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />';
+                    return '<a href="' + Fast.api.cdnurl(value) + '" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>';
                 },
                 images: function (value, row, index) {
                     value = value === null ? '' : value.toString();
@@ -381,7 +381,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var html = [];
                     $.each(arr, function (i, value) {
                         value = value ? value : '/assets/img/blank.gif';
-                        html.push('<img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" />');
+                        html.push('<a href="' + Fast.api.cdnurl(value) + '" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>');
                     });
                     return html.join(' ');
                 },
@@ -394,9 +394,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                     value = value === null ? '' : value.toString();
                     var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
-                    value = value.charAt(0).toUpperCase() + value.slice(1);
+                    var newValue = value.charAt(0).toUpperCase() + value.slice(1);
                     //渲染状态
-                    var html = '<span class="text-' + color + '"><i class="fa fa-circle"></i> ' + __(value) + '</span>';
+                    var html = '<span class="text-' + color + '"><i class="fa fa-circle"></i> ' + __(newValue) + '</span>';
+                    if (this.operate != false) {
+                        html = '<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', __(newValue)) + '" data-field="' + this.field + '" data-value="' + value + '">' + html + '</a>';
+                    }
                     return html;
                 },
                 url: function (value, row, index) {
@@ -442,7 +445,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return Table.api.formatter.flag.call(this, value, row, index);
                 },
                 datetime: function (value, row, index) {
-                    return value ? Moment(parseInt(value) * 1000).format("YYYY-MM-DD HH:mm:ss") : __('None');
+                    var datetimeFormat = typeof this.datetimeFormat === 'undefined' ? 'YYYY-MM-DD HH:mm:ss' : this.datetimeFormat;
+                    if (isNaN(value)) {
+                        return value ? Moment(value).format(datetimeFormat) : __('None');
+                    } else {
+                        return value ? Moment(parseInt(value) * 1000).format(datetimeFormat) : __('None');
+                    }
                 },
                 operate: function (value, row, index) {
                     var table = this.table;

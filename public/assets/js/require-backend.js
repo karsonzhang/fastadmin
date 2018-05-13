@@ -1,10 +1,10 @@
 require.config({
     urlArgs: "v=" + requirejs.s.contexts._.config.config.site.version,
     packages: [{
-            name: 'moment',
-            location: '../libs/moment',
-            main: 'moment'
-        }
+        name: 'moment',
+        location: '../libs/moment',
+        main: 'moment'
+    }
     ],
     //在打包压缩时将会把include中的模块合并到主文件中
     include: ['css', 'layer', 'toastr', 'fast', 'backend', 'backend-init', 'table', 'form', 'dragsort', 'drag', 'drop', 'addtabs', 'selectpage'],
@@ -102,10 +102,10 @@ require.config({
             'moment/locale/zh-cn',
 //            'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
         ],
-        'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
+//        'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css',],
         'bootstrap-select-lang': ['bootstrap-select'],
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
-        'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],
+        'jstree': ['css!../libs/jstree/dist/themes/default/style.css',],
         'plupload': {
             deps: ['../libs/plupload/js/moxie.min'],
             exports: "plupload"

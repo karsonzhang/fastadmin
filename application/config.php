@@ -267,6 +267,8 @@ return [
         'login_unique'        => false,
         //登录页默认背景图
         'login_background'    => "/assets/img/loginbg.jpg",
+        //是否启用多级菜单导航
+        'multiplenav'         => false,
         //自动检测更新
         'checkupdate'         => false,
         //版本号

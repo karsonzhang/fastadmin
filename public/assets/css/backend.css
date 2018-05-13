@@ -9,9 +9,11 @@
 @import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
 @import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
+@import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
 body {
   background: #f1f4f6;
+  font-size: 13px;
 }
 body.is-dialog {
   background: #fff;
@@ -31,19 +33,6 @@ body.is-dialog {
 .main-header .navbar {
   position: relative;
 }
-.main-header .navbar .sidebar-toggle {
-  position: absolute;
-  width: 45px;
-  text-align: center;
-}
-.main-header .navbar #nav {
-  position: absolute;
-  left: 45px;
-}
-.main-header .navbar .navbar-custom-menu {
-  position: absolute;
-  right: 0;
-}
 .bootstrap-dialog .modal-dialog {
   /*width: 70%;*/
   max-width: 885px;
@@ -60,7 +49,6 @@ html.ios-fix body {
 }
 #header {
   background: #fff;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
 }
 .content-wrapper {
   position: relative;
@@ -110,9 +98,6 @@ html.ios-fix body {
   padding: 15px;
   margin-bottom: 15px;
   background-color: #f5f5f5;
-}
-.searchit {
-  border-bottom: 1px dashed #3c8dbc;
 }
 /* 固定的底部按钮 */
 .fixed-footer {
@@ -283,6 +268,7 @@ form.form-horizontal .control-label {
 }
 /*顶栏addtabs*/
 .nav-addtabs {
+  height: 100%;
   border: none;
 }
 .nav-addtabs.disable-top-badge > li > a > .pull-right-container {
@@ -292,8 +278,8 @@ form.form-horizontal .control-label {
   margin: 0;
 }
 .nav-addtabs > li > a {
-  height: 49px;
-  line-height: 49px;
+  height: 50px;
+  line-height: 50px;
   padding: 0 15px;
   border-radius: 0;
   border: none;
@@ -311,8 +297,8 @@ form.form-horizontal .control-label {
   margin-right: 3px;
 }
 .nav-addtabs > li.active > a {
-  height: 49px;
-  line-height: 49px;
+  height: 50px;
+  line-height: 50px;
   padding: 0 15px;
   border-radius: 0;
   border: none;
@@ -325,20 +311,27 @@ form.form-horizontal .control-label {
 .nav-addtabs > li.active > a:focus {
   border: none;
   color: #2c3e50;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
   background: #f1f4f6;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 .nav-addtabs > li .close-tab {
   font-size: 10px;
   position: absolute;
-  right: 5px;
+  right: 0px;
   top: 50%;
-  margin-top: -7px;
+  margin-top: -8px;
   z-index: 100;
-  cursor: hand;
   cursor: pointer;
-  color: #fff;
+  color: #eee;
   display: none;
+}
+.nav-addtabs > li .close-tab:before {
+  content: "\e626";
+  font-family: iconfont;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size: 18px;
 }
 .nav-addtabs .open > a:hover,
 .nav-addtabs .open > a:focus {
@@ -349,6 +342,119 @@ form.form-horizontal .control-label {
 }
 .nav-addtabs li:hover > .close-tab {
   display: block;
+}
+.multiplenav .content-wrapper,
+.multiplenav .right-side {
+  padding-top: 94px;
+}
+.multiplenav #firstnav .nav-addtabs {
+  padding-right: 450px;
+}
+#firstnav {
+  height: 50px;
+  border-bottom: 1px solid transparent;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  position: relative;
+}
+#firstnav .sidebar-toggle {
+  position: absolute;
+  width: 45px;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  padding: 0;
+}
+#firstnav .nav-addtabs {
+  position: absolute;
+  left: 45px;
+  z-index: 98;
+}
+#firstnav .navbar-custom-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  background: transparent;
+}
+/*次栏菜单栏*/
+#secondnav {
+  height: 44px;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: #fff;
+  width: 100%;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  padding: 5px 10px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+#secondnav .nav-addtabs {
+  height: 100%;
+  border: none;
+}
+#secondnav .nav-addtabs.disable-top-badge > li > a > .pull-right-container {
+  display: none;
+}
+#secondnav .nav-addtabs > li {
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  margin: 2px 5px 2px 0;
+  background: #fff;
+}
+#secondnav .nav-addtabs > li > a {
+  display: block;
+  color: #495060 !important;
+  height: 100%;
+  padding: 0;
+  line-height: 28px;
+  font-size: 12px;
+  vertical-align: middle;
+  opacity: 1;
+  overflow: hidden;
+  background: none;
+  border: none;
+}
+#secondnav .nav-addtabs > li > a i {
+  margin-right: 3px;
+}
+#secondnav .nav-addtabs > li.active {
+  border-color: #bdbebd;
+  background-color: #f7f7f7;
+}
+#secondnav .nav-addtabs > li .close-tab {
+  font-size: 10px;
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  margin-top: -8px;
+  z-index: 100;
+  cursor: pointer;
+  color: #eee;
+}
+#secondnav .nav-addtabs > li .close-tab:before {
+  content: "\e626";
+  font-family: iconfont;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size: 18px;
+}
+#secondnav .nav-addtabs > li:hover,
+#secondnav .nav-addtabs > li:focus {
+  border-color: #bdbebd;
+}
+#secondnav .nav-addtabs ul li {
+  position: relative;
+}
+#secondnav .nav-addtabs li:hover > .close-tab {
+  display: block;
+  border-color: #222e32;
+  color: #222e32;
 }
 .main-sidebar .sidebar-form {
   overflow: visible;
@@ -396,7 +502,7 @@ form.form-horizontal .control-label {
     top: 41px;
   }
   .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
-    top: 7px!important;
+    top: 7px !important;
     height: 17px;
   }
 }
@@ -487,7 +593,7 @@ form.form-horizontal .control-label {
 }
 /*去除bootstrap-table的边框*/
 .fixed-table-container {
-  border: none!important;
+  border: none !important;
 }
 /*修复nice-validator新版下的一处BUG*/
 .nice-validator input,
@@ -535,7 +641,7 @@ form.form-horizontal .control-label {
 }
 .dropdown-menu.text-left a,
 .dropdown-menu.text-left li {
-  text-align: left!important;
+  text-align: left !important;
 }
 .bootstrap-table .fixed-table-toolbar .dropdown-menu {
   overflow: auto;
@@ -612,25 +718,25 @@ form.form-horizontal .control-label {
 }
 /*重写toast的几个背景色*/
 .toast-primary {
-  background-color: #48c9b0!important;
+  background-color: #48c9b0 !important;
 }
 .toast-success {
-  background-color: #18bc9c!important;
+  background-color: #18bc9c !important;
 }
 .toast-error {
-  background-color: #e74c3c!important;
+  background-color: #e74c3c !important;
 }
 .toast-info {
-  background-color: #5dade2!important;
+  background-color: #5dade2 !important;
 }
 .toast-warning {
-  background-color: #f1c40f!important;
+  background-color: #f1c40f !important;
 }
 .toast-inverse {
-  background-color: #34495e!important;
+  background-color: #34495e !important;
 }
 .toast-default {
-  background-color: #bdc3c7!important;
+  background-color: #bdc3c7 !important;
 }
 #toast-container > div,
 #toast-container > div:hover {
@@ -642,8 +748,8 @@ form.form-horizontal .control-label {
   /*自定义底部灰色操作区*/
 }
 .layui-layer-fast .layui-layer-title {
-  background: #2c3e50!important;
-  color: #fff!important;
+  background: #2c3e50 !important;
+  color: #fff !important;
   border-bottom: none;
 }
 .layui-layer-fast .layui-layer-title ~ .layui-layer-setwin {
@@ -656,7 +762,7 @@ form.form-horizontal .control-label {
   display: inline-block;
 }
 .layui-layer-fast.layui-layer-border {
-  border: none!important;
+  border: none !important;
   box-shadow: 1px 1px 50px rgba(0, 0, 0, 0.3) !important;
 }
 .layui-layer-fast.layui-layer-iframe {
@@ -668,15 +774,15 @@ form.form-horizontal .control-label {
   box-sizing: content-box;
 }
 .layui-layer-fast .layui-layer-btn {
-  text-align: center!important;
-  padding: 10px!important;
+  text-align: center !important;
+  padding: 10px !important;
   background: #ecf0f1;
   overflow: hidden;
 }
 .layui-layer-fast .layui-layer-btn a {
   background-color: #95a5a6;
   border-color: #95a5a6;
-  color: #fff!important;
+  color: #fff !important;
   height: 31px;
   margin-top: 0;
   border: 1px solid transparent;
@@ -689,10 +795,10 @@ form.form-horizontal .control-label {
   padding: 8px 20px;
   background-color: #ecf0f1;
   height: auto;
-  text-align: inherit!important;
+  text-align: inherit !important;
 }
 .layui-layer-fast .layui-layer-setwin > a {
-  background: none!important;
+  background: none !important;
 }
 .layui-layer-fast .layui-layer-setwin > a cite {
   display: none;
@@ -710,11 +816,11 @@ form.form-horizontal .control-label {
   z-index: 1;
 }
 .layui-layer-fast .layui-layer-setwin > a:hover {
-  text-decoration: none!important;
-  background: none!important;
+  text-decoration: none !important;
+  background: none !important;
 }
 .layui-layer-fast .layui-layer-setwin > a:focus {
-  text-decoration: none!important;
+  text-decoration: none !important;
 }
 .layui-layer-fast .layui-layer-setwin .layui-layer-min {
   display: none;
@@ -773,8 +879,12 @@ form.form-horizontal .control-label {
 }
 /*手机版样式*/
 @media (max-width: 480px) {
-  .nav-addtabs {
-    display: none;
+  #firstnav .navbar-custom-menu ul li a {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  #firstnav .navbar-nav > .user-menu .user-image {
+    margin-top: -3px;
   }
   .fixed-table-toolbar .columns-right.btn-group {
     display: none;
@@ -783,9 +893,64 @@ form.form-horizontal .control-label {
   .fixed .right-side {
     padding-top: 50px;
   }
+  .multiplenav .fixed .content-wrapper,
+  .multiplenav .fixed .right-side {
+    padding-top: 94px;
+  }
+  .multiplenav .content-wrapper,
+  .multiplenav .right-side {
+    padding-top: 94px;
+  }
+  .main-sidebar,
+  .left-side {
+    padding-top: 144px;
+  }
 }
 /*平板样式*/
 @media (max-width: 768px) {
+  body .wrapper .main-header .logo {
+    background: none;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+    position: absolute;
+    top: 0;
+    z-index: 1200;
+    width: 130px;
+    left: 50%;
+    margin-left: -65px;
+  }
+  body .sidebar .mobilenav a.btn-app {
+    color: #444;
+    width: 100px;
+    height: 70px;
+    font-size: 13px;
+  }
+  body .sidebar .mobilenav a.btn-app i.fa {
+    font-size: 24px;
+  }
+  body .sidebar .mobilenav a.btn-app span {
+    margin-top: 5px;
+    display: block;
+  }
+  body .sidebar .mobilenav a.btn-app.active {
+    color: #222d32;
+  }
+  body .wrapper .main-header .navbar .dropdown-menu li > a {
+    color: #333;
+  }
+  body .wrapper .main-header .navbar .dropdown-menu li > a:hover {
+    background: #eee;
+  }
+  body .wrapper .main-header .navbar .dropdown-menu li.active > a {
+    color: #fff;
+  }
+  body .wrapper .main-header .navbar .dropdown-menu li.active > a:hover {
+    background: #222d32;
+  }
+  .main-sidebar,
+  .left-side {
+    padding-top: 94px;
+  }
   .n-bootstrap .n-right {
     margin-top: 0;
     top: -20px;
@@ -811,5 +976,5 @@ form.form-horizontal .control-label {
   margin: 2px 0 0;
 }
 .wipecache li a {
-  color: #444444!important;
+  color: #444444 !important;
 }

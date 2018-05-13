@@ -215,6 +215,11 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
+
+            var multiplenav = Config.fastadmin.multiplenav;
+            var firstnav = $("#firstnav .nav-addtabs");
+            var nav = multiplenav ? $("#secondnav .nav-addtabs") : firstnav;
+
             //刷新菜单事件
             $(document).on('refresh', '.sidebar-menu', function () {
                 Fast.api.ajax({
@@ -223,28 +228,103 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }, function (data) {
                     $(".sidebar-menu li:not([data-rel='external'])").remove();
                     $(".sidebar-menu").prepend(data.menulist);
-                    $("#nav ul li[role='presentation'].active a").trigger('click');
+                    if (multiplenav) {
+                        firstnav.html(data.navlist);
+                    }
+                    $("li[role='presentation'].active a", nav).trigger('click');
                     return false;
                 }, function () {
                     return false;
                 });
             });
 
+            if (multiplenav) {
+                //一级菜单自适应
+                $(window).resize(function () {
+                    var siblingsWidth = 0;
+                    firstnav.siblings().each(function () {
+                        siblingsWidth += $(this).outerWidth();
+                    });
+                    firstnav.width(firstnav.parent().width() - siblingsWidth);
+                    firstnav.refreshAddtabs();
+                });
+
+                //点击顶部第一级菜单栏
+                firstnav.on("click", "li a", function () {
+                    $("li", firstnav).removeClass("active");
+                    $(this).closest("li").addClass("active");
+                    $(".sidebar-menu > li.treeview").addClass("hidden");
+                    if ($(this).attr("url") == "javascript:;") {
+                        var sonlist = $(".sidebar-menu > li[pid='" + $(this).attr("addtabs") + "']");
+                        sonlist.removeClass("hidden");
+                        var last_id = $(this).attr("last-id");
+                        if (last_id) {
+                            $(".sidebar-menu > li[pid='" + $(this).attr("addtabs") + "'] a[addtabs='" + last_id + "']").trigger('click');
+                        } else {
+                            $(".sidebar-menu > li[pid='" + $(this).attr("addtabs") + "']:first > a").trigger('click');
+                        }
+                    } else {
+
+                    }
+                });
+
+                //点击左侧菜单栏
+                $(document).on('click', '.sidebar-menu li a[addtabs]', function (e) {
+                    var parents = $(this).parentsUntil("ul.sidebar-menu", "li");
+                    var top = parents[parents.length - 1];
+                    var pid = $(top).attr("pid");
+                    if (pid) {
+                        var obj = $("li a[addtabs=" + pid + "]", firstnav);
+                        var last_id = obj.attr("last-id");
+                        if (!last_id || last_id != pid) {
+                            obj.attr("last-id", $(this).attr("addtabs"));
+                            if (!obj.closest("li").hasClass("active")) {
+                                obj.trigger("click");
+                            }
+                        }
+                    }
+                });
+
+                var mobilenav = $(".mobilenav");
+                $("#firstnav .nav-addtabs li a").each(function(){
+                    mobilenav.append($(this).clone().addClass("btn btn-app"));
+                });
+
+                //点击移动端一级菜单
+                mobilenav.on("click", "a", function () {
+                    $("a", mobilenav).removeClass("active");
+                    $(this).addClass("active");
+                    $(".sidebar-menu > li.treeview").addClass("hidden");
+                    if ($(this).attr("url") == "javascript:;") {
+                        var sonlist = $(".sidebar-menu > li[pid='" + $(this).attr("addtabs") + "']");
+                        sonlist.removeClass("hidden");
+                    }
+                });
+            }
+
             //这一行需要放在点击左侧链接事件之前
             var addtabs = Config.referer ? localStorage.getItem("addtabs") : null;
 
             //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true
-            $('#nav').addtabs({iframeHeight: "100%", iframeForceRefresh: false});
+            nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, nav: nav});
+
             if ($("ul.sidebar-menu li.active a").size() > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
             } else {
-                $("ul.sidebar-menu li a[url!='javascript:;']:first").trigger("click");
+                if (Config.fastadmin.multiplenav) {
+                    $("li:first > a", firstnav).trigger("click");
+                } else {
+                    $("ul.sidebar-menu li a[url!='javascript:;']:first").trigger("click");
+                }
             }
 
             //如果是刷新操作则直接返回刷新前的页面
             if (Config.referer) {
                 if (Config.referer === $(addtabs).attr("url")) {
                     var active = $("ul.sidebar-menu li a[addtabs=" + $(addtabs).attr("addtabs") + "]");
+                    if (multiplenav && active.size() == 0) {
+                        active = $("ul li a[addtabs='" + $(addtabs).attr("addtabs") + "']");
+                    }
                     if (active.size() > 0) {
                         active.trigger("click");
                     } else {
@@ -319,7 +399,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     if ($(this).data("menu") == 'show-submenu') {
                         $("ul.sidebar-menu").toggleClass("show-submenu");
                     } else {
-                        $(".nav-addtabs").toggleClass("disable-top-badge");
+                        nav.toggleClass("disable-top-badge");
                     }
                 });
 
@@ -365,7 +445,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 if ($('ul.sidebar-menu').hasClass('show-submenu')) {
                     $("[data-menu='show-submenu']").attr('checked', 'checked');
                 }
-                if ($('ul.nav-addtabs').hasClass('disable-top-badge')) {
+                if (nav.hasClass('disable-top-badge')) {
                     $("[data-menu='disable-top-badge']").attr('checked', 'checked');
                 }
 

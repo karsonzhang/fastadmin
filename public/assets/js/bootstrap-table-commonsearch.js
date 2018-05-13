@@ -193,7 +193,7 @@
                     }
                 } else {
                     value = $("[name='" + name + "']:checked", that.$commonsearch).val();
-                    value = (vObjCol && typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : obj.val();
+                    value = (vObjCol && typeof vObjCol.process === 'function') ? vObjCol.process(value) : value;
                 }
             } else {
                 value = (vObjCol && typeof vObjCol.process === 'function') ? vObjCol.process(obj.val()) : obj.val();
@@ -297,7 +297,7 @@
 
         var that = this,
             html = [];
-        if(that.options.showSearch){
+        if (that.options.showSearch) {
             html.push(sprintf('<div class="columns-%s pull-%s" style="margin-top:10px;margin-bottom:10px;">', this.options.buttonsAlign, this.options.buttonsAlign));
             html.push(sprintf('<button class="btn btn-default%s' + '" type="button" name="commonSearch" title="%s">', that.options.iconSize === undefined ? '' : ' btn-' + that.options.iconSize, that.options.formatCommonSearch()));
             html.push(sprintf('<i class="%s %s"></i>', that.options.iconsPrefix, that.options.icons.commonSearchIcon))
@@ -320,7 +320,16 @@
         that.$container.on("click", "." + that.options.searchClass, function () {
             var obj = $("form [name='" + $(this).data("field") + "']", that.$commonsearch);
             if (obj.size() > 0) {
-                obj.val($(this).data("value"));
+                var value = $(this).data("value");
+                if (obj.is("select")) {
+                    console.log($("option[value='" + value + "']", obj));
+                    $("option[value='" + value + "']", obj).prop("selected", true);
+                } else if (obj.size() > 1) {
+                    $("form [name='" + $(this).data("field") + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);
+                } else {
+                    obj.val(value);
+                }
+                obj.trigger("change");
                 $("form", that.$commonsearch).trigger("submit");
             }
         });

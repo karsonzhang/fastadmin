@@ -304,7 +304,7 @@ function _init() {
                         $(".sidebar").slimscroll({
                             height: ($(window).height() - $(".main-header").height()) + "px",
                             color: "rgba(0,0,0,0.2)",
-                            size: "3px"
+                            size: "8px"
                         });
                     }
                 }

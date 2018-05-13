@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html lang="{$config.language}">
     <head>
+        <!-- 加载部部样式及META信息 -->
         {include file="common/meta" /}
     </head>
-    <body class="hold-transition skin-green sidebar-mini fixed" id="tabs">
+    <body class="hold-transition skin-green sidebar-mini fixed {if $config.fastadmin.multiplenav}multiplenav{/if}" id="tabs">
         <div class="wrapper">
 
+            <!-- 头部区域 -->
             <header id="header" class="main-header">
                 {include file='common/header' /}
             </header>
-            <!-- Left side column. contains the logo and sidebar -->
+
+            <!-- 左侧菜单栏 -->
             <aside class="main-sidebar">
                 {include file='common/menu' /}
             </aside>
 
-            <!-- Content Wrapper. Contains page content -->
+            <!-- 主体内容区域 -->
             <div class="content-wrapper tab-content tab-addtabs">
 
             </div>
-            <!-- /.content-wrapper -->
+
+            <!-- 底部链接,默认隐藏 -->
             <footer class="main-footer hide">
                 <div class="pull-right hidden-xs">
                 </div>
-                <strong>Copyright &copy; 2017-2018 <a href="https://www.fastadmin.net">Fastadmin</a>.</strong> All rights
-                reserved.
+                <strong>Copyright &copy; 2017-2018 <a href="https://www.fastadmin.net">Fastadmin</a>.</strong> All rights reserved.
             </footer>
 
-            <!-- Add the sidebar's background. This div must be placed
-                 immediately after the control sidebar -->
+            <!-- 右侧控制栏 -->
             <div class="control-sidebar-bg"></div>
             {include file="common/control" /}
         </div>
-        <!-- ./wrapper -->
-        <!-- end main content -->
+
+        <!-- 加载JS脚本 -->
         {include file="common/script" /}
     </body>
 </html>

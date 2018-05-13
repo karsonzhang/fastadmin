@@ -30,21 +30,20 @@ class Index extends Backend
     public function index()
     {
         //左侧菜单
-        $menulist = $this->auth->getSidebar([
+        list($menulist, $navlist) = $this->auth->getSidebar([
             'dashboard' => 'hot',
             'addon'     => ['new', 'red', 'badge'],
             'auth/rule' => __('Menu'),
             'general'   => ['new', 'purple'],
-                ], $this->view->site['fixedpage']);
+        ], $this->view->site['fixedpage']);
         $action = $this->request->request('action');
-        if ($this->request->isPost())
-        {
-            if ($action == 'refreshmenu')
-            {
-                $this->success('', null, ['menulist' => $menulist]);
+        if ($this->request->isPost()) {
+            if ($action == 'refreshmenu') {
+                $this->success('', null, ['menulist' => $menulist, 'navlist' => $navlist]);
             }
         }
         $this->view->assign('menulist', $menulist);
+        $this->view->assign('navlist', $navlist);
         $this->view->assign('title', __('Home'));
         return $this->view->fetch();
     }
@@ -55,12 +54,10 @@ class Index extends Backend
     public function login()
     {
         $url = $this->request->get('url', 'index/index');
-        if ($this->auth->isLogin())
-        {
+        if ($this->auth->isLogin()) {
             $this->success(__("You've logged in, do not login again"), $url);
         }
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $username = $this->request->post('username');
             $password = $this->request->post('password');
             $keeplogin = $this->request->post('keeplogin');
@@ -75,26 +72,21 @@ class Index extends Backend
                 'password'  => $password,
                 '__token__' => $token,
             ];
-            if (Config::get('fastadmin.login_captcha'))
-            {
+            if (Config::get('fastadmin.login_captcha')) {
                 $rule['captcha'] = 'require|captcha';
                 $data['captcha'] = $this->request->post('captcha');
             }
             $validate = new Validate($rule, [], ['username' => __('Username'), 'password' => __('Password'), 'captcha' => __('Captcha')]);
             $result = $validate->check($data);
-            if (!$result)
-            {
+            if (!$result) {
                 $this->error($validate->getError(), $url, ['token' => $this->request->token()]);
             }
             AdminLog::setTitle(__('Login'));
             $result = $this->auth->login($username, $password, $keeplogin ? 86400 : 0);
-            if ($result === true)
-            {
+            if ($result === true) {
                 Hook::listen("admin_login_after", $this->request);
                 $this->success(__('Login successful'), $url, ['url' => $url, 'id' => $this->auth->id, 'username' => $username, 'avatar' => $this->auth->avatar]);
-            }
-            else
-            {
+            } else {
                 $msg = $this->auth->getError();
                 $msg = $msg ? $msg : __('Username or password is incorrect');
                 $this->error($msg, $url, ['token' => $this->request->token()]);
@@ -102,12 +94,11 @@ class Index extends Backend
         }
 
         // 根据客户端的cookie,判断是否可以自动登录
-        if ($this->auth->autologin())
-        {
+        if ($this->auth->autologin()) {
             $this->redirect($url);
         }
         $background = Config::get('fastadmin.login_background');
-        $background = stripos($background, 'http')===0 ? $background : config('site.cdnurl') . $background;
+        $background = stripos($background, 'http') === 0 ? $background : config('site.cdnurl') . $background;
         $this->view->assign('background', $background);
         $this->view->assign('title', __('Login'));
         Hook::listen("admin_login_init", $this->request);
