@@ -104,7 +104,7 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
             refreshmenu: function () {
                 top.window.$(".sidebar-menu").trigger("refresh");
             },
-            gettablecolumnbutton: function(options){
+            gettablecolumnbutton: function (options) {
                 if (typeof options.tableId !== 'undefined' && typeof options.fieldIndex !== 'undefined' && typeof options.buttonIndex !== 'undefined') {
                     var tableOptions = $("#" + options.tableId).bootstrapTable('getOptions');
                     if (tableOptions) {
@@ -226,8 +226,10 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                 });
             }
             //tooltip和popover
-            $('body').tooltip({selector: '[data-toggle="tooltip"]'});
-            $('body').tooltip({selector: '[data-toggle="popover"]'});
+            if (!('ontouchstart' in document.documentElement)) {
+                $('body').tooltip({selector: '[data-toggle="tooltip"]'});
+            }
+            $('body').popover({selector: '[data-toggle="popover"]'});
         }
     };
     Backend.api = $.extend(Fast.api, Backend.api);
