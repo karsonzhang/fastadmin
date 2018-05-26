@@ -4,7 +4,7 @@
  官网: https://www.fastadmin.net
  演示: https://demo.fastadmin.net
 
- Date: 2018年03月07日
+ Date: 2018年05月26日
 */
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -58,7 +58,7 @@ CREATE TABLE `fa_admin_log` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员日志表';
 
 -- ----------------------------
 -- Table structure for fa_attachment
@@ -82,7 +82,7 @@ CREATE TABLE `fa_attachment` (
   `storage` varchar(100) NOT NULL DEFAULT 'local' COMMENT '存储位置',
   `sha1` varchar(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='附件表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='附件表';
 
 -- ----------------------------
 -- Records of fa_attachment
@@ -104,7 +104,7 @@ CREATE TABLE `fa_auth_group` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='分组表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='分组表';
 
 -- ----------------------------
 -- Records of fa_auth_group
@@ -127,7 +127,7 @@ CREATE TABLE `fa_auth_group_access` (
   UNIQUE KEY `uid_group_id` (`uid`,`group_id`),
   KEY `uid` (`uid`),
   KEY `group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限分组表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='权限分组表';
 
 -- ----------------------------
 -- Records of fa_auth_group_access
@@ -276,7 +276,7 @@ CREATE TABLE `fa_category` (
   PRIMARY KEY (`id`),
   KEY `weigh` (`weigh`,`id`),
   KEY `pid` (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='分类表';
 
 -- ----------------------------
 -- Records of fa_category
@@ -314,7 +314,7 @@ CREATE TABLE `fa_config` (
   `extend` varchar(255) NOT NULL DEFAULT '' COMMENT '扩展属性',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='系统配置';
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统配置';
 
 -- ----------------------------
 -- Records of fa_config
@@ -470,7 +470,7 @@ CREATE TABLE `fa_user_group` (
   `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `status` enum('normal','hidden') DEFAULT NULL COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员组表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员组表';
 
 -- ----------------------------
 -- Records of fa_user_group
@@ -495,7 +495,7 @@ CREATE TABLE `fa_user_rule` (
   `weigh` int(10) DEFAULT '0' COMMENT '权重',
   `status` enum('normal','hidden') DEFAULT NULL COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='会员规则表';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员规则表';
 
 -- ----------------------------
 -- Records of fa_user_rule
@@ -528,7 +528,7 @@ CREATE TABLE `fa_user_score_log` (
   `memo` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会员积分变动表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员积分变动表';
 
 -- ----------------------------
 -- Table structure for fa_user_token
@@ -540,7 +540,7 @@ CREATE TABLE `fa_user_token` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `expiretime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
   PRIMARY KEY (`token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员Token表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员Token表';
 
 -- ----------------------------
 -- Table structure for fa_version
@@ -559,7 +559,7 @@ CREATE TABLE `fa_version`  (
   `weigh` int(10) NOT NULL DEFAULT 0 COMMENT '权重',
   `status` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '版本表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT = '版本表';
 
 -- ----------------------------
 -- Table structure for fa_version

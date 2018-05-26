@@ -507,7 +507,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 type = typeof type === 'undefined' ? 'buttons' : type;
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];
-                var hidden, url, classname, icon, text, title, refresh, confirm, extend;
+                var hidden, visible, url, classname, icon, text, title, refresh, confirm, extend;
                 var fieldIndex = column.fieldIndex;
 
                 $.each(buttons, function (i, j) {
@@ -523,6 +523,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     if (typeof attr === 'undefined' || attr) {
                         hidden = typeof j.hidden === 'function' ? j.hidden.call(table, row, j) : (j.hidden ? j.hidden : false);
                         if (hidden) {
+                            return true;
+                        }
+                        visible = typeof j.visible === 'function' ? j.visible.call(table, row, j) : (j.visible ? j.visible : true);
+                        if (!visible) {
                             return true;
                         }
                         url = j.url ? j.url : '';
