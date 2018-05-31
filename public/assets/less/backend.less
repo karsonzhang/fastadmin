@@ -738,10 +738,7 @@ form.form-horizontal .control-label {
 .bootstrap-table .form-commonsearch .form-group {
   margin-left: 0;
   margin-right: 0;
-  > .control-label {
-    padding-left:0;
-    padding-right:0;
-  }
+  white-space: nowrap;
 }
 
 .toolbar {
@@ -764,6 +761,12 @@ form.form-horizontal .control-label {
 
 .bootstrap-table td.bs-checkbox {
   vertical-align: middle;
+}
+
+table.table-nowrap {
+  tbody > tr > td, thead > tr > th {
+    white-space: nowrap;
+  }
 }
 
 .fixed-table-container thead th .sortable {
