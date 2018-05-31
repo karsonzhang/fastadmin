@@ -53,6 +53,9 @@
         position: absolute;
         box-shadow: 0px 0px 2px #f11414;
     }
+    .form-userinfo .breadcrumb {
+        margin-bottom:10px;
+    }
 </style>
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
@@ -158,17 +161,21 @@
                     <strong>{:__('Warning')}</strong><br/>{:__('Login tips')}
                 </div>
                 <div class="form-group">
-                    <label for="inputAccount" class="col-lg-3 control-label">{:__('Username')}</label>
-                    <div class="col-lg-9">
-                        <input type="text" class="form-control" id="inputAccount" value=""
-                               placeholder="{:__('Your username or email')}">
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <input type="text" class="form-control" id="inputAccount" value=""
+                                   placeholder="{:__('Your username or email')}">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputPassword" class="col-lg-3 control-label">{:__('Password')}</label>
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                         <input type="password" class="form-control" id="inputPassword" value=""
                                placeholder="{:__('Your password')}">
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -177,13 +184,15 @@
 </script>
 <script id="userinfotpl" type="text/html">
     <div>
-        <form class="form-horizontal">
+        <form class="form-horizontal form-userinfo">
             <fieldset>
                 <div class="alert alert-dismissable alert-success">
                     <button type="button" class="close" data-dismiss="alert">×</button>
                     <strong>{:__('Warning')}</strong><br/>{:__('Logined tips', '<%=username%>')}
                 </div>
             </fieldset>
+            <div class="breadcrumb"><a href="https://www.fastadmin.net/user/myaddon.html" target="_blank"><i class="fa fa-money"></i> {:__('My addons')}</a></div>
+            <div class="breadcrumb"><a href="https://www.fastadmin.net/user/addon.html" target="_blank"><i class="fa fa-upload"></i> {:__('My posts')}</a></div>
         </form>
     </div>
 </script>
@@ -273,15 +282,15 @@
                                 </ul>
                             </span>
         <% }else{%>
-        <a href="javascript:;" class="btn btn-xs btn-info btn-upgrade" data-version="<%=item.version%>"><i
+        <a href="javascript:;" class="btn btn-xs btn-info btn-upgrade" title="{:__('Upgrade')}" data-version="<%=item.version%>"><i
                 class="fa fa-cloud"></i> {:__('Upgrade')}</a>
         <% }%>
         <% }%>
         <% if(addon.config){ %>
-        <a href="javascript:;" class="btn btn-xs btn-primary btn-config"><i class="fa fa-pencil"></i>
+        <a href="javascript:;" class="btn btn-xs btn-primary btn-config" title="{:__('Setting')}"><i class="fa fa-pencil"></i>
             {:__('Setting')}</a>
         <% } %>
-        <a href="javascript:;" class="btn btn-xs btn-danger btn-uninstall"><i class="fa fa-times"></i>
+        <a href="javascript:;" class="btn btn-xs btn-danger btn-uninstall" title="{:__('Uninstall')}"><i class="fa fa-times"></i>
             {:__('Uninstall')}</a>
         <% } %>
 

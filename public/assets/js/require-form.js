@@ -357,7 +357,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         return false;
                     }
                 }
-                var type = form.attr("method").toUpperCase();
+                var type = form.attr("method") ? form.attr("method").toUpperCase() : 'GET';
                 type = type && (type === 'GET' || type === 'POST') ? type : 'GET';
                 url = form.attr("action");
                 url = url ? url : location.href;

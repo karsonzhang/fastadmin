@@ -40,6 +40,12 @@ class Backend extends Controller
     protected $auth = null;
 
     /**
+     * 模型对象
+     * @var \think\Model
+     */
+    protected $model = null;
+
+    /**
      * 快速搜索时执行查找的字段
      */
     protected $searchFields = 'id';
@@ -52,7 +58,7 @@ class Backend extends Controller
     /**
      * 是否开启数据限制
      * 支持auth/personal
-     * 表示按权限判断/仅限个人 
+     * 表示按权限判断/仅限个人
      * 默认为禁用,若启用请务必保证表中存在admin_id字段
      */
     protected $dataLimit = false;
@@ -116,22 +122,18 @@ class Backend extends Controller
         // 设置当前请求的URI
         $this->auth->setRequestUri($path);
         // 检测是否需要验证登录
-        if (!$this->auth->match($this->noNeedLogin))
-        {
+        if (!$this->auth->match($this->noNeedLogin)) {
             //检测是否登录
-            if (!$this->auth->isLogin())
-            {
+            if (!$this->auth->isLogin()) {
                 Hook::listen('admin_nologin', $this);
                 $url = Session::get('referer');
                 $url = $url ? $url : $this->request->url();
                 $this->error(__('Please login first'), url('index/login', ['url' => $url]));
             }
             // 判断是否需要验证权限
-            if (!$this->auth->match($this->noNeedRight))
-            {
+            if (!$this->auth->match($this->noNeedRight)) {
                 // 判断控制器和方法判断是否有对应权限
-                if (!$this->auth->check($path))
-                {
+                if (!$this->auth->check($path)) {
                     Hook::listen('admin_nopermission', $this);
                     $this->error(__('You have no permission'), '');
                 }
@@ -139,15 +141,12 @@ class Backend extends Controller
         }
 
         // 非选项卡时重定向
-        if (!$this->request->isPost() && !IS_AJAX && !IS_ADDTABS && !IS_DIALOG && input("ref") == 'addtabs')
-        {
-            $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function($matches) {
+        if (!$this->request->isPost() && !IS_AJAX && !IS_ADDTABS && !IS_DIALOG && input("ref") == 'addtabs') {
+            $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function ($matches) {
                 return $matches[2] == '&' ? $matches[1] : '';
             }, $this->request->url());
-            if (Config::get('url_domain_deploy'))
-            {
-                if (stripos($url, $this->request->server('SCRIPT_NAME')) === 0)
-                {
+            if (Config::get('url_domain_deploy')) {
+                if (stripos($url, $this->request->server('SCRIPT_NAME')) === 0) {
                     $url = substr($url, strlen($this->request->server('SCRIPT_NAME')));
                 }
                 $url = url($url, '', false);
@@ -162,8 +161,7 @@ class Backend extends Controller
         $this->view->breadcrumb = $breadcrumb;
 
         // 如果有使用模板布局
-        if ($this->layout)
-        {
+        if ($this->layout) {
             $this->view->engine->layout('layout/' . $this->layout);
         }
 
@@ -220,7 +218,7 @@ class Backend extends Controller
     /**
      * 渲染配置信息
      * @param mixed $name 键名或数组
-     * @param mixed $value 值 
+     * @param mixed $value 值
      */
     protected function assignconfig($name, $value = '')
     {
@@ -244,48 +242,46 @@ class Backend extends Controller
         $order = $this->request->get("order", "DESC");
         $offset = $this->request->get("offset", 0);
         $limit = $this->request->get("limit", 0);
-        $filter = json_decode($filter, TRUE);
-        $op = json_decode($op, TRUE);
+        $filter = (array)json_decode($filter, TRUE);
+        $op = (array)json_decode($op, TRUE);
         $filter = $filter ? $filter : [];
         $where = [];
         $tableName = '';
-        if ($relationSearch)
-        {
-            if (!empty($this->model))
-            {
-                $tableName = $this->model->getQuery()->getTable() . ".";
+        if ($relationSearch) {
+            if (!empty($this->model)) {
+                $name = \think\Loader::parseName(basename(str_replace('\\', '/', get_class($this->model))));
+                $tableName = $name . '.';
             }
-            $sort = stripos($sort, ".") === false ? $tableName . $sort : $sort;
+            $sortArr = explode(',', $sort);
+            foreach ($sortArr as $index => & $item) {
+                $item = stripos($item, ".") === false ? $tableName . trim($item) : $item;
+            }
+            unset($item);
+            $sort = implode(',', $sortArr);
         }
         $adminIds = $this->getDataLimitAdminIds();
-        if (is_array($adminIds))
-        {
+        if (is_array($adminIds)) {
             $where[] = [$tableName . $this->dataLimitField, 'in', $adminIds];
         }
-        if ($search)
-        {
+        if ($search) {
             $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
-            foreach ($searcharr as $k => &$v)
-            {
+            foreach ($searcharr as $k => &$v) {
                 $v = stripos($v, ".") === false ? $tableName . $v : $v;
             }
             unset($v);
             $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
         }
-        foreach ($filter as $k => $v)
-        {
+        foreach ($filter as $k => $v) {
             $sym = isset($op[$k]) ? $op[$k] : '=';
-            if (stripos($k, ".") === false)
-            {
+            if (stripos($k, ".") === false) {
                 $k = $tableName . $k;
             }
             $v = !is_array($v) ? trim($v) : $v;
             $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
-            switch ($sym)
-            {
+            switch ($sym) {
                 case '=':
                 case '!=':
-                    $where[] = [$k, $sym, (string) $v];
+                    $where[] = [$k, $sym, (string)$v];
                     break;
                 case 'LIKE':
                 case 'NOT LIKE':
@@ -300,8 +296,9 @@ class Backend extends Controller
                     $where[] = [$k, $sym, intval($v)];
                     break;
                 case 'FINDIN':
+                case 'FINDINSET':
                 case 'FIND_IN_SET':
-                    $where[] = "FIND_IN_SET('{$v}', `{$k}`)";
+                    $where[] = "FIND_IN_SET('{$v}', " . ($this->relationSearch ? $k : '`' . str_replace('.', '`.`', $k) . '`') . ")";
                     break;
                 case 'IN':
                 case 'IN(...)':
@@ -315,13 +312,10 @@ class Backend extends Controller
                     if (stripos($v, ',') === false || !array_filter($arr))
                         continue;
                     //当出现一边为空时改变操作符
-                    if ($arr[0] === '')
-                    {
+                    if ($arr[0] === '') {
                         $sym = $sym == 'BETWEEN' ? '<=' : '>';
                         $arr = $arr[1];
-                    }
-                    else if ($arr[1] === '')
-                    {
+                    } else if ($arr[1] === '') {
                         $sym = $sym == 'BETWEEN' ? '>=' : '<';
                         $arr = $arr[0];
                     }
@@ -334,13 +328,10 @@ class Backend extends Controller
                     if (stripos($v, ',') === false || !array_filter($arr))
                         continue;
                     //当出现一边为空时改变操作符
-                    if ($arr[0] === '')
-                    {
+                    if ($arr[0] === '') {
                         $sym = $sym == 'RANGE' ? '<=' : '>';
                         $arr = $arr[1];
-                    }
-                    else if ($arr[1] === '')
-                    {
+                    } else if ($arr[1] === '') {
                         $sym = $sym == 'RANGE' ? '>=' : '<';
                         $arr = $arr[0];
                     }
@@ -360,15 +351,11 @@ class Backend extends Controller
                     break;
             }
         }
-        $where = function($query) use ($where) {
-            foreach ($where as $k => $v)
-            {
-                if (is_array($v))
-                {
+        $where = function ($query) use ($where) {
+            foreach ($where as $k => $v) {
+                if (is_array($v)) {
                     call_user_func_array([$query, 'where'], $v);
-                }
-                else
-                {
+                } else {
                     $query->where($v);
                 }
             }
@@ -383,17 +370,14 @@ class Backend extends Controller
      */
     protected function getDataLimitAdminIds()
     {
-        if (!$this->dataLimit)
-        {
+        if (!$this->dataLimit) {
             return null;
         }
-        if ($this->auth->isSuperAdmin())
-        {
+        if ($this->auth->isSuperAdmin()) {
             return null;
         }
         $adminIds = [];
-        if (in_array($this->dataLimit, ['auth', 'personal']))
-        {
+        if (in_array($this->dataLimit, ['auth', 'personal'])) {
             $adminIds = $this->dataLimit == 'auth' ? $this->auth->getChildrenAdminIds(true) : [$this->auth->id];
         }
         return $adminIds;
@@ -401,10 +385,10 @@ class Backend extends Controller
 
     /**
      * Selectpage的实现方法
-     * 
+     *
      * 当前方法只是一个比较通用的搜索匹配,请按需重载此方法来编写自己的搜索逻辑,$where按自己的需求写即可
      * 这里示例了所有的参数，所以比较复杂，实现上自己实现只需简单的几行即可
-     * 
+     *
      */
     protected function selectpage()
     {
@@ -412,7 +396,7 @@ class Backend extends Controller
         $this->request->filter(['strip_tags', 'htmlspecialchars']);
 
         //搜索关键词,客户端输入以空格分开,这里接收为数组
-        $word = (array) $this->request->request("q_word/a");
+        $word = (array)$this->request->request("q_word/a");
         //当前页
         $page = $this->request->request("pageNumber");
         //分页大小
@@ -420,7 +404,7 @@ class Backend extends Controller
         //搜索条件
         $andor = $this->request->request("andOr");
         //排序方式
-        $orderby = (array) $this->request->request("orderBy/a");
+        $orderby = (array)$this->request->request("orderBy/a");
         //显示的字段
         $field = $this->request->request("showField");
         //主键
@@ -428,59 +412,48 @@ class Backend extends Controller
         //主键值
         $primaryvalue = $this->request->request("keyValue");
         //搜索字段
-        $searchfield = (array) $this->request->request("searchField/a");
+        $searchfield = (array)$this->request->request("searchField/a");
         //自定义搜索条件
-        $custom = (array) $this->request->request("custom/a");
+        $custom = (array)$this->request->request("custom/a");
         $order = [];
-        foreach ($orderby as $k => $v)
-        {
+        foreach ($orderby as $k => $v) {
             $order[$v[0]] = $v[1];
         }
         $field = $field ? $field : 'name';
 
         //如果有primaryvalue,说明当前是初始化传值
-        if ($primaryvalue !== null)
-        {
+        if ($primaryvalue !== null) {
             $where = [$primarykey => ['in', $primaryvalue]];
-        }
-        else
-        {
-            $where = function($query) use($word, $andor, $field, $searchfield, $custom) {
-                foreach ($word as $k => $v)
-                {
-                    foreach ($searchfield as $m => $n)
-                    {
+        } else {
+            $where = function ($query) use ($word, $andor, $field, $searchfield, $custom) {
+                foreach ($word as $k => $v) {
+                    foreach ($searchfield as $m => $n) {
                         $query->where($n, "like", "%{$v}%", $andor);
                     }
                 }
-                if ($custom && is_array($custom))
-                {
-                    foreach ($custom as $k => $v)
-                    {
+                if ($custom && is_array($custom)) {
+                    foreach ($custom as $k => $v) {
                         $query->where($k, '=', $v);
                     }
                 }
             };
         }
         $adminIds = $this->getDataLimitAdminIds();
-        if (is_array($adminIds))
-        {
+        if (is_array($adminIds)) {
             $this->model->where($this->dataLimitField, 'in', $adminIds);
         }
         $list = [];
         $total = $this->model->where($where)->count();
-        if ($total > 0)
-        {
-            if (is_array($adminIds))
-            {
+        if ($total > 0) {
+            if (is_array($adminIds)) {
                 $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
             $list = $this->model->where($where)
-                    ->order($order)
-                    ->page($page, $pagesize)
-                    ->field("{$primarykey},{$field}")
-                    ->field("password,salt", true)
-                    ->select();
+                ->order($order)
+                ->page($page, $pagesize)
+                ->field("{$primarykey},{$field}")
+                ->field("password,salt", true)
+                ->select();
         }
         //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
         return json(['list' => $list, 'total' => $total]);

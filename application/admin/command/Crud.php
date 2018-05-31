@@ -1215,7 +1215,7 @@ EOD;
                 $v = "__('" . $v . "')";
         }
         unset($v);
-        $searchList = json_encode($itemArr, JSON_FORCE_OBJECT);
+        $searchList = json_encode($itemArr, JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
         $searchList = str_replace(['":"', '"}', ')","'], ['":', '}', '),"'], $searchList);
         if ($itemArr && !$extend) {
             $html .= ", searchList: " . $searchList;

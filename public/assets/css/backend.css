@@ -649,6 +649,14 @@ form.form-horizontal .control-label {
 .bootstrap-table .fa-toggle-on.fa-2x {
   font-size: 1.86em;
 }
+.bootstrap-table .form-commonsearch .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+.bootstrap-table .form-commonsearch .form-group > .control-label {
+  padding-left: 0;
+  padding-right: 0;
+}
 .toolbar {
   margin-top: 10px;
   margin-bottom: 10px;

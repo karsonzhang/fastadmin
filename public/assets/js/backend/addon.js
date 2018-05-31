@@ -173,11 +173,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             // 会员信息
             $(document).on("click", ".btn-userinfo", function () {
+                var that = this;
                 var userinfo = Controller.api.userinfo.get();
                 if (!userinfo) {
                     Layer.open({
                         content: Template("logintpl", {}),
-                        area: ['400px', '330px'],
+                        area: ['430px', '350px'],
                         title: __('Login FastAdmin'),
                         resize: false,
                         btn: [__('Login'), __('Register')],
@@ -206,33 +207,43 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         }
                     });
                 } else {
-                    var userinfo = Controller.api.userinfo.get();
-                    if (!userinfo) {
-                        Layer.alert(__('You\'re not login'));
-                        return false;
-                    }
-                    Layer.open({
-                        content: Template("userinfotpl", userinfo),
-                        area: ['400px', '330px'],
-                        title: __('Userinfo'),
-                        resize: false,
-                        btn: [__('Logout'), __('Cancel')],
-                        yes: function () {
-                            Fast.api.ajax({
-                                url: Config.fastadmin.api_url + '/user/logout',
-                                dataType: 'jsonp',
-                                data: {uid: userinfo.id, token: userinfo.token}
-                            }, function (data, ret) {
-                                Controller.api.userinfo.set(null);
-                                Layer.closeAll();
-                                Layer.alert(ret.msg);
-                            }, function (data, ret) {
-                                Controller.api.userinfo.set(null);
-                                Layer.closeAll();
-                                Layer.alert(ret.msg);
-                            });
+                    Fast.api.ajax({
+                        url: Config.fastadmin.api_url + '/user/index',
+                        dataType: 'jsonp',
+                        data: {
+                            user_id: userinfo.id,
+                            token: userinfo.token,
                         }
+                    }, function (data) {
+                        Layer.open({
+                            content: Template("userinfotpl", userinfo),
+                            area: ['430px', '360px'],
+                            title: __('Userinfo'),
+                            resize: false,
+                            btn: [__('Logout'), __('Cancel')],
+                            yes: function () {
+                                Fast.api.ajax({
+                                    url: Config.fastadmin.api_url + '/user/logout',
+                                    dataType: 'jsonp',
+                                    data: {uid: userinfo.id, token: userinfo.token}
+                                }, function (data, ret) {
+                                    Controller.api.userinfo.set(null);
+                                    Layer.closeAll();
+                                    Layer.alert(ret.msg);
+                                }, function (data, ret) {
+                                    Controller.api.userinfo.set(null);
+                                    Layer.closeAll();
+                                    Layer.alert(ret.msg);
+                                });
+                            }
+                        });
+                        return false;
+                    }, function (data) {
+                        Controller.api.userinfo.set(null);
+                        $(that).trigger('click');
+                        return false;
                     });
+
                 }
             });
 
@@ -278,6 +289,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             }
                         });
                     } else if (ret && ret.code === -2) {
+                        //如果登录已经超时,重新提醒登录
+                        if (uid && uid != ret.data.uid) {
+                            Controller.api.userinfo.set(null);
+                            $(".operate[data-name='" + name + "'] .btn-install").trigger("click");
+                            return;
+                        }
                         top.Fast.api.open(ret.data.payurl, __('Pay now'), {
                             area: ["650px", "700px"],
                             end: function () {
@@ -425,7 +442,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Layer.alert(__('Please disable addon first'), {icon: 7});
                     return false;
                 }
-                Layer.confirm(__('Uninstall tips'), function () {
+                Layer.confirm(__('Uninstall tips', Config['addons'][name].title), function () {
                     uninstall(name, false);
                 });
             });
@@ -452,7 +469,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 }
                 var version = $(this).data("version");
 
-                Layer.confirm(__('Upgrade tips'), function () {
+                Layer.confirm(__('Upgrade tips', Config['addons'][name].title), function () {
                     upgrade(name, version);
                 });
             });
@@ -510,7 +527,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     return value;
                 },
                 version: function (value, row, index) {
-                    return row.addon && row.addon.version != row.version ? '<span class="releasetips" data-toggle="tooltip" title="' + __('New version') + ':' + row.version + '">' + row.addon.version + '<i></i></span>' : row.version;
+                    return row.addon && row.addon.version != row.version ? '<a href="' + row.url + '?version=' + row.version + '" target="_blank"><span class="releasetips text-primary" data-toggle="tooltip" title="' + __('New version tips', row.version) + '">' + row.addon.version + '<i></i></span></a>' : row.version;
                 },
                 home: function (value, row, index) {
                     return row.addon ? '<a href="' + row.addon.url + '" data-toggle="tooltip" title="' + __('View addon index page') + '" target="_blank"><i class="fa fa-home text-primary"></i></a>' : '<a href="javascript:;"><i class="fa fa-home text-gray"></i></a>';
