@@ -1,55 +1,217 @@
-<div class="container">
-    <div class="row">
-        <div class="col-xs-6">
+<!DOCTYPE html>
+<html>
 
-            <a href="{:url('admin/index/login')}" class="btn btn-block btn-lg btn-success">FastAdmin后台演示</a>
-        </div>
-        <div class="col-xs-6">
-            <a href="http://git.oschina.net/karson/fastadmin?ref=fastadmin" target="_blank" class="btn btn-block btn-lg btn-info">FastAdmin源码下载</a>
-        </div>
-    </div>
-    <div class="page-header"><h3>组件</h3></div>
+    <head>
 
-    <div class="row" id="component-list">
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <a href="{:url('index/user/login')}"><img style="height: 200px; width: 100%; display: block;" src="__CDN__/assets/img/third.jpg" data-holder-rendered="true"></a>
-                <div class="caption">
-                    <h3>第三方登录</h3>
-                    <p>FastAdmin中自带第三方登录扩展组件,包括微博登录、QQ登录、微信登录,可极速进行第三方登录的融合,同时系统中已提供注册登录的代码</p>
-                    <p><a href="{:url('index/user/login')}" class="btn btn-primary" role="button">预览</a> <a href="http://git.oschina.net/karson/fastadmin" class="btn btn-default" role="button">下载</a></p>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>FastAdmin - {:__('The fastest framework based on ThinkPHP5 and Bootstrap')}</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="__CDN__/assets/css/index.css" rel="stylesheet">
+
+        <!-- Plugin CSS -->
+        <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="//cdn.bootcss.com/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="//cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+            <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body id="page-top">
+
+        <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-menu">
+                        <span class="sr-only">Toggle navigation</span><i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand page-scroll" href="#page-top"><img src="__CDN__/assets/img/logo.png" style="width:200px;" alt=""></a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse-menu">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="https://www.fastadmin.net" target="_blank">{:__('Home')}</a></li>
+                        <li><a href="https://www.fastadmin.net/store.html" target="_blank">{:__('Store')}</a></li>
+                        <li><a href="https://www.fastadmin.net/service.html" target="_blank">{:__('Services')}</a></li>
+                        <li><a href="https://www.fastadmin.net/download.html" target="_blank">{:__('Download')}</a></li>
+                        <li><a href="https://www.fastadmin.net/demo.html" target="_blank">{:__('Demo')}</a></li>
+                        <li><a href="https://www.fastadmin.net/donate.html" target="_blank">{:__('Donation')}</a></li>
+                        <li><a href="https://forum.fastadmin.net" target="_blank">{:__('Forum')}</a></li>
+                        <li><a href="https://doc.fastadmin.net" target="_blank">{:__('Docs')}</a></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+
+        <header>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="header-content">
+                            <div class="header-content-inner">
+                                <h1>FastAdmin</h1>
+                                <h3>{:__('The fastest framework based on ThinkPHP5 and Bootstrap')}</h3>
+                                <a href="{:url('admin/index/login')}" class="btn btn-warning btn-xl page-scroll">{:__('Go to Dashboard')}</a>
+                                <a href="{:url('index/user/index')}" class="btn btn-outline btn-xl page-scroll">{:__('Go to Member center')}</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <a href="{:url('index/user/login')}"><img style="height: 200px; width: 100%; display: block;" src="__CDN__/assets/img/ucenter.jpg" data-holder-rendered="true"></a>
-                <div class="caption">
-                    <h3>Ucenter整合登录</h3>
-                    <p>FastAdmin中基于Ucenter融合一套账号同步登录注册退出的方案,同时提供修改版Ucenter和Discuz论坛代码下载,同时适应于PHP7,此版本改动较大,建议适用于新系统的开发</p>
-                    <p><a href="{:url('index/user/login')}" class="btn btn-primary" role="button">预览</a> <a href="http://git.oschina.net/karson/fastadmin" class="btn btn-default" role="button">下载</a></p>
+        </header>
+
+        <section id="features" class="features">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <div class="section-heading">
+                            <h2>{:__('Features')}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="feature-item">
+                                        <i class="icon-user text-primary"></i>
+                                        <h3>{:__('Auth')}</h3>
+                                        <p class="text-muted">{:__('Auth tips')}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-item">
+                                        <i class="icon-screen-smartphone text-primary"></i>
+                                        <h3>{:__('Responsive')}</h3>
+                                        <p class="text-muted">{:__('Responsive tips')}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-item">
+                                        <i class="icon-present text-primary"></i>
+                                        <h3>{:__('Languages')}</h3>
+                                        <p class="text-muted">{:__('Languages tips')}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-item">
+                                        <i class="icon-layers text-primary"></i>
+                                        <h3>{:__('Module')}</h3>
+                                        <p class="text-muted">{:__('Module tips')}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-item">
+                                        <i class="icon-docs text-primary"></i>
+                                        <h3>{:__('CRUD')}</h3>
+                                        <p class="text-muted">{:__('CRUD tips')}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-item">
+                                        <i class="icon-puzzle text-primary"></i>
+                                        <h3>{:__('Extension')}</h3>
+                                        <p class="text-muted">{:__('Extension tips')}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <a href="{:url('index/demo/qrcode')}"><img style="height: 200px; width: 100%; display: block;" src="__CDN__/assets/img/qrcode.jpg" data-holder-rendered="true"></a>
-                <div class="caption">
-                    <h3>二维码生成</h3>
-                    <p>基于第三方组件增加了一个二维码的生成示例,可快速的调整文字、标签、Logo的大小、颜色、字体等等。此外还可对标签位置、容错率等进行相关设置。</p>
-                    <p><a href="{:url('index/demo/qrcode')}" class="btn btn-primary" role="button">预览</a> <a href="http://git.oschina.net/karson/fastadmin" class="btn btn-default" role="button">下载</a></p>
+        </section>
+
+        <section class="cta">
+            <div class="cta-content">
+                <div class="container">
+                    <h2>{:__('Do not hesitate')}<br>{:__('Start to act')}</h2>
+                    <a href="https://doc.fastadmin.net/docs/contributing.html" class="btn btn-outline btn-xl page-scroll">{:__('Contribution')}</a>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <a href="{:url('index/demo/bootstrap')}"><img style="height: 200px; width: 100%; display: block;" src="__CDN__/assets/img/bootstrap.jpg" data-holder-rendered="true"></a>
-                <div class="caption">
-                    <h3>Bootstrap组件</h3>
-                    <p>由于FastAdmin对Bootstrap进行了大量的二次开发,对Bootstrap的组件样式有许多更改,你可以直接在这里预览到Bootstrap的部分组件</p>
-                    <p><a href="{:url('index/demo/bootstrap')}" class="btn btn-primary" role="button">预览</a> <a href="http://git.oschina.net/karson/fastadmin" class="btn btn-default" role="button">下载</a></p>
-                </div>
+            <div class="overlay"></div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <!-- FastAdmin是开源程序，建议在您的网站底部保留一个FastAdmin的链接 -->
+                <p>&copy; 2017-2018 <a href="https://www.fastadmin.net" target="_blank">FastAdmin</a>. All Rights Reserved.</p>
+                <ul class="list-inline">
+                    <li>
+                        <a href="https://gitee.com/karson/fastadmin">{:__('Gitee')}</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/karsonzhang/fastadmin">{:__('Github')}</a>
+                    </li>
+                    <li>
+                        <a href="https://shang.qq.com/wpa/qunwpa?idkey=46c326e570d0f97cfae1f8257ae82322192ec8841c79b2136446df0b3b62028c">{:__('QQ group')}</a>
+                    </li>
+                </ul>
             </div>
-        </div>
-    </div>
-</div>
+        </footer>
+
+        <!-- jQuery -->
+        <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <!-- Plugin JavaScript -->
+        <script src="//cdn.bootcss.com/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+        <script>
+            $(function () {
+                $(window).on("scroll", function () {
+                    $("#mainNav").toggleClass("affix", $(window).height() - $(window).scrollTop() <= 50);
+                });
+
+                //发送版本统计信息
+                try {
+                    var installed = localStorage.getItem("installed");
+                    if (!installed) {
+                        $.ajax({
+                            url: "{$Think.config.fastadmin.api_url}/statistics/installed",
+                            data: {
+                                version: "{:config('fastadmin.version')}",
+                                os: "{$Think.PHP_OS}",
+                                sapi: "{$Think.PHP_SAPI}",
+                                tpversion: "{$Think.THINK_VERSION}",
+                                phpversion: "{$Think.PHP_VERSION}",
+                                software: "{$Request.server.SERVER_SOFTWARE}",
+                                url: location.href,
+                            },
+                            dataType: 'jsonp',
+                        });
+                        localStorage.setItem("installed", true);
+                    }
+                } catch (e) {
+
+                }
+
+            });
+        </script>
+
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?f8d0a8c400404989e195270b0bbf060a";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+
+    </body>
+
+</html>

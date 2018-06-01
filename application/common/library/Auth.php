@@ -3,49 +3,42 @@
 namespace app\common\library;
 
 use app\common\model\User;
-use app\common\model\UserThird;
+use app\common\model\UserRule;
 use fast\Random;
-use fast\ucenter\client\Client;
-use think\Cookie;
+use think\Config;
 use think\Db;
-use think\Exception;
+use think\Hook;
 use think\Request;
 use think\Validate;
 
-/**
- * Auth类
- */
-class Auth implements \JsonSerializable, \ArrayAccess
+class Auth
 {
 
-    const ERR_ACCOUNT_IS_INCORRECT = 'Account is incorrect';
-    const ERR_ACCOUNT_NOT_EXIST = 'Account not exist';
-    const ERR_USERNAME_IS_INCORRECT = 'Username is incorrect';
-    const ERR_EMAIL_IS_INCORRECT = 'Email is incorrect';
-    const ERR_PASSWORD_IS_INCORRECT = 'Password is incorrect';
-    const ERR_USERNAME_OR_PASSWORD_IS_INCORRECT = 'Username or password is incorrect';
-    const ERR_USERNAME_ALREADY_EXIST = 'Username already exist';
-    const ERR_EMAIL_ALREADY_EXIST = 'Email already exist';
-    const ERR_MOBILE_ALREADY_EXIST = 'Mobile already exist';
-    const ERR_ACCOUNT_IS_LOCKED = 'Account is locked';
-    const ERR_USERNAME_OR_PASSWORD_IS_MODIFIED = 'Username or password is modified';
-    const ERR_YOU_ARE_NOT_LOGGED_IN = 'You are not logged in';
-    const ERR_ACCOUNT_ALREADY_LOGGED_IN_AT_ANOTHER_PLACE = 'Account already logged in at another';
-
     protected static $instance = null;
-    private $_error = '';
-    private $_logined = FALSE;
-    private $user = NULL;
-    private $keeptime = 0;
-    private $requestUri = '';
+    protected $_error = '';
+    protected $_logined = FALSE;
+    protected $_user = NULL;
+    protected $_token = '';
+    //Token默认有效时长
+    protected $keeptime = 2592000;
+    protected $requestUri = '';
+    protected $rules = [];
+    //默认配置
+    protected $config = [];
+    protected $options = [];
+    protected $allowFields = ['id', 'username', 'nickname', 'mobile', 'avatar', 'score'];
 
-    public function __construct()
+    public function __construct($options = [])
     {
-        $this->user = new User;
+        if ($config = Config::get('user'))
+        {
+            $this->options = array_merge($this->config, $config);
+        }
+        $this->options = array_merge($this->config, $options);
     }
 
     /**
-     * 初始化
+     * 
      * @param array $options 参数
      * @return Auth
      */
@@ -60,22 +53,72 @@ class Auth implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * 
+     * 获取User模型
      * @return User
      */
-    public function getModel()
+    public function getUser()
     {
-        return $this->user;
+        return $this->_user;
     }
 
+    /**
+     * 兼容调用user模型的属性
+     * 
+     * @param string $name
+     * @return mixed
+     */
     public function __get($name)
     {
-        return $this->check() ? $this->user->$name : NULL;
+        return $this->_user ? $this->_user->$name : NULL;
     }
 
-    public function __call($name, $arguments)
+    /**
+     * 根据Token初始化
+     *
+     * @param string       $token    Token
+     * @return boolean
+     */
+    public function init($token)
     {
-        return call_user_func_array([$this->user, $name], $arguments);
+        if ($this->_logined)
+        {
+            return TRUE;
+        }
+        if ($this->_error)
+            return FALSE;
+        $data = Token::get($token);
+        if (!$data)
+        {
+            return FALSE;
+        }
+        $user_id = intval($data['user_id']);
+        if ($user_id > 0)
+        {
+            $user = User::get($user_id);
+            if (!$user)
+            {
+                $this->setError('Account not exist');
+                return FALSE;
+            }
+            if ($user['status'] != 'normal')
+            {
+                $this->setError('Account is locked');
+                return FALSE;
+            }
+            $this->_user = $user;
+            $this->_logined = TRUE;
+            $this->_token = $token;
+
+            //初始化成功的事件
+            Hook::listen("user_init_successed", $this->_user);
+
+            return TRUE;
+        }
+        else
+        {
+            $this->setError('You are not logged in');
+            return FALSE;
+        }
     }
 
     /**
@@ -85,59 +128,40 @@ class Auth implements \JsonSerializable, \ArrayAccess
      * @param string $password  密码
      * @param string $email     邮箱
      * @param string $mobile    手机号
-     * @param string $extend    扩展参数
+     * @param array $extend    扩展参数
      * @return boolean
      */
-    public function register($username, $password, $email = '', $mobile = '', $extend = [], $keeptime = 0, $sync = TRUE)
+    public function register($username, $password, $email = '', $mobile = '', $extend = [])
     {
-        $rule = [
-            'username' => 'require|length:6,30',
-            'password' => 'require|length:6,30',
-            'email'    => 'email',
-            'mobile'   => 'regex:/^1\d{10}$/',
-        ];
-
-        $msg = [
-            'username.require' => __('Username can not be empty'),
-            'username.length'  => __('Username must be 6 to 30 characters'),
-            'password.require' => __('Password can not be empty'),
-            'password.length'  => __('Password must be 6 to 30 characters'),
-            'email'            => __('Email is incorrect'),
-            'mobile'           => __('Mobile is incorrect'),
-        ];
-        $data = [
-            'username' => $username,
-            'password' => $password,
-            'email'    => $email,
-            'mobile'   => $mobile,
-        ];
-        $validate = new Validate($rule, $msg);
-        $result = $validate->check($data);
-        if (!$result)
-        {
-            $this->setError($validate->getError());
-            return FALSE;
-        }
-
         // 检测用户名或邮箱、手机号是否存在
         if (User::getByUsername($username))
         {
-            $this->setError(__('Username already exist'));
+            $this->setError('Username already exist');
             return FALSE;
         }
         if ($email && User::getByEmail($email))
         {
-            $this->setError(__('Email already exist'));
+            $this->setError('Email already exist');
             return FALSE;
         }
         if ($mobile && User::getByMobile($mobile))
         {
-            $this->setError(__('Mobile already exist'));
+            $this->setError('Mobile already exist');
             return FALSE;
         }
 
         $ip = request()->ip();
         $time = time();
+
+        $data = [
+            'username' => $username,
+            'password' => $password,
+            'email'    => $email,
+            'mobile'   => $mobile,
+            'level'    => 1,
+            'score'    => 0,
+            'avatar'   => '',
+        ];
         $params = array_merge($data, [
             'nickname'  => $username,
             'salt'      => Random::alnum(),
@@ -152,14 +176,14 @@ class Auth implements \JsonSerializable, \ArrayAccess
         $params = array_merge($params, $extend);
 
         ////////////////同步到Ucenter////////////////
-        if (defined('UC_STATUS') && UC_STATUS && $sync)
+        if (defined('UC_STATUS') && UC_STATUS)
         {
-            $uc = new Client();
+            $uc = new \addons\ucenter\library\client\Client();
             $user_id = $uc->uc_user_register($username, $password, $email);
             // 如果小于0则说明发生错误
             if ($user_id <= 0)
             {
-                $this->setError($user_id > -4 ? self::ERR_USERNAME_IS_INCORRECT : self::ERR_EMAIL_IS_INCORRECT);
+                $this->setError($user_id > -4 ? 'Username is incorrect' : 'Email is incorrect');
                 return FALSE;
             }
             else
@@ -172,17 +196,24 @@ class Auth implements \JsonSerializable, \ArrayAccess
         Db::startTrans();
         try
         {
-            $ret = $this->user->save($params);
+            $user = User::create($params);
             Db::commit();
 
             // 此时的Model中只包含部分数据
-            $this->user = $this->user->get($this->user->id);
+            $this->_user = User::get($user->id);
 
-            $this->keeptime($keeptime);
-            return $this->syncLogin();
+            //设置Token
+            $this->_token = Random::uuid();
+            Token::set($this->_token, $user->id, $this->keeptime);
+
+            //注册成功的事件
+            Hook::listen("user_register_successed", $this->_user);
+
+            return TRUE;
         }
         catch (Exception $e)
         {
+            $this->setError($e->getMessage());
             Db::rollback();
             return FALSE;
         }
@@ -193,133 +224,218 @@ class Auth implements \JsonSerializable, \ArrayAccess
      *
      * @param string    $account    账号,用户名、邮箱、手机号
      * @param string    $password   密码
-     * @param int       $keeptime   有效时长,默认为浏览器关闭
-     * @return array
+     * @return boolean
      */
-    public function login($account, $password, $keeptime = 0, $sync = TRUE)
+    public function login($account, $password)
     {
         $field = Validate::is($account, 'email') ? 'email' : (Validate::regex($account, '/^1\d{10}$/') ? 'mobile' : 'username');
-        $user = $this->user->get([$field => $account]);
-        if ($user)
+        $user = User::get([$field => $account]);
+        if (!$user)
         {
-            if ($user->status != 'normal')
-            {
-                $this->setError(self::ERR_ACCOUNT_IS_LOCKED);
-                return FALSE;
-            }
-            if ($user->password != $this->getEncryptPassword($password, $user->salt))
-            {
-                $this->setError(self::ERR_PASSWORD_IS_INCORRECT);
-                return FALSE;
-            }
-
-            $this->user = $user;
-
-            // 设置登录有效时长
-            $this->keeptime($keeptime);
-
-            return $this->syncLogin($sync);
-        }
-        else
-        {
-            $this->setError(self::ERR_ACCOUNT_IS_INCORRECT);
+            $this->setError('Account is incorrect');
             return FALSE;
         }
-    }
 
-    /**
-     * 注销登录退出
-     * @return bool
-     */
-    public function logout($token = NULL)
-    {
-        //设置登录标识
-        $this->_logined = FALSE;
-        $token = is_null($token) ? Cookie::get('token') : $token;
-        Token::delete($token);
-        Cookie::delete('user_id');
-        //Cookie::del('username');
-        Cookie::delete('token');
+        if ($user->status != 'normal')
+        {
+            $this->setError('Account is locked');
+            return FALSE;
+        }
+        if ($user->password != $this->getEncryptPassword($password, $user->salt))
+        {
+            $this->setError('Password is incorrect');
+            return FALSE;
+        }
+
+        //直接登录会员
+        $this->direct($user->id);
+
         return TRUE;
     }
 
     /**
-     * 生成Token
-     * @return string
+     * 注销
+     * 
+     * @return boolean
      */
-    public function token()
+    public function logout()
     {
-        //$token = Encrypt::aesEncode($this->keeptime . '|' . $expiretime, Config::get('encrypt', 'aes_key'), TRUE);
-        $token = Random::uuid();
-        Token::set($token, $this->user->id, $this->keeptime);
-        return $token;
+        if (!$this->_logined)
+        {
+            $this->setError('You are not logged in');
+            return false;
+        }
+        //设置登录标识
+        $this->_logined = FALSE;
+        //删除Token
+        Token::delete($this->_token);
+        //注销成功的事件
+        Hook::listen("user_logout_successed", $this->_user);
+        return TRUE;
     }
 
     /**
-     * 初始化
-     *
-     * @param int       $user_id    会员ID,默认从Cookie中取
-     * @param string    $token      会员Token,默认从Cookie中取
-     *
+     * 修改密码
+     * @param string    $newpassword        新密码
+     * @param string    $oldpassword        旧密码
+     * @param bool      $ignoreoldpassword  忽略旧密码
      * @return boolean
      */
-    public function init($user_id = NULL, $token = NULL)
+    public function changepwd($newpassword, $oldpassword = '', $ignoreoldpassword = false)
     {
-        $user_id = $user_id ? $user_id : Cookie::get('user_id');
-        $user_id = intval($user_id);
-        if ($user_id > 0)
+        if (!$this->_logined)
         {
-            if ($this->_error)
-                return FALSE;
-            $user = $this->get($user_id);
-            if (!$user)
+            $this->setError('You are not logged in');
+            return false;
+        }
+        //判断旧密码是否正确
+        if ($this->_user->password == $this->getEncryptPassword($oldpassword, $this->_user->salt) || $ignoreoldpassword)
+        {
+            $salt = Random::alnum();
+            $newpassword = $this->getEncryptPassword($newpassword, $salt);
+            $this->_user->save(['password' => $newpassword, 'salt' => $salt]);
+
+            Token::delete($this->_token);
+            //修改密码成功的事件
+            Hook::listen("user_changepwd_successed", $this->_user);
+            return true;
+        }
+        else
+        {
+            $this->setError('Password is incorrect');
+            return false;
+        }
+    }
+
+    /**
+     * 直接登录账号
+     * @param int $user_id
+     * @return boolean
+     */
+    public function direct($user_id)
+    {
+        $user = User::get($user_id);
+        if ($user)
+        {
+            ////////////////同步到Ucenter////////////////
+            if (defined('UC_STATUS') && UC_STATUS)
             {
-                $this->setError(self::ERR_ACCOUNT_NOT_EXIST);
-                return FALSE;
+                $uc = new \addons\ucenter\library\client\Client();
+                $re = $uc->uc_user_login($this->user->id, $this->user->password . '#split#' . $this->user->salt, 3);
+                // 如果小于0则说明发生错误
+                if ($re <= 0)
+                {
+                    $this->setError('Username or password is incorrect');
+                    return FALSE;
+                }
             }
-            if ($user['status'] != 'normal')
+
+            $ip = request()->ip();
+            $time = time();
+
+            //判断连续登录和最大连续登录
+            if ($user->logintime < \fast\Date::unixtime('day'))
             {
-                $this->setError(self::ERR_ACCOUNT_IS_LOCKED);
-                return FALSE;
+                $user->successions = $user->logintime < \fast\Date::unixtime('day', -1) ? 1 : $user->successions + 1;
+                $user->maxsuccessions = max($user->successions, $user->maxsuccessions);
             }
-            $token = $token ? $token : Cookie::get('token');
-            if (!Token::check($token))
-            {
-                return FALSE;
-            }
-            if (Token::identity($token) != $user['id'])
-            {
-                return FALSE;
-            }
-            $this->user = $user;
+
+            $user->prevtime = $user->logintime;
+            //记录本次登录的IP和时间
+            $user->loginip = $ip;
+            $user->logintime = $time;
+
+            $user->save();
+
+            $this->_user = $user;
+
+            $this->_token = Random::uuid();
+            Token::set($this->_token, $user->id, $this->keeptime);
+
             $this->_logined = TRUE;
+
+            //登录成功的事件
+            Hook::listen("user_login_successed", $this->_user);
             return TRUE;
         }
         else
         {
-            $this->setError(self::ERR_YOU_ARE_NOT_LOGGED_IN);
             return FALSE;
         }
     }
 
     /**
-     * 检测是否登录
-     *
+     * 检测是否是否有对应权限
+     * @param string $path      控制器/方法
+     * @param string $module    模块 默认为当前模块
      * @return boolean
      */
-    public function check()
+    public function check($path = NULL, $module = NULL)
     {
-        return $this->_logined;
+        if (!$this->_logined)
+            return false;
+
+        $ruleList = $this->getRuleList();
+        $rules = [];
+        foreach ($ruleList as $k => $v)
+        {
+            $rules[] = $v['name'];
+        }
+        $url = ($module ? $module : request()->module()) . '/' . (is_null($path) ? $this->getRequestUri() : $path);
+        $url = strtolower(str_replace('.', '/', $url));
+        return in_array($url, $rules) ? TRUE : FALSE;
     }
 
     /**
-     * 检测是否登录
-     *
+     * 判断是否登录
      * @return boolean
      */
     public function isLogin()
     {
-        return $this->check();
+        if ($this->_logined)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 获取当前Token
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->_token;
+    }
+
+    /**
+     * 获取会员基本信息
+     */
+    public function getUserinfo()
+    {
+        $data = $this->_user->toArray();
+        $allowFields = $this->getAllowFields();
+        $userinfo = array_intersect_key($data, array_flip($allowFields));
+        $userinfo = array_merge($userinfo, Token::get($this->_token));
+        return $userinfo;
+    }
+
+    /**
+     * 获取会员组别规则列表
+     * @return array
+     */
+    public function getRuleList()
+    {
+        if ($this->rules)
+            return $this->rules;
+        $group = $this->_user->group;
+        if (!$group)
+        {
+            return [];
+        }
+        $rules = explode(',', $group->rules);
+        $this->rules = UserRule::where('status', 'normal')->where('id', 'in', $rules)->field('id,pid,name,title,ismenu')->select();
+        return $this->rules;
     }
 
     /**
@@ -341,142 +457,80 @@ class Auth implements \JsonSerializable, \ArrayAccess
     }
 
     /**
-     * 第三方登录
-     * @param string    $platform
-     * @param array     $params
-     * @param int       $keeptime
-     * @return boolean
+     * 获取允许输出的字段
+     * @return array
      */
-    public function connect($platform, $params = [], $keeptime = 0)
+    public function getAllowFields()
     {
-        $time = time();
-        $values = [
-            'platform'      => $platform,
-            'openid'        => $params['openid'],
-            'openname'      => isset($params['userinfo']['nickname']) ? $params['userinfo']['nickname'] : '',
-            'access_token'  => $params['access_token'],
-            'refresh_token' => $params['refresh_token'],
-            'expires_in'    => $params['expires_in'],
-            'logintime'     => $time,
-            'expiretime'    => $time + $params['expires_in'],
-        ];
+        return $this->allowFields;
+    }
 
-        $this->keeptime($keeptime);
-        $userthird = UserThird::get(['platform' => $platform, 'openid' => $params['openid']]);
-        if ($userthird)
-        {
-            $this->user = $this->user->get($userthird['user_id']);
-            if (!$this->user)
-            {
-                return FALSE;
-            }
-            $userthird->save($values);
-            return $this->syncLogin();
-        }
-        else
-        {
-            // 先随机一个用户名,随后再变更为u+数字id
-            $username = Random::alnum(20);
-            $password = Random::alnum(6);
-            // 默认注册一个会员
-            $result = $this->register($username, $password, '', '', [], $keeptime);
-            if (!$result)
-            {
-                return FALSE;
-            }
-            $userarr = ['username' => 'u' . $this->user->id];
-            if (isset($params['userinfo']['nickname']))
-                $userarr['nickname'] = $params['userinfo']['nickname'];
-            if (isset($params['userinfo']['avatar']))
-                $userarr['avatar'] = $params['userinfo']['avatar'];
-
-            // 更新会员资料
-            $this->user->save($userarr);
-
-            // 保存第三方信息
-            $values['user_id'] = $this->user->id;
-            UserThird::create($values);
-
-            // 写入登录Cookies和Token
-            $this->writeStatus();
-            return TRUE;
-        }
+    /**
+     * 设置允许输出的字段
+     * @param array $fields
+     */
+    public function setAllowFields($fields)
+    {
+        $this->allowFields = $fields;
     }
 
     /**
      * 删除一个指定会员
-     * @param int $user_id
-     * @param bool $sync 是否同步删除
+     * @param int $user_id 会员ID
+     * @return boolean
      */
-    public function delete($user_id, $sync = TRUE)
+    public function delete($user_id)
     {
-        $user = $this->user->get($user_id);
+        $user = User::get($user_id);
         if (!$user)
         {
             return FALSE;
         }
 
         ////////////////同步到Ucenter////////////////
-        if (defined('UC_STATUS') && UC_STATUS && $sync)
+        if (defined('UC_STATUS') && UC_STATUS)
         {
-            $uc = new Client();
+            $uc = new \addons\ucenter\library\client\Client();
             $re = $uc->uc_user_delete($user['id']);
             // 如果小于0则说明发生错误
             if ($re <= 0)
             {
-                $this->setError(self::ERR_ACCOUNT_IS_LOCKED);
+                $this->setError('Account is locked');
                 return FALSE;
             }
         }
+
         // 调用事务删除账号
         $result = Db::transaction(function($db) use($user_id) {
                     // 删除会员
                     User::destroy($user_id);
-
-                    // 删除会员第三方登录
-                    UserThird::destroy($user_id);
+                    // 删除会员指定的所有Token
+                    Token::clear($user_id);
+                    return TRUE;
                 });
-
+        if ($result)
+        {
+            Hook::listen("user_delete_successed", $user);
+        }
         return $result ? TRUE : FALSE;
     }
 
     /**
-     * 直接登录账号
-     * @param int $user_id
-     * @param boolean $sync
-     * @return boolean
-     */
-    public function direct($user_id, $sync = TRUE)
-    {
-        $this->user = $this->user->get($user_id);
-        if ($this->user)
-        {
-            $this->syncLogin($sync);
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
-        }
-    }
-
-    /**
-     * 获取密码加密方式
-     * @param string $password
-     * @param string $salt
+     * 获取密码加密后的字符串
+     * @param string $password  密码
+     * @param string $salt      密码盐
      * @return string
      */
     public function getEncryptPassword($password, $salt = '')
     {
         return md5(md5($password) . $salt);
     }
-    
-    
 
     /**
      * 检测当前控制器和方法是否匹配传递的数组
      *
      * @param array $arr 需要验证权限的数组
+     * @return boolean
      */
     public function match($arr = [])
     {
@@ -486,6 +540,7 @@ class Auth implements \JsonSerializable, \ArrayAccess
         {
             return FALSE;
         }
+        $arr = array_map('strtolower', $arr);
         // 是否存在
         if (in_array(strtolower($request->action()), $arr) || in_array('*', $arr))
         {
@@ -494,56 +549,6 @@ class Auth implements \JsonSerializable, \ArrayAccess
 
         // 没找到匹配
         return FALSE;
-    }
-
-    /**
-     * 同步登录信息
-     * @param int $sync     是否同步登录到UC
-     * @return boolean
-     */
-    protected function syncLogin($sync = TRUE)
-    {
-        ////////////////同步到Ucenter////////////////
-        if (defined('UC_STATUS') && UC_STATUS && $sync)
-        {
-            $uc = new Client();
-            $re = $uc->uc_user_login($this->user->id, $this->user->password . '#split#' . $this->user->salt, 3);
-            // 如果小于0则说明发生错误
-            if ($re <= 0)
-            {
-                $this->setError(self::ERR_USERNAME_OR_PASSWORD_IS_INCORRECT);
-                return FALSE;
-            }
-        }
-
-        //增加登录次数和设置最后登录时间
-        $this->user->save([
-            'prevtime'  => $this->user->logintime,
-            'logintime' => time(),
-            'loginip'   => request()->ip(),
-        ]);
-
-        // 写入登录Cookies和Token
-        $this->writeStatus();
-        return TRUE;
-    }
-
-    /**
-     * 写入登录态和Cookie
-     *
-     * @param int $keeptime
-     */
-    protected function writeStatus()
-    {
-        //设置登录标识
-        $this->_logined = TRUE;
-
-        $token = $this->token();
-        Cookie::set('user_id', $this->user->id, $this->keeptime);
-        Cookie::set('username', $this->user->username, 86400 * 365);
-        //加密安全字符
-        Cookie::set('token', $token, $this->keeptime);
-        $this->setError('');
     }
 
     /**
@@ -557,10 +562,10 @@ class Auth implements \JsonSerializable, \ArrayAccess
 
     /**
      * 渲染用户数据
-     * @param array     $datalist
-     * @param array     $fields
-     * @param string    $fieldkey
-     * @param string    $renderkey
+     * @param array     $datalist   二维数组
+     * @param mixed     $fields     加载的字段列表
+     * @param string    $fieldkey   渲染的字段
+     * @param string    $renderkey  结果字段
      * @return array
      */
     public function render(&$datalist, $fields = [], $fieldkey = 'user_id', $renderkey = 'userinfo')
@@ -598,7 +603,8 @@ class Auth implements \JsonSerializable, \ArrayAccess
     /**
      * 设置错误信息
      *
-     * @param $error
+     * @param $error 错误信息
+     * @return Auth
      */
     public function setError($error)
     {
@@ -612,39 +618,7 @@ class Auth implements \JsonSerializable, \ArrayAccess
      */
     public function getError()
     {
-        return __($this->_error);
-    }
-
-    public function __toString()
-    {
-        return $this->user->toJson();
-    }
-
-    // JsonSerializable
-    public function jsonSerialize()
-    {
-        return $this->user->toArray();
-    }
-
-    // ArrayAccess
-    public function offsetSet($name, $value)
-    {
-        $this->user->setAttr($name, $value);
-    }
-
-    public function offsetExists($name)
-    {
-        return $this->user->__isset($name);
-    }
-
-    public function offsetUnset($name)
-    {
-        $this->user->__unset($name);
-    }
-
-    public function offsetGet($name)
-    {
-        return $this->user->getAttr($name);
+        return $this->_error ? __($this->_error) : '';
     }
 
 }

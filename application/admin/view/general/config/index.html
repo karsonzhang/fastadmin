@@ -11,10 +11,10 @@
 </style>
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
-        <div class="panel-lead"><em>系统配置</em>可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除</div>
+        {:build_heading(null, false)}
         <ul class="nav nav-tabs">
             {foreach $siteList as $index=>$vo} 
-            <li class="{$vo.active?'active':''}"><a href="#{$vo.name}" data-toggle="tab">{$vo.title}</a></li>
+            <li class="{$vo.active?'active':''}"><a href="#{$vo.name}" data-toggle="tab">{:__($vo.title)}</a></li>
             {/foreach}
             <li>
                 <a href="#addcfg" data-toggle="tab"><i class="fa fa-plus"></i></a>
@@ -50,21 +50,17 @@
                                                 {case text}
                                                 <textarea name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
                                                 {/case}
+                                                {case editor}
+                                                <textarea name="row[{$item.name}]" id="editor-{$item.name}" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
+                                                {/case}
                                                 {case array}
-                                                <dl class="fieldlist" rel="{$item.value|count}" data-name="row[{$item.name}]">
+                                                <dl class="fieldlist" data-name="row[{$item.name}]">
                                                     <dd>
                                                         <ins>{:__('Array key')}</ins>
                                                         <ins>{:__('Array value')}</ins>
                                                     </dd>
-                                                    {foreach $item.value as $key => $vo}
-                                                    <dd class="form-inline">
-                                                        <input type="text" name="row[{$item.name}][field][{$key}]" class="form-control" value="{$key}" size="10" />
-                                                        <input type="text" name="row[{$item.name}][value][{$key}]" class="form-control" value="{$vo}" size="40" />
-                                                        <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
-                                                        <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
-                                                    </dd>
-                                                    {/foreach}
-                                                    <dd><a href="javascript:;" class="append btn btn-sm btn-success"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                                    <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                                    <textarea name="row[{$item.name}]" class="form-control hide" cols="30" rows="5">{$item.value}</textarea>
                                                 </dl>
                                                 {/case}
                                                 {case datetime}
@@ -180,8 +176,8 @@
                     <div class="form-group hide" id="add-content-container">
                         <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Content')}:</label>
                         <div class="col-xs-12 col-sm-4">
-                            <textarea name="row[content]" id="content" cols="30" rows="5" class="form-control" data-rule="required">key1|value1
-key2|value2</textarea>
+                            <textarea name="row[content]" id="content" cols="30" rows="5" class="form-control" data-rule="required">value1|title1
+value2|title2</textarea>
                         </div>
                     </div>
                     <div class="form-group">

@@ -20,42 +20,64 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 "hideMethod": "fadeOut"
             }
         },
+        events: {
+            //请求成功的回调
+            onAjaxSuccess: function (ret, onAjaxSuccess) {
+                var data = typeof ret.data !== 'undefined' ? ret.data : null;
+                var msg = typeof ret.msg !== 'undefined' && ret.msg ? ret.msg : __('Operation completed');
+
+                if (typeof onAjaxSuccess === 'function') {
+                    var result = onAjaxSuccess.call(this, data, ret);
+                    if (result === false)
+                        return;
+                }
+                Toastr.success(msg);
+            },
+            //请求错误的回调
+            onAjaxError: function (ret, onAjaxError) {
+                var data = typeof ret.data !== 'undefined' ? ret.data : null;
+                if (typeof onAjaxError === 'function') {
+                    var result = onAjaxError.call(this, data, ret);
+                    if (result === false) {
+                        return;
+                    }
+                }
+                Toastr.error(ret.msg);
+            },
+            //服务器响应数据后
+            onAjaxResponse: function (response) {
+                try {
+                    var ret = typeof response === 'object' ? response : JSON.parse(response);
+                    if (!ret.hasOwnProperty('code')) {
+                        $.extend(ret, {code: -2, msg: response, data: null});
+                    }
+                } catch (e) {
+                    var ret = {code: -1, msg: e.message, data: null};
+                }
+                return ret;
+            }
+        },
         api: {
             //发送Ajax请求
-            ajax: function (options, success, failure) {
-                options = typeof options == 'string' ? {url: options} : options;
+            ajax: function (options, success, error) {
+                options = typeof options === 'string' ? {url: options} : options;
                 var index = Layer.load();
                 options = $.extend({
                     type: "POST",
-                    dataType: 'json',
+                    dataType: "json",
                     success: function (ret) {
                         Layer.close(index);
-                        if (ret.hasOwnProperty("code")) {
-                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
-                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                            if (ret.code === 1) {
-                                if (typeof success == 'function') {
-                                    var onAfterResult = success.call(undefined, data);
-                                    if (!onAfterResult) {
-                                        return false;
-                                    }
-                                }
-                                Toastr.success(msg ? msg : __('Operation completed'));
-                            } else {
-                                Toastr.error(msg ? msg : __('Operation failed'));
-                            }
+                        ret = Fast.events.onAjaxResponse(ret);
+                        if (ret.code === 1) {
+                            Fast.events.onAjaxSuccess(ret, success);
                         } else {
-                            Toastr.error(__('Unknown data format'));
+                            Fast.events.onAjaxError(ret, error);
                         }
-                    }, error: function () {
+                    },
+                    error: function (xhr) {
                         Layer.close(index);
-                        if (typeof failure == 'function') {
-                            var onAfterResult = failure.call(undefined, data);
-                            if (!onAfterResult) {
-                                return false;
-                            }
-                        }
-                        Toastr.error(__('Network error'));
+                        var ret = {code: xhr.status, msg: xhr.statusText, data: null};
+                        Fast.events.onAjaxError(ret, error);
                     }
                 }, options);
                 $.ajax(options);
@@ -67,6 +89,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     if (!r.test(url)) {
                         url = Config.moduleurl + "/" + url;
                     }
+                } else if (url.substr(0, 8) === "/addons/") {
+                    url = Config.__PUBLIC__.replace(/(\/*$)/g, "") + url;
                 }
                 return url;
             },
@@ -81,57 +105,20 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 }
                 name = name.replace(/[\[\]]/g, "\\$&");
                 var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                        results = regex.exec(url);
+                    results = regex.exec(url);
                 if (!results)
                     return null;
                 if (!results[2])
                     return '';
                 return decodeURIComponent(results[2].replace(/\+/g, " "));
             },
-            //上传文件
-            upload: function (file, callback) {
-                var data = new FormData();
-                data.append("file", file);
-                $.ajax({
-                    url: "ajax/upload",
-                    data: data,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function (ret) {
-                        if (ret.hasOwnProperty("code")) {
-                            var data = ret.hasOwnProperty("data") && ret.data != "" ? ret.data : null;
-                            var msg = ret.hasOwnProperty("msg") && ret.msg != "" ? ret.msg : "";
-                            if (ret.code === 1) {
-                                if (typeof callback == 'function') {
-                                    var onAfterResult = success.call(undefined, data);
-                                    if (!onAfterResult) {
-                                        return false;
-                                    }
-                                }
-                                if ($('.summernote').size() > 0 && data && typeof data.url !== 'undefined') {
-                                    $('.summernote').summernote("insertImage", data.url, 'filename');
-                                }
-                                Toastr.success(__('Operation completed'));
-                            } else {
-                                Toastr.error(msg ? msg : __('Operation failed'));
-                            }
-                        } else {
-                            Toastr.error(__('Unknown data format'));
-                        }
-                    }, error: function () {
-                        Toastr.error(__('Network error'));
-                    }
-                });
-            },
+            //打开一个弹出窗口
             open: function (url, title, options) {
                 title = title ? title : "";
                 url = Fast.api.fixurl(url);
                 url = url + (url.indexOf("?") > -1 ? "&" : "?") + "dialog=1";
                 var area = [$(window).width() > 800 ? '800px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
-                Layer.open($.extend({
+                options = $.extend({
                     type: 2,
                     title: title,
                     shadeClose: true,
@@ -141,38 +128,67 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     area: area,
                     content: url,
                     zIndex: Layer.zIndex,
-                    skin: 'layui-layer-noborder',
                     success: function (layero, index) {
                         var that = this;
+                        //存储callback事件
+                        $(layero).data("callback", that.callback);
                         //$(layero).removeClass("layui-layer-border");
                         Layer.setTop(layero);
-                        var frame = Layer.getChildFrame('html', index);
-                        var layerfooter = frame.find(".layer-footer");
-                        Fast.api.layerfooter(layero, index, that);
+                        try {
+                            var frame = Layer.getChildFrame('html', index);
+                            var layerfooter = frame.find(".layer-footer");
+                            Fast.api.layerfooter(layero, index, that);
 
-                        //绑定事件
-                        if (layerfooter.size() > 0) {
-                            // 监听窗口内的元素及属性变化
-                            // Firefox和Chrome早期版本中带有前缀
-                            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
-                            // 选择目标节点
-                            var target = layerfooter[0];
-                            // 创建观察者对象
-                            var observer = new MutationObserver(function (mutations) {
-                                Fast.api.layerfooter(layero, index, that);
-                                mutations.forEach(function (mutation) {
-                                });
+                            //绑定事件
+                            if (layerfooter.size() > 0) {
+                                // 监听窗口内的元素及属性变化
+                                // Firefox和Chrome早期版本中带有前缀
+                                var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+                                if (MutationObserver) {
+                                    // 选择目标节点
+                                    var target = layerfooter[0];
+                                    // 创建观察者对象
+                                    var observer = new MutationObserver(function (mutations) {
+                                        Fast.api.layerfooter(layero, index, that);
+                                        mutations.forEach(function (mutation) {
+                                        });
+                                    });
+                                    // 配置观察选项:
+                                    var config = {attributes: true, childList: true, characterData: true, subtree: true}
+                                    // 传入目标节点和观察选项
+                                    observer.observe(target, config);
+                                    // 随后,你还可以停止观察
+                                    // observer.disconnect();
+                                }
+                            }
+                        } catch (e) {
+
+                        }
+                        if ($(layero).height() > $(window).height()) {
+                            //当弹出窗口大于浏览器可视高度时,重定位
+                            Layer.style(index, {
+                                top: 0,
+                                height: $(window).height()
                             });
-                            // 配置观察选项:
-                            var config = {attributes: true, childList: true, characterData: true, subtree: true}
-                            // 传入目标节点和观察选项
-                            observer.observe(target, config);
-                            // 随后,你还可以停止观察
-                            // observer.disconnect();
                         }
                     }
-                }, options ? options : {}));
-                return false;
+                }, options ? options : {});
+                if ($(window).width() < 480 || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").size() > 0)) {
+                    options.area = [top.$(".tab-pane.active").width() + "px", top.$(".tab-pane.active").height() + "px"];
+                    options.offset = [top.$(".tab-pane.active").scrollTop() + "px", "0px"];
+                }
+                return Layer.open(options);
+            },
+            //关闭窗口并回传数据
+            close: function (data) {
+                var index = parent.Layer.getFrameIndex(window.name);
+                var callback = parent.$("#layui-layer" + index).data("callback");
+                //再执行关闭
+                parent.Layer.close(index);
+                //再调用回传函数
+                if (typeof callback === 'function') {
+                    callback.call(undefined, data);
+                }
             },
             layerfooter: function (layero, index, that) {
                 var frame = Layer.getChildFrame('html', index);
@@ -185,33 +201,25 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         $(">", footer).wrapAll("<div class='row'></div>");
                     }
                     footer.insertAfter(layero.find('.layui-layer-content'));
-                }
-                var heg = frame.outerHeight();
-                var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
-                var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
-
-                var oldheg = heg + titHeight + btnHeight;
-                var maxheg = $(window).height() < 600 ? $(window).height() : 600;
-                if (frame.outerWidth() < 768 || that.area[0].indexOf("%") > -1) {
-                    maxheg = $(window).height();
-                }
-                // 如果有.layer-footer或窗口小于600则重新排
-                if (layerfooter.size() > 0 || oldheg < maxheg || that.area[0].indexOf("%") > -1) {
-                    var footerHeight = layero.find('.layui-layer-footer').outerHeight() || 0;
-                    footerHeight = 0;
-                    if (oldheg >= maxheg) {
-                        heg = Math.min(maxheg, oldheg) - titHeight - btnHeight - footerHeight;
-                    }
-                    layero.css({height: heg + titHeight + btnHeight + footerHeight});
-                    layero.find("iframe").css({height: heg});
-                }
-                if (layerfooter.size() > 0) {
+                    //绑定事件
                     footer.on("click", ".btn", function () {
                         if ($(this).hasClass("disabled") || $(this).parent().hasClass("disabled")) {
                             return;
                         }
                         $(".btn:eq(" + $(this).index() + ")", layerfooter).trigger("click");
                     });
+
+                    var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
+                    var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
+                    //重设iframe高度
+                    $("iframe", layero).height(layero.height() - titHeight - btnHeight);
+                }
+                //修复iOS下弹出窗口的高度和iOS下iframe无法滚动的BUG
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                    var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
+                    var btnHeight = layero.find('.layui-layer-btn').outerHeight() || 0;
+                    $("iframe", layero).parent().css("height", layero.height() - titHeight - btnHeight);
+                    $("iframe", layero).css("height", "100%");
                 }
             },
             success: function (options, callback) {
@@ -237,8 +245,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
         },
         lang: function () {
             var args = arguments,
-                    string = args[0],
-                    i = 1;
+                string = args[0],
+                i = 1;
             string = string.toLowerCase();
             //string = typeof Lang[string] != 'undefined' ? Lang[string] : string;
             if (typeof Lang[string] != 'undefined') {
@@ -286,6 +294,9 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 beforeSend: function (xhr, setting) {
                     setting.url = Fast.api.fixurl(setting.url);
                 }
+            });
+            Layer.config({
+                skin: 'layui-layer-fast'
             });
             // 绑定ESC关闭窗口事件
             $(window).keyup(function (e) {

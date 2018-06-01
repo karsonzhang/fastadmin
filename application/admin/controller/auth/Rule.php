@@ -24,10 +24,17 @@ class Rule extends Backend
         parent::_initialize();
         $this->model = model('AuthRule');
         // 必须将结果集转换为数组
-        Tree::instance()->init(collection($this->model->order('weigh', 'desc')->select())->toArray());
+        $ruleList = collection($this->model->order('weigh', 'desc')->select())->toArray();
+        foreach ($ruleList as $k => &$v)
+        {
+            $v['title'] = __($v['title']);
+            $v['remark'] = __($v['remark']);
+        }
+        unset($v);
+        Tree::instance()->init($ruleList);
         $this->rulelist = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'title');
         $ruledata = [0 => __('None')];
-        foreach ($this->rulelist as $k => $v)
+        foreach ($this->rulelist as $k => &$v)
         {
             if (!$v['ismenu'])
                 continue;
@@ -60,21 +67,22 @@ class Rule extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params)
             {
                 if (!$params['ismenu'] && !$params['pid'])
                 {
-                    $this->msg = __('The non-menu rule must have parent');
-                    return;
+                    $this->error(__('The non-menu rule must have parent'));
                 }
-                $this->model->create($params);
+                $result = $this->model->validate()->save($params);
+                if ($result === FALSE)
+                {
+                    $this->error($this->model->getError());
+                }
                 Cache::rm('__menu__');
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         return $this->view->fetch();
     }
@@ -89,21 +97,27 @@ class Rule extends Backend
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params)
             {
                 if (!$params['ismenu'] && !$params['pid'])
                 {
-                    $this->msg = __('The non-menu rule must have parent');
-                    return;
+                    $this->error(__('The non-menu rule must have parent'));
                 }
-                $row->save($params);
+                //这里需要针对name做唯一验证
+                $ruleValidate = \think\Loader::validate('AuthRule');
+                $ruleValidate->rule([
+                    'name' => 'require|format|unique:AuthRule,name,' . $row->id,
+                ]);
+                $result = $row->validate()->save($params);
+                if ($result === FALSE)
+                {
+                    $this->error($row->getError());
+                }
                 Cache::rm('__menu__');
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         $this->view->assign("row", $row);
         return $this->view->fetch();
@@ -114,7 +128,6 @@ class Rule extends Backend
      */
     public function del($ids = "")
     {
-        $this->code = -1;
         if ($ids)
         {
             $delIds = [];
@@ -127,11 +140,10 @@ class Rule extends Backend
             if ($count)
             {
                 Cache::rm('__menu__');
-                $this->code = 1;
+                $this->success();
             }
         }
-
-        return;
+        $this->error();
     }
 
 }

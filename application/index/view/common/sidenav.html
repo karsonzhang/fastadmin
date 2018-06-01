@@ -1,0 +1,9 @@
+<div class="sidenav">
+    <ul class="list-group">
+        <li class="list-group-heading">{:__('User center')}</li>
+        <li class="list-group-item {:$config['actionname']=='index'?'active':''}"> <a href="{:url('user/index')}"><i class="fa fa-user-circle"></i> {:__('User center')}</a> </li>
+        <li class="list-group-item {:$config['actionname']=='profile'?'active':''}"> <a href="{:url('user/profile')}"><i class="fa fa-user-o"></i> {:__('Profile')}</a> </li>
+        <li class="list-group-item {:$config['actionname']=='changepwd'?'active':''}"> <a href="{:url('user/changepwd')}"><i class="fa fa-key"></i> {:__('Change password')}</a> </li>
+        <li class="list-group-item {:$config['actionname']=='logout'?'active':''}"> <a href="{:url('user/logout')}"><i class="fa fa-sign-out"></i> {:__('Sign out')}</a> </li>
+    </ul>
+</div>

@@ -266,8 +266,7 @@ class Tree
                 $selected = $selectedids && in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = $disabledids && in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled, 'spacer' => $spacer));
-                $value = array_combine(array_map(function($k)
-                        {
+                $value = array_combine(array_map(function($k) {
                             return '@' . $k;
                         }, array_keys($value)), $value);
                 $nstr = strtr((($value["@{$this->pidname}"] == 0 || $this->getChild($id) ) && $toptpl ? $toptpl : $itemtpl), $value);
@@ -303,8 +302,7 @@ class Tree
                 $selected = $selectedids && in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = $disabledids && in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled));
-                $value = array_combine(array_map(function($k)
-                        {
+                $value = array_combine(array_map(function($k) {
                             return '@' . $k;
                         }, array_keys($value)), $value);
                 $nstr = strtr($itemtpl, $value);
@@ -340,8 +338,7 @@ class Tree
                 $selected = in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled));
-                $value = array_combine(array_map(function($k)
-                        {
+                $value = array_combine(array_map(function($k) {
                             return '@' . $k;
                         }, array_keys($value)), $value);
                 $bakvalue = array_intersect_key($value, array_flip(['@url', '@caret', '@class']));
@@ -354,6 +351,7 @@ class Tree
                 $value = array(
                     '@childlist' => $childlist,
                     '@url'       => $childdata || !isset($value['@url']) ? "javascript:;" : url($value['@url']),
+                    '@addtabs'   => $childdata || !isset($value['@url']) ? "" : (stripos($value['@url'], "?") !== false ? "&" : "?") . "ref=addtabs",
                     '@caret'     => ($childdata && (!isset($value['@badge']) || !$value['@badge']) ? '<i class="fa fa-angle-left"></i>' : ''),
                     '@badge'     => isset($value['@badge']) ? $value['@badge'] : '',
                     '@class'     => ($selected ? ' active' : '') . ($disabled ? ' disabled' : '') . ($childdata ? ' treeview' : ''),
@@ -398,8 +396,7 @@ class Tree
                 $selected = $selectedids && in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = $disabledids && in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled, 'spacer' => $spacer));
-                $value = array_combine(array_map(function($k)
-                        {
+                $value = array_combine(array_map(function($k) {
                             return '@' . $k;
                         }, array_keys($value)), $value);
                 $nstr = strtr(!isset($value['@disabled']) || !$value['@disabled'] ? $itemtpl1 : $itemtpl2, $value);

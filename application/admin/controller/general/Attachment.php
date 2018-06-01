@@ -26,6 +26,8 @@ class Attachment extends Backend
      */
     public function index()
     {
+        //设置过滤方法
+        $this->request->filter(['strip_tags']);
         if ($this->request->isAjax())
         {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
@@ -71,9 +73,35 @@ class Attachment extends Backend
     {
         if ($this->request->isAjax())
         {
-            $this->code = -1;
+            $this->error();
         }
         return $this->view->fetch();
+    }
+
+    /**
+     * 删除附件
+     * @param array $ids
+     */
+    public function del($ids = "")
+    {
+        if ($ids)
+        {
+            \think\Hook::add('upload_delete', function($params) {
+                $attachmentFile = ROOT_PATH . '/public' . $params['url'];
+                if (is_file($attachmentFile))
+                {
+                    @unlink($attachmentFile);
+                }
+            });
+            $attachmentlist = $this->model->where('id', 'in', $ids)->select();
+            foreach ($attachmentlist as $attachment)
+            {
+                \think\Hook::listen("upload_delete", $attachment);
+                $attachment->delete();
+            }
+            $this->success();
+        }
+        $this->error(__('Parameter %s can not be empty', 'ids'));
     }
 
 }

@@ -10,21 +10,12 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-//如果有定义绑定后台模块则禁用路由规则 
-if (defined('BIND_MODULE') && BIND_MODULE == 'admin')
-    return [];
-
 return [
     //别名配置,别名只能是映射到控制器且访问时必须加上请求的方法
-//    '__alias__'   => [
-//        'demo' => 'admin/Test',
-//    ],
-    '__pattern__' => [
-        'name' => '\w+',
+    '__alias__'   => [
     ],
-    '[hello]'     => [
-        ':id'   => ['index/hello', ['method' => 'get'], ['id' => '\d+']],
-        ':name' => ['index/hello', ['method' => 'post']],
+    //变量规则
+    '__pattern__' => [
     ],
 //        域名绑定到模块
 //        '__domain__'  => [

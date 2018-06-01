@@ -2,10 +2,10 @@
 
 namespace app\admin\controller\general;
 
-use think\Session;
-use app\admin\model\AdminLog;
+use app\admin\model\Admin;
 use app\common\controller\Backend;
 use fast\Random;
+use think\Session;
 
 /**
  * 个人配置
@@ -20,6 +20,8 @@ class Profile extends Backend
      */
     public function index()
     {
+        //设置过滤方法
+        $this->request->filter(['strip_tags']);
         if ($this->request->isAjax())
         {
             $model = model('AdminLog');
@@ -52,7 +54,6 @@ class Profile extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a");
             $params = array_filter(array_intersect_key($params, array_flip(array('email', 'nickname', 'password', 'avatar'))));
             unset($v);
@@ -63,16 +64,13 @@ class Profile extends Backend
             }
             if ($params)
             {
-                model('admin')->where('id', $this->auth->id)->update($params);
+                $admin = Admin::get($this->auth->id);
+                $admin->save($params);
                 //因为个人资料面板读取的Session显示，修改自己资料后同时更新Session
-                $admin = Session::get('admin');
-                $admin_id = $admin ? $admin->id : 0;
-                if($this->auth->id==$admin_id){
-                    $admin = model('admin')->get(['id' => $admin_id]);
-                    Session::set("admin", $admin);
-                }
-                $this->code = 1;
+                Session::set("admin", $admin->toArray());
+                $this->success();
             }
+            $this->error();
         }
         return;
     }

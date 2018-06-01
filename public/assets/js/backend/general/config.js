@@ -29,7 +29,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'intro', title: __('Intro')},
                         {field: 'group', title: __('Group')},
                         {field: 'type', title: __('Type')},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            formatter: Table.api.formatter.operate
+                        }
                     ]
                 ]
             });
@@ -50,28 +56,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 location.reload();
             });
 
-            $(document).on("click", ".fieldlist .append", function () {
-                var rel = parseInt($(this).closest("dl").attr("rel")) + 1;
-                var name = $(this).closest("dl").data("name");
-                $(this).closest("dl").attr("rel", rel);
-                $('<dd class="form-inline"><input type="text" name="' + name + '[field][' + rel + ']" class="form-control" value="" size="10" /> <input type="text" name="' + name + '[value][' + rel + ']" class="form-control" value="" size="40" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>').insertBefore($(this).parent());
-            });
-            $(document).on("click", ".fieldlist dd .btn-remove", function () {
-                $(this).parent().remove();
-            });
-            //拖拽排序
-            require(['dragsort'], function () {
-                //绑定拖动排序
-                $("dl.fieldlist").dragsort({
-                    itemSelector: 'dd',
-                    dragSelector: ".btn-dragsort",
-                    dragEnd: function () {
-
-                    },
-                    placeHolderTemplate: "<dd></dd>"
-                });
-            });
-
             //切换显示隐藏变量字典列表
             $(document).on("change", "form#add-form select[name='row[type]']", function (e) {
                 $("#add-content-container").toggleClass("hide", ['select', 'selects', 'checkbox', 'radio'].indexOf($(this).val()) > -1 ? false : true);
@@ -80,7 +64,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             //添加向发件人发送测试邮件按钮和方法
             $('input[name="row[mail_from]"]').parent().next().append('<a class="btn btn-info testmail">' + __('Send a test message') + '</a>');
             $(document).on("click", ".testmail", function () {
-                Backend.api.ajax({url: "general/config/emailtest", data: {receiver: $('input[name="row[mail_from]"]').val()}});
+                var that = this;
+                Layer.prompt({title: __('Please input your email'), formType: 0}, function (value, index) {
+                    Backend.api.ajax({
+                        url: "general/config/emailtest?receiver=" + value,
+                        data: $(that).closest("form").serialize()
+                    });
+                });
+
             });
         },
         add: function () {

@@ -6,12 +6,13 @@
         margin:5px 0 0 0;
     }
     #chooseicon ul li{
-        width:30px;height:30px;
-        line-height:30px;
-        border:1px solid #ddd;
+        width:41px;height:42px;
+        line-height:42px;
+        border:1px solid #efefef;
         padding:1px;
         margin:1px;
         text-align: center;
+        font-size:18px;
     }
     #chooseicon ul li:hover{
         border:1px solid #2c3e50;
@@ -31,7 +32,7 @@
         <div>
             <ul class="list-inline">
                 <% for(var i=0; i<iconlist.length; i++){ %>
-                    <li data-font="<%=iconlist[i]%>" title="<%=iconlist[i]%>">
+                    <li data-font="<%=iconlist[i]%>" data-toggle="tooltip" title="<%=iconlist[i]%>">
                     <i class="fa fa-<%=iconlist[i]%>"></i>
                 </li>
                 <% } %>

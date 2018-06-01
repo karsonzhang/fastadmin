@@ -3,10 +3,10 @@
     <div class="form-group">
         <label for="c-type" class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
-            <select  id="c-type" data-rule="required" class="form-control selectpicker" name="row[type]">
+
+            <select id="c-type" data-rule="required" class="form-control selectpicker" name="row[type]">
                 {foreach name="typeList" item="vo"}
-                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
                 {/foreach}
             </select>
 
@@ -15,10 +15,10 @@
     <div class="form-group">
         <label for="c-pid" class="control-label col-xs-12 col-sm-2">{:__('Pid')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
-            <select  id="c-flag" data-rule="required" class="form-control selectpicker" name="row[pid]">
+
+            <select id="c-pid" data-rule="required" class="form-control selectpicker" name="row[pid]">
                 {foreach name="parentList" item="vo"}
-                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                <option data-type="{$vo.type}" value="{$key}" {in name="key" value=""}selected{/in}>{$vo.name}</option>
                 {/foreach}
             </select>
 
@@ -39,10 +39,10 @@
     <div class="form-group">
         <label for="c-flag" class="control-label col-xs-12 col-sm-2">{:__('Flag')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
+
             <select  id="c-flag" class="form-control selectpicker" multiple="" name="row[flag][]">
                 {foreach name="flagList" item="vo"}
-                    <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
+                <option value="{$key}" {in name="key" value=""}selected{/in}>{$vo}</option>
                 {/foreach}
             </select>
 
@@ -51,12 +51,15 @@
     <div class="form-group">
         <label for="c-image" class="control-label col-xs-12 col-sm-2">{:__('Image')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <div class="form-inline">
+            <div class="input-group">
                 <input id="c-image" class="form-control" size="50" name="row[image]" type="text" value="">
-                <span><button type="button" id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-mimetype="image/*" data-multiple="false" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
-                <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-input-id="c-image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
-                <ul class="row list-inline plupload-preview" id="p-image"></ul>
+                <div class="input-group-addon no-border no-padding">
+                    <span><button type="button" id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="false" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-input-id="c-image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                </div>
+                <span class="msg-box n-right"></span>
             </div>
+            <ul class="row list-inline plupload-preview" id="p-image"></ul>
         </div>
     </div>
     <div class="form-group">
@@ -78,7 +81,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="c-status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
         <div class="col-xs-12 col-sm-8">
             {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')])}
         </div>

@@ -27,13 +27,15 @@ class Min extends Command
                 ->setName('min')
                 ->addOption('module', 'm', Option::VALUE_REQUIRED, 'module name(frontend or backend),use \'all\' when build all modules', null)
                 ->addOption('resource', 'r', Option::VALUE_REQUIRED, 'resource name(js or css),use \'all\' when build all resources', null)
+                ->addOption('optimize', 'o', Option::VALUE_OPTIONAL, 'optimize type(uglify|closure|none)', 'none')
                 ->setDescription('Compress js and css file');
     }
 
     protected function execute(Input $input, Output $output)
     {
-        $module = $input->getOption('module') ? : '';
-        $resource = $input->getOption('resource') ? : '';
+        $module = $input->getOption('module') ?: '';
+        $resource = $input->getOption('resource') ?: '';
+        $optimize = $input->getOption('optimize') ?: 'none';
 
         if (!$module || !in_array($module, ['frontend', 'backend', 'all']))
         {
@@ -51,27 +53,29 @@ class Min extends Command
         $publicPath = ROOT_PATH . 'public' . DS;
         $tempFile = $minPath . 'temp.js';
 
-        // Winsows下请手动配置配置该值
-        $nodeExec = "";
+        $nodeExec = '';
 
         if (!$nodeExec)
         {
             if (IS_WIN)
             {
-                throw new Exception("node environment not found!please check http://doc.fastadmin.net/faq.html !");
+                // Winsows下请手动配置配置该值,一般将该值配置为 '"C:\Program Files\nodejs\node.exe"'，除非你的Node安装路径有变更
+                $nodeExec = '"C:\Program Files\nodejs\node.exe"';
             }
-
-            try
+            else
             {
-                $nodeExec = exec("which node");
-                if (!$nodeExec)
+                try
                 {
-                    throw new Exception("node environment not found!please install node first!");
+                    $nodeExec = exec("which node");
+                    if (!$nodeExec)
+                    {
+                        throw new Exception("node environment not found!please install node first!");
+                    }
                 }
-            }
-            catch (Exception $e)
-            {
-                throw new Exception($e->getMessage());
+                catch (Exception $e)
+                {
+                    throw new Exception($e->getMessage());
+                }
             }
         }
 
@@ -85,8 +89,9 @@ class Min extends Command
                     'jsBaseUrl'   => $this->options['jsBaseUrl'],
                     'cssBaseName' => str_replace('{module}', $mod, $this->options['cssBaseName']),
                     'cssBaseUrl'  => $this->options['cssBaseUrl'],
-                    'jsBasePath'  => ROOT_PATH . $this->options['jsBaseUrl'],
-                    'cssBasePath' => ROOT_PATH . $this->options['cssBaseUrl'],
+                    'jsBasePath'  => str_replace(DS, '/', ROOT_PATH . $this->options['jsBaseUrl']),
+                    'cssBasePath' => str_replace(DS, '/', ROOT_PATH . $this->options['cssBaseUrl']),
+                    'optimize'    => $optimize,
                     'ds'          => DS,
                 ];
 
@@ -100,7 +105,7 @@ class Min extends Command
                 if ($res == "js")
                 {
                     $content = file_get_contents($from);
-                    preg_match("/require\.config\(\{[\n]+(.*?)\n\}\);/is", $content, $matches);
+                    preg_match("/require\.config\(\{[\r\n]?[\n]?+(.*?)[\r\n]?[\n]?}\);/is", $content, $matches);
                     if (!isset($matches[1]))
                     {
                         $output->error("js config not found!");
@@ -115,11 +120,19 @@ class Min extends Command
                 $output->info("Compress " . $data["{$res}BaseName"] . ".{$res}");
 
                 // 执行压缩
-                echo exec("{$nodeExec} {$minPath}r.js -o {$tempFile} >> {$minPath}node.log");
+                $command = "{$nodeExec} \"{$minPath}r.js\" -o \"{$tempFile}\" >> \"{$minPath}node.log\"";
+                if ($output->isDebug())
+                {
+                    $output->warning($command);
+                }
+                echo exec($command);
             }
         }
 
-        @unlink($tempFile);
+        if (!$output->isDebug())
+        {
+            @unlink($tempFile);
+        }
 
         $output->info("Build Successed!");
     }
@@ -156,7 +169,7 @@ class Min extends Command
      */
     protected function getStub($name)
     {
-        return __DIR__ . '/Min/stubs/' . $name . '.stub';
+        return __DIR__ . DS . 'Min' . DS . 'stubs' . DS . $name . '.stub';
     }
 
 }

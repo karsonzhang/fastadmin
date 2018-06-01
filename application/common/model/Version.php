@@ -24,11 +24,11 @@ class Version extends Model
      */
     public static function check($version)
     {
-        $versionlist = self::all(['status' => 'normal'], [], TRUE);
+        $versionlist = self::where('status', 'normal')->cache('__version__')->order('weigh desc,id desc')->select();
         foreach ($versionlist as $k => $v)
         {
             // 版本正常且新版本号不等于验证的版本号且找到匹配的旧版本
-            if ($v['status'] == 'normal' && $v['newversion'] !== $version && self::inversion($version, $v['oldversion']))
+            if ($v['status'] == 'normal' && $v['newversion'] !== $version && \fast\Version::check($version, $v['oldversion']))
             {
                 $updateversion = $v;
                 break;
@@ -49,88 +49,6 @@ class Version extends Model
             ];
         }
         return NULL;
-    }
-
-    /**
-     * 检测版本是否的版本要求的数据中
-     *
-     * @param string $version
-     * @param array $data
-     */
-    public static function inversion($version, $data = [])
-    {
-        //版本号以.分隔
-        $data = is_array($data) ? $data : [$data];
-        if ($data)
-        {
-            if (in_array("*", $data) || in_array($version, $data))
-            {
-                return TRUE;
-            }
-            $ver = explode('.', $version);
-            if ($ver)
-            {
-                $versize = count($ver);
-                //验证允许的版本
-                foreach ($data as $m)
-                {
-                    $c = explode('.', $m);
-                    if (!$c || $versize != count($c))
-                        continue;
-                    $i = 0;
-                    foreach ($c as $a => $k)
-                    {
-                        if (!self::compare($ver[$a], $k))
-                        {
-                            continue 2;
-                        }
-                        else
-                        {
-                            $i++;
-                        }
-                    }
-                    if ($i == $versize)
-                        return TRUE;
-                }
-            }
-        }
-        return FALSE;
-    }
-
-    /**
-     * 比较两个版本号
-     *
-     * @param string $v1
-     * @param string $v2
-     * @return boolean
-     */
-    public static function compare($v1, $v2)
-    {
-        if ($v2 == "*" || $v1 == $v2)
-        {
-            return TRUE;
-        }
-        else
-        {
-            $values = [];
-            $k = explode(',', $v2);
-            foreach ($k as $v)
-            {
-                if (strpos($v, '-') !== FALSE)
-                {
-                    list($start, $stop) = explode('-', $v);
-                    for ($i = $start; $i <= $stop; $i++)
-                    {
-                        $values[] = $i;
-                    }
-                }
-                else
-                {
-                    $values[] = $v;
-                }
-            }
-            return in_array($v1, $values) ? TRUE : FALSE;
-        }
     }
 
 }

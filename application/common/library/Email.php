@@ -127,12 +127,17 @@ class Email
 
     /**
      * 获取最后产生的错误
+     * @return string
      */
     public function getError()
     {
         return $this->_error;
     }
 
+    /**
+     * 设置错误
+     * @param string $error 信息信息
+     */
     protected function setError($error)
     {
         $this->_error = $error;

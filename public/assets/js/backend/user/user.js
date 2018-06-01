@@ -1,15 +1,16 @@
-define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefined, Backend, Form, Table) {
+define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
 
     var Controller = {
         index: function () {
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'user_user/index',
-                    add_url: 'user_user/add',
-                    edit_url: 'user_user/edit',
-                    del_url: 'user_user/del',
-                    multi_url: 'user_user/multi',
+                    index_url: 'user/user/index',
+                    add_url: 'user/user/add',
+                    edit_url: 'user/user/edit',
+                    del_url: 'user/user/del',
+                    multi_url: 'user/user/multi',
+                    table: 'user',
                 }
             });
 
@@ -18,35 +19,35 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
-                sortName: 'id',
+                pk: 'id',
+                sortName: 'user.id',
                 columns: [
                     [
-                        {field: 'state', checkbox: true, },
-                        {field: 'id', title: __('Id')},
-                        {field: 'partner_id', title: __('Partner_id')},
-                        {field: 'role_id', title: __('Role_id')},
-                        {field: 'area_id', title: __('Area_id')},
-                        {field: 'editor_id', title: __('Editor_id')},
-                        {field: 'level', title: __('Level')},
-                        {field: 'star', title: __('Star')},
-                        {field: 'username', title: __('Username')},
-                        {field: 'nickname', title: __('Nickname')},
-                        {field: 'email', title: __('Email')},
-                        {field: 'mobile', title: __('Mobile')},
-                        {field: 'avatar', title: __('Avatar'), formatter: Table.api.formatter.image},
-                        {field: 'gender', title: __('Gender')},
-                        {field: 'birthday', title: __('Birthday')},
-                        {field: 'score', title: __('Score')},
-                        {field: 'prevtime', title: __('Prevtime'), formatter: Table.api.formatter.datetime},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'operate', title: __('Operate'), events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {checkbox: true},
+                        {field: 'id', title: __('Id'), sortable: true},
+                        {field: 'group.name', title: __('Group')},
+                        {field: 'username', title: __('Username'), operate: 'LIKE'},
+                        {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
+                        {field: 'email', title: __('Email'), operate: 'LIKE'},
+                        {field: 'mobile', title: __('Mobile'), operate: 'LIKE'},
+                        {field: 'avatar', title: __('Avatar'), formatter: Table.api.formatter.image, operate: false},
+                        {field: 'level', title: __('Level'), operate: 'BETWEEN', sortable: true},
+                        {field: 'gender', title: __('Gender'), visible: false, searchList: {1: __('Male'), 0: __('Female')}},
+                        {field: 'score', title: __('Score'), operate: 'BETWEEN', sortable: true},
+                        {field: 'successions', title: __('Successions'), visible: false, operate: 'BETWEEN', sortable: true},
+                        {field: 'maxsuccessions', title: __('Maxsuccessions'), visible: false, operate: 'BETWEEN', sortable: true},
+                        {field: 'logintime', title: __('Logintime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                        {field: 'loginip', title: __('Loginip'), formatter: Table.api.formatter.search},
+                        {field: 'jointime', title: __('Jointime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                        {field: 'joinip', title: __('Joinip'), formatter: Table.api.formatter.search},
+                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status, searchList: {normal: __('Normal'), hidden: __('Hidden')}},
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
 
             // 为表格绑定事件
             Table.api.bindevent(table);
-
         },
         add: function () {
             Controller.api.bindevent();
@@ -59,7 +60,6 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 Form.api.bindevent($("form[role=form]"));
             }
         }
-
     };
     return Controller;
 });

@@ -15,12 +15,23 @@ class Category Extends Model
     // 定义时间戳字段名
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
-    
     // 追加属性
     protected $append = [
         'type_text',
         'flag_text',
     ];
+
+    protected static function init()
+    {
+        self::afterInsert(function ($row) {
+            $row->save(['weigh' => $row['id']]);
+        });
+    }
+
+    public function setFlagAttr($value, $data)
+    {
+        return is_array($value) ? implode(',', $value) : $value;
+    }
 
     /**
      * 读取分类类型
@@ -28,8 +39,12 @@ class Category Extends Model
      */
     public static function getTypeList()
     {
-        $typelist = config('site.categorytype');
-        return $typelist;
+        $typeList = config('site.categorytype');
+        foreach ($typeList as $k => &$v)
+        {
+            $v = __($v);
+        }
+        return $typeList;
     }
 
     public function getTypeTextAttr($value, $data)
@@ -54,8 +69,8 @@ class Category Extends Model
 
     /**
      * 读取分类列表
-     * @param string $type 指定类型
-     * @param string $status 指定状态
+     * @param string $type      指定类型
+     * @param string $status    指定状态
      * @return array
      */
     public static function getCategoryArray($type = NULL, $status = NULL)

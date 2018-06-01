@@ -124,10 +124,10 @@
 </style>
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
-        <div class="panel-lead"><em>控制台（Dashboard）</em>用于展示当前系统中的统计数据、统计报表及重要实时数据</div>
+        {:build_heading(null, false)}
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#one" data-toggle="tab">控制台</a></li>
-            <li><a href="#two" data-toggle="tab">微信统计</a></li>
+            <li class="active"><a href="#one" data-toggle="tab">{:__('Dashboard')}</a></li>
+            <li><a href="#two" data-toggle="tab">{:__('Custom')}</a></li>
         </ul>
     </div>
     <div class="panel-body">
@@ -140,7 +140,7 @@
                             <span class="sm-st-icon st-red"><i class="fa fa-users"></i></span>
                             <div class="sm-st-info">
                                 <span>{$totaluser}</span>
-                                总会员数
+                                {:__('Total user')}
                             </div>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                             <span class="sm-st-icon st-violet"><i class="fa fa-book"></i></span>
                             <div class="sm-st-info">
                                 <span>{$totalviews}</span>
-                                总访问数
+                                {:__('Total view')}
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                             <span class="sm-st-icon st-blue"><i class="fa fa-shopping-bag"></i></span>
                             <div class="sm-st-info">
                                 <span>{$totalorder}</span>
-                                总订单数
+                                {:__('Total order')}
                             </div>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                             <span class="sm-st-icon st-green"><i class="fa fa-cny"></i></span>
                             <div class="sm-st-info">
                                 <span>{$totalorderamount}</span>
-                                总金额
+                                {:__('Total order amount')}
                             </div>
                         </div>
                     </div>
@@ -185,60 +185,60 @@
                                         <div class="stat-icon"> <i class="fa fa-rocket"></i> </div>
                                         <div class="stat">
                                             <div class="value"> {$todayusersignup} </div>
-                                            <div class="name"> 今日注册 </div>
+                                            <div class="name"> {:__('Today user signup')} </div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 30%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6 stat-col">
                                         <div class="stat-icon"> <i class="fa fa-shopping-cart"></i> </div>
                                         <div class="stat">
                                             <div class="value"> {$todayuserlogin} </div>
-                                            <div class="name"> 今日登录 </div>
+                                            <div class="name"> {:__('Today user login')} </div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
                                         <div class="stat-icon"> <i class="fa fa-line-chart"></i> </div>
                                         <div class="stat">
                                             <div class="value"> {$todayorder} </div>
-                                            <div class="name"> 今日订单 </div>
+                                            <div class="name"> {:__('Today order')} </div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
                                         <div class="stat-icon"> <i class="fa fa-users"></i> </div>
                                         <div class="stat">
-                                            <div class="value"> {$todayunsettleorder} </div>
-                                            <div class="name"> 未处理订单 </div>
+                                            <div class="value"> {$unsettleorder} </div>
+                                            <div class="name"> {:__('Unsettle order')} </div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
                                         <div class="stat-icon"> <i class="fa fa-list-alt"></i> </div>
                                         <div class="stat">
                                             <div class="value"> {$sevendnu} </div>
-                                            <div class="name"> 七日新增 </div>
+                                            <div class="name"> {:__('Seven dnu')} </div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6 stat-col">
                                         <div class="stat-icon"> <i class="fa fa-dollar"></i> </div>
                                         <div class="stat">
                                             <div class="value"> {$sevendau} </div>
-                                            <div class="name"> 七日活跃 </div>
+                                            <div class="name"> {:__('Seven dau')} </div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -246,43 +246,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="row hidden">
-                    <div class="col-lg-4">
-                        <div class="box">
-                            <div class="box-header"><h3 class="box-title">温馨设置</h3></div>
-                            <div class="box-body">test test</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="box">
-                            <div class="box-header">cccc</div>
-                            <div class="box-body">test test</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="box">
-                            <div class="box-header">cccc</div>
-                            <div class="box-body">test test</div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row" style="margin-top:15px;">
 
                     <div class="col-lg-12">
-                        <h4>详细统计</h4>
                     </div>
                     <div class="col-xs-6 col-md-3">
                         <div class="panel bg-blue">
                             <div class="panel-body">
                                 <div class="panel-title">
-                                    <span class="label label-success pull-right">管理</span>
-                                    <h5>教练统计</h5>
+                                    <span class="label label-success pull-right">{:__('Real time')}</span>
+                                    <h5>{:__('Category count')}</h5>
                                 </div>
                                 <div class="panel-content">
                                     <h1 class="no-margins">1234</h1>
                                     <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
-                                    <small>总评论数</small>
+                                    <small>{:__('Category count tips')}</small>
                                 </div>
                             </div>
                         </div>
@@ -291,13 +270,13 @@
                         <div class="panel bg-aqua-gradient">
                             <div class="panel-body">
                                 <div class="ibox-title">
-                                    <span class="label label-info pull-right">管理</span>
-                                    <h5>文章统计</h5>
+                                    <span class="label label-info pull-right">{:__('Real time')}</span>
+                                    <h5>{:__('Attachment count')}</h5>
                                 </div>
                                 <div class="ibox-content">
                                     <h1 class="no-margins">1043</h1>
                                     <div class="stat-percent font-bold text-gray"><i class="fa fa-modx"></i> 2592</div>
-                                    <small>总文章数</small>
+                                    <small>{:__('Attachment count tips')}</small>
                                 </div>
                             </div>
                         </div>
@@ -307,19 +286,19 @@
                         <div class="panel bg-purple-gradient">
                             <div class="panel-body">
                                 <div class="ibox-title">
-                                    <span class="label label-primary pull-right">管理</span>
-                                    <h5>动态统计</h5>
+                                    <span class="label label-primary pull-right">{:__('Real time')}</span>
+                                    <h5>{:__('Article count')}</h5>
                                 </div>
                                 <div class="ibox-content">
 
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h1 class="no-margins">1234</h1>
-                                            <div class="font-bold text-navy"><i class="fa fa-commenting"></i> <small>总评论数</small></div>
+                                            <div class="font-bold text-navy"><i class="fa fa-commenting"></i> <small>{:__('Comment count')}</small></div>
                                         </div>
                                         <div class="col-md-6">
                                             <h1 class="no-margins">6754</h1>
-                                            <div class="font-bold text-navy"><i class="fa fa-heart"></i> <small>总评论点赞数</small></div>
+                                            <div class="font-bold text-navy"><i class="fa fa-heart"></i> <small>{:__('Like count')}</small></div>
                                         </div>
                                     </div>
                                 </div>
@@ -330,19 +309,19 @@
                         <div class="panel bg-green-gradient">
                             <div class="panel-body">
                                 <div class="ibox-title">
-                                    <span class="label label-primary pull-right">管理</span>
-                                    <h5>活动统计</h5>
+                                    <span class="label label-primary pull-right">{:__('Real time')}</span>
+                                    <h5>{:__('News count')}</h5>
                                 </div>
                                 <div class="ibox-content">
 
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h1 class="no-margins">5302</h1>
-                                            <div class="font-bold text-navy"><i class="fa fa-commenting"></i> <small>总评论数</small></div>
+                                            <div class="font-bold text-navy"><i class="fa fa-commenting"></i> <small>{:__('Comment count')}</small></div>
                                         </div>
                                         <div class="col-md-6">
                                             <h1 class="no-margins">8205</h1>
-                                            <div class="font-bold text-navy"><i class="fa fa-user"></i> <small>总参与人数</small></div>
+                                            <div class="font-bold text-navy"><i class="fa fa-user"></i> <small>{:__('Like count')}</small></div>
                                         </div>
                                     </div>
                                 </div>
@@ -351,78 +330,127 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="box box-danger">
+                            <div class="box-header">
+                                <h3 class="box-title">{:__('Recent news')}</h3>
+                                <div class="box-tools pull-right">
+                                    <a href="https://www.fastadmin.net" target="_blank" class="btn btn-box-tool">{:__('More')}</a>
+                                </div>
+                            </div>
+                            <div class="box-body" id="news-list">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="box box-success">
+                            <div class="box-header">
+                                <h3 class="box-title">{:__('Recent discussion')}</h3>
+                                <div class="box-tools pull-right">
+                                    <a href="https://forum.fastadmin.net" class="btn btn-box-tool">{:__('More')}</a>
+                                </div>
+                            </div>
+                            <div class="box-body" id="discussion-list">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="box box-info">
+                            <div class="box-header"><h3 class="box-title">{:__('Server info')}</h3></div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td width="140">{:__('FastAdmin version')}</td>
+                                            <td>{$Think.config.fastadmin.version} <a href="javascript:;" class="btn btn-xs btn-checkversion">检查最新版</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('FastAdmin addon version')}</td>
+                                            <td>{$addonversion}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Sapi name')}</td>
+                                            <td>{:php_sapi_name()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Debug mode')}</td>
+                                            <td>{$Think.config.app_debug?__('Yes'):__('No')}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Software')}</td>
+                                            <td>{$Think.server.SERVER_SOFTWARE}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Upload mode')}</td>
+                                            <td>{$uploadmode}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Upload url')}</td>
+                                            <td>{$config.upload.uploadurl}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Upload Cdn url')}</td>
+                                            <td>{$config.upload.cdnurl}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Timezone')}</td>
+                                            <td>{:date_default_timezone_get()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Cdn url')}</td>
+                                            <td>__CDN__</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{:__('Language')}</td>
+                                            <td>{$config.language}</td>
+                                        </tr>
+                                    </tbody></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade" id="two">
                 <div class="row">
-                    <div class="col-xs-3">
-                        <div class="box box-danger">
-                            <div class="box-header with-border"><span class="label label-success pull-right">Monthly</span>
-                                <div class="box-title">
-                                    统计数据1
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <div class="ibox-content">
-                                    <h1 class="no-margin no-padding">40 886,200</h1>
-                                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                                    <small>Total income</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="box box-success bg-green-gradient">
-                            <div class="box-header"><span class="label label-success pull-right">Monthly</span>
-                                <div class="box-title">
-                                    统计数据2
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <div class="ibox-content">
-                                    <h1 class="no-margin no-padding">40 886,200</h1>
-                                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                                    <small>Total income</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="box box-warning">
-                            <div class="box-header with-border"><span class="label label-success pull-right">Monthly</span>
-                                <div class="box-title">
-                                    统计数据3
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <div class="ibox-content">
-                                    <h1 class="no-margin no-padding">40 886,200</h1>
-                                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                                    <small>Total income</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="box box-info bg-purple-gradient">
-                            <div class="box-header"><span class="label label-success pull-right">Monthly</span>
-                                <div class="box-title">
-                                    统计数据4
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <div class="ibox-content">
-                                    <h1 class="no-margin no-padding">40 886,200</h1>
-                                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
-                                    <small>Total income</small>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-xs-12">
+                        {:__('Custom zone')}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script id="newstpl" type="text/html">
+    <ul class="nav nav-stacked">
+        <%for(var i=0;i < news.length;i++){%>
+        <%var item=news[i];%>
+        <li>
+            <a href="<%=item.url%>" target="_blank">
+                <span class="text"><%=item.title%></span>
+            </a>
+        </li>
+        <%}%>
+    </ul>
+</script>
+<script id="discussiontpl" type="text/html">
+    <ul class="products-list product-list-in-box">
+        <%for(var i=0;i < news.length;i++){%>
+        <%var item=news[i];%>
+        <li class="item">
+            <div class="">
+                <a href="<%=item.url%>" target="_blank" class="product-title"><%=item.title%>
+                    <span class="label label-warning pull-right"><%=item.comments_count%></span></a>
+                <span class="product-description">
+                    <%=item.last_time%>
+                </span>
+            </div>
+        </li>
+        <%}%>
+    </ul>
+</script>
 <script>
     var Orderdata = {
     column: {:json_encode(array_keys($paylist))},

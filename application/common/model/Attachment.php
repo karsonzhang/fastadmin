@@ -16,4 +16,9 @@ class Attachment extends Model
     protected $type = [
     ];
 
+    public function setUploadtimeAttr($value)
+    {
+        return strtotime($value);
+    }
+
 }

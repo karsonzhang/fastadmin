@@ -9,6 +9,7 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
+use think\Env;
 
 return [
     // +----------------------------------------------------------------------
@@ -17,9 +18,9 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => true,
+    'app_debug'              => Env::get('app.debug', false),
     // 应用Trace
-    'app_trace'              => false,
+    'app_trace'              => Env::get('app.trace', false),
     // 应用模式状态
     'app_status'             => '',
     // 是否支持多模块
@@ -130,11 +131,12 @@ return [
         'taglib_begin' => '{',
         // 标签库标签结束标记
         'taglib_end'   => '}',
+        'tpl_cache'    => true,
     ],
-    // 视图输出字符串内容替换
+    // 视图输出字符串内容替换,留空则会自动进行计算
     'view_replace_str'       => [
-        '__PUBLIC__' => '/public/',
-        '__ROOT__'   => '/',
+        '__PUBLIC__' => '',
+        '__ROOT__'   => '',
         '__CDN__'    => '',
     ],
     // 默认跳转页面对应的模板文件
@@ -144,9 +146,9 @@ return [
     // | 异常及错误设置
     // +----------------------------------------------------------------------
     // 异常页面的模板文件
-    'exception_tmpl'         => THINK_PATH . 'tpl' . DS . 'think_exception.tpl',
+    'exception_tmpl'         => APP_PATH . 'common' . DS . 'view' . DS . 'tpl' . DS . 'think_exception.tpl',
     // 错误显示信息,非调试模式有效
-    'error_message'          => '页面错误！请稍后再试～',
+    'error_message'          => '你所浏览的页面暂时无法访问',
     // 显示错误信息
     'show_error_msg'         => false,
     // 异常处理handle类 留空使用 \think\exception\Handle
@@ -221,22 +223,57 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+    //验证码配置
     'captcha'                => [
         // 验证码字符集合
         'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',
         // 验证码字体大小(px)
-        'fontSize' => 16,
+        'fontSize' => 18,
         // 是否画混淆曲线
         'useCurve' => false,
         //使用中文验证码
         'useZh'    => false,
         // 验证码图片高度
-        'imageH'   => 30,
+        'imageH'   => 40,
         // 验证码图片宽度
-        'imageW'   => 100,
+        'imageW'   => 130,
         // 验证码位数
         'length'   => 4,
         // 验证成功后是否重置
         'reset'    => true
+    ],
+    // +----------------------------------------------------------------------
+    // | Token设置
+    // +----------------------------------------------------------------------
+    'token'                  => [
+        // 驱动方式
+        'type'     => 'Mysql',
+        // 缓存前缀
+        'key'      => 'i3d6o32wo8fvs1fvdpwens',
+        // 加密方式
+        'hashalgo' => 'ripemd160',
+        // 缓存有效期 0表示永久缓存
+        'expire'   => 0,
+    ],
+    //FastAdmin配置
+    'fastadmin'              => [
+        //是否开启前台会员中心
+        'usercenter'          => true,
+        //登录验证码
+        'login_captcha'       => false,
+        //登录失败超过10则1天后重试
+        'login_failure_retry' => true,
+        //是否同一账号同一时间只能在一个地方登录
+        'login_unique'        => false,
+        //登录页默认背景图
+        'login_background'    => "/assets/img/loginbg.jpg",
+        //是否启用多级菜单导航
+        'multiplenav'         => false,
+        //自动检测更新
+        'checkupdate'         => false,
+        //版本号
+        'version'             => '1.0.0.20180513_beta',
+        //API接口地址
+        'api_url'             => 'https://api.fastadmin.net',
     ],
 ];

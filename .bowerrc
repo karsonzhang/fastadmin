@@ -1,3 +1,9 @@
 {
-  "directory" : "public/assets/libs"
+  "directory" : "public/assets/libs",
+  "ignoredDependencies": [
+    "file-saver",
+    "html2canvas",
+    "jspdf",
+    "jspdf-autotable"
+  ]
 }

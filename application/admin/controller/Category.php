@@ -23,15 +23,15 @@ class Category extends Backend
     {
         parent::_initialize();
         $this->request->filter(['strip_tags']);
-        $this->model = model('Category');
+        $this->model = model('app\common\model\Category');
 
         $tree = Tree::instance();
-        $tree->init($this->model->order('weigh desc,id desc')->select(), 'pid');
+        $tree->init(collection($this->model->order('weigh desc,id desc')->select())->toArray(), 'pid');
         $this->categorylist = $tree->getTreeList($tree->getTreeArray(0), 'name');
-        $categorydata = [0 => __('None')];
+        $categorydata = [0 => ['type' => 'all', 'name' => __('None')]];
         foreach ($this->categorylist as $k => $v)
         {
-            $categorydata[$v['id']] = $v['name'];
+            $categorydata[$v['id']] = $v;
         }
         $this->view->assign("flagList", $this->model->getFlagList());
         $this->view->assign("typeList", CategoryModel::getTypeList());
@@ -45,11 +45,36 @@ class Category extends Backend
     {
         if ($this->request->isAjax())
         {
+            $search = $this->request->request("search");
+            $type = $this->request->request("type");
 
             //构造父类select列表选项数据
-            $list = $this->categorylist;
+            $list = [];
+
+                foreach ($this->categorylist as $k => $v)
+                {
+                    if ($search) {
+                        if ($v['type'] == $type && stripos($v['name'], $search) !== false || stripos($v['nickname'], $search) !== false)
+                        {
+                            if($type == "all" || $type == null) {
+                                $list = $this->categorylist;
+                            } else {
+                                $list[] = $v;
+                            }
+                        }
+                    } else {
+                        if($type == "all" || $type == null) {
+                            $list = $this->categorylist;
+                        } else if ($v['type'] == $type){
+                            $list[] = $v;
+                        }
+
+                    }
+
+                }
+
             $total = count($list);
-            $result = array("total" => 1, "rows" => $list);
+            $result = array("total" => $total, "rows" => $list);
 
             return json($result);
         }

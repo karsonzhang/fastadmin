@@ -1,16 +1,16 @@
 /*
  FastAdmin Install SQL
 
- 官网: http://www.fastadmin.net
- 演示: http://demo.fastadmin.net
+ 官网: https://www.fastadmin.net
+ 演示: https://demo.fastadmin.net
 
- Date: 07/11/2017 23:52:44 PM
+ Date: 2018年05月26日
 */
 
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
---  Table structure for `fa_admin`
+-- Table structure for fa_admin
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_admin`;
 CREATE TABLE `fa_admin` (
@@ -29,24 +29,28 @@ CREATE TABLE `fa_admin` (
   `status` varchar(30) NOT NULL DEFAULT 'normal' COMMENT '状态',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员表';
 
 -- ----------------------------
---  Records of `fa_admin`
+-- Records of fa_admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_admin` VALUES ('1', 'admin', 'Admin', '075eaec83636846f51c152f29b98a2fd', 's4f3', '/assets/img/avatar.png', 'admin@fastadmin.net', '0', '1497070325', '1492186163', '1497070325', 'c586728f-0687-4e1a-84c0-c3b9f9003850', 'normal'), ('2', 'admin2', 'admin2', '9a28ce07ce875fbd14172a9ca5357d3c', '2dHDmj', '/assets/img/avatar.png', 'admin2@fastadmin.net', '0', '0', '1492186163', '1492186163', '', 'normal'), ('3', 'admin3', 'admin3', '1c11f945dfcd808a130a8c2a8753fe62', 'WOKJEn', '/assets/img/avatar.png', 'admin3@fastadmin.net', '0', '0', '1492186201', '1492186201', '', 'normal'), ('4', 'admin22', 'admin22', '1c1a0aa0c3c56a8c1a908aab94519648', 'Aybcn5', '/assets/img/avatar.png', 'admin22@fastadmin.net', '0', '0', '1492186240', '1492186240', '', 'normal'), ('5', 'admin32', 'admin32', 'ade94d5d7a7033afa7d84ac3066d0a02', 'FvYK0u', '/assets/img/avatar.png', 'admin32@fastadmin.net', '0', '0', '1492186263', '1492186263', '', 'normal'), ('6', 'test123', 'test', '2a9020e6ef15245399f00d5cda5fb1e6', 'unbBZH', '', 'test@163.com', '0', '1497062737', '1497062728', '1497070313', '', 'normal');
+INSERT INTO `fa_admin` VALUES (1, 'admin', 'Admin', '075eaec83636846f51c152f29b98a2fd', 's4f3', '/assets/img/avatar.png', 'admin@fastadmin.net', 0, 1502029281, 1492186163, 1502029281, 'd3992c3b-5ecc-4ecb-9dc2-8997780fcadc', 'normal');
+INSERT INTO `fa_admin` VALUES (2, 'admin2', 'admin2', '9a28ce07ce875fbd14172a9ca5357d3c', '2dHDmj', '/assets/img/avatar.png', 'admin2@fastadmin.net', 0, 1505450906, 1492186163, 1505450906, 'df45fdd5-26f4-45ca-83b3-47e4491a315a', 'normal');
+INSERT INTO `fa_admin` VALUES (3, 'admin3', 'admin3', '1c11f945dfcd808a130a8c2a8753fe62', 'WOKJEn', '/assets/img/avatar.png', 'admin3@fastadmin.net', 0, 1501980868, 1492186201, 1501982377, '', 'normal');
+INSERT INTO `fa_admin` VALUES (4, 'admin22', 'admin22', '1c1a0aa0c3c56a8c1a908aab94519648', 'Aybcn5', '/assets/img/avatar.png', 'admin22@fastadmin.net', 0, 0, 1492186240, 1492186240, '', 'normal');
+INSERT INTO `fa_admin` VALUES (5, 'admin32', 'admin32', 'ade94d5d7a7033afa7d84ac3066d0a02', 'FvYK0u', '/assets/img/avatar.png', 'admin32@fastadmin.net', 0, 0, 1492186263, 1492186263, '', 'normal');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_admin_log`
+-- Table structure for fa_admin_log
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_admin_log`;
 CREATE TABLE `fa_admin_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
   `username` varchar(30) NOT NULL DEFAULT '' COMMENT '管理员名字',
-  `url` varchar(100) NOT NULL DEFAULT '' COMMENT '操作页面',
+  `url` varchar(1500) NOT NULL DEFAULT '' COMMENT '操作页面',
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '日志标题',
   `content` text NOT NULL COMMENT '内容',
   `ip` varchar(50) NOT NULL DEFAULT '' COMMENT 'IP',
@@ -54,69 +58,41 @@ CREATE TABLE `fa_admin_log` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员日志表';
 
 -- ----------------------------
---  Records of `fa_admin_log`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_admin_log` VALUES ('1', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"phone-bg.png\",\"signature\":\"e6afb5fb65947ba639810670d67535f2\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499768230\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499681848'), ('2', '1', 'admin', '/public/admin.php/category/edit/ids/5?dialog=1', '分类管理 编辑', '{\"dialog\":\"1\",\"row\":{\"type\":\"page\",\"pid\":\"0\",\"name\":\"\\u8f6f\\u4ef6\\u4ea7\\u54c1\",\"nickname\":\"software\",\"flag\":[\"recommend\"],\"image\":\"\\/uploads\\/20170710\\/52ecad420fc9bb113e588de3b3593b90.png\",\"keywords\":\"\",\"description\":\"\",\"weigh\":\"0\",\"status\":\"normal\"},\"ids\":\"5\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499681850'), ('3', '1', 'admin', '/public/admin.php/test/add/ids?dialog=1', '测试管理 添加', '{\"dialog\":\"1\",\"row_category_id_text\":\"\\u6d4b\\u8bd51\",\"row\":{\"category_id\":\"12\",\"category_ids\":\"12,13\",\"user_id\":\"3\",\"user_ids\":\"3\",\"week\":\"monday\",\"flag\":[\"hot\",\"index\"],\"genderdata\":\"male\",\"hobbydata\":[\"music\",\"reading\"],\"title\":\"\\u6211\\u662f\\u4e00\\u7bc7\\u6d4b\\u8bd5\\u6587\\u7ae0\",\"content\":\"<p>\\u6211\\u662f\\u6d4b\\u8bd5\\u5185\\u5bb9<\\/p>\",\"image\":\"\\/assets\\/img\\/avatar.png\",\"images\":\"\\/assets\\/img\\/avatar.png,\\/assets\\/img\\/qrcode.png\",\"attachfile\":\"\\/assets\\/img\\/avatar.png\",\"keywords\":\"\\u5173\\u952e\\u5b57\",\"description\":\"\\u63cf\\u8ff0\",\"price\":\"0.00\",\"views\":\"0\",\"startdate\":\"2017-07-10\",\"activitytime\":\"2017-07-10 18:24:45\",\"year\":\"2017\",\"times\":\"18:24:45\",\"refreshtime\":\"2017-07-10 18:24:45\",\"weigh\":\"0\",\"status\":\"normal\",\"state\":\"1\"},\"row_category_ids_text\":\"\",\"row_user_id_text\":\"admin\",\"row_user_ids_text\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499682526'), ('4', '1', 'admin', '/public/admin/test/add/ids?dialog=1', '测试管理 添加', '{\"dialog\":\"1\",\"row_category_id_text\":\"\\u6d4b\\u8bd52\",\"row\":{\"category_id\":\"13\",\"category_ids\":\"13\",\"user_id\":\"3\",\"user_ids\":\"3\",\"week\":\"monday\",\"flag\":[\"hot\",\"index\"],\"genderdata\":\"male\",\"hobbydata\":[\"music\",\"reading\"],\"title\":\"tes\",\"content\":\"<p>test<\\/p>\",\"image\":\"a\",\"images\":\"b\",\"attachfile\":\"c\",\"keywords\":\"a\",\"description\":\"a\",\"price\":\"0.00\",\"views\":\"0\",\"startdate\":\"2017-07-11\",\"activitytime\":\"2017-07-11 16:12:03\",\"year\":\"2017\",\"times\":\"16:12:03\",\"refreshtime\":\"2017-07-11 16:12:03\",\"weigh\":\"0\",\"status\":\"normal\",\"state\":\"1\"},\"row_category_ids_text\":\"\",\"row_user_id_text\":\"admin\",\"row_user_ids_text\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499760748'), ('5', '1', 'admin', '/public/admin/ajax/upload', '', '{\"name\":\"qrcode.png\",\"signature\":\"45fd8c9bd10632cabd23ba0ce7070533\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499847826\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499761445'), ('6', '1', 'admin', '/public/admin/auth/rule/edit/ids/11291?dialog=1', '权限管理 规则管理 编辑', '{\"dialog\":\"1\",\"row\":{\"ismenu\":\"1\",\"pid\":\"11290\",\"name\":\"\\/admin\\/wechat\\/autoreply\",\"title\":\"\\u5fae\\u4fe1\\u81ea\\u52a8\\u56de\\u590d\\u7ba1\\u7406\",\"icon\":\"fa fa-reply-all\",\"weigh\":\"26\",\"condition\":\"\\u7528\\u6237\\u5728\\u5fae\\u4fe1\\u516c\\u4f17\\u53f7\\u4e2d\\u8f93\\u5165\\u7279\\u5b9a\\u7684\\u6587\\u5b57\\u540e\\uff0c\\u670d\\u52a1\\u5668\\u54cd\\u5e94\\u4e0d\\u540c\\u7684\\u4e8b\\u4ef6\",\"remark\":\"\",\"status\":\"normal\"},\"ids\":\"11291\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499761628'), ('7', '1', 'admin', '/public/admin/auth/group/del/ids/1', '权限管理 角色组 删除', '{\"action\":\"del\",\"ids\":\"1\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499762290'), ('8', '1', 'admin', '/public/admin/auth/group/del/ids/1', '权限管理 角色组 删除', '{\"action\":\"del\",\"ids\":\"1\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499762464'), ('9', '1', 'admin', '/public/admin/auth/group/del/ids/1', '权限管理 角色组 删除', '{\"action\":\"del\",\"ids\":\"1\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499762761'), ('10', '1', 'admin', '/public/admin/auth/group/del/ids/1', '权限管理 角色组 删除', '{\"action\":\"del\",\"ids\":\"1\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499762770'), ('11', '1', 'admin', '/public/admin/auth/group/del/ids/1', '权限管理 角色组 删除', '{\"action\":\"del\",\"ids\":\"1\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499762943'), ('12', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795288.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764194'), ('13', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795290.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764194'), ('14', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795282.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764194'), ('15', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795283.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764194'), ('16', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795292.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764194'), ('17', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795286.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764195'), ('18', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795293.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764245'), ('19', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795277.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764259'), ('20', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795284.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764270'), ('21', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795287.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764281'), ('22', '1', 'admin', '/public/admin.php/ajax/upload', '', '{\"name\":\"14558668_1350878795289.jpg\",\"signature\":\"99d25cbae44dab9ed570f7db53ef28fb\",\"bucket\":\"yourbucketname\",\"save-key\":\"\\/uploads\\/{year}{mon}{day}\\/{filemd5}{.suffix}\",\"expiration\":\"1499850578\",\"notify-url\":\"http:\\/\\/www.yoursite.com\\/upyun\\/notify\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499764291'), ('23', '1', 'admin', '/public/admin.php/general/crontab/get_schedule_future', '', '{\"schedule\":\"* * * * *\",\"days\":\"7\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765449'), ('24', '1', 'admin', '/public/admin.php/general/crontab/check_schedule', '', '{\"row\":{\"schedule\":\"* * * * *\"}}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765451'), ('25', '1', 'admin', '/public/admin.php/general/crontab/get_schedule_future', '', '{\"schedule\":\"* * * * *\",\"days\":\"7\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765451'), ('26', '1', 'admin', '/public/admin.php/general/crontab/edit/ids/1?dialog=1', '常规管理 定时任务 编辑', '{\"dialog\":\"1\",\"row\":{\"title\":\"\\u8bf7\\u6c42FastAdmin\",\"type\":\"url\",\"content\":\"http:\\/\\/www.fastadmin.net\",\"schedule\":\"* * * * *\",\"maximums\":\"0\",\"begintime\":\"2017-01-01 00:00:00\",\"endtime\":\"2019-01-01 00:00:00\",\"weigh\":\"1\",\"status\":\"normal\"},\"ids\":\"1\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765451'), ('27', '1', 'admin', '/public/admin.php/general/crontab/get_schedule_future', '', '{\"schedule\":\"* * * * *\",\"days\":\"7\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765453'), ('28', '1', 'admin', '/public/admin.php/general/crontab/check_schedule', '', '{\"row\":{\"schedule\":\"* * * * *\"}}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765456'), ('29', '1', 'admin', '/public/admin.php/general/crontab/get_schedule_future', '', '{\"schedule\":\"* * * * *\",\"days\":\"7\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765456'), ('30', '1', 'admin', '/public/admin.php/general/crontab/edit/ids/2?dialog=1', '常规管理 定时任务 编辑', '{\"dialog\":\"1\",\"row\":{\"title\":\"\\u67e5\\u8be2\\u4e00\\u6761SQL\",\"type\":\"sql\",\"content\":\"SELECT 1;\",\"schedule\":\"* * * * *\",\"maximums\":\"0\",\"begintime\":\"2017-01-01 00:00:00\",\"endtime\":\"2019-01-01 00:00:00\",\"weigh\":\"2\",\"status\":\"normal\"},\"ids\":\"2\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765456'), ('31', '1', 'admin', '/public/admin.php/general/crontab/get_schedule_future', '', '{\"schedule\":\"* * * * *\",\"days\":\"7\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499765460'), ('32', '1', 'admin', '/public/admin.php/page/add/ids?dialog=1', '单页管理 添加', '{\"dialog\":\"1\",\"row_category_id_text\":\"Android\\u5f00\\u53d1\",\"row\":{\"category_id\":\"4\",\"title\":\"test\",\"keywords\":\"test\",\"flag\":\"recommend\",\"image\":\"\\/assets\\/img\\/qrcode.png\",\"content\":\"<p>test<\\/p>\",\"icon\":\"\",\"views\":\"0\",\"comments\":\"0\",\"weigh\":\"0\",\"status\":\"normal\"}}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499769482'), ('33', '1', 'admin', '/public/admin.php/example/bootstraptable/change/ids/31', '', '{\"action\":\"\",\"ids\":\"31\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499769813'), ('34', '1', 'admin', '/public/admin.php/example/bootstraptable/change/ids/31', '', '{\"action\":\"\",\"ids\":\"31\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499769814'), ('35', '1', 'admin', '/public/admin.php/example/bootstraptable/change/ids/33', '', '{\"action\":\"\",\"ids\":\"33\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499769815'), ('36', '1', 'admin', '/public/admin.php/example/bootstraptable/change/ids/35', '', '{\"action\":\"\",\"ids\":\"35\",\"params\":\"\"}', '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '1499769816');
-COMMIT;
-
--- ----------------------------
---  Table structure for `fa_article`
--- ----------------------------
-DROP TABLE IF EXISTS `fa_article`;
-CREATE TABLE `fa_article` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID',
-  `flag` set('h','i','r') NOT NULL DEFAULT '' COMMENT '标志',
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '标题',
-  `content` text NOT NULL COMMENT '内容',
-  `image` varchar(100) NOT NULL DEFAULT '' COMMENT '图片',
-  `keywords` varchar(255) NOT NULL DEFAULT '' COMMENT '关键字',
-  `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
-  `views` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击',
-  `comments` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
-  `status` enum('normal','hidden') NOT NULL DEFAULT 'normal' COMMENT '状态',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='文章表';
-
--- ----------------------------
---  Table structure for `fa_attachment`
+-- Table structure for fa_attachment
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_attachment`;
 CREATE TABLE `fa_attachment` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
   `url` varchar(255) NOT NULL DEFAULT '' COMMENT '物理路径',
   `imagewidth` varchar(30) NOT NULL DEFAULT '' COMMENT '宽度',
-  `imageheight` varchar(30) NOT NULL DEFAULT '' COMMENT '宽度',
+  `imageheight` varchar(30) NOT NULL DEFAULT '' COMMENT '高度',
   `imagetype` varchar(30) NOT NULL DEFAULT '' COMMENT '图片类型',
   `imageframes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '图片帧数',
   `filesize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
-  `mimetype` varchar(30) NOT NULL DEFAULT '' COMMENT 'mime类型',
+  `mimetype` varchar(100) NOT NULL DEFAULT '' COMMENT 'mime类型',
   `extparam` varchar(255) NOT NULL DEFAULT '' COMMENT '透传数据',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `uploadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
-  `storage` enum('local','upyun') NOT NULL DEFAULT 'local' COMMENT '存储位置',
+  `storage` varchar(100) NOT NULL DEFAULT 'local' COMMENT '存储位置',
   `sha1` varchar(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sha1` (`sha1`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='附件表';
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='附件表';
 
 -- ----------------------------
---  Records of `fa_attachment`
+-- Records of fa_attachment
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_attachment` VALUES ('1', '/assets/img/qrcode.png', '150', '150', 'png', '0', '21859', 'image/png', '', '1499681848', '1499681848', '1499681848', 'local', '17163603d0263e4838b9387ff2cd4877e8b018f6');
+INSERT INTO `fa_attachment` VALUES (1, 1, 0, '/assets/img/qrcode.png', '150', '150', 'png', 0, 21859, 'image/png', '', 1499681848, 1499681848, 1499681848, 'local', '17163603d0263e4838b9387ff2cd4877e8b018f6');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_auth_group`
+-- Table structure for fa_auth_group
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_auth_group`;
 CREATE TABLE `fa_auth_group` (
@@ -128,17 +104,21 @@ CREATE TABLE `fa_auth_group` (
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='分组表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='分组表';
 
 -- ----------------------------
---  Records of `fa_auth_group`
+-- Records of fa_auth_group
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_auth_group` VALUES ('1', '0', '超级管理员', '*', '1490883540', '1490883540', 'normal'), ('2', '1', '二级管理员', '11180,11181,11182,11183,11184,11185,11198,11199,11200,11201,11202,11203,11204,11205,11206,11207,11208,11209,11210,11211,11212,11213,11214,11215,11216,11217,11218,11219,11220,11221,11222,11223,11224,11225,11226,11227,11228,11229,11230,11231,11232,11233,11234,11235,11236,11237,11238,11239,11240,11241,11242,11243,11244,11245,11246,11247,11248,11249,11250,11251,11252,11253,11254,11255,11256,11257,11258,11259,11260,11261,11262,11263,11264,11265,11266,11267,11268,11269,11270,11271,11272,11273,11274,11275,11276,11277,11278,11279,11280,11281,11282,11283,11284,11285,11286,11287,11288,11289', '1490883540', '1497431170', 'normal'), ('3', '2', '三级管理员', '11180,11181,11182,11183,11184,11185,11198,11199,11200,11201,11202,11203,11204,11205,11206,11207,11208,11209,11210,11211,11212,11213,11214,11215,11216,11217', '1490883540', '1497431183', 'normal'), ('4', '1', '二级管理员2', '11174,11175,11176,11177,11178,11179,11180,11181,11182,11183,11184,11185,11290,11291,11292,11293,11294,11295,11296,11297,11298,11299,11300,11301,11302,11303,11304,11305,11306,11307,11308,11309,11310,11311,11312,11313,11314,11315,11316', '1490883540', '1497431177', 'normal'), ('5', '2', '三级管理员2', '11180,11181,11182,11183,11184,11185,11218,11219,11220,11221,11222,11223,11224,11225,11226,11227,11228,11229,11230,11231,11232,11233,11234,11235,11236,11237,11238,11239,11240,11241,11242,11243,11244,11245,11246,11247,11248,11249,11250,11251,11252,11253,11254,11255,11256,11257,11258,11259,11260,11261,11262,11263,11264,11265,11266,11267,11268,11269,11270,11271,11272,11273,11274,11275,11276,11277,11278,11279,11280,11281,11282,11283,11284,11285,11286,11287,11288,11289', '1490883540', '1497431190', 'normal');
+INSERT INTO `fa_auth_group` VALUES (1, 0, 'Admin group', '*', 1490883540, 149088354, 'normal');
+INSERT INTO `fa_auth_group` VALUES (2, 1, 'Second group', '13,14,16,15,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,40,41,42,43,44,45,46,47,48,49,50,55,56,57,58,59,60,61,62,63,64,65,1,9,10,11,7,6,8,2,4,5', 1490883540, 1505465692, 'normal');
+INSERT INTO `fa_auth_group` VALUES (3, 2, 'Third group', '1,4,9,10,11,13,14,15,16,17,40,41,42,43,44,45,46,47,48,49,50,55,56,57,58,59,60,61,62,63,64,65,5', 1490883540, 1502205322, 'normal');
+INSERT INTO `fa_auth_group` VALUES (4, 1, 'Second group 2', '1,4,13,14,15,16,17,55,56,57,58,59,60,61,62,63,64,65', 1490883540, 1502205350, 'normal');
+INSERT INTO `fa_auth_group` VALUES (5, 2, 'Third group 2', '1,2,6,7,8,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34', 1490883540, 1502205344, 'normal');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_auth_group_access`
+-- Table structure for fa_auth_group_access
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_auth_group_access`;
 CREATE TABLE `fa_auth_group_access` (
@@ -147,17 +127,21 @@ CREATE TABLE `fa_auth_group_access` (
   UNIQUE KEY `uid_group_id` (`uid`,`group_id`),
   KEY `uid` (`uid`),
   KEY `group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限分组表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='权限分组表';
 
 -- ----------------------------
---  Records of `fa_auth_group_access`
+-- Records of fa_auth_group_access
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_auth_group_access` VALUES ('1', '1'), ('2', '2'), ('3', '3'), ('4', '5'), ('5', '5'), ('6', '2');
+INSERT INTO `fa_auth_group_access` VALUES (1, 1);
+INSERT INTO `fa_auth_group_access` VALUES (2, 2);
+INSERT INTO `fa_auth_group_access` VALUES (3, 3);
+INSERT INTO `fa_auth_group_access` VALUES (4, 5);
+INSERT INTO `fa_auth_group_access` VALUES (5, 5);
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_auth_rule`
+-- Table structure for fa_auth_rule
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_auth_rule`;
 CREATE TABLE `fa_auth_rule` (
@@ -178,17 +162,100 @@ CREATE TABLE `fa_auth_rule` (
   UNIQUE KEY `name` (`name`) USING BTREE,
   KEY `pid` (`pid`),
   KEY `weigh` (`weigh`)
-) ENGINE=InnoDB AUTO_INCREMENT=11324 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='节点表';
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='节点表';
 
 -- ----------------------------
---  Records of `fa_auth_rule`
+-- Records of fa_auth_rule
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_auth_rule` VALUES ('11174', 'file', '0', '/admin/category', '分类管理', 'fa fa-list\r', '', '用于统一管理网站的所有分类,分类可进行无限级分类\r', '1', '1497429920', '1497429920', '119', 'normal'), ('11175', 'file', '11174', '/admin/category/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '142', 'normal'), ('11176', 'file', '11174', '/admin/category/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '141', 'normal'), ('11177', 'file', '11174', '/admin/category/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '140', 'normal'), ('11178', 'file', '11174', '/admin/category/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '139', 'normal'), ('11179', 'file', '11174', '/admin/category/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '138', 'normal'), ('11180', 'file', '0', '/admin/dashboard', '控制台', 'fa fa-dashboard\r', '', '用于展示当前系统中的统计数据、统计报表及重要实时数据\r', '1', '1497429920', '1497429920', '143', 'normal'), ('11181', 'file', '11180', '/admin/dashboard/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '136', 'normal'), ('11182', 'file', '11180', '/admin/dashboard/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '135', 'normal'), ('11183', 'file', '11180', '/admin/dashboard/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '134', 'normal'), ('11184', 'file', '11180', '/admin/dashboard/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '133', 'normal'), ('11185', 'file', '11180', '/admin/dashboard/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '132', 'normal'), ('11186', 'file', '0', '/admin/page', '单页管理', 'fa fa-tags', '', '用于管理普通的单页面,通常用于关于我们、联系我们、商务合作等单一页面\r\n', '1', '1497429920', '1497430149', '125', 'normal'), ('11187', 'file', '11186', '/admin/page/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '130', 'normal'), ('11188', 'file', '11186', '/admin/page/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '129', 'normal'), ('11189', 'file', '11186', '/admin/page/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '128', 'normal'), ('11190', 'file', '11186', '/admin/page/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '127', 'normal'), ('11191', 'file', '11186', '/admin/page/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '126', 'normal'), ('11192', 'file', '0', '/admin/version', '版本管理', 'fa fa-file-text-o', '', '', '1', '1497429920', '1497430600', '27', 'normal'), ('11193', 'file', '11192', '/admin/version/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '124', 'normal'), ('11194', 'file', '11192', '/admin/version/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '123', 'normal'), ('11195', 'file', '11192', '/admin/version/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '122', 'normal'), ('11196', 'file', '11192', '/admin/version/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '121', 'normal'), ('11197', 'file', '11192', '/admin/version/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '120', 'normal'), ('11198', 'file', '0', '/admin/auth', '权限管理', 'fa fa-group', '', '', '1', '1497429920', '1497430092', '99', 'normal'), ('11199', 'file', '11198', '/admin/auth/admin', '管理员管理', 'fa fa-user', '', '一个管理员可以有多个角色组,左侧的菜单根据管理员所拥有的权限进行生成', '1', '1497429920', '1497430320', '118', 'normal'), ('11200', 'file', '11199', '/admin/auth/admin/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '117', 'normal'), ('11201', 'file', '11199', '/admin/auth/admin/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '116', 'normal'), ('11202', 'file', '11199', '/admin/auth/admin/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '115', 'normal'), ('11203', 'file', '11199', '/admin/auth/admin/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '114', 'normal'), ('11204', 'file', '11198', '/admin/auth/adminlog', '管理员日志', 'fa fa-list-alt', '', '管理员可以查看自己所拥有的权限的管理员日志', '1', '1497429920', '1497430307', '113', 'normal'), ('11205', 'file', '11204', '/admin/auth/adminlog/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '112', 'normal'), ('11206', 'file', '11204', '/admin/auth/adminlog/detail', '详情', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '111', 'normal'), ('11207', 'file', '11204', '/admin/auth/adminlog/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '110', 'normal'), ('11208', 'file', '11198', '/admin/auth/group', '角色组', 'fa fa-group', '', '角色组可以有多个,角色有上下级层级关系,如果子角色有角色组和管理员的权限则可以派生属于自己组别下级的角色组或管理员', '1', '1497429920', '1497429920', '109', 'normal'), ('11209', 'file', '11208', '/admin/auth/group/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '108', 'normal'), ('11210', 'file', '11208', '/admin/auth/group/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '107', 'normal'), ('11211', 'file', '11208', '/admin/auth/group/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '106', 'normal'), ('11212', 'file', '11208', '/admin/auth/group/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '105', 'normal'), ('11213', 'file', '11198', '/admin/auth/rule', '规则管理', 'fa fa-bars', '', '规则通常对应一个控制器的方法,同时左侧的菜单栏数据也从规则中体现,通常建议通过控制台进行生成规则节点', '1', '1497429920', '1497430581', '104', 'normal'), ('11214', 'file', '11213', '/admin/auth/rule/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '103', 'normal'), ('11215', 'file', '11213', '/admin/auth/rule/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '102', 'normal'), ('11216', 'file', '11213', '/admin/auth/rule/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '101', 'normal'), ('11217', 'file', '11213', '/admin/auth/rule/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '100', 'normal'), ('11218', 'file', '0', '/admin/example', '示例管理', 'fa fa-magic', '', '', '1', '1497429920', '1497430123', '131', 'normal'), ('11219', 'file', '11218', '/admin/example/bootstraptable', '表格完整示例', 'fa fa-table', '', '在使用Bootstrap-table中的常用方式,更多使用方式可查看:http://bootstrap-table.wenzhixin.net.cn/zh-cn/', '1', '1497429920', '1497429920', '98', 'normal'), ('11220', 'file', '11219', '/admin/example/bootstraptable/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '97', 'normal'), ('11221', 'file', '11219', '/admin/example/bootstraptable/detail', '详情', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '96', 'normal'), ('11222', 'file', '11219', '/admin/example/bootstraptable/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '95', 'normal'), ('11223', 'file', '11219', '/admin/example/bootstraptable/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '94', 'normal'), ('11224', 'file', '11219', '/admin/example/bootstraptable/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '93', 'normal'), ('11225', 'file', '11219', '/admin/example/bootstraptable/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '92', 'normal'), ('11226', 'file', '11218', '/admin/example/colorbadge', '彩色角标', 'fa fa-table', '', '在JS端控制角标的显示与隐藏,请注意左侧菜单栏角标的数值变化', '1', '1497429920', '1497429920', '91', 'normal'), ('11227', 'file', '11226', '/admin/example/colorbadge/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '90', 'normal'), ('11228', 'file', '11226', '/admin/example/colorbadge/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '89', 'normal'), ('11229', 'file', '11226', '/admin/example/colorbadge/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '88', 'normal'), ('11230', 'file', '11226', '/admin/example/colorbadge/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '87', 'normal'), ('11231', 'file', '11226', '/admin/example/colorbadge/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '86', 'normal'), ('11232', 'file', '11218', '/admin/example/controllerjump', '控制器间跳转', 'fa fa-table', '', 'FastAdmin支持在控制器间跳转,点击后将切换到另外一个TAB中,无需刷新当前页面', '1', '1497429920', '1497429920', '85', 'normal'), ('11233', 'file', '11232', '/admin/example/controllerjump/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '84', 'normal'), ('11234', 'file', '11232', '/admin/example/controllerjump/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '83', 'normal'), ('11235', 'file', '11232', '/admin/example/controllerjump/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '82', 'normal'), ('11236', 'file', '11232', '/admin/example/controllerjump/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '81', 'normal'), ('11237', 'file', '11232', '/admin/example/controllerjump/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '80', 'normal'), ('11238', 'file', '11218', '/admin/example/cxselect', '多级联动', 'fa fa-table', '', 'FastAdmin使用了jQuery-cxselect实现多级联动,更多文档请参考https://github.com/karsonzhang/cxSelect', '1', '1497429920', '1497429920', '79', 'normal'), ('11239', 'file', '11238', '/admin/example/cxselect/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '78', 'normal'), ('11240', 'file', '11238', '/admin/example/cxselect/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '77', 'normal'), ('11241', 'file', '11238', '/admin/example/cxselect/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '76', 'normal'), ('11242', 'file', '11238', '/admin/example/cxselect/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '75', 'normal'), ('11243', 'file', '11238', '/admin/example/cxselect/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '74', 'normal'), ('11244', 'file', '11218', '/admin/example/multitable', '多表格示例', 'fa fa-table', '', '当一个页面上存在多个Bootstrap-table时该如何控制按钮和表格', '1', '1497429920', '1497429920', '73', 'normal'), ('11245', 'file', '11244', '/admin/example/multitable/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '72', 'normal'), ('11246', 'file', '11244', '/admin/example/multitable/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '71', 'normal'), ('11247', 'file', '11244', '/admin/example/multitable/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '70', 'normal'), ('11248', 'file', '11244', '/admin/example/multitable/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '69', 'normal'), ('11249', 'file', '11244', '/admin/example/multitable/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '68', 'normal'), ('11250', 'file', '11218', '/admin/example/relationmodel', '多模型关联', 'fa fa-table', '', '当使用到关联模型时需要重载index方法', '1', '1497429920', '1497429920', '67', 'normal'), ('11251', 'file', '11250', '/admin/example/relationmodel/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '66', 'normal'), ('11252', 'file', '11250', '/admin/example/relationmodel/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '65', 'normal'), ('11253', 'file', '11250', '/admin/example/relationmodel/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '64', 'normal'), ('11254', 'file', '11250', '/admin/example/relationmodel/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '63', 'normal'), ('11255', 'file', '11250', '/admin/example/relationmodel/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '62', 'normal'), ('11256', 'file', '0', '/admin/general', '常规管理', 'fa fa-cogs', '', '', '1', '1497429920', '1497430169', '137', 'normal'), ('11257', 'file', '11256', '/admin/general/attachment', '附件管理', 'fa fa-file-image-o', '', '主要用于管理上传到又拍云的数据或上传至本服务的上传数据\r\n', '1', '1497429920', '1497430699', '53', 'normal'), ('11258', 'file', '11257', '/admin/general/attachment/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '59', 'normal'), ('11259', 'file', '11257', '/admin/general/attachment/select', '选择附件', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '58', 'normal'), ('11260', 'file', '11257', '/admin/general/attachment/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '57', 'normal'), ('11261', 'file', '11257', '/admin/general/attachment/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '56', 'normal'), ('11262', 'file', '11257', '/admin/general/attachment/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '55', 'normal'), ('11263', 'file', '11257', '/admin/general/attachment/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '54', 'normal'), ('11264', 'file', '11256', '/admin/general/config', '系统配置', 'fa fa-cog', '', '', '1', '1497429920', '1497430683', '60', 'normal'), ('11265', 'file', '11264', '/admin/general/config/index', 'index', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '52', 'normal'), ('11266', 'file', '11264', '/admin/general/config/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '51', 'normal'), ('11267', 'file', '11264', '/admin/general/config/edit', 'edit', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '50', 'normal'), ('11268', 'file', '11264', '/admin/general/config/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '49', 'normal'), ('11269', 'file', '11264', '/admin/general/config/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '48', 'normal'), ('11270', 'file', '11256', '/admin/general/crontab', '定时任务', 'fa fa-tasks', '', '类似于Linux的Crontab定时任务,可以按照设定的时间进行任务的执行,目前仅支持三种任务:请求URL、执行SQL、执行Shell', '1', '1497429920', '1497429920', '47', 'normal'), ('11271', 'file', '11270', '/admin/general/crontab/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '46', 'normal'), ('11272', 'file', '11270', '/admin/general/crontab/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '45', 'normal'), ('11273', 'file', '11270', '/admin/general/crontab/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '44', 'normal'), ('11274', 'file', '11270', '/admin/general/crontab/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '43', 'normal'), ('11275', 'file', '11270', '/admin/general/crontab/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '42', 'normal'), ('11276', 'file', '11256', '/admin/general/database', '数据库管理', 'fa fa-database', '', '可在线进行一些简单的数据库表优化或修复,查看表结构和数据。也可以进行SQL语句的操作', '1', '1497429920', '1497429920', '41', 'normal'), ('11277', 'file', '11276', '/admin/general/database/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '40', 'normal'), ('11278', 'file', '11276', '/admin/general/database/query', 'SQL查询', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '39', 'normal'), ('11279', 'file', '11276', '/admin/general/database/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '38', 'normal'), ('11280', 'file', '11276', '/admin/general/database/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '37', 'normal'), ('11281', 'file', '11276', '/admin/general/database/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '36', 'normal'), ('11282', 'file', '11276', '/admin/general/database/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '35', 'normal'), ('11283', 'file', '11256', '/admin/general/profile', '个人配置', 'fa fa-user\r', '', '', '1', '1497429920', '1497429920', '34', 'normal'), ('11284', 'file', '11283', '/admin/general/profile/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '33', 'normal'), ('11285', 'file', '11283', '/admin/general/profile/update', '更新个人信息', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '32', 'normal'), ('11286', 'file', '11283', '/admin/general/profile/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '31', 'normal'), ('11287', 'file', '11283', '/admin/general/profile/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '30', 'normal'), ('11288', 'file', '11283', '/admin/general/profile/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '29', 'normal'), ('11289', 'file', '11283', '/admin/general/profile/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '28', 'normal'), ('11290', 'file', '0', '/admin/wechat', '微信管理', 'fa fa-wechat', '', '', '1', '1497429920', '1497430064', '61', 'normal'), ('11291', 'file', '11290', '/admin/wechat/autoreply', '微信自动回复管理', 'fa fa-reply-all', '用户在微信公众号中输入特定的文字后，服务器响应不同的事件', '', '1', '1497429920', '1499761628', '26', 'normal'), ('11292', 'file', '11291', '/admin/wechat/autoreply/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '25', 'normal'), ('11293', 'file', '11291', '/admin/wechat/autoreply/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '24', 'normal'), ('11294', 'file', '11291', '/admin/wechat/autoreply/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '23', 'normal'), ('11295', 'file', '11291', '/admin/wechat/autoreply/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '22', 'normal'), ('11296', 'file', '11291', '/admin/wechat/autoreply/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '21', 'normal'), ('11297', 'file', '11290', '/admin/wechat/config', '微信配置管理', 'fa fa-cog', '', '', '1', '1497429920', '1497430632', '20', 'normal'), ('11298', 'file', '11297', '/admin/wechat/config/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '19', 'normal'), ('11299', 'file', '11297', '/admin/wechat/config/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '18', 'normal'), ('11300', 'file', '11297', '/admin/wechat/config/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '17', 'normal'), ('11301', 'file', '11297', '/admin/wechat/config/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '16', 'normal'), ('11302', 'file', '11297', '/admin/wechat/config/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '15', 'normal'), ('11303', 'file', '11290', '/admin/wechat/menu', '菜单管理', 'fa fa-bars', '', '', '1', '1497429920', '1497430652', '14', 'normal'), ('11304', 'file', '11303', '/admin/wechat/menu/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '13', 'normal'), ('11305', 'file', '11303', '/admin/wechat/menu/edit', '修改', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '12', 'normal'), ('11306', 'file', '11303', '/admin/wechat/menu/sync', '同步', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '11', 'normal'), ('11307', 'file', '11303', '/admin/wechat/menu/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '10', 'normal'), ('11308', 'file', '11303', '/admin/wechat/menu/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '9', 'normal'), ('11309', 'file', '11303', '/admin/wechat/menu/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '8', 'normal'), ('11310', 'file', '11290', '/admin/wechat/response', '资源管理', 'fa fa-list-alt', '', '', '1', '1497429920', '1497429920', '7', 'normal'), ('11311', 'file', '11310', '/admin/wechat/response/select', '选择素材', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '6', 'normal'), ('11312', 'file', '11310', '/admin/wechat/response/add', '添加', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '5', 'normal'), ('11313', 'file', '11310', '/admin/wechat/response/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '4', 'normal'), ('11314', 'file', '11310', '/admin/wechat/response/index', '查看', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '3', 'normal'), ('11315', 'file', '11310', '/admin/wechat/response/del', '删除', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '2', 'normal'), ('11316', 'file', '11310', '/admin/wechat/response/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497429920', '1497429920', '1', 'normal'), ('11317', 'file', '11218', '/admin/example/tabletemplate', '表格模板示例', 'fa fa-table', '', '可以通过使用表格模板将表格中的行渲染成一样的展现方式，基于此功能可以任意定制自己想要的展示列表', '1', '1497968508', '1497968508', '0', 'normal'), ('11318', 'file', '11317', '/admin/example/tabletemplate/index', '查看', 'fa fa-circle-o', '', '', '0', '1497968508', '1497968508', '0', 'normal'), ('11319', 'file', '11317', '/admin/example/tabletemplate/detail', '详情', 'fa fa-circle-o', '', '', '0', '1497968508', '1497968508', '0', 'normal'), ('11320', 'file', '11317', '/admin/example/tabletemplate/add', '添加', 'fa fa-circle-o', '', '', '0', '1497968508', '1497968508', '0', 'normal'), ('11321', 'file', '11317', '/admin/example/tabletemplate/edit', '编辑', 'fa fa-circle-o', '', '', '0', '1497968508', '1497968508', '0', 'normal'), ('11322', 'file', '11317', '/admin/example/tabletemplate/del', '删除', 'fa fa-circle-o', '', '', '0', '1497968508', '1497968508', '0', 'normal'), ('11323', 'file', '11317', '/admin/example/tabletemplate/multi', '批量更新', 'fa fa-circle-o', '', '', '0', '1497968508', '1497968508', '0', 'normal');
+INSERT INTO `fa_auth_rule` VALUES (1, 'file', 0, 'dashboard', 'Dashboard', 'fa fa-dashboard', '', 'Dashboard tips', 1, 1497429920, 1497429920, 143, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (2, 'file', 0, 'general', 'General', 'fa fa-cogs', '', '', 1, 1497429920, 1497430169, 137, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (3, 'file', 0, 'category', 'Category', 'fa fa-list', '', 'Category tips', 1, 1497429920, 1497429920, 119, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (4, 'file', 0, 'addon', 'Addon', 'fa fa-rocket', '', 'Addon tips', 1, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (5, 'file', 0, 'auth', 'Auth', 'fa fa-group', '', '', 1, 1497429920, 1497430092, 99, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (6, 'file', 2, 'general/config', 'Config', 'fa fa-cog', '', 'Config tips', 1, 1497429920, 1497430683, 60, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (7, 'file', 2, 'general/attachment', 'Attachment', 'fa fa-file-image-o', '', 'Attachment tips', 1, 1497429920, 1497430699, 53, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (8, 'file', 2, 'general/profile', 'Profile', 'fa fa-user', '', '', 1, 1497429920, 1497429920, 34, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (9, 'file', 5, 'auth/admin', 'Admin', 'fa fa-user', '', 'Admin tips', 1, 1497429920, 1497430320, 118, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (10, 'file', 5, 'auth/adminlog', 'Admin log', 'fa fa-list-alt', '', 'Admin log tips', 1, 1497429920, 1497430307, 113, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (11, 'file', 5, 'auth/group', 'Group', 'fa fa-group', '', 'Group tips', 1, 1497429920, 1497429920, 109, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (12, 'file', 5, 'auth/rule', 'Rule', 'fa fa-bars', '', 'Rule tips', 1, 1497429920, 1497430581, 104, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (13, 'file', 1, 'dashboard/index', 'View', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 136, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (14, 'file', 1, 'dashboard/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 135, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (15, 'file', 1, 'dashboard/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 133, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (16, 'file', 1, 'dashboard/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 134, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (17, 'file', 1, 'dashboard/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 132, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (18, 'file', 6, 'general/config/index', 'View', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 52, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (19, 'file', 6, 'general/config/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 51, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (20, 'file', 6, 'general/config/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 50, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (21, 'file', 6, 'general/config/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 49, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (22, 'file', 6, 'general/config/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 48, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (23, 'file', 7, 'general/attachment/index', 'View', 'fa fa-circle-o', '', 'Attachment tips', 0, 1497429920, 1497429920, 59, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (24, 'file', 7, 'general/attachment/select', 'Select attachment', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 58, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (25, 'file', 7, 'general/attachment/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 57, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (26, 'file', 7, 'general/attachment/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 56, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (27, 'file', 7, 'general/attachment/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 55, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (28, 'file', 7, 'general/attachment/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 54, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (29, 'file', 8, 'general/profile/index', 'View', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 33, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (30, 'file', 8, 'general/profile/update', 'Update profile', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 32, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (31, 'file', 8, 'general/profile/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 31, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (32, 'file', 8, 'general/profile/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 30, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (33, 'file', 8, 'general/profile/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 29, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (34, 'file', 8, 'general/profile/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 28, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (35, 'file', 3, 'category/index', 'View', 'fa fa-circle-o', '', 'Category tips', 0, 1497429920, 1497429920, 142, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (36, 'file', 3, 'category/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 141, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (37, 'file', 3, 'category/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 140, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (38, 'file', 3, 'category/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 139, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (39, 'file', 3, 'category/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 138, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (40, 'file', 9, 'auth/admin/index', 'View', 'fa fa-circle-o', '', 'Admin tips', 0, 1497429920, 1497429920, 117, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (41, 'file', 9, 'auth/admin/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 116, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (42, 'file', 9, 'auth/admin/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 115, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (43, 'file', 9, 'auth/admin/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 114, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (44, 'file', 10, 'auth/adminlog/index', 'View', 'fa fa-circle-o', '', 'Admin log tips', 0, 1497429920, 1497429920, 112, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (45, 'file', 10, 'auth/adminlog/detail', 'Detail', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 111, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (46, 'file', 10, 'auth/adminlog/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 110, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (47, 'file', 11, 'auth/group/index', 'View', 'fa fa-circle-o', '', 'Group tips', 0, 1497429920, 1497429920, 108, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (48, 'file', 11, 'auth/group/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 107, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (49, 'file', 11, 'auth/group/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 106, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (50, 'file', 11, 'auth/group/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 105, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (51, 'file', 12, 'auth/rule/index', 'View', 'fa fa-circle-o', '', 'Rule tips', 0, 1497429920, 1497429920, 103, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (52, 'file', 12, 'auth/rule/add', 'Add', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 102, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (53, 'file', 12, 'auth/rule/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 101, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (54, 'file', 12, 'auth/rule/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1497429920, 1497429920, 100, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (55, 'file', 4, 'addon/index', 'View', 'fa fa-circle-o', '', 'Addon tips', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (56, 'file', 4, 'addon/add', 'Add', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (57, 'file', 4, 'addon/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (58, 'file', 4, 'addon/del', 'Delete', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (59, 'file', 4, 'addon/local', 'Local install', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (60, 'file', 4, 'addon/state', 'Update state', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (61, 'file', 4, 'addon/install', 'Install', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (62, 'file', 4, 'addon/uninstall', 'Uninstall', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (63, 'file', 4, 'addon/config', 'Setting', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (64, 'file', 4, 'addon/refresh', 'Refresh', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (65, 'file', 4, 'addon/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1502035509, 1502035509, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (66, 'file', 0, 'user', 'User', 'fa fa-list', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (67, 'file', 66, 'user/user', 'User', 'fa fa-user', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (68, 'file', 67, 'user/user/index', 'View', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (69, 'file', 67, 'user/user/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (70, 'file', 67, 'user/user/add', 'Add', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (71, 'file', 67, 'user/user/del', 'Del', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (72, 'file', 67, 'user/user/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (73, 'file', 66, 'user/group', 'User group', 'fa fa-users', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (74, 'file', 73, 'user/group/add', 'Add', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (75, 'file', 73, 'user/group/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (76, 'file', 73, 'user/group/index', 'View', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (77, 'file', 73, 'user/group/del', 'Del', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (78, 'file', 73, 'user/group/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (79, 'file', 66, 'user/rule', 'User rule', 'fa fa-circle-o', '', '', 1, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (80, 'file', 79, 'user/rule/index', 'View', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (81, 'file', 79, 'user/rule/del', 'Del', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (82, 'file', 79, 'user/rule/add', 'Add', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (83, 'file', 79, 'user/rule/edit', 'Edit', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
+INSERT INTO `fa_auth_rule` VALUES (84, 'file', 79, 'user/rule/multi', 'Multi', 'fa fa-circle-o', '', '', 0, 1516374729, 1516374729, 0, 'normal');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_category`
+-- Table structure for fa_category
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_category`;
 CREATE TABLE `fa_category` (
@@ -209,17 +276,29 @@ CREATE TABLE `fa_category` (
   PRIMARY KEY (`id`),
   KEY `weigh` (`weigh`,`id`),
   KEY `pid` (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='分类表';
 
 -- ----------------------------
---  Records of `fa_category`
+-- Records of fa_category
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_category` VALUES ('1', '0', 'page', '官方新闻', 'news', 'recommend', '/assets/img/qrcode.png', '', '', 'news', '1495262190', '1495262190', '1', 'normal'), ('2', '0', 'page', '移动应用', 'mobileapp', 'hot', '/assets/img/qrcode.png', '', '', 'mobileapp', '1495262244', '1495262244', '2', 'normal'), ('3', '2', 'page', '微信公众号', 'wechatpublic', 'index', '/assets/img/qrcode.png', '', '', 'wechatpublic', '1495262288', '1495262288', '3', 'normal'), ('4', '2', 'page', 'Android开发', 'android', 'recommend', '/assets/img/qrcode.png', '', '', 'android', '1495262317', '1495262317', '4', 'normal'), ('5', '0', 'page', '软件产品', 'software', 'recommend', '/assets/img/qrcode.png', '', '', 'software', '1495262336', '1499681850', '5', 'normal'), ('6', '5', 'page', '网站建站', 'website', 'recommend', '/assets/img/qrcode.png', '', '', 'website', '1495262357', '1495262357', '6', 'normal'), ('7', '5', 'page', '企业管理软件', 'company', 'index', '/assets/img/qrcode.png', '', '', 'company', '1495262391', '1495262391', '7', 'normal'), ('8', '6', 'page', 'PC端', 'website-pc', 'recommend', '/assets/img/qrcode.png', '', '', 'website-pc', '1495262424', '1495262424', '8', 'normal'), ('9', '6', 'page', '移动端', 'website-mobile', 'recommend', '/assets/img/qrcode.png', '', '', 'website-mobile', '1495262456', '1495262456', '9', 'normal'), ('10', '7', 'page', 'CRM系统 ', 'company-crm', 'recommend', '/assets/img/qrcode.png', '', '', 'company-crm', '1495262487', '1495262487', '10', 'normal'), ('11', '7', 'page', 'SASS平台软件', 'company-sass', 'recommend', '/assets/img/qrcode.png', '', '', 'company-sass', '1495262515', '1495262515', '11', 'normal'), ('12', '0', 'test', '测试1', 'test1', 'recommend', '/assets/img/qrcode.png', '', '', 'test1', '1497015727', '1497015727', '12', 'normal'), ('13', '0', 'test', '测试2', 'test2', 'recommend', '/assets/img/qrcode.png', '', '', 'test2', '1497015738', '1497015738', '13', 'normal');
+INSERT INTO `fa_category` VALUES (1, 0, 'page', '官方新闻', 'news', 'recommend', '/assets/img/qrcode.png', '', '', 'news', 1495262190, 1495262190, 1, 'normal');
+INSERT INTO `fa_category` VALUES (2, 0, 'page', '移动应用', 'mobileapp', 'hot', '/assets/img/qrcode.png', '', '', 'mobileapp', 1495262244, 1495262244, 2, 'normal');
+INSERT INTO `fa_category` VALUES (3, 2, 'page', '微信公众号', 'wechatpublic', 'index', '/assets/img/qrcode.png', '', '', 'wechatpublic', 1495262288, 1495262288, 3, 'normal');
+INSERT INTO `fa_category` VALUES (4, 2, 'page', 'Android开发', 'android', 'recommend', '/assets/img/qrcode.png', '', '', 'android', 1495262317, 1495262317, 4, 'normal');
+INSERT INTO `fa_category` VALUES (5, 0, 'page', '软件产品', 'software', 'recommend', '/assets/img/qrcode.png', '', '', 'software', 1495262336, 1499681850, 5, 'normal');
+INSERT INTO `fa_category` VALUES (6, 5, 'page', '网站建站', 'website', 'recommend', '/assets/img/qrcode.png', '', '', 'website', 1495262357, 1495262357, 6, 'normal');
+INSERT INTO `fa_category` VALUES (7, 5, 'page', '企业管理软件', 'company', 'index', '/assets/img/qrcode.png', '', '', 'company', 1495262391, 1495262391, 7, 'normal');
+INSERT INTO `fa_category` VALUES (8, 6, 'page', 'PC端', 'website-pc', 'recommend', '/assets/img/qrcode.png', '', '', 'website-pc', 1495262424, 1495262424, 8, 'normal');
+INSERT INTO `fa_category` VALUES (9, 6, 'page', '移动端', 'website-mobile', 'recommend', '/assets/img/qrcode.png', '', '', 'website-mobile', 1495262456, 1495262456, 9, 'normal');
+INSERT INTO `fa_category` VALUES (10, 7, 'page', 'CRM系统 ', 'company-crm', 'recommend', '/assets/img/qrcode.png', '', '', 'company-crm', 1495262487, 1495262487, 10, 'normal');
+INSERT INTO `fa_category` VALUES (11, 7, 'page', 'SASS平台软件', 'company-sass', 'recommend', '/assets/img/qrcode.png', '', '', 'company-sass', 1495262515, 1495262515, 11, 'normal');
+INSERT INTO `fa_category` VALUES (12, 0, 'test', '测试1', 'test1', 'recommend', '/assets/img/qrcode.png', '', '', 'test1', 1497015727, 1497015727, 12, 'normal');
+INSERT INTO `fa_category` VALUES (13, 0, 'test', '测试2', 'test2', 'recommend', '/assets/img/qrcode.png', '', '', 'test2', 1497015738, 1497015738, 13, 'normal');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_config`
+-- Table structure for fa_config
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_config`;
 CREATE TABLE `fa_config` (
@@ -235,84 +314,70 @@ CREATE TABLE `fa_config` (
   `extend` varchar(255) NOT NULL DEFAULT '' COMMENT '扩展属性',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='系统配置';
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统配置';
 
 -- ----------------------------
---  Records of `fa_config`
+-- Records of fa_config
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_config` VALUES ('1', 'name', 'basic', '站点名称', '请填写站点名称', 'string', 'FastAdmin', '', 'required', ''), ('2', 'beian', 'basic', '备案号', '粤ICP备15054802号-4', 'string', '', '', '', ''), ('3', 'cdnurl', 'basic', 'CDN地址', '如果使用CDN云储存请配置该值', 'string', '', '', '', ''), ('4', 'version', 'basic', '版本号', '如果静态资源有变动请重新配置该值', 'string', '1.0.1', '', 'required', ''), ('5', 'timezone', 'basic', '时区', '', 'string', 'Asia/Shanghai', '', 'required', ''), ('6', 'forbiddenip', 'basic', '禁止访问IP', '一行一条记录', 'text', '', '', '', ''), ('7', 'languages', 'basic', '模块语言', '', 'array', '{\"backend\":\"zh-cn\",\"frontend\":\"zh-cn\"}', '', 'required', ''), ('8', 'fixedpage', 'basic', '后台默认页', '请尽量输入左侧菜单栏存在的链接', 'string', 'dashboard', '', 'required', ''), ('9', 'categorytype', 'dictionary', '分类类型', '', 'array', '{\"default\":\"默认\",\"page\":\"单页\",\"article\":\"文章\",\"test\":\"测试\"}', '', '', ''), ('10', 'configgroup', 'dictionary', '配置分组', '', 'array', '{\"basic\":\"基础配置\",\"email\":\"邮件配置\",\"dictionary\":\"字典配置\",\"user\":\"会员配置\",\"example\":\"示例分组\"}', '', '', ''), ('11', 'mail_type', 'email', '邮件发送方式', '选择邮件发送方式', 'select', '1', '[\"请选择\",\"SMTP\",\"mail()函数\"]', '', ''), ('12', 'mail_smtp_host', 'email', 'SMTP[服务器]', '错误的配置发送邮件会导致服务器超时', 'string', 'smtp.qq.com', '', '', ''), ('13', 'mail_smtp_port', 'email', 'SMTP[端口]', '(不加密默认25,SSL默认465,TLS默认587)', 'string', '465', '', '', ''), ('14', 'mail_smtp_user', 'email', 'SMTP[用户名]', '（填写完整用户名）', 'string', '10000', '', '', ''), ('15', 'mail_smtp_pass', 'email', 'SMTP[密码]', '（填写您的密码）', 'string', 'password', '', '', ''), ('16', 'mail_verify_type', 'email', 'SMTP验证方式', '（SMTP验证方式[推荐SSL]）', 'select', '2', '[\"无\",\"TLS\",\"SSL\"]', '', ''), ('17', 'mail_from', 'email', '发件人邮箱', '', 'string', '10000@qq.com', '', '', '');
+INSERT INTO `fa_config` VALUES (1, 'name', 'basic', 'Site name', '请填写站点名称', 'string', 'FastAdmin', '', 'required', '');
+INSERT INTO `fa_config` VALUES (2, 'beian', 'basic', 'Beian', '粤ICP备15054802号-4', 'string', '', '', '', '');
+INSERT INTO `fa_config` VALUES (3, 'cdnurl', 'basic', 'Cdn url', '如果静态资源使用第三方云储存请配置该值', 'string', '', '', '', '');
+INSERT INTO `fa_config` VALUES (4, 'version', 'basic', 'Version', '如果静态资源有变动请重新配置该值', 'string', '1.0.1', '', 'required', '');
+INSERT INTO `fa_config` VALUES (5, 'timezone', 'basic', 'Timezone', '', 'string', 'Asia/Shanghai', '', 'required', '');
+INSERT INTO `fa_config` VALUES (6, 'forbiddenip', 'basic', 'Forbidden ip', '一行一条记录', 'text', '', '', '', '');
+INSERT INTO `fa_config` VALUES (7, 'languages', 'basic', 'Languages', '', 'array', '{\"backend\":\"zh-cn\",\"frontend\":\"zh-cn\"}', '', 'required', '');
+INSERT INTO `fa_config` VALUES (8, 'fixedpage', 'basic', 'Fixed page', '请尽量输入左侧菜单栏存在的链接', 'string', 'dashboard', '', 'required', '');
+INSERT INTO `fa_config` VALUES (9, 'categorytype', 'dictionary', 'Category type', '', 'array', '{\"default\":\"Default\",\"page\":\"Page\",\"article\":\"Article\",\"test\":\"Test\"}', '', '', '');
+INSERT INTO `fa_config` VALUES (10, 'configgroup', 'dictionary', 'Config group', '', 'array', '{\"basic\":\"Basic\",\"email\":\"Email\",\"dictionary\":\"Dictionary\",\"user\":\"User\",\"example\":\"Example\"}', '', '', '');
+INSERT INTO `fa_config` VALUES (11, 'mail_type', 'email', 'Mail type', '选择邮件发送方式', 'select', '1', '[\"Please select\",\"SMTP\",\"Mail\"]', '', '');
+INSERT INTO `fa_config` VALUES (12, 'mail_smtp_host', 'email', 'Mail smtp host', '错误的配置发送邮件会导致服务器超时', 'string', 'smtp.qq.com', '', '', '');
+INSERT INTO `fa_config` VALUES (13, 'mail_smtp_port', 'email', 'Mail smtp port', '(不加密默认25,SSL默认465,TLS默认587)', 'string', '465', '', '', '');
+INSERT INTO `fa_config` VALUES (14, 'mail_smtp_user', 'email', 'Mail smtp user', '（填写完整用户名）', 'string', '10000', '', '', '');
+INSERT INTO `fa_config` VALUES (15, 'mail_smtp_pass', 'email', 'Mail smtp password', '（填写您的密码）', 'string', 'password', '', '', '');
+INSERT INTO `fa_config` VALUES (16, 'mail_verify_type', 'email', 'Mail vertify type', '（SMTP验证方式[推荐SSL]）', 'select', '2', '[\"None\",\"TLS\",\"SSL\"]', '', '');
+INSERT INTO `fa_config` VALUES (17, 'mail_from', 'email', 'Mail from', '', 'string', '10000@qq.com', '', '', '');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_crontab`
+-- Table structure for fa_ems
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_crontab`;
-CREATE TABLE `fa_crontab` (
+DROP TABLE IF EXISTS `fa_ems`;
+CREATE TABLE `fa_ems`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `event` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '事件',
+  `email` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
+  `code` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '验证码',
+  `times` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '验证次数',
+  `ip` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'IP',
+  `createtime` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='邮箱验证码表';
+
+-- ----------------------------
+-- Table structure for fa_sms
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_sms`;
+CREATE TABLE `fa_sms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `type` varchar(10) NOT NULL DEFAULT '' COMMENT '事件类型',
-  `title` varchar(100) NOT NULL DEFAULT '' COMMENT '事件标题',
-  `content` text NOT NULL COMMENT '事件内容',
-  `schedule` varchar(100) NOT NULL DEFAULT '' COMMENT 'Crontab格式',
-  `sleep` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '延迟秒数执行',
-  `maximums` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大执行次数 0为不限',
-  `executes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已经执行的次数',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `begintime` int(10) NOT NULL DEFAULT '0' COMMENT '开始时间',
-  `endtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
-  `executetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后执行时间',
-  `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
-  `status` enum('completed','expired','hidden','normal') NOT NULL DEFAULT 'normal' COMMENT '状态',
+  `event` varchar(30) NOT NULL DEFAULT '' COMMENT '事件',
+  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
+  `code` varchar(10) NOT NULL DEFAULT '' COMMENT '验证码',
+  `times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '验证次数',
+  `ip` varchar(30) NOT NULL DEFAULT '' COMMENT 'IP',
+  `createtime` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='定时任务表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='短信验证码表';
 
 -- ----------------------------
---  Records of `fa_crontab`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_crontab` VALUES ('1', 'url', '请求FastAdmin', 'http://www.fastadmin.net', '* * * * *', '0', '0', '1063', '1497070825', '1499788320', '1483200000', '1546272000', '1499788320', '1', 'normal'), ('2', 'sql', '查询一条SQL', 'SELECT 1;', '* * * * *', '0', '0', '1063', '1497071095', '1499788320', '1483200000', '1546272000', '1499788320', '2', 'normal');
-COMMIT;
-
--- ----------------------------
---  Table structure for `fa_page`
--- ----------------------------
-DROP TABLE IF EXISTS `fa_page`;
-CREATE TABLE `fa_page` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `category_id` int(10) NOT NULL DEFAULT '0' COMMENT '分类ID',
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '标题',
-  `keywords` varchar(255) NOT NULL DEFAULT '' COMMENT '关键字',
-  `flag` set('hot','index','recommend') NOT NULL DEFAULT '' COMMENT '标志',
-  `image` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
-  `content` text NOT NULL COMMENT '内容',
-  `icon` varchar(50) NOT NULL DEFAULT '' COMMENT '图标',
-  `views` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击',
-  `comments` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
-  `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='单页表';
-
--- ----------------------------
---  Records of `fa_page`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_page` VALUES ('1', '4', 'test', 'test', 'recommend', '/assets/img/qrcode.png', '<p>test</p>', '', '0', '0', '1499769482', '1499769482', '0', 'normal');
-COMMIT;
-
--- ----------------------------
---  Table structure for `fa_test`
+-- Table structure for fa_test
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_test`;
 CREATE TABLE `fa_test` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `admin_id` int(10) NOT NULL DEFAULT '0' COMMENT '管理员ID',
   `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID(单选)',
   `category_ids` varchar(100) NOT NULL COMMENT '分类ID(多选)',
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
-  `user_ids` varchar(100) NOT NULL DEFAULT '' COMMENT '多会员ID',
   `week` enum('monday','tuesday','wednesday') NOT NULL COMMENT '星期(单选):monday=星期一,tuesday=星期二,wednesday=星期三',
   `flag` set('hot','index','recommend') NOT NULL DEFAULT '' COMMENT '标志(多选):hot=热门,index=首页,recommend=推荐',
   `genderdata` enum('male','female') NOT NULL DEFAULT 'male' COMMENT '性别(单选):male=男,female=女',
@@ -324,6 +389,7 @@ CREATE TABLE `fa_test` (
   `attachfile` varchar(100) NOT NULL DEFAULT '' COMMENT '附件',
   `keywords` varchar(100) NOT NULL DEFAULT '' COMMENT '关键字',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+  `city` varchar(100) NOT NULL DEFAULT '' COMMENT '省市',
   `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
   `views` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击',
   `startdate` date DEFAULT NULL COMMENT '开始日期',
@@ -334,24 +400,26 @@ CREATE TABLE `fa_test` (
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
+  `switch` tinyint(1) NOT NULL DEFAULT '0' COMMENT '开关',
   `status` enum('normal','hidden') NOT NULL DEFAULT 'normal' COMMENT '状态',
   `state` enum('0','1','2') NOT NULL DEFAULT '1' COMMENT '状态值:0=禁用,1=正常,2=推荐',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='测试表';
 
 -- ----------------------------
---  Records of `fa_test`
+-- Records of fa_test
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_test` VALUES ('1', '12', '12,13', '3', '3', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '0.00', '0', '2017-07-10', '2017-07-10 18:24:45', '2017', '18:24:45', '1499682285', '1499682526', '1499682526', '0', 'normal', '1');
+INSERT INTO `fa_test` VALUES (1, 0, 12, '12,13', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '广西壮族自治区/百色市/平果县', 0.00, 0, '2017-07-10', '2017-07-10 18:24:45', 2017, '18:24:45', 1499682285, 1499682526, 1499682526, 0, 1, 'normal', '1');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_user`
+-- Table structure for fa_user
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_user`;
 CREATE TABLE `fa_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `group_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '组别ID',
   `username` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
   `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '昵称',
   `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
@@ -361,175 +429,143 @@ CREATE TABLE `fa_user` (
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `level` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '等级',
   `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
-  `birthday` date NOT NULL COMMENT '生日',
+  `birthday` date COMMENT '生日',
+  `bio` varchar(100) NOT NULL DEFAULT '' COMMENT '格言',
   `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
+  `successions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '连续登录天数',
+  `maxsuccessions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '最大连续登录天数',
   `prevtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次登录时间',
-  `loginfailure` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '失败次数',
   `logintime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '登录时间',
   `loginip` varchar(50) NOT NULL DEFAULT '' COMMENT '登录IP',
-  `joinip` varchar(50) NOT NULL DEFAULT '' COMMENT '加入时间',
+  `loginfailure` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '失败次数',
+  `joinip` varchar(50) NOT NULL DEFAULT '' COMMENT '加入IP',
   `jointime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入时间',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `token` varchar(50) NOT NULL DEFAULT '' COMMENT 'Token',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
+  `verification` varchar(255) NOT NULL DEFAULT '' COMMENT '验证',
   PRIMARY KEY (`id`),
   KEY `username` (`username`),
   KEY `email` (`email`),
   KEY `mobile` (`mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员表';
 
 -- ----------------------------
---  Records of `fa_user`
+-- Records of fa_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_user` VALUES ('3', 'admin', 'admin', 'c13f62012fd6a8fdf06b3452a94430e5', 'rpR6Bv', 'admin@163.com', '13888888888', '/assets/img/avatar.png', '0', '0', '2017-04-15', '0', '1491822015', '0', '1491822038', '127.0.0.1', '127.0.0.1', '1491461418', 'normal');
+INSERT INTO `fa_user` VALUES (1, 1, 'admin', 'admin', 'c13f62012fd6a8fdf06b3452a94430e5', 'rpR6Bv', 'admin@163.com', '13888888888', '/assets/img/avatar.png', 0, 0, '2017-04-15', '', 0, 1, 1, 1516170492, 1516171614, '127.0.0.1', 0, '127.0.0.1', 1491461418, 0, 1516171614, '', 'normal','');
 COMMIT;
 
 -- ----------------------------
---  Table structure for `fa_user_signin`
+-- Table structure for fa_user_group
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user_signin`;
-CREATE TABLE `fa_user_signin` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
-  `successions` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '连续签到次数',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员签到表';
+DROP TABLE IF EXISTS `fa_user_group`;
+CREATE TABLE `fa_user_group` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '' COMMENT '组名',
+  `rules` text COMMENT '权限节点',
+  `createtime` int(10) DEFAULT NULL COMMENT '添加时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
+  `status` enum('normal','hidden') DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员组表';
 
 -- ----------------------------
---  Table structure for `fa_user_third`
+-- Records of fa_user_group
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user_third`;
-CREATE TABLE `fa_user_third` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+BEGIN;
+INSERT INTO `fa_user_group` VALUES (1, '默认组', '1,2,3,4,5,6,7,8,9,10,11,12', 1515386468, 1516168298, 'normal');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for fa_user_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_user_rule`;
+CREATE TABLE `fa_user_rule` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(10) DEFAULT NULL COMMENT '父ID',
+  `name` varchar(50) DEFAULT NULL COMMENT '名称',
+  `title` varchar(50) DEFAULT '' COMMENT '标题',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注',
+  `ismenu` tinyint(1) DEFAULT NULL COMMENT '是否菜单',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
+  `weigh` int(10) DEFAULT '0' COMMENT '权重',
+  `status` enum('normal','hidden') DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员规则表';
+
+-- ----------------------------
+-- Records of fa_user_rule
+-- ----------------------------
+BEGIN;
+INSERT INTO `fa_user_rule` VALUES (1, 0, 'index', '前台', '', 1, 1516168079, 1516168079, 1, 'normal');
+INSERT INTO `fa_user_rule` VALUES (2, 0, 'api', 'API接口', '', 1, 1516168062, 1516168062, 2, 'normal');
+INSERT INTO `fa_user_rule` VALUES (3, 1, 'user', '会员模块', '', 1, 1515386221, 1516168103, 12, 'normal');
+INSERT INTO `fa_user_rule` VALUES (4, 2, 'user', '会员模块', '', 1, 1515386221, 1516168092, 11, 'normal');
+INSERT INTO `fa_user_rule` VALUES (5, 3, 'index/user/login', '登录', '', 0, 1515386247, 1515386247, 5, 'normal');
+INSERT INTO `fa_user_rule` VALUES (6, 3, 'index/user/register', '注册', '', 0, 1515386262, 1516015236, 7, 'normal');
+INSERT INTO `fa_user_rule` VALUES (7, 3, 'index/user/index', '会员中心', '', 0, 1516015012, 1516015012, 9, 'normal');
+INSERT INTO `fa_user_rule` VALUES (8, 3, 'index/user/profile', '个人资料', '', 0, 1516015012, 1516015012, 4, 'normal');
+INSERT INTO `fa_user_rule` VALUES (9, 4, 'api/user/login', '登录', '', 0, 1515386247, 1515386247, 6, 'normal');
+INSERT INTO `fa_user_rule` VALUES (10, 4, 'api/user/register', '注册', '', 0, 1515386262, 1516015236, 8, 'normal');
+INSERT INTO `fa_user_rule` VALUES (11, 4, 'api/user/index', '会员中心', '', 0, 1516015012, 1516015012, 10, 'normal');
+INSERT INTO `fa_user_rule` VALUES (12, 4, 'api/user/profile', '个人资料', '', 0, 1516015012, 1516015012, 3, 'normal');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for fa_user_score_log
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_user_score_log`;
+CREATE TABLE `fa_user_score_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
-  `platform` enum('weibo','wechat','qq') NOT NULL COMMENT '第三方应用',
-  `openid` varchar(50) NOT NULL DEFAULT '' COMMENT '第三方唯一ID',
-  `openname` varchar(50) NOT NULL DEFAULT '' COMMENT '第三方会员昵称',
-  `access_token` varchar(100) NOT NULL DEFAULT '',
-  `refresh_token` varchar(100) NOT NULL DEFAULT '',
-  `expires_in` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '有效期',
+  `score` int(10) NOT NULL DEFAULT '0' COMMENT '变更积分',
+  `before` int(10) NOT NULL DEFAULT '0' COMMENT '变更前积分',
+  `after` int(10) NOT NULL DEFAULT '0' COMMENT '变更后积分',
+  `memo` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `logintime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '登录时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员积分变动表';
+
+-- ----------------------------
+-- Table structure for fa_user_token
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_user_token`;
+CREATE TABLE `fa_user_token` (
+  `token` varchar(50) NOT NULL COMMENT 'Token',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `expiretime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `platform` (`platform`,`openid`),
-  KEY `user_id` (`user_id`,`platform`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员连接表';
+  PRIMARY KEY (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员Token表';
 
 -- ----------------------------
---  Table structure for `fa_version`
+-- Table structure for fa_version
 -- ----------------------------
 DROP TABLE IF EXISTS `fa_version`;
-CREATE TABLE `fa_version` (
+CREATE TABLE `fa_version`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `oldversion` varchar(30) NOT NULL DEFAULT '' COMMENT '旧版本号',
-  `newversion` varchar(30) NOT NULL DEFAULT '' COMMENT '新版本号',
-  `packagesize` varchar(30) NOT NULL DEFAULT '' COMMENT '包大小',
-  `content` varchar(500) NOT NULL DEFAULT '' COMMENT '升级内容',
-  `downloadurl` varchar(255) NOT NULL DEFAULT '' COMMENT '下载地址',
-  `enforce` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '强制更新',
-  `createtime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
-  `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='版本表';
+  `oldversion` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '旧版本号',
+  `newversion` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '新版本号',
+  `packagesize` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '包大小',
+  `content` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '升级内容',
+  `downloadurl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '下载地址',
+  `enforce` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '强制更新',
+  `createtime` int(10) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `updatetime` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
+  `weigh` int(10) NOT NULL DEFAULT 0 COMMENT '权重',
+  `status` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT = '版本表';
 
 -- ----------------------------
---  Records of `fa_version`
+-- Table structure for fa_version
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_version` VALUES ('1', '1.1.1,2', '1.2.1', '20M', '更新内容', 'http://www.downloadurl.com', '1', '1400000000', '0', '0', 'normal');
+INSERT INTO `fa_version` (`id`, `oldversion`, `newversion`, `packagesize`, `content`, `downloadurl`, `enforce`, `createtime`, `updatetime`, `weigh`, `status`) VALUES
+(1, '1.1.1,2', '1.2.1', '20M', '更新内容', 'https://www.fastadmin.net/download.html', 1, 1520425318, 0, 0, 'normal');
 COMMIT;
-
--- ----------------------------
---  Table structure for `fa_wechat_autoreply`
--- ----------------------------
-DROP TABLE IF EXISTS `fa_wechat_autoreply`;
-CREATE TABLE `fa_wechat_autoreply` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL DEFAULT '' COMMENT '标题',
-  `text` varchar(100) NOT NULL DEFAULT '' COMMENT '触发文本',
-  `eventkey` varchar(50) NOT NULL DEFAULT '' COMMENT '响应事件',
-  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信自动回复表';
-
--- ----------------------------
---  Records of `fa_wechat_autoreply`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_wechat_autoreply` VALUES ('1', '输入hello', 'hello', '58c7d908c4570', '123', '1493366855', '1493366855', 'normal'), ('2', '输入你好', '你好', '58fdfaa9e1965', 'sad', '1493704976', '1493704976', 'normal');
-COMMIT;
-
--- ----------------------------
---  Table structure for `fa_wechat_config`
--- ----------------------------
-DROP TABLE IF EXISTS `fa_wechat_config`;
-CREATE TABLE `fa_wechat_config` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '配置名称',
-  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '配置标题',
-  `value` text NOT NULL COMMENT '配置值',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信配置表';
-
--- ----------------------------
---  Records of `fa_wechat_config`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_wechat_config` VALUES ('1', 'menu', '微信菜单', '[{\"name\":\"FastAdmin\",\"sub_button\":[{\"name\":\"官网\",\"type\":\"view\",\"url\":\"http:\\/\\/www.fastadmin.net\"},{\"name\":\"在线演示\",\"type\":\"view\",\"url\":\"http:\\/\\/demo.fastadmin.net\"},{\"name\":\"文档\",\"type\":\"view\",\"url\":\"http:\\/\\/doc.fastadmin.net\"}]},{\"name\":\"在线客服\",\"type\":\"click\",\"key\":\"58cb852984970\"},{\"name\":\"关于我们\",\"type\":\"click\",\"key\":\"58bf944aa0777\"}]', '1497398820', '1497422985'), ('2', 'service', '客服配置', '{\"onlinetime\":\"09:00-18:00\",\"offlinemsg\":\"请在工作时间联系客服！\",\"nosessionmsg\":\"当前没有客服在线！请稍后重试！\",\"waitformsg\":\"请问有什么可以帮到您？\"}', '1497429674', '1497429674'), ('3', 'signin', '连续登录配置', '{\"s1\":\"100\",\"s2\":\"200\",\"s3\":\"300\",\"sn\":\"500\"}', '1497429711', '1497429711');
-COMMIT;
-
--- ----------------------------
---  Table structure for `fa_wechat_context`
--- ----------------------------
-DROP TABLE IF EXISTS `fa_wechat_context`;
-CREATE TABLE `fa_wechat_context` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `openid` varchar(64) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT '' COMMENT '类型',
-  `eventkey` varchar(64) NOT NULL DEFAULT '',
-  `command` varchar(64) NOT NULL DEFAULT '',
-  `message` varchar(255) NOT NULL DEFAULT '' COMMENT '内容',
-  `refreshtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后刷新时间',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `openid` (`openid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信上下文表';
-
--- ----------------------------
---  Table structure for `fa_wechat_response`
--- ----------------------------
-DROP TABLE IF EXISTS `fa_wechat_response`;
-CREATE TABLE `fa_wechat_response` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL DEFAULT '' COMMENT '资源名',
-  `eventkey` varchar(128) NOT NULL DEFAULT '' COMMENT '事件',
-  `type` enum('text','image','news','voice','video','music','link','app') NOT NULL DEFAULT 'text' COMMENT '类型',
-  `content` text NOT NULL COMMENT '内容',
-  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `event` (`eventkey`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信资源表';
-
--- ----------------------------
---  Records of `fa_wechat_response`
--- ----------------------------
-BEGIN;
-INSERT INTO `fa_wechat_response` VALUES ('1', '签到送积分', '58adaf7876aab', 'app', '{\"app\":\"signin\"}', '', '1487777656', '1487777656', 'normal'), ('2', '关于我们', '58bf944aa0777', 'app', '{\"app\":\"page\",\"id\":\"1\"}', '', '1488950346', '1488950346', 'normal'), ('3', '自动回复1', '58c7d908c4570', 'text', '{\"content\":\"world\"}', '', '1489492232', '1489492232', 'normal'), ('4', '联系客服', '58cb852984970', 'app', '{\"app\":\"service\"}', '', '1489732905', '1489732905', 'normal'), ('5', '自动回复2', '58fdfaa9e1965', 'text', '{\"content\":\"我是FastAdmin!\"}', '', '1493039785', '1493039785', 'normal');
-COMMIT;
-
 SET FOREIGN_KEY_CHECKS = 1;

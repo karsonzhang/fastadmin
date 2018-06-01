@@ -62,6 +62,7 @@ class Date
      * @param   string  $output formatting string
      * @return  string   when only a single output is requested
      * @return  array    associative list of all outputs requested
+     * @from https://github.com/kohana/ohanzee-helpers/blob/master/src/Date.php
      */
     public static function span($remote, $local = NULL, $output = 'years,months,weeks,days,hours,minutes,seconds')
     {
@@ -157,78 +158,6 @@ class Date
     }
 
     /**
-     * 判断Unix时间是否满足Cron指定的执行条件
-     *
-     * @param string $cron Crontab格式
-     * @param string $time 时间,默认为当前时间
-     * @return boolean
-     */
-    public static function cron($cron, $time = null)
-    {
-        $time = is_null($time) ? time() : $time;
-        $cron_parts = explode(' ', $cron);
-        if (count($cron_parts) != 5)
-        {
-            return false;
-        }
-        list($min, $hour, $day, $mon, $week) = explode(' ', $cron);
-        $to_check = array('min' => 'i', 'hour' => 'G', 'day' => 'j', 'mon' => 'n', 'week' => 'w');
-        $ranges = array(
-            'min'  => '0-59',
-            'hour' => '0-23',
-            'day'  => '1-31',
-            'mon'  => '1-12',
-            'week' => '0-6',
-        );
-
-        foreach ($to_check as $part => $c)
-        {
-            $val = $$part;
-            $values = [];
-            if (strpos($val, '/') !== false)
-            {
-                //Get the range and step
-                list($range, $steps) = explode('/', $val);
-                //Now get the start and stop
-                if ($range == '*')
-                {
-                    $range = $ranges[$part];
-                }
-                list($start, $stop) = explode('-', $range);
-                for ($i = $start; $i <= $stop; $i = $i + $steps)
-                {
-                    $values[] = $i;
-                }
-            }
-            else
-            {
-                $k = explode(',', $val);
-                foreach ($k as $v)
-                {
-                    if (strpos($v, '-') !== false)
-                    {
-                        list($start, $stop) = explode('-', $v);
-
-                        for ($i = $start; $i <= $stop; $i++)
-                        {
-                            $values[] = $i;
-                        }
-                    }
-                    else
-                    {
-                        $values[] = $v;
-                    }
-                }
-            }
-            if (!in_array(date($c, $time), $values) and ( strval($val) != '*'))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * 获取一个基于时间偏移的Unix时间戳
      *
      * @param string $type 时间类型，默认为day，可选minute,hour,day,week,month,quarter,year
@@ -267,12 +196,12 @@ class Date
                         mktime(23, 59, 59, $month, $day - date("w", mktime(0, 0, 0, $month, $day, $year)) + 7 - 7 * (-$offset), $year);
                 break;
             case 'month':
-                $time = $position ? mktime(0, 0, 0, $month + $offset, 1, $year) : mktime(23, 59, 59, $month + $offset, get_month_days($month + $offset, $year), $year);
+                $time = $position ? mktime(0, 0, 0, $month + $offset, 1, $year) : mktime(23, 59, 59, $month + $offset, cal_days_in_month(CAL_GREGORIAN, $month + $offset, $year), $year);
                 break;
             case 'quarter':
                 $time = $position ?
                         mktime(0, 0, 0, 1 + ((ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) - 1) * 3, 1, $year) :
-                        mktime(23, 59, 59, (ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, get_month_days((ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, $year), $year);
+                        mktime(23, 59, 59, (ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, cal_days_in_month(CAL_GREGORIAN, (ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, $year), $year);
                 break;
             case 'year':
                 $time = $position ? mktime(0, 0, 0, 1, 1, $year + $offset) : mktime(23, 59, 59, 12, 31, $year + $offset);

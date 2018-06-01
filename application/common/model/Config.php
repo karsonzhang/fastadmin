@@ -4,6 +4,9 @@ namespace app\common\model;
 
 use think\Model;
 
+/**
+ * 配置模型
+ */
 class Config extends Model
 {
 
@@ -27,7 +30,10 @@ class Config extends Model
         $typeList = [
             'string'   => __('String'),
             'text'     => __('Text'),
+            'editor'   => __('Editor'),
             'number'   => __('Number'),
+            'date'     => __('Date'),
+            'time'     => __('Time'),
             'datetime' => __('Datetime'),
             'select'   => __('Select'),
             'selects'  => __('Selects'),
@@ -38,8 +44,31 @@ class Config extends Model
             'checkbox' => __('Checkbox'),
             'radio'    => __('Radio'),
             'array'    => __('Array'),
+            'custom'   => __('Custom'),
         ];
         return $typeList;
+    }
+
+    public static function getRegexList()
+    {
+        $regexList = [
+            'required' => '必选',
+            'digits'   => '数字',
+            'letters'  => '字母',
+            'date'     => '日期',
+            'time'     => '时间',
+            'email'    => '邮箱',
+            'url'      => '网址',
+            'qq'       => 'QQ号',
+            'IDcard'   => '身份证',
+            'tel'      => '座机电话',
+            'mobile'   => '手机号',
+            'zipcode'  => '邮编',
+            'chinese'  => '中文',
+            'username' => '用户名',
+            'password' => '密码'
+        ];
+        return $regexList;
     }
 
     /**
@@ -49,62 +78,87 @@ class Config extends Model
     public static function getGroupList()
     {
         $groupList = config('site.configgroup');
+        foreach ($groupList as $k => &$v)
+        {
+            $v = __($v);
+        }
         return $groupList;
     }
-    
+
+    public static function getArrayData($data)
+    {
+        $fieldarr = $valuearr = [];
+        $field = isset($data['field']) ? $data['field'] : [];
+        $value = isset($data['value']) ? $data['value'] : [];
+        foreach ($field as $m => $n)
+        {
+            if ($n != '')
+            {
+                $fieldarr[] = $field[$m];
+                $valuearr[] = $value[$m];
+            }
+        }
+        return $fieldarr ? array_combine($fieldarr, $valuearr) : [];
+    }
+
     /**
-     * 加载上传配置
-     *
-     * @param array $params 扩展参数,常用字段savekey,mimetype,maxsize,ext-param,notify-url,return-url<br>
-     * 更多字段可参考http://docs.upyun.com/api/form_api/#_2
-     *
+     * 将字符串解析成键值数组
+     * @param string $text
      * @return array
      */
-    public static function upload($params = [])
+    public static function decode($text, $split = "\r\n")
+    {
+        $content = explode($split, $text);
+        $arr = [];
+        foreach ($content as $k => $v)
+        {
+            if (stripos($v, "|") !== false)
+            {
+                $item = explode('|', $v);
+                $arr[$item[0]] = $item[1];
+            }
+        }
+        return $arr;
+    }
+
+    /**
+     * 将键值数组转换为字符串
+     * @param array $array
+     * @return string
+     */
+    public static function encode($array, $split = "\r\n")
+    {
+        $content = '';
+        if ($array && is_array($array))
+        {
+            $arr = [];
+            foreach ($array as $k => $v)
+            {
+                $arr[] = "{$k}|{$v}";
+            }
+            $content = implode($split, $arr);
+        }
+        return $content;
+    }
+
+    /**
+     * 本地上传配置信息
+     * @return array
+     */
+    public static function upload()
     {
         $uploadcfg = config('upload');
-        $uploadcfg = $uploadcfg ? $uploadcfg : [];
-        $uploadcfg = array_merge($uploadcfg, $params);
-        $uploadcfg['bucket'] = isset($uploadcfg['bucket']) ? $uploadcfg['bucket'] : '';
-        $multiple = isset($uploadcfg['multiple']) ? $uploadcfg['multiple'] : false;
-        $savekey = isset($uploadcfg['savekey']) ? $uploadcfg['savekey'] : '';
-        $uploadcfg['save-key'] = isset($uploadcfg['save-key']) ? $uploadcfg['save-key'] : $savekey;
-        $expiration = time() + (isset($uploadcfg['expire']) ? $uploadcfg['expire'] : 600);
-        $uploadcfg['expiration'] = isset($uploadcfg['expiration']) ? $uploadcfg['expiration'] : $expiration;
-        $notifyurl = isset($uploadcfg['notifyurl']) ? $uploadcfg['notifyurl'] : '';
-        $returnurl = isset($uploadcfg['returnurl']) ? $uploadcfg['returnurl'] : '';
-        if ($notifyurl)
-            $uploadcfg['notify-url'] = $notifyurl;
-        else
-            unset($uploadcfg['notify-url']);
-        if ($returnurl)
-            $uploadcfg['return-url'] = $returnurl;
-        else
-            unset($uploadcfg['return-url']);
 
-        //设置允许的附加字段
-        $allowfields = [
-            'bucket', 'save-key', 'expiration', 'date', 'content-md5', 'notify-url', 'return-url', 'content-secret', 'content-type', 'allow-file-type', 'content-length-range',
-            'image-width-range', 'image-height-range', 'x-gmkerl-thumb', 'x-gmkerl-type', 'apps', 'b64encoded', 'ext-param'
+        $upload = [
+            'cdnurl'    => $uploadcfg['cdnurl'],
+            'uploadurl' => $uploadcfg['uploadurl'],
+            'bucket'    => 'local',
+            'maxsize'   => $uploadcfg['maxsize'],
+            'mimetype'  => $uploadcfg['mimetype'],
+            'multipart' => [],
+            'multiple'  => $uploadcfg['multiple'],
         ];
-        $params = array_intersect_key($uploadcfg, array_flip($allowfields));
-        $policy = base64_encode(json_encode($params));
-        $signature = md5($policy . '&' . (isset($uploadcfg['formkey']) ? $uploadcfg['formkey'] : ''));
-        $multipart = [
-            'policy'    => $policy,
-            'signature' => $signature,
-        ];
-
-        $multipart = array_merge($multipart, $params);
-        return [
-            'cdnurl'    => isset($uploadcfg['cdnurl']) ? $uploadcfg['cdnurl'] : '',
-            'uploadurl' => isset($uploadcfg['uploadurl']) ? $uploadcfg['uploadurl'] : url('ajax/upload'),
-            'bucket'    => $uploadcfg['bucket'],
-            'maxsize'   => isset($uploadcfg['maxsize']) ? $uploadcfg['maxsize'] : '',
-            'mimetype'  => isset($uploadcfg['mimetype']) ? $uploadcfg['mimetype'] : '',
-            'multipart' => $multipart,
-            'multiple'  => $multiple,
-        ];
+        return $upload;
     }
 
 }

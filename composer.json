@@ -10,18 +10,21 @@
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "karson",
+            "name": "Karson",
             "email": "karsonzhang@163.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "^5.0",
+        "topthink/framework": "~5.0.14",
         "overtrue/wechat": "~3.1",
-        "endroid/qrcode": "^1.9",
+        "endroid/qr-code": "^1.9",
         "topthink/think-captcha": "^1.0",
         "mtdowling/cron-expression": "^1.2",
-        "phpmailer/phpmailer": "^5.2"
+        "phpmailer/phpmailer": "^5.2",
+        "karsonzhang/fastadmin-addons": "~1.1.4",
+        "overtrue/pinyin": "~3.0",
+        "phpoffice/phpexcel": "^1.8"
     },
     "config": {
         "preferred-install": "dist"

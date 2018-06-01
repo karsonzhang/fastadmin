@@ -2,8 +2,6 @@
 
 namespace app\admin\behavior;
 
-use think\Config;
-
 class AdminLog
 {
 

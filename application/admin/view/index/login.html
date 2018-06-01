@@ -6,7 +6,7 @@
         <style type="text/css">
             body {
                 color:#999;
-                background:url('http://img.infinitynewtab.com/wallpaper/{:date("Ymd")%4000}.jpg');
+                background:url('{$background}');
                 background-size:cover;
             }
             a {
@@ -54,16 +54,6 @@
             }
 
         </style>
-        <script>
-            //此处为FastAdmin的统计代码,正式使用请移除
-            var _hmt = _hmt || [];
-            (function () {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?58347d769d009bcf6074e9a0ab7ba05e";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();
-        </script>
     </head>
     <body>
         <div class="container">
@@ -73,7 +63,7 @@
                         <div class="login-form">
                             <img id="profile-img" class="profile-img-card" src="__CDN__/assets/img/avatar.png" />
                             <p id="profile-name" class="profile-name-card"></p>
-                            
+
                             <form action="" method="post" id="login-form">
                                 <div id="errtips" class="hide"></div>
                                 {:token()}
@@ -86,7 +76,15 @@
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
                                     <input type="password" class="form-control" id="pd-form-password" placeholder="{:__('Password')}" name="password" autocomplete="off" value="" data-rule="{:__('Password')}:required;password" />
                                 </div>
-
+                                {if $config.fastadmin.login_captcha}
+                                <div class="input-group">
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></div>
+                                    <input type="text" name="captcha" class="form-control" placeholder="{:__('Captcha')}" data-rule="{:__('Captcha')}:required;length(4)" />
+                                    <span class="input-group-addon" style="padding:0;border:none;cursor:pointer;">
+                                        <img src="{:rtrim('__PUBLIC__', '/')}/captcha" width="100" height="30" onclick="this.src = '{:rtrim('__PUBLIC__', '/')}/captcha?r=' + Math.random();"/>
+                                    </span>
+                                </div>
+                                {/if}
                                 <div class="form-group">
                                     <label class="inline" for="keeplogin">
                                         <input type="checkbox" name="keeplogin" id="keeplogin" value="1" />
@@ -99,7 +97,8 @@
                             </form>
                         </div>
                     </div>
-                    <p class="copyright"><a href="http://www.fastadmin.net?ref=demo">Powered By FastAdmin</a></p>
+                    <!-- FastAdmin是开源程序，建议在您的网站底部保留一个FastAdmin的链接 -->
+                    <p class="copyright"><a href="https://www.fastadmin.net">Powered By FastAdmin</a></p>
                 </div>
             </div>
         </div>

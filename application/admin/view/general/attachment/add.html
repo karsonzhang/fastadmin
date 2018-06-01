@@ -1,17 +1,19 @@
 <form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+    {if $config.upload.cdnurl}
     <div class="form-group">
-        <label for="c-upyun" class="control-label col-xs-12 col-sm-2">{:__('Upload')}:</label>
+        <label for="c-third" class="control-label col-xs-12 col-sm-2">{:__('Upload')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input type="text" name="row[upyun]" id="c-upyun" class="form-control" />
+            <input type="text" name="row[third]" id="c-third" class="form-control" />
         </div>
     </div>
 
     <div class="form-group">
-        <label for="c-upyun" class="control-label col-xs-12 col-sm-2"></label>
+        <label for="c-third" class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
-            <button id="plupload-upyun" class="btn btn-danger plupload" data-input-id="c-upyun" ><i class="fa fa-upload"></i> {:__("Upload to upyun")}</button>
+            <button id="plupload-third" class="btn btn-danger plupload" data-multiple="true" data-input-id="c-third" ><i class="fa fa-upload"></i> {:__("Upload to third")}</button>
         </div>
     </div>
+    {/if}
 
     <div class="form-group">
         <label for="c-local" class="control-label col-xs-12 col-sm-2">{:__('Upload')}:</label>
@@ -28,9 +30,9 @@
     </div>
 
     <div class="form-group">
-        <label for="c-local" class="control-label col-xs-12 col-sm-2">{:__('Upload by summernote')}:</label>
+        <label for="c-editor" class="control-label col-xs-12 col-sm-2">{:__('Upload from editor')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea name="row[summernote]" id="c-summernote" cols="60" rows="5" class="summernote"></textarea>
+            <textarea name="row[editor]" id="c-editor" cols="60" rows="5" class="form-control editor"></textarea>
         </div>
     </div>
     <div class="form-group hidden layer-footer">

@@ -1,62 +1,56 @@
-<div class="container">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="page-header" style="margin-top:10px;">
-                <h4>注册</h4>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-xs-12">
-                    <div class="well">
-                        <form id="registerForm" method="POST" action="#">
-                            <div class="form-group">
-                                <label for="email" class="control-label">邮箱</label>
-                                <input type="text" class="form-control" id="email" name="email" value="" required="" placeholder="">
-                                <span class="help-block"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="username" class="control-label">用户名</label>
-                                <input type="text" class="form-control" id="username" name="username" value="" required="" placeholder="">
-                                <span class="help-block"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="mobile" class="control-label">手机</label>
-                                <input type="text" class="form-control" id="mobile" name="mobile" value="" placeholder="可选">
-                                <span class="help-block"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="password" class="control-label">密码</label>
-                                <input type="password" class="form-control" id="password" name="password" value="" required="" />
-                                <span class="help-block"></span>
-                            </div>
-                            <div class="form-group">
-                                <label for="password" class="control-label">验证码</label>
-                                <div class="input-group">
-                                    <input type="text" name="captcha" class="form-control" />
-                                    <span class="input-group-addon" style="padding:0;border:none;">
-                                        <img src="{:captcha_src()}" width="100" height="30" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
-                                    </span>
-                                </div>
-                                <span class="help-block"></span>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-block">提 交</button>
-                            <a href="{:url('user/login')}" class="btn btn-default btn-block">已经账号,立即登录</a>
-                        </form>
+<div id="content-container" class="container">
+    <div class="user-section login-section">
+        <div class="logon-tab clearfix"> <a href="{:url('user/login')}">{:__('Sign in')}</a> <a class="active">{:__('Sign up')}</a> </div>
+        <div class="login-main"> 
+            <form name="form1" id="register-form" class="form-vertical" method="POST" action="">
+                <input type="hidden" name="invite_user_id" value="0" />
+                <input type="hidden" name="url" value="{$url}" />
+                {:token()}
+                <div class="form-group">
+                    <label class="control-label required">{:__('Email')}<span class="text-success"></span></label>
+                    <div class="controls">
+                        <input type="text" name="email" id="email" data-rule="required;email" class="form-control input-lg" placeholder="{:__('Email')}">
+                        <p class="help-block"></p>
                     </div>
                 </div>
-                <div class="col-md-6 col-xs-12">
-                    <p class="lead">会员权益</p>
-                    <ul class="list-unstyled" style="line-height: 2">
-                        <li><span class="fa fa-check text-success"></span> 最新代码推送</li>
-                        <li><span class="fa fa-check text-success"></span> 发布评论</li>
-                        <li><span class="fa fa-check text-success"></span> 个性化头像</li>
-                        <li><span class="fa fa-check text-success"></span> 定制专属页面</li>
-                        <li><span class="fa fa-check text-success"></span> 发现更多</li>
-                    </ul>
-                    <a href="{:url('user/third?action=redirect&platform=weibo')}" class="btn btn-danger btn-block"><i class="fa fa-weibo"></i> 微博登录</a>
-                    <a href="{:url('user/third?action=redirect&platform=wechat')}" class="btn btn-success btn-block"><i class="fa fa-wechat"></i> 微信登录</a>
-                    <a href="{:url('user/third?action=redirect&platform=qq')}" class="btn btn-info btn-block"><i class="fa fa-qq"></i> QQ登录</a>
+                <div class="form-group">
+                    <label class="control-label">{:__('Username')}</label>
+                    <div class="controls">
+                        <input type="text" id="username" name="username" data-rule="required;username" class="form-control input-lg" placeholder="{:__('Username must be 3 to 30 characters')}">
+                        <p class="help-block"></p>
+                    </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label class="control-label">{:__('Password')}</label>
+                    <div class="controls">
+                        <input type="password" id="password" name="password" data-rule="required;password" class="form-control input-lg" placeholder="{:__('Password must be 6 to 30 characters')}">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{:__('Mobile')}</label>
+                    <div class="controls">
+                        <input type="text" id="mobile" name="mobile" data-rule="required;mobile" class="form-control input-lg" placeholder="{:__('Mobile')}">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">{:__('Captcha')}</label>
+                    <div class="controls">
+                        <div class="input-group input-group-lg">
+                            <input type="text" name="captcha" class="form-control" placeholder="{:__('Captcha')}" data-rule="required;length(4)" style="border-radius: 0;" />
+                            <span class="input-group-addon" style="padding:0;border:none;">
+                                <img src="{:captcha_src()}" width="140" height="42" onclick="this.src = '{:captcha_src()}?r=' + Math.random();"/>
+                            </span>
+                        </div>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">{:__('Sign up')}</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

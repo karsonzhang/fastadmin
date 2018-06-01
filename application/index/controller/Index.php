@@ -3,11 +3,14 @@
 namespace app\index\controller;
 
 use app\common\controller\Frontend;
+use app\common\library\Token;
 
 class Index extends Frontend
 {
 
-    protected $layout = 'bootstrap';
+    protected $noNeedLogin = '*';
+    protected $noNeedRight = '*';
+    protected $layout = '';
 
     public function _initialize()
     {
@@ -21,8 +24,8 @@ class Index extends Frontend
 
     public function news()
     {
-        $newslist = \app\common\model\Page::where('category_id', 1)->order('weigh', 'desc')->select();
-        return jsonp(['newslist' => $newslist, 'new' => count($newslist), 'url' => 'http://www.fastadmin.net?ref=news']);
+        $newslist = [];
+        return jsonp(['newslist' => $newslist, 'new' => count($newslist), 'url' => 'https://www.fastadmin.net?ref=news']);
     }
 
 }

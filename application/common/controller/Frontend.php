@@ -5,47 +5,38 @@ namespace app\common\controller;
 use app\common\library\Auth;
 use think\Config;
 use think\Controller;
+use think\Hook;
 use think\Lang;
-use think\Session;
 
+/**
+ * 前台控制器基类
+ */
 class Frontend extends Controller
 {
-
-    /**
-     * 返回码,默认为null,当设置了该值后将输出json数据
-     * @var int
-     */
-    protected $code = null;
-
-    /**
-     * 返回内容,默认为null,当设置了该值后将输出json数据
-     * @var mixed
-     */
-    protected $data = null;
-
-    /**
-     * 返回文本,默认为空
-     * @var mixed
-     */
-    protected $msg = '';
-
-    /**
-     *
-     * @var Auth
-     */
-    protected $user = null;
-
-    /**
-     * 无需登录的方法，默认全部都无需登录
-     * @var array
-     */
-    protected $noNeedLogin = ['*'];
 
     /**
      * 布局模板
      * @var string
      */
     protected $layout = '';
+
+    /**
+     * 无需登录的方法,同时也就不需要鉴权了
+     * @var array
+     */
+    protected $noNeedLogin = [];
+
+    /**
+     * 无需鉴权的方法,但需要登录
+     * @var array
+     */
+    protected $noNeedRight = [];
+
+    /**
+     * 权限Auth
+     * @var Auth 
+     */
+    protected $auth = null;
 
     public function _initialize()
     {
@@ -55,39 +46,64 @@ class Frontend extends Controller
         $controllername = strtolower($this->request->controller());
         $actionname = strtolower($this->request->action());
 
-        $path = '/' . $modulename . '/' . str_replace('.', '/', $controllername) . '/' . $actionname;
-
-        $this->user = Auth::instance();
-
-        // 设置当前请求的URI
-        $this->user->setRequestUri($path);
-
-        // 检测当前是否登录并进行初始化
-        $this->user->init();
-        
-        // 检测是否需要验证登录
-        if (!$this->user->match($this->noNeedLogin))
-        {
-            $this->checkLogin();
-        }
-        
-        // 将auth对象渲染至视图
-        $this->view->assign("user", $this->user);
         // 如果有使用模板布局
         if ($this->layout)
         {
             $this->view->engine->layout('layout/' . $this->layout);
         }
+        $this->auth = Auth::instance();
+
+        // token
+        $token = $this->request->server('HTTP_TOKEN', $this->request->request('token', \think\Cookie::get('token')));
+
+        $path = str_replace('.', '/', $controllername) . '/' . $actionname;
+        // 设置当前请求的URI
+        $this->auth->setRequestUri($path);
+        // 检测是否需要验证登录
+        if (!$this->auth->match($this->noNeedLogin))
+        {
+            //初始化
+            $this->auth->init($token);
+            //检测是否登录
+            if (!$this->auth->isLogin())
+            {
+                $this->error(__('Please login first'), 'user/login');
+            }
+            // 判断是否需要验证权限
+            if (!$this->auth->match($this->noNeedRight))
+            {
+                // 判断控制器和方法判断是否有对应权限
+                if (!$this->auth->check($path))
+                {
+                    $this->error(__('You have no permission'));
+                }
+            }
+        }
+        else
+        {
+            // 如果有传递token才验证是否登录状态
+            if ($token)
+            {
+                $this->auth->init($token);
+            }
+        }
+
+        $this->view->assign('user', $this->auth->getUser());
 
         // 语言检测
-        $lang = Lang::detect();
+        $lang = strip_tags(Lang::detect());
 
         $site = Config::get("site");
+
+        $upload = \app\common\model\Config::upload();
+
+        // 上传信息配置后
+        Hook::listen("upload_config_init", $upload);
 
         // 配置信息
         $config = [
             'site'           => array_intersect_key($site, array_flip(['name', 'cdnurl', 'version', 'timezone', 'languages'])),
-            'upload'         => \app\common\model\Config::upload(),
+            'upload'         => $upload,
             'modulename'     => $modulename,
             'controllername' => $controllername,
             'actionname'     => $actionname,
@@ -95,20 +111,16 @@ class Frontend extends Controller
             'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang
         ];
+        $config = array_merge($config, Config::get("view_replace_str"));
+
+        Config::set('upload', array_merge(Config::get('upload'), $upload));
+
+        // 配置信息后
+        Hook::listen("config_init", $config);
+        // 加载当前控制器语言包
         $this->loadlang($controllername);
         $this->assign('site', $site);
         $this->assign('config', $config);
-    }
-
-    protected function checkLogin()
-    {
-        //检测是否登录
-        if (!$this->user->isLogin())
-        {
-            $url = Session::get('referer');
-            $url = $url ? $url : $this->request->url();
-            $this->error(__('Please login first'), url('/user/login', ['url' => $url]));
-        }
     }
 
     /**
@@ -121,16 +133,13 @@ class Frontend extends Controller
     }
 
     /**
-     * 析构方法
-     *
+     * 渲染配置信息
+     * @param mixed $name 键名或数组
+     * @param mixed $value 值 
      */
-    public function __destruct()
+    protected function assignconfig($name, $value = '')
     {
-        //判断是否设置code值,如果有则变动response对象的正文
-        if (!is_null($this->code))
-        {
-            $this->result($this->data, $this->code, $this->msg, 'json');
-        }
+        $this->view->config = array_merge($this->view->config ? $this->view->config : [], is_array($name) ? $name : [$name => $value]);
     }
 
 }

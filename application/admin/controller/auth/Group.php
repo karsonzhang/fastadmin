@@ -2,6 +2,7 @@
 
 namespace app\admin\controller\auth;
 
+use app\admin\model\AuthGroup;
 use app\common\controller\Backend;
 use fast\Tree;
 
@@ -15,8 +16,8 @@ class Group extends Backend
 {
 
     protected $model = null;
-    //当前登录管理员所有子节点组别
-    protected $childrenIds = [];
+    //当前登录管理员所有子组别
+    protected $childrenGroupIds = [];
     //当前组别列表数据
     protected $groupdata = [];
     //无需要权限判断的方法
@@ -27,27 +28,34 @@ class Group extends Backend
         parent::_initialize();
         $this->model = model('AuthGroup');
 
-        $groups = $this->auth->getGroups();
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
-        // 取出所有分组
-        $grouplist = model('AuthGroup')->all(['status' => 'normal']);
-        $objlist = [];
-        foreach ($groups as $K => $v)
+        $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
+
+        Tree::instance()->init($groupList);
+        $result = [];
+        if ($this->auth->isSuperAdmin())
         {
-            // 取出包含自己的所有子节点
-            $childrenlist = Tree::instance()->init($grouplist)->getChildren($v['id'], TRUE);
-            $obj = Tree::instance()->init($childrenlist)->getTreeArray($v['pid']);
-            $objlist = array_merge($objlist, Tree::instance()->getTreeList($obj));
+            $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
+        }
+        else
+        {
+            $groups = $this->auth->getGroups();
+            foreach ($groups as $m => $n)
+            {
+                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['pid'])));
+            }
+        }
+        $groupName = [];
+        foreach ($result as $k => $v)
+        {
+            $groupName[$v['id']] = $v['name'];
         }
 
-        $groupdata = [];
-        foreach ($objlist as $k => $v)
-        {
-            $groupdata[$v['id']] = $v['name'];
-        }
-        $this->groupdata = $groupdata;
-        $this->childrenIds = array_keys($groupdata);
-        $this->view->assign('groupdata', $groupdata);
+        $this->groupdata = $groupName;
+        $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $this->auth->getGroupIds()]);
+
+        $this->view->assign('groupdata', $this->groupdata);
     }
 
     /**
@@ -57,12 +65,21 @@ class Group extends Backend
     {
         if ($this->request->isAjax())
         {
+            $list = AuthGroup::all(array_keys($this->groupdata));
+            $list = collection($list)->toArray();
+            $groupList = [];
+            foreach ($list as $k => $v)
+            {
+                $groupList[$v['id']] = $v;
+            }
             $list = [];
             foreach ($this->groupdata as $k => $v)
             {
-                $data = $this->model->get($k);
-                $data->name = $v;
-                $list[] = $data;
+                if (isset($groupList[$k]))
+                {
+                    $groupList[$k]['name'] = $v;
+                    $list[] = $groupList[$k];
+                }
             }
             $total = count($list);
             $result = array("total" => $total, "rows" => $list);
@@ -79,20 +96,16 @@ class Group extends Backend
     {
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             $params['rules'] = explode(',', $params['rules']);
-            if (!in_array($params['pid'], $this->childrenIds))
+            if (!in_array($params['pid'], $this->childrenGroupIds))
             {
-                $this->code = -1;
-                $this->msg = __('');
-                return;
+                $this->error(__('The parent group can not be its own child'));
             }
             $parentmodel = model("AuthGroup")->get($params['pid']);
             if (!$parentmodel)
             {
-                $this->msg = __('The parent group can not found');
-                return;
+                $this->error(__('The parent group can not found'));
             }
             // 父级别的规则节点
             $parentrules = explode(',', $parentmodel->rules);
@@ -107,10 +120,9 @@ class Group extends Backend
             if ($params)
             {
                 $this->model->create($params);
-                $this->code = 1;
+                $this->success();
             }
-
-            return;
+            $this->error();
         }
         return $this->view->fetch();
     }
@@ -125,21 +137,18 @@ class Group extends Backend
             $this->error(__('No Results were found'));
         if ($this->request->isPost())
         {
-            $this->code = -1;
             $params = $this->request->post("row/a", [], 'strip_tags');
             // 父节点不能是它自身的子节点
-            if (!in_array($params['pid'], $this->childrenIds))
+            if (!in_array($params['pid'], $this->childrenGroupIds))
             {
-                $this->msg = __('The parent group can not be its own child');
-                return;
+                $this->error(__('The parent group can not be its own child'));
             }
             $params['rules'] = explode(',', $params['rules']);
 
             $parentmodel = model("AuthGroup")->get($params['pid']);
             if (!$parentmodel)
             {
-                $this->msg = __('The parent group can not found');
-                return;
+                $this->error(__('The parent group can not found'));
             }
             // 父级别的规则节点
             $parentrules = explode(',', $parentmodel->rules);
@@ -154,9 +163,9 @@ class Group extends Backend
             if ($params)
             {
                 $row->save($params);
-                $this->code = 1;
+                $this->success();
             }
-
+            $this->error();
             return;
         }
         $this->view->assign("row", $row);
@@ -168,7 +177,6 @@ class Group extends Backend
      */
     public function del($ids = "")
     {
-        $this->code = -1;
         if ($ids)
         {
             $ids = explode(',', $ids);
@@ -201,16 +209,15 @@ class Group extends Backend
             }
             if (!$ids)
             {
-                $this->msg = __('You can not delete group that contain child group and administrators');
-                return;
+                $this->error(__('You can not delete group that contain child group and administrators'));
             }
             $count = $this->model->where('id', 'in', $ids)->delete();
             if ($count)
             {
-                $this->code = 1;
+                $this->success();
             }
         }
-        return;
+        $this->error();
     }
 
     /**
@@ -220,8 +227,7 @@ class Group extends Backend
     public function multi($ids = "")
     {
         // 组别禁止批量操作
-        $this->code = -1;
-        return;
+        $this->error();
     }
 
     /**
@@ -236,28 +242,28 @@ class Group extends Backend
         $model = model('AuthGroup');
         $id = $this->request->post("id");
         $pid = $this->request->post("pid");
-        $parentgroupmodel = $model->get($pid);
-        $currentgroupmodel = NULL;
+        $parentGroupModel = $model->get($pid);
+        $currentGroupModel = NULL;
         if ($id)
         {
-            $currentgroupmodel = $model->get($id);
+            $currentGroupModel = $model->get($id);
         }
-        if (($pid || $parentgroupmodel) && (!$id || $currentgroupmodel))
+        if (($pid || $parentGroupModel) && (!$id || $currentGroupModel))
         {
             $id = $id ? $id : NULL;
             $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->select())->toArray();
             //读取父类角色所有节点列表
             $parentRuleList = [];
-            if (in_array('*', explode(',', $parentgroupmodel->rules)))
+            if (in_array('*', explode(',', $parentGroupModel->rules)))
             {
                 $parentRuleList = $ruleList;
             }
             else
             {
-                $parent_rule_ids = explode(',', $parentgroupmodel->rules);
+                $parentRuleIds = explode(',', $parentGroupModel->rules);
                 foreach ($ruleList as $k => $v)
                 {
-                    if (in_array($v['id'], $parent_rule_ids))
+                    if (in_array($v['id'], $parentRuleIds))
                     {
                         $parentRuleList[] = $v;
                     }
@@ -265,45 +271,47 @@ class Group extends Backend
             }
 
             //当前所有正常规则列表
-            Tree::instance()->init($ruleList);
+            Tree::instance()->init($parentRuleList);
 
             //读取当前角色下规则ID集合
-            $admin_rule_ids = $this->auth->getRuleIds();
+            $adminRuleIds = $this->auth->getRuleIds();
             //是否是超级管理员
             $superadmin = $this->auth->isSuperAdmin();
             //当前拥有的规则ID集合
-            $current_rule_ids = $id ? explode(',', $currentgroupmodel->rules) : [];
+            $currentRuleIds = $id ? explode(',', $currentGroupModel->rules) : [];
 
             if (!$id || !in_array($pid, Tree::instance()->getChildrenIds($id, TRUE)))
             {
-                $ruleList = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'name');
+                $parentRuleList = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'name');
                 $hasChildrens = [];
-                foreach ($ruleList as $k => $v)
+                foreach ($parentRuleList as $k => $v)
                 {
                     if ($v['haschild'])
                         $hasChildrens[] = $v['id'];
                 }
-                $nodelist = [];
+                $parentRuleIds = array_map(function($item) {
+                    return $item['id'];
+                }, $parentRuleList);
+                $nodeList = [];
                 foreach ($parentRuleList as $k => $v)
                 {
-                    if (!$superadmin && !in_array($v['id'], $admin_rule_ids))
+                    if (!$superadmin && !in_array($v['id'], $adminRuleIds))
                         continue;
-                    $state = array('selected' => in_array($v['id'], $current_rule_ids) && !in_array($v['id'], $hasChildrens));
-                    $nodelist[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => $v['title'], 'type' => 'menu', 'state' => $state);
+                    if ($v['pid'] && !in_array($v['pid'], $parentRuleIds))
+                        continue;
+                    $state = array('selected' => in_array($v['id'], $currentRuleIds) && !in_array($v['id'], $hasChildrens));
+                    $nodeList[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => __($v['title']), 'type' => 'menu', 'state' => $state);
                 }
-                $this->code = 1;
-                $this->data = $nodelist;
+                $this->success('', null, $nodeList);
             }
             else
             {
-                $this->code = -1;
-                $this->data = __('Can not change the parent to child');
+                $this->error(__('Can not change the parent to child'));
             }
         }
         else
         {
-            $this->code = -1;
-            $this->data = __('Group not found');
+            $this->error(__('Group not found'));
         }
     }
 

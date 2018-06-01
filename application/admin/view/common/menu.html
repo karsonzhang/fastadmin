@@ -1,6 +1,6 @@
-<!-- sidebar: style can be found in sidebar.less -->
+<!-- 左侧菜单栏 -->
 <section class="sidebar">
-    <!-- Sidebar user panel -->
+    <!-- 管理员信息 -->
     <div class="user-panel hidden-xs">
         <div class="pull-left image">
             <a href="general/profile" class="addtabsit"><img src="__CDN__{$admin.avatar}" class="img-circle" /></a>
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <!-- search form -->
+    <!-- 菜单搜索 -->
     <form action="" method="get" class="sidebar-form" onsubmit="return false;">
         <div class="input-group">
             <input type="text" name="q" class="form-control" placeholder="{:__('Search menu')}">
@@ -23,12 +23,22 @@
             </div>
         </div>
     </form>
-    <!-- /.search form -->
 
-    <!-- sidebar menu: : style can be found in sidebar.less -->
-    <!--如果想始终显示子菜单,则给ul加上show-submenu类即可-->
-    <ul class="sidebar-menu">
+    <!-- 移动端一级菜单 -->
+    <div class="mobilenav visible-xs">
+
+    </div>
+
+    <!--如果想始终显示子菜单,则给ul加上show-submenu类即可,当multiplenav开启的情况下默认为展开-->
+    <ul class="sidebar-menu {if $config.fastadmin.multiplenav}show-submenu{/if}">
+
+        <!-- 菜单可以在 后台管理->权限管理->菜单规则 中进行增删改排序 -->
         {$menulist}
+
+        <!--以下4行可以删除或改成自己的链接,但建议你在你的网站上添加一个FastAdmin的链接-->
+        <li class="header" data-rel="external">{:__('Links')}</li>
+        <li data-rel="external"><a href="https://doc.fastadmin.net" target="_blank"><i class="fa fa-list text-red"></i> <span>{:__('Docs')}</span></a></li>
+        <li data-rel="external"><a href="https://forum.fastadmin.net" target="_blank"><i class="fa fa-comment text-yellow"></i> <span>{:__('Forum')}</span></a></li>
+        <li data-rel="external"><a href="https://jq.qq.com/?_wv=1027&k=487PNBb" target="_blank"><i class="fa fa-qq text-aqua"></i> <span>{:__('QQ qun')}</span></a></li>
     </ul>
 </section>
-<!-- /.sidebar -->

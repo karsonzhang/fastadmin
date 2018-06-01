@@ -1,42 +1,54 @@
-<div class="container">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="page-header" style="margin-top:10px;">
-                <h4>会员中心</h4>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    {if $user->check()}
-                    <div class="alert alert-dismissable bg-gray-light clearfix">
-                        <div class="pull-left"><img class="img-responsive img-circle" style="width:100px;" src="/assets/img/avatar.png" /></div>
-                        <div class="pull-left text-left" style="margin-left:15px;">
-                            <p>
-                                {:__('Welcome', $user->nickname)}<br />
-                                Lv:{$user->level}
-                            </p>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="list-group">
-                            <a href="{:url('user/changepwd')}" class="list-group-item">
-                                <i class="fa fa-user"></i> 修改密码
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <span class="badge">2</span>
-                                <i class="fa fa-list"></i> 我发表的帖子
-                            </a>
-                            <a href="#" class="list-group-item">
-                                <span class="badge">1</span>
-                                <i class="fa fa-list-alt"></i> 我发表的主题
+<div id="content-container" class="container">
+    <div class="row">
+        <div class="col-md-3">
+            {include file="common/sidenav" /}
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default ">
+                <div class="panel-body">
+                    <h2 class="page-header">{:__('User center')}</h2>
+                    <div class="row user-baseinfo">
+                        <div class="col-md-3 col-sm-3 col-xs-2 text-center user-center">
+                            <a href="{:url('user/profile')}" title="{:__('Click to edit')}">
+                                <span class="avatar-img"><img src="{$user.avatar}" alt=""></span>
                             </a>
                         </div>
+                        <div class="col-md-7 col-sm-7 col-xs-10">
+                            <!-- Content -->
+                            <div class="ui-content">
+                                <!-- Heading -->
+                                <h4><a href="{:url('user/profile')}">{$user.username}</a></h4>
+                                <!-- Paragraph -->
+                                <p><a href="{:url('user/profile')}">{$user.bio|default=__("This guy hasn't written anything yet")}</a></p>
+                                <!-- Success -->
+                                <div style="margin-top:15px;">
+                                    <table class="table">	
+                                        <tbody><tr>
+                                                <th>{:__('Lv')}</th>
+                                                <td><a href="javascript:;" class="viewlv">{$user.level}</a></td>
+                                                <th>{:__('Score')}</th>
+                                                <td><a href="javascript:;" class="viewscore">{$user.score}</a></td>
+                                            </tr>
+                                            <tr>
+                                                <th>{:__('Successions')}</th>
+                                                <td>{$user.successions} {:__('Day')}</td>
+                                                <th>{:__('Maxsuccessions')}</th>
+                                                <td>{$user.maxsuccessions} {:__('Day')}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>{:__('Logintime')}</th>
+                                                <td>{$user.logintime|date="Y-m-d H:i:s",###}</td>
+                                                <th>{:__('Prevtime')}</th>
+                                                <td>{$user.prevtime|date="Y-m-d H:i:s",###}</td>
+                                            </tr>
+                                        </tbody></table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-2 col-xs-0 col-pad">
+                            <a href="{:url('user/profile')}" class="btn btn-success hidden-xs"><i class="fa fa-pencil"></i> {:__('Profile')}</a>	
+                        </div>
                     </div>
-
-                    <a class="btn btn-danger btn-block" href="{:url('user/logout')}"><i class="fa fa-user"></i> 立即注销</a>
-                    {else/}
-                    <a class="btn btn-info btn-block" href="{:url('user/register')}"><i class="fa fa-user"></i> 立即注册</a>
-                    <a class="btn btn-success btn-block" href="{:url('user/login')}"><i class="fa fa-user"></i> 立即登录</a>
-                    {/if}
                 </div>
             </div>
         </div>

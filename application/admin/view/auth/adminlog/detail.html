@@ -1,14 +1,14 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>标题</th>
-            <th>内容</th>
+            <th>{:__('Title')}</th>
+            <th>{:__('Content')}</th>
         </tr>
     </thead>
     <tbody>
         {volist name="row" id="vo"  }
             <tr>
-                <td>{$key}</td>
+                <td>{:__($key)}</td>
                 <td>{$vo}</td>
             </tr>
         {/volist}

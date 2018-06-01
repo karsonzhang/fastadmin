@@ -33,6 +33,7 @@
         if (!that.options.templateView) {
             return;
         }
+        that.options.cardView = true;
 
     };
 

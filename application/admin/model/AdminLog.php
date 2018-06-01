@@ -2,6 +2,7 @@
 
 namespace app\admin\model;
 
+use app\admin\library\Auth;
 use think\Model;
 
 class AdminLog extends Model
@@ -29,9 +30,9 @@ class AdminLog extends Model
 
     public static function record($title = '')
     {
-        $admin = \think\Session::get('admin');
-        $admin_id = $admin ? $admin->id : 0;
-        $username = $admin ? $admin->username : __('Unknown');
+        $auth = Auth::instance();
+        $admin_id = $auth->isLogin() ? $auth->id : 0;
+        $username = $auth->isLogin() ? $auth->username : __('Unknown');
         $content = self::$content;
         if (!$content)
         {
@@ -48,7 +49,7 @@ class AdminLog extends Model
         if (!$title)
         {
             $title = [];
-            $breadcrumb = \app\admin\library\Auth::instance()->getBreadcrumb();
+            $breadcrumb = Auth::instance()->getBreadcrumb();
             foreach ($breadcrumb as $k => $v)
             {
                 $title[] = $v['title'];
