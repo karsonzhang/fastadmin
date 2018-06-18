@@ -1,3 +1,16 @@
+<style>
+    .basicinfo {
+        margin: 15px 0;
+    }
+
+    .basicinfo .row > .col-xs-4 {
+        padding-right: 0;
+    }
+
+    .basicinfo .row > div {
+        margin: 5px 0;
+    }
+</style>
 <div id="content-container" class="container">
     <div class="row">
         <div class="col-md-3">
@@ -6,47 +19,52 @@
         <div class="col-md-9">
             <div class="panel panel-default ">
                 <div class="panel-body">
-                    <h2 class="page-header">{:__('User center')}</h2>
+                    <h2 class="page-header">
+                        {:__('User center')}
+                        <a href="{:url('user/profile')}" class="btn btn-success pull-right"><i class="fa fa-pencil"></i>
+                            {:__('Profile')}</a>
+                    </h2>
                     <div class="row user-baseinfo">
                         <div class="col-md-3 col-sm-3 col-xs-2 text-center user-center">
                             <a href="{:url('user/profile')}" title="{:__('Click to edit')}">
                                 <span class="avatar-img"><img src="{$user.avatar}" alt=""></span>
                             </a>
                         </div>
-                        <div class="col-md-7 col-sm-7 col-xs-10">
+                        <div class="col-md-9 col-sm-9 col-xs-10">
                             <!-- Content -->
                             <div class="ui-content">
                                 <!-- Heading -->
-                                <h4><a href="{:url('user/profile')}">{$user.username}</a></h4>
+                                <h4><a href="{:url('user/profile')}">{$user.nickname}</a></h4>
                                 <!-- Paragraph -->
-                                <p><a href="{:url('user/profile')}">{$user.bio|default=__("This guy hasn't written anything yet")}</a></p>
+                                <p>
+                                    <a href="{:url('user/profile')}">
+                                        {$user.bio|default=__("This guy hasn't written anything yet")}
+                                    </a>
+                                </p>
                                 <!-- Success -->
-                                <div style="margin-top:15px;">
-                                    <table class="table">	
-                                        <tbody><tr>
-                                                <th>{:__('Lv')}</th>
-                                                <td><a href="javascript:;" class="viewlv">{$user.level}</a></td>
-                                                <th>{:__('Score')}</th>
-                                                <td><a href="javascript:;" class="viewscore">{$user.score}</a></td>
-                                            </tr>
-                                            <tr>
-                                                <th>{:__('Successions')}</th>
-                                                <td>{$user.successions} {:__('Day')}</td>
-                                                <th>{:__('Maxsuccessions')}</th>
-                                                <td>{$user.maxsuccessions} {:__('Day')}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>{:__('Logintime')}</th>
-                                                <td>{$user.logintime|date="Y-m-d H:i:s",###}</td>
-                                                <th>{:__('Prevtime')}</th>
-                                                <td>{$user.prevtime|date="Y-m-d H:i:s",###}</td>
-                                            </tr>
-                                        </tbody></table>
+                                <div class="basicinfo">
+                                    <div class="row">
+                                        <div class="col-xs-4 col-md-2">{:__('Lv')}</div>
+                                        <div class="col-xs-8 col-md-4"><a href="javascript:;" class="viewlv">{$user.level}</a>
+                                        </div>
+                                        <div class="col-xs-4 col-md-2">{:__('Score')}</div>
+                                        <div class="col-xs-8 col-md-4"><a href="javascript:;" class="viewscore">{$user.score}</a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-md-2">{:__('Successions')}</div>
+                                        <div class="col-xs-8 col-md-4">{$user.successions} {:__('Day')}</div>
+                                        <div class="col-xs-4 col-md-2">{:__('Maxsuccessions')}</div>
+                                        <div class="col-xs-8 col-md-4">{$user.maxsuccessions} {:__('Day')}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-md-2">{:__('Logintime')}</div>
+                                        <div class="col-xs-8 col-md-4">{$user.logintime|date="Y-m-d H:i:s",###}</div>
+                                        <div class="col-xs-4 col-md-2">{:__('Prevtime')}</div>
+                                        <div class="col-xs-8 col-md-4">{$user.prevtime|date="Y-m-d H:i:s",###}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-2 col-sm-2 col-xs-0 col-pad">
-                            <a href="{:url('user/profile')}" class="btn btn-success hidden-xs"><i class="fa fa-pencil"></i> {:__('Profile')}</a>	
                         </div>
                     </div>
                 </div>

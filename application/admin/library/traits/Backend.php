@@ -12,24 +12,22 @@ trait Backend
     {
         //设置过滤方法
         $this->request->filter(['strip_tags']);
-        if ($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
             //如果发送的来源是Selectpage，则转发到Selectpage
-            if ($this->request->request('keyField'))
-            {
+            if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
-                    ->where($where)
-                    ->order($sort, $order)
-                    ->count();
+                ->where($where)
+                ->order($sort, $order)
+                ->count();
 
             $list = $this->model
-                    ->where($where)
-                    ->order($sort, $order)
-                    ->limit($offset, $limit)
-                    ->select();
+                ->where($where)
+                ->order($sort, $order)
+                ->limit($offset, $limit)
+                ->select();
 
             $list = collection($list)->toArray();
             $result = array("total" => $total, "rows" => $list);
@@ -46,21 +44,20 @@ trait Backend
     {
         //设置过滤方法
         $this->request->filter(['strip_tags']);
-        if ($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
-                    ->onlyTrashed()
-                    ->where($where)
-                    ->order($sort, $order)
-                    ->count();
+                ->onlyTrashed()
+                ->where($where)
+                ->order($sort, $order)
+                ->count();
 
             $list = $this->model
-                    ->onlyTrashed()
-                    ->where($where)
-                    ->order($sort, $order)
-                    ->limit($offset, $limit)
-                    ->select();
+                ->onlyTrashed()
+                ->where($where)
+                ->order($sort, $order)
+                ->limit($offset, $limit)
+                ->select();
 
             $result = array("total" => $total, "rows" => $list);
 
@@ -74,36 +71,26 @@ trait Backend
      */
     public function add()
     {
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
-            if ($params)
-            {
-                if ($this->dataLimit && $this->dataLimitFieldAutoFill)
-                {
+            if ($params) {
+                if ($this->dataLimit && $this->dataLimitFieldAutoFill) {
                     $params[$this->dataLimitField] = $this->auth->id;
                 }
-                try
-                {
+                try {
                     //是否采用模型验证
-                    if ($this->modelValidate)
-                    {
+                    if ($this->modelValidate) {
                         $name = basename(str_replace('\\', '/', get_class($this->model)));
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : true) : $this->modelValidate;
                         $this->model->validate($validate);
                     }
                     $result = $this->model->allowField(true)->save($params);
-                    if ($result !== false)
-                    {
+                    if ($result !== false) {
                         $this->success();
-                    }
-                    else
-                    {
+                    } else {
                         $this->error($this->model->getError());
                     }
-                }
-                catch (\think\exception\PDOException $e)
-                {
+                } catch (\think\exception\PDOException $e) {
                     $this->error($e->getMessage());
                 }
             }
@@ -121,39 +108,28 @@ trait Backend
         if (!$row)
             $this->error(__('No Results were found'));
         $adminIds = $this->getDataLimitAdminIds();
-        if (is_array($adminIds))
-        {
-            if (!in_array($row[$this->dataLimitField], $adminIds))
-            {
+        if (is_array($adminIds)) {
+            if (!in_array($row[$this->dataLimitField], $adminIds)) {
                 $this->error(__('You have no permission'));
             }
         }
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
-            if ($params)
-            {
-                try
-                {
+            if ($params) {
+                try {
                     //是否采用模型验证
-                    if ($this->modelValidate)
-                    {
+                    if ($this->modelValidate) {
                         $name = basename(str_replace('\\', '/', get_class($this->model)));
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.edit' : true) : $this->modelValidate;
                         $row->validate($validate);
                     }
                     $result = $row->allowField(true)->save($params);
-                    if ($result !== false)
-                    {
+                    if ($result !== false) {
                         $this->success();
-                    }
-                    else
-                    {
+                    } else {
                         $this->error($row->getError());
                     }
-                }
-                catch (\think\exception\PDOException $e)
-                {
+                } catch (\think\exception\PDOException $e) {
                     $this->error($e->getMessage());
                 }
             }
@@ -168,26 +144,20 @@ trait Backend
      */
     public function del($ids = "")
     {
-        if ($ids)
-        {
+        if ($ids) {
             $pk = $this->model->getPk();
             $adminIds = $this->getDataLimitAdminIds();
-            if (is_array($adminIds))
-            {
+            if (is_array($adminIds)) {
                 $count = $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
             $list = $this->model->where($pk, 'in', $ids)->select();
             $count = 0;
-            foreach ($list as $k => $v)
-            {
+            foreach ($list as $k => $v) {
                 $count += $v->delete();
             }
-            if ($count)
-            {
+            if ($count) {
                 $this->success();
-            }
-            else
-            {
+            } else {
                 $this->error(__('No rows were deleted'));
             }
         }
@@ -201,26 +171,20 @@ trait Backend
     {
         $pk = $this->model->getPk();
         $adminIds = $this->getDataLimitAdminIds();
-        if (is_array($adminIds))
-        {
+        if (is_array($adminIds)) {
             $count = $this->model->where($this->dataLimitField, 'in', $adminIds);
         }
-        if ($ids)
-        {
+        if ($ids) {
             $this->model->where($pk, 'in', $ids);
         }
         $count = 0;
         $list = $this->model->onlyTrashed()->select();
-        foreach ($list as $k => $v)
-        {
+        foreach ($list as $k => $v) {
             $count += $v->delete(true);
         }
-        if ($count)
-        {
+        if ($count) {
             $this->success();
-        }
-        else
-        {
+        } else {
             $this->error(__('No rows were deleted'));
         }
         $this->error(__('Parameter %s can not be empty', 'ids'));
@@ -233,17 +197,18 @@ trait Backend
     {
         $pk = $this->model->getPk();
         $adminIds = $this->getDataLimitAdminIds();
-        if (is_array($adminIds))
-        {
+        if (is_array($adminIds)) {
             $this->model->where($this->dataLimitField, 'in', $adminIds);
         }
-        if ($ids)
-        {
+        if ($ids) {
             $this->model->where($pk, 'in', $ids);
         }
-        $count = $this->model->restore('1=1');
-        if ($count)
-        {
+        $count = 0;
+        $list = $this->model->onlyTrashed()->select();
+        foreach ($list as $index => $item) {
+            $count += $item->restore();
+        }
+        if ($count) {
             $this->success();
         }
         $this->error(__('No rows were updated'));
@@ -255,32 +220,26 @@ trait Backend
     public function multi($ids = "")
     {
         $ids = $ids ? $ids : $this->request->param("ids");
-        if ($ids)
-        {
-            if ($this->request->has('params'))
-            {
+        if ($ids) {
+            if ($this->request->has('params')) {
                 parse_str($this->request->post("params"), $values);
                 $values = array_intersect_key($values, array_flip(is_array($this->multiFields) ? $this->multiFields : explode(',', $this->multiFields)));
-                if ($values)
-                {
+                if ($values) {
                     $adminIds = $this->getDataLimitAdminIds();
-                    if (is_array($adminIds))
-                    {
+                    if (is_array($adminIds)) {
                         $this->model->where($this->dataLimitField, 'in', $adminIds);
                     }
-                    $this->model->where($this->model->getPk(), 'in', $ids);
-                    $count = $this->model->allowField(true)->isUpdate(true)->save($values);
-                    if ($count)
-                    {
-                        $this->success();
+                    $count = 0;
+                    $list = $this->model->where($this->model->getPk(), 'in', $ids)->select();
+                    foreach ($list as $index => $item) {
+                        $count += $item->allowField(true)->isUpdate(true)->save($values);
                     }
-                    else
-                    {
+                    if ($count) {
+                        $this->success();
+                    } else {
                         $this->error(__('No rows were updated'));
                     }
-                }
-                else
-                {
+                } else {
                     $this->error(__('You have no permission'));
                 }
             }
@@ -294,24 +253,19 @@ trait Backend
     protected function import()
     {
         $file = $this->request->request('file');
-        if (!$file)
-        {
+        if (!$file) {
             $this->error(__('Parameter %s can not be empty', 'file'));
         }
         $filePath = ROOT_PATH . DS . 'public' . DS . $file;
-        if (!is_file($filePath))
-        {
+        if (!is_file($filePath)) {
             $this->error(__('No results were found'));
         }
         $PHPReader = new \PHPExcel_Reader_Excel2007();
-        if (!$PHPReader->canRead($filePath))
-        {
+        if (!$PHPReader->canRead($filePath)) {
             $PHPReader = new \PHPExcel_Reader_Excel5();
-            if (!$PHPReader->canRead($filePath))
-            {
+            if (!$PHPReader->canRead($filePath)) {
                 $PHPReader = new \PHPExcel_Reader_CSV();
-                if (!$PHPReader->canRead($filePath))
-                {
+                if (!$PHPReader->canRead($filePath)) {
                     $this->error(__('Unknown data format'));
                 }
             }
@@ -324,14 +278,10 @@ trait Backend
         $database = \think\Config::get('database.database');
         $fieldArr = [];
         $list = db()->query("SELECT COLUMN_NAME,COLUMN_COMMENT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?", [$table, $database]);
-        foreach ($list as $k => $v)
-        {
-            if ($importHeadType == 'comment')
-            {
+        foreach ($list as $k => $v) {
+            if ($importHeadType == 'comment') {
                 $fieldArr[$v['COLUMN_COMMENT']] = $v['COLUMN_NAME'];
-            }
-            else
-            {
+            } else {
                 $fieldArr[$v['COLUMN_NAME']] = $v['COLUMN_NAME'];
             }
         }
@@ -341,47 +291,36 @@ trait Backend
         $allColumn = $currentSheet->getHighestDataColumn(); //取得最大的列号
         $allRow = $currentSheet->getHighestRow(); //取得一共有多少行
         $maxColumnNumber = \PHPExcel_Cell::columnIndexFromString($allColumn);
-        for ($currentRow = 1; $currentRow <= 1; $currentRow++)
-        {
-            for ($currentColumn = 0; $currentColumn < $maxColumnNumber; $currentColumn++)
-            {
+        for ($currentRow = 1; $currentRow <= 1; $currentRow++) {
+            for ($currentColumn = 0; $currentColumn < $maxColumnNumber; $currentColumn++) {
                 $val = $currentSheet->getCellByColumnAndRow($currentColumn, $currentRow)->getValue();
                 $fields[] = $val;
             }
         }
         $insert = [];
-        for ($currentRow = 2; $currentRow <= $allRow; $currentRow++)
-        {
+        for ($currentRow = 2; $currentRow <= $allRow; $currentRow++) {
             $values = [];
-            for ($currentColumn = 0; $currentColumn < $maxColumnNumber; $currentColumn++)
-            {
+            for ($currentColumn = 0; $currentColumn < $maxColumnNumber; $currentColumn++) {
                 $val = $currentSheet->getCellByColumnAndRow($currentColumn, $currentRow)->getValue();
                 $values[] = is_null($val) ? '' : $val;
             }
             $row = [];
             $temp = array_combine($fields, $values);
-            foreach ($temp as $k => $v)
-            {
-                if (isset($fieldArr[$k]) && $k !== '')
-                {
+            foreach ($temp as $k => $v) {
+                if (isset($fieldArr[$k]) && $k !== '') {
                     $row[$fieldArr[$k]] = $v;
                 }
             }
-            if ($row)
-            {
+            if ($row) {
                 $insert[] = $row;
             }
         }
-        if (!$insert)
-        {
+        if (!$insert) {
             $this->error(__('No rows were updated'));
         }
-        try
-        {
+        try {
             $this->model->saveAll($insert);
-        }
-        catch (\think\exception\PDOException $exception)
-        {
+        } catch (\think\exception\PDOException $exception) {
             $this->error($exception->getMessage());
         }
 

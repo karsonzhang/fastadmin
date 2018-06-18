@@ -38,13 +38,13 @@
                             {/if}
                             <ul class="dropdown-menu">
                                 {if $user}
-                                <li><a href="{:url('user/index')}"><i class="fa fa-user-circle"></i>{:__('User center')}</a></li>
-                                <li><a href="{:url('user/profile')}"><i class="fa fa-user-o"></i>{:__('Profile')}</a></li>
-                                <li><a href="{:url('user/changepwd')}"><i class="fa fa-key"></i>{:__('Change password')}</a></li>
-                                <li><a href="{:url('user/logout')}"><i class="fa fa-sign-out"></i>{:__('Sign out')}</a></li>
+                                <li><a href="{:url('user/index')}"><i class="fa fa-user-circle fa-fw"></i>{:__('User center')}</a></li>
+                                <li><a href="{:url('user/profile')}"><i class="fa fa-user-o fa-fw"></i>{:__('Profile')}</a></li>
+                                <li><a href="{:url('user/changepwd')}"><i class="fa fa-key fa-fw"></i>{:__('Change password')}</a></li>
+                                <li><a href="{:url('user/logout')}"><i class="fa fa-sign-out fa-fw"></i>{:__('Sign out')}</a></li>
                                 {else /}
-                                <li><a href="{:url('user/login')}"><i class="fa fa-sign-in"></i> {:__('Sign in')}</a></li>
-                                <li><a href="{:url('user/register')}"><i class="fa fa-user-o"></i> {:__('Sign up')}</a></li>
+                                <li><a href="{:url('user/login')}"><i class="fa fa-sign-in fa-fw"></i> {:__('Sign in')}</a></li>
+                                <li><a href="{:url('user/register')}"><i class="fa fa-user-o fa-fw"></i> {:__('Sign up')}</a></li>
                                 {/if}
 
                             </ul>

@@ -377,6 +377,7 @@ class Auth extends \fast\Auth
                 continue;
             }
             $select_id = $v['name'] == $fixedPage ? $v['id'] : $select_id;
+            $v['icon'] = $v['icon'] . ' fa-fw';
             $v['url'] = '/' . $module . '/' . $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
             $v['py'] = $pinyin->abbr($v['title'], '');

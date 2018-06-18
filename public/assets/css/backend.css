@@ -44,9 +44,6 @@ html.ios-fix body {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
-.content {
-  min-height: 500px;
-}
 #header {
   background: #fff;
 }
@@ -293,9 +290,6 @@ form.form-horizontal .control-label {
   color: #2c3e50;
   border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
-.nav-addtabs > li > a i {
-  margin-right: 3px;
-}
 .nav-addtabs > li.active > a {
   height: 50px;
   line-height: 50px;
@@ -419,9 +413,6 @@ form.form-horizontal .control-label {
   background: none;
   border: none;
 }
-#secondnav .nav-addtabs > li > a i {
-  margin-right: 3px;
-}
 #secondnav .nav-addtabs > li.active {
   border-color: #bdbebd;
   background-color: #f7f7f7;
@@ -492,6 +483,9 @@ form.form-horizontal .control-label {
 }
 .sidebar-menu > li .badge {
   margin-top: 0;
+}
+.sidebar-menu .treeview-menu > li > a {
+  font-size: inherit;
 }
 .sidebar-collapse .user-panel > .image img {
   width: 25px;

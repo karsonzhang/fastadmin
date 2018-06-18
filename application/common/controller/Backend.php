@@ -89,6 +89,11 @@ class Backend extends Controller
     protected $multiFields = 'status';
 
     /**
+     * Selectpage可显示的字段
+     */
+    protected $selectpageFields = '*';
+
+    /**
      * 导入文件首行类型
      * 支持comment/name
      * 表示注释或字段名
@@ -166,7 +171,7 @@ class Backend extends Controller
         }
 
         // 语言检测
-        $lang = strip_tags(Lang::detect());
+        $lang = strip_tags($this->request->langset());
 
         $site = Config::get("site");
 
@@ -212,7 +217,7 @@ class Backend extends Controller
      */
     protected function loadlang($name)
     {
-        Lang::load(APP_PATH . $this->request->module() . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $name) . '.php');
+        Lang::load(APP_PATH . $this->request->module() . '/lang/' . $this->request->langset() . '/' . str_replace('.', '/', $name) . '.php');
     }
 
     /**
@@ -402,7 +407,7 @@ class Backend extends Controller
         //分页大小
         $pagesize = $this->request->request("pageSize");
         //搜索条件
-        $andor = $this->request->request("andOr");
+        $andor = $this->request->request("andOr", "and", "strtoupper");
         //排序方式
         $orderby = (array)$this->request->request("orderBy/a");
         //显示的字段
@@ -426,10 +431,10 @@ class Backend extends Controller
             $where = [$primarykey => ['in', $primaryvalue]];
         } else {
             $where = function ($query) use ($word, $andor, $field, $searchfield, $custom) {
+                $logic = $andor == 'AND' ? '&' : '|';
+                $searchfield = is_array($searchfield) ? implode($logic, $searchfield) : $searchfield;
                 foreach ($word as $k => $v) {
-                    foreach ($searchfield as $m => $n) {
-                        $query->where($n, "like", "%{$v}%", $andor);
-                    }
+                    $query->where(str_replace(',', $logic, $searchfield), "like", "%{$v}%");
                 }
                 if ($custom && is_array($custom)) {
                     foreach ($custom as $k => $v) {
@@ -448,12 +453,18 @@ class Backend extends Controller
             if (is_array($adminIds)) {
                 $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
-            $list = $this->model->where($where)
+            $datalist = $this->model->where($where)
                 ->order($order)
                 ->page($page, $pagesize)
-                ->field("{$primarykey},{$field}")
-                ->field("password,salt", true)
+                ->field($this->selectpageFields)
                 ->select();
+            foreach ($datalist as $index => $item) {
+                unset($item['password'], $item['salt']);
+                $list[] = [
+                    $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
+                    $field      => isset($item[$field]) ? $item[$field] : ''
+                ];
+            }
         }
         //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
         return json(['list' => $list, 'total' => $total]);

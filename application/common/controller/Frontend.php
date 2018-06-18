@@ -34,7 +34,7 @@ class Frontend extends Controller
 
     /**
      * 权限Auth
-     * @var Auth 
+     * @var Auth
      */
     protected $auth = null;
 
@@ -47,8 +47,7 @@ class Frontend extends Controller
         $actionname = strtolower($this->request->action());
 
         // 如果有使用模板布局
-        if ($this->layout)
-        {
+        if ($this->layout) {
             $this->view->engine->layout('layout/' . $this->layout);
         }
         $this->auth = Auth::instance();
@@ -60,30 +59,23 @@ class Frontend extends Controller
         // 设置当前请求的URI
         $this->auth->setRequestUri($path);
         // 检测是否需要验证登录
-        if (!$this->auth->match($this->noNeedLogin))
-        {
+        if (!$this->auth->match($this->noNeedLogin)) {
             //初始化
             $this->auth->init($token);
             //检测是否登录
-            if (!$this->auth->isLogin())
-            {
+            if (!$this->auth->isLogin()) {
                 $this->error(__('Please login first'), 'user/login');
             }
             // 判断是否需要验证权限
-            if (!$this->auth->match($this->noNeedRight))
-            {
+            if (!$this->auth->match($this->noNeedRight)) {
                 // 判断控制器和方法判断是否有对应权限
-                if (!$this->auth->check($path))
-                {
+                if (!$this->auth->check($path)) {
                     $this->error(__('You have no permission'));
                 }
             }
-        }
-        else
-        {
+        } else {
             // 如果有传递token才验证是否登录状态
-            if ($token)
-            {
+            if ($token) {
                 $this->auth->init($token);
             }
         }
@@ -91,7 +83,7 @@ class Frontend extends Controller
         $this->view->assign('user', $this->auth->getUser());
 
         // 语言检测
-        $lang = strip_tags(Lang::detect());
+        $lang = strip_tags($this->request->langset());
 
         $site = Config::get("site");
 
@@ -129,13 +121,13 @@ class Frontend extends Controller
      */
     protected function loadlang($name)
     {
-        Lang::load(APP_PATH . $this->request->module() . '/lang/' . Lang::detect() . '/' . str_replace('.', '/', $name) . '.php');
+        Lang::load(APP_PATH . $this->request->module() . '/lang/' . $this->request->langset() . '/' . str_replace('.', '/', $name) . '.php');
     }
 
     /**
      * 渲染配置信息
      * @param mixed $name 键名或数组
-     * @param mixed $value 值 
+     * @param mixed $value 值
      */
     protected function assignconfig($name, $value = '')
     {
