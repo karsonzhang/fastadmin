@@ -20,15 +20,15 @@ class Install extends Command
     {
         $config = Config::get('database');
         $this
-                ->setName('install')
-                ->addOption('hostname', 'a', Option::VALUE_OPTIONAL, 'mysql hostname', $config['hostname'])
-                ->addOption('hostport', 'o', Option::VALUE_OPTIONAL, 'mysql hostport', $config['hostport'])
-                ->addOption('database', 'd', Option::VALUE_OPTIONAL, 'mysql database', $config['database'])
-                ->addOption('prefix', 'r', Option::VALUE_OPTIONAL, 'table prefix', $config['prefix'])
-                ->addOption('username', 'u', Option::VALUE_OPTIONAL, 'mysql username', $config['username'])
-                ->addOption('password', 'p', Option::VALUE_OPTIONAL, 'mysql password', $config['password'])
-                ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', FALSE)
-                ->setDescription('New installation of FastAdmin');
+            ->setName('install')
+            ->addOption('hostname', 'a', Option::VALUE_OPTIONAL, 'mysql hostname', $config['hostname'])
+            ->addOption('hostport', 'o', Option::VALUE_OPTIONAL, 'mysql hostport', $config['hostport'])
+            ->addOption('database', 'd', Option::VALUE_OPTIONAL, 'mysql database', $config['database'])
+            ->addOption('prefix', 'r', Option::VALUE_OPTIONAL, 'table prefix', $config['prefix'])
+            ->addOption('username', 'u', Option::VALUE_OPTIONAL, 'mysql username', $config['username'])
+            ->addOption('password', 'p', Option::VALUE_OPTIONAL, 'mysql password', $config['password'])
+            ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', FALSE)
+            ->setDescription('New installation of FastAdmin');
     }
 
     protected function execute(Input $input, Output $output)
@@ -43,8 +43,7 @@ class Install extends Command
         $password = $input->getOption('password');
 
         $installLockFile = __DIR__ . "/Install/install.lock";
-        if (is_file($installLockFile) && !$force)
-        {
+        if (is_file($installLockFile) && !$force) {
             throw new Exception("\nFastAdmin already installed!\nIf you need to reinstall again, use the parameter --force=true ");
         }
 
@@ -58,21 +57,30 @@ class Install extends Command
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->query("CREATE DATABASE IF NOT EXISTS `{$database}` CHARACTER SET utf8 COLLATE utf8_general_ci;");
 
+        // 连接install命令中指定的数据库
+        $instance = Db::connect([
+            'type' => 'mysql',
+            'hostname' => "{$hostname}",
+            'hostport' => "{$hostport}",
+            'database' => "{$database}",
+            'username' => "{$username}",
+            'password' => "{$password}",
+        ]);
+
         // 查询一次SQL,判断连接是否正常
-        Db::execute("SELECT 1");
+        $instance->execute("SELECT 1");
 
         // 调用原生PDO对象进行批量查询
-        Db::getPdo()->exec($sql);
+        $instance->getPdo()->exec($sql);
 
         file_put_contents($installLockFile, 1);
 
         $dbConfigFile = APP_PATH . 'database.php';
         $config = @file_get_contents($dbConfigFile);
-        $callback = function($matches) use($hostname, $hostport, $username, $password, $database, $prefix) {
+        $callback = function ($matches) use ($hostname, $hostport, $username, $password, $database, $prefix) {
             $field = $matches[1];
             $replace = $$field;
-            if ($matches[1] == 'hostport' && $hostport == 3306)
-            {
+            if ($matches[1] == 'hostport' && $hostport == 3306) {
                 $replace = '';
             }
             return "'{$matches[1]}'{$matches[2]}=>{$matches[3]}Env::get('database.{$matches[1]}', '{$replace}'),";
@@ -80,7 +88,7 @@ class Install extends Command
         $config = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $config);
         // 写入数据库配置
         file_put_contents($dbConfigFile, $config);
-        
+
         \think\Cache::rm('__menu__');
 
         $output->info("Install Successed!");
