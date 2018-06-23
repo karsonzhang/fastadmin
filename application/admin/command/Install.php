@@ -59,7 +59,7 @@ class Install extends Command
 
         // 连接install命令中指定的数据库
         $instance = Db::connect([
-            'type' => 'mysql',
+            'type' => "{$config['type']}",
             'hostname' => "{$hostname}",
             'hostport' => "{$hostport}",
             'database' => "{$database}",
