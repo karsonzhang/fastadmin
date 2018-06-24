@@ -25,11 +25,14 @@ class Menu extends Command
             ->addOption('controller', 'c', Option::VALUE_REQUIRED | Option::VALUE_IS_ARRAY, 'controller name,use \'all-controller\' when build all menu', null)
             ->addOption('delete', 'd', Option::VALUE_OPTIONAL, 'delete the specified menu', '')
             ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force delete menu,without tips', null)
+            ->addOption('equal', 'e', Option::VALUE_OPTIONAL, 'the controller must be equal', null)
             ->setDescription('Build auth menu from controller');
+            //要执行的controller必须一样，不适用模糊查询
     }
 
     protected function execute(Input $input, Output $output)
     {
+
         $this->model = new AuthRule();
         $adminPath = dirname(__DIR__) . DS;
         //控制器名
@@ -40,14 +43,21 @@ class Menu extends Command
         $force = $input->getOption('force');
         //是否为删除模式
         $delete = $input->getOption('delete');
+        //是否控制器完全匹配
+        $equal= $input->getOption('equal');
+
+
         if ($delete) {
             if (in_array('all-controller', $controller)) {
                 throw new Exception("could not delete all menu");
             }
             $ids = [];
-            $list = $this->model->where(function ($query) use ($controller) {
+            $list = $this->model->where(function ($query) use ($controller, $equal) {
                 foreach ($controller as $index => $item) {
-                    $query->whereOr('name', 'like', strtolower($item) . "%");
+                    if($equal)
+                        $query->whereOr('name', 'eq', $item);
+                    else
+                        $query->whereOr('name', 'like', strtolower($item) . "%");         
                 }
             })->select();
             foreach ($list as $k => $v) {
