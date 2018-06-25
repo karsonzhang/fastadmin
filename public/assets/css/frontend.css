@@ -1,5 +1,5 @@
-@import url("../css/bootstrap.min.css");
-@import url("../css/fastadmin.min.css");
+@import url("../css/bootstrap.css");
+@import url("../css/fastadmin.css");
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
@@ -132,15 +132,6 @@ body {
     padding: 15px 0;
     background: none;
   }
-}
-.panel-primary > .panel-heading {
-  background-color: #46c37b;
-  color: #fff;
-}
-.panel-primary > .panel-body {
-  background: #fafafa;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
 }
 .panel-gray {
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
@@ -484,4 +475,4 @@ main.content {
     line-height: 30px;
   }
 }
-/*# sourceMappingURL=frontend.css.map */
+/*# sourceMappingURL=../css/frontend.css.map */
