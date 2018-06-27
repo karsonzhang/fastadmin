@@ -386,19 +386,35 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return html.join(' ');
                 },
                 status: function (value, row, index) {
-                    //颜色状态数组,可使用red/yellow/aqua/blue/navy/teal/olive/lime/fuchsia/purple/maroon
-                    var colorArr = {normal: 'success', hidden: 'grey', deleted: 'danger', locked: 'info'};
-                    //如果字段列有定义custom
+                    var custom = {normal: 'success', hidden: 'gray', deleted: 'danger', locked: 'info'};
                     if (typeof this.custom !== 'undefined') {
-                        colorArr = $.extend(colorArr, this.custom);
+                        custom = $.extend(custom, this.custom);
                     }
+                    this.custom = custom;
+                    this.icon = 'fa fa-circle';
+                    return Table.api.formatter.normal.call(this, value, row, index);
+                },
+                normal: function (value, row, index) {
+                    var colorArr = ["primary", "success", "danger", "warning", "info", "gray", "red", "yellow", "aqua", "blue", "navy", "teal", "olive", "lime", "fuchsia", "purple", "maroon"];
+                    var custom = {};
+                    if (typeof this.custom !== 'undefined') {
+                        custom = $.extend(custom, this.custom);
+                    }
+                    var keys = typeof this.searchList === 'object' ? Object.keys(this.searchList) : [];
+                    var index = keys.indexOf(value);
                     value = value === null ? '' : value.toString();
-                    var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
-                    var newValue = value.charAt(0).toUpperCase() + value.slice(1);
-                    //渲染状态
-                    var html = '<span class="text-' + color + '"><i class="fa fa-circle"></i> ' + __(newValue) + '</span>';
+                    var color = value && typeof custom[value] !== 'undefined' ? custom[value] : null;
+                    var display = index > -1 ? this.searchList[value] : null;
+                    var icon = typeof this.icon !== 'undefined' ? this.icon : null;
+                    if (!color) {
+                        color = index > -1 && typeof colorArr[index] !== 'undefined' ? colorArr[index] : 'primary';
+                    }
+                    if (!display) {
+                        display = value.charAt(0).toUpperCase() + value.slice(1);
+                    }
+                    var html = '<span class="text-' + color + '">' + (icon ? '<i class="' + icon + '"></i> ' : '') + display + '</span>';
                     if (this.operate != false) {
-                        html = '<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', __(newValue)) + '" data-field="' + this.field + '" data-value="' + value + '">' + html + '</a>';
+                        html = '<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', display) + '" data-field="' + this.field + '" data-value="' + value + '">' + html + '</a>';
                     }
                     return html;
                 },
@@ -408,7 +424,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var no = typeof this.no !== 'undefined' ? this.no : 0;
                     return "<a href='javascript:;' data-toggle='tooltip' title='" + __('Click to toggle') + "' class='btn-change' data-id='"
                         + row.id + "' data-params='" + this.field + "=" + (value ? no : yes) + "'><i class='fa fa-toggle-on " + (value == yes ? 'text-' + color : 'fa-flip-horizontal text-gray') + " fa-2x'></i></a>";
-                },
+                }
+                ,
                 url: function (value, row, index) {
                     return '<div class="input-group input-group-sm" style="width:250px;margin:0 auto;"><input type="text" class="form-control input-sm" value="' + value + '"><span class="input-group-btn input-group-sm"><a href="' + value + '" target="_blank" class="btn btn-default btn-sm"><i class="fa fa-link"></i></a></span></div>';
                 },
@@ -426,15 +443,19 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return '<a href="' + Fast.api.fixurl(url) + '" class="dialogit" data-value="' + value + '" title="' + title + '">' + value + '</a>';
                 },
                 flag: function (value, row, index) {
+                    var that = this;
                     value = value === null ? '' : value.toString();
                     var colorArr = {index: 'success', hot: 'warning', recommend: 'danger', 'new': 'info'};
                     //如果字段列有定义custom
                     if (typeof this.custom !== 'undefined') {
                         colorArr = $.extend(colorArr, this.custom);
                     }
+                    var field = this.field;
                     if (typeof this.customField !== 'undefined' && typeof row[this.customField] !== 'undefined') {
                         value = row[this.customField];
+                        field = this.customField;
                     }
+
                     //渲染Flag
                     var html = [];
                     var arr = value.split(',');
@@ -443,8 +464,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         if (value == '')
                             return true;
                         var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
-                        value = value.charAt(0).toUpperCase() + value.slice(1);
-                        html.push('<span class="label label-' + color + '">' + __(value) + '</span>');
+                        var display = typeof that.searchList !== 'undefined' && typeof that.searchList[value] !== 'undefined' ? that.searchList[value] : value.charAt(0).toUpperCase() + value.slice(1);
+                        html.push('<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', display) + '" data-field="' + field + '" data-value="' + value + '"><span class="label label-' + color + '">' + display + '</span></a>');
                     });
                     return html.join(' ');
                 },
@@ -495,7 +516,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         });
                     }
                     return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
-                },
+                }
+                ,
                 buttons: function (value, row, index) {
                     // 默认按钮组
                     var buttons = $.extend([], this.buttons || []);

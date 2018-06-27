@@ -21,7 +21,7 @@ class {%controllerName%} extends Backend
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = model('{%modelName%}');
+        $this->model = new \{%modelNamespace%}\{%modelName%};
 {%controllerAssignList%}
     }
     

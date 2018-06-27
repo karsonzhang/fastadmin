@@ -326,7 +326,6 @@
             if (obj.size() > 0) {
                 var value = $(this).data("value");
                 if (obj.is("select")) {
-                    console.log($("option[value='" + value + "']", obj));
                     $("option[value='" + value + "']", obj).prop("selected", true);
                 } else if (obj.size() > 1) {
                     $("form [name='" + $(this).data("field") + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);

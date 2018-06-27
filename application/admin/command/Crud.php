@@ -46,6 +46,11 @@ class Crud extends Command
     protected $switchSuffix = ['switch'];
 
     /**
+     * 富文本后缀
+     */
+    protected $editorSuffix = ['content'];
+
+    /**
      * 城市后缀
      */
     protected $citySuffix = ['city'];
@@ -64,12 +69,13 @@ class Crud extends Command
      * 以指定字符结尾的字段格式化函数
      */
     protected $fieldFormatterSuffix = [
-        'status' => ['type' => ['varchar'], 'name' => 'status'],
+        'status' => ['type' => ['varchar', 'enum'], 'name' => 'status'],
         'icon'   => 'icon',
         'flag'   => 'flag',
         'url'    => 'url',
         'image'  => 'image',
         'images' => 'images',
+        'switch' => 'toggle',
         'time'   => ['type' => ['int', 'timestamp'], 'name' => 'datetime']
     ];
 
@@ -145,6 +151,8 @@ class Crud extends Command
         $controller = $input->getOption('controller');
         //自定义模型
         $model = $input->getOption('model');
+        //验证器类
+        $validate = $model;
         //自定义显示字段
         $fields = $input->getOption('fields');
         //强制覆盖
@@ -220,6 +228,11 @@ class Crud extends Command
         $dbname = Config::get('database.database');
         $prefix = Config::get('database.prefix');
 
+        //模块
+        $moduleName = 'admin';
+        $modelModuleName = $local ? $moduleName : 'common';
+        $validateModuleName = $local ? $moduleName : 'common';
+
         //检查主表
         $modelName = $table = stripos($table, $prefix) === 0 ? substr($table, strlen($prefix)) : $table;
         $modelTableType = 'table';
@@ -257,9 +270,7 @@ class Crud extends Command
                 $relationTableInfo = $relationTableInfo[0];
                 $relationModel = isset($relationModel[$index]) ? $relationModel[$index] : '';
 
-                //关联模型默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入relationmodel,不支持目录层级
-                $relationName = $this->getModelName($relationModel, $relationName);
-                $relationFile = ($local ? $adminPath : APP_PATH . 'common' . DS) . 'model' . DS . $relationName . '.php';
+                list($relationNamespace, $relationName, $relationFile) = $this->getModelData($modelModuleName, $relationModel, $relationName);
 
                 $relations[] = [
                     //关联表基础名
@@ -292,28 +303,25 @@ class Crud extends Command
         $iconPath = ROOT_PATH . str_replace('/', DS, '/public/assets/libs/font-awesome/less/variables.less');
         $iconName = is_file($iconPath) && stripos(file_get_contents($iconPath), '@fa-var-' . $table . ':') ? 'fa fa-' . $table : 'fa fa-circle-o';
 
-        //控制器默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入controller,格式为目录层级
-        $controller = str_replace('_', '', $controller);
-        $controllerArr = !$controller ? explode('_', strtolower($table)) : explode('/', strtolower($controller));
-        $controllerUrl = implode('/', $controllerArr);
-        $controllerName = ucfirst(array_pop($controllerArr));
-        $controllerDir = implode(DS, $controllerArr);
-        $controllerFile = ($controllerDir ? $controllerDir . DS : '') . $controllerName . '.php';
-        $viewDir = $adminPath . 'view' . DS . $controllerUrl . DS;
+        //控制器
+        list($controllerNamespace, $controllerName, $controllerFile, $controllerArr) = $this->getControllerData($moduleName, $controller, $table);
+        //模型
+        list($modelNamespace, $modelName, $modelFile, $modelArr) = $this->getModelData($modelModuleName, $model, $table);
+        //验证器
+        list($validateNamespace, $validateName, $validateFile, $validateArr) = $this->getValidateData($validateModuleName, $validate, $table);
+
+        $controllerUrl = strtolower(implode('/', $controllerArr));
+        $controllerBaseName = strtolower(implode(DS, $controllerArr));
+
+        //视图文件
+        $viewDir = $adminPath . 'view' . DS . $controllerBaseName . DS;
 
         //最终将生成的文件路径
-        $controllerFile = $adminPath . 'controller' . DS . $controllerFile;
-        $javascriptFile = ROOT_PATH . 'public' . DS . 'assets' . DS . 'js' . DS . 'backend' . DS . $controllerUrl . '.js';
+        $javascriptFile = ROOT_PATH . 'public' . DS . 'assets' . DS . 'js' . DS . 'backend' . DS . $controllerBaseName . '.js';
         $addFile = $viewDir . 'add.html';
         $editFile = $viewDir . 'edit.html';
         $indexFile = $viewDir . 'index.html';
-        $langFile = $adminPath . 'lang' . DS . Lang::detect() . DS . $controllerUrl . '.php';
-
-        //模型默认以表名进行处理,以下划线进行分隔,如果需要自定义则需要传入model,不支持目录层级
-        $modelName = $this->getModelName($model, $table);
-        $modelFile = ($local ? $adminPath : APP_PATH . 'common' . DS) . 'model' . DS . $modelName . '.php';
-
-        $validateFile = $adminPath . 'validate' . DS . $modelName . '.php';
+        $langFile = $adminPath . 'lang' . DS . Lang::detect() . DS . $controllerBaseName . '.php';
 
         //是否为删除模式
         $delete = $input->getOption('delete');
@@ -332,6 +340,14 @@ class Crud extends Command
             foreach ($readyFiles as $k => $v) {
                 if (file_exists($v))
                     unlink($v);
+                //删除空文件夹
+                if ($v == $modelFile) {
+                    $this->removeEmptyBaseDir($v, $modelArr);
+                } else if ($v == $validateFile) {
+                    $this->removeEmptyBaseDir($v, $validateArr);
+                } else {
+                    $this->removeEmptyBaseDir($v, $controllerArr);
+                }
             }
 
             $output->info("Delete Successed");
@@ -457,8 +473,10 @@ class Crud extends Command
                 $itemArr = [];
                 // 这里构建Enum和Set类型的列表数据
                 if (in_array($v['DATA_TYPE'], ['enum', 'set', 'tinyint'])) {
-                    $itemArr = substr($v['COLUMN_TYPE'], strlen($v['DATA_TYPE']) + 1, -1);
-                    $itemArr = explode(',', str_replace("'", '', $itemArr));
+                    if ($v['DATA_TYPE'] !== 'tinyint') {
+                        $itemArr = substr($v['COLUMN_TYPE'], strlen($v['DATA_TYPE']) + 1, -1);
+                        $itemArr = explode(',', str_replace("'", '', $itemArr));
+                    }
                     $itemArr = $this->getItemArray($itemArr, $field, $v['COLUMN_COMMENT']);
                     //如果类型为tinyint且有使用备注数据
                     if ($itemArr && $v['DATA_TYPE'] == 'tinyint') {
@@ -563,7 +581,7 @@ class Crud extends Command
                         $formAddElement = $this->getReplacedStub('html/' . $inputType, ['field' => $field, 'fieldName' => $fieldName, 'fieldList' => $this->getFieldListName($field), 'attrStr' => Form::attributes($attrArr), 'selectedValue' => $defaultValue]);
                         $formEditElement = $this->getReplacedStub('html/' . $inputType, ['field' => $field, 'fieldName' => $fieldName, 'fieldList' => $this->getFieldListName($field), 'attrStr' => Form::attributes($attrArr), 'selectedValue' => "\$row.{$field}"]);
                     } else if ($inputType == 'textarea') {
-                        $cssClassArr[] = substr($field, -7) == 'content' ? $this->editorClass : '';
+                        $cssClassArr[] = $this->isMatchSuffix($field, $this->editorSuffix) ? $this->editorClass : '';
                         $attrArr['class'] = implode(' ', $cssClassArr);
                         $attrArr['rows'] = 5;
                         $formAddElement = Form::textarea($fieldName, $defaultValue, $attrArr);
@@ -576,6 +594,9 @@ class Crud extends Command
                         } else {
                             $no = $defaultValue;
                             $yes = $defaultValue === '0' ? '1' : 'Y';
+                        }
+                        if (!$itemArr) {
+                            $itemArr = [$yes => 'Yes', $no => 'No'];
                         }
                         $formAddElement = $formEditElement = Form::hidden($fieldName, $no, array_merge(['checked' => ''], $attrArr));
                         $attrArr['id'] = $fieldName . "-switch";
@@ -603,6 +624,10 @@ class Crud extends Command
                                 $attrArr['data-params'] = '##replacetext##';
                                 $search = '"##replacetext##"';
                                 $replace = '\'{"custom[type]":"' . $table . '"}\'';
+                            } elseif ($selectpageController == 'admin') {
+                                $attrArr['data-source'] = 'auth/admin/selectpage';
+                            } elseif ($selectpageController == 'user') {
+                                $attrArr['data-source'] = 'user/user/index';
                             }
                             if ($this->isMatchSuffix($field, $this->selectpagesSuffix)) {
                                 $attrArr['data-multiple'] = 'true';
@@ -696,13 +721,6 @@ class Crud extends Command
             $tableComment = $modelTableInfo['Comment'];
             $tableComment = mb_substr($tableComment, -1) == '表' ? mb_substr($tableComment, 0, -1) . '管理' : $tableComment;
 
-            $appNamespace = Config::get('app_namespace');
-            $moduleName = 'admin';
-            $controllerNamespace = "{$appNamespace}\\{$moduleName}\\controller" . ($controllerDir ? "\\" : "") . str_replace('/', "\\", $controllerDir);
-            $modelNamespace = "{$appNamespace}\\" . ($local ? $moduleName : "common") . "\\model";
-            $validateNamespace = "{$appNamespace}\\" . $moduleName . "\\validate";
-            $validateName = $modelName;
-
             $modelInit = '';
             if ($priKey != $order) {
                 $modelInit = $this->getReplacedStub('mixins' . DS . 'modelinit', ['order' => $order]);
@@ -713,7 +731,6 @@ class Crud extends Command
                 'modelNamespace'          => $modelNamespace,
                 'validateNamespace'       => $validateNamespace,
                 'controllerUrl'           => $controllerUrl,
-                'controllerDir'           => $controllerDir,
                 'controllerName'          => $controllerName,
                 'controllerAssignList'    => implode("\n", $controllerAssignList),
                 'modelName'               => $modelName,
@@ -890,18 +907,91 @@ EOD;
 EOD;
     }
 
-    protected function getModelName($model, $table)
+    /**
+     * 移除相对的空目录
+     * @param $parseFile
+     * @param $parseArr
+     * @return bool
+     */
+    protected function removeEmptyBaseDir($parseFile, $parseArr)
     {
-        if (!$model) {
-            $modelarr = explode('_', strtolower($table));
-            foreach ($modelarr as $k => &$v)
-                $v = ucfirst($v);
-            unset($v);
-            $modelName = implode('', $modelarr);
-        } else {
-            $modelName = ucfirst($model);
+        if (count($parseArr) > 1) {
+            $parentDir = dirname($parseFile);
+            for ($i = 0; $i < count($parseArr); $i++) {
+                $iterator = new \FilesystemIterator($parentDir);
+                $isDirEmpty = !$iterator->valid();
+                if ($isDirEmpty) {
+                    rmdir($parentDir);
+                    $parentDir = dirname($parentDir);
+                } else {
+                    return true;
+                }
+            }
         }
-        return $modelName;
+        return true;
+    }
+
+    /**
+     * 获取控制器相关信息
+     * @param $module
+     * @param $controller
+     * @param $table
+     * @return array
+     */
+    protected function getControllerData($module, $controller, $table)
+    {
+        return $this->getParseNameData($module, $controller, $table, 'controller');
+    }
+
+    /**
+     * 获取模型相关信息
+     * @param $module
+     * @param $model
+     * @param $table
+     * @return array
+     */
+    protected function getModelData($module, $model, $table)
+    {
+        return $this->getParseNameData($module, $model, $table, 'model');
+    }
+
+    /**
+     * 获取验证器相关信息
+     * @param $module
+     * @param $validate
+     * @param $table
+     * @return array
+     */
+    protected function getValidateData($module, $validate, $table)
+    {
+        return $this->getParseNameData($module, $validate, $table, 'validate');
+    }
+
+    /**
+     * 获取已解析相关信息
+     * @param $module
+     * @param $name
+     * @param $table
+     * @param $type
+     * @return array
+     */
+    protected function getParseNameData($module, $name, $table, $type)
+    {
+        $arr = [];
+        if (!$name) {
+            $arr = explode('_', strtolower($table));
+        } else {
+            $name = str_replace(['.', '/', '\\'], '/', $name);
+            $arr = explode('/', $name);
+        }
+        $parseName = ucfirst(array_pop($arr));
+        $appNamespace = Config::get('app_namespace');
+        $parseNamespace = "{$appNamespace}\\{$module}\\{$type}" . ($arr ? "\\" . implode("\\", $arr) : "");
+        $moduleDir = APP_PATH . $module . DS;
+        $parseFile = $moduleDir . $type . DS . ($arr ? implode(DS, $arr) . DS : '') . $parseName . '.php';
+        $parseArr = $arr;
+        $parseArr[] = $parseName;
+        return [$parseNamespace, $parseName, $parseFile, $parseArr];
     }
 
     /**
@@ -1199,25 +1289,19 @@ EOD;
                 }
             }
         }
-        if ($formatter) {
-            $extend = '';
-        }
-        $html = str_repeat(" ", 24) . "{field: '{$field}{$extend}', title: __('{$lang}')";
-        //$formatter = $extend ? '' : $formatter;
-        if ($extend) {
-            $html .= ", operate:false";
-            if ($datatype == 'set') {
-                $formatter = 'label';
-            }
+        $html = str_repeat(" ", 24) . "{field: '{$field}', title: __('{$lang}')";
+
+        if ($datatype == 'set') {
+            $formatter = 'label';
         }
         foreach ($itemArr as $k => &$v) {
             if (substr($v, 0, 3) !== '__(')
-                $v = "__('" . $v . "')";
+                $v = "__('" . mb_ucfirst($v) . "')";
         }
         unset($v);
         $searchList = json_encode($itemArr, JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
         $searchList = str_replace(['":"', '"}', ')","'], ['":', '}', '),"'], $searchList);
-        if ($itemArr && !$extend) {
+        if ($itemArr) {
             $html .= ", searchList: " . $searchList;
         }
         if (in_array($datatype, ['date', 'datetime']) || $formatter === 'datetime') {
@@ -1225,18 +1309,16 @@ EOD;
         } else if (in_array($datatype, ['float', 'double', 'decimal'])) {
             $html .= ", operate:'BETWEEN'";
         }
+        if (in_array($datatype, ['set'])) {
+            $html .= ", operate:'FIND_IN_SET'";
+        }
+        if ($itemArr && !$formatter) {
+            $formatter = 'normal';
+        }
         if ($formatter)
             $html .= ", formatter: Table.api.formatter." . $formatter . "}";
         else
             $html .= "}";
-        if ($extend) {
-            $origin = str_repeat(" ", 24) . "{field: '{$field}', title: __('{$lang}'), visible:false";
-            if ($searchList) {
-                $origin .= ", searchList: " . $searchList;
-            }
-            $origin .= "}";
-            $html = $origin . ",\n" . $html;
-        }
         return $html;
     }
 
