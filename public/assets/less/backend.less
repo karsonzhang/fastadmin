@@ -134,11 +134,6 @@ html.ios-fix, html.ios-fix body {
   padding: 10px;
 }
 
-/* 包裹在layer外层 */
-.layer-footer {
-  display: none;
-}
-
 table.table-template {
   overflow: hidden;
 }
@@ -206,6 +201,9 @@ table.table-template {
 .is-dialog {
   #main {
     background: #fff;
+  }
+  .layer-footer {
+    display: none;
   }
 }
 
@@ -556,7 +554,7 @@ form.form-horizontal .control-label {
     margin-top: 0;
   }
   .treeview-menu > li > a {
-    font-size:inherit;
+    font-size: inherit;
   }
 }
 
@@ -1115,4 +1113,15 @@ table.table-nowrap {
 
 .wipecache li a {
   color: #444444 !important;
+}
+
+/*修正开关关闭下的颜色值*/
+.btn-switcher {
+  &.disabled {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+  .text-gray {
+    color: #d2d6de !important;
+  }
 }

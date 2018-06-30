@@ -598,11 +598,9 @@ class Crud extends Command
                         if (!$itemArr) {
                             $itemArr = [$yes => 'Yes', $no => 'No'];
                         }
-                        $formAddElement = $formEditElement = Form::hidden($fieldName, $no, array_merge(['checked' => ''], $attrArr));
-                        $attrArr['id'] = $fieldName . "-switch";
-                        $formAddElement .= sprintf(Form::label("{$attrArr['id']}", "%s {:__('Yes')}", ['class' => 'control-label']), Form::checkbox($fieldName, $yes, $defaultValue === $yes, $attrArr));
-                        $formEditElement .= sprintf(Form::label("{$attrArr['id']}", "%s {:__('Yes')}", ['class' => 'control-label']), Form::checkbox($fieldName, $yes, 0, $attrArr));
-                        $formEditElement = str_replace('type="checkbox"', 'type="checkbox" {in name="' . "\$row.{$field}" . '" value="' . $yes . '"}checked{/in}', $formEditElement);
+                        $stateNoClass = 'fa-flip-horizontal text-gray';
+                        $formAddElement = $this->getReplacedStub('html/' . $inputType, ['field' => $field, 'fieldName' => $fieldName, 'fieldYes' => $yes, 'fieldNo' => $no, 'attrStr' => Form::attributes($attrArr), 'fieldValue' => $defaultValue, 'fieldSwitchClass' => $defaultValue == $no ? $stateNoClass : '']);
+                        $formEditElement = $this->getReplacedStub('html/' . $inputType, ['field' => $field, 'fieldName' => $fieldName, 'fieldYes' => $yes, 'fieldNo' => $no, 'attrStr' => Form::attributes($attrArr), 'fieldValue' => "{\$row.{$field}}", 'fieldSwitchClass' => "{eq name=\"\$row.{$field}\" value=\"{$no}\"}fa-flip-horizontal text-gray{/eq}"]);
                     } else if ($inputType == 'citypicker') {
                         $attrArr['class'] = implode(' ', $cssClassArr);
                         $attrArr['data-toggle'] = "city-picker";

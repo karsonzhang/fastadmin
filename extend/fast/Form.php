@@ -8,28 +8,45 @@ use ArrayAccess;
  * 表单元素生成
  * @class Form
  * @package fast
- * @method mixed token() static token
- * @method mixed close() static 关闭一个HTML表单
- * @method mixed setModel(mixed $model) static 设置HTML表单模型
- * @method mixed open(array $options) static 打开一个新的HTML表单
- * @method mixed file(string $name, array $options = array()) static 表单file
- * @method mixed reset(string $name, array $options = array()) static 表单reset
- * @method mixed password(string $name, array $options = array()) static 表单password
- * @method mixed button(string $value = null, array $options = array()) static 表单button
- * @method mixed model(mixed $model ,array $options = array()) static 打开一个新的HTML表单模型
- * @method mixed submit(string $value = null, array $options = array()) static 表单submit提交
- * @method mixed text(string $name, string $value = null, array $options = []) static 表单text
- * @method mixed label(string $name, string $value = null, array $options = []) static label标签
- * @method mixed url(string $name, string $value = null, array $options = array()) static 表单url
- * @method mixed email(string $name, string $value = null, array $options = array()) static 表单email
- * @method mixed hidden(string $name, string $value = null, array $options = array()) static 表单hidden
- * @method mixed image(string $url, string $name = null, array $attributes = array()) static 表单image提交
- * @method mixed textarea(string $name, string $value = null, array $options = array()) static 表单textarea
- * @method mixed checkbox(string $name, string $value = 1, string $checked = null, array $options = array()) static 表单checkbox
- * @method mixed radio(string $name, string $value = null, string $checked = null, array $options = array())) static 表单radio
- * @method mixed select(string $name, array $list = array(), string $selected = null, array $options = array()) static 表单textarea
- * @method mixed selectYear(string $name ,string $begin,string $end, string $selected = null ,array $options = array()) static select年
- * @method mixed selectMonth(string $name ,string $selected = null ,array $options = array() ,string $format = '%m') static select月
+ * @method string token() static 生成Token
+ * @method string label(string $name, string $value = null, array $options = []) static label标签
+ * @method string input($type, $name, string $value = null, array $options = []) static 按类型生成文本框
+ * @method string text(string $name, string $value = null, array $options = []) static 普通文本框
+ * @method string password(string $name, array $options = []) static 密码文本框
+ * @method string hidden(string $name, string $value = null, array $options = []) static 隐藏文本框
+ * @method string email(string $name, string $value = null, array $options = []) static Email文本框
+ * @method string url(string $name, string $value = null, array $options = []) static URL文本框
+ * @method string file(string $name, array $options = []) static 文件上传组件
+ * @method string textarea(string $name, string $value = null, array $options = []) static 多行文本框
+ * @method string editor(string $name, string $value = null, array $options = []) static 富文本编辑器
+ * @method string select(string $name, array $list = [], string $selected = null, array $options = []) static 下拉列表组件
+ * @method string selects(string $name, array $list = [], string $selected = null, array $options = []) static 下拉列表组件(多选)
+ * @method string selectpicker(string $name, array $list = [], string $selected = null, array $options = []) static 下拉列表组件(友好)
+ * @method string selectpickers(string $name, array $list = [], string $selected = null, array $options = []) static 下拉列表组件(友好)(多选)
+ * @method string selectpage(string $name, string $value, string $url, string $field = null, string $primaryKey = null, array $options = []) static 动态下拉列表组件
+ * @method string selectpages(string $name, string $value, string $url, string $field = null, string $primaryKey = null, array $options = []) static 动态下拉列表组件(多选)
+ * @method string citypicker(string $name, string $value, array $options = []) static 城市选择组件
+ * @method string switcher(string $name, string $value, array $options = []) static 切换组件
+ * @method string datepicker(string $name, string $value, array $options = []) static 日期选择组件
+ * @method string timepicker(string $name, string $value, array $options = []) static 时间选择组件
+ * @method string datetimepicker(string $name, string $value, array $options = []) static 日期时间选择组件
+ * @method string daterange(string $name, string $value, array $options = []) static 日期区间组件
+ * @method string timerange(string $name, string $value, array $options = []) static 时间区间组件
+ * @method string datetimerange(string $name, string $value, array $options = []) static 日期时间区间组件
+ * @method string fieldlist(string $name, string $value, string $title = null, string $template = null, array $options = []) static 字段列表组件
+ * @method string cxselect(string $url, array $names = [], array $values = [], array $options = []) static 联动组件
+ * @method string selectRange(string $name, string $begin, string $end, string $selected = null, array $options = []) static 选择数字区间
+ * @method string selectYear(string $name, string $begin, string $end, string $selected = null, array $options = []) static 选择年
+ * @method string selectMonth(string $name, string $selected = null, array $options = [], string $format = '%m') static 选择月
+ * @method string checkbox(string $name, string $value = '1', string $checked = null, array $options = []) static 单个复选框
+ * @method string checkboxs(string $name, array $list = [], string $checked = null, array $options = []) static 一组复选框
+ * @method string radio(string $name, string $value = null, string $checked = null, array $options = [])) static 单个单选框
+ * @method string radios(string $name, array $list = [], string $checked = null, array $options = [])) static 一组单选框
+ * @method string image(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) static 上传图片组件
+ * @method string images(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) static 上传图片组件(多图)）
+ * @method string upload(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) static 上传文件组件
+ * @method string uploads(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) static 上传文件组件(多文件)）
+ * @method string button(string $value = null, array $options = []) static 表单button
  */
 class Form
 {
@@ -39,6 +56,11 @@ class Form
 
     }
 
+    /**
+     * @param $name
+     * @param $arguments
+     * @return FormBuilder
+     */
     public static function __callStatic($name, $arguments)
     {
         return call_user_func_array([FormBuilder::instance(), $name], $arguments);
@@ -56,68 +78,46 @@ class FormBuilder
 {
 
     /**
-     * The CSRF token used by the form builder.
+     * Token
      *
      * @var string
      */
     protected $csrfToken = array('name' => '__token__');
 
     /**
-     * The current model instance for the form.
-     *
-     * @var mixed
-     */
-    protected $model;
-
-    /**
-     * An array of label names we've created.
+     * 已创建的标签名称
      *
      * @var array
      */
-    protected $labels = array();
+    protected $labels = [];
 
     /**
-     * The reserved form open attributes.
-     *
-     * @var array
-     */
-    protected $reserved = array('method', 'url', 'route', 'action', 'files');
-
-    /**
-     * The form methods that should be spoofed, in uppercase.
-     *
-     * @var array
-     */
-    protected $spoofedMethods = array('DELETE', 'PATCH', 'PUT');
-
-    /**
-     * The types of inputs to not fill values on by default.
+     * 跳过的填充value值的类型
      *
      * @var array
      */
     protected $skipValueTypes = array('file', 'password', 'checkbox', 'radio');
 
     /**
-     * Escape html
+     * 转义HTML
      * @var boolean
      */
     protected $escapeHtml = true;
     protected static $instance;
 
-    /**
-     * Create a new form builder instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
 
     }
 
+    /**
+     * 获取单例
+     * @param array $options
+     * @return static
+     */
     public static function instance($options = [])
     {
-        if (is_null(self::$instance))
-        {
+        if (is_null(self::$instance)) {
             self::$instance = new static($options);
         }
 
@@ -125,75 +125,7 @@ class FormBuilder
     }
 
     /**
-     * Open up a new HTML form.
-     *
-     * @param  array   $options
-     * @return string
-     */
-    public function open(array $options = array())
-    {
-        $method = array_get($options, 'method', 'post');
-
-        // We need to extract the proper method from the attributes. If the method is
-        // something other than GET or POST we'll use POST since we will spoof the
-        // actual method since forms don't support the reserved methods in HTML.
-        $attributes['method'] = $this->getMethod($method);
-
-        $attributes['action'] = array_get($options, 'action', '');
-
-        $attributes['accept-charset'] = 'UTF-8';
-
-        // If the method is PUT, PATCH or DELETE we will need to add a spoofer hidden
-        // field that will instruct the Symfony request to pretend the method is a
-        // different method than it actually is, for convenience from the forms.
-        $append = $this->getAppendage($method);
-
-        if (isset($options['files']) && $options['files'])
-        {
-            $options['enctype'] = 'multipart/form-data';
-        }
-
-        // Finally we're ready to create the final form HTML field. We will attribute
-        // format the array of attributes. We will also add on the appendage which
-        // is used to spoof requests for this PUT, PATCH, etc. methods on forms.
-        $attributes = array_merge(
-                $attributes, array_except($options, $this->reserved)
-        );
-        // Finally, we will concatenate all of the attributes into a single string so
-        // we can build out the final form open statement. We'll also append on an
-        // extra value for the hidden _method field if it's needed for the form.
-        $attributes = $this->attributes($attributes);
-
-        return '<form' . $attributes . '>' . $append;
-    }
-
-    /**
-     * Create a new model based form builder.
-     *
-     * @param  mixed  $model
-     * @param  array  $options
-     * @return string
-     */
-    public function model($model, array $options = array())
-    {
-        $this->model = $model;
-
-        return $this->open($options);
-    }
-
-    /**
-     * Set the model instance on the form builder.
-     *
-     * @param  mixed  $model
-     * @return void
-     */
-    public function setModel($model)
-    {
-        $this->model = $model;
-    }
-
-    /**
-     * Set the escape html mode
+     * 设置是否转义
      * @param boolean $escape
      */
     public function setEscapeHtml($escape)
@@ -202,45 +134,31 @@ class FormBuilder
     }
 
     /**
-     * Escape HTML special characters in a string.
+     * 获取转义编码后的值
+     * @param string $value
      * @return string
      */
     public function escape($value)
     {
-        if (!$this->escapeHtml)
-        {
+        if (!$this->escapeHtml) {
             return $value;
         }
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             $value = json_encode($value, JSON_UNESCAPED_UNICODE);
         }
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
     }
 
     /**
-     * Close the current form.
+     * 生成Token
      *
-     * @return string
-     */
-    public function close()
-    {
-        $this->labels = array();
-
-        $this->model = null;
-
-        return '</form>';
-    }
-
-    /**
-     * Generate a hidden field with the current CSRF token.
-     *
+     * @param string $name
+     * @param string $type
      * @return string
      */
     public function token($name = '__token__', $type = 'md5')
     {
-        if (function_exists('token'))
-        {
+        if (function_exists('token')) {
             return token($name, $type);
         }
 
@@ -248,19 +166,18 @@ class FormBuilder
     }
 
     /**
-     * Create a form label element.
+     * 生成Label标签
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  array   $options
+     * @param  string $name
+     * @param  string $value
+     * @param  array $options
      * @return string
      */
-    public function label($name, $value = null, $options = array())
+    public function label($name, $value = null, $options = [])
     {
         $this->labels[] = $name;
 
         $options = $this->attributes($options);
-
         $value = $this->escape($this->formatLabel($name, $value));
 
         return '<label for="' . $name . '"' . $options . '>' . $value . '</label>';
@@ -269,207 +186,198 @@ class FormBuilder
     /**
      * Format the label value.
      *
-     * @param  string  $name
-     * @param  string|null  $value
+     * @param  string $name
+     * @param  string|null $value
      * @return string
      */
     protected function formatLabel($name, $value)
     {
-        return $value ? : ucwords(str_replace('_', ' ', $name));
+        return $value ?: ucwords(str_replace('_', ' ', $name));
     }
 
     /**
-     * Create a form input field.
+     * 生成文本框(按类型)
      *
-     * @param  string  $type
-     * @param  string  $name
-     * @param  string  $value
-     * @param  array   $options
+     * @param  string $type
+     * @param  string $name
+     * @param  string $value
+     * @param  array $options
      * @return string
      */
-    public function input($type, $name, $value = null, $options = array())
+    public function input($type, $name, $value = null, $options = [])
     {
         if (!isset($options['name']))
             $options['name'] = $name;
 
-        // We will get the appropriate value for the given field. We will look for the
-        // value in the session for the value in the old input data then we'll look
-        // in the model instance if one is set. Otherwise we will just use empty.
         $id = $this->getIdAttribute($name, $options);
 
-        if (!in_array($type, $this->skipValueTypes))
-        {
+        if (!in_array($type, $this->skipValueTypes)) {
             $value = $this->getValueAttribute($name, $value);
+            $options['class'] = isset($options['class']) ? $options['class'] . ' form-control' : 'form-control';
         }
 
-        // Once we have the type, value, and ID we can merge them into the rest of the
-        // attributes array so we can convert them into their HTML attribute format
-        // when creating the HTML element. Then, we will return the entire input.
         $merge = compact('type', 'value', 'id');
-
         $options = array_merge($options, $merge);
 
         return '<input' . $this->attributes($options) . '>';
     }
 
     /**
-     * Create a text input field.
+     * 生成普通文本框
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  array   $options
+     * @param  string $name
+     * @param  string $value
+     * @param  array $options
      * @return string
      */
-    public function text($name, $value = null, $options = array())
+    public function text($name, $value = null, $options = [])
     {
         return $this->input('text', $name, $value, $options);
     }
 
     /**
-     * Create a password input field.
+     * 生成密码文本框
      *
-     * @param  string  $name
-     * @param  array   $options
+     * @param  string $name
+     * @param  array $options
      * @return string
      */
-    public function password($name, $options = array())
+    public function password($name, $options = [])
     {
         return $this->input('password', $name, '', $options);
     }
 
     /**
-     * Create a hidden input field.
+     * 生成隐藏文本框
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  array   $options
+     * @param  string $name
+     * @param  string $value
+     * @param  array $options
      * @return string
      */
-    public function hidden($name, $value = null, $options = array())
+    public function hidden($name, $value = null, $options = [])
     {
         return $this->input('hidden', $name, $value, $options);
     }
 
     /**
-     * Create an e-mail input field.
+     * 生成Email文本框
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  array   $options
+     * @param  string $name
+     * @param  string $value
+     * @param  array $options
      * @return string
      */
-    public function email($name, $value = null, $options = array())
+    public function email($name, $value = null, $options = [])
     {
         return $this->input('email', $name, $value, $options);
     }
 
     /**
-     * Create a url input field.
+     * 生成URL文本框
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  array   $options
+     * @param  string $name
+     * @param  string $value
+     * @param  array $options
      * @return string
      */
-    public function url($name, $value = null, $options = array())
+    public function url($name, $value = null, $options = [])
     {
         return $this->input('url', $name, $value, $options);
     }
 
     /**
-     * Create a file input field.
+     * 生成上传文件组件
      *
-     * @param  string  $name
-     * @param  array   $options
+     * @param  string $name
+     * @param  array $options
      * @return string
      */
-    public function file($name, $options = array())
+    public function file($name, $options = [])
     {
         return $this->input('file', $name, null, $options);
     }
 
     /**
-     * Create a textarea input field.
+     * 生成多行文本框
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  array   $options
+     * @param  string $name
+     * @param  string $value
+     * @param  array $options
      * @return string
      */
-    public function textarea($name, $value = null, $options = array())
+    public function textarea($name, $value = null, $options = [])
     {
         if (!isset($options['name']))
             $options['name'] = $name;
 
-        // Next we will look for the rows and cols attributes, as each of these are put
-        // on the textarea element definition. If they are not present, we will just
-        // assume some sane default values for these attributes for the developer.
         $options = $this->setTextAreaSize($options);
-
         $options['id'] = $this->getIdAttribute($name, $options);
-
-        $value = (string) $this->getValueAttribute($name, $value);
+        $value = (string)$this->getValueAttribute($name, $value);
 
         unset($options['size']);
 
-        // Next we will convert the attributes into a string form. Also we have removed
-        // the size attribute, as it was merely a short-cut for the rows and cols on
-        // the element. Then we'll create the final textarea elements HTML for us.
+        $options['class'] = isset($options['class']) ? $options['class'] . ' form-control' : 'form-control';
         $options = $this->attributes($options);
 
         return '<textarea' . $options . '>' . $this->escape($value) . '</textarea>';
     }
 
     /**
-     * Set the text area size on the attributes.
+     * 生成富文本编辑器
      *
-     * @param  array  $options
+     * @param string $name
+     * @param string $value
+     * @param array $options
+     * @return string
+     */
+    public function editor($name, $value = null, $options = [])
+    {
+        $options['class'] = isset($options['class']) ? $options['class'] . ' editor' : 'editor';
+        return $this->textarea($name, $value, $options);
+    }
+
+    /**
+     * 设置默认的文本框行列数
+     *
+     * @param  array $options
      * @return array
      */
     protected function setTextAreaSize($options)
     {
-        if (isset($options['size']))
-        {
+        if (isset($options['size'])) {
             return $this->setQuickTextAreaSize($options);
         }
 
-        // If the "size" attribute was not specified, we will just look for the regular
-        // columns and rows attributes, using sane defaults if these do not exist on
-        // the attributes array. We'll then return this entire options array back.
         $cols = array_get($options, 'cols', 50);
-
-        $rows = array_get($options, 'rows', 10);
+        $rows = array_get($options, 'rows', 5);
 
         return array_merge($options, compact('cols', 'rows'));
     }
 
     /**
-     * Set the text area size using the quick "size" attribute.
+     * 根据size设置行数和列数
      *
-     * @param  array  $options
+     * @param  array $options
      * @return array
      */
     protected function setQuickTextAreaSize($options)
     {
         $segments = explode('x', $options['size']);
-
         return array_merge($options, array('cols' => $segments[0], 'rows' => $segments[1]));
     }
 
     /**
-     * Create a select box field.
+     * 生成下拉列表框
      *
-     * @param  string  $name
-     * @param  array   $list
-     * @param  string  $selected
-     * @param  array   $options
+     * @param  string $name
+     * @param  array $list
+     * @param  mixed $selected
+     * @param  array $options
      * @return string
      */
-    public function select($name, $list = array(), $selected = null, $options = array())
+    public function select($name, $list = [], $selected = null, $options = [])
     {
-        // When building a select box the "value" attribute is really the selected one
-        // so we will use that when checking the model or session for a value which
-        // should provide a convenient method of re-populating the forms on post.
         $selected = $this->getValueAttribute($name, $selected);
 
         $options['id'] = $this->getIdAttribute($name, $options);
@@ -477,74 +385,372 @@ class FormBuilder
         if (!isset($options['name']))
             $options['name'] = $name;
 
-        // We will simply loop through the options and build an HTML value for each of
-        // them until we have an array of HTML declarations. Then we will join them
-        // all together into one single HTML element that can be put on the form.
-        $html = array();
-
-        foreach ($list as $value => $display)
-        {
+        $html = [];
+        foreach ($list as $value => $display) {
             $html[] = $this->getSelectOption($display, $value, $selected);
         }
+        $options['class'] = isset($options['class']) ? $options['class'] . ' form-control' : 'form-control';
 
-        // Once we have all of this HTML, we can join this into a single element after
-        // formatting the attributes into an HTML "attributes" string, then we will
-        // build out a final select statement, which will contain all the values.
         $options = $this->attributes($options);
-
         $list = implode('', $html);
 
         return "<select{$options}>{$list}</select>";
     }
 
     /**
-     * Create a select range field.
+     * 下拉列表(多选)
      *
-     * @param  string  $name
-     * @param  string  $begin
-     * @param  string  $end
-     * @param  string  $selected
-     * @param  array   $options
+     * @param string $name
+     * @param array $list
+     * @param mixed $selected
+     * @param array $options
      * @return string
      */
-    public function selectRange($name, $begin, $end, $selected = null, $options = array())
+    public function selects($name, $list = [], $selected = null, $options = [])
     {
+        $options[] = 'multiple';
+        return $this->select($name, $list, $selected, $options);
+    }
 
+    /**
+     * 下拉列表(友好)
+     *
+     * @param string $name
+     * @param array $list
+     * @param mixed $selected
+     * @param array $options
+     * @return string
+     */
+    public function selectpicker($name, $list = [], $selected = null, $options = [])
+    {
+        $options['class'] = isset($options['class']) ? $options['class'] . ' selectpicker' : 'selectpicker';
+        return $this->select($name, $list, $selected, $options);
+    }
+
+    /**
+     * 下拉列表(友好)(多选)
+     *
+     * @param string $name
+     * @param array $list
+     * @param mixed $selected
+     * @param array $options
+     * @return string
+     */
+    public function selectpickers($name, $list = [], $selected = null, $options = [])
+    {
+        $options[] = 'multiple';
+        return $this->selectpicker($name, $list, $selected, $options);
+    }
+
+    /**
+     * 生成动态下拉列表
+     *
+     * @param string $name 名称
+     * @param mixed $value
+     * @param string $url 数据源地址
+     * @param string $field 显示的字段名称,默认为name
+     * @param string $primaryKey 主键,数据库中保存的值,默认为id
+     * @param array $options
+     * @return string
+     */
+    public function selectpage($name, $value, $url, $field = null, $primaryKey = null, $options = [])
+    {
+        $options = array_merge($options, ['data-source' => $url, 'data-field' => $field ? $field : 'name', 'data-primary-key' => $primaryKey ? $primaryKey : 'id']);
+        $options['class'] = isset($options['class']) ? $options['class'] . ' selectpage' : 'selectpage';
+        return $this->text($name, $value, $options);
+    }
+
+
+    /**
+     * 生成动态下拉列表(复选)
+     *
+     * @param string $name 名称
+     * @param mixed $value
+     * @param string $url 数据源地址
+     * @param string $field 显示的字段名称,默认为name
+     * @param string $primaryKey 主键,数据库中保存的值,默认为id
+     * @param array $options
+     * @return string
+     */
+    public function selectpages($name, $value, $url, $field = null, $primaryKey = null, $options = [])
+    {
+        $options['data-multiple'] = "true";
+        return $this->selectpage($name, $value, $url, $field, $primaryKey, $options);
+    }
+
+    /**
+     * 生成城市选择框
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param array $options
+     * @return string
+     */
+    public function citypicker($name, $value, $options = [])
+    {
+        $options['data-toggle'] = 'city-picker';
+        return "<div class='control-relative'>" . $this->text($name, $value, $options) . "</div>";
+    }
+
+    /**
+     * 生成switch组件
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param array $options
+     * @return string
+     */
+    public function switcher($name, $value, $options = [])
+    {
+        $domname = str_replace(['[', ']', '.'], '', $name);
+        $btn = $this->hidden($name, $value, ['id' => "c-{$domname}"]);
+        $yes = 1;
+        $no = 0;
+        if (isset($options['yes']) && isset($options['no'])) {
+            $yes = $options['yes'];
+            $no = $options['no'];
+        }
+        $selected = $no == $value ? "fa-flip-horizontal text-gray" : "";
+        $disabled = (isset($options['disabled']) && $options['disabled']) || in_array('disabled', $options) ? "disabled" : '';
+        $color = isset($options['color']) ? $options['color'] : 'success';
+        unset($options['yes'], $options['no'], $options['color'], $options['disabled']);
+        $attr = $this->attributes($options);
+        $html = <<<EOD
+{$btn}
+<a href="javascript:;" data-toggle="switcher" class="btn-switcher {$disabled}" data-input-id="c-{$domname}" data-yes="{$yes}" data-no="{$no}" {$attr}><i class="fa fa-toggle-on text-{$color} {$selected} fa-2x"></i></a>
+EOD;
+        return $html;
+    }
+
+    /**
+     * 日期选择器
+     * @param string $name
+     * @param mixed $value
+     * @param array $options
+     * @return string
+     */
+    public function datepicker($name, $value, $options = [])
+    {
+        $defaults = [
+            'data-date-format' => "YYYY-MM-DD",
+        ];
+        $options = array_merge($defaults, $options);
+        $value = is_numeric($value) ? date("Y-m-d", $value) : $value;
+        return $this->datetimepicker($name, $value, $options);
+    }
+
+    /**
+     * 时间选择器
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param array $options
+     * @return string
+     */
+    public function timepicker($name, $value, $options = [])
+    {
+        $defaults = [
+            'data-date-format' => "HH:mm:ss",
+        ];
+        $options = array_merge($defaults, $options);
+        $value = is_numeric($value) ? date("H:i:s", $value) : $value;
+        return $this->datetimepicker($name, $value, $options);
+    }
+
+    /**
+     * 日期时间选择器
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param array $options
+     * @return string
+     */
+    public function datetimepicker($name, $value, $options = [])
+    {
+        $defaults = [
+            'data-date-format' => "YYYY-MM-DD HH:mm:ss",
+            'data-use-current' => "true",
+        ];
+        $value = is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+        $options = array_merge($defaults, $options);
+        $options['class'] = isset($options['class']) ? $options['class'] . ' datetimepicker' : 'datetimepicker';
+        return $this->text($name, $value, $options);
+    }
+
+    /**
+     * 日期区间
+     *
+     * @param string $name
+     * @param string $value
+     * @param array $options
+     * @return string
+     */
+    public function daterange($name, $value, $options = [])
+    {
+        $defaults = [
+            'data-locale' => [
+                'format' => 'YYYY-MM-DD'
+            ]
+        ];
+        $options = array_merge($defaults, $options);
+        return $this->datetimerange($name, $value, $options);
+    }
+
+    /**
+     * 时间区间
+     *
+     * @param string $name
+     * @param string $value
+     * @param array $options
+     * @return string
+     */
+    public function timerange($name, $value, $options = [])
+    {
+        $defaults = [
+            'data-locale'                  => [
+                'format' => 'HH:mm:ss'
+            ],
+            'data-ranges'                  => [],
+            'data-show-custom-range-label' => "false",
+            'data-time-picker'             => "true",
+        ];
+        $options = array_merge($defaults, $options);
+        return $this->datetimerange($name, $value, $options);
+    }
+
+    /**
+     * 日期时间区间
+     *
+     * @param string $name
+     * @param string $value
+     * @param array $options
+     * @return string
+     */
+    public function datetimerange($name, $value, $options = [])
+    {
+        $defaults = [
+            'data-locale' => [
+                'format' => 'YYYY-MM-DD HH:mm:ss'
+            ]
+        ];
+        $options = array_merge($defaults, $options);
+        $options['class'] = isset($options['class']) ? $options['class'] . ' datetimerange' : 'datetimerange';
+        return $this->text($name, $value, $options);
+    }
+
+    /**
+     * 生成字段列表组件
+     *
+     * @param string $name
+     * @param mixed $value
+     * @param array $title
+     * @param string $template
+     * @param array $options
+     * @return string
+     */
+    public function fieldlist($name, $value, $title = null, $template = null, $options = [])
+    {
+        $append = __('Append');
+        $template = $template ? 'data-template="' . $template . '"' : '';
+        $attributes = $this->attributes($options);
+        if (is_null($title)) {
+            $title = [__('Key'), __('Value')];
+        }
+        $ins = implode("\n", array_map(function ($value) {
+            return "<ins>{$value}</ins>";
+        }, $title));
+        $value = is_array($value) ? json_encode($value) : $value;
+        $html = <<<EOD
+<dl class="fieldlist" data-name="{$name}" {$template} {$attributes}>
+    <dd>
+        {$ins}
+    </dd>
+    <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {$append}</a></dd>
+    <textarea name="{$name}" class="form-control hide" cols="30" rows="5">{$value}</textarea>
+</dl>
+EOD;
+        return $html;
+    }
+
+    /**
+     * 生成联动下拉列表
+     *
+     * @param string $url 联动获取数据源的URL地址
+     * @param array $names 联动字段名称
+     * @param array $values 联动字段默认选中的值
+     * @param array $options 扩展属性
+     * @return string
+     */
+    public function cxselect($url, $names = [], $values = [], $options = [])
+    {
+        $classes = [];
+        $cxselect = [];
+        $attributes = $this->attributes($options);
+        foreach ($names as $index => $value) {
+            $level = $index + 1;
+            $class = "cxselect-{$level}";
+            $classes[] = $class;
+            $selectValue = isset($values[$value]) ? $values[$value] : (isset($values[$index]) ? $values[$index] : '');
+
+            $cxselect[] = <<<EOD
+<select class="{$class} form-control" name="{$value}" data-value="{$selectValue}" data-url="{$url}?level={$level}&name={$value}" {$attributes}></select>
+EOD;
+        }
+        $cxselect = implode("\n", $cxselect);
+        $selects = implode(',', $classes);
+        $html = <<<EOD
+<div class="form-inline" data-toggle="cxselect" data-selects="{$selects}">
+{$cxselect}
+</div>
+EOD;
+        return $html;
+    }
+
+    /**
+     * 创建一个下拉列表选择区间组件
+     *
+     * @param  string $name
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $selected
+     * @param  array $options
+     * @return string
+     */
+    public function selectRange($name, $begin, $end, $selected = null, $options = [])
+    {
         $range = array_combine($range = range($begin, $end), $range);
-
         return $this->select($name, $range, $selected, $options);
     }
 
     /**
-     * Create a select year field.
+     * 生成选择年组件
      *
-     * @param  string  $name
-     * @param  string  $begin
-     * @param  string  $end
-     * @param  string  $selected
-     * @param  array   $options
+     * @param  string $name
+     * @param  string $begin
+     * @param  string $end
+     * @param  string $selected
+     * @param  array $options
      * @return string
      */
-    public function selectYear()
+    public function selectYear($name, $begin, $end, $selected, $options)
     {
         return call_user_func_array(array($this, 'selectRange'), func_get_args());
     }
 
     /**
-     * Create a select month field.
+     * 生成选择月组件
      *
-     * @param  string  $name
-     * @param  string  $selected
-     * @param  array   $options
-     * @param  string  $format
+     * @param  string $name
+     * @param  string $selected
+     * @param  array $options
+     * @param  string $format
      * @return string
      */
-    public function selectMonth($name, $selected = null, $options = array(), $format = '%m')
+    public function selectMonth($name, $selected = null, $options = [], $format = '%m')
     {
-        $months = array();
+        $months = [];
 
-        foreach (range(1, 12) as $month)
-        {
+        foreach (range(1, 12) as $month) {
             $months[$month] = strftime($format, mktime(0, 0, 0, $month, 1));
         }
 
@@ -552,17 +758,16 @@ class FormBuilder
     }
 
     /**
-     * Get the select option for the given value.
+     * 根据传递的值生成option
      *
-     * @param  string  $display
-     * @param  string  $value
-     * @param  string  $selected
+     * @param  string $display
+     * @param  string $value
+     * @param  string $selected
      * @return string
      */
     public function getSelectOption($display, $value, $selected)
     {
-        if (is_array($display))
-        {
+        if (is_array($display)) {
             return $this->optionGroup($display, $value, $selected);
         }
 
@@ -570,19 +775,18 @@ class FormBuilder
     }
 
     /**
-     * Create an option group form element.
+     * 生成optionGroup
      *
-     * @param  array   $list
-     * @param  string  $label
-     * @param  string  $selected
+     * @param  array $list
+     * @param  string $label
+     * @param  string $selected
      * @return string
      */
     protected function optionGroup($list, $label, $selected)
     {
-        $html = array();
+        $html = [];
 
-        foreach ($list as $value => $display)
-        {
+        foreach ($list as $value => $display) {
             $html[] = $this->option($display, $value, $selected);
         }
 
@@ -590,11 +794,11 @@ class FormBuilder
     }
 
     /**
-     * Create a select element option.
+     * 生成option选项
      *
-     * @param  string  $display
-     * @param  string  $value
-     * @param  string  $selected
+     * @param  string $display
+     * @param  string $value
+     * @param  string $selected
      * @return string
      */
     protected function option($display, $value, $selected)
@@ -607,195 +811,232 @@ class FormBuilder
     }
 
     /**
-     * Determine if the value is selected.
+     * 检测value是否选中
      *
-     * @param  string  $value
-     * @param  string  $selected
+     * @param  string $value
+     * @param  string $selected
      * @return string
      */
     protected function getSelectedValue($value, $selected)
     {
-        if (is_array($selected))
-        {
+        if (is_array($selected)) {
             return in_array($value, $selected) ? 'selected' : null;
         }
 
-        return ((string) $value == (string) $selected) ? 'selected' : null;
+        return ((string)$value == (string)$selected) ? 'selected' : null;
     }
 
     /**
-     * Create a checkbox input field.
+     * 生成复选按钮
      *
-     * @param  string  $name
-     * @param  mixed   $value
-     * @param  bool    $checked
-     * @param  array   $options
+     * @param  string $name
+     * @param  mixed $value
+     * @param  bool $checked
+     * @param  array $options
      * @return string
      */
-    public function checkbox($name, $value = 1, $checked = null, $options = array())
+    public function checkbox($name, $value = 1, $checked = null, $options = [])
     {
-        return $this->checkable('checkbox', $name, $value, $checked, $options);
+        if ($checked)
+            $options['checked'] = 'checked';
+
+        return $this->input('checkbox', $name, $value, $options);
     }
 
     /**
-     * Create a radio button input field.
+     * 生成一组筛选框
      *
-     * @param  string  $name
-     * @param  mixed   $value
-     * @param  bool    $checked
-     * @param  array   $options
+     * @param string $name
+     * @param array $list
+     * @param mixed $checked
+     * @param array $options
      * @return string
      */
-    public function radio($name, $value = null, $checked = null, $options = array())
+    public function checkboxs($name, $list, $checked, $options = [])
+    {
+        $html = [];
+        $checked = is_null($checked) ? [] : $checked;
+        $checked = is_array($checked) ? $checked : explode(',', $checked);
+        foreach ($list as $k => $v) {
+            $options['id'] = "{$name}-{$k}";
+            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox($name, $k, in_array($k, $checked), $options));
+        }
+        return '<div class="checkbox">' . implode(' ', $html) . '</div>';
+    }
+
+    /**
+     * 生成单选按钮
+     *
+     * @param  string $name
+     * @param  mixed $value
+     * @param  bool $checked
+     * @param  array $options
+     * @return string
+     */
+    public function radio($name, $value = null, $checked = null, $options = [])
     {
         if (is_null($value))
             $value = $name;
 
-        return $this->checkable('radio', $name, $value, $checked, $options);
-    }
-
-    /**
-     * Create a checkable input field.
-     *
-     * @param  string  $type
-     * @param  string  $name
-     * @param  mixed   $value
-     * @param  bool    $checked
-     * @param  array   $options
-     * @return string
-     */
-    protected function checkable($type, $name, $value, $checked, $options)
-    {
-        $checked = $this->getCheckedState($type, $name, $value, $checked);
-
         if ($checked)
             $options['checked'] = 'checked';
 
-        return $this->input($type, $name, $value, $options);
+        return $this->input('radio', $name, $value, $options);
     }
 
     /**
-     * Get the check state for a checkable input.
+     * 生成一组单选框
      *
-     * @param  string  $type
-     * @param  string  $name
-     * @param  mixed   $value
-     * @param  bool    $checked
-     * @return bool
+     * @param string $name
+     * @param array $list
+     * @param mixed $checked
+     * @param array $options
+     * @return string
      */
-    protected function getCheckedState($type, $name, $value, $checked)
+    public function radios($name, $list, $checked = null, $options = [])
     {
-        switch ($type)
-        {
-            case 'checkbox':
-                return $this->getCheckboxCheckedState($name, $value, $checked);
-
-            case 'radio':
-                return $this->getRadioCheckedState($name, $value, $checked);
-
-            default:
-                return $this->getValueAttribute($name) == $value;
+        $html = [];
+        $checked = is_null($checked) ? key($list) : $checked;
+        $checked = is_array($checked) ? $checked : explode(',', $checked);
+        foreach ($list as $k => $v) {
+            $options['id'] = "{$name}-{$k}";
+            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::radio($name, $k, in_array($k, $checked), $options));
         }
+        return '<div class="radio">' . implode(' ', $html) . '</div>';
     }
 
     /**
-     * Get the check state for a checkbox input.
+     * 生成上传图片组件(单图)
      *
-     * @param  string  $name
-     * @param  mixed  $value
-     * @param  bool  $checked
-     * @return bool
-     */
-    protected function getCheckboxCheckedState($name, $value, $checked)
-    {
-        if (isset($this->session) && !$this->oldInputIsEmpty() && is_null($this->old($name)))
-            return false;
-
-        if ($this->missingOldAndModel($name))
-            return $checked;
-
-        $posted = $this->getValueAttribute($name);
-
-        return is_array($posted) ? in_array($value, $posted) : (bool) $posted;
-    }
-
-    /**
-     * Get the check state for a radio input.
-     *
-     * @param  string  $name
-     * @param  mixed  $value
-     * @param  bool  $checked
-     * @return bool
-     */
-    protected function getRadioCheckedState($name, $value, $checked)
-    {
-        if ($this->missingOldAndModel($name))
-            return $checked;
-
-        return $this->getValueAttribute($name) == $value;
-    }
-
-    /**
-     * Determine if old input or model input exists for a key.
-     *
-     * @param  string  $name
-     * @return bool
-     */
-    protected function missingOldAndModel($name)
-    {
-        return (is_null($this->old($name)) && is_null($this->getModelValueAttribute($name)));
-    }
-
-    /**
-     * Create a HTML reset input element.
-     *
-     * @param  string  $value
-     * @param  array   $attributes
+     * @param string $name
+     * @param string $value
+     * @param array $inputAttr
+     * @param array $uploadAttr
+     * @param array $chooseAttr
+     * @param array $previewAttr
      * @return string
      */
-    public function reset($value, $attributes = array())
+    public function image($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
-        return $this->input('reset', null, $value, $attributes);
+
+        $default = [
+            'data-mimetype' => 'image/gif,image/jpeg,image/png,image/jpg,image/bmp'
+        ];
+        $uploadAttr = is_array($chooseAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
+        $chooseAttr = is_array($chooseAttr) ? array_merge($default, $chooseAttr) : $chooseAttr;
+        return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
 
     /**
-     * Create a HTML image input element.
+     * 生成上传图片组件(多图)
      *
-     * @param  string  $url
-     * @param  string  $name
-     * @param  array   $attributes
+     * @param string $name
+     * @param string $value
+     * @param array $inputAttr
+     * @param array $uploadAttr
+     * @param array $chooseAttr
+     * @param array $previewAttr
      * @return string
      */
-    public function image($url, $name = null, $attributes = array())
+    public function images($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
-        $attributes['src'] = $url;
-
-        return $this->input('image', $name, null, $attributes);
+        $default = [
+            'data-multiple' => 'true',
+            'data-mimetype' => 'image/gif,image/jpeg,image/png,image/jpg,image/bmp'
+        ];
+        $uploadAttr = is_array($chooseAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
+        $chooseAttr = is_array($chooseAttr) ? array_merge($default, $chooseAttr) : $chooseAttr;
+        return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
 
     /**
-     * Create a submit button element.
+     * 生成上传文件组件(单文件)
      *
-     * @param  string  $value
-     * @param  array   $options
+     * @param string $name
+     * @param string $value
+     * @param array $inputAttr
+     * @param array $uploadAttr
+     * @param array $chooseAttr
+     * @param array $previewAttr
      * @return string
      */
-    public function submit($value = null, $options = array())
+    public function upload($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
-        return $this->input('submit', null, $value, $options);
+        return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
 
     /**
-     * Create a button element.
+     * 生成上传文件组件(多文件)
      *
-     * @param  string  $value
-     * @param  array   $options
+     * @param string $name
+     * @param string $value
+     * @param array $inputAttr
+     * @param array $uploadAttr
+     * @param array $chooseAttr
+     * @param array $previewAttr
      * @return string
      */
-    public function button($value = null, $options = array())
+    public function uploads($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
-        if (!array_key_exists('type', $options))
-        {
+        $default = [
+            'data-multiple' => 'true',
+        ];
+        $uploadAttr = is_array($chooseAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
+        $chooseAttr = is_array($chooseAttr) ? array_merge($default, $chooseAttr) : $chooseAttr;
+        return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
+    }
+
+    protected function uploader($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
+    {
+        $domname = str_replace(['[', ']', '.'], '', $name);
+        $options = [
+            'id'            => "plupload-{$domname}",
+            'class'         => "btn btn-danger plupload",
+            'data-input-id' => "c-{$domname}",
+        ];
+        $upload = $uploadAttr === false ? false : true;
+        $choose = $chooseAttr === false ? false : true;
+        $preview = $previewAttr === false ? false : true;
+        if ($preview) {
+            $options['data-preview-id'] = "p-{$domname}";
+        }
+        $uploadBtn = $upload ? $this->button('<i class="fa fa-upload"></i> ' . __('Upload'), array_merge($options, $uploadAttr)) : '';
+        $options = [
+            'id'            => "fachoose-{$domname}",
+            'class'         => "btn btn-danger fachoose",
+            'data-input-id' => "c-{$domname}",
+        ];
+        if ($preview) {
+            $options['data-preview-id'] = "p-{$domname}";
+        }
+        $chooseBtn = $choose ? $this->button('<i class="fa fa-list"></i> ' . __('Choose'), array_merge($options, $chooseAttr)) : '';
+        $previewAttrHtml = $this->attributes($previewAttr);
+        $previewArea = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $domname . '" ' . $previewAttrHtml . '></ul>' : '';
+        $input = $this->text($name, $value, array_merge(['size' => 50, 'id' => "c-{$domname}"], $inputAttr));
+        $html = <<<EOD
+<div class="input-group">
+                {$input}
+                <div class="input-group-addon no-border no-padding">
+                    <span>{$uploadBtn}</span>                  
+                    <span>{$chooseBtn}</span>
+                </div>
+                <span class="msg-box n-right" for="c-{$domname}"></span>
+            </div>
+            {$previewArea}
+EOD;
+        return $html;
+    }
+
+    /**
+     * 生成一个按钮
+     *
+     * @param  string $value
+     * @param  array $options
+     * @return string
+     */
+    public function button($value = null, $options = [])
+    {
+        if (!array_key_exists('type', $options)) {
             $options['type'] = 'button';
         }
 
@@ -803,154 +1044,29 @@ class FormBuilder
     }
 
     /**
-     * Parse the form action method.
+     * 获取ID属性值
      *
-     * @param  string  $method
-     * @return string
-     */
-    protected function getMethod($method)
-    {
-        $method = strtoupper($method);
-
-        return $method != 'GET' ? 'POST' : $method;
-    }
-
-    /**
-     * Get the form action from the options.
-     *
-     * @param  array   $options
-     * @return string
-     */
-    /* protected function getAction(array $options)
-      {
-      // We will also check for a "route" or "action" parameter on the array so that
-      // developers can easily specify a route or controller action when creating
-      // a form providing a convenient interface for creating the form actions.
-      if (isset($options['url']))
-      {
-      return $this->getUrlAction($options['url']);
-      }
-
-      if (isset($options['route']))
-      {
-      return $this->getRouteAction($options['route']);
-      }
-
-      // If an action is available, we are attempting to open a form to a controller
-      // action route. So, we will use the URL generator to get the path to these
-      // actions and return them from the method. Otherwise, we'll use current.
-      elseif (isset($options['action']))
-      {
-      return $this->getControllerAction($options['action']);
-      }
-
-      return $this->url->current();
-      } */
-
-    /**
-     * Get the action for a "url" option.
-     *
-     * @param  array|string  $options
-     * @return string
-     */
-    /* protected function getUrlAction($options)
-      {
-      if (is_array($options))
-      {
-      return $this->url->to($options[0], array_slice($options, 1));
-      }
-
-      return $this->url->to($options);
-      } */
-
-    /**
-     * Get the action for a "route" option.
-     *
-     * @param  array|string  $options
-     * @return string
-     */
-    /* protected function getRouteAction($options)
-      {
-      if (is_array($options))
-      {
-      return $this->url->route($options[0], array_slice($options, 1));
-      }
-
-      return $this->url->route($options);
-      } */
-
-    /**
-     * Get the action for an "action" option.
-     *
-     * @param  array|string  $options
-     * @return string
-     */
-    /* protected function getControllerAction($options)
-      {
-      if (is_array($options))
-      {
-      return $this->url->action($options[0], array_slice($options, 1));
-      }
-
-      return $this->url->action($options);
-      } */
-
-    /**
-     * Get the form appendage for the given method.
-     *
-     * @param  string  $method
-     * @return string
-     */
-    protected function getAppendage($method)
-    {
-        list($method, $appendage) = array(strtoupper($method), '');
-
-        // If the HTTP method is in this list of spoofed methods, we will attach the
-        // method spoofer hidden input to the form. This allows us to use regular
-        // form to initiate PUT and DELETE requests in addition to the typical.
-        if (in_array($method, $this->spoofedMethods))
-        {
-            $appendage .= $this->hidden('_method', $method);
-        }
-
-
-        // If the method is something other than GET we will go ahead and attach the
-        // CSRF token to the form, as this can't hurt and is convenient to simply
-        // always have available on every form the developers creates for them.
-        if ($method != 'GET')
-        {
-            $appendage .= $this->token(array_get($this->csrfToken, 'name'), array_get($this->csrfToken, 'type'));
-        }
-
-        return $appendage;
-    }
-
-    /**
-     * Get the ID attribute for a field name.
-     *
-     * @param  string  $name
-     * @param  array   $attributes
+     * @param  string $name
+     * @param  array $attributes
      * @return string
      */
     public function getIdAttribute($name, $attributes)
     {
 
-        if (array_key_exists('id', $attributes))
-        {
+        if (array_key_exists('id', $attributes)) {
             return $attributes['id'];
         }
 
-        if (in_array($name, $this->labels))
-        {
+        if (in_array($name, $this->labels)) {
             return $name;
         }
     }
 
     /**
-     * Get the value that should be assigned to the field.
+     * 获取Value属性值
      *
-     * @param  string  $name
-     * @param  string  $value
+     * @param  string $name
+     * @param  string $value
      * @return string
      */
     public function getValueAttribute($name, $value = null)
@@ -958,87 +1074,24 @@ class FormBuilder
         if (is_null($name))
             return $value;
 
-        if (!is_null($this->old($name)))
-        {
-            return $this->old($name);
-        }
-
         if (!is_null($value))
             return $value;
 
-        if (isset($this->model))
-        {
-            return $this->getModelValueAttribute($name);
-        }
-    }
-
-    /**
-     * Get the model value that should be assigned to the field.
-     *
-     * @param  string  $name
-     * @return string
-     */
-    protected function getModelValueAttribute($name)
-    {
-        if (is_object($this->model))
-        {
-            return object_get($this->model, $this->transformKey($name));
-        }
-        elseif (is_array($this->model))
-        {
-            return array_get($this->model, $this->transformKey($name));
-        }
-    }
-
-    /**
-     * Get a value from the session's old input.
-     *
-     * @param  string  $name
-     * @return string
-     */
-    public function old($name)
-    {
-        if (isset($this->session))
-        {
-            return $this->session->getOldInput($this->transformKey($name));
-        }
-    }
-
-    /**
-     * Determine if the old input is empty.
-     *
-     * @return bool
-     */
-    public function oldInputIsEmpty()
-    {
-        return (isset($this->session) && count($this->session->getOldInput()) == 0);
-    }
-
-    /**
-     * Transform key from array to dot syntax.
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected function transformKey($key)
-    {
-        return str_replace(array('.', '[]', '[', ']'), array('_', '', '.', ''), $key);
     }
 
     /**
      * 数组转换成一个HTML属性字符串。
      *
-     * @param  array  $attributes
+     * @param  array $attributes
      * @return string
      */
     public function attributes($attributes)
     {
-        $html = array();
+        $html = [];
         // 假设我们的keys 和 value 是相同的,
         // 拿HTML“required”属性来说,假设是['required']数组,
         // 会已 required="required" 拼接起来,而不是用数字keys去拼接
-        foreach ((array) $attributes as $key => $value)
-        {
+        foreach ((array)$attributes as $key => $value) {
             $element = $this->attributeElement($key, $value);
             if (!is_null($element))
                 $html[] = $element;
@@ -1049,16 +1102,22 @@ class FormBuilder
     /**
      * 拼接成一个属性。
      *
-     * @param  string  $key
-     * @param  string  $value
+     * @param  string $key
+     * @param  string $value
      * @return string
      */
     protected function attributeElement($key, $value)
     {
         if (is_numeric($key))
             $key = $value;
-        if (!is_null($value))
-            return $key . '="' . $value . '"';
+        if (!is_null($value)) {
+            if (is_array($value) || stripos($value, '"') !== false) {
+                $value = is_array($value) ? json_encode($value, JSON_UNESCAPED_UNICODE) : $value;
+                return $key . "='" . $value . "'";
+            } else {
+                return $key . '="' . $value . '"';
+            }
+        }
     }
 
 }
@@ -1069,7 +1128,7 @@ class Arr
     /**
      * Determine whether the given value is array accessible.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return bool
      */
     public static function accessible($value)
@@ -1080,14 +1139,13 @@ class Arr
     /**
      * Determine if the given key exists in the provided array.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string|int  $key
+     * @param  \ArrayAccess|array $array
+     * @param  string|int $key
      * @return bool
      */
     public static function exists($array, $key)
     {
-        if ($array instanceof ArrayAccess)
-        {
+        if ($array instanceof ArrayAccess) {
             return $array->offsetExists($key);
         }
         return array_key_exists($key, $array);
@@ -1096,33 +1154,26 @@ class Arr
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  \ArrayAccess|array $array
+     * @param  string $key
+     * @param  mixed $default
      * @return mixed
      */
     public static function get($array, $key, $default = null)
     {
-        if (!static::accessible($array))
-        {
+        if (!static::accessible($array)) {
             return $default;
         }
-        if (is_null($key))
-        {
+        if (is_null($key)) {
             return $array;
         }
-        if (static::exists($array, $key))
-        {
+        if (static::exists($array, $key)) {
             return $array[$key];
         }
-        foreach (explode('.', $key) as $segment)
-        {
-            if (static::accessible($array) && static::exists($array, $segment))
-            {
+        foreach (explode('.', $key) as $segment) {
+            if (static::accessible($array) && static::exists($array, $segment)) {
                 $array = $array[$segment];
-            }
-            else
-            {
+            } else {
                 return $default;
             }
         }
@@ -1132,8 +1183,8 @@ class Arr
     /**
      * Get all of the given array except for a specified array of items.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param  array $array
+     * @param  array|string $keys
      * @return array
      */
     public static function except($array, $keys)
@@ -1145,38 +1196,31 @@ class Arr
     /**
      * Remove one or many array items from a given array using "dot" notation.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param  array $array
+     * @param  array|string $keys
      * @return void
      */
     public static function forget(&$array, $keys)
     {
         $original = &$array;
-        $keys = (array) $keys;
-        if (count($keys) === 0)
-        {
+        $keys = (array)$keys;
+        if (count($keys) === 0) {
             return;
         }
-        foreach ($keys as $key)
-        {
+        foreach ($keys as $key) {
             // if the exact key exists in the top-level, remove it
-            if (static::exists($array, $key))
-            {
+            if (static::exists($array, $key)) {
                 unset($array[$key]);
                 continue;
             }
             $parts = explode('.', $key);
             // clean up before each pass
             $array = &$original;
-            while (count($parts) > 1)
-            {
+            while (count($parts) > 1) {
                 $part = array_shift($parts);
-                if (isset($array[$part]) && is_array($array[$part]))
-                {
+                if (isset($array[$part]) && is_array($array[$part])) {
                     $array = &$array[$part];
-                }
-                else
-                {
+                } else {
                     continue 2;
                 }
             }
@@ -1186,15 +1230,14 @@ class Arr
 
 }
 
-if (!function_exists('array_get'))
-{
+if (!function_exists('array_get')) {
 
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param  \ArrayAccess|array  $array
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  \ArrayAccess|array $array
+     * @param  string $key
+     * @param  mixed $default
      * @return mixed
      */
     function array_get($array, $key, $default = null)
@@ -1203,8 +1246,7 @@ if (!function_exists('array_get'))
     }
 
 }
-if (!function_exists('e'))
-{
+if (!function_exists('e')) {
 
     /**
      * Escape HTML special characters in a string.
@@ -1214,22 +1256,20 @@ if (!function_exists('e'))
      */
     function e($value)
     {
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             $value = json_encode($value, JSON_UNESCAPED_UNICODE);
         }
         return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
     }
 
 }
-if (!function_exists('array_except'))
-{
+if (!function_exists('array_except')) {
 
     /**
      * Get all of the given array except for a specified array of items.
      *
-     * @param  array  $array
-     * @param  array|string  $keys
+     * @param  array $array
+     * @param  array|string $keys
      * @return array
      */
     function array_except($array, $keys)

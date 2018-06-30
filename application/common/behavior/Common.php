@@ -4,6 +4,7 @@ namespace app\common\behavior;
 
 use think\Config;
 use think\Lang;
+use think\Loader;
 
 class Common
 {
@@ -57,6 +58,8 @@ class Common
         {
             \think\Cookie::set('think_var', $request->get('lang'));
         }
+        // Form别名
+        class_alias('fast\\Form', 'Form');
     }
 
     public function addonBegin(&$request)

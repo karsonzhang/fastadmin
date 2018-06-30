@@ -187,7 +187,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             ranges: ranges,
                         };
                         var origincallback = function (start, end) {
-                            $(this.element).val(start.format(options.locale.format) + " - " + end.format(options.locale.format));
+                            $(this.element).val(start.format(this.locale.format) + " - " + end.format(this.locale.format));
                             $(this.element).trigger('blur');
                         };
                         $(".datetimerange", form).each(function () {
@@ -342,6 +342,28 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     });
                 }
             },
+            switcher: function (form) {
+                form.on("click", "[data-toggle='switcher']", function () {
+                    if ($(this).hasClass("disabled")) {
+                        return false;
+                    }
+                    var input = $(this).prev("input");
+                    input = $(this).data("input-id") ? $("#" + $(this).data("input-id")) : input;
+                    if (input.size() > 0) {
+                        var yes = $(this).data("yes");
+                        var no = $(this).data("no");
+                        if (input.val() == yes) {
+                            input.val(no);
+                            $("i", this).addClass("fa-flip-horizontal text-gray");
+                        } else {
+                            input.val(yes);
+                            $("i", this).removeClass("fa-flip-horizontal text-gray");
+                        }
+                        input.trigger('change');
+                    }
+                    return false;
+                });
+            },
             bindevent: function (form) {
 
             }
@@ -442,6 +464,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 events.faselect(form);
 
                 events.fieldlist(form);
+
+                events.switcher(form);
             },
             custom: {}
         },

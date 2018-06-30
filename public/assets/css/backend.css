@@ -105,10 +105,6 @@ html.ios-fix body {
   margin-bottom: 0;
   padding: 10px;
 }
-/* 包裹在layer外层 */
-.layer-footer {
-  display: none;
-}
 table.table-template {
   overflow: hidden;
 }
@@ -164,6 +160,9 @@ table.table-template {
 }
 .is-dialog #main {
   background: #fff;
+}
+.is-dialog .layer-footer {
+  display: none;
 }
 form.form-horizontal .control-label {
   font-weight: normal;
@@ -983,5 +982,13 @@ table.table-nowrap thead > tr > th {
 }
 .wipecache li a {
   color: #444444 !important;
+}
+/*修正开关关闭下的颜色值*/
+.btn-switcher.disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+.btn-switcher .text-gray {
+  color: #d2d6de !important;
 }
 /*# sourceMappingURL=../css/backend.css.map */
