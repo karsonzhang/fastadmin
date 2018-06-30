@@ -95,6 +95,8 @@ return [
     'Flag'                                                  => '标志',
     'Drag to sort'                                          => '拖动进行排序',
     'Redirect now'                                          => '立即跳转',
+    'Key'                                                   => '键',
+    'Value'                                                 => '值',
     'Common search'                                         => '普通搜索',
     'Search %s'                                             => '搜索 %s',
     'View %s'                                               => '查看 %s',
