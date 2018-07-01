@@ -962,12 +962,18 @@ table.table-nowrap {
 
 .layui-layer-fast-msg {
   min-width: 100px;
-  border-radius: 2px;
-  background-color: rgba(0, 0, 0, .6);
-  color: #fff;
+}
+
+.layui-layer-fast-tab {
+  .layui-layer-title {
+    .layui-this {
+      color:#333;
+    }
+  }
   .layui-layer-content {
-    padding: 12px 25px;
-    text-align: center;
+    .layui-layer-tabmain {
+      margin:0;padding:0;
+    }
   }
 }
 

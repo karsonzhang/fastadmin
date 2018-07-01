@@ -43,7 +43,7 @@ require.config({
         'plupload': '../libs/plupload/js/plupload.min',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
-        'layer': '../libs/layer/dist/layer',
+        'layer': '../libs/fastadmin-layer/dist/layer',
         'cookie': '../libs/jquery.cookie/jquery.cookie',
         'cxselect': '../libs/fastadmin-cxselect/js/jquery.cxselect',
         'template': '../libs/art-template/dist/template-native',
