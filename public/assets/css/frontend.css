@@ -3,7 +3,7 @@
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
-@import url("../libs/layer/dist/theme/default/layer.css");
+@import url("../libs/fastadmin-layer/dist/theme/default/layer.css");
 @import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 html,
