@@ -1,0 +1,5 @@
+
+            <input {%attrStr%} name="{%fieldName%}" type="hidden" value="{%fieldValue%}">
+            <a href="javascript:;" data-toggle="switcher" class="btn-switcher" data-input-id="c-{%field%}" data-yes="{%fieldYes%}" data-no="{%fieldNo%}" >
+                <i class="fa fa-toggle-on text-success {%fieldSwitchClass%} fa-2x"></i>
+            </a>
