@@ -410,7 +410,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         color = index > -1 && typeof colorArr[index] !== 'undefined' ? colorArr[index] : 'primary';
                     }
                     if (!display) {
-                        display = value.charAt(0).toUpperCase() + value.slice(1);
+                        display = __(value.charAt(0).toUpperCase() + value.slice(1));
                     }
                     var html = '<span class="text-' + color + '">' + (icon ? '<i class="' + icon + '"></i> ' : '') + display + '</span>';
                     if (this.operate != false) {
@@ -464,7 +464,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         if (value == '')
                             return true;
                         var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
-                        var display = typeof that.searchList !== 'undefined' && typeof that.searchList[value] !== 'undefined' ? that.searchList[value] : value.charAt(0).toUpperCase() + value.slice(1);
+                        var display = typeof that.searchList !== 'undefined' && typeof that.searchList[value] !== 'undefined' ? that.searchList[value] : __(value.charAt(0).toUpperCase() + value.slice(1));
                         html.push('<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', display) + '" data-field="' + field + '" data-value="' + value + '"><span class="label label-' + color + '">' + display + '</span></a>');
                     });
                     return html.join(' ');
