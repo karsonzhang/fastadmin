@@ -50,7 +50,8 @@ class Rule extends Backend
     {
         if ($this->request->isAjax())
         {
-            $list = $this->rulelist;
+            $search = $this->request->get("search", '');
+            $list = collection($this->model->where('weigh', $search)->order('weigh', 'desc')->select())->toArray();
             $total = count($this->rulelist);
 
             $result = array("total" => $total, "rows" => $list);

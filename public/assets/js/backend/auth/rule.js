@@ -52,7 +52,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     ]
                 ],
                 pagination: false,
-                search: false,
+                search: true,
                 commonSearch: false,
             });
 
