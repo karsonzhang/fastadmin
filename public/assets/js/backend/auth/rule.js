@@ -63,7 +63,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
                 //默认隐藏所有子节点
                 //$("a.btn[data-id][data-pid][data-pid!=0]").closest("tr").hide();
-                $(".btn-node-sub.disabled").closest("tr").hide();
+                //取消默认隐藏
+                // $(".btn-node-sub.disabled").closest("tr").hide();
 
                 //显示隐藏子节点
                 $(".btn-node-sub").off("click").on("click", function (e) {
