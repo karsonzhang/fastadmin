@@ -1,5 +1,5 @@
 <div class="panel panel-default panel-intro">
-    {:build_heading()}
+    {%headingHtml%}
 
     <div class="panel-body">
         <div id="myTabContent" class="tab-content">

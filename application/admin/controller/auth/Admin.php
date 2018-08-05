@@ -17,6 +17,9 @@ use fast\Tree;
 class Admin extends Backend
 {
 
+    /**
+     * @var \app\admin\model\Admin
+     */
     protected $model = null;
     protected $childrenGroupIds = [];
     protected $childrenAdminIds = [];

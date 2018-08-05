@@ -29,37 +29,33 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
                     boundaryGap: false,
                     data: Orderdata.column
                 },
-                yAxis: {
-
-                },
+                yAxis: {},
                 grid: [{
-                        left: 'left',
-                        top: 'top',
-                        right: '10',
-                        bottom: 30
-                    }],
+                    left: 'left',
+                    top: 'top',
+                    right: '10',
+                    bottom: 30
+                }],
                 series: [{
-                        name: __('Sales'),
-                        type: 'line',
-                        smooth: true,
-                        areaStyle: {
-                            normal: {
-                            }
-                        },
-                        lineStyle: {
-                            normal: {
-                                width: 1.5
-                            }
-                        },
-                        data: Orderdata.paydata
+                    name: __('Sales'),
+                    type: 'line',
+                    smooth: true,
+                    areaStyle: {
+                        normal: {}
                     },
+                    lineStyle: {
+                        normal: {
+                            width: 1.5
+                        }
+                    },
+                    data: Orderdata.paydata
+                },
                     {
                         name: __('Orders'),
                         type: 'line',
                         smooth: true,
                         areaStyle: {
-                            normal: {
-                            }
+                            normal: {}
                         },
                         lineStyle: {
                             normal: {
@@ -92,20 +88,23 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
                         data: Orderdata.column
                     },
                     series: [{
-                            name: __('Sales'),
-                            data: Orderdata.paydata
-                        },
+                        name: __('Sales'),
+                        data: Orderdata.paydata
+                    },
                         {
                             name: __('Orders'),
                             data: Orderdata.createdata
                         }]
                 });
+                if ($("#echart").width() != $("#echart canvas").width() && $("#echart canvas").width() < $("#echart").width()) {
+                    myChart.resize();
+                }
             }, 2000);
             $(window).resize(function () {
                 myChart.resize();
             });
 
-            $(document).on("click", ".btn-checkversion", function(){
+            $(document).on("click", ".btn-checkversion", function () {
                 top.window.$("[data-toggle=checkupdate]").trigger("click");
             });
 

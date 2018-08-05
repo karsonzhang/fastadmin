@@ -165,44 +165,30 @@ class Ajax extends Backend
             $ids = array_values(array_intersect($ids, $hasids));
         }
 
-        //直接修复排序
-        $one = Db::name($table)->field("{$field},COUNT(*) AS nums")->group($field)->having('nums > 1')->find();
-        if ($one) {
-            $list = Db::name($table)->field("$prikey,$field")->order($field, $orderway)->select();
-            foreach ($list as $k => $v) {
-                Db::name($table)->where($prikey, $v[$prikey])->update([$field => $k + 1]);
-            }
-            $this->success();
-        } else {
-            $list = Db::name($table)->field("$prikey,$field")->where($prikey, 'in', $ids)->order($field, $orderway)->select();
-            foreach ($list as $k => $v) {
-                $sour[] = $v[$prikey];
-                $weighdata[$v[$prikey]] = $v[$field];
-            }
-            $position = array_search($changeid, $ids);
-            $desc_id = $sour[$position];    //移动到目标的ID值,取出所处改变前位置的值
-            $sour_id = $changeid;
-            $desc_value = $weighdata[$desc_id];
-            $sour_value = $weighdata[$sour_id];
-            //echo "移动的ID:{$sour_id}\n";
-            //echo "替换的ID:{$desc_id}\n";
-            $weighids = array();
-            $temp = array_values(array_diff_assoc($ids, $sour));
-            foreach ($temp as $m => $n) {
-                if ($n == $sour_id) {
-                    $offset = $desc_id;
-                } else {
-                    if ($sour_id == $temp[0]) {
-                        $offset = isset($temp[$m + 1]) ? $temp[$m + 1] : $sour_id;
-                    } else {
-                        $offset = isset($temp[$m - 1]) ? $temp[$m - 1] : $sour_id;
-                    }
-                }
-                $weighids[$n] = $weighdata[$offset];
-                Db::name($table)->where($prikey, $n)->update([$field => $weighdata[$offset]]);
-            }
-            $this->success();
+        $list = Db::name($table)->field("$prikey,$field")->where($prikey, 'in', $ids)->order($field, $orderway)->select();
+        foreach ($list as $k => $v) {
+            $sour[] = $v[$prikey];
+            $weighdata[$v[$prikey]] = $v[$field];
         }
+        $position = array_search($changeid, $ids);
+        $desc_id = $sour[$position];    //移动到目标的ID值,取出所处改变前位置的值
+        $sour_id = $changeid;
+        $weighids = array();
+        $temp = array_values(array_diff_assoc($ids, $sour));
+        foreach ($temp as $m => $n) {
+            if ($n == $sour_id) {
+                $offset = $desc_id;
+            } else {
+                if ($sour_id == $temp[0]) {
+                    $offset = isset($temp[$m + 1]) ? $temp[$m + 1] : $sour_id;
+                } else {
+                    $offset = isset($temp[$m - 1]) ? $temp[$m - 1] : $sour_id;
+                }
+            }
+            $weighids[$n] = $weighdata[$offset];
+            Db::name($table)->where($prikey, $n)->update([$field => $weighdata[$offset]]);
+        }
+        $this->success();
     }
 
     /**

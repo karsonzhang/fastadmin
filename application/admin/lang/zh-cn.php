@@ -17,6 +17,8 @@ return [
     'Del'                                                   => '删除',
     'Delete'                                                => '删除',
     'Import'                                                => '导入',
+    'Export'                                                => '导出',
+    'All'                                                   => '全部',
     'Detail'                                                => '详情',
     'Multi'                                                 => '批量更新',
     'Setting'                                               => '配置',

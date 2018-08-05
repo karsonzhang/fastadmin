@@ -92,6 +92,8 @@ trait Backend
                     }
                 } catch (\think\exception\PDOException $e) {
                     $this->error($e->getMessage());
+                } catch (\think\Exception $e) {
+                    $this->error($e->getMessage());
                 }
             }
             $this->error(__('Parameter %s can not be empty', ''));
@@ -130,6 +132,8 @@ trait Backend
                         $this->error($row->getError());
                     }
                 } catch (\think\exception\PDOException $e) {
+                    $this->error($e->getMessage());
+                } catch (\think\Exception $e) {
                     $this->error($e->getMessage());
                 }
             }
@@ -322,6 +326,8 @@ trait Backend
             $this->model->saveAll($insert);
         } catch (\think\exception\PDOException $exception) {
             $this->error($exception->getMessage());
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
 
         $this->success();

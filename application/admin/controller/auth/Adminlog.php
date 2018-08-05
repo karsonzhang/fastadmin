@@ -14,6 +14,9 @@ use app\common\controller\Backend;
 class Adminlog extends Backend
 {
 
+    /**
+     * @var \app\admin\model\AdminLog
+     */
     protected $model = null;
     protected $childrenGroupIds = [];
     protected $childrenAdminIds = [];

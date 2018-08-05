@@ -8,6 +8,7 @@
         <meta name="author" content="{$config.author}">
         <title>{$config.title}</title>
         <link href="https://cdn.bootcss.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.bootcss.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet">
         <style type="text/css">
             body {
                 padding-top: 70px; margin-bottom: 15px;
@@ -28,6 +29,59 @@
             .null     { color: magenta; }
             .key      { color: red; }
             .popover  { max-width: 400px; max-height: 400px; overflow-y: auto;}
+            .list-group.panel > .list-group-item {
+            }
+            .list-group-item:last-child {
+                border-radius:0;
+            }
+            h4.panel-title a {
+                font-weight:normal;
+                font-size:14px;
+            }
+            h4.panel-title a .text-muted {
+                font-size:12px;
+                font-weight:normal;
+                font-family: 'Verdana';
+            }
+            #sidebar {
+                width: 220px;
+                position: fixed;
+                margin-left: -240px;
+                overflow-y:auto;
+            }
+            #sidebar > .list-group {
+                margin-bottom:0;
+            }
+            #sidebar > .list-group > a{
+                text-indent:0;
+            }
+            #sidebar .child {
+                border:1px solid #ddd;
+                border-bottom:none;
+            }
+            #sidebar .child > a {
+                border:0;
+            }
+            #sidebar .list-group a.current {
+                background:#f5f5f5;
+            }
+            @media (max-width: 1620px){
+                #sidebar {
+                    margin:0;
+                }
+                #accordion {
+                    padding-left:235px;
+                }
+            }
+            @media (max-width: 768px){
+                #sidebar {
+                    display: none;
+                }
+                #accordion {
+                    padding-left:0px;
+                }
+            }
+
         </style>
     </head>
     <body>
@@ -68,15 +122,29 @@
         </div>
 
         <div class="container">
+            <!-- menu -->
+            <div id="sidebar">
+                <div class="list-group panel">
+                    {foreach name="docslist" id="docs"}
+                    <a href="#{$key}" class="list-group-item" data-toggle="collapse" data-parent="#sidebar">{$key}  <i class="fa fa-caret-down"></i></a>
+                    <div class="child collapse" id="{$key}">
+                        {foreach name="docs" id="api" }
+                        <a href="javascript:;" data-id="{$api.id}" class="list-group-item">{$api.title}</a>
+                        {/foreach}
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
             <div class="panel-group" id="accordion">
                 {foreach name="docslist" id="docs"}
                 <h2>{$key}</h2>
                 <hr>
                 {foreach name="docs" id="api" }
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading" id="heading-{$api.id}">
                         <h4 class="panel-title">
-                            <span class="label {$api.method_label}">{$api.method|strtoupper}</span> <a data-toggle="collapse" data-parent="#accordion{$api.id}" href="#collapseOne{$api.id}"> {$api.route}</a>
+                            <span class="label {$api.method_label}">{$api.method|strtoupper}</span>
+                            <a data-toggle="collapse" data-parent="#accordion{$api.id}" href="#collapseOne{$api.id}"> {$api.title} <span class="text-muted">{$api.route}</span></a>
                         </h4>
                     </div>
                     <div id="collapseOne{$api.id}" class="panel-collapse collapse">
@@ -198,6 +266,7 @@
                                                         {/if}
                                                         <div class="form-group">
                                                             <button type="submit" class="btn btn-success send" rel="{$api.id}">{$lang.Send}</button>
+                                                            <button type="reset" class="btn btn-info" rel="{$api.id}">{$lang.Reset}</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -347,6 +416,24 @@
 
                 $('[data-toggle="tooltip"]').tooltip({
                     placement: 'bottom'
+                });
+
+                $(window).on("resize", function(){
+                    $("#sidebar").css("max-height", $(window).height()-80);
+                });
+
+                $(window).trigger("resize");
+
+                $(document).on("click", "#sidebar .list-group > .list-group-item", function(){
+                    $("#sidebar .list-group > .list-group-item").removeClass("current");
+                    $(this).addClass("current");
+                });
+                $(document).on("click", "#sidebar .child a", function(){
+                    var heading = $("#heading-"+$(this).data("id"));
+                    if(!heading.next().hasClass("in")){
+                        $("a", heading).trigger("click");
+                    }
+                    $("html,body").animate({scrollTop:heading.offset().top-70});
                 });
 
                 $('code[id^=response]').hide();

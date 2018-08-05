@@ -30,7 +30,7 @@ class Index extends Backend
     public function index()
     {
         //左侧菜单
-        list($menulist, $navlist) = $this->auth->getSidebar([
+        list($menulist, $navlist, $fixedmenu, $referermenu) = $this->auth->getSidebar([
             'dashboard' => 'hot',
             'addon'     => ['new', 'red', 'badge'],
             'auth/rule' => __('Menu'),
@@ -44,6 +44,8 @@ class Index extends Backend
         }
         $this->view->assign('menulist', $menulist);
         $this->view->assign('navlist', $navlist);
+        $this->view->assign('fixedmenu', $fixedmenu);
+        $this->view->assign('referermenu', $referermenu);
         $this->view->assign('title', __('Home'));
         return $this->view->fetch();
     }

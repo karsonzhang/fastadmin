@@ -12,6 +12,7 @@ return [
     'Required'         => '必选',
     'Description'      => '描述',
     'Send'             => '提交',
+    'Reset'            => '重置',
     'Tokentips'        => 'Token在会员注册或登录后都会返回,WEB端同时存在于Cookie中',
     'Apiurltips'       => 'API接口URL',
     'Savetips'         => '点击保存后Token和Api url都将保存在本地Localstorage中',

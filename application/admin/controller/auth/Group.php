@@ -15,6 +15,9 @@ use fast\Tree;
 class Group extends Backend
 {
 
+    /**
+     * @var \app\admin\model\AuthGroup
+     */
     protected $model = null;
     //当前登录管理员所有子组别
     protected $childrenGroupIds = [];

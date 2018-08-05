@@ -11,6 +11,10 @@
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
+html,
+body {
+  height: 100%;
+}
 body {
   background: #f1f4f6;
   font-size: 13px;
@@ -44,17 +48,18 @@ html.ios-fix body {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
+.wrapper {
+  height: 100%;
+}
 #header {
   background: #fff;
 }
 .content-wrapper {
   position: relative;
+  height: 100%;
 }
 .control-relative {
   position: relative;
-}
-.tab-addtabs {
-  overflow: hidden;
 }
 .tab-addtabs .tab-pane {
   height: 100%;

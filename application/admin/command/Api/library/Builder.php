@@ -14,18 +14,18 @@ class Builder
 
     /**
      *
-     * @var \think\View 
+     * @var \think\View
      */
     public $view = null;
 
     /**
      * parse classes
-     * @var array 
+     * @var array
      */
     protected $classes = [];
 
     /**
-     * 
+     *
      * @param array $classes
      */
     public function __construct($classes = [])
@@ -37,8 +37,12 @@ class Builder
     protected function extractAnnotations()
     {
         $st_output = [];
-        foreach ($this->classes as $class)
-        {
+        foreach ($this->classes as $class) {
+            $classAnnotation = Extractor::getClassAnnotations($class);
+            // 如果忽略
+            if (isset($classAnnotation['ApiInternal'])) {
+                continue;
+            }
             $st_output[] = Extractor::getAllClassAnnotations($class);
         }
         return end($st_output);
@@ -46,14 +50,12 @@ class Builder
 
     protected function generateHeadersTemplate($docs)
     {
-        if (!isset($docs['ApiHeaders']))
-        {
+        if (!isset($docs['ApiHeaders'])) {
             return [];
         }
 
         $headerslist = array();
-        foreach ($docs['ApiHeaders'] as $params)
-        {
+        foreach ($docs['ApiHeaders'] as $params) {
             $tr = array(
                 'name'        => $params['name'],
                 'type'        => $params['type'],
@@ -69,14 +71,12 @@ class Builder
 
     protected function generateParamsTemplate($docs)
     {
-        if (!isset($docs['ApiParams']))
-        {
+        if (!isset($docs['ApiParams'])) {
             return [];
         }
 
         $paramslist = array();
-        foreach ($docs['ApiParams'] as $params)
-        {
+        foreach ($docs['ApiParams'] as $params) {
             $tr = array(
                 'name'        => $params['name'],
                 'type'        => isset($params['type']) ? $params['type'] : 'string',
@@ -92,14 +92,12 @@ class Builder
 
     protected function generateReturnHeadersTemplate($docs)
     {
-        if (!isset($docs['ApiReturnHeaders']))
-        {
+        if (!isset($docs['ApiReturnHeaders'])) {
             return [];
         }
 
         $headerslist = array();
-        foreach ($docs['ApiReturnHeaders'] as $params)
-        {
+        foreach ($docs['ApiReturnHeaders'] as $params) {
             $tr = array(
                 'name'        => $params['name'],
                 'type'        => 'string',
@@ -115,14 +113,12 @@ class Builder
 
     protected function generateReturnParamsTemplate($st_params)
     {
-        if (!isset($st_params['ApiReturnParams']))
-        {
+        if (!isset($st_params['ApiReturnParams'])) {
             return [];
         }
 
         $paramslist = array();
-        foreach ($st_params['ApiReturnParams'] as $params)
-        {
+        foreach ($st_params['ApiReturnParams'] as $params) {
             $tr = array(
                 'name'        => $params['name'],
                 'type'        => isset($params['type']) ? $params['type'] : 'string',
@@ -157,20 +153,14 @@ class Builder
         $counter = 0;
         $section = null;
         $docslist = [];
-        foreach ($annotations as $class => $methods)
-        {
-            foreach ($methods as $name => $docs)
-            {
-                if (isset($docs['ApiSector'][0]))
-                {
+        foreach ($annotations as $class => $methods) {
+            foreach ($methods as $name => $docs) {
+                if (isset($docs['ApiSector'][0])) {
                     $section = is_array($docs['ApiSector'][0]) ? $docs['ApiSector'][0]['data'] : $docs['ApiSector'][0];
-                }
-                else
-                {
+                } else {
                     $section = $class;
                 }
-                if (0 === count($docs))
-                {
+                if (0 === count($docs)) {
                     continue;
                 }
 
@@ -180,6 +170,7 @@ class Builder
                     'method_label'      => $this->generateBadgeForMethod($docs),
                     'section'           => $section,
                     'route'             => is_array($docs['ApiRoute'][0]) ? $docs['ApiRoute'][0]['data'] : $docs['ApiRoute'][0],
+                    'title'           => is_array($docs['ApiTitle'][0]) ? $docs['ApiTitle'][0]['data'] : $docs['ApiTitle'][0],
                     'summary'           => is_array($docs['ApiSummary'][0]) ? $docs['ApiSummary'][0]['data'] : $docs['ApiSummary'][0],
                     'body'              => isset($docs['ApiBody'][0]) ? is_array($docs['ApiBody'][0]) ? $docs['ApiBody'][0]['data'] : $docs['ApiBody'][0] : '',
                     'headerslist'       => $this->generateHeadersTemplate($docs),

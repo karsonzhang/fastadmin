@@ -14,8 +14,9 @@ class User extends Backend
 
     protected $relationSearch = true;
 
+
     /**
-     * User模型对象
+     * @var \app\admin\model\User
      */
     protected $model = null;
 

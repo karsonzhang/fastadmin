@@ -93,6 +93,7 @@ class Api extends Command
                 $classes[] = $this->get_class_from_file($filePath);
             }
         }
+        $classes = array_unique(array_filter($classes));
 
         $config = [
             'title'       => $title,

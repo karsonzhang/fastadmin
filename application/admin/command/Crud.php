@@ -105,6 +105,12 @@ class Crud extends Command
     protected $sortField = 'weigh';
 
     /**
+     * 筛选字段
+     * @var string
+     */
+    protected $headingFilterField = 'status';
+
+    /**
      * 编辑器的Class
      */
     protected $editorClass = 'editor';
@@ -138,6 +144,7 @@ class Crud extends Command
             ->addOption('selectpagessuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate multiple selectpage component with suffix', null)
             ->addOption('ignorefields', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'ignore fields', null)
             ->addOption('sortfield', null, Option::VALUE_OPTIONAL, 'sort field', null)
+            ->addOption('headingfilterfield', null, Option::VALUE_OPTIONAL, 'heading filter field', null)
             ->addOption('editorclass', null, Option::VALUE_OPTIONAL, 'automatically generate editor class', null)
             ->setDescription('Build CRUD controller and model from table');
     }
@@ -198,6 +205,8 @@ class Crud extends Command
         $ignoreFields = $input->getOption('ignorefields');
         //排序字段
         $sortfield = $input->getOption('sortfield');
+        //顶部筛选过滤字段
+        $headingfilterfield = $input->getOption('headingfilterfield');
         //编辑器Class
         $editorclass = $input->getOption('editorclass');
         if ($setcheckboxsuffix)
@@ -224,6 +233,8 @@ class Crud extends Command
             $this->editorClass = $editorclass;
         if ($sortfield)
             $this->sortField = $sortfield;
+        if ($headingfilterfield)
+            $this->headingFilterField = $headingfilterfield;
 
         $dbname = Config::get('database.database');
         $prefix = Config::get('database.prefix');
@@ -466,6 +477,8 @@ class Crud extends Command
             $getEnumArr = [];
             $appendAttrList = [];
             $controllerAssignList = [];
+            $headingHtml = '{:build_heading()}';
+            $headingJs = '';
 
             //循环所有字段,开始构造视图的HTML和JS信息
             foreach ($columnList as $k => $v) {
@@ -681,6 +694,10 @@ class Crud extends Command
                         //构造JS列信息
                         $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '', $itemArr);
                     }
+                    if ($this->headingFilterField && $this->headingFilterField == $field && $itemArr) {
+                        $headingHtml = $this->getReplacedStub('html/heading-html', ['field' => $field]);
+                        $headingJs = $this->getReplacedStub('html/heading-js', ['field' => $field]);
+                    }
                     //排序方式,如果有指定排序字段,否则按主键排序
                     $order = $field == $this->sortField ? $this->sortField : $order;
                 }
@@ -724,6 +741,7 @@ class Crud extends Command
                 $modelInit = $this->getReplacedStub('mixins' . DS . 'modelinit', ['order' => $order]);
             }
 
+
             $data = [
                 'controllerNamespace'     => $controllerNamespace,
                 'modelNamespace'          => $modelNamespace,
@@ -753,6 +771,8 @@ class Crud extends Command
                 'relationWithList'        => '',
                 'relationMethodList'      => '',
                 'controllerIndex'         => '',
+                'headingHtml'             => $headingHtml,
+                'headingJs'               => $headingJs,
                 'visibleFieldList'        => $fields ? "\$row->visible(['" . implode("','", array_filter(explode(',', $fields))) . "']);" : '',
                 'appendAttrList'          => implode(",\n", $appendAttrList),
                 'getEnumList'             => implode("\n\n", $getEnumArr),

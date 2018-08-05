@@ -15,6 +15,9 @@ use fast\Tree;
 class Category extends Backend
 {
 
+    /**
+     * @var \app\common\model\Category
+     */
     protected $model = null;
     protected $categorylist = [];
     protected $noNeedRight = ['selectpage'];

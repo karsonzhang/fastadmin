@@ -16,6 +16,9 @@ use think\Exception;
 class Config extends Backend
 {
 
+    /**
+     * @var \app\common\model\Config
+     */
     protected $model = null;
     protected $noNeedRight = ['check'];
 

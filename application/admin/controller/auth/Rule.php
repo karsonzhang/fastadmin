@@ -15,6 +15,9 @@ use think\Cache;
 class Rule extends Backend
 {
 
+    /**
+     * @var \app\admin\model\AuthRule
+     */
     protected $model = null;
     protected $rulelist = [];
     protected $multiFields = 'ismenu,status';

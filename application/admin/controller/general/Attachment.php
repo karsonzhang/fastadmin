@@ -13,6 +13,9 @@ use app\common\controller\Backend;
 class Attachment extends Backend
 {
 
+    /**
+     * @var \app\common\model\Attachment
+     */
     protected $model = null;
 
     public function _initialize()

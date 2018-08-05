@@ -13,7 +13,7 @@ class Group extends Backend
 {
 
     /**
-     * UserGroup模型对象
+     * @var \app\admin\model\UserGroup
      */
     protected $model = null;
 
