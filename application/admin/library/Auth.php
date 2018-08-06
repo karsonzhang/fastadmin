@@ -347,9 +347,7 @@ class Auth extends \fast\Auth
         $module = request()->module();
         // 生成菜单的badge
         foreach ($params as $k => $v) {
-
             $url = $k;
-
             if (is_array($v)) {
                 $nums = isset($v[0]) ? $v[0] : 0;
                 $color = isset($v[1]) ? $v[1] : $colorArr[(is_numeric($nums) ? $nums : strlen($nums)) % $colorNums];
@@ -389,6 +387,8 @@ class Auth extends \fast\Auth
         if ($selected == $referer) {
             $referer = [];
         }
+        $selected && $selected['url'] = url($selected['url']);
+        $referer && $referer['url'] = url($referer['url']);
 
         $select_id = $selected ? $selected['id'] : 0;
         $menu = $nav = '';
@@ -425,7 +425,6 @@ class Auth extends \fast\Auth
                 $nav .= '<li role="presentation" id="tab_' . $referer['id'] . '" class="active"><a href="#con_' . $referer['id'] . '" node-id="' . $referer['id'] . '" aria-controls="' . $referer['id'] . '" role="tab" data-toggle="tab"><i class="' . $referer['icon'] . ' fa-fw"></i> <span>' . $referer['title'] . '</span> </a> <i class="close-tab fa fa-remove"></i></li>';
             }
         }
-
 
         return [$menu, $nav, $selected, $referer];
     }
