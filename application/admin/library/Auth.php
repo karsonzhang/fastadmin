@@ -382,7 +382,7 @@ class Auth extends \fast\Auth
             $v['pinyin'] = $pinyin->permalink($v['title'], '');
             $v['title'] = __($v['title']);
             $selected = $v['name'] == $fixedPage ? $v : $selected;
-            $referer = $v['url'] == $refererUrl ? $v : $referer;
+            $referer = url($v['url']) == $refererUrl ? $v : $referer;
         }
         if ($selected == $referer) {
             $referer = [];
