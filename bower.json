@@ -10,7 +10,6 @@
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.6.1",
     "bootstrap-table": "~1.11.0",
-    "layer": "^3.0",
     "jstree": "~3.3.2",
     "moment": "~2.15.2",
     "plupload": "~2.2.0",
