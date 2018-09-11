@@ -246,7 +246,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     if (preview_id && multiple) {
                         require(['dragsort'], function () {
                             $("#" + preview_id).dragsort({
-                                dragSelector: "li",
+                                dragSelector: "li a:not(.btn-trash)",
                                 dragEnd: function () {
                                     $("#" + preview_id).trigger("fa.preview.change");
                                 },

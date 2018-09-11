@@ -15,10 +15,10 @@
                         <div class="col-sm-8 col-xs-12">
                             {switch $item.type}
                             {case string}
-                            <input type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}" {$item.extend} />
+                            <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}" />
                             {/case}
                             {case text}
-                            <textarea name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}" {$item.extend}>{$item.value}</textarea>
+                            <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value}</textarea>
                             {/case}
                             {case array}
                             <dl class="fieldlist" data-name="row[{$item.name}]">
@@ -31,10 +31,10 @@
                             </dl>
                             {/case}
                             {case datetime}
-                            <input type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-tip="{$item.tip}" data-rule="{$item.rule}" {$item.extend} />
+                            <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-tip="{$item.tip}" data-rule="{$item.rule}" />
                             {/case}
                             {case number}
-                            <input type="number" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}" {$item.extend} />
+                            <input {$item.extend} type="number" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}" />
                             {/case}
                             {case checkbox}
                             {foreach name="item.content" item="vo"}
@@ -48,7 +48,7 @@
                             {/case}
                             {case value="select" break="0"}{/case}
                             {case value="selects"}
-                            <select name="row[{$item.name}]{$item.type=='selects'?'[]':''}" class="form-control selectpicker" data-tip="{$item.tip}" {$item.type=='selects'?'multiple':''}>
+                            <select {$item.extend} name="row[{$item.name}]{$item.type=='selects'?'[]':''}" class="form-control selectpicker" data-tip="{$item.tip}" {$item.type=='selects'?'multiple':''}>
                                 {foreach name="item.content" item="vo"}
                                 <option value="{$key}" {in name="key" value="$item.value"}selected{/in}>{$vo}</option>
                                 {/foreach}

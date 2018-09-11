@@ -84,7 +84,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             field: 'downloads',
                             title: __('Downloads'),
                             operate: 'LIKE',
-                            width: '100px',
+                            width: '80px',
                             align: 'center',
                             formatter: Controller.api.formatter.downloads
                         },
@@ -92,14 +92,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             field: 'version',
                             title: __('Version'),
                             operate: 'LIKE',
-                            width: '100px',
+                            width: '80px',
                             align: 'center',
                             formatter: Controller.api.formatter.version
                         },
                         {
                             field: 'toggle',
                             title: __('Status'),
-                            width: '100px',
+                            width: '80px',
                             formatter: Controller.api.formatter.toggle
                         },
                         {
@@ -515,7 +515,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     if (!row.addon) {
                         return '';
                     }
-                    return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Click to toggle status') + '" class="btn-' + (row.addon.state == 1 ? "disable" : "enable") + '" data-action="' + (row.addon.state == 1 ? "disable" : "enable") + '" data-name="' + row.name + '"><i class="fa ' + (row.addon.state == 0 ? 'fa-toggle-on fa-rotate-180 text-gray' : 'fa-toggle-on text-success') + ' fa-2x"></i></a>';
+                    return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Click to toggle status') + '" class="btn btn-toggle btn-' + (row.addon.state == 1 ? "disable" : "enable") + '" data-action="' + (row.addon.state == 1 ? "disable" : "enable") + '" data-name="' + row.name + '"><i class="fa ' + (row.addon.state == 0 ? 'fa-toggle-on fa-rotate-180 text-gray' : 'fa-toggle-on text-success') + ' fa-2x"></i></a>';
                 },
                 author: function (value, row, index) {
                     return '<a href="https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes" target="_blank" data-toggle="tooltip" title="' + __('Click to contact developer') + '" class="text-primary">' + value + '</a>';

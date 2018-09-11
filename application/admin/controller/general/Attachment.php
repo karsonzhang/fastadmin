@@ -31,22 +31,35 @@ class Attachment extends Backend
     {
         //设置过滤方法
         $this->request->filter(['strip_tags']);
-        if ($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
+            $mimetypeQuery = [];
+            $filter = $this->request->request('filter');
+            $filterArr = (array)json_decode($filter, TRUE);
+            if (isset($filterArr['mimetype']) && stripos($filterArr['mimetype'], ',') !== false) {
+                $this->request->get(['filter' => json_encode(array_merge($filterArr, ['mimetype' => '']))]);
+                $mimetypeQuery = function ($query) use ($filterArr) {
+                    $mimetypeArr = explode(',', $filterArr['mimetype']);
+                    foreach ($mimetypeArr as $index => $item) {
+                        $query->whereOr('mimetype', 'like', '%' . $item . '%');
+                    }
+                };
+            }
+
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
-                    ->where($where)
-                    ->order($sort, $order)
-                    ->count();
+                ->where($mimetypeQuery)
+                ->where($where)
+                ->order($sort, $order)
+                ->count();
 
             $list = $this->model
-                    ->where($where)
-                    ->order($sort, $order)
-                    ->limit($offset, $limit)
-                    ->select();
+                ->where($mimetypeQuery)
+                ->where($where)
+                ->order($sort, $order)
+                ->limit($offset, $limit)
+                ->select();
             $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $this->request->root());
-            foreach ($list as $k => &$v)
-            {
+            foreach ($list as $k => &$v) {
                 $v['fullurl'] = ($v['storage'] == 'local' ? $cdnurl : $this->view->config['upload']['cdnurl']) . $v['url'];
             }
             unset($v);
@@ -62,8 +75,7 @@ class Attachment extends Backend
      */
     public function select()
     {
-        if ($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
             return $this->index();
         }
         return $this->view->fetch();
@@ -74,8 +86,7 @@ class Attachment extends Backend
      */
     public function add()
     {
-        if ($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
             $this->error();
         }
         return $this->view->fetch();
@@ -87,18 +98,15 @@ class Attachment extends Backend
      */
     public function del($ids = "")
     {
-        if ($ids)
-        {
-            \think\Hook::add('upload_delete', function($params) {
+        if ($ids) {
+            \think\Hook::add('upload_delete', function ($params) {
                 $attachmentFile = ROOT_PATH . '/public' . $params['url'];
-                if (is_file($attachmentFile))
-                {
+                if (is_file($attachmentFile)) {
                     @unlink($attachmentFile);
                 }
             });
             $attachmentlist = $this->model->where('id', 'in', $ids)->select();
-            foreach ($attachmentlist as $attachment)
-            {
+            foreach ($attachmentlist as $attachment) {
                 \think\Hook::listen("upload_delete", $attachment);
                 $attachment->delete();
             }

@@ -215,16 +215,6 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
             if ($(".layer-footer").size() > 0 && self === top) {
                 $(".layer-footer").show();
             }
-            //优化在多个弹窗下点击不能切换的操作体验
-            if (Fast.api.query("dialog") == "1" && self != top && self.frameElement && self.frameElement.tagName == "IFRAME") {
-                $(window).on('click', function () {
-                    var layero = self.frameElement.parentNode.parentElement;
-                    if (parent.Layer.zIndex != parseInt(parent.window.$(layero).css("z-index"))) {
-                        parent.window.$(layero).trigger("mousedown");
-                        parent.Layer.zIndex = parseInt(parent.window.$(layero).css("z-index"));
-                    }
-                });
-            }
             //tooltip和popover
             if (!('ontouchstart' in document.documentElement)) {
                 $('body').tooltip({selector: '[data-toggle="tooltip"]'});

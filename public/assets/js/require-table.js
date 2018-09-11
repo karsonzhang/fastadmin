@@ -365,6 +365,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 icon: function (value, row, index) {
                     if (!value)
                         return '';
+                    value = value === null ? '' : value.toString();
                     value = value.indexOf(" ") > -1 ? value : "fa fa-" + value;
                     //渲染fontawesome图标
                     return '<i class="' + value + '"></i> ' + value;
@@ -400,9 +401,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     if (typeof this.custom !== 'undefined') {
                         custom = $.extend(custom, this.custom);
                     }
+                    value = value === null ? '' : value.toString();
                     var keys = typeof this.searchList === 'object' ? Object.keys(this.searchList) : [];
                     var index = keys.indexOf(value);
-                    value = value === null ? '' : value.toString();
                     var color = value && typeof custom[value] !== 'undefined' ? custom[value] : null;
                     var display = index > -1 ? this.searchList[value] : null;
                     var icon = typeof this.icon !== 'undefined' ? this.icon : null;
@@ -486,8 +487,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var options = table ? table.bootstrapTable('getOptions') : {};
                     // 默认按钮组
                     var buttons = $.extend([], this.buttons || []);
-
-                    if (options.extend.dragsort_url !== '') {
+                    // 所有按钮名称
+                    var names = [];
+                    buttons.forEach(function (item) {
+                        names.push(item.name);
+                    });
+                    if (options.extend.dragsort_url !== '' && names.indexOf('dragsort') === -1) {
                         buttons.push({
                             name: 'dragsort',
                             icon: 'fa fa-arrows',
@@ -496,7 +501,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             classname: 'btn btn-xs btn-primary btn-dragsort'
                         });
                     }
-                    if (options.extend.edit_url !== '') {
+                    if (options.extend.edit_url !== '' && names.indexOf('edit') === -1) {
                         buttons.push({
                             name: 'edit',
                             icon: 'fa fa-pencil',
@@ -506,7 +511,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             url: options.extend.edit_url
                         });
                     }
-                    if (options.extend.del_url !== '') {
+                    if (options.extend.del_url !== '' && names.indexOf('del') === -1) {
                         buttons.push({
                             name: 'del',
                             icon: 'fa fa-trash',

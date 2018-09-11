@@ -2,6 +2,8 @@
 
 return [
     'Id'                 => 'ID',
+    'Admin_id'           => '管理员ID',
+    'User_id'            => '会员ID',
     'Url'                => '物理路径',
     'Imagewidth'         => '宽度',
     'Imageheight'        => '高度',

@@ -24,14 +24,16 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     [
                         {field: 'state', checkbox: true,},
                         {field: 'id', title: __('Id')},
+                        {field: 'admin_id', title: __('Admin_id'), visible: false, addClass:"selectpage", extend:"data-source='auth/admin/index' data-field='nickname'"},
+                        {field: 'user_id', title: __('User_id'), visible: false, addClass:"selectpage", extend:"data-source='user/user/index' data-field='nickname'"},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
                         {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url},
                         {field: 'imagewidth', title: __('Imagewidth'), sortable: true},
                         {field: 'imageheight', title: __('Imageheight'), sortable: true},
-                        {field: 'imagetype', title: __('Imagetype'), formatter:Table.api.formatter.search},
+                        {field: 'imagetype', title: __('Imagetype'), formatter: Table.api.formatter.search},
                         {field: 'storage', title: __('Storage'), formatter: Table.api.formatter.search},
                         {field: 'filesize', title: __('Filesize'), operate: 'BETWEEN', sortable: true},
-                        {field: 'mimetype', title: __('Mimetype'), formatter:Table.api.formatter.search},
+                        {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},
                         {
                             field: 'createtime',
                             title: __('Createtime'),
@@ -73,6 +75,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     [
                         {field: 'state', checkbox: true,},
                         {field: 'id', title: __('Id')},
+                        {field: 'admin_id', title: __('Admin_id'), visible: false},
+                        {field: 'user_id', title: __('User_id'), visible: false},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb},
                         {field: 'imagewidth', title: __('Imagewidth')},
                         {field: 'imageheight', title: __('Imageheight')},

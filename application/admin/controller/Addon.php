@@ -82,7 +82,9 @@ class Addon extends Backend
             $this->error(__('Parameter %s can not be empty', ''));
         }
         $this->view->assign("addon", ['info' => $info, 'config' => $config]);
-        return $this->view->fetch();
+        $configFile = ADDON_PATH . $name . DS . 'config.html';
+        $viewFile = is_file($configFile) ? $configFile : '';
+        return $this->view->fetch($viewFile);
     }
 
     /**

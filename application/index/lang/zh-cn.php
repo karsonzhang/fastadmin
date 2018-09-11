@@ -104,6 +104,7 @@ return [
     'Features'                                               => '功能特性',
     'Home'                                                   => '首页',
     'Store'                                                  => '插件市场',
+    'Wxapp'                                                  => '小程序',
     'Services'                                               => '服务',
     'Download'                                               => '下载',
     'Demo'                                                   => '演示',
