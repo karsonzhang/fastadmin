@@ -195,7 +195,9 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                 }
                 //如果未设备成功的回调,设定了自动刷新的情况下自动进行刷新
                 if (!success && typeof options.tableId !== 'undefined' && typeof options.refresh !== 'undefined' && options.refresh) {
-                    $("#" + options.tableId).bootstrapTable('refresh');
+                    success = function () {
+                        $("#" + options.tableId).bootstrapTable('refresh');
+                    }
                 }
                 if (typeof options.confirm !== 'undefined') {
                     Layer.confirm(options.confirm, function (index) {
