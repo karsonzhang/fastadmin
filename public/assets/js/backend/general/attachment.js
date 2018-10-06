@@ -24,8 +24,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     [
                         {field: 'state', checkbox: true,},
                         {field: 'id', title: __('Id')},
-                        {field: 'admin_id', title: __('Admin_id'), visible: false, addClass:"selectpage", extend:"data-source='auth/admin/index' data-field='nickname'"},
-                        {field: 'user_id', title: __('User_id'), visible: false, addClass:"selectpage", extend:"data-source='user/user/index' data-field='nickname'"},
+                        {field: 'admin_id', title: __('Admin_id'), visible: false, addClass: "selectpage", extend: "data-source='auth/admin/index' data-field='nickname'"},
+                        {field: 'user_id', title: __('User_id'), visible: false, addClass: "selectpage", extend: "data-source='user/user/index' data-field='nickname'"},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
                         {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url},
                         {field: 'imagewidth', title: __('Imagewidth'), sortable: true},
@@ -77,9 +77,9 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'id', title: __('Id')},
                         {field: 'admin_id', title: __('Admin_id'), visible: false},
                         {field: 'user_id', title: __('User_id'), visible: false},
-                        {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb},
-                        {field: 'imagewidth', title: __('Imagewidth')},
-                        {field: 'imageheight', title: __('Imageheight')},
+                        {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
+                        {field: 'imagewidth', title: __('Imagewidth'), operate: false},
+                        {field: 'imageheight', title: __('Imageheight'), operate: false},
                         {
                             field: 'mimetype', title: __('Mimetype'), operate: 'LIKE %...%',
                             process: function (value, arg) {

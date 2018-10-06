@@ -249,7 +249,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                                     }
                                 }
                                 table.bootstrapTable('refresh');
-                            }, function () {
+                            }, function (data, ret) {
                                 var error = $(element).data("error") || $.noop;
                                 if (typeof error === 'function') {
                                     if (false === error.call(element, data, ret)) {
@@ -534,7 +534,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 type = typeof type === 'undefined' ? 'buttons' : type;
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];
-                var hidden, visible, url, classname, icon, text, title, refresh, confirm, extend;
+                var hidden, visible, url, classname, icon, text, title, refresh, confirm, extend, click;
                 var fieldIndex = column.fieldIndex;
 
                 $.each(buttons, function (i, j) {

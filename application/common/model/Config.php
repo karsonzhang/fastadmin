@@ -41,6 +41,7 @@ class Config extends Model
             'images'   => __('Images'),
             'file'     => __('File'),
             'files'    => __('Files'),
+            'switch'   => __('Switch'),
             'checkbox' => __('Checkbox'),
             'radio'    => __('Radio'),
             'array'    => __('Array'),
@@ -78,8 +79,7 @@ class Config extends Model
     public static function getGroupList()
     {
         $groupList = config('site.configgroup');
-        foreach ($groupList as $k => &$v)
-        {
+        foreach ($groupList as $k => &$v) {
             $v = __($v);
         }
         return $groupList;
@@ -90,10 +90,8 @@ class Config extends Model
         $fieldarr = $valuearr = [];
         $field = isset($data['field']) ? $data['field'] : [];
         $value = isset($data['value']) ? $data['value'] : [];
-        foreach ($field as $m => $n)
-        {
-            if ($n != '')
-            {
+        foreach ($field as $m => $n) {
+            if ($n != '') {
                 $fieldarr[] = $field[$m];
                 $valuearr[] = $value[$m];
             }
@@ -110,10 +108,8 @@ class Config extends Model
     {
         $content = explode($split, $text);
         $arr = [];
-        foreach ($content as $k => $v)
-        {
-            if (stripos($v, "|") !== false)
-            {
+        foreach ($content as $k => $v) {
+            if (stripos($v, "|") !== false) {
                 $item = explode('|', $v);
                 $arr[$item[0]] = $item[1];
             }
@@ -129,11 +125,9 @@ class Config extends Model
     public static function encode($array, $split = "\r\n")
     {
         $content = '';
-        if ($array && is_array($array))
-        {
+        if ($array && is_array($array)) {
             $arr = [];
-            foreach ($array as $k => $v)
-            {
+            foreach ($array as $k => $v) {
                 $arr[] = "{$k}|{$v}";
             }
             $content = implode($split, $arr);

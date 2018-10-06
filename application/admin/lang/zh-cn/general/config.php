@@ -27,6 +27,7 @@ return [
     'Files'                       => '文件(多)',
     'Select'                      => '列表',
     'Selects'                     => '列表(多选)',
+    'Switch'                      => '开关',
     'Checkbox'                    => '复选',
     'Radio'                       => '单选',
     'Array'                       => '数组',

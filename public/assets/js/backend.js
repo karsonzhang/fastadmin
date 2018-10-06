@@ -209,6 +209,28 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                 }
                 return false;
             });
+            $(document).on('click', '.btn-click,.clickit', function (e) {
+                var that = this;
+                var options = $.extend({}, $(that).data() || {});
+                var row = {};
+                if (typeof options.tableId !== 'undefined') {
+                    var index = parseInt(options.rowIndex);
+                    var data = $("#" + options.tableId).bootstrapTable('getData');
+                    row = typeof data[index] !== 'undefined' ? data[index] : {};
+                }
+                var button = Backend.api.gettablecolumnbutton(options);
+                var click = typeof button.click === 'function' ? button.click : $.noop;
+
+                if (typeof options.confirm !== 'undefined') {
+                    Layer.confirm(options.confirm, function (index) {
+                        click.apply(that, [options, row, button]);
+                        Layer.close(index);
+                    });
+                } else {
+                    click.apply(that, [options, row, button]);
+                }
+                return false;
+            });
             //修复含有fixed-footer类的body边距
             if ($(".fixed-footer").size() > 0) {
                 $(document.body).css("padding-bottom", $(".fixed-footer").outerHeight());
