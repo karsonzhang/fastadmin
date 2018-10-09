@@ -95,7 +95,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     $err = '';
     $mysqlHostname = isset($_POST['mysqlHost']) ? $_POST['mysqlHost'] : '127.0.0.1';
-    $mysqlHostport = 3306;
+    $mysqlHostport = isset($_POST['mysqlHostport']) ? $_POST['mysqlHostport'] : 3306;
     $hostArr = explode(':', $mysqlHostname);
     if (count($hostArr) > 1) {
         $mysqlHostname = $hostArr[0];
@@ -373,6 +373,11 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="form-field">
                     <label>MySQL 数据表前缀</label>
                     <input type="text" name="mysqlPrefix" value="fa_">
+                </div>
+
+                <div class="form-field">
+                    <label>MySQL 端口号</label>
+                    <input type="number" name="mysqlHostport" value="3306">
                 </div>
             </div>
 
