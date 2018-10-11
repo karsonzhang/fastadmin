@@ -59,7 +59,9 @@ class Common
             \think\Cookie::set('think_var', $request->get('lang'));
         }
         // Form别名
-        class_alias('fast\\Form', 'Form');
+        if (!class_exists('Form')) {
+            class_alias('fast\\Form', 'Form');
+        }
     }
 
     public function addonBegin(&$request)
