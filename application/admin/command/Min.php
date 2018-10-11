@@ -60,7 +60,14 @@ class Min extends Command
             if (IS_WIN)
             {
                 // Winsows下请手动配置配置该值,一般将该值配置为 '"C:\Program Files\nodejs\node.exe"'，除非你的Node安装路径有变更
-                $nodeExec = '"C:\Program Files\nodejs\node.exe"';
+                $nodeExec = 'C:\Program Files\nodejs\node.exe';
+                if (file_exists($nodeExec)){
+                    $nodeExec = '"' . $nodeExec . '"';
+                }else{
+                    // 如果 '"C:\Program Files\nodejs\node.exe"' 不存在，可能是node安装路径有变更
+                    // 但安装node会自动配置环境变量，直接执行 '"node.exe"' 提高第一次使用压缩打包的成功率
+                    $nodeExec = '"node.exe"';
+                }
             }
             else
             {
