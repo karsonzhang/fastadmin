@@ -158,6 +158,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var ids = Table.api.selectedids(table);
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !ids.length);
                 });
+                // 绑定TAB事件
+                $('.panel-heading ul[data-field] li a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var field = $(this).closest("ul").data("field");
+                    var value = $(this).data("value");
+                    $("select[name='" + field + "'] option[value='" + value + "']", table.closest(".bootstrap-table").find(".commonsearch-table")).prop("selected", true);
+                    table.bootstrapTable('refresh', {});
+                    return false;
+                });
                 // 刷新按钮事件
                 $(toolbar).on('click', Table.config.refreshbtn, function () {
                     table.bootstrapTable('refresh');

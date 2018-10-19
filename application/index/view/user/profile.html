@@ -44,7 +44,7 @@
                             <label class="control-label col-xs-12 col-sm-2"></label>
                             <div class="col-xs-12 col-sm-4">
                                 <div class="profile-avatar-container">
-                                    <img class="profile-user-img img-responsive img-circle plupload" src="{$user.avatar}" alt="">
+                                    <img class="profile-user-img img-responsive img-circle plupload" src="{$user.avatar|cdnurl}" alt="">
                                     <div class="profile-avatar-text img-circle">{:__('Click to edit')}</div>
                                     <button id="plupload-avatar" class="plupload" data-mimetype="png,jpg,jpeg,gif" data-input-id="c-avatar"><i class="fa fa-upload"></i> {:__('Upload')}</button>
                                 </div>

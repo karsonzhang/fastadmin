@@ -32,7 +32,7 @@
                         <li class="dropdown">
                             {if $user}
                             <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown" style="padding-top: 10px;height: 50px;">
-                                <span class="avatar-img"><img src="{$user.avatar}" alt=""></span>
+                                <span class="avatar-img"><img src="{$user.avatar|cdnurl}" alt=""></span>
                             </a>
                             {else /}
                             <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown">{:__('User center')} <b class="caret"></b></a>

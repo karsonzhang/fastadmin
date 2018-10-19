@@ -4,7 +4,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
         config: {
             container: document.body,
             classname: '.plupload:not([initialized])',
-            previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
+            previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" onerror="this.src=\'https://tool.fastadmin.net/icon/\'+\'<%=fullurl%>\'.split(\'.\').pop()+\'.png\';this.onerror=null;" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
         },
         events: {
             //初始化完成
@@ -184,11 +184,9 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     multiple = typeof multiple !== "undefined" ? multiple : Config.upload.multiple;
                     var mimetypeArr = new Array();
                     //支持后缀和Mimetype格式,以,分隔
-                    if (mimetype && mimetype !== "*" && mimetype.indexOf("/") === -1)
-                    {
+                    if (mimetype && mimetype !== "*" && mimetype.indexOf("/") === -1) {
                         var tempArr = mimetype.split(',');
-                        for (var i = 0; i < tempArr.length; i++)
-                        {
+                        for (var i = 0; i < tempArr.length; i++) {
                             mimetypeArr.push({title: __('Files'), extensions: tempArr[i]});
                         }
                         mimetype = mimetypeArr;

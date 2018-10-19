@@ -408,7 +408,9 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </form>
 
-        <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+        <!-- jQuery -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js"></script>
+
         <script>
             $(function () {
                 $('form :input:first').select();

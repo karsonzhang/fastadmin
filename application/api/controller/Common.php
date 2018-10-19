@@ -48,7 +48,7 @@ class Common extends Api
 
     /**
      * 上传文件
-     *
+     * @ApiMethod (POST)
      * @param File $file 文件流
      */
     public function upload()

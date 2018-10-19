@@ -478,7 +478,6 @@ class Crud extends Command
             $appendAttrList = [];
             $controllerAssignList = [];
             $headingHtml = '{:build_heading()}';
-            $headingJs = '';
 
             //循环所有字段,开始构造视图的HTML和JS信息
             foreach ($columnList as $k => $v) {
@@ -696,7 +695,6 @@ class Crud extends Command
                     }
                     if ($this->headingFilterField && $this->headingFilterField == $field && $itemArr) {
                         $headingHtml = $this->getReplacedStub('html/heading-html', ['field' => $field]);
-                        $headingJs = $this->getReplacedStub('html/heading-js', ['field' => $field]);
                     }
                     //排序方式,如果有指定排序字段,否则按主键排序
                     $order = $field == $this->sortField ? $this->sortField : $order;
@@ -772,7 +770,6 @@ class Crud extends Command
                 'relationMethodList'      => '',
                 'controllerIndex'         => '',
                 'headingHtml'             => $headingHtml,
-                'headingJs'               => $headingJs,
                 'visibleFieldList'        => $fields ? "\$row->visible(['" . implode("','", array_filter(explode(',', $fields))) . "']);" : '',
                 'appendAttrList'          => implode(",\n", $appendAttrList),
                 'getEnumList'             => implode("\n\n", $getEnumArr),
@@ -1267,7 +1264,7 @@ EOD;
             $selectfilter = ' data-mimetype="image/*"';
         }
         $multiple = substr($field, -1) == 's' ? ' data-multiple="true"' : ' data-multiple="false"';
-        $preview = $uploadfilter ? ' data-preview-id="p-' . $field . '"' : '';
+        $preview = ' data-preview-id="p-' . $field . '"';
         $previewcontainer = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $field . '"></ul>' : '';
         return <<<EOD
 <div class="input-group">

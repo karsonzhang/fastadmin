@@ -27,7 +27,7 @@
                     <div class="row user-baseinfo">
                         <div class="col-md-3 col-sm-3 col-xs-2 text-center user-center">
                             <a href="{:url('user/profile')}" title="{:__('Click to edit')}">
-                                <span class="avatar-img"><img src="{$user.avatar}" alt=""></span>
+                                <span class="avatar-img"><img src="{$user.avatar|cdnurl}" alt=""></span>
                             </a>
                         </div>
                         <div class="col-md-9 col-sm-9 col-xs-10">
