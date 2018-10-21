@@ -58,10 +58,10 @@ body {
 
 /*预览区域*/
 .plupload-preview {
-    padding:10px;
+    padding:0 10px;
     margin-bottom:0;
     li {
-        margin-bottom:10px;
+        margin-top:10px;
     }
     .thumbnail {
         margin-bottom:10px;
@@ -212,6 +212,24 @@ body {
     font-size: 12px;
     line-height: 1.5;
     padding: 4px 13px;
+}
+
+.fieldlist dd {
+    display: block;
+    margin: 5px 0;
+    input {
+        display: inline-block;
+        width: 300px;
+    }
+    input:first-child {
+        width: 110px;
+    }
+    ins {
+        width: 110px;
+        display: inline-block;
+        text-decoration: none;
+        font-weight: bold;
+    }
 }
 
 /* 弹窗中的表单 */
@@ -434,4 +452,27 @@ main.content {
         position:inherit;
         .copyright{padding:10px;line-height:30px;}
     }
+}
+
+.pager {
+    .pagination {
+        margin: 0;
+    }
+    li {
+        margin: 0 .4em;
+        display: inline-block;
+        &:first-child, &:last-child {
+            > a, > span {
+                padding: .5em 1.2em;
+            }
+        }
+    }
+}
+
+.pager li > a, .pager li > span {
+    background: none;
+    border: 1px solid #e6e6e6;
+    border-radius: 0.25em;
+    padding: .5em .93em;
+    font-size: 14px;
 }

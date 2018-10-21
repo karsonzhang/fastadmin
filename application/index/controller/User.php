@@ -60,7 +60,10 @@ class User extends Frontend
      */
     public function _empty($name)
     {
-        Hook::listen("user_request_empty", $name);
+        $data = Hook::listen("user_request_empty", $name);
+        foreach ($data as $index => $datum) {
+            $this->view->assign($datum);
+        }
         return $this->view->fetch('user/' . $name);
     }
 
