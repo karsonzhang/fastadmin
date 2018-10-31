@@ -213,7 +213,7 @@ class FormBuilder
 
         if (!in_array($type, $this->skipValueTypes)) {
             $value = $this->getValueAttribute($name, $value);
-            $options['class'] = isset($options['class']) ? $options['class'] . ' form-control' : 'form-control';
+            $options['class'] = isset($options['class']) ? $options['class'] . (stripos($options['class'], 'form-control') !== false ? '' : ' form-control') : 'form-control';
         }
 
         $merge = compact('type', 'value', 'id');
@@ -317,7 +317,7 @@ class FormBuilder
 
         unset($options['size']);
 
-        $options['class'] = isset($options['class']) ? $options['class'] . ' form-control' : 'form-control';
+        $options['class'] = isset($options['class']) ? $options['class'] . (stripos($options['class'], 'form-control') !== false ? '' : ' form-control') : 'form-control';
         $options = $this->attributes($options);
 
         return '<textarea' . $options . '>' . $this->escape($value) . '</textarea>';
@@ -389,7 +389,7 @@ class FormBuilder
         foreach ($list as $value => $display) {
             $html[] = $this->getSelectOption($display, $value, $selected);
         }
-        $options['class'] = isset($options['class']) ? $options['class'] . ' form-control' : 'form-control';
+        $options['class'] = isset($options['class']) ? $options['class'] . (stripos($options['class'], 'form-control') !== false ? '' : ' form-control') : 'form-control';
 
         $options = $this->attributes($options);
         $list = implode('', $html);
