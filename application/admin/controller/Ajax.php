@@ -198,19 +198,22 @@ class Ajax extends Backend
     {
         $type = $this->request->request("type");
         switch ($type) {
-            case 'content' || 'all':
+            case 'content':
                 rmdirs(CACHE_PATH, false);
                 Cache::clear();
-                if ($type == 'content')
-                    break;
-            case 'template' || 'all':
+                break;
+            case 'template':
                 rmdirs(TEMP_PATH, false);
-                if ($type == 'template')
-                    break;
-            case 'addons' || 'all':
+                break;
+            case 'addons':
                 Service::refresh();
-                if ($type == 'addons')
-                    break;
+                break;
+            case 'all':
+                rmdirs(CACHE_PATH, false);
+                Cache::clear();
+                rmdirs(TEMP_PATH, false);
+                Service::refresh();
+                break;
         }
 
         \think\Hook::listen("wipecache_after");
