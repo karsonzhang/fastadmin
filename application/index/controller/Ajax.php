@@ -26,7 +26,7 @@ class Ajax extends Frontend
         $controllername = input("controllername");
         $this->loadlang($controllername);
         //强制输出JSON Object
-        $result = 'define(' . json_encode(Lang::get(), JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE) . ');';
+        $result = jsonp(Lang::get(), 200, [], ['json_encode_param' => JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE]);
         return $result;
     }
     
