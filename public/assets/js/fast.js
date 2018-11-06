@@ -206,7 +206,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         if ($(this).hasClass("disabled") || $(this).parent().hasClass("disabled")) {
                             return;
                         }
-                        $(".btn:eq(" + $(this).index() + ")", layerfooter).trigger("click");
+                        var index = footer.find('.btn').index(this);
+                        $(".btn:eq(" + index + ")", layerfooter).trigger("click");
                     });
 
                     var titHeight = layero.find('.layui-layer-title').outerHeight() || 0;
