@@ -541,7 +541,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 type = typeof type === 'undefined' ? 'buttons' : type;
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];
-                var hidden, visible, url, classname, icon, text, title, refresh, confirm, extend, click;
+                var hidden, visible, disable, url, classname, icon, text, title, refresh, confirm, extend, click;
                 var fieldIndex = column.fieldIndex;
 
                 $.each(buttons, function (i, j) {
@@ -572,6 +572,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         refresh = j.refresh ? 'data-refresh="' + j.refresh + '"' : '';
                         confirm = j.confirm ? 'data-confirm="' + j.confirm + '"' : '';
                         extend = j.extend ? j.extend : '';
+                        disable = typeof j.disable === 'function' ? j.disable.call(table, row, j) : (j.disable ? j.disable : false);
+                        if (disable) {
+                            classname = classname + ' disabled';
+                        }
                         html.push('<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + (refresh ? refresh + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-field-index="' + fieldIndex + '" data-row-index="' + index + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
                     }
                 });
