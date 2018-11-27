@@ -365,11 +365,12 @@ class Tree
     /**
      * 特殊
      * @param integer $myid 要查询的ID
-     * @param string $itemtpl1   第一种HTML代码方式
-     * @param string $itemtpl2  第二种HTML代码方式
-     * @param mixed $selectedids  默认选中
-     * @param mixed $disabledids  禁用
-     * @param integer $itemprefix 前缀
+     * @param string $itemtpl1 第一种HTML代码方式
+     * @param string $itemtpl2 第二种HTML代码方式
+     * @param mixed $selectedids 默认选中
+     * @param mixed $disabledids 禁用
+     * @param string $itemprefix 前缀
+     * @return string
      */
     public function getTreeSpecial($myid, $itemtpl1, $itemtpl2, $selectedids = 0, $disabledids = 0, $itemprefix = '')
     {
@@ -413,9 +414,8 @@ class Tree
      *
      * 获取树状数组
      * @param string $myid 要查询的ID
-     * @param string $nametpl 名称条目模板
      * @param string $itemprefix 前缀
-     * @return string
+     * @return array
      */
     public function getTreeArray($myid, $itemprefix = '')
     {

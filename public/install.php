@@ -409,7 +409,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
 
         <!-- jQuery -->
-        <script src="https://cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
 
         <script>
             $(function () {

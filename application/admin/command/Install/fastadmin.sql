@@ -29,17 +29,13 @@ CREATE TABLE `fa_admin` (
   `status` varchar(30) NOT NULL DEFAULT 'normal' COMMENT '状态',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of fa_admin
 -- ----------------------------
 BEGIN;
 INSERT INTO `fa_admin` VALUES (1, 'admin', 'Admin', '075eaec83636846f51c152f29b98a2fd', 's4f3', '/assets/img/avatar.png', 'admin@fastadmin.net', 0, 1502029281, 1492186163, 1502029281, 'd3992c3b-5ecc-4ecb-9dc2-8997780fcadc', 'normal');
-INSERT INTO `fa_admin` VALUES (2, 'admin2', 'admin2', '9a28ce07ce875fbd14172a9ca5357d3c', '2dHDmj', '/assets/img/avatar.png', 'admin2@fastadmin.net', 0, 1505450906, 1492186163, 1505450906, 'df45fdd5-26f4-45ca-83b3-47e4491a315a', 'normal');
-INSERT INTO `fa_admin` VALUES (3, 'admin3', 'admin3', '1c11f945dfcd808a130a8c2a8753fe62', 'WOKJEn', '/assets/img/avatar.png', 'admin3@fastadmin.net', 0, 1501980868, 1492186201, 1501982377, '', 'normal');
-INSERT INTO `fa_admin` VALUES (4, 'admin22', 'admin22', '1c1a0aa0c3c56a8c1a908aab94519648', 'Aybcn5', '/assets/img/avatar.png', 'admin22@fastadmin.net', 0, 0, 1492186240, 1492186240, '', 'normal');
-INSERT INTO `fa_admin` VALUES (5, 'admin32', 'admin32', 'ade94d5d7a7033afa7d84ac3066d0a02', 'FvYK0u', '/assets/img/avatar.png', 'admin32@fastadmin.net', 0, 0, 1492186263, 1492186263, '', 'normal');
 COMMIT;
 
 -- ----------------------------
@@ -134,10 +130,6 @@ CREATE TABLE `fa_auth_group_access` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `fa_auth_group_access` VALUES (1, 1);
-INSERT INTO `fa_auth_group_access` VALUES (2, 2);
-INSERT INTO `fa_auth_group_access` VALUES (3, 3);
-INSERT INTO `fa_auth_group_access` VALUES (4, 5);
-INSERT INTO `fa_auth_group_access` VALUES (5, 5);
 COMMIT;
 
 -- ----------------------------
@@ -431,6 +423,7 @@ CREATE TABLE `fa_user` (
   `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
   `birthday` date COMMENT '生日',
   `bio` varchar(100) NOT NULL DEFAULT '' COMMENT '格言',
+  `money` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '余额',
   `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
   `successions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '连续登录天数',
   `maxsuccessions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '最大连续登录天数',
@@ -478,6 +471,21 @@ CREATE TABLE `fa_user_group` (
 BEGIN;
 INSERT INTO `fa_user_group` VALUES (1, '默认组', '1,2,3,4,5,6,7,8,9,10,11,12', 1515386468, 1516168298, 'normal');
 COMMIT;
+
+-- ----------------------------
+-- Table structure for fa_user_money_log
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_user_money_log`;
+CREATE TABLE `fa_user_money_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
+  `money` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '变更余额',
+  `before` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '变更前余额',
+  `after` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '变更后余额',
+  `memo` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员余额变动表';
 
 -- ----------------------------
 -- Table structure for fa_user_rule

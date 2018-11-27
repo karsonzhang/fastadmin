@@ -152,6 +152,11 @@ $(function () {
             AdminLTEOptions);
     }
 
+    if ('ontouchstart' in document.documentElement) {
+        $.AdminLTE.options.sidebarSlimScroll = false;
+        $(".main-sidebar").css({height: ($(window).height() - $(".main-header").height()) + "px", overflow: "scroll"});
+    }
+
     //Easy access to options
     var o = $.AdminLTE.options;
 

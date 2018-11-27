@@ -43,6 +43,8 @@ return [
     'Last month'                                            => '上月',
     'This month'                                            => '本月',
     'Loading'                                               => '加载中',
+    'Money'                                                 => '余额',
+    'Score'                                                 => '积分',
     'More'                                                  => '更多',
     'Yes'                                                   => '是',
     'No'                                                    => '否',

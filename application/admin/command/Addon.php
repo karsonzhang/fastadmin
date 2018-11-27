@@ -33,7 +33,7 @@ class Addon extends Command
     {
         $name = $input->getOption('name') ?: '';
         $action = $input->getOption('action') ?: '';
-        if(stripos($name, 'addons/')!==false){
+        if (stripos($name, 'addons/') !== false) {
             $name = explode('/', $name)[1];
         }
         //强制覆盖
@@ -241,7 +241,7 @@ class Addon extends Command
                 foreach ($files as $name => $file) {
                     if (!$file->isDir()) {
                         $filePath = $file->getRealPath();
-                        $relativePath = substr($filePath, strlen($addonDir));
+                        $relativePath = str_replace(DS, '/', substr($filePath, strlen($addonDir)));
                         if (!in_array($file->getFilename(), ['.git', '.DS_Store', 'Thumbs.db'])) {
                             $zip->addFile($filePath, $relativePath);
                         }

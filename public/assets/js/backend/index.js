@@ -19,24 +19,17 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             //快捷搜索
             $(".menuresult").width($("form.sidebar-form > .input-group").width());
-            var isAndroid = /(android)/i.test(navigator.userAgent);
             var searchResult = $(".menuresult");
             $("form.sidebar-form").on("blur", "input[name=q]", function () {
                 searchResult.addClass("hide");
-                if (isAndroid) {
-                    $.AdminLTE.options.sidebarSlimScroll = true;
-                }
             }).on("focus", "input[name=q]", function () {
-                if (isAndroid) {
-                    $.AdminLTE.options.sidebarSlimScroll = false;
-                }
                 if ($("a", searchResult).size() > 0) {
                     searchResult.removeClass("hide");
                 }
             }).on("keyup", "input[name=q]", function () {
                 searchResult.html('');
                 var val = $(this).val();
-                var html = new Array();
+                var html = [];
                 if (val != '') {
                     $("ul.sidebar-menu li a[addtabs]:not([href^='javascript:;'])").each(function () {
                         if ($("span:first", this).text().indexOf(val) > -1 || $(this).attr("py").indexOf(val) > -1 || $(this).attr("pinyin").indexOf(val) > -1) {
@@ -122,7 +115,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                             Layer.open({
                                 title: __('Discover new version'),
                                 maxHeight: 400,
-                                content: '<h5 style="background-color:#f7f7f7; font-size:14px; padding: 10px;">' + __('Your current version') + ':' + ret.data.version + '，' + __('New version') + ':' + ret.data.newversion + '</h5><span class="label label-danger">'+__('Release notes')+'</span><br/>' + ret.data.upgradetext,
+                                content: '<h5 style="background-color:#f7f7f7; font-size:14px; padding: 10px;">' + __('Your current version') + ':' + ret.data.version + '，' + __('New version') + ':' + ret.data.newversion + '</h5><span class="label label-danger">' + __('Release notes') + '</span><br/>' + ret.data.upgradetext,
                                 btn: [__('Go to download'), __('Ignore this version'), __('Do not remind again')],
                                 btn2: function (index, layero) {
                                     localStorage.setItem("ignoreversion", ret.data.newversion);
@@ -304,8 +297,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             //这一行需要放在点击左侧链接事件之前
             var addtabs = Config.referer ? localStorage.getItem("addtabs") : null;
 
-            //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true
-            nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, nav: nav});
+            //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true,iframeForceRefreshTable只强制刷新表格
+            nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, iframeForceRefreshTable: true, nav: nav});
 
             if ($("ul.sidebar-menu li.active a").size() > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");

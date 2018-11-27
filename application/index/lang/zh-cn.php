@@ -27,6 +27,8 @@ return [
     'OK'                                                     => '确定',
     'Cancel'                                                 => '取消',
     'Loading'                                                => '加载中',
+    'Money'                                                  => '余额',
+    'Score'                                                  => '积分',
     'More'                                                   => '更多',
     'Normal'                                                 => '正常',
     'Hidden'                                                 => '隐藏',

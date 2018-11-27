@@ -75,6 +75,26 @@ class User Extends Model
     }
 
     /**
+     * 变更会员余额
+     * @param int $money    余额
+     * @param int $user_id  会员ID
+     * @param string $memo  备注
+     */
+    public static function money($money, $user_id, $memo)
+    {
+        $user = self::get($user_id);
+        if ($user)
+        {
+            $before = $user->money;
+            $after = $user->money + $money;
+            //更新会员信息
+            $user->save(['money' => $after]);
+            //写入日志
+            MoneyLog::create(['user_id' => $user_id, 'money' => $money, 'before' => $before, 'after' => $after, 'memo' => $memo]);
+        }
+    }
+
+    /**
      * 变更会员积分
      * @param int $score    积分
      * @param int $user_id  会员ID

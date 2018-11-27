@@ -122,6 +122,11 @@
         padding:30px 0;
     }
 </style>
+{if preg_match('/\/admin\/|admin\.php|admin_d75KABNWt\.php/i', url())}
+<div class="alert alert-danger-light">
+    {:__('Security tips')}
+</div>
+{/if}
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
         {:build_heading(null, false)}

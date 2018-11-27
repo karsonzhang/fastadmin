@@ -75,6 +75,12 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="c-money" class="control-label col-xs-12 col-sm-2">{:__('Money')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-money" data-rule="required" class="form-control" name="row[money]" type="number" value="{$row.money}">
+        </div>
+    </div>
+    <div class="form-group">
         <label for="c-score" class="control-label col-xs-12 col-sm-2">{:__('Score')}:</label>
         <div class="col-xs-12 col-sm-4">
             <input id="c-score" data-rule="required" class="form-control" name="row[score]" type="number" value="{$row.score}">

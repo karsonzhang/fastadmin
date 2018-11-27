@@ -252,9 +252,6 @@ footer.footer {
   color: #aaa;
   background: #555;
   margin-top: 25px;
-  position: fixed;
-  bottom: 0;
-  z-index: 99;
 }
 footer.footer .copyright {
   line-height: 50px;
@@ -370,12 +367,9 @@ footer.footer .copyright a:hover {
 main.content {
   width: 100%;
   overflow: auto;
-  top: 0;
-  position: absolute;
-  z-index: 10;
-  bottom: 50px;
   padding: 15px;
-  padding-top: 67px;
+  padding-top: 20px;
+  min-height: calc(100vh - 125px);
 }
 .sidenav {
   padding: 20px 0 10px 0;
