@@ -73,6 +73,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 });
 
             });
+
+            //删除配置
+            $(document).on("click", ".btn-delcfg", function () {
+                var that = this;
+                Layer.confirm(__('Are you sure you want to delete this item?'), {icon: 3, title:'提示'}, function (index) {
+                    Backend.api.ajax({
+                        url: "general/config/del?receiver=" + value,
+                        data: {name: $(that).data("name")}
+                    }, function () {
+                        $(that).closest("tr").remove();
+                        Layer.close(index);
+                    });
+                });
+
+            });
         },
         add: function () {
             Controller.api.bindevent();
