@@ -6,6 +6,31 @@ trait Backend
 {
 
     /**
+     * 排除前台提交过来的字段
+     * @param $params
+     * @return array
+     */
+    private function preExcludeFields($params)
+    {
+        if (is_array($this->excludeFields)) {
+            foreach ($this->excludeFields as $field) {
+                if (key_exists($field,$params))
+                {
+                    unset($params[$field]);
+                }
+            }
+        } else {
+
+            if (key_exists($this->excludeFields,$params))
+            {
+                unset($params[$this->excludeFields]);
+            }
+        }
+        return $params;
+    }
+
+
+    /**
      * 查看
      */
     public function index()
@@ -74,6 +99,9 @@ trait Backend
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
             if ($params) {
+
+                $params = $this->preExcludeFields($params);
+
                 if ($this->dataLimit && $this->dataLimitFieldAutoFill) {
                     $params[$this->dataLimitField] = $this->auth->id;
                 }
@@ -118,6 +146,9 @@ trait Backend
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
             if ($params) {
+
+                $params = $this->preExcludeFields($params);
+
                 try {
                     //是否采用模型验证
                     if ($this->modelValidate) {
