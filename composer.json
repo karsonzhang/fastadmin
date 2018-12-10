@@ -6,7 +6,7 @@
         "fastadmin",
         "thinkphp"
     ],
-    "homepage": "http://www.fastadmin.net/",
+    "homepage": "https://www.fastadmin.net/",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "~5.0.14",
+        "topthink/framework": "~5.0.23",
         "overtrue/wechat": "~3.1",
         "endroid/qr-code": "^1.9",
         "topthink/think-captcha": "^1.0",
