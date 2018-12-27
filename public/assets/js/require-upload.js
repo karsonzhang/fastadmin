@@ -199,6 +199,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                         container: $(this).parent().get(0), //取按钮的上级元素
                         flash_swf_url: '/assets/libs/plupload/js/Moxie.swf',
                         silverlight_xap_url: '/assets/libs/plupload/js/Moxie.xap',
+                        drop_element: [id, $(this).data("input-id")],
                         filters: {
                             max_file_size: maxsize,
                             mime_types: mimetype,

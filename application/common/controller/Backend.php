@@ -315,7 +315,7 @@ class Backend extends Controller
                 case 'NOT BETWEEN':
                     $arr = array_slice(explode(',', $v), 0, 2);
                     if (stripos($v, ',') === false || !array_filter($arr))
-                        continue;
+                        continue 2;
                     //当出现一边为空时改变操作符
                     if ($arr[0] === '') {
                         $sym = $sym == 'BETWEEN' ? '<=' : '>';
@@ -331,7 +331,7 @@ class Backend extends Controller
                     $v = str_replace(' - ', ',', $v);
                     $arr = array_slice(explode(',', $v), 0, 2);
                     if (stripos($v, ',') === false || !array_filter($arr))
-                        continue;
+                        continue 2;
                     //当出现一边为空时改变操作符
                     if ($arr[0] === '') {
                         $sym = $sym == 'RANGE' ? '<=' : '>';

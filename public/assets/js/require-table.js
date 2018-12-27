@@ -541,8 +541,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 type = typeof type === 'undefined' ? 'buttons' : type;
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];
-                var hidden, visible, disable, url, classname, icon, text, title, refresh, confirm, extend, click;
+                var hidden, visible, disable, url, classname, icon, text, title, refresh, confirm, extend, click, dropdown, link;
                 var fieldIndex = column.fieldIndex;
+                var dropdowns = {};
 
                 $.each(buttons, function (i, j) {
                     if (type === 'operate') {
@@ -563,6 +564,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         if (!visible) {
                             return true;
                         }
+                        dropdown = j.dropdown ? j.dropdown : '';
                         url = j.url ? j.url : '';
                         url = typeof url === 'function' ? url.call(table, row, j) : (url ? Fast.api.fixurl(Table.api.replaceurl(url, row, table)) : 'javascript:;');
                         classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
@@ -576,9 +578,24 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         if (disable) {
                             classname = classname + ' disabled';
                         }
-                        html.push('<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + (refresh ? refresh + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-field-index="' + fieldIndex + '" data-row-index="' + index + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>');
+                        link = '<a href="' + url + '" class="' + classname + '" ' + (confirm ? confirm + ' ' : '') + (refresh ? refresh + ' ' : '') + extend + ' title="' + title + '" data-table-id="' + (table ? table.attr("id") : '') + '" data-field-index="' + fieldIndex + '" data-row-index="' + index + '" data-button-index="' + i + '"><i class="' + icon + '"></i>' + (text ? ' ' + text : '') + '</a>';
+                        if (dropdown) {
+                            if (typeof dropdowns[dropdown] == 'undefined') {
+                                dropdowns[dropdown] = [];
+                            }
+                            dropdowns[dropdown].push(link);
+                        } else {
+                            html.push(link);
+                        }
                     }
                 });
+                if (!$.isEmptyObject(dropdowns)) {
+                    var dropdownHtml = [];
+                    $.each(dropdowns, function (i, j) {
+                        dropdownHtml.push('<div class="btn-group"><button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown">' + i + '</button><button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu pull-right"><li>' + j.join('</li><li>') + '</li></ul></div>');
+                    });
+                    html.unshift(dropdownHtml);
+                }
                 return html.join(' ');
             },
             //替换URL中的数据

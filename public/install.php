@@ -122,8 +122,8 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     } else if (strlen($adminUsername) < 3 || strlen($adminUsername) > 12) {
         echo "用户名请输入3~12位字符";
         exit;
-    } else if (strlen($adminPassword) < 6 || strlen($adminPassword) > 16) {
-        echo "密码请输入6~16位字符";
+    } else if (strlen($adminPassword) < 6 || strlen($adminPassword) > 16 || stripos($adminPassword, ' ') !== false) {
+        echo "密码请输入6~16位字符,不能包含空格";
         exit;
     }
     try {

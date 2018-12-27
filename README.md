@@ -23,8 +23,8 @@ FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台开发框架。
 * 共用同一账号体系的Web端会员中心权限验证和API接口会员权限验证
 * 二级域名部署支持，同时域名支持绑定到插件
 * 多语言支持，服务端及客户端支持
-* 强大的第三方模块支持([CMS](https://www.fastadmin.net/store/cms.html)、[博客](https://www.fastadmin.net/store/blog.html)、[文档生成](https://www.fastadmin.net/store/docs.html)、[个人免签支付](https://www.fastadmin.net/store/pay.html))
-* 整合第三方短信接口(阿里云、创蓝短信)
+* 强大的第三方模块支持([CMS](https://www.fastadmin.net/store/cms.html)、[博客](https://www.fastadmin.net/store/blog.html)、[文档生成](https://www.fastadmin.net/store/docs.html))
+* 整合第三方短信接口(阿里云、腾讯云短信)
 * 无缝整合第三方云存储(七牛、阿里云OSS、又拍云)功能
 * 第三方富文本编辑器支持(Summernote、Tinymce、百度编辑器)
 * 第三方登录(QQ、微信、微博)整合
@@ -53,7 +53,7 @@ https://demo.fastadmin.net
 
 交流社区: https://forum.fastadmin.net
 
-QQ群: [636393962](https://jq.qq.com/?_wv=1027&k=487PNBb)(交流群①) [708784003](https://jq.qq.com/?_wv=1027&k=5ObjtwM)(交流群②) [696992864](https://jq.qq.com/?_wv=1027&k=5R2AB00)(高级群,邀请加入)
+QQ群: [636393962](https://jq.qq.com/?_wv=1027&k=487PNBb)(满) [708784003](https://jq.qq.com/?_wv=1027&k=5ObjtwM)(满) [964776039](https://jq.qq.com/?_wv=1027&k=59qjU2P)(3群)
 
 Email: (karsonzhang#163.com, 把#换成@)
 
