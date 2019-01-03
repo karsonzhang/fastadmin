@@ -13,3 +13,4 @@ composer.lock
 *.css.map
 !.gitkeep
 .env
+.vscode
