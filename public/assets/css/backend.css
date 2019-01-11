@@ -855,7 +855,7 @@ table.table-nowrap thead > tr > th {
 }
 .layui-layer-fast .layui-layer-setwin .layui-layer-close2,
 .layui-layer-fast .layui-layer-setwin .layui-layer-close2:hover {
-  background: url('../libs/layer/dist/theme/default/icon.png') no-repeat -149px -31px !important;
+  background: url('../libs/fastadmin-layer/dist/theme/default/icon.png') no-repeat -149px -31px !important;
   top: -30px;
   right: -30px;
 }
