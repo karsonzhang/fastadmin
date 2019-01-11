@@ -178,6 +178,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 if (!userinfo) {
                     Layer.open({
                         content: Template("logintpl", {}),
+                        zIndex: 99,
                         area: ['430px', '350px'],
                         title: __('Login FastAdmin'),
                         resize: false,
@@ -196,7 +197,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                 Layer.closeAll();
                                 Layer.alert(ret.msg);
                             }, function (data, ret) {
-                                Layer.alert(ret.msg);
                             });
                         },
                         btn2: function () {

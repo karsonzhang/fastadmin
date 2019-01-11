@@ -81,7 +81,7 @@
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></div>
                                     <input type="text" name="captcha" class="form-control" placeholder="{:__('Captcha')}" data-rule="{:__('Captcha')}:required;length(4)" />
                                     <span class="input-group-addon" style="padding:0;border:none;cursor:pointer;">
-                                        <img src="{:rtrim('__PUBLIC__', '/')}/index.php/captcha" width="100" height="30" onclick="this.src = '{:rtrim('__PUBLIC__', '/')}/index.php/captcha?r=' + Math.random();"/>
+                                        <img src="{:rtrim('__PUBLIC__', '/')}/index.php?s=/captcha" width="100" height="30" onclick="this.src = '{:rtrim('__PUBLIC__', '/')}/index.php?s=/captcha&r=' + Math.random();"/>
                                     </span>
                                 </div>
                                 {/if}
