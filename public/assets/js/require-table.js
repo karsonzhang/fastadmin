@@ -366,6 +366,23 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             }
                         );
                     }
+                },//单元格图片预览
+                image: {
+                    'click .img-center': function (e, value, row, index) {
+                        data = [];
+                        value= value.split(",");
+                        $.each(value, function (index, value) {
+                            data.push({
+                                src: Fast.api.cdnurl(value),
+                            });
+                        });
+                        layer.photos({
+                            photos: {
+                                "data": data
+                            },
+                            anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                        });
+                    },
                 }
             },
             // 单元格数据格式化
@@ -381,7 +398,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 image: function (value, row, index) {
                     value = value ? value : '/assets/img/blank.gif';
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    return '<a href="' + Fast.api.cdnurl(value) + '" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>';
+                    return '<a href="javascript:void(0)" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>';
                 },
                 images: function (value, row, index) {
                     value = value === null ? '' : value.toString();
@@ -390,7 +407,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var html = [];
                     $.each(arr, function (i, value) {
                         value = value ? value : '/assets/img/blank.gif';
-                        html.push('<a href="' + Fast.api.cdnurl(value) + '" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>');
+                        html.push('<a href="javascript:void(0)" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>');
                     });
                     return html.join(' ');
                 },
