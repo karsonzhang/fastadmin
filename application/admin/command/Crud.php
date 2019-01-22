@@ -75,6 +75,7 @@ class Crud extends Command
         'url'    => 'url',
         'image'  => 'image',
         'images' => 'images',
+        'avatar' => 'image',
         'switch' => 'toggle',
         'time'   => ['type' => ['int', 'timestamp'], 'name' => 'datetime']
     ];
