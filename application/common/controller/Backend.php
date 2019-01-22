@@ -94,6 +94,11 @@ class Backend extends Controller
     protected $selectpageFields = '*';
 
     /**
+     * 前台提交过来,需要排除的字段数据
+     */
+    protected $excludeFields = "";
+
+    /**
      * 导入文件首行类型
      * 支持comment/name
      * 表示注释或字段名
