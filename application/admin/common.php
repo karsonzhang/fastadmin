@@ -113,7 +113,7 @@ if (!function_exists('build_toolbar')) {
             'add'     => ['javascript:;', 'btn btn-success btn-add', 'fa fa-plus', __('Add'), __('Add')],
             'edit'    => ['javascript:;', 'btn btn-success btn-edit btn-disabled disabled', 'fa fa-pencil', __('Edit'), __('Edit')],
             'del'     => ['javascript:;', 'btn btn-danger btn-del btn-disabled disabled', 'fa fa-trash', __('Delete'), __('Delete')],
-            'import'  => ['javascript:;', 'btn btn-danger btn-import', 'fa fa-upload', __('Import'), __('Import')],
+            'import'  => ['javascript:;', 'btn btn-info btn-import', 'fa fa-upload', __('Import'), __('Import')],
         ];
         $btnAttr = array_merge($btnAttr, $attr);
         $html = [];
@@ -123,8 +123,39 @@ if (!function_exists('build_toolbar')) {
                 continue;
             }
             list($href, $class, $icon, $text, $title) = $btnAttr[$v];
-            $extend = $v == 'import' ? 'id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"' : '';
-            $html[] = '<a href="' . $href . '" class="' . $class . '" title="' . $title . '" ' . $extend . '><i class="' . $icon . '"></i> ' . $text . '</a>';
+            //$extend = $v == 'import' ? 'id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"' : '';
+            //$html[] = '<a href="' . $href . '" class="' . $class . '" title="' . $title . '" ' . $extend . '><i class="' . $icon . '"></i> ' . $text . '</a>';
+            if ($v == 'import') {
+                $template = str_replace('/', '_', $controller);
+                $download = '';
+                if (file_exists("./template/{$template}.xlsx")) {
+                    $download .= "\n                                <li><a href=\"/template/{$template}.xlsx\" target=\"_blank\">XLSX模版</a></li>";
+                }
+                if (file_exists("./template/{$template}.xls")) {
+                    $download .= "\n                                <li><a href=\"/template/{$template}.xls\" target=\"_blank\">XLS模版</a></li>";
+                }
+                if (file_exists("./template/{$template}.csv")) {
+                    $download .= empty($download) ? '' : "\n                                <li class=\"divider\"></li>";
+                    $download .= "\n                                <li><a href=\"/template/{$template}.csv\" target=\"_blank\">CSV模版</a></li>";
+                }
+                $download .= empty($download) ? '' : "\n                            ";
+                if (!empty($download)) {
+                $html[] = <<<EOT
+                        <div class="btn-group">
+                            <button type="button" href="{$href}" class="btn btn-info btn-import" title="{$title}" id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"><i class="{$icon}"></i> {$text}</button>
+                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" title="下载批量导入模版">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">{$download}</ul>
+                        </div>
+EOT;
+                } else {
+                    $html[] = '<a href="' . $href . '" class="' . $class . '" title="' . $title . '" id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"><i class="' . $icon . '"></i> ' . $text . '</a>';
+                }
+            } else {
+                $html[] = '<a href="' . $href . '" class="' . $class . '" title="' . $title . '"><i class="' . $icon . '"></i> ' . $text . '</a>';
+            }
         }
         return implode(' ', $html);
     }
