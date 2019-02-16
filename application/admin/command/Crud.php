@@ -116,6 +116,11 @@ class Crud extends Command
      */
     protected $editorClass = 'editor';
 
+    /**
+     * langList的key最长字节数
+    */
+    protected $fieldMaxLen = 0;
+
     protected function configure()
     {
         $this
@@ -730,6 +735,15 @@ class Crud extends Command
             $editList = implode("\n", array_filter($editList));
             $javascriptList = implode(",\n", array_filter($javascriptList));
             $langList = implode(",\n", array_filter($langList));
+            //数组等号对齐
+            $langList = array_filter(explode(",\n", $langList . ",\n"));
+            foreach ($langList as &$line) {
+                if (preg_match("/^\s+'([^']+)'\s*=>\s*'([^']+)'\s*/is", $line, $matches)) {
+                    $line = "    '{$matches[1]}'" . str_pad('=>', ($this->fieldMaxLen - strlen($matches[1]) + 3), ' ', STR_PAD_LEFT) . " '{$matches[2]}'";
+                }
+            }
+            unset($line);
+            $langList = implode(",\n", array_filter($langList)). ",";
 
             //表注释
             $tableComment = $modelTableInfo['Comment'];
@@ -1072,6 +1086,7 @@ EOD;
     {
         if ($content || !Lang::has($field)) {
             $itemArr = [];
+            $this->fieldMaxLen = strlen($field) > $this->fieldMaxLen ? strlen($field) : $this->fieldMaxLen;
             $content = str_replace('，', ',', $content);
             if (stripos($content, ':') !== false && stripos($content, ',') && stripos($content, '=') !== false) {
                 list($fieldLang, $item) = explode(':', $content);
@@ -1081,6 +1096,7 @@ EOD;
                     if (count($valArr) == 2) {
                         list($key, $value) = $valArr;
                         $itemArr[$field . ' ' . $key] = $value;
+                        $this->fieldMaxLen = strlen($field . ' ' . $key) > $this->fieldMaxLen ? strlen($field . ' ' . $key) : $this->fieldMaxLen;
                     }
                 }
             } else {
@@ -1088,7 +1104,7 @@ EOD;
             }
             $resultArr = [];
             foreach ($itemArr as $k => $v) {
-                $resultArr[] = "    '" . mb_ucfirst($k) . "'  =>  '{$v}'";
+                $resultArr[] = "    '" . mb_ucfirst($k) . "' => '{$v}'";
             }
             return implode(",\n", $resultArr);
         } else {
@@ -1129,7 +1145,7 @@ EOD;
             }
             $stringArr[] = "'" . $k . "' => " . ($is_var ? $v : "'{$v}'");
         }
-        return implode(",", $stringArr);
+        return implode(", ", $stringArr);
     }
 
     protected function getItemArray($item, $field, $comment)
