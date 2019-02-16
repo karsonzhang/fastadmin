@@ -33,6 +33,7 @@ require.config({
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
+        'bootstrap-slider': '../libs/bootstrap-slider/bootstrap-slider',
         'tableexport': '../libs/tableExport.jquery.plugin/tableExport.min',
         'dragsort': '../libs/fastadmin-dragsort/jquery.dragsort',
         'sortable': '../libs/Sortable/Sortable.min',

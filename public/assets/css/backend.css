@@ -11,6 +11,7 @@
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
+@import url("../libs/bootstrap-slider/slider.css");
 html,
 body {
   height: 100%;

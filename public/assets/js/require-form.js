@@ -368,6 +368,20 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
             },
             bindevent: function (form) {
 
+            },
+            slider: function (form) {
+                if ($(".slider", form).size() > 0) {
+                    require(['bootstrap-slider'], function () {
+                        $('.slider').removeClass('hidden').css('width', function (index, value) {
+                            return $(this).parents('.form-control').width();
+                        }).slider().on('slide', function (ev) {
+                            var data = $(this).data();
+                            if (typeof data.unit !== 'undefined') {
+                                $(this).parents('.form-control').siblings('.value').text(ev.value + data.unit);
+                            }
+                        });
+                    });
+                }
             }
         },
         api: {
@@ -466,6 +480,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 events.faselect(form);
 
                 events.fieldlist(form);
+
+                events.slider(form);
 
                 events.switcher(form);
             },
