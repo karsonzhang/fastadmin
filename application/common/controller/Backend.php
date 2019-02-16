@@ -8,6 +8,7 @@ use think\Controller;
 use think\Hook;
 use think\Lang;
 use think\Session;
+use fast\Tree;
 
 /**
  * 后台控制器基类
@@ -425,6 +426,13 @@ class Backend extends Controller
         $searchfield = (array)$this->request->request("searchField/a");
         //自定义搜索条件
         $custom = (array)$this->request->request("custom/a");
+        //是否返回树形结构
+        $istree = $this->request->request("isTree", 0);
+        $ishtml = $this->request->request("isHtml", 0);
+        if($istree) {
+            $word = [];
+            $pagesize = 99999;
+        }
         $order = [];
         foreach ($orderby as $k => $v) {
             $order[$v[0]] = $v[1];
@@ -467,8 +475,20 @@ class Backend extends Controller
                 unset($item['password'], $item['salt']);
                 $list[] = [
                     $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
-                    $field      => isset($item[$field]) ? $item[$field] : ''
+                    $field      => isset($item[$field]) ? $item[$field] : '',
+                    'pid'       => isset($item['pid']) ? $item['pid'] : 0
                 ];
+            }
+            if($istree) {
+                $tree = Tree::instance();
+                $tree->init(collection($list)->toArray(), 'pid');
+                $list = $tree->getTreeList($tree->getTreeArray(0), $field);
+                if(!$ishtml){
+                    foreach ($list as &$item) {
+                        $item = str_replace('&nbsp;', ' ', $item);
+                    }
+                    unset($item);
+                }
             }
         }
         //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
