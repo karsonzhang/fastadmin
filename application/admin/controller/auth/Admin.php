@@ -265,7 +265,7 @@ class Admin extends Backend
     /**
      * 下拉搜索
      */
-    protected function selectpage()
+    public function selectpage()
     {
         $this->dataLimit = 'auth';
         $this->dataLimitField = 'id';
