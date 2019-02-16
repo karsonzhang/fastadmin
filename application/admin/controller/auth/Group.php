@@ -254,7 +254,7 @@ class Group extends Backend
         if (($pid || $parentGroupModel) && (!$id || $currentGroupModel))
         {
             $id = $id ? $id : NULL;
-            $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->select())->toArray();
+            $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->order('id', 'asc')->select())->toArray();
             //读取父类角色所有节点列表
             $parentRuleList = [];
             if (in_array('*', explode(',', $parentGroupModel->rules)))
