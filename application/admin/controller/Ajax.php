@@ -245,8 +245,14 @@ class Ajax extends Backend
      */
     public function area()
     {
-        $province = $this->request->get('province');
-        $city = $this->request->get('city');
+        $params = $this->request->get("row/a");
+        if (!empty($params)) {
+            $province = isset($params['province']) ? $params['province'] : '';
+            $city = isset($params['city']) ? $params['city'] : null;
+        } else {
+            $province = $this->request->get('province');
+            $city = $this->request->get('city');
+        }
         $where = ['pid' => 0, 'level' => 1];
         $provincelist = null;
         if ($province !== '') {
