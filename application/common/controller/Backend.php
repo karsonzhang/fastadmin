@@ -295,7 +295,7 @@ class Backend extends Controller
             $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
             switch ($sym) {
                 case '=':
-                case '!=':
+                case '<>':
                     $where[] = [$k, $sym, (string)$v];
                     break;
                 case 'LIKE':
@@ -433,7 +433,7 @@ class Backend extends Controller
         //是否返回树形结构
         $istree = $this->request->request("isTree", 0);
         $ishtml = $this->request->request("isHtml", 0);
-        if($istree) {
+        if ($istree) {
             $word = [];
             $pagesize = 99999;
         }
@@ -455,7 +455,11 @@ class Backend extends Controller
                 }
                 if ($custom && is_array($custom)) {
                     foreach ($custom as $k => $v) {
-                        $query->where($k, '=', $v);
+                        if (is_array($v) && 2 == count($v)) {
+                            $query->where($k, trim($v[0]), $v[1]);
+                        } else {
+                            $query->where($k, '=', $v);
+                        }
                     }
                 }
             };
