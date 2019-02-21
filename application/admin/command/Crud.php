@@ -1328,6 +1328,9 @@ EOD;
         if (in_array($datatype, ['set'])) {
             $html .= ", operate:'FIND_IN_SET'";
         }
+        if (in_array($formatter, ['image','images'])) {
+            $html .= ", events: Table.api.events.image";
+        }
         if ($itemArr && !$formatter) {
             $formatter = 'normal';
         }
