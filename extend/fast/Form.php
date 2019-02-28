@@ -922,7 +922,7 @@ EOD;
         $default = [
             'data-mimetype' => 'image/gif,image/jpeg,image/png,image/jpg,image/bmp'
         ];
-        $uploadAttr = is_array($chooseAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
+        $uploadAttr = is_array($uploadAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
         $chooseAttr = is_array($chooseAttr) ? array_merge($default, $chooseAttr) : $chooseAttr;
         return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
@@ -944,7 +944,7 @@ EOD;
             'data-multiple' => 'true',
             'data-mimetype' => 'image/gif,image/jpeg,image/png,image/jpg,image/bmp'
         ];
-        $uploadAttr = is_array($chooseAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
+        $uploadAttr = is_array($uploadAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
         $chooseAttr = is_array($chooseAttr) ? array_merge($default, $chooseAttr) : $chooseAttr;
         return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
@@ -981,7 +981,7 @@ EOD;
         $default = [
             'data-multiple' => 'true',
         ];
-        $uploadAttr = is_array($chooseAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
+        $uploadAttr = is_array($uploadAttr) ? array_merge($default, $uploadAttr) : $uploadAttr;
         $chooseAttr = is_array($chooseAttr) ? array_merge($default, $chooseAttr) : $chooseAttr;
         return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
