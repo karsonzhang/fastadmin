@@ -12,7 +12,6 @@ use think\Exception;
 
 class Api extends Command
 {
-
     protected function configure()
     {
         $site = Config::get('site');
@@ -84,7 +83,8 @@ class Api extends Command
 
         $controllerDir = $moduleDir . Config::get('url_controller_layer') . DS;
         $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($controllerDir), \RecursiveIteratorIterator::LEAVES_ONLY
+            new \RecursiveDirectoryIterator($controllerDir),
+            \RecursiveIteratorIterator::LEAVES_ONLY
         );
 
         foreach ($files as $name => $file) {
@@ -150,7 +150,7 @@ class Api extends Command
 
                     //Append the token's value to the name of the namespace
                     $namespace .= $token[1];
-                } else if ($token === ';') {
+                } elseif ($token === ';') {
 
                     //If the token is the semicolon, then we're done with the namespace declaration
                     $getting_namespace = false;
@@ -175,5 +175,4 @@ class Api extends Command
         //Build the fully-qualified class name and return it
         return $namespace ? $namespace . '\\' . $class : $class;
     }
-
 }

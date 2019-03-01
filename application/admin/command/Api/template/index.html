@@ -92,6 +92,9 @@
                     padding-left:0px;
                 }
             }
+            .label-primary {
+                background-color: #248aff;
+            }
 
         </style>
     </head>
@@ -547,6 +550,9 @@
                         contentType: false,
                         processData: false,
                         headers: headers,
+                        xhrFields: {
+                            withCredentials: true
+                        },
                         success: function (data, textStatus, xhr) {
                             if (typeof data === 'object') {
                                 var str = JSON.stringify(data, null, 2);

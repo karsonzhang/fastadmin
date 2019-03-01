@@ -92,7 +92,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                                 'click .btn-chooseone': function (e, value, row, index) {
                                     var multiple = Backend.api.query('multiple');
                                     multiple = multiple == 'true' ? true : false;
-                                    Fast.api.close({url: row.url, multiple: false});
+                                    Fast.api.close({url: row.url, multiple: multiple});
                                 },
                             }, formatter: function () {
                                 return '<a href="javascript:;" class="btn btn-danger btn-chooseone btn-xs"><i class="fa fa-check"></i> ' + __('Choose') + '</a>';
@@ -110,7 +110,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 });
                 var multiple = Backend.api.query('multiple');
                 multiple = multiple == 'true' ? true : false;
-                Fast.api.close({url: urlArr.join(","), multiple: true});
+                Fast.api.close({url: urlArr.join(","), multiple: multiple});
             });
 
             // 为表格绑定事件

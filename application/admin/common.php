@@ -74,6 +74,7 @@ if (!function_exists('build_category_select')) {
      * @param string $type
      * @param mixed $selected
      * @param array $attr
+     * @param array $header
      * @return string
      */
     function build_category_select($name, $type, $selected = null, $attr = [], $header = [])
@@ -98,14 +99,14 @@ if (!function_exists('build_toolbar')) {
      * @param array $attr 按钮属性值
      * @return string
      */
-    function build_toolbar($btns = NULL, $attr = [])
+    function build_toolbar($btns = null, $attr = [])
     {
         $auth = \app\admin\library\Auth::instance();
         $controller = str_replace('.', '/', strtolower(think\Request::instance()->controller()));
         $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del', 'import'];
         $btns = is_array($btns) ? $btns : explode(',', $btns);
         $index = array_search('delete', $btns);
-        if ($index !== FALSE) {
+        if ($index !== false) {
             $btns[$index] = 'del';
         }
         $btnAttr = [
@@ -140,7 +141,7 @@ if (!function_exists('build_toolbar')) {
                 }
                 $download .= empty($download) ? '' : "\n                            ";
                 if (!empty($download)) {
-                $html[] = <<<EOT
+                    $html[] = <<<EOT
                         <div class="btn-group">
                             <button type="button" href="{$href}" class="btn btn-info btn-import" title="{$title}" id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"><i class="{$icon}"></i> {$text}</button>
                             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" title="下载批量导入模版">
@@ -169,7 +170,7 @@ if (!function_exists('build_heading')) {
      * @param string $path 指定的path
      * @return string
      */
-    function build_heading($path = NULL, $container = TRUE)
+    function build_heading($path = null, $container = true)
     {
         $title = $content = '';
         if (is_null($path)) {
@@ -183,8 +184,9 @@ if (!function_exists('build_heading')) {
             $title = __($data['title']);
             $content = __($data['remark']);
         }
-        if (!$content)
+        if (!$content) {
             return '';
+        }
         $result = '<div class="panel-lead"><em>' . $title . '</em>' . $content . '</div>';
         if ($container) {
             $result = '<div class="panel-heading">' . $result . '</div>';

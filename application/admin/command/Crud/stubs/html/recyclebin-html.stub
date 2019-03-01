@@ -1,0 +1,1 @@
+<a class="btn btn-success btn-recyclebin btn-dialog" href="{%controllerUrl%}/recyclebin" title="{:__('Recycle bin')}"><i class="fa fa-recycle"></i> {:__('Recycle bin')}</a>

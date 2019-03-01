@@ -15,7 +15,6 @@ use think\Exception;
 
 class Menu extends Command
 {
-
     protected $model = null;
 
     protected function configure()
@@ -32,7 +31,6 @@ class Menu extends Command
 
     protected function execute(Input $input, Output $output)
     {
-
         $this->model = new AuthRule();
         $adminPath = dirname(__DIR__) . DS;
         //控制器名
@@ -54,10 +52,11 @@ class Menu extends Command
             $ids = [];
             $list = $this->model->where(function ($query) use ($controller, $equal) {
                 foreach ($controller as $index => $item) {
-                    if ($equal)
+                    if ($equal) {
                         $query->whereOr('name', 'eq', $item);
-                    else
+                    } else {
                         $query->whereOr('name', 'like', strtolower($item) . "%");
+                    }
                 }
             })->select();
             foreach ($list as $k => $v) {
@@ -94,8 +93,11 @@ class Menu extends Command
                 }
                 $this->importRule($item);
             }
-
         } else {
+            $authRuleList = AuthRule::select();
+            //生成权限规则备份文件
+            file_put_contents(RUNTIME_PATH . 'authrule.json', json_encode(collection($authRuleList)->toArray()));
+
             $this->model->where('id', '>', 0)->delete();
             $controllerDir = $adminPath . 'controller' . DS;
             // 扫描新的节点信息并导入
@@ -199,7 +201,7 @@ class Menu extends Command
             }
         }
         //忽略的类
-        if (stripos($classComment, "@internal") !== FALSE) {
+        if (stripos($classComment, "@internal") !== false) {
             return;
         }
         preg_match_all('#(@.*?)\n#s', $classComment, $annotations);
@@ -208,10 +210,10 @@ class Menu extends Command
         //判断注释中是否设置了icon值
         if (isset($annotations[1])) {
             foreach ($annotations[1] as $tag) {
-                if (stripos($tag, '@icon') !== FALSE) {
+                if (stripos($tag, '@icon') !== false) {
                     $controllerIcon = substr($tag, stripos($tag, ' ') + 1);
                 }
-                if (stripos($tag, '@remark') !== FALSE) {
+                if (stripos($tag, '@remark') !== false) {
                     $controllerRemark = substr($tag, stripos($tag, ' ') + 1);
                 }
             }
@@ -226,7 +228,13 @@ class Menu extends Command
         $pid = 0;
         foreach ($controllerArr as $k => $v) {
             $key = $k + 1;
-            $name = strtolower(implode('/', array_slice($controllerArr, 0, $key)));
+            //驼峰转下划线
+            $controllerNameArr = array_slice($controllerArr, 0, $key);
+            foreach ($controllerNameArr as &$val) {
+                $val = strtolower(trim(preg_replace("/[A-Z]/", "_\\0", $val), "_"));
+            }
+            unset($val);
+            $name = implode('/', $controllerNameArr);
             $title = (!isset($controllerArr[$key]) ? $controllerTitle : '');
             $icon = (!isset($controllerArr[$key]) ? $controllerIcon : 'fa fa-list');
             $remark = (!isset($controllerArr[$key]) ? $controllerRemark : '');
@@ -259,7 +267,7 @@ class Menu extends Command
             }
             $comment = $reflector->getMethod($n->name)->getDocComment();
             //忽略的方法
-            if (stripos($comment, "@internal") !== FALSE) {
+            if (stripos($comment, "@internal") !== false) {
                 continue;
             }
             //过滤掉其它字符
@@ -285,5 +293,4 @@ class Menu extends Command
             return $id ? $id : null;
         }
     }
-
 }

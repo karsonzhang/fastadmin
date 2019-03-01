@@ -92,6 +92,9 @@
                     padding-left:0px;
                 }
             }
+            .label-primary {
+                background-color: #248aff;
+            }
 
         </style>
     </head>
@@ -3727,7 +3730,7 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2018-10-19 17:00:36                </div>
+                    Generated on 2019-02-26 17:13:43                </div>
                 <div class="col-md-6" align="right">
                     <a href="https://www.fastadmin.net" target="_blank">FastAdmin</a>
                 </div>
@@ -3929,6 +3932,9 @@
                         contentType: false,
                         processData: false,
                         headers: headers,
+                        xhrFields: {
+                            withCredentials: true
+                        },
                         success: function (data, textStatus, xhr) {
                             if (typeof data === 'object') {
                                 var str = JSON.stringify(data, null, 2);

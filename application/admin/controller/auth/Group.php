@@ -37,21 +37,16 @@ class Group extends Backend
 
         Tree::instance()->init($groupList);
         $result = [];
-        if ($this->auth->isSuperAdmin())
-        {
+        if ($this->auth->isSuperAdmin()) {
             $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
-        }
-        else
-        {
+        } else {
             $groups = $this->auth->getGroups();
-            foreach ($groups as $m => $n)
-            {
+            foreach ($groups as $m => $n) {
                 $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['pid'])));
             }
         }
         $groupName = [];
-        foreach ($result as $k => $v)
-        {
+        foreach ($result as $k => $v) {
             $groupName[$v['id']] = $v['name'];
         }
 
@@ -66,20 +61,16 @@ class Group extends Backend
      */
     public function index()
     {
-        if ($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
             $list = AuthGroup::all(array_keys($this->groupdata));
             $list = collection($list)->toArray();
             $groupList = [];
-            foreach ($list as $k => $v)
-            {
+            foreach ($list as $k => $v) {
                 $groupList[$v['id']] = $v;
             }
             $list = [];
-            foreach ($this->groupdata as $k => $v)
-            {
-                if (isset($groupList[$k]))
-                {
+            foreach ($this->groupdata as $k => $v) {
+                if (isset($groupList[$k])) {
                     $groupList[$k]['name'] = $v;
                     $list[] = $groupList[$k];
                 }
@@ -97,17 +88,14 @@ class Group extends Backend
      */
     public function add()
     {
-        if ($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $params = $this->request->post("row/a", [], 'strip_tags');
             $params['rules'] = explode(',', $params['rules']);
-            if (!in_array($params['pid'], $this->childrenGroupIds))
-            {
+            if (!in_array($params['pid'], $this->childrenGroupIds)) {
                 $this->error(__('The parent group can not be its own child'));
             }
             $parentmodel = model("AuthGroup")->get($params['pid']);
-            if (!$parentmodel)
-            {
+            if (!$parentmodel) {
                 $this->error(__('The parent group can not found'));
             }
             // 父级别的规则节点
@@ -120,8 +108,7 @@ class Group extends Backend
             // 如果当前组别不是超级管理员则需要过滤规则节点,不能超当前组别的权限
             $rules = in_array('*', $currentrules) ? $rules : array_intersect($currentrules, $rules);
             $params['rules'] = implode(',', $rules);
-            if ($params)
-            {
+            if ($params) {
                 $this->model->create($params);
                 $this->success();
             }
@@ -133,24 +120,22 @@ class Group extends Backend
     /**
      * 编辑
      */
-    public function edit($ids = NULL)
+    public function edit($ids = null)
     {
         $row = $this->model->get(['id' => $ids]);
-        if (!$row)
+        if (!$row) {
             $this->error(__('No Results were found'));
-        if ($this->request->isPost())
-        {
+        }
+        if ($this->request->isPost()) {
             $params = $this->request->post("row/a", [], 'strip_tags');
             // 父节点不能是它自身的子节点
-            if (!in_array($params['pid'], $this->childrenGroupIds))
-            {
+            if (!in_array($params['pid'], $this->childrenGroupIds)) {
                 $this->error(__('The parent group can not be its own child'));
             }
             $params['rules'] = explode(',', $params['rules']);
 
             $parentmodel = model("AuthGroup")->get($params['pid']);
-            if (!$parentmodel)
-            {
+            if (!$parentmodel) {
                 $this->error(__('The parent group can not found'));
             }
             // 父级别的规则节点
@@ -163,8 +148,7 @@ class Group extends Backend
             // 如果当前组别不是超级管理员则需要过滤规则节点,不能超当前组别的权限
             $rules = in_array('*', $currentrules) ? $rules : array_intersect($currentrules, $rules);
             $params['rules'] = implode(',', $rules);
-            if ($params)
-            {
+            if ($params) {
                 $row->save($params);
                 $this->success();
             }
@@ -180,11 +164,10 @@ class Group extends Backend
      */
     public function del($ids = "")
     {
-        if ($ids)
-        {
+        if ($ids) {
             $ids = explode(',', $ids);
             $grouplist = $this->auth->getGroups();
-            $group_ids = array_map(function($group) {
+            $group_ids = array_map(function ($group) {
                 return $group['id'];
             }, $grouplist);
             // 移除掉当前管理员所在组别
@@ -193,30 +176,25 @@ class Group extends Backend
             // 循环判断每一个组别是否可删除
             $grouplist = $this->model->where('id', 'in', $ids)->select();
             $groupaccessmodel = model('AuthGroupAccess');
-            foreach ($grouplist as $k => $v)
-            {
+            foreach ($grouplist as $k => $v) {
                 // 当前组别下有管理员
                 $groupone = $groupaccessmodel->get(['group_id' => $v['id']]);
-                if ($groupone)
-                {
+                if ($groupone) {
                     $ids = array_diff($ids, [$v['id']]);
                     continue;
                 }
                 // 当前组别下有子组别
                 $groupone = $this->model->get(['pid' => $v['id']]);
-                if ($groupone)
-                {
+                if ($groupone) {
                     $ids = array_diff($ids, [$v['id']]);
                     continue;
                 }
             }
-            if (!$ids)
-            {
+            if (!$ids) {
                 $this->error(__('You can not delete group that contain child group and administrators'));
             }
             $count = $this->model->where('id', 'in', $ids)->delete();
-            if ($count)
-            {
+            if ($count) {
                 $this->success();
             }
         }
@@ -235,7 +213,7 @@ class Group extends Backend
 
     /**
      * 读取角色权限树
-     * 
+     *
      * @internal
      */
     public function roletree()
@@ -246,35 +224,32 @@ class Group extends Backend
         $id = $this->request->post("id");
         $pid = $this->request->post("pid");
         $parentGroupModel = $model->get($pid);
-        $currentGroupModel = NULL;
-        if ($id)
-        {
+        $currentGroupModel = null;
+        if ($id) {
             $currentGroupModel = $model->get($id);
         }
-        if (($pid || $parentGroupModel) && (!$id || $currentGroupModel))
-        {
-            $id = $id ? $id : NULL;
+        if (($pid || $parentGroupModel) && (!$id || $currentGroupModel)) {
+            $id = $id ? $id : null;
             $ruleList = collection(model('AuthRule')->order('weigh', 'desc')->order('id', 'asc')->select())->toArray();
             //读取父类角色所有节点列表
             $parentRuleList = [];
-            if (in_array('*', explode(',', $parentGroupModel->rules)))
-            {
+            if (in_array('*', explode(',', $parentGroupModel->rules))) {
                 $parentRuleList = $ruleList;
-            }
-            else
-            {
+            } else {
                 $parentRuleIds = explode(',', $parentGroupModel->rules);
-                foreach ($ruleList as $k => $v)
-                {
-                    if (in_array($v['id'], $parentRuleIds))
-                    {
+                foreach ($ruleList as $k => $v) {
+                    if (in_array($v['id'], $parentRuleIds)) {
                         $parentRuleList[] = $v;
                     }
                 }
             }
 
+            $ruleTree = new Tree();
+            $groupTree = new Tree();
             //当前所有正常规则列表
-            Tree::instance()->init($parentRuleList);
+            $ruleTree->init($parentRuleList);
+            //角色组列表
+            $groupTree->init(collection(model('AuthGroup')->where('id', 'in', $this->childrenGroupIds)->select())->toArray());
 
             //读取当前角色下规则ID集合
             $adminRuleIds = $this->auth->getRuleIds();
@@ -283,39 +258,34 @@ class Group extends Backend
             //当前拥有的规则ID集合
             $currentRuleIds = $id ? explode(',', $currentGroupModel->rules) : [];
 
-            if (!$id || !in_array($pid, Tree::instance()->getChildrenIds($id, TRUE)))
-            {
-                $parentRuleList = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'name');
+            if (!$id || !in_array($pid, $this->childrenGroupIds) || !in_array($pid, $groupTree->getChildrenIds($id, true))) {
+                $parentRuleList = $ruleTree->getTreeList($ruleTree->getTreeArray(0), 'name');
                 $hasChildrens = [];
-                foreach ($parentRuleList as $k => $v)
-                {
-                    if ($v['haschild'])
+                foreach ($parentRuleList as $k => $v) {
+                    if ($v['haschild']) {
                         $hasChildrens[] = $v['id'];
+                    }
                 }
-                $parentRuleIds = array_map(function($item) {
+                $parentRuleIds = array_map(function ($item) {
                     return $item['id'];
                 }, $parentRuleList);
                 $nodeList = [];
-                foreach ($parentRuleList as $k => $v)
-                {
-                    if (!$superadmin && !in_array($v['id'], $adminRuleIds))
+                foreach ($parentRuleList as $k => $v) {
+                    if (!$superadmin && !in_array($v['id'], $adminRuleIds)) {
                         continue;
-                    if ($v['pid'] && !in_array($v['pid'], $parentRuleIds))
+                    }
+                    if ($v['pid'] && !in_array($v['pid'], $parentRuleIds)) {
                         continue;
+                    }
                     $state = array('selected' => in_array($v['id'], $currentRuleIds) && !in_array($v['id'], $hasChildrens));
                     $nodeList[] = array('id' => $v['id'], 'parent' => $v['pid'] ? $v['pid'] : '#', 'text' => __($v['title']), 'type' => 'menu', 'state' => $state);
                 }
                 $this->success('', null, $nodeList);
-            }
-            else
-            {
+            } else {
                 $this->error(__('Can not change the parent to child'));
             }
-        }
-        else
-        {
+        } else {
             $this->error(__('Group not found'));
         }
     }
-
 }

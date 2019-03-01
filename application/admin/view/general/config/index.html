@@ -100,6 +100,7 @@
                                                     <input id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value}" data-tip="{$item.tip}">
                                                     <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                                                     <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                                    <span class="msg-box n-right" for="c-{$item.name}"></span>
                                                     <ul class="row list-inline plupload-preview" id="p-{$item.name}"></ul>
                                                 </div>
                                                 {/case}
@@ -109,6 +110,7 @@
                                                     <input id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value}" data-tip="{$item.tip}">
                                                     <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                                                     <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                                                    <span class="msg-box n-right" for="c-{$item.name}"></span>
                                                 </div>
                                                 {/case}
                                                 {case switch}

@@ -1,13 +1,13 @@
 <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
     <div class="form-group">
-        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Ismenu')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Ismenu')}:</label>
         <div class="col-xs-12 col-sm-8">
             {:build_radios('row[ismenu]', ['1'=>__('Yes'), '0'=>__('No')])}
         </div>
     </div>
 
     <div class="form-group">
-        <label for="c-pid" class="control-label col-xs-12 col-sm-2">{:__('Pid')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Pid')}:</label>
         <div class="col-xs-12 col-sm-8">
             {:build_select('row[pid]', $ruledata, null, ['class'=>'form-control', 'required'=>''])}
         </div>
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
         <div class="col-xs-12 col-sm-8">
             {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')])}
         </div>

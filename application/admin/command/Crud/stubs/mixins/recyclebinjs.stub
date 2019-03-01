@@ -1,0 +1,58 @@
+
+        recyclebin: function () {
+            // 初始化表格参数配置
+            Table.api.init({
+                extend: {
+                    'dragsort_url': ''
+                }
+            });
+
+            var table = $("#table");
+
+            // 初始化表格
+            table.bootstrapTable({
+                url: '{%controllerUrl%}/recyclebin',
+                pk: 'id',
+                sortName: 'id',
+                columns: [
+                    [
+                        {checkbox: true},
+                        {field: 'id', title: __('Id')},{%recyclebinTitleJs%}
+                        {
+                            field: 'deletetime',
+                            title: __('Deletetime'),
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            formatter: Table.api.formatter.datetime
+                        },
+                        {
+                            field: 'operate',
+                            width: '130px',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            buttons: [
+                                {
+                                    name: 'Restore',
+                                    text: __('Restore'),
+                                    classname: 'btn btn-xs btn-info btn-restoreit',
+                                    icon: 'fa fa-rotate-left',
+                                    url: '{%controllerUrl%}/restore'
+                                },
+                                {
+                                    name: 'Destroy',
+                                    text: __('Destroy'),
+                                    classname: 'btn btn-xs btn-danger btn-destroyit',
+                                    icon: 'fa fa-times',
+                                    url: '{%controllerUrl%}/destroy'
+                                }
+                            ],
+                            formatter: Table.api.formatter.operate
+                        }
+                    ]
+                ]
+            });
+
+            // 为表格绑定事件
+            Table.api.bindevent(table);
+        },

@@ -15,7 +15,6 @@ use think\exception\PDOException;
 
 class Addon extends Command
 {
-
     protected function configure()
     {
         $this
@@ -80,7 +79,6 @@ class Addon extends Command
                         $createTableSql = $result[0]['Create Table'];
                     }
                 } catch (PDOException $e) {
-
                 }
 
                 $data = [
@@ -235,7 +233,8 @@ class Addon extends Command
                 $zip->open($addonFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
                 $files = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($addonDir), \RecursiveIteratorIterator::LEAVES_ONLY
+                    new \RecursiveDirectoryIterator($addonDir),
+                    \RecursiveIteratorIterator::LEAVES_ONLY
                 );
 
                 foreach ($files as $name => $file) {
@@ -251,7 +250,7 @@ class Addon extends Command
                 $output->info("Package Successed!");
                 break;
 
-            default :
+            default:
                 break;
         }
     }
@@ -315,5 +314,4 @@ class Addon extends Command
     {
         return __DIR__ . '/Addon/stubs/' . $name . '.stub';
     }
-
 }

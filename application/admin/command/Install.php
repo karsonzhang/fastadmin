@@ -13,7 +13,6 @@ use think\Exception;
 
 class Install extends Command
 {
-
     protected $model = null;
 
     protected function configure()
@@ -27,7 +26,7 @@ class Install extends Command
             ->addOption('prefix', 'r', Option::VALUE_OPTIONAL, 'table prefix', $config['prefix'])
             ->addOption('username', 'u', Option::VALUE_OPTIONAL, 'mysql username', $config['username'])
             ->addOption('password', 'p', Option::VALUE_OPTIONAL, 'mysql password', $config['password'])
-            ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', FALSE)
+            ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', false)
             ->setDescription('New installation of FastAdmin');
     }
 
@@ -93,5 +92,4 @@ class Install extends Command
 
         $output->info("Install Successed!");
     }
-
 }

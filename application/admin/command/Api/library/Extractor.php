@@ -20,6 +20,10 @@ class Extractor
      */
     private static $annotationCache;
 
+    private static $classAnnotationCache;
+
+    private static $classMethodAnnotationCache;
+
     /**
      * Indicates that annotations should has strict behavior, 'false' by default
      * @var boolean
@@ -63,27 +67,43 @@ class Extractor
      * Gets all anotations with pattern @SomeAnnotation() from a given class
      *
      * @param  string $className class name to get annotations
-     * @return array  self::$annotationCache all annotated elements
+     * @return array  self::$classAnnotationCache all annotated elements
      */
     public static function getClassAnnotations($className)
     {
-        if (!isset(self::$annotationCache[$className])) {
+        if (!isset(self::$classAnnotationCache[$className])) {
             $class = new \ReflectionClass($className);
-            self::$annotationCache[$className] = self::parseAnnotations($class->getDocComment());
+            self::$classAnnotationCache[$className] = self::parseAnnotations($class->getDocComment());
         }
 
-        return self::$annotationCache[$className];
+        return self::$classAnnotationCache[$className];
     }
 
-    public static function getAllClassAnnotations($className)
+    /**
+     * 获取类所有方法的属性配置
+     * @param $className
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    public static function getClassMethodAnnotations($className)
     {
         $class = new \ReflectionClass($className);
 
         foreach ($class->getMethods() as $object) {
-            self::$annotationCache['annotations'][$className][$object->name] = self::getMethodAnnotations($className, $object->name);
+            self::$classMethodAnnotationCache[$className][$object->name] = self::getMethodAnnotations($className, $object->name);
         }
 
-        return self::$annotationCache['annotations'];
+        return self::$classMethodAnnotationCache[$className];
+    }
+
+    public static function getAllClassAnnotations()
+    {
+        return self::$classAnnotationCache;
+    }
+
+    public static function getAllClassMethodAnnotations()
+    {
+        return self::$classMethodAnnotationCache;
     }
 
     /**
@@ -181,14 +201,14 @@ class Extractor
         preg_match_all("/\*[\s]+(.*)(\\r\\n|\\r|\\n)/U", str_replace('/**', '', $docblockMethod), $methodArr);
         preg_match_all("/\*[\s]+(.*)(\\r\\n|\\r|\\n)/U", str_replace('/**', '', $dockblockClass), $classArr);
 
-        $methodTitle = isset($methodArr[1]) && isset($methodArr[1][0]) ? $methodArr[1][0] : '';
-        $classTitle = isset($classArr[1]) && isset($classArr[1][0]) ? $classArr[1][0] : '';
-
         if (!isset($methodAnnotations['ApiMethod'])) {
             $methodAnnotations['ApiMethod'] = ['get'];
         }
+        if (!isset($methodAnnotations['ApiWeigh'])) {
+            $methodAnnotations['ApiWeigh'] = [0];
+        }
         if (!isset($methodAnnotations['ApiSummary'])) {
-            $methodAnnotations['ApiSummary'] = [$methodTitle];
+            $methodAnnotations['ApiSummary'] = $methodAnnotations['ApiTitle'];
         }
 
         if ($methodAnnotations) {
@@ -210,9 +230,6 @@ class Extractor
                 }
             }
         }
-        if (!isset($methodAnnotations['ApiTitle'])) {
-            $methodAnnotations['ApiTitle'] = [$methodTitle];
-        }
         if (!isset($methodAnnotations['ApiRoute'])) {
             $urlArr = [];
             $className = $class->getName();
@@ -231,7 +248,7 @@ class Extractor
             $methodAnnotations['ApiRoute'] = [implode('/', $urlArr)];
         }
         if (!isset($methodAnnotations['ApiSector'])) {
-            $methodAnnotations['ApiSector'] = isset($classAnnotations['ApiSector']) ? $classAnnotations['ApiSector'] : [$classTitle];
+            $methodAnnotations['ApiSector'] = isset($classAnnotations['ApiSector']) ? $classAnnotations['ApiSector'] : $classAnnotations['ApiTitle'];
         }
         if (!isset($methodAnnotations['ApiParams'])) {
             $params = self::parseCustomAnnotations($docblockMethod, 'param');
@@ -292,7 +309,7 @@ class Extractor
                     $argsParts = trim($matches['args'][$i]);
                     if ($name == 'ApiReturn') {
                         $value = $argsParts;
-                    } else if ($matches['args'][$i] != '') {
+                    } elseif ($matches['args'][$i] != '') {
                         $argsParts = preg_replace("/\{(\w+)\}/", '#$1#', $argsParts);
                         $value = self::parseArgs($argsParts);
                         if (is_string($value)) {
@@ -306,6 +323,11 @@ class Extractor
         }
         if (stripos($docblock, '@ApiInternal') !== false) {
             $annotations['ApiInternal'] = [true];
+        }
+        if (!isset($annotations['ApiTitle'])) {
+            preg_match_all("/\*[\s]+(.*)(\\r\\n|\\r|\\n)/U", str_replace('/**', '', $docblock), $matchArr);
+            $title = isset($matchArr[1]) && isset($matchArr[1][0]) ? $matchArr[1][0] : '';
+            $annotations['ApiTitle'] = [$title];
         }
 
         return $annotations;
@@ -354,7 +376,9 @@ class Extractor
                     // close delimiter
                     if ($c !== $nextDelimiter) {
                         throw new Exception(sprintf(
-                            "Parse Error: enclosing error -> expected: [%s], given: [%s]", $nextDelimiter, $c
+                            "Parse Error: enclosing error -> expected: [%s], given: [%s]",
+                            $nextDelimiter,
+                            $c
                         ));
                     }
 
@@ -362,7 +386,8 @@ class Extractor
                     if ($i < $len) {
                         if (',' !== substr($content, $i, 1) && '\\' !== $prev_c) {
                             throw new Exception(sprintf(
-                                "Parse Error: missing comma separator near: ...%s<--", substr($content, ($i - 10), $i)
+                                "Parse Error: missing comma separator near: ...%s<--",
+                                substr($content, ($i - 10), $i)
                             ));
                         }
                     }
@@ -387,7 +412,9 @@ class Extractor
                         // it means that the string was not enclosed, so it is parsing error.
                         if ($composing === true && !empty($prevDelimiter) && !empty($nextDelimiter)) {
                             throw new Exception(sprintf(
-                                "Parse Error: enclosing error -> expected: [%s], given: [%s]", $nextDelimiter, $c
+                                "Parse Error: enclosing error -> expected: [%s], given: [%s]",
+                                $nextDelimiter,
+                                $c
                             ));
                         }
 
@@ -416,7 +443,8 @@ class Extractor
                         // if the string is composing yet means that the structure of var. never was enclosed with '}'
                         if ($subComposing) {
                             throw new Exception(sprintf(
-                                "Parse Error: Composite variable is not enclosed correctly. near: ...%s'", $subc
+                                "Parse Error: Composite variable is not enclosed correctly. near: ...%s'",
+                                $subc
                             ));
                         }
 
@@ -479,5 +507,4 @@ class Extractor
 
         return $val;
     }
-
 }

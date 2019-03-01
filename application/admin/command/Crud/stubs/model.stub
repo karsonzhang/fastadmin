@@ -3,9 +3,13 @@
 namespace {%modelNamespace%};
 
 use think\Model;
+{%sofeDeleteClassPath%}
 
 class {%modelName%} extends Model
 {
+
+    {%softDelete%}
+
     // 表名
     protected ${%modelTableType%} = '{%modelTableTypeName%}';
     
@@ -15,7 +19,8 @@ class {%modelName%} extends Model
     // 定义时间戳字段名
     protected $createTime = {%createTime%};
     protected $updateTime = {%updateTime%};
-    
+    protected $deleteTime = {%deleteTime%};
+
     // 追加属性
     protected $append = [
 {%appendAttrList%}

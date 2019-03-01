@@ -16,6 +16,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             showExport: true,
             exportDataType: "all",
             exportTypes: ['json', 'xml', 'csv', 'txt', 'doc', 'excel'],
+            exportOptions: {
+                fileName: 'export_' + Moment().format("YYYY-MM-DD"),
+                ignoreColumn: [0, 'operate'] //默认不导出第一列(checkbox)与操作(operate)列
+            },
             pageSize: 10,
             pageList: [10, 25, 50, 'All'],
             pagination: true,
@@ -62,6 +66,10 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             multibtn: '.btn-multi',
             disabledbtn: '.btn-disabled',
             editonebtn: '.btn-editone',
+            restoreonebtn: '.btn-restoreone',
+            destroyonebtn: '.btn-destroyone',
+            restoreallbtn: '.btn-restoreall',
+            destroyallbtn: '.btn-destroyall',
             dragsortfield: 'weigh',
         },
         api: {
@@ -202,6 +210,29 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         var url = Table.api.replaceurl(url, row, table);
                         Fast.api.open(url, __('Edit'), $(that).data() || {});
                     });
+                });
+                //清空回收站
+                $(document).on('click', Table.config.destroyallbtn, function () {
+                    var that = this;
+                    Layer.confirm(__('Are you sure you want to truncate?'), function () {
+                        var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
+                        Fast.api.ajax(url, function () {
+                            Layer.closeAll();
+                            table.bootstrapTable('refresh');
+                        }, function () {
+                            Layer.closeAll();
+                        });
+                    });
+                    return false;
+                });
+                //还原或删除
+                $(document).on('click', Table.config.restoreallbtn + ',' + Table.config.restoreonebtn + ',' + Table.config.destroyonebtn, function () {
+                    var that = this;
+                    var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
+                    Fast.api.ajax(url, function () {
+                        table.bootstrapTable('refresh');
+                    });
+                    return false;
                 });
                 // 批量操作按钮事件
                 $(toolbar).on('click', Table.config.multibtn, function () {
@@ -369,14 +400,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 },//单元格图片预览
                 image: {
                     'click .img-center': function (e, value, row, index) {
-                        data = [];
-                        value= value.split(",");
+                        var data = [];
+                        value = value.split(",");
                         $.each(value, function (index, value) {
                             data.push({
                                 src: Fast.api.cdnurl(value),
                             });
                         });
-                        layer.photos({
+                        Layer.photos({
                             photos: {
                                 "data": data
                             },
@@ -558,7 +589,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 type = typeof type === 'undefined' ? 'buttons' : type;
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];
-                var hidden, visible, disable, url, classname, icon, text, title, refresh, confirm, extend, click, dropdown, link;
+                var hidden, visible, disable, url, classname, icon, text, title, refresh, confirm, extend,
+                    dropdown, link;
                 var fieldIndex = column.fieldIndex;
                 var dropdowns = {};
 
@@ -573,11 +605,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                     var attr = table.data(type + "-" + j.name);
                     if (typeof attr === 'undefined' || attr) {
-                        hidden = typeof j.hidden === 'function' ? j.hidden.call(table, row, j) : (j.hidden ? j.hidden : false);
+                        hidden = typeof j.hidden === 'function' ? j.hidden.call(table, row, j) : (typeof j.hidden !== 'undefined' ? j.hidden : false);
                         if (hidden) {
                             return true;
                         }
-                        visible = typeof j.visible === 'function' ? j.visible.call(table, row, j) : (j.visible ? j.visible : true);
+                        visible = typeof j.visible === 'function' ? j.visible.call(table, row, j) : (typeof j.visible !== 'undefined' ? j.visible : true);
                         if (!visible) {
                             return true;
                         }
@@ -586,12 +618,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         url = typeof url === 'function' ? url.call(table, row, j) : (url ? Fast.api.fixurl(Table.api.replaceurl(url, row, table)) : 'javascript:;');
                         classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
                         icon = j.icon ? j.icon : '';
-                        text = j.text ? j.text : '';
-                        title = j.title ? j.title : text;
+                        text = typeof j.text === 'function' ? j.text.call(table, row, j) : j.text ? j.text : '';
+                        title = typeof j.title === 'function' ? j.title.call(table, row, j) : j.title ? j.title : text;
                         refresh = j.refresh ? 'data-refresh="' + j.refresh + '"' : '';
                         confirm = j.confirm ? 'data-confirm="' + j.confirm + '"' : '';
                         extend = j.extend ? j.extend : '';
-                        disable = typeof j.disable === 'function' ? j.disable.call(table, row, j) : (j.disable ? j.disable : false);
+                        disable = typeof j.disable === 'function' ? j.disable.call(table, row, j) : (typeof j.disable !== 'undefined' ? j.disable : false);
                         if (disable) {
                             classname = classname + ' disabled';
                         }

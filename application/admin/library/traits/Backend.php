@@ -7,6 +7,8 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
+use think\Exception;
+
 trait Backend
 {
 
@@ -19,15 +21,12 @@ trait Backend
     {
         if (is_array($this->excludeFields)) {
             foreach ($this->excludeFields as $field) {
-                if (key_exists($field,$params))
-                {
+                if (key_exists($field, $params)) {
                     unset($params[$field]);
                 }
             }
         } else {
-
-            if (key_exists($this->excludeFields,$params))
-            {
+            if (key_exists($this->excludeFields, $params)) {
                 unset($params[$this->excludeFields]);
             }
         }
@@ -104,7 +103,6 @@ trait Backend
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
             if ($params) {
-
                 $params = $this->preExcludeFields($params);
 
                 if ($this->dataLimit && $this->dataLimitFieldAutoFill) {
@@ -137,11 +135,12 @@ trait Backend
     /**
      * 编辑
      */
-    public function edit($ids = NULL)
+    public function edit($ids = null)
     {
         $row = $this->model->get($ids);
-        if (!$row)
+        if (!$row) {
             $this->error(__('No Results were found'));
+        }
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds)) {
             if (!in_array($row[$this->dataLimitField], $adminIds)) {
@@ -151,7 +150,6 @@ trait Backend
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
             if ($params) {
-
                 $params = $this->preExcludeFields($params);
 
                 try {
@@ -419,5 +417,4 @@ trait Backend
 
         $this->success();
     }
-
 }

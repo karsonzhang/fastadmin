@@ -350,7 +350,7 @@
         var searchQuery = getSearchQuery(this);
         this.trigger('common-search', this, searchQuery);
         this.options.pageNumber = 1;
-        this.options.pageSize = $.fn.bootstrapTable.defaults.pageSize;
+        //this.options.pageSize = $.fn.bootstrapTable.defaults.pageSize;
         this.refresh({});
     };
 

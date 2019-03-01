@@ -37,12 +37,10 @@ class Min extends Command
         $resource = $input->getOption('resource') ?: '';
         $optimize = $input->getOption('optimize') ?: 'none';
 
-        if (!$module || !in_array($module, ['frontend', 'backend', 'all']))
-        {
+        if (!$module || !in_array($module, ['frontend', 'backend', 'all'])) {
             throw new Exception('Please input correct module name');
         }
-        if (!$resource || !in_array($resource, ['js', 'css', 'all']))
-        {
+        if (!$resource || !in_array($resource, ['js', 'css', 'all'])) {
             throw new Exception('Please input correct resource name');
         }
 
@@ -55,41 +53,31 @@ class Min extends Command
 
         $nodeExec = '';
 
-        if (!$nodeExec)
-        {
-            if (IS_WIN)
-            {
+        if (!$nodeExec) {
+            if (IS_WIN) {
                 // Winsows下请手动配置配置该值,一般将该值配置为 '"C:\Program Files\nodejs\node.exe"'，除非你的Node安装路径有变更
                 $nodeExec = 'C:\Program Files\nodejs\node.exe';
-                if (file_exists($nodeExec)){
+                if (file_exists($nodeExec)) {
                     $nodeExec = '"' . $nodeExec . '"';
-                }else{
+                } else {
                     // 如果 '"C:\Program Files\nodejs\node.exe"' 不存在，可能是node安装路径有变更
                     // 但安装node会自动配置环境变量，直接执行 '"node.exe"' 提高第一次使用压缩打包的成功率
                     $nodeExec = '"node.exe"';
                 }
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     $nodeExec = exec("which node");
-                    if (!$nodeExec)
-                    {
+                    if (!$nodeExec) {
                         throw new Exception("node environment not found!please install node first!");
                     }
-                }
-                catch (Exception $e)
-                {
+                } catch (Exception $e) {
                     throw new Exception($e->getMessage());
                 }
             }
         }
 
-        foreach ($moduleArr as $mod)
-        {
-            foreach ($resourceArr as $res)
-            {
+        foreach ($moduleArr as $mod) {
+            foreach ($resourceArr as $res) {
                 $data = [
                     'publicPath'  => $publicPath,
                     'jsBaseName'  => str_replace('{module}', $mod, $this->options['jsBaseName']),
@@ -104,17 +92,14 @@ class Min extends Command
 
                 //源文件
                 $from = $data["{$res}BasePath"] . $data["{$res}BaseName"] . '.' . $res;
-                if (!is_file($from))
-                {
+                if (!is_file($from)) {
                     $output->error("{$res} source file not found!file:{$from}");
                     continue;
                 }
-                if ($res == "js")
-                {
+                if ($res == "js") {
                     $content = file_get_contents($from);
                     preg_match("/require\.config\(\{[\r\n]?[\n]?+(.*?)[\r\n]?[\n]?}\);/is", $content, $matches);
-                    if (!isset($matches[1]))
-                    {
+                    if (!isset($matches[1])) {
                         $output->error("js config not found!");
                         continue;
                     }
@@ -128,16 +113,14 @@ class Min extends Command
 
                 // 执行压缩
                 $command = "{$nodeExec} \"{$minPath}r.js\" -o \"{$tempFile}\" >> \"{$minPath}node.log\"";
-                if ($output->isDebug())
-                {
+                if ($output->isDebug()) {
                     $output->warning($command);
                 }
                 echo exec($command);
             }
         }
 
-        if (!$output->isDebug())
-        {
+        if (!$output->isDebug()) {
             @unlink($tempFile);
         }
 
@@ -154,16 +137,14 @@ class Min extends Command
     protected function writeToFile($name, $data, $pathname)
     {
         $search = $replace = [];
-        foreach ($data as $k => $v)
-        {
+        foreach ($data as $k => $v) {
             $search[] = "{%{$k}%}";
             $replace[] = $v;
         }
         $stub = file_get_contents($this->getStub($name));
         $content = str_replace($search, $replace, $stub);
 
-        if (!is_dir(dirname($pathname)))
-        {
+        if (!is_dir(dirname($pathname))) {
             mkdir(strtolower(dirname($pathname)), 0755, true);
         }
         return file_put_contents($pathname, $content);
@@ -178,5 +159,4 @@ class Min extends Command
     {
         return __DIR__ . DS . 'Min' . DS . 'stubs' . DS . $name . '.stub';
     }
-
 }
