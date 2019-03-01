@@ -35,16 +35,18 @@
                                 {
                                     name: 'Restore',
                                     text: __('Restore'),
-                                    classname: 'btn btn-xs btn-info btn-restoreit',
+                                    classname: 'btn btn-xs btn-info btn-ajax btn-restoreit',
                                     icon: 'fa fa-rotate-left',
-                                    url: '{%controllerUrl%}/restore'
+                                    url: '{%controllerUrl%}/restore',
+                                    refresh: true
                                 },
                                 {
                                     name: 'Destroy',
                                     text: __('Destroy'),
-                                    classname: 'btn btn-xs btn-danger btn-destroyit',
+                                    classname: 'btn btn-xs btn-danger btn-ajax btn-destroyit',
                                     icon: 'fa fa-times',
-                                    url: '{%controllerUrl%}/destroy'
+                                    url: '{%controllerUrl%}/destroy',
+                                    refresh: true
                                 }
                             ],
                             formatter: Table.api.formatter.operate

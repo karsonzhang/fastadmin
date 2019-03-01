@@ -130,14 +130,14 @@ if (!function_exists('build_toolbar')) {
                 $template = str_replace('/', '_', $controller);
                 $download = '';
                 if (file_exists("./template/{$template}.xlsx")) {
-                    $download .= "\n                                <li><a href=\"/template/{$template}.xlsx\" target=\"_blank\">XLSX模版</a></li>";
+                    $download .= "<li><a href=\"/template/{$template}.xlsx\" target=\"_blank\">XLSX模版</a></li>";
                 }
                 if (file_exists("./template/{$template}.xls")) {
-                    $download .= "\n                                <li><a href=\"/template/{$template}.xls\" target=\"_blank\">XLS模版</a></li>";
+                    $download .= "<li><a href=\"/template/{$template}.xls\" target=\"_blank\">XLS模版</a></li>";
                 }
                 if (file_exists("./template/{$template}.csv")) {
-                    $download .= empty($download) ? '' : "\n                                <li class=\"divider\"></li>";
-                    $download .= "\n                                <li><a href=\"/template/{$template}.csv\" target=\"_blank\">CSV模版</a></li>";
+                    $download .= empty($download) ? '' : "<li class=\"divider\"></li>";
+                    $download .= "<li><a href=\"/template/{$template}.csv\" target=\"_blank\">CSV模版</a></li>";
                 }
                 $download .= empty($download) ? '' : "\n                            ";
                 if (!empty($download)) {

@@ -15,7 +15,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 }
             });
 
-
             var table = $("#table");
             var tableOptions = {
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
@@ -24,11 +23,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 sortName: 'weigh',
                 pagination: false,
                 commonSearch: false,
+                search: false,
                 columns: [
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
-                        {field: 'type', title: __('Type')},
+                        {field: 'type', title: __('Type'), searchList: Config.searchList, formatter: Table.api.formatter.normal},
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'nickname', title: __('Nickname')},
                         {field: 'flag', title: __('Flag'), operate: false, formatter: Table.api.formatter.flag},
@@ -48,7 +48,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             //绑定TAB事件
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 // var options = table.bootstrapTable(tableOptions);
-                var typeStr = $(this).attr("href").replace('#','');
+                var typeStr = $(this).attr("href").replace('#', '');
                 var options = table.bootstrapTable('getOptions');
                 options.pageNumber = 1;
                 options.queryParams = function (params) {

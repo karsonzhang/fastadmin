@@ -14,7 +14,6 @@ use think\Validate;
  */
 class User extends Frontend
 {
-
     protected $layout = 'default';
     protected $noNeedLogin = ['login', 'register', 'third'];
     protected $noNeedRight = ['*'];
@@ -82,8 +81,9 @@ class User extends Frontend
     public function register()
     {
         $url = $this->request->request('url');
-        if ($this->auth->id)
+        if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url);
+        }
         if ($this->request->isPost()) {
             $username = $this->request->post('username');
             $password = $this->request->post('password');
@@ -152,8 +152,9 @@ class User extends Frontend
     public function login()
     {
         $url = $this->request->request('url');
-        if ($this->auth->id)
+        if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url);
+        }
         if ($this->request->isPost()) {
             $account = $this->request->post('account');
             $password = $this->request->post('password');
@@ -180,7 +181,7 @@ class User extends Frontend
             $result = $validate->check($data);
             if (!$result) {
                 $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
-                return FALSE;
+                return false;
             }
             if ($this->auth->login($account, $password)) {
                 $synchtml = '';
@@ -208,7 +209,7 @@ class User extends Frontend
     /**
      * 注销登录
      */
-    function logout()
+    public function logout()
     {
         //注销本站
         $this->auth->logout();
@@ -264,7 +265,7 @@ class User extends Frontend
             $result = $validate->check($data);
             if (!$result) {
                 $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
-                return FALSE;
+                return false;
             }
 
             $ret = $this->auth->changepwd($newpassword, $oldpassword);
@@ -283,5 +284,4 @@ class User extends Frontend
         $this->view->assign('title', __('Change password'));
         return $this->view->fetch();
     }
-
 }

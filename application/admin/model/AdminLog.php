@@ -34,24 +34,19 @@ class AdminLog extends Model
         $admin_id = $auth->isLogin() ? $auth->id : 0;
         $username = $auth->isLogin() ? $auth->username : __('Unknown');
         $content = self::$content;
-        if (!$content)
-        {
+        if (!$content) {
             $content = request()->param();
-            foreach ($content as $k => $v)
-            {
-                if (is_string($v) && strlen($v) > 200 || stripos($k, 'password') !== false)
-                {
+            foreach ($content as $k => $v) {
+                if (is_string($v) && strlen($v) > 200 || stripos($k, 'password') !== false) {
                     unset($content[$k]);
                 }
             }
         }
         $title = self::$title;
-        if (!$title)
-        {
+        if (!$title) {
             $title = [];
             $breadcrumb = Auth::instance()->getBreadcrumb();
-            foreach ($breadcrumb as $k => $v)
-            {
+            foreach ($breadcrumb as $k => $v) {
                 $title[] = $v['title'];
             }
             $title = implode(' ', $title);
@@ -59,10 +54,10 @@ class AdminLog extends Model
         self::create([
             'title'     => $title,
             'content'   => !is_scalar($content) ? json_encode($content) : $content,
-            'url'       => request()->url(),
+            'url'       => substr(request()->url(), 0, 1500),
             'admin_id'  => $admin_id,
             'username'  => $username,
-            'useragent' => request()->server('HTTP_USER_AGENT'),
+            'useragent' => substr(request()->server('HTTP_USER_AGENT'), 0, 255),
             'ip'        => request()->ip()
         ]);
     }
@@ -71,5 +66,4 @@ class AdminLog extends Model
     {
         return $this->belongsTo('Admin', 'admin_id')->setEagerlyType(0);
     }
-
 }

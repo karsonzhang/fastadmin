@@ -15,5 +15,6 @@ return [
     'Menu tips'                                                 => '父级菜单无需匹配控制器和方法,子级菜单请使用控制器名',
     'Node tips'                                                 => '控制器/方法名,如果有目录请使用 目录名/控制器名/方法名',
     'The non-menu rule must have parent'                        => '非菜单规则节点必须有父级',
+    'Can not change the parent to child'                        => '父组别不能是它的子组别',
     'Name only supports letters, numbers, underscore and slash' => 'URL规则只能是小写字母、数字、下划线和/组成',
 ];

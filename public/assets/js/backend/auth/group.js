@@ -45,17 +45,19 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                 escape: false,
                 columns: [
                     [
-                        {field: 'state', checkbox: true, },
+                        {field: 'state', checkbox: true,},
                         {field: 'id', title: 'ID'},
                         {field: 'pid', title: __('Parent')},
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: function (value, row, index) {
+                        {
+                            field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: function (value, row, index) {
                                 if (Config.admin.group_ids.indexOf(parseInt(row.id)) > -1) {
                                     return '';
                                 }
                                 return Table.api.formatter.operate.call(this, value, row, index);
-                            }}
+                            }
+                        }
                     ]
                 ],
                 pagination: false,
@@ -105,7 +107,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                                     $("#treeview").jstree("destroy");
                                     Controller.api.rendertree(data);
                                 } else {
-                                    Backend.api.toastr.error(ret.data);
+                                    Backend.api.toastr.error(ret.msg);
                                 }
                             }
                         }, error: function (e) {
@@ -124,31 +126,31 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
             },
             rendertree: function (content) {
                 $("#treeview")
-                        .on('redraw.jstree', function (e) {
-                            $(".layer-footer").attr("domrefresh", Math.random());
-                        })
-                        .jstree({
-                            "themes": {"stripes": true},
-                            "checkbox": {
-                                "keep_selected_style": false,
+                    .on('redraw.jstree', function (e) {
+                        $(".layer-footer").attr("domrefresh", Math.random());
+                    })
+                    .jstree({
+                        "themes": {"stripes": true},
+                        "checkbox": {
+                            "keep_selected_style": false,
+                        },
+                        "types": {
+                            "root": {
+                                "icon": "fa fa-folder-open",
                             },
-                            "types": {
-                                "root": {
-                                    "icon": "fa fa-folder-open",
-                                },
-                                "menu": {
-                                    "icon": "fa fa-folder-open",
-                                },
-                                "file": {
-                                    "icon": "fa fa-file-o",
-                                }
+                            "menu": {
+                                "icon": "fa fa-folder-open",
                             },
-                            "plugins": ["checkbox", "types"],
-                            "core": {
-                                'check_callback': true,
-                                "data": content
+                            "file": {
+                                "icon": "fa fa-file-o",
                             }
-                        });
+                        },
+                        "plugins": ["checkbox", "types"],
+                        "core": {
+                            'check_callback': true,
+                            "data": content
+                        }
+                    });
             }
         }
     };

@@ -17,7 +17,7 @@ trait Backend
      * @param $params
      * @return array
      */
-    private function preExcludeFields($params)
+    protected function preExcludeFields($params)
     {
         if (is_array($this->excludeFields)) {
             foreach ($this->excludeFields as $field) {
