@@ -192,7 +192,9 @@ class Menu extends Command
         //判断是否有启用软删除
         $softDeleteMethods = ['destroy', 'restore', 'recyclebin'];
         $withSofeDelete = false;
-        preg_match_all("/\\\$this\->model\s*=\s*model\('(\w+)'\);/", $classContent, $matches);
+        $modelRegexArr = ["/\\\$this\->model\s*=\s*model\(['|\"](\w+)['|\"]\);/", "/\\\$this\->model\s*=\s*new\s+([a-zA-Z\\\]+);/"];
+        $modelRegex = preg_match($modelRegexArr[0], $classContent) ? $modelRegexArr[0] : $modelRegexArr[1];
+        preg_match_all($modelRegex, $classContent, $matches);
         if (isset($matches[1]) && isset($matches[1][0]) && $matches[1][0]) {
             \think\Request::instance()->module('admin');
             $model = model($matches[1][0]);
