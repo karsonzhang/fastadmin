@@ -826,6 +826,7 @@ class Crud extends Command
                 'relationWithList'        => '',
                 'relationMethodList'      => '',
                 'controllerIndex'         => '',
+                'recyclebinJs'            => '',
                 'headingHtml'             => $headingHtml,
                 'recyclebinHtml'          => $recyclebinHtml,
                 'visibleFieldList'        => $fields ? "\$row->visible(['" . implode("','", array_filter(explode(',', $fields))) . "']);" : '',

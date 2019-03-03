@@ -391,6 +391,7 @@ CREATE TABLE `fa_test` (
   `refreshtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '刷新时间(int)',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `deletetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
   `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
   `switch` tinyint(1) NOT NULL DEFAULT '0' COMMENT '开关',
   `status` enum('normal','hidden') NOT NULL DEFAULT 'normal' COMMENT '状态',
