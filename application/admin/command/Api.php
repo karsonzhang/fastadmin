@@ -26,7 +26,7 @@ class Api extends Command
             ->addOption('author', 'a', Option::VALUE_OPTIONAL, 'document author', $site['name'])
             ->addOption('class', 'c', Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'extend class', null)
             ->addOption('language', 'l', Option::VALUE_OPTIONAL, 'language', 'zh-cn')
-            ->setDescription('Compress js and css file');
+            ->setDescription('Build Api document from controller');
     }
 
     protected function execute(Input $input, Output $output)

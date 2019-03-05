@@ -22,9 +22,9 @@ CREATE TABLE `fa_admin` (
   `avatar` varchar(100) NOT NULL DEFAULT '' COMMENT '头像',
   `email` varchar(100) NOT NULL DEFAULT '' COMMENT '电子邮箱',
   `loginfailure` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '失败次数',
-  `logintime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '登录时间',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `logintime` int(10) DEFAULT NULL COMMENT '登录时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `token` varchar(59) NOT NULL DEFAULT '' COMMENT 'Session标识',
   `status` varchar(30) NOT NULL DEFAULT 'normal' COMMENT '状态',
   PRIMARY KEY (`id`),
@@ -51,7 +51,7 @@ CREATE TABLE `fa_admin_log` (
   `content` text NOT NULL COMMENT '内容',
   `ip` varchar(50) NOT NULL DEFAULT '' COMMENT 'IP',
   `useragent` varchar(255) NOT NULL DEFAULT '' COMMENT 'User-Agent',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`),
   KEY `name` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员日志表';
@@ -72,9 +72,9 @@ CREATE TABLE `fa_attachment` (
   `filesize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `mimetype` varchar(100) NOT NULL DEFAULT '' COMMENT 'mime类型',
   `extparam` varchar(255) NOT NULL DEFAULT '' COMMENT '透传数据',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建日期',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `uploadtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建日期',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
+  `uploadtime` int(10) DEFAULT NULL COMMENT '上传时间',
   `storage` varchar(100) NOT NULL DEFAULT 'local' COMMENT '存储位置',
   `sha1` varchar(40) NOT NULL DEFAULT '' COMMENT '文件 sha1编码',
   PRIMARY KEY (`id`)
@@ -96,8 +96,8 @@ CREATE TABLE `fa_auth_group` (
   `pid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父组别',
   `name` varchar(100) NOT NULL DEFAULT '' COMMENT '组名',
   `rules` text NOT NULL COMMENT '规则ID',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='分组表';
@@ -146,8 +146,8 @@ CREATE TABLE `fa_auth_rule` (
   `condition` varchar(255) NOT NULL DEFAULT '' COMMENT '条件',
   `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
   `ismenu` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否为菜单',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`),
@@ -261,8 +261,8 @@ CREATE TABLE `fa_category` (
   `keywords` varchar(255) NOT NULL DEFAULT '' COMMENT '关键字',
   `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
   `diyname` varchar(30) NOT NULL DEFAULT '' COMMENT '自定义名称',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`),
@@ -388,10 +388,10 @@ CREATE TABLE `fa_test` (
   `activitytime` datetime DEFAULT NULL COMMENT '活动时间(datetime)',
   `year` year(4) DEFAULT NULL COMMENT '年',
   `times` time DEFAULT NULL COMMENT '时间',
-  `refreshtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '刷新时间(int)',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `deletetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '删除时间',
+  `refreshtime` int(10) DEFAULT NULL COMMENT '刷新时间(int)',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
+  `deletetime` int(10) DEFAULT NULL COMMENT '删除时间',
   `weigh` int(10) NOT NULL DEFAULT '0' COMMENT '权重',
   `switch` tinyint(1) NOT NULL DEFAULT '0' COMMENT '开关',
   `status` enum('normal','hidden') NOT NULL DEFAULT 'normal' COMMENT '状态',
@@ -403,7 +403,7 @@ CREATE TABLE `fa_test` (
 -- Records of fa_test
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_test` VALUES (1, 0, 12, '12,13', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '广西壮族自治区/百色市/平果县', 0.00, 0, '2017-07-10', '2017-07-10 18:24:45', 2017, '18:24:45', 1499682285, 1499682526, 1499682526, 0, 1, 'normal', '1');
+INSERT INTO `fa_test` VALUES (1, 0, 12, '12,13', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '广西壮族自治区/百色市/平果县', 0.00, 0, '2017-07-10', '2017-07-10 18:24:45', 2017, '18:24:45', 1499682285, 1499682526, 1499682526, NULL, 0, 1, 'normal', '1');
 COMMIT;
 
 -- ----------------------------
@@ -428,14 +428,14 @@ CREATE TABLE `fa_user` (
   `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
   `successions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '连续登录天数',
   `maxsuccessions` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '最大连续登录天数',
-  `prevtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次登录时间',
-  `logintime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '登录时间',
+  `prevtime` int(10) DEFAULT NULL COMMENT '上次登录时间',
+  `logintime` int(10) DEFAULT NULL COMMENT '登录时间',
   `loginip` varchar(50) NOT NULL DEFAULT '' COMMENT '登录IP',
   `loginfailure` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '失败次数',
   `joinip` varchar(50) NOT NULL DEFAULT '' COMMENT '加入IP',
-  `jointime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '加入时间',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatetime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `jointime` int(10) DEFAULT NULL COMMENT '加入时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `token` varchar(50) NOT NULL DEFAULT '' COMMENT 'Token',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   `verification` varchar(255) NOT NULL DEFAULT '' COMMENT '验证',
@@ -484,7 +484,7 @@ CREATE TABLE `fa_user_money_log` (
   `before` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '变更前余额',
   `after` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '变更后余额',
   `memo` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员余额变动表';
 
@@ -535,7 +535,7 @@ CREATE TABLE `fa_user_score_log` (
   `before` int(10) NOT NULL DEFAULT '0' COMMENT '变更前积分',
   `after` int(10) NOT NULL DEFAULT '0' COMMENT '变更后积分',
   `memo` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员积分变动表';
 
@@ -546,8 +546,8 @@ DROP TABLE IF EXISTS `fa_user_token`;
 CREATE TABLE `fa_user_token` (
   `token` varchar(50) NOT NULL COMMENT 'Token',
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
-  `createtime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `expiretime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '过期时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `expiretime` int(10) DEFAULT NULL COMMENT '过期时间',
   PRIMARY KEY (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='会员Token表';
 
