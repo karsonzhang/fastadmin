@@ -86,15 +86,8 @@ if (!function_exists('cdnurl')) {
     {
         $url = preg_match("/^https?:\/\/(.*)/i", $url) ? $url : \think\Config::get('upload.cdnurl') . $url;
         if ($domain && !preg_match("/^(http:\/\/|https:\/\/)/i", $url)) {
-            if (is_bool($domain)) {
-                $public = \think\Config::get('view_replace_str.__PUBLIC__');
-                $url = rtrim($public, '/') . $url;
-                if (!preg_match("/^(http:\/\/|https:\/\/)/i", $url)) {
-                    $url = request()->domain() . $url;
-                }
-            } else {
-                $url = $domain . $url;
-            }
+            $domain = is_bool($domain) ? request()->domain() : $domain;
+            $url = $domain . $url;
         }
         return $url;
     }
