@@ -368,6 +368,23 @@ class FormBuilder
     }
 
     /**
+     * 生成滑块
+     * 
+     * @param string $name
+     * @param string $min
+     * @param string $max
+     * @param string $step
+     * @param string $value
+     * @param array $options
+     * @return string
+     */
+    public function slider($name, $min, $max, $step, $value = null, $options = [])
+    {
+    	$options = array_merge($options, ['data-slider-min' => $min, 'data-slider-max' => $max, 'data-slider-step' => $step,'data-slider-value' => $value ? $value : '']);
+        $options['class'] = isset($options['class']) ? $options['class'] . (stripos($options['class'], 'form-control') !== false ? '' : ' slider form-control') : 'slider form-control';
+        return $this->input('text', $name, $value, $options);
+    }
+    /**
      * 生成下拉列表框
      *
      * @param  string $name
