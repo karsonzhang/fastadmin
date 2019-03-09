@@ -360,10 +360,17 @@ class Crud extends Command
         list($validateNamespace, $validateName, $validateFile, $validateArr) = $this->getValidateData($validateModuleName, $validate, $table);
 
         $controllerUrl = strtolower(implode('/', $controllerArr));
-        $controllerBaseName = strtolower(implode(DS, $controllerArr));
+
+        //处理基础文件名，取消所有下划线并转换为小写
+        $baseNameArr = $controllerArr;
+        $baseFileName = Loader::parseName(array_pop($baseNameArr), 1);
+        array_push($baseNameArr, $baseFileName);
+        $controllerBaseName = strtolower(implode(DS, $baseNameArr));
 
         //视图文件
-        $viewDir = $adminPath . 'view' . DS . $controllerBaseName . DS;
+        $viewArr = $controllerArr;
+        array_unshift($viewArr, 'view');
+        $viewDir = $adminPath . implode(DS, $viewArr) . DS;
 
         //最终将生成的文件路径
         $javascriptFile = ROOT_PATH . 'public' . DS . 'assets' . DS . 'js' . DS . 'backend' . DS . $controllerBaseName . '.js';
@@ -392,12 +399,20 @@ class Crud extends Command
                     unlink($v);
                 }
                 //删除空文件夹
-                if ($v == $modelFile) {
-                    $this->removeEmptyBaseDir($v, $modelArr);
-                } elseif ($v == $validateFile) {
-                    $this->removeEmptyBaseDir($v, $validateArr);
-                } else {
-                    $this->removeEmptyBaseDir($v, $controllerArr);
+                switch ($v) {
+                    case $modelFile:
+                        $this->removeEmptyBaseDir($v, $modelArr);
+                        break;
+                    case $validateFile:
+                        $this->removeEmptyBaseDir($v, $validateArr);
+                        break;
+                    case $addFile:
+                    case $editFile:
+                    case $indexFile:
+                        $this->removeEmptyBaseDir($v, $viewArr);
+                        break;
+                    default:
+                        $this->removeEmptyBaseDir($v, $controllerArr);
                 }
             }
 
@@ -848,7 +863,6 @@ class Crud extends Command
                     $relation['relationMode'] = $relation['relationMode'] == 'hasone' ? 'hasOne' : 'belongsTo';
 
                     //关联字段
-                    $relation['relationForeignKey'] = $relation['relationForeignKey'];
                     $relation['relationPrimaryKey'] = $relation['relationPrimaryKey'] ? $relation['relationPrimaryKey'] : $priKey;
 
                     //预载入的方法
@@ -883,38 +897,38 @@ class Crud extends Command
             }
 
             // 生成控制器文件
-            $result = $this->writeToFile('controller', $data, $controllerFile);
+            $this->writeToFile('controller', $data, $controllerFile);
             // 生成模型文件
-            $result = $this->writeToFile('model', $data, $modelFile);
+            $this->writeToFile('model', $data, $modelFile);
 
             if ($relations) {
                 foreach ($relations as $i => $relation) {
                     $relation['modelNamespace'] = $data['modelNamespace'];
                     if (!is_file($relation['relationFile'])) {
                         // 生成关联模型文件
-                        $result = $this->writeToFile('relationmodel', $relation, $relation['relationFile']);
+                        $this->writeToFile('relationmodel', $relation, $relation['relationFile']);
                     }
                 }
             }
             // 生成验证文件
-            $result = $this->writeToFile('validate', $data, $validateFile);
+            $this->writeToFile('validate', $data, $validateFile);
             // 生成视图文件
-            $result = $this->writeToFile('add', $data, $addFile);
-            $result = $this->writeToFile('edit', $data, $editFile);
-            $result = $this->writeToFile('index', $data, $indexFile);
+            $this->writeToFile('add', $data, $addFile);
+            $this->writeToFile('edit', $data, $editFile);
+            $this->writeToFile('index', $data, $indexFile);
             if ($recyclebinHtml) {
-                $result = $this->writeToFile('recyclebin', $data, $recyclebinFile);
+                $this->writeToFile('recyclebin', $data, $recyclebinFile);
                 $recyclebinTitle = in_array('title', $fieldArr) ? 'title' : (in_array('name', $fieldArr) ? 'name' : '');
                 $recyclebinTitleJs = $recyclebinTitle ? "\n                        {field: '{$recyclebinTitle}', title: __('" . (ucfirst($recyclebinTitle)) . "'), align: 'left'}," : '';
                 $data['recyclebinJs'] = $this->getReplacedStub('mixins/recyclebinjs', ['recyclebinTitleJs' => $recyclebinTitleJs, 'controllerUrl' => $controllerUrl]);
             }
             // 生成JS文件
-            $result = $this->writeToFile('javascript', $data, $javascriptFile);
+            $this->writeToFile('javascript', $data, $javascriptFile);
             // 生成语言文件
             if ($langList) {
-                $result = $this->writeToFile('lang', $data, $langFile);
+                $this->writeToFile('lang', $data, $langFile);
             }
-        } catch (\think\exception\ErrorException $e) {
+        } catch (think\exception\ErrorException $e) {
             throw new Exception("Code: " . $e->getCode() . "\nLine: " . $e->getLine() . "\nMessage: " . $e->getMessage() . "\nFile: " . $e->getFile());
         }
 
@@ -999,13 +1013,17 @@ EOD;
         if (count($parseArr) > 1) {
             $parentDir = dirname($parseFile);
             for ($i = 0; $i < count($parseArr); $i++) {
-                $iterator = new \FilesystemIterator($parentDir);
-                $isDirEmpty = !$iterator->valid();
-                if ($isDirEmpty) {
-                    rmdir($parentDir);
-                    $parentDir = dirname($parentDir);
-                } else {
-                    return true;
+                try {
+                    $iterator = new \FilesystemIterator($parentDir);
+                    $isDirEmpty = !$iterator->valid();
+                    if ($isDirEmpty) {
+                        rmdir($parentDir);
+                        $parentDir = dirname($parentDir);
+                    } else {
+                        return true;
+                    }
+                } catch (\UnexpectedValueException $e) {
+                    return false;
                 }
             }
         }
@@ -1050,17 +1068,16 @@ EOD;
 
     /**
      * 获取已解析相关信息
-     * @param $module
-     * @param $name
-     * @param $table
-     * @param $type
+     * @param string $module 模块名称
+     * @param string $name   自定义名称
+     * @param string $table  数据表名
+     * @param string $type   解析类型，本例中为controller、model、validate
      * @return array
      */
     protected function getParseNameData($module, $name, $table, $type)
     {
-        $arr = [];
         if (!$name) {
-            $arr = explode('_', strtolower($table));
+            $arr = [Loader::parseName($table, 1)];
         } else {
             $name = str_replace(['.', '/', '\\'], '/', $name);
             $arr = explode('/', $name);
@@ -1071,14 +1088,14 @@ EOD;
         $moduleDir = APP_PATH . $module . DS;
         $parseFile = $moduleDir . $type . DS . ($arr ? implode(DS, $arr) . DS : '') . $parseName . '.php';
         $parseArr = $arr;
-        $parseArr[] = $parseName;
+        $parseArr[] = Loader::parseName($parseName);
         return [$parseNamespace, $parseName, $parseFile, $parseArr];
     }
 
     /**
      * 写入到文件
      * @param string $name
-     * @param array $data
+     * @param array  $data
      * @param string $pathname
      * @return mixed
      */
@@ -1099,7 +1116,7 @@ EOD;
     /**
      * 获取替换后的数据
      * @param string $name
-     * @param array $data
+     * @param array  $data
      * @return string
      */
     protected function getReplacedStub($name, $data)
@@ -1136,7 +1153,6 @@ EOD;
     protected function getLangItem($field, $content)
     {
         if ($content || !Lang::has($field)) {
-            $itemArr = [];
             $this->fieldMaxLen = strlen($field) > $this->fieldMaxLen ? strlen($field) : $this->fieldMaxLen;
             $content = str_replace('，', ',', $content);
             if (stripos($content, ':') !== false && stripos($content, ',') && stripos($content, '=') !== false) {
@@ -1165,7 +1181,7 @@ EOD;
 
     /**
      * 读取数据和语言数组列表
-     * @param array $arr
+     * @param array   $arr
      * @param boolean $withTpl
      * @return array
      */
@@ -1285,8 +1301,8 @@ EOD;
 
     /**
      * 判断是否符合指定后缀
-     * @param string $field 字段名称
-     * @param mixed $suffixArr 后缀
+     * @param string $field     字段名称
+     * @param mixed  $suffixArr 后缀
      * @return boolean
      */
     protected function isMatchSuffix($field, $suffixArr)
@@ -1353,7 +1369,7 @@ EOD;
      * @param string $field
      * @param string $datatype
      * @param string $extend
-     * @param array $itemArr
+     * @param array  $itemArr
      * @return string
      */
     protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [])
