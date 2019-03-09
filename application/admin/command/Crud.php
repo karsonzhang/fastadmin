@@ -1076,20 +1076,21 @@ EOD;
      */
     protected function getParseNameData($module, $name, $table, $type)
     {
-        if (!$name) {
-            $arr = [Loader::parseName($table, 1)];
-        } else {
+        $arr = [];
+        if ($name) {
             $name = str_replace(['.', '/', '\\'], '/', $name);
             $arr = explode('/', $name);
+            $parseName = ucfirst(array_pop($arr));
+        } else {
+            $parseName = Loader::parseName($table, 1);
         }
-        $parseName = ucfirst(array_pop($arr));
         $appNamespace = Config::get('app_namespace');
         $parseNamespace = "{$appNamespace}\\{$module}\\{$type}" . ($arr ? "\\" . implode("\\", $arr) : "");
         $moduleDir = APP_PATH . $module . DS;
         $parseFile = $moduleDir . $type . DS . ($arr ? implode(DS, $arr) . DS : '') . $parseName . '.php';
-        $parseArr = $arr;
-        $parseArr[] = Loader::parseName($parseName);
-        return [$parseNamespace, $parseName, $parseFile, $parseArr];
+
+        array_push($arr, $parseName);
+        return [$parseNamespace, $parseName, $parseFile, $arr];
     }
 
     /**
