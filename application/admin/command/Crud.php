@@ -370,7 +370,7 @@ class Crud extends Command
         //视图文件
         $viewArr = $controllerArr;
         array_unshift($viewArr, 'view');
-        $viewDir = $adminPath . implode(DS, $viewArr) . DS;
+        $viewDir = $adminPath . strtolower(implode(DS, $viewArr)) . DS;
 
         //最终将生成的文件路径
         $javascriptFile = ROOT_PATH . 'public' . DS . 'assets' . DS . 'js' . DS . 'backend' . DS . $controllerBaseName . '.js';
