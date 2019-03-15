@@ -15,6 +15,7 @@ use think\exception\PDOException;
 
 class Addon extends Command
 {
+
     protected function configure()
     {
         $this
@@ -25,6 +26,7 @@ class Addon extends Command
             ->addOption('release', 'r', Option::VALUE_OPTIONAL, 'addon release version', null)
             ->addOption('uid', 'u', Option::VALUE_OPTIONAL, 'fastadmin uid', null)
             ->addOption('token', 't', Option::VALUE_OPTIONAL, 'fastadmin token', null)
+            ->addOption('local', 'l', Option::VALUE_OPTIONAL, 'local package', null)
             ->setDescription('Addon manager');
     }
 
@@ -79,6 +81,7 @@ class Addon extends Command
                         $createTableSql = $result[0]['Create Table'];
                     }
                 } catch (PDOException $e) {
+
                 }
 
                 $data = [
@@ -138,8 +141,10 @@ class Addon extends Command
                 if (is_dir($addonDir)) {
                     rmdirs($addonDir);
                 }
+                // 获取本地路径
+                $local = $input->getOption('local');
                 try {
-                    Service::install($name, 0, ['version' => $release]);
+                    Service::install($name, 0, ['version' => $release], $local);
                 } catch (AddonException $e) {
                     if ($e->getCode() != -3) {
                         throw new Exception($e->getMessage());
@@ -156,7 +161,7 @@ class Addon extends Command
                             throw new Exception("Operation is aborted!");
                         }
                     }
-                    Service::install($name, 1, ['version' => $release, 'uid' => $uid, 'token' => $token]);
+                    Service::install($name, 1, ['version' => $release, 'uid' => $uid, 'token' => $token], $local);
                 } catch (Exception $e) {
                     throw new Exception($e->getMessage());
                 }
@@ -233,8 +238,7 @@ class Addon extends Command
                 $zip->open($addonFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
                 $files = new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($addonDir),
-                    \RecursiveIteratorIterator::LEAVES_ONLY
+                    new \RecursiveDirectoryIterator($addonDir), \RecursiveIteratorIterator::LEAVES_ONLY
                 );
 
                 foreach ($files as $name => $file) {
@@ -250,7 +254,7 @@ class Addon extends Command
                 $output->info("Package Successed!");
                 break;
 
-            default:
+            default :
                 break;
         }
     }
@@ -314,4 +318,5 @@ class Addon extends Command
     {
         return __DIR__ . '/Addon/stubs/' . $name . '.stub';
     }
+
 }
