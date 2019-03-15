@@ -11,7 +11,7 @@
 
             // 初始化表格
             table.bootstrapTable({
-                url: '{%controllerUrl%}/recyclebin',
+                url: '{%controllerUrl%}/recyclebin' + location.search,
                 pk: 'id',
                 sortName: 'id',
                 columns: [
