@@ -10,6 +10,7 @@ use think\console\input\Option;
 use think\console\Output;
 use think\Db;
 use think\Exception;
+use think\exception\ErrorException;
 use think\Lang;
 use think\Loader;
 
@@ -17,6 +18,9 @@ class Crud extends Command
 {
     protected $stubList = [];
 
+    protected $internalKeywords = [
+        'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor'
+    ];
     /**
      * Selectpage搜索字段关联
      */
@@ -181,6 +185,7 @@ class Crud extends Command
         $controller = $input->getOption('controller');
         //自定义模型
         $model = $input->getOption('model');
+        $model = $model ? $model : $controller;
         //验证器类
         $validate = $model;
         //自定义显示字段
@@ -324,6 +329,8 @@ class Crud extends Command
                 $relations[] = [
                     //关联表基础名
                     'relationName'          => $relationName,
+                    //关联表类命名空间
+                    'relationNamespace'     => $relationNamespace,
                     //关联模型名
                     'relationModel'         => $relationModel,
                     //关联文件
@@ -369,6 +376,8 @@ class Crud extends Command
 
         //视图文件
         $viewArr = $controllerArr;
+        $lastValue = array_pop($viewArr);
+        $viewArr[] = Loader::parseName($lastValue, 0);
         array_unshift($viewArr, 'view');
         $viewDir = $adminPath . strtolower(implode(DS, $viewArr)) . DS;
 
@@ -383,7 +392,7 @@ class Crud extends Command
         //是否为删除模式
         $delete = $input->getOption('delete');
         if ($delete) {
-            $readyFiles = [$controllerFile, $modelFile, $validateFile, $addFile, $editFile, $indexFile, $langFile, $javascriptFile];
+            $readyFiles = [$controllerFile, $modelFile, $validateFile, $addFile, $editFile, $indexFile, $recyclebinFile, $langFile, $javascriptFile];
             foreach ($readyFiles as $k => $v) {
                 $output->warning($v);
             }
@@ -409,6 +418,7 @@ class Crud extends Command
                     case $addFile:
                     case $editFile:
                     case $indexFile:
+                    case $recyclebinFile:
                         $this->removeEmptyBaseDir($v, $viewArr);
                         break;
                     default:
@@ -522,6 +532,7 @@ class Crud extends Command
             }
             $relation['relationForeignKey'] = $relationForeignKey;
             $relation['relationPrimaryKey'] = $relationPrimaryKey;
+            $relation['relationClassName'] = $modelNamespace != $relation['relationNamespace'] ? $relation['relationNamespace'] . '\\' . $relation['relationName'] : $relation['relationName'];
         }
         unset($relation);
 
@@ -629,9 +640,8 @@ class Crud extends Command
                         $defaultDateTime = "{:date('{$phpFormat}')}";
                         $attrArr['data-date-format'] = $format;
                         $attrArr['data-use-current'] = "true";
-                        $fieldFunc = $fieldFunc ? "|{$fieldFunc}" : "";
                         $formAddElement = Form::text($fieldName, $defaultDateTime, $attrArr);
-                        $formEditElement = Form::text($fieldName, "{\$row.{$field}{$fieldFunc}}", $attrArr);
+                        $formEditElement = Form::text($fieldName, ($fieldFunc ? "{:\$row.{$field}?{$fieldFunc}(\$row.{$field}):''}" : "{\$row.{$field}{$fieldFunc}}"), $attrArr);
                     } elseif ($inputType == 'checkbox' || $inputType == 'radio') {
                         unset($attrArr['data-rule']);
                         $fieldName = $inputType == 'checkbox' ? $fieldName .= "[]" : $fieldName;
@@ -928,7 +938,7 @@ class Crud extends Command
             if ($langList) {
                 $this->writeToFile('lang', $data, $langFile);
             }
-        } catch (think\exception\ErrorException $e) {
+        } catch (ErrorException $e) {
             throw new Exception("Code: " . $e->getCode() . "\nLine: " . $e->getLine() . "\nMessage: " . $e->getMessage() . "\nFile: " . $e->getFile());
         }
 
@@ -956,7 +966,7 @@ class Crud extends Command
     public function {$methodName}()
     {
         return [{$itemString}];
-    }     
+    }
 EOD;
         $controllerAssignList[] = <<<EOD
         \$this->view->assign("{$fieldList}", \$this->model->{$methodName}());
@@ -980,7 +990,7 @@ EOD;
         $attrField = ucfirst($this->getCamelizeName($field));
         if ($inputType == 'datetime') {
             $return = <<<EOD
-return \$value && !is_numeric(\$value) ? strtotime(\$value) : \$value;
+return \$value === '' ? null : (\$value && !is_numeric(\$value) ? strtotime(\$value) : \$value);
 EOD;
         } elseif (in_array($inputType, ['checkbox', 'select'])) {
             $return = <<<EOD
@@ -1069,9 +1079,9 @@ EOD;
     /**
      * 获取已解析相关信息
      * @param string $module 模块名称
-     * @param string $name   自定义名称
-     * @param string $table  数据表名
-     * @param string $type   解析类型，本例中为controller、model、validate
+     * @param string $name 自定义名称
+     * @param string $table 数据表名
+     * @param string $type 解析类型，本例中为controller、model、validate
      * @return array
      */
     protected function getParseNameData($module, $name, $table, $type)
@@ -1087,6 +1097,10 @@ EOD;
             $parseArr = $arr;
             array_push($parseArr, $parseName);
         }
+        //类名不能为内部关键字
+        if (in_array(strtolower($parseName), $this->internalKeywords)) {
+            throw new Exception('Unable to use internal variable:' . $parseName);
+        }
         $appNamespace = Config::get('app_namespace');
         $parseNamespace = "{$appNamespace}\\{$module}\\{$type}" . ($arr ? "\\" . implode("\\", $arr) : "");
         $moduleDir = APP_PATH . $module . DS;
@@ -1097,7 +1111,7 @@ EOD;
     /**
      * 写入到文件
      * @param string $name
-     * @param array  $data
+     * @param array $data
      * @param string $pathname
      * @return mixed
      */
@@ -1118,7 +1132,7 @@ EOD;
     /**
      * 获取替换后的数据
      * @param string $name
-     * @param array  $data
+     * @param array $data
      * @return string
      */
     protected function getReplacedStub($name, $data)
@@ -1183,7 +1197,7 @@ EOD;
 
     /**
      * 读取数据和语言数组列表
-     * @param array   $arr
+     * @param array $arr
      * @param boolean $withTpl
      * @return array
      */
@@ -1303,8 +1317,8 @@ EOD;
 
     /**
      * 判断是否符合指定后缀
-     * @param string $field     字段名称
-     * @param mixed  $suffixArr 后缀
+     * @param string $field 字段名称
+     * @param mixed $suffixArr 后缀
      * @return boolean
      */
     protected function isMatchSuffix($field, $suffixArr)
@@ -1371,7 +1385,7 @@ EOD;
      * @param string $field
      * @param string $datatype
      * @param string $extend
-     * @param array  $itemArr
+     * @param array $itemArr
      * @return string
      */
     protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [])

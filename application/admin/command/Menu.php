@@ -12,6 +12,7 @@ use think\console\Input;
 use think\console\input\Option;
 use think\console\Output;
 use think\Exception;
+use think\Loader;
 
 class Menu extends Command
 {
@@ -52,6 +53,18 @@ class Menu extends Command
             $ids = [];
             $list = $this->model->where(function ($query) use ($controller, $equal) {
                 foreach ($controller as $index => $item) {
+                    if (stripos($item, '_') !== false) {
+                        $item = Loader::parseName($item, 1);
+                    }
+                    if (stripos($item, '/') !== false) {
+                        $controllerArr = explode('/', $item);
+                        end($controllerArr);
+                        $key = key($controllerArr);
+                        $controllerArr[$key] = Loader::parseName($controllerArr[$key]);
+                    } else {
+                        $controllerArr = [Loader::parseName($item)];
+                    }
+                    $item = str_replace('_', '\_', implode('/', $controllerArr));
                     if ($equal) {
                         $query->whereOr('name', 'eq', $item);
                     } else {
@@ -82,10 +95,17 @@ class Menu extends Command
 
         if (!in_array('all-controller', $controller)) {
             foreach ($controller as $index => $item) {
-                $controllerArr = explode('/', $item);
-                end($controllerArr);
-                $key = key($controllerArr);
-                $controllerArr[$key] = ucfirst($controllerArr[$key]);
+                if (stripos($item, '_') !== false) {
+                    $item = Loader::parseName($item, 1);
+                }
+                if (stripos($item, '/') !== false) {
+                    $controllerArr = explode('/', $item);
+                    end($controllerArr);
+                    $key = key($controllerArr);
+                    $controllerArr[$key] = ucfirst($controllerArr[$key]);
+                } else {
+                    $controllerArr = [ucfirst($item)];
+                }
                 $adminPath = dirname(__DIR__) . DS . 'controller' . DS . implode(DS, $controllerArr) . '.php';
                 if (!is_file($adminPath)) {
                     $output->error("controller not found");
@@ -159,10 +179,15 @@ class Menu extends Command
     protected function importRule($controller)
     {
         $controller = str_replace('\\', '/', $controller);
-        $controllerArr = explode('/', $controller);
-        end($controllerArr);
-        $key = key($controllerArr);
-        $controllerArr[$key] = ucfirst($controllerArr[$key]);
+        if (stripos($controller, '/') !== false) {
+            $controllerArr = explode('/', $controller);
+            end($controllerArr);
+            $key = key($controllerArr);
+            $controllerArr[$key] = ucfirst($controllerArr[$key]);
+        } else {
+            $key = 0;
+            $controllerArr = [ucfirst($controller)];
+        }
         $classSuffix = Config::get('controller_suffix') ? ucfirst(Config::get('url_controller_layer')) : '';
         $className = "\\app\\admin\\controller\\" . implode("\\", $controllerArr) . $classSuffix;
 

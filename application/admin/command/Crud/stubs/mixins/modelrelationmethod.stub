@@ -1,5 +1,5 @@
 
     public function {%relationMethod%}()
     {
-        return $this->{%relationMode%}('{%relationName%}', '{%relationForeignKey%}', '{%relationPrimaryKey%}', [], 'LEFT')->setEagerlyType(0);
+        return $this->{%relationMode%}('{%relationClassName%}', '{%relationForeignKey%}', '{%relationPrimaryKey%}', [], 'LEFT')->setEagerlyType(0);
     }
