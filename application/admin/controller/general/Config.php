@@ -51,6 +51,7 @@ class Config extends Backend
                 $value['value'] = explode(',', $value['value']);
             }
             $value['content'] = json_decode($value['content'], TRUE);
+			$value['tip'] = htmlspecialchars($value['tip']);
             $siteList[$v['group']]['list'][] = $value;
         }
         $index = 0;
