@@ -7,6 +7,7 @@ use think\Config;
 use think\Controller;
 use think\Hook;
 use think\Lang;
+use think\Loader;
 use think\Session;
 use fast\Tree;
 
@@ -114,7 +115,7 @@ class Backend extends Controller
     public function _initialize()
     {
         $modulename = $this->request->module();
-        $controllername = strtolower($this->request->controller());
+        $controllername = Loader::parseName($this->request->controller());
         $actionname = strtolower($this->request->action());
 
         $path = str_replace('.', '/', $controllername) . '/' . $actionname;
