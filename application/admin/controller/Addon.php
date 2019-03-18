@@ -18,7 +18,6 @@ use think\Exception;
  */
 class Addon extends Backend
 {
-
     protected $model = null;
 
     public function _initialize()
@@ -43,7 +42,7 @@ class Addon extends Backend
     /**
      * 配置
      */
-    public function config($ids = NULL)
+    public function config($ids = null)
     {
         $name = $this->request->get("name");
         if (!$name) {
@@ -54,8 +53,9 @@ class Addon extends Backend
         }
         $info = get_addon_info($name);
         $config = get_addon_fullconfig($name);
-        if (!$info)
+        if (!$info) {
             $this->error(__('No Results were found'));
+        }
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a");
             if ($params) {
@@ -290,7 +290,7 @@ class Addon extends Backend
             $onlineaddons = [];
             $result = Http::sendRequest(config('fastadmin.api_url') . '/addon/index');
             if ($result['ret']) {
-                $json = json_decode($result['msg'], TRUE);
+                $json = (array)json_decode($result['msg'], true);
                 $rows = isset($json['rows']) ? $json['rows'] : [];
                 foreach ($rows as $index => $row) {
                     $onlineaddons[$row['name']] = $row;
@@ -302,8 +302,9 @@ class Addon extends Backend
         $addons = get_addon_list();
         $list = [];
         foreach ($addons as $k => $v) {
-            if ($search && stripos($v['name'], $search) === FALSE && stripos($v['intro'], $search) === FALSE)
+            if ($search && stripos($v['name'], $search) === false && stripos($v['intro'], $search) === false) {
                 continue;
+            }
 
             if (isset($onlineaddons[$v['name']])) {
                 $v = array_merge($v, $onlineaddons[$v['name']]);
@@ -314,7 +315,7 @@ class Addon extends Backend
                 $v['image'] = '';
                 $v['donateimage'] = '';
                 $v['demourl'] = '';
-                $v['price'] = '0.00';
+                $v['price'] = __('None');
                 $v['screenshots'] = [];
                 $v['releaselist'] = [];
             }
@@ -334,5 +335,4 @@ class Addon extends Backend
         $callback = $this->request->get('callback') ? "jsonp" : "json";
         return $callback($result);
     }
-
 }

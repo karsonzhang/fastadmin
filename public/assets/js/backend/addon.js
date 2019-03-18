@@ -521,6 +521,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     return '<a href="https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes" target="_blank" data-toggle="tooltip" title="' + __('Click to contact developer') + '" class="text-primary">' + value + '</a>';
                 },
                 price: function (value, row, index) {
+                    if (isNaN(value)) {
+                        return value;
+                    }
                     return parseFloat(value) == 0 ? '<span class="text-success">' + __('Free') + '</span>' : '<span class="text-danger">￥' + value + '</span>';
                 },
                 downloads: function (value, row, index) {

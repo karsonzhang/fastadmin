@@ -69,7 +69,7 @@ return [
     'Setting'                        => '配置',
     'Disable'                        => '禁用',
     'Enable'                         => '启用',
-    'Your username or email'         => '你的用户名或邮箱',
+    'Your username or email'         => '你的手机号、用户名或邮箱',
     'Your password'                  => '你的密码',
     'Login FastAdmin'                => '登录FastAdmin',
     'Login'                          => '登录',
