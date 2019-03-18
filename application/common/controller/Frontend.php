@@ -7,6 +7,7 @@ use think\Config;
 use think\Controller;
 use think\Hook;
 use think\Lang;
+use think\Loader;
 
 /**
  * 前台控制器基类
@@ -43,7 +44,7 @@ class Frontend extends Controller
         //移除HTML标签
         $this->request->filter('strip_tags');
         $modulename = $this->request->module();
-        $controllername = strtolower($this->request->controller());
+        $controllername = Loader::parseName($this->request->controller());
         $actionname = strtolower($this->request->action());
 
         // 如果有使用模板布局

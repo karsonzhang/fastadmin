@@ -366,13 +366,12 @@ class Crud extends Command
         //验证器
         list($validateNamespace, $validateName, $validateFile, $validateArr) = $this->getValidateData($validateModuleName, $validate, $table);
 
-        $controllerUrl = strtolower(implode('/', $controllerArr));
-
         //处理基础文件名，取消所有下划线并转换为小写
         $baseNameArr = $controllerArr;
-        $baseFileName = Loader::parseName(array_pop($baseNameArr), 1);
+        $baseFileName = Loader::parseName(array_pop($baseNameArr), 0);
         array_push($baseNameArr, $baseFileName);
         $controllerBaseName = strtolower(implode(DS, $baseNameArr));
+        $controllerUrl = strtolower(implode('/', $baseNameArr));
 
         //视图文件
         $viewArr = $controllerArr;
