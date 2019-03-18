@@ -74,8 +74,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     $(this).data("shown", !status);
                     return false;
                 });
+                //点击切换/排序/删除操作后刷新左侧菜单
                 $(".btn-change[data-id],.btn-delone,.btn-dragsort").data("success", function (data, ret) {
                     Fast.api.refreshmenu();
+                    return false;
                 });
 
             });
