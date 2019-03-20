@@ -7,7 +7,7 @@ use think\Model;
 /**
  * 会员模型
  */
-class User Extends Model
+class User extends Model
 {
 
     // 开启自动写入时间戳字段
@@ -22,8 +22,8 @@ class User Extends Model
 
     /**
      * 获取个人URL
-     * @param   string  $value
-     * @param   array   $data
+     * @param   string $value
+     * @param   array  $data
      * @return string
      */
     public function getUrlAttr($value, $data)
@@ -33,8 +33,8 @@ class User Extends Model
 
     /**
      * 获取头像
-     * @param   string    $value
-     * @param   array     $data
+     * @param   string $value
+     * @param   array  $data
      * @return string
      */
     public function getAvatarAttr($value, $data)
@@ -52,15 +52,15 @@ class User Extends Model
 
     /**
      * 获取验证字段数组值
-     * @param   string    $value
-     * @param   array     $data
+     * @param   string $value
+     * @param   array  $data
      * @return  object
      */
     public function getVerificationAttr($value, $data)
     {
-        $value = array_filter((array) json_decode($value, TRUE));
+        $value = array_filter((array)json_decode($value, true));
         $value = array_merge(['email' => 0, 'mobile' => 0], $value);
-        return (object) $value;
+        return (object)$value;
     }
 
     /**
@@ -76,15 +76,14 @@ class User Extends Model
 
     /**
      * 变更会员余额
-     * @param int $money    余额
-     * @param int $user_id  会员ID
-     * @param string $memo  备注
+     * @param int    $money   余额
+     * @param int    $user_id 会员ID
+     * @param string $memo    备注
      */
     public static function money($money, $user_id, $memo)
     {
         $user = self::get($user_id);
-        if ($user)
-        {
+        if ($user && $money != 0) {
             $before = $user->money;
             $after = $user->money + $money;
             //更新会员信息
@@ -96,15 +95,14 @@ class User Extends Model
 
     /**
      * 变更会员积分
-     * @param int $score    积分
-     * @param int $user_id  会员ID
-     * @param string $memo  备注
+     * @param int    $score   积分
+     * @param int    $user_id 会员ID
+     * @param string $memo    备注
      */
     public static function score($score, $user_id, $memo)
     {
         $user = self::get($user_id);
-        if ($user)
-        {
+        if ($user && $score != 0) {
             $before = $user->score;
             $after = $user->score + $score;
             $level = self::nextlevel($after);
@@ -124,14 +122,11 @@ class User Extends Model
     {
         $lv = array(1 => 0, 2 => 30, 3 => 100, 4 => 500, 5 => 1000, 6 => 2000, 7 => 3000, 8 => 5000, 9 => 8000, 10 => 10000);
         $level = 1;
-        foreach ($lv as $key => $value)
-        {
-            if ($score >= $value)
-            {
+        foreach ($lv as $key => $value) {
+            if ($score >= $value) {
                 $level = $key;
             }
         }
         return $level;
     }
-
 }
