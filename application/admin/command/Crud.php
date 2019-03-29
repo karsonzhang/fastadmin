@@ -807,7 +807,7 @@ class Crud extends Command
                 }
             }
             unset($line);
-            $langList = implode(",\n", array_filter($langList)) . ",";
+            $langList = implode(",\n", array_filter($langList));
 
             //表注释
             $tableComment = $modelTableInfo['Comment'];
@@ -934,9 +934,7 @@ class Crud extends Command
             // 生成JS文件
             $this->writeToFile('javascript', $data, $javascriptFile);
             // 生成语言文件
-            if ($langList) {
-                $this->writeToFile('lang', $data, $langFile);
-            }
+            $this->writeToFile('lang', $data, $langFile);
         } catch (ErrorException $e) {
             throw new Exception("Code: " . $e->getCode() . "\nLine: " . $e->getLine() . "\nMessage: " . $e->getMessage() . "\nFile: " . $e->getFile());
         }
