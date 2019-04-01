@@ -10,6 +10,8 @@ class {%modelName%} extends Model
 
     {%softDelete%}
 
+    //数据库
+    protected $connection = '{%databaseConfigName%}';
     // 表名
     protected ${%modelTableType%} = '{%modelTableTypeName%}';
     
