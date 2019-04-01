@@ -87,8 +87,16 @@ class Config extends Model
 
     public static function getArrayData($data)
     {
+        if (!isset($data['value'])) {
+            $result = [];
+            foreach ($data as $index => $datum) {
+                $result['field'][$index] = $datum['key'];
+                $result['value'][$index] = $datum['value'];
+            }
+            $data = $result;
+        }
         $fieldarr = $valuearr = [];
-        $field = isset($data['field']) ? $data['field'] : [];
+        $field = isset($data['field']) ? $data['field'] : (isset($data['key']) ? $data['key'] : []);
         $value = isset($data['value']) ? $data['value'] : [];
         foreach ($field as $m => $n) {
             if ($n != '') {
