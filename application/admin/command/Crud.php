@@ -173,12 +173,15 @@ class Crud extends Command
             ->addOption('sortfield', null, Option::VALUE_OPTIONAL, 'sort field', null)
             ->addOption('headingfilterfield', null, Option::VALUE_OPTIONAL, 'heading filter field', null)
             ->addOption('editorclass', null, Option::VALUE_OPTIONAL, 'automatically generate editor class', null)
+            ->addOption('db', null, Option::VALUE_OPTIONAL, 'database config name', 'database')
             ->setDescription('Build CRUD controller and model from table');
     }
 
     protected function execute(Input $input, Output $output)
     {
         $adminPath = dirname(__DIR__) . DS;
+        //数据库
+        $db = $input->getOption('db');
         //表名
         $table = $input->getOption('table') ?: '';
         //自定义控制器
@@ -279,8 +282,9 @@ class Crud extends Command
 
         $this->reservedField = array_merge($this->reservedField, [$this->createTimeField, $this->updateTimeField, $this->deleteTimeField]);
 
-        $dbname = Config::get('database.database');
-        $prefix = Config::get('database.prefix');
+        $dbconnect = Db::connect($db);
+        $dbname = Config::get($db . '.database');
+        $prefix = Config::get($db . '.prefix');
 
         //模块
         $moduleName = 'admin';
@@ -291,11 +295,11 @@ class Crud extends Command
         $modelName = $table = stripos($table, $prefix) === 0 ? substr($table, strlen($prefix)) : $table;
         $modelTableType = 'table';
         $modelTableTypeName = $modelTableName = $modelName;
-        $modelTableInfo = Db::query("SHOW TABLE STATUS LIKE '{$modelTableName}'", [], true);
+        $modelTableInfo = $dbconnect->query("SHOW TABLE STATUS LIKE '{$modelTableName}'", [], true);
         if (!$modelTableInfo) {
             $modelTableType = 'name';
             $modelTableName = $prefix . $modelName;
-            $modelTableInfo = Db::query("SHOW TABLE STATUS LIKE '{$modelTableName}'", [], true);
+            $modelTableInfo = $dbconnect->query("SHOW TABLE STATUS LIKE '{$modelTableName}'", [], true);
             if (!$modelTableInfo) {
                 throw new Exception("table not found");
             }
@@ -312,11 +316,11 @@ class Crud extends Command
                 $relationName = stripos($relationTable, $prefix) === 0 ? substr($relationTable, strlen($prefix)) : $relationTable;
                 $relationTableType = 'table';
                 $relationTableTypeName = $relationTableName = $relationName;
-                $relationTableInfo = Db::query("SHOW TABLE STATUS LIKE '{$relationTableName}'", [], true);
+                $relationTableInfo = $dbconnect->query("SHOW TABLE STATUS LIKE '{$relationTableName}'", [], true);
                 if (!$relationTableInfo) {
                     $relationTableType = 'name';
                     $relationTableName = $prefix . $relationName;
-                    $relationTableInfo = Db::query("SHOW TABLE STATUS LIKE '{$relationTableName}'", [], true);
+                    $relationTableInfo = $dbconnect->query("SHOW TABLE STATUS LIKE '{$relationTableName}'", [], true);
                     if (!$relationTableInfo) {
                         throw new Exception("relation table not found");
                     }
@@ -451,7 +455,7 @@ class Crud extends Command
             . "WHERE TABLE_SCHEMA = ? AND table_name = ? "
             . "ORDER BY ORDINAL_POSITION";
         //加载主表的列
-        $columnList = Db::query($sql, [$dbname, $modelTableName]);
+        $columnList = $dbconnect->query($sql, [$dbname, $modelTableName]);
         $fieldArr = [];
         foreach ($columnList as $k => $v) {
             $fieldArr[] = $v['COLUMN_NAME'];
@@ -459,7 +463,7 @@ class Crud extends Command
 
         // 加载关联表的列
         foreach ($relations as $index => &$relation) {
-            $relationColumnList = Db::query($sql, [$dbname, $relation['relationTableName']]);
+            $relationColumnList = $dbconnect->query($sql, [$dbname, $relation['relationTableName']]);
 
             $relationFieldList = [];
             foreach ($relationColumnList as $k => $v) {
@@ -819,6 +823,7 @@ class Crud extends Command
             }
 
             $data = [
+                'databaseConfigName'      => $db,
                 'controllerNamespace'     => $controllerNamespace,
                 'modelNamespace'          => $modelNamespace,
                 'validateNamespace'       => $validateNamespace,
