@@ -10,14 +10,8 @@ use fast\Random;
  */
 class Token extends Api
 {
-
     protected $noNeedLogin = [];
     protected $noNeedRight = '*';
-
-    public function _initialize()
-    {
-        parent::_initialize();
-    }
 
     /**
      * 检测Token是否过期
@@ -45,5 +39,4 @@ class Token extends Api
         $tokenInfo = \app\common\library\Token::get($token);
         $this->success('', ['token' => $tokenInfo['token'], 'expires_in' => $tokenInfo['expires_in']]);
     }
-
 }

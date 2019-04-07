@@ -17,18 +17,14 @@ class Menu
      */
     public static function create($menu, $parent = 0)
     {
-        if (!is_numeric($parent))
-        {
+        if (!is_numeric($parent)) {
             $parentRule = AuthRule::getByName($parent);
             $pid = $parentRule ? $parentRule['id'] : 0;
-        }
-        else
-        {
+        } else {
             $pid = $parent;
         }
         $allow = array_flip(['file', 'name', 'title', 'icon', 'condition', 'remark', 'ismenu']);
-        foreach ($menu as $k => $v)
-        {
+        foreach ($menu as $k => $v) {
             $hasChild = isset($v['sublist']) && $v['sublist'] ? true : false;
 
             $data = array_intersect_key($v, $allow);
@@ -37,16 +33,12 @@ class Menu
             $data['icon'] = isset($data['icon']) ? $data['icon'] : ($hasChild ? 'fa fa-list' : 'fa fa-circle-o');
             $data['pid'] = $pid;
             $data['status'] = 'normal';
-            try
-            {
+            try {
                 $menu = AuthRule::create($data);
-                if ($hasChild)
-                {
+                if ($hasChild) {
                     self::create($v['sublist'], $menu->id);
                 }
-            }
-            catch (PDOException $e)
-            {
+            } catch (PDOException $e) {
                 throw new Exception($e->getMessage());
             }
         }
@@ -54,14 +46,13 @@ class Menu
 
     /**
      * 删除菜单
-     * @param string $name 规则name 
+     * @param string $name 规则name
      * @return boolean
      */
     public static function delete($name)
     {
         $ids = self::getAuthRuleIdsByName($name);
-        if (!$ids)
-        {
+        if (!$ids) {
             return false;
         }
         AuthRule::destroy($ids);
@@ -76,8 +67,7 @@ class Menu
     public static function enable($name)
     {
         $ids = self::getAuthRuleIdsByName($name);
-        if (!$ids)
-        {
+        if (!$ids) {
             return false;
         }
         AuthRule::where('id', 'in', $ids)->update(['status' => 'normal']);
@@ -92,8 +82,7 @@ class Menu
     public static function disable($name)
     {
         $ids = self::getAuthRuleIdsByName($name);
-        if (!$ids)
-        {
+        if (!$ids) {
             return false;
         }
         AuthRule::where('id', 'in', $ids)->update(['status' => 'hidden']);
@@ -108,14 +97,12 @@ class Menu
     public static function export($name)
     {
         $ids = self::getAuthRuleIdsByName($name);
-        if (!$ids)
-        {
+        if (!$ids) {
             return [];
         }
         $menuList = [];
         $menu = AuthRule::getByName($name);
-        if ($menu)
-        {
+        if ($menu) {
             $ruleList = collection(AuthRule::where('id', 'in', $ids)->select())->toArray();
             $menuList = Tree::instance()->init($ruleList)->getTreeArray($menu['id']);
         }
@@ -131,8 +118,7 @@ class Menu
     {
         $ids = [];
         $menu = AuthRule::getByName($name);
-        if ($menu)
-        {
+        if ($menu) {
             // 必须将结果集转换为数组
             $ruleList = collection(AuthRule::order('weigh', 'desc')->field('id,pid,name')->select())->toArray();
             // 构造菜单数据

@@ -21,6 +21,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     });
                 }
             });
+            table.on('load-error.bs.table', function (e, status, res) {
+                if (status == 404 && $(".btn-switch.active").data("type") != "local") {
+                    Layer.confirm(__('Store now available tips'), {
+                        title: __('Warmtips'),
+                        btn: [__('Switch to the local'), __('Try to reload')]
+                    }, function (index) {
+                        layer.close(index);
+                        $(".btn-switch[data-type='local']").trigger("click");
+                    }, function (index) {
+                        layer.close(index);
+                        table.bootstrapTable('refresh');
+                    });
+                    return false;
+                }
+            });
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
                 var parenttable = table.closest('.bootstrap-table');
                 var d = $(".fixed-table-toolbar", parenttable).find(".search input");

@@ -9,17 +9,15 @@ use app\common\controller\Api;
  */
 class Index extends Api
 {
-
     protected $noNeedLogin = ['*'];
     protected $noNeedRight = ['*'];
 
     /**
      * 首页
-     * 
+     *
      */
     public function index()
     {
         $this->success('请求成功');
     }
-
 }

@@ -7,7 +7,6 @@ namespace fast;
  */
 class Rsa
 {
-
     public $publicKey = '';
     public $privateKey = '';
     private $_privKey;
@@ -28,23 +27,27 @@ class Rsa
 
     /**
      * * the construtor,the param $path is the keys saving path
+     * @param string $publicKey  公钥
+     * @param string $privateKey 私钥
      */
-    function __construct($publicKey = null, $privateKey = null)
+    public function __construct($publicKey = null, $privateKey = null)
     {
         $this->setKey($publicKey, $privateKey);
     }
 
     /**
      * 设置公钥和私钥
-     * @param string $publicKey 公钥
+     * @param string $publicKey  公钥
      * @param string $privateKey 私钥
      */
     public function setKey($publicKey = null, $privateKey = null)
     {
-        if (!is_null($publicKey))
+        if (!is_null($publicKey)) {
             $this->publicKey = $publicKey;
-        if (!is_null($privateKey))
+        }
+        if (!is_null($privateKey)) {
             $this->privateKey = $privateKey;
+        }
     }
 
     /**
@@ -52,8 +55,7 @@ class Rsa
      */
     private function setupPrivKey()
     {
-        if (is_resource($this->_privKey))
-        {
+        if (is_resource($this->_privKey)) {
             return true;
         }
         $pem = chunk_split($this->privateKey, 64, "\n");
@@ -67,8 +69,7 @@ class Rsa
      */
     private function setupPubKey()
     {
-        if (is_resource($this->_pubKey))
-        {
+        if (is_resource($this->_pubKey)) {
             return true;
         }
         $pem = chunk_split($this->publicKey, 64, "\n");
@@ -82,14 +83,12 @@ class Rsa
      */
     public function privEncrypt($data)
     {
-        if (!is_string($data))
-        {
+        if (!is_string($data)) {
             return null;
         }
         $this->setupPrivKey();
         $r = openssl_private_encrypt($data, $encrypted, $this->_privKey);
-        if ($r)
-        {
+        if ($r) {
             return base64_encode($encrypted);
         }
         return null;
@@ -100,15 +99,13 @@ class Rsa
      */
     public function privDecrypt($encrypted)
     {
-        if (!is_string($encrypted))
-        {
+        if (!is_string($encrypted)) {
             return null;
         }
         $this->setupPrivKey();
         $encrypted = base64_decode($encrypted);
         $r = openssl_private_decrypt($encrypted, $decrypted, $this->_privKey);
-        if ($r)
-        {
+        if ($r) {
             return $decrypted;
         }
         return null;
@@ -119,14 +116,12 @@ class Rsa
      */
     public function pubEncrypt($data)
     {
-        if (!is_string($data))
-        {
+        if (!is_string($data)) {
             return null;
         }
         $this->setupPubKey();
         $r = openssl_public_encrypt($data, $encrypted, $this->_pubKey);
-        if ($r)
-        {
+        if ($r) {
             return base64_encode($encrypted);
         }
         return null;
@@ -137,15 +132,13 @@ class Rsa
      */
     public function pubDecrypt($crypted)
     {
-        if (!is_string($crypted))
-        {
+        if (!is_string($crypted)) {
             return null;
         }
         $this->setupPubKey();
         $crypted = base64_decode($crypted);
         $r = openssl_public_decrypt($crypted, $decrypted, $this->_pubKey);
-        if ($r)
-        {
+        if ($r) {
             return $decrypted;
         }
         return null;
@@ -183,5 +176,4 @@ class Rsa
         is_resource($this->_privKey) && @openssl_free_key($this->_privKey);
         is_resource($this->_pubKey) && @openssl_free_key($this->_pubKey);
     }
-
 }

@@ -25,8 +25,8 @@ class Token
     /**
      * 连接Token驱动
      * @access public
-     * @param  array $options 配置数组
-     * @param  bool|string $name Token连接标识 true 强制重新连接
+     * @param  array       $options 配置数组
+     * @param  bool|string $name    Token连接标识 true 强制重新连接
      * @return Driver
      */
     public static function connect(array $options = [], $name = false)
@@ -102,8 +102,8 @@ class Token
     /**
      * 读取Token
      * @access public
-     * @param  string $token Token标识
-     * @param  mixed $default 默认值
+     * @param  string $token   Token标识
+     * @param  mixed  $default 默认值
      * @return mixed
      */
     public static function get($token, $default = false)
@@ -114,9 +114,9 @@ class Token
     /**
      * 写入Token
      * @access public
-     * @param  string $token Token标识
-     * @param  mixed $user_id 存储数据
-     * @param  int|null $expire 有效时间 0为永久
+     * @param  string   $token   Token标识
+     * @param  mixed    $user_id 存储数据
+     * @param  int|null $expire  有效时间 0为永久
      * @return boolean
      */
     public static function set($token, $user_id, $expire = null)

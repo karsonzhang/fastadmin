@@ -55,19 +55,17 @@ class Random
     /**
      * 能用的随机数生成
      * @param string $type 类型 alpha/alnum/numeric/nozero/unique/md5/encrypt/sha1
-     * @param int $len 长度
+     * @param int    $len  长度
      * @return string
      */
     public static function build($type = 'alnum', $len = 8)
     {
-        switch ($type)
-        {
+        switch ($type) {
             case 'alpha':
             case 'alnum':
             case 'numeric':
             case 'nozero':
-                switch ($type)
-                {
+                switch ($type) {
                     case 'alpha':
                         $pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
                         break;
@@ -87,80 +85,64 @@ class Random
                 return md5(uniqid(mt_rand()));
             case 'encrypt':
             case 'sha1':
-                return sha1(uniqid(mt_rand(), TRUE));
+                return sha1(uniqid(mt_rand(), true));
         }
     }
 
     /**
      * 根据数组元素的概率获得键名
      *
-     * @param array $ps array('p1'=>20, 'p2'=>30, 'p3'=>50);
-     * @param array $num 默认为1,即随机出来的数量
-     * @param array $unique 默认为true,即当num>1时,随机出的数量是否唯一
+     * @param array $ps     array('p1'=>20, 'p2'=>30, 'p3'=>50);
+     * @param int   $num    默认为1,即随机出来的数量
+     * @param bool  $unique 默认为true,即当num>1时,随机出的数量是否唯一
      * @return mixed 当num为1时返回键名,反之返回一维数组
      */
     public static function lottery($ps, $num = 1, $unique = true)
     {
-        if (!$ps)
-        {
+        if (!$ps) {
             return $num == 1 ? '' : [];
         }
-        if ($num >= count($ps) && $unique)
-        {
+        if ($num >= count($ps) && $unique) {
             $res = array_keys($ps);
             return $num == 1 ? $res[0] : $res;
         }
         $max_exp = 0;
         $res = [];
-        foreach ($ps as $key => $value)
-        {
+        foreach ($ps as $key => $value) {
             $value = substr($value, 0, stripos($value, ".") + 6);
             $exp = strlen(strchr($value, '.')) - 1;
-            if ($exp > $max_exp)
-            {
+            if ($exp > $max_exp) {
                 $max_exp = $exp;
             }
         }
         $pow_exp = pow(10, $max_exp);
-        if ($pow_exp > 1)
-        {
+        if ($pow_exp > 1) {
             reset($ps);
-            foreach ($ps as $key => $value)
-            {
+            foreach ($ps as $key => $value) {
                 $ps[$key] = $value * $pow_exp;
             }
         }
         $pro_sum = array_sum($ps);
-        if ($pro_sum < 1)
-        {
+        if ($pro_sum < 1) {
             return $num == 1 ? '' : [];
         }
-        for ($i = 0; $i < $num; $i++)
-        {
+        for ($i = 0; $i < $num; $i++) {
             $rand_num = mt_rand(1, $pro_sum);
             reset($ps);
-            foreach ($ps as $key => $value)
-            {
-                if ($rand_num <= $value)
-                {
+            foreach ($ps as $key => $value) {
+                if ($rand_num <= $value) {
                     break;
-                }
-                else
-                {
+                } else {
                     $rand_num -= $value;
                 }
             }
-            if ($num == 1)
-            {
+            if ($num == 1) {
                 $res = $key;
                 break;
-            }
-            else
-            {
+            } else {
                 $res[$i] = $key;
             }
-            if ($unique)
-            {
+            if ($unique) {
                 $pro_sum -= $value;
                 unset($ps[$key]);
             }
@@ -175,8 +157,15 @@ class Random
     public static function uuid()
     {
         return sprintf(
-                '%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
         );
     }
-
 }

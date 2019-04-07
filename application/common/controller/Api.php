@@ -52,13 +52,13 @@ class Api
 
     /**
      * 权限Auth
-     * @var Auth 
+     * @var Auth
      */
     protected $auth = null;
 
     /**
      * 默认响应输出类型,支持json/xml
-     * @var string 
+     * @var string
      */
     protected $responseType = 'json';
 
@@ -75,13 +75,11 @@ class Api
         $this->_initialize();
 
         // 前置操作方法
-        if ($this->beforeActionList)
-        {
-            foreach ($this->beforeActionList as $method => $options)
-            {
+        if ($this->beforeActionList) {
+            foreach ($this->beforeActionList as $method => $options) {
                 is_numeric($method) ?
-                                $this->beforeAction($options) :
-                                $this->beforeAction($method, $options);
+                    $this->beforeAction($options) :
+                    $this->beforeAction($method, $options);
             }
         }
     }
@@ -108,30 +106,23 @@ class Api
         // 设置当前请求的URI
         $this->auth->setRequestUri($path);
         // 检测是否需要验证登录
-        if (!$this->auth->match($this->noNeedLogin))
-        {
+        if (!$this->auth->match($this->noNeedLogin)) {
             //初始化
             $this->auth->init($token);
             //检测是否登录
-            if (!$this->auth->isLogin())
-            {
+            if (!$this->auth->isLogin()) {
                 $this->error(__('Please login first'), null, 401);
             }
             // 判断是否需要验证权限
-            if (!$this->auth->match($this->noNeedRight))
-            {
+            if (!$this->auth->match($this->noNeedRight)) {
                 // 判断控制器和方法判断是否有对应权限
-                if (!$this->auth->check($path))
-                {
+                if (!$this->auth->check($path)) {
                     $this->error(__('You have no permission'), null, 403);
                 }
             }
-        }
-        else
-        {
+        } else {
             // 如果有传递token才验证是否登录状态
-            if ($token)
-            {
+            if ($token) {
                 $this->auth->init($token);
             }
         }
@@ -158,11 +149,11 @@ class Api
 
     /**
      * 操作成功返回的数据
-     * @param string $msg   提示信息
-     * @param mixed $data   要返回的数据
-     * @param int   $code   错误码，默认为1
-     * @param string $type  输出类型
-     * @param array $header 发送的 Header 信息
+     * @param string $msg    提示信息
+     * @param mixed  $data   要返回的数据
+     * @param int    $code   错误码，默认为1
+     * @param string $type   输出类型
+     * @param array  $header 发送的 Header 信息
      */
     protected function success($msg = '', $data = null, $code = 1, $type = null, array $header = [])
     {
@@ -171,11 +162,11 @@ class Api
 
     /**
      * 操作失败返回的数据
-     * @param string $msg   提示信息
-     * @param mixed $data   要返回的数据
-     * @param int   $code   错误码，默认为0
-     * @param string $type  输出类型
-     * @param array $header 发送的 Header 信息
+     * @param string $msg    提示信息
+     * @param mixed  $data   要返回的数据
+     * @param int    $code   错误码，默认为0
+     * @param string $type   输出类型
+     * @param array  $header 发送的 Header 信息
      */
     protected function error($msg = '', $data = null, $code = 0, $type = null, array $header = [])
     {
@@ -204,13 +195,10 @@ class Api
         // 如果未设置类型则自动判断
         $type = $type ? $type : ($this->request->param(config('var_jsonp_handler')) ? 'jsonp' : $this->responseType);
 
-        if (isset($header['statuscode']))
-        {
+        if (isset($header['statuscode'])) {
             $code = $header['statuscode'];
             unset($header['statuscode']);
-        }
-        else
-        {
+        } else {
             //未设置状态码,根据code值判断
             $code = $code >= 1000 || $code < 200 ? 200 : $code;
         }
@@ -227,27 +215,20 @@ class Api
      */
     protected function beforeAction($method, $options = [])
     {
-        if (isset($options['only']))
-        {
-            if (is_string($options['only']))
-            {
+        if (isset($options['only'])) {
+            if (is_string($options['only'])) {
                 $options['only'] = explode(',', $options['only']);
             }
 
-            if (!in_array($this->request->action(), $options['only']))
-            {
+            if (!in_array($this->request->action(), $options['only'])) {
                 return;
             }
-        }
-        elseif (isset($options['except']))
-        {
-            if (is_string($options['except']))
-            {
+        } elseif (isset($options['except'])) {
+            if (is_string($options['except'])) {
                 $options['except'] = explode(',', $options['except']);
             }
 
-            if (in_array($this->request->action(), $options['except']))
-            {
+            if (in_array($this->request->action(), $options['except'])) {
                 return;
             }
         }
@@ -281,16 +262,12 @@ class Api
      */
     protected function validate($data, $validate, $message = [], $batch = false, $callback = null)
     {
-        if (is_array($validate))
-        {
+        if (is_array($validate)) {
             $v = Loader::validate();
             $v->rule($validate);
-        }
-        else
-        {
+        } else {
             // 支持场景
-            if (strpos($validate, '.'))
-            {
+            if (strpos($validate, '.')) {
                 list($validate, $scene) = explode('.', $validate);
             }
 
@@ -300,21 +277,20 @@ class Api
         }
 
         // 批量验证
-        if ($batch || $this->batchValidate)
+        if ($batch || $this->batchValidate) {
             $v->batch(true);
+        }
         // 设置错误信息
-        if (is_array($message))
+        if (is_array($message)) {
             $v->message($message);
+        }
         // 使用回调验证
-        if ($callback && is_callable($callback))
-        {
+        if ($callback && is_callable($callback)) {
             call_user_func_array($callback, [$v, &$data]);
         }
 
-        if (!$v->check($data))
-        {
-            if ($this->failException)
-            {
+        if (!$v->check($data)) {
+            if ($this->failException) {
                 throw new ValidateException($v->getError());
             }
 
@@ -323,5 +299,4 @@ class Api
 
         return true;
     }
-
 }

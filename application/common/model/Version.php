@@ -25,17 +25,14 @@ class Version extends Model
     public static function check($version)
     {
         $versionlist = self::where('status', 'normal')->cache('__version__')->order('weigh desc,id desc')->select();
-        foreach ($versionlist as $k => $v)
-        {
+        foreach ($versionlist as $k => $v) {
             // 版本正常且新版本号不等于验证的版本号且找到匹配的旧版本
-            if ($v['status'] == 'normal' && $v['newversion'] !== $version && \fast\Version::check($version, $v['oldversion']))
-            {
+            if ($v['status'] == 'normal' && $v['newversion'] !== $version && \fast\Version::check($version, $v['oldversion'])) {
                 $updateversion = $v;
                 break;
             }
         }
-        if (isset($updateversion))
-        {
+        if (isset($updateversion)) {
             $search = ['{version}', '{newversion}', '{downloadurl}', '{url}', '{packagesize}'];
             $replace = [$version, $updateversion['newversion'], $updateversion['downloadurl'], $updateversion['downloadurl'], $updateversion['packagesize']];
             $upgradetext = str_replace($search, $replace, $updateversion['content']);
@@ -48,7 +45,6 @@ class Version extends Model
                 "upgradetext" => $upgradetext
             ];
         }
-        return NULL;
+        return null;
     }
-
 }

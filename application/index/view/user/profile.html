@@ -39,7 +39,7 @@
                     <h2 class="page-header">{:__('Profile')}</h2>
                     <form id="profile-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="{:url('api/user/profile')}">
                         {:token()}
-                        <input type="hidden" name="avatar" id="c-avatar" value="{$user.avatar}" />
+                        <input type="hidden" name="avatar" id="c-avatar" value="{:$user->getData('avatar')}" />
                         <div class="form-group">
                             <label class="control-label col-xs-12 col-sm-2"></label>
                             <div class="col-xs-12 col-sm-4">

@@ -75,9 +75,9 @@ class Redis extends Driver
 
     /**
      * 存储Token
-     * @param   string $token Token
-     * @param   int $user_id 会员ID
-     * @param   int $expire 过期时长,0表示无限,单位秒
+     * @param   string $token   Token
+     * @param   int    $user_id 会员ID
+     * @param   int    $expire  过期时长,0表示无限,单位秒
      * @return bool
      */
     public function set($token, $user_id, $expire = 0)
@@ -123,8 +123,8 @@ class Redis extends Driver
 
     /**
      * 判断Token是否可用
-     * @param   string $token Token
-     * @param   int $user_id 会员ID
+     * @param   string $token   Token
+     * @param   int    $user_id 会员ID
      * @return  boolean
      */
     public function check($token, $user_id)

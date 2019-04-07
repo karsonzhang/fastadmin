@@ -10,7 +10,6 @@ use think\Config;
  */
 class Tree
 {
-
     protected static $instance;
     //默认配置
     protected $config = [];
@@ -32,8 +31,7 @@ class Tree
 
     public function __construct($options = [])
     {
-        if ($config = Config::get('tree'))
-        {
+        if ($config = Config::get('tree')) {
             $this->options = array_merge($this->config, $config);
         }
         $this->options = array_merge($this->config, $options);
@@ -47,8 +45,7 @@ class Tree
      */
     public static function instance($options = [])
     {
-        if (is_null(self::$instance))
-        {
+        if (is_null(self::$instance)) {
             self::$instance = new static($options);
         }
 
@@ -56,11 +53,9 @@ class Tree
     }
 
     /**
-
      * 初始化方法
-
-     * @param array 2维数组，例如：
-     * array(
+     * @param array  $arr     2维数组，例如：
+     *      array(
      *      1 => array('id'=>'1','pid'=>0,'name'=>'一级栏目一'),
      *      2 => array('id'=>'2','pid'=>0,'name'=>'一级栏目二'),
      *      3 => array('id'=>'3','pid'=>1,'name'=>'二级栏目一'),
@@ -69,14 +64,19 @@ class Tree
      *      6 => array('id'=>'6','pid'=>3,'name'=>'三级栏目一'),
      *      7 => array('id'=>'7','pid'=>3,'name'=>'三级栏目二')
      *      )
+     * @param string $pidname 父字段名称
+     * @param string $nbsp    空格占位符
+     * @return Tree
      */
-    public function init($arr = [], $pidname = NULL, $nbsp = NULL)
+    public function init($arr = [], $pidname = null, $nbsp = null)
     {
         $this->arr = $arr;
-        if (!is_null($pidname))
+        if (!is_null($pidname)) {
             $this->pidname = $pidname;
-        if (!is_null($nbsp))
+        }
+        if (!is_null($nbsp)) {
             $this->nbsp = $nbsp;
+        }
         return $this;
     }
 
@@ -88,37 +88,34 @@ class Tree
     public function getChild($myid)
     {
         $newarr = [];
-        foreach ($this->arr as $value)
-        {
-            if (!isset($value['id']))
+        foreach ($this->arr as $value) {
+            if (!isset($value['id'])) {
                 continue;
-            if ($value[$this->pidname] == $myid)
+            }
+            if ($value[$this->pidname] == $myid) {
                 $newarr[$value['id']] = $value;
+            }
         }
         return $newarr;
     }
 
     /**
-
      * 读取指定节点的所有孩子节点
-     * @param int $myid 节点ID
+     * @param int     $myid     节点ID
      * @param boolean $withself 是否包含自身
      * @return array
      */
-    public function getChildren($myid, $withself = FALSE)
+    public function getChildren($myid, $withself = false)
     {
         $newarr = [];
-        foreach ($this->arr as $value)
-        {
-            if (!isset($value['id']))
+        foreach ($this->arr as $value) {
+            if (!isset($value['id'])) {
                 continue;
-            if ($value[$this->pidname] == $myid)
-            {
+            }
+            if ($value[$this->pidname] == $myid) {
                 $newarr[] = $value;
                 $newarr = array_merge($newarr, $this->getChildren($value['id']));
-            }
-            else if ($withself && $value['id'] == $myid)
-            {
+            } elseif ($withself && $value['id'] == $myid) {
                 $newarr[] = $value;
             }
         }
@@ -126,50 +123,42 @@ class Tree
     }
 
     /**
-
      * 读取指定节点的所有孩子节点ID
-     * @param int $myid 节点ID
+     * @param int     $myid     节点ID
      * @param boolean $withself 是否包含自身
      * @return array
      */
-    public function getChildrenIds($myid, $withself = FALSE)
+    public function getChildrenIds($myid, $withself = false)
     {
         $childrenlist = $this->getChildren($myid, $withself);
         $childrenids = [];
-        foreach ($childrenlist as $k => $v)
-        {
+        foreach ($childrenlist as $k => $v) {
             $childrenids[] = $v['id'];
         }
         return $childrenids;
     }
 
     /**
-
      * 得到当前位置父辈数组
      * @param int
      * @return array
-
      */
     public function getParent($myid)
     {
         $pid = 0;
         $newarr = [];
-        foreach ($this->arr as $value)
-        {
-            if (!isset($value['id']))
+        foreach ($this->arr as $value) {
+            if (!isset($value['id'])) {
                 continue;
-            if ($value['id'] == $myid)
-            {
+            }
+            if ($value['id'] == $myid) {
                 $pid = $value[$this->pidname];
                 break;
             }
         }
-        if ($pid)
-        {
-            foreach ($this->arr as $value)
-            {
-                if ($value['id'] == $pid)
-                {
+        if ($pid) {
+            foreach ($this->arr as $value) {
+                if ($value['id'] == $pid) {
                     $newarr[] = $value;
                     break;
                 }
@@ -179,33 +168,29 @@ class Tree
     }
 
     /**
-
      * 得到当前位置所有父辈数组
      * @param int
+     * @param bool $withself 是否包含自己
      * @return array
-
      */
-    public function getParents($myid, $withself = FALSE)
+    public function getParents($myid, $withself = false)
     {
         $pid = 0;
         $newarr = [];
-        foreach ($this->arr as $value)
-        {
-            if (!isset($value['id']))
+        foreach ($this->arr as $value) {
+            if (!isset($value['id'])) {
                 continue;
-            if ($value['id'] == $myid)
-            {
-                if ($withself)
-                {
+            }
+            if ($value['id'] == $myid) {
+                if ($withself) {
                     $newarr[] = $value;
                 }
                 $pid = $value[$this->pidname];
                 break;
             }
         }
-        if ($pid)
-        {
-            $arr = $this->getParents($pid, TRUE);
+        if ($pid) {
+            $arr = $this->getParents($pid, true);
             $newarr = array_merge($arr, $newarr);
         }
         return $newarr;
@@ -213,52 +198,44 @@ class Tree
 
     /**
      * 读取指定节点所有父类节点ID
-     * @param int $myid
+     * @param int     $myid
      * @param boolean $withself
      * @return array
      */
-    public function getParentsIds($myid, $withself = FALSE)
+    public function getParentsIds($myid, $withself = false)
     {
         $parentlist = $this->getParents($myid, $withself);
         $parentsids = [];
-        foreach ($parentlist as $k => $v)
-        {
+        foreach ($parentlist as $k => $v) {
             $parentsids[] = $v['id'];
         }
         return $parentsids;
     }
 
     /**
-
      * 树型结构Option
-     * @param int $myid 表示获得这个ID下的所有子级
-     * @param string $itemtpl 条目模板 如："<option value=@id @selected @disabled>@spacer@name</option>"
-     * @param mixed $selectedids 被选中的ID，比如在做树型下拉框的时候需要用到
-     * @param mixed $disabledids 被禁用的ID，比如在做树型下拉框的时候需要用到
-     * @param string $itemprefix 每一项前缀
-     * @param string $toptpl 顶级栏目的模板
+     * @param int    $myid        表示获得这个ID下的所有子级
+     * @param string $itemtpl     条目模板 如："<option value=@id @selected @disabled>@spacer@name</option>"
+     * @param mixed  $selectedids 被选中的ID，比如在做树型下拉框的时候需要用到
+     * @param mixed  $disabledids 被禁用的ID，比如在做树型下拉框的时候需要用到
+     * @param string $itemprefix  每一项前缀
+     * @param string $toptpl      顶级栏目的模板
      * @return string
-
      */
     public function getTree($myid, $itemtpl = "<option value=@id @selected @disabled>@spacer@name</option>", $selectedids = '', $disabledids = '', $itemprefix = '', $toptpl = '')
     {
         $ret = '';
         $number = 1;
         $childs = $this->getChild($myid);
-        if ($childs)
-        {
+        if ($childs) {
             $total = count($childs);
-            foreach ($childs as $value)
-            {
+            foreach ($childs as $value) {
                 $id = $value['id'];
                 $j = $k = '';
-                if ($number == $total)
-                {
+                if ($number == $total) {
                     $j .= $this->icon[2];
                     $k = $itemprefix ? $this->nbsp : '';
-                }
-                else
-                {
+                } else {
                     $j .= $this->icon[1];
                     $k = $itemprefix ? $this->icon[0] : '';
                 }
@@ -266,10 +243,10 @@ class Tree
                 $selected = $selectedids && in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = $disabledids && in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled, 'spacer' => $spacer));
-                $value = array_combine(array_map(function($k) {
-                            return '@' . $k;
-                        }, array_keys($value)), $value);
-                $nstr = strtr((($value["@{$this->pidname}"] == 0 || $this->getChild($id) ) && $toptpl ? $toptpl : $itemtpl), $value);
+                $value = array_combine(array_map(function ($k) {
+                    return '@' . $k;
+                }, array_keys($value)), $value);
+                $nstr = strtr((($value["@{$this->pidname}"] == 0 || $this->getChild($id)) && $toptpl ? $toptpl : $itemtpl), $value);
                 $ret .= $nstr;
                 $ret .= $this->getTree($id, $itemtpl, $selectedids, $disabledids, $itemprefix . $k . $this->nbsp, $toptpl);
                 $number++;
@@ -279,32 +256,29 @@ class Tree
     }
 
     /**
-
      * 树型结构UL
-     * @param int $myid 表示获得这个ID下的所有子级
-     * @param string $itemtpl 条目模板 如："<li value=@id @selected @disabled>@name @childlist</li>"
+     * @param int    $myid        表示获得这个ID下的所有子级
+     * @param string $itemtpl     条目模板 如："<li value=@id @selected @disabled>@name @childlist</li>"
      * @param string $selectedids 选中的ID
      * @param string $disabledids 禁用的ID
-     * @param string $wraptag 子列表包裹标签
+     * @param string $wraptag     子列表包裹标签
+     * @param string $wrapattr    子列表包裹属性
      * @return string
-
      */
     public function getTreeUl($myid, $itemtpl, $selectedids = '', $disabledids = '', $wraptag = 'ul', $wrapattr = '')
     {
         $str = '';
         $childs = $this->getChild($myid);
-        if ($childs)
-        {
-            foreach ($childs as $value)
-            {
+        if ($childs) {
+            foreach ($childs as $value) {
                 $id = $value['id'];
                 unset($value['child']);
                 $selected = $selectedids && in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = $disabledids && in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled));
-                $value = array_combine(array_map(function($k) {
-                            return '@' . $k;
-                        }, array_keys($value)), $value);
+                $value = array_combine(array_map(function ($k) {
+                    return '@' . $k;
+                }, array_keys($value)), $value);
                 $nstr = strtr($itemtpl, $value);
                 $childdata = $this->getTreeUl($id, $itemtpl, $selectedids, $disabledids, $wraptag, $wrapattr);
                 $childlist = $childdata ? "<{$wraptag} {$wrapattr}>" . $childdata . "</{$wraptag}>" : "";
@@ -316,31 +290,29 @@ class Tree
 
     /**
      * 菜单数据
-     * @param int $myid
+     * @param int    $myid
      * @param string $itemtpl
-     * @param mixed $selectedids
-     * @param mixed $disabledids
+     * @param mixed  $selectedids
+     * @param mixed  $disabledids
      * @param string $wraptag
      * @param string $wrapattr
-     * @param int $deeplevel
+     * @param int    $deeplevel
      * @return string
      */
     public function getTreeMenu($myid, $itemtpl, $selectedids = '', $disabledids = '', $wraptag = 'ul', $wrapattr = '', $deeplevel = 0)
     {
         $str = '';
         $childs = $this->getChild($myid);
-        if ($childs)
-        {
-            foreach ($childs as $value)
-            {
+        if ($childs) {
+            foreach ($childs as $value) {
                 $id = $value['id'];
                 unset($value['child']);
                 $selected = in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled));
-                $value = array_combine(array_map(function($k) {
-                            return '@' . $k;
-                        }, array_keys($value)), $value);
+                $value = array_combine(array_map(function ($k) {
+                    return '@' . $k;
+                }, array_keys($value)), $value);
                 $bakvalue = array_intersect_key($value, array_flip(['@url', '@caret', '@class']));
                 $value = array_diff_key($value, $bakvalue);
                 $nstr = strtr($itemtpl, $value);
@@ -364,12 +336,12 @@ class Tree
 
     /**
      * 特殊
-     * @param integer $myid 要查询的ID
-     * @param string $itemtpl1 第一种HTML代码方式
-     * @param string $itemtpl2 第二种HTML代码方式
-     * @param mixed $selectedids 默认选中
-     * @param mixed $disabledids 禁用
-     * @param string $itemprefix 前缀
+     * @param integer $myid        要查询的ID
+     * @param string  $itemtpl1    第一种HTML代码方式
+     * @param string  $itemtpl2    第二种HTML代码方式
+     * @param mixed   $selectedids 默认选中
+     * @param mixed   $disabledids 禁用
+     * @param string  $itemprefix  前缀
      * @return string
      */
     public function getTreeSpecial($myid, $itemtpl1, $itemtpl2, $selectedids = 0, $disabledids = 0, $itemprefix = '')
@@ -377,19 +349,14 @@ class Tree
         $ret = '';
         $number = 1;
         $childs = $this->getChild($myid);
-        if ($childs)
-        {
+        if ($childs) {
             $total = count($childs);
-            foreach ($childs as $id => $value)
-            {
+            foreach ($childs as $id => $value) {
                 $j = $k = '';
-                if ($number == $total)
-                {
+                if ($number == $total) {
                     $j .= $this->icon[2];
                     $k = $itemprefix ? $this->nbsp : '';
-                }
-                else
-                {
+                } else {
                     $j .= $this->icon[1];
                     $k = $itemprefix ? $this->icon[0] : '';
                 }
@@ -397,9 +364,9 @@ class Tree
                 $selected = $selectedids && in_array($id, (is_array($selectedids) ? $selectedids : explode(',', $selectedids))) ? 'selected' : '';
                 $disabled = $disabledids && in_array($id, (is_array($disabledids) ? $disabledids : explode(',', $disabledids))) ? 'disabled' : '';
                 $value = array_merge($value, array('selected' => $selected, 'disabled' => $disabled, 'spacer' => $spacer));
-                $value = array_combine(array_map(function($k) {
-                            return '@' . $k;
-                        }, array_keys($value)), $value);
+                $value = array_combine(array_map(function ($k) {
+                    return '@' . $k;
+                }, array_keys($value)), $value);
                 $nstr = strtr(!isset($value['@disabled']) || !$value['@disabled'] ? $itemtpl1 : $itemtpl2, $value);
 
                 $ret .= $nstr;
@@ -413,7 +380,7 @@ class Tree
     /**
      *
      * 获取树状数组
-     * @param string $myid 要查询的ID
+     * @param string $myid       要查询的ID
      * @param string $itemprefix 前缀
      * @return array
      */
@@ -423,19 +390,14 @@ class Tree
         $n = 0;
         $data = [];
         $number = 1;
-        if ($childs)
-        {
+        if ($childs) {
             $total = count($childs);
-            foreach ($childs as $id => $value)
-            {
+            foreach ($childs as $id => $value) {
                 $j = $k = '';
-                if ($number == $total)
-                {
+                if ($number == $total) {
                     $j .= $this->icon[2];
                     $k = $itemprefix ? $this->nbsp : '';
-                }
-                else
-                {
+                } else {
                     $j .= $this->icon[1];
                     $k = $itemprefix ? $this->icon[0] : '';
                 }
@@ -452,26 +414,25 @@ class Tree
 
     /**
      * 将getTreeArray的结果返回为二维数组
-     * @param array $data
+     * @param array  $data
+     * @param string $field
      * @return array
      */
     public function getTreeList($data = [], $field = 'name')
     {
         $arr = [];
-        foreach ($data as $k => $v)
-        {
+        foreach ($data as $k => $v) {
             $childlist = isset($v['childlist']) ? $v['childlist'] : [];
             unset($v['childlist']);
             $v[$field] = $v['spacer'] . ' ' . $v[$field];
             $v['haschild'] = $childlist ? 1 : 0;
-            if ($v['id'])
+            if ($v['id']) {
                 $arr[] = $v;
-            if ($childlist)
-            {
+            }
+            if ($childlist) {
                 $arr = array_merge($arr, $this->getTreeList($childlist, $field));
             }
         }
         return $arr;
     }
-
 }

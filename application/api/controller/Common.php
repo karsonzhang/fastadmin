@@ -13,21 +13,15 @@ use think\Config;
  */
 class Common extends Api
 {
-
     protected $noNeedLogin = ['init'];
     protected $noNeedRight = '*';
-
-    public function _initialize()
-    {
-        parent::_initialize();
-    }
 
     /**
      * 加载初始化
      *
      * @param string $version 版本号
-     * @param string $lng 经度
-     * @param string $lat 纬度
+     * @param string $lng     经度
+     * @param string $lat     纬度
      */
     public function init()
     {
@@ -137,5 +131,4 @@ class Common extends Api
             $this->error($file->getError());
         }
     }
-
 }

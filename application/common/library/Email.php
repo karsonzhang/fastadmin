@@ -38,8 +38,7 @@ class Email
      */
     public static function instance($options = [])
     {
-        if (is_null(self::$instance))
-        {
+        if (is_null(self::$instance)) {
             self::$instance = new static($options);
         }
 
@@ -52,8 +51,7 @@ class Email
      */
     public function __construct($options = [])
     {
-        if ($config = Config::get('site'))
-        {
+        if ($config = Config::get('site')) {
             $this->options = array_merge($this->options, $config);
         }
         $this->options = array_merge($this->options, $options);
@@ -114,7 +112,7 @@ class Email
 
     /**
      * 设置邮件正文
-     * @param string $body
+     * @param string  $body
      * @param boolean $ishtml
      * @return $this
      */
@@ -150,27 +148,20 @@ class Email
     public function send()
     {
         $result = false;
-        switch ($this->options['mail_type'])
-        {
+        switch ($this->options['mail_type']) {
             case 1:
                 //使用phpmailer发送
                 $this->mail->setFrom($this->options['from'], $this->options['from_name']);
                 $this->mail->addAddress($this->options['to'], $this->options['to_name']);
                 $this->mail->Subject = $this->options['subject'];
-                if ($this->options['ishtml'])
-                {
+                if ($this->options['ishtml']) {
                     $this->mail->msgHTML($this->options['body']);
-                }
-                else
-                {
+                } else {
                     $this->mail->Body = $this->options['body'];
                 }
-                try
-                {
+                try {
                     $result = $this->mail->send();
-                }
-                catch (\phpmailerException $e)
-                {
+                } catch (\phpmailerException $e) {
                     $this->setError($e->getMessage());
                 }
 

@@ -11,14 +11,8 @@ use app\common\model\User;
  */
 class Sms extends Api
 {
-
     protected $noNeedLogin = '*';
     protected $noNeedRight = '*';
-
-    public function _initialize()
-    {
-        parent::_initialize();
-    }
 
     /**
      * 发送验证码
@@ -48,15 +42,15 @@ class Sms extends Api
             if ($event == 'register' && $userinfo) {
                 //已被注册
                 $this->error(__('已被注册'));
-            } else if (in_array($event, ['changemobile']) && $userinfo) {
+            } elseif (in_array($event, ['changemobile']) && $userinfo) {
                 //被占用
                 $this->error(__('已被占用'));
-            } else if (in_array($event, ['changepwd', 'resetpwd']) && !$userinfo) {
+            } elseif (in_array($event, ['changepwd', 'resetpwd']) && !$userinfo) {
                 //未注册
                 $this->error(__('未注册'));
             }
         }
-        $ret = Smslib::send($mobile, NULL, $event);
+        $ret = Smslib::send($mobile, null, $event);
         if ($ret) {
             $this->success(__('发送成功'));
         } else {
@@ -86,10 +80,10 @@ class Sms extends Api
             if ($event == 'register' && $userinfo) {
                 //已被注册
                 $this->error(__('已被注册'));
-            } else if (in_array($event, ['changemobile']) && $userinfo) {
+            } elseif (in_array($event, ['changemobile']) && $userinfo) {
                 //被占用
                 $this->error(__('已被占用'));
-            } else if (in_array($event, ['changepwd', 'resetpwd']) && !$userinfo) {
+            } elseif (in_array($event, ['changepwd', 'resetpwd']) && !$userinfo) {
                 //未注册
                 $this->error(__('未注册'));
             }
@@ -101,5 +95,4 @@ class Sms extends Api
             $this->error(__('验证码不正确'));
         }
     }
-
 }

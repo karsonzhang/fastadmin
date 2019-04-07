@@ -13,7 +13,6 @@ use think\Validate;
  */
 class User extends Api
 {
-
     protected $noNeedLogin = ['login', 'mobilelogin', 'register', 'resetpwd', 'changeemail', 'changemobile', 'third'];
     protected $noNeedRight = '*';
 
@@ -33,7 +32,7 @@ class User extends Api
     /**
      * 会员登录
      *
-     * @param string $account 账号
+     * @param string $account  账号
      * @param string $password 密码
      */
     public function login()
@@ -55,7 +54,7 @@ class User extends Api
     /**
      * 手机验证码登录
      *
-     * @param string $mobile 手机号
+     * @param string $mobile  手机号
      * @param string $captcha 验证码
      */
     public function mobilelogin()
@@ -92,8 +91,8 @@ class User extends Api
      *
      * @param string $username 用户名
      * @param string $password 密码
-     * @param string $email 邮箱
-     * @param string $mobile 手机号
+     * @param string $email    邮箱
+     * @param string $mobile   手机号
      */
     public function register()
     {
@@ -131,10 +130,10 @@ class User extends Api
     /**
      * 修改会员个人信息
      *
-     * @param string $avatar 头像地址
+     * @param string $avatar   头像地址
      * @param string $username 用户名
      * @param string $nickname 昵称
-     * @param string $bio 个人简介
+     * @param string $bio      个人简介
      */
     public function profile()
     {
@@ -142,7 +141,7 @@ class User extends Api
         $username = $this->request->request('username');
         $nickname = $this->request->request('nickname');
         $bio = $this->request->request('bio');
-        $avatar = $this->request->request('avatar');
+        $avatar = $this->request->request('avatar', '', 'trim,strip_tags,htmlspecialchars');
         if ($username) {
             $exists = \app\common\model\User::where('username', $username)->where('id', '<>', $this->auth->id)->find();
             if ($exists) {
@@ -160,7 +159,7 @@ class User extends Api
     /**
      * 修改邮箱
      *
-     * @param string $email 邮箱
+     * @param string $email   邮箱
      * @param string $captcha 验证码
      */
     public function changeemail()
@@ -194,7 +193,7 @@ class User extends Api
     /**
      * 修改手机号
      *
-     * @param string $email 手机号
+     * @param string $email   手机号
      * @param string $captcha 验证码
      */
     public function changemobile()
@@ -229,7 +228,7 @@ class User extends Api
      * 第三方登录
      *
      * @param string $platform 平台名称
-     * @param string $code Code码
+     * @param string $code     Code码
      */
     public function third()
     {
@@ -259,9 +258,9 @@ class User extends Api
     /**
      * 重置密码
      *
-     * @param string $mobile 手机号
+     * @param string $mobile      手机号
      * @param string $newpassword 新密码
-     * @param string $captcha 验证码
+     * @param string $captcha     验证码
      */
     public function resetpwd()
     {
@@ -309,5 +308,4 @@ class User extends Api
             $this->error($this->auth->getError());
         }
     }
-
 }

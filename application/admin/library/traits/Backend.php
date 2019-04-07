@@ -7,7 +7,10 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
+use think\Db;
 use think\Exception;
+use think\exception\PDOException;
+use think\exception\ValidateException;
 
 trait Backend
 {
@@ -108,6 +111,8 @@ trait Backend
                 if ($this->dataLimit && $this->dataLimitFieldAutoFill) {
                     $params[$this->dataLimitField] = $this->auth->id;
                 }
+                $result = false;
+                Db::startTrans();
                 try {
                     //是否采用模型验证
                     if ($this->modelValidate) {
@@ -116,15 +121,21 @@ trait Backend
                         $this->model->validate($validate);
                     }
                     $result = $this->model->allowField(true)->save($params);
-                    if ($result !== false) {
-                        $this->success();
-                    } else {
-                        $this->error($this->model->getError());
-                    }
-                } catch (\think\exception\PDOException $e) {
+                    Db::commit();
+                } catch (ValidateException $e) {
+                    Db::rollback();
                     $this->error($e->getMessage());
-                } catch (\think\Exception $e) {
+                } catch (PDOException $e) {
+                    Db::rollback();
                     $this->error($e->getMessage());
+                } catch (Exception $e) {
+                    Db::rollback();
+                    $this->error($e->getMessage());
+                }
+                if ($result) {
+                    $this->success();
+                } else {
+                    $this->error();
                 }
             }
             $this->error(__('Parameter %s can not be empty', ''));
@@ -151,7 +162,8 @@ trait Backend
             $params = $this->request->post("row/a");
             if ($params) {
                 $params = $this->preExcludeFields($params);
-
+                $result = false;
+                Db::startTrans();
                 try {
                     //是否采用模型验证
                     if ($this->modelValidate) {
@@ -160,15 +172,21 @@ trait Backend
                         $row->validate($validate);
                     }
                     $result = $row->allowField(true)->save($params);
-                    if ($result !== false) {
-                        $this->success();
-                    } else {
-                        $this->error($row->getError());
-                    }
-                } catch (\think\exception\PDOException $e) {
+                    Db::commit();
+                } catch (ValidateException $e) {
+                    Db::rollback();
                     $this->error($e->getMessage());
-                } catch (\think\Exception $e) {
+                } catch (PDOException $e) {
+                    Db::rollback();
                     $this->error($e->getMessage());
+                } catch (Exception $e) {
+                    Db::rollback();
+                    $this->error($e->getMessage());
+                }
+                if ($result) {
+                    $this->success();
+                } else {
+                    $this->error();
                 }
             }
             $this->error(__('Parameter %s can not be empty', ''));
@@ -186,12 +204,23 @@ trait Backend
             $pk = $this->model->getPk();
             $adminIds = $this->getDataLimitAdminIds();
             if (is_array($adminIds)) {
-                $count = $this->model->where($this->dataLimitField, 'in', $adminIds);
+                $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
             $list = $this->model->where($pk, 'in', $ids)->select();
+
             $count = 0;
-            foreach ($list as $k => $v) {
-                $count += $v->delete();
+            Db::startTrans();
+            try {
+                foreach ($list as $k => $v) {
+                    $count += $v->delete();
+                }
+                Db::commit();
+            } catch (PDOException $e) {
+                Db::rollback();
+                $this->error($e->getMessage());
+            } catch (Exception $e) {
+                Db::rollback();
+                $this->error($e->getMessage());
             }
             if ($count) {
                 $this->success();
@@ -210,15 +239,25 @@ trait Backend
         $pk = $this->model->getPk();
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds)) {
-            $count = $this->model->where($this->dataLimitField, 'in', $adminIds);
+            $this->model->where($this->dataLimitField, 'in', $adminIds);
         }
         if ($ids) {
             $this->model->where($pk, 'in', $ids);
         }
         $count = 0;
-        $list = $this->model->onlyTrashed()->select();
-        foreach ($list as $k => $v) {
-            $count += $v->delete(true);
+        Db::startTrans();
+        try {
+            $list = $this->model->onlyTrashed()->select();
+            foreach ($list as $k => $v) {
+                $count += $v->delete(true);
+            }
+            Db::commit();
+        } catch (PDOException $e) {
+            Db::rollback();
+            $this->error($e->getMessage());
+        } catch (Exception $e) {
+            Db::rollback();
+            $this->error($e->getMessage());
         }
         if ($count) {
             $this->success();
@@ -242,9 +281,19 @@ trait Backend
             $this->model->where($pk, 'in', $ids);
         }
         $count = 0;
-        $list = $this->model->onlyTrashed()->select();
-        foreach ($list as $index => $item) {
-            $count += $item->restore();
+        Db::startTrans();
+        try {
+            $list = $this->model->onlyTrashed()->select();
+            foreach ($list as $index => $item) {
+                $count += $item->restore();
+            }
+            Db::commit();
+        } catch (PDOException $e) {
+            Db::rollback();
+            $this->error($e->getMessage());
+        } catch (Exception $e) {
+            Db::rollback();
+            $this->error($e->getMessage());
         }
         if ($count) {
             $this->success();
@@ -268,9 +317,19 @@ trait Backend
                         $this->model->where($this->dataLimitField, 'in', $adminIds);
                     }
                     $count = 0;
-                    $list = $this->model->where($this->model->getPk(), 'in', $ids)->select();
-                    foreach ($list as $index => $item) {
-                        $count += $item->allowField(true)->isUpdate(true)->save($values);
+                    Db::startTrans();
+                    try {
+                        $list = $this->model->where($this->model->getPk(), 'in', $ids)->select();
+                        foreach ($list as $index => $item) {
+                            $count += $item->allowField(true)->isUpdate(true)->save($values);
+                        }
+                        Db::commit();
+                    } catch (PDOException $e) {
+                        Db::rollback();
+                        $this->error($e->getMessage());
+                    } catch (Exception $e) {
+                        Db::rollback();
+                        $this->error($e->getMessage());
                     }
                     if ($count) {
                         $this->success();
@@ -405,7 +464,7 @@ trait Backend
                 }
             }
             $this->model->saveAll($insert);
-        } catch (\think\exception\PDOException $exception) {
+        } catch (PDOException $exception) {
             $msg = $exception->getMessage();
             if (preg_match("/.+Integrity constraint violation: 1062 Duplicate entry '(.+)' for key '(.+)'/is", $msg, $matches)) {
                 $msg = "导入失败，包含【{$matches[1]}】的记录已存在";
