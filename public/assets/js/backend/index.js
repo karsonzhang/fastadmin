@@ -354,7 +354,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             function setup() {
                 var tmp = localStorage.getItem('skin');
-                if (tmp && $.inArray(tmp, my_skins))
+                if (tmp && $.inArray(tmp, my_skins) != -1)
                     change_skin(tmp);
 
                 // 皮肤切换

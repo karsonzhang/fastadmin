@@ -95,8 +95,14 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 return url;
             },
             //获取修复后可访问的cdn链接
-            cdnurl: function (url) {
-                return /^(?:[a-z]+:)?\/\//i.test(url) ? url : Config.upload.cdnurl + url;
+            cdnurl: function (url, domain) {
+                var rule = new RegExp("^((?:[a-z]+:)?\\/\\/|data:image\\/)", "i");
+                var url = rule.test(url) ? url : Config.upload.cdnurl + url;
+                if (domain && !rule.test(url)) {
+                    domain = typeof domain === 'string' ? domain : location.origin;
+                    url = domain + url;
+                }
+                return url;
             },
             //查询Url参数
             query: function (name, url) {
