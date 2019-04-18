@@ -118,7 +118,7 @@ trait Backend
                     if ($this->modelValidate) {
                         $name = str_replace("\\model\\", "\\validate\\", get_class($this->model));
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : $name) : $this->modelValidate;
-                        $this->model->validate($validate);
+                        $this->model->validateFailException(true)->validate($validate);
                     }
                     $result = $this->model->allowField(true)->save($params);
                     Db::commit();
@@ -132,10 +132,10 @@ trait Backend
                     Db::rollback();
                     $this->error($e->getMessage());
                 }
-                if ($result) {
+                if ($result !== false) {
                     $this->success();
                 } else {
-                    $this->error();
+                    $this->error(__('No rows were inserted'));
                 }
             }
             $this->error(__('Parameter %s can not be empty', ''));
@@ -169,7 +169,7 @@ trait Backend
                     if ($this->modelValidate) {
                         $name = str_replace("\\model\\", "\\validate\\", get_class($this->model));
                         $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.edit' : $name) : $this->modelValidate;
-                        $row->validate($validate);
+                        $row->validateFailException(true)->validate($validate);
                     }
                     $result = $row->allowField(true)->save($params);
                     Db::commit();
@@ -183,10 +183,10 @@ trait Backend
                     Db::rollback();
                     $this->error($e->getMessage());
                 }
-                if ($result) {
+                if ($result !== false) {
                     $this->success();
                 } else {
-                    $this->error();
+                    $this->error(__('No rows were updated'));
                 }
             }
             $this->error(__('Parameter %s can not be empty', ''));

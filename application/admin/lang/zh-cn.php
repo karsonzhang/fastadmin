@@ -130,6 +130,7 @@ return [
     'Network error'                                         => '网络错误!',
     'Invalid parameters'                                    => '未知参数',
     'No results were found'                                 => '记录未找到',
+    'No rows were inserted'                                 => '未插入任何行',
     'No rows were deleted'                                  => '未删除任何行',
     'No rows were updated'                                  => '未更新任何行',
     'Parameter %s can not be empty'                         => '参数%s不能为空',

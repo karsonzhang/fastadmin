@@ -61,12 +61,15 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             //发送Ajax请求
             ajax: function (options, success, error) {
                 options = typeof options === 'string' ? {url: options} : options;
-                var index = Layer.load();
+                var index;
+                if (typeof options.loading === 'undefined' || options.loading) {
+                    index = Layer.load(options.loading || 0);
+                }
                 options = $.extend({
                     type: "POST",
                     dataType: "json",
                     success: function (ret) {
-                        Layer.close(index);
+                        index && Layer.close(index);
                         ret = Fast.events.onAjaxResponse(ret);
                         if (ret.code === 1) {
                             Fast.events.onAjaxSuccess(ret, success);
@@ -75,7 +78,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         }
                     },
                     error: function (xhr) {
-                        Layer.close(index);
+                        index && Layer.close(index);
                         var ret = {code: xhr.status, msg: xhr.statusText, data: null};
                         Fast.events.onAjaxError(ret, error);
                     }
@@ -246,6 +249,16 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 return Layer.msg(__('Operation failed'), $.extend({
                     offset: 0, icon: 2
                 }, type ? {} : options), callback);
+            },
+            msg: function (message, url) {
+                var callback = typeof url === 'function' ? url : function () {
+                    if (typeof url !== 'undefined' && url) {
+                        location.href = url;
+                    }
+                };
+                Layer.msg(message, {
+                    time: 2000
+                }, callback);
             },
             toastr: Toastr,
             layer: Layer

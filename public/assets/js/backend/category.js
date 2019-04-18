@@ -68,6 +68,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         add: function () {
             Controller.api.bindevent();
+            $("#c-type").trigger("change");
         },
         edit: function () {
             Controller.api.bindevent();

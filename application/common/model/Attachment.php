@@ -18,7 +18,7 @@ class Attachment extends Model
 
     public function setUploadtimeAttr($value)
     {
-        return strtotime($value);
+        return is_numeric($value) ? $value : strtotime($value);
     }
 
     protected static function init()
