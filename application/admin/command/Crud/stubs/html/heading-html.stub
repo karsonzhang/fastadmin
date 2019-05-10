@@ -3,7 +3,7 @@
         {:build_heading(null,FALSE)}
         <ul class="nav nav-tabs" data-field="{%field%}">
             <li class="active"><a href="#t-all" data-value="" data-toggle="tab">{:__('All')}</a></li>
-            {foreach name="{%field%}List" item="vo"}
+            {foreach name="{%fieldName%}List" item="vo"}
             <li><a href="#t-{$key}" data-value="{$key}" data-toggle="tab">{$vo}</a></li>
             {/foreach}
         </ul>

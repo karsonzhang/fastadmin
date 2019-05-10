@@ -31,8 +31,9 @@ return [
     'Recent discussion'       => '最新发贴',
     'Server info'             => '服务器信息',
     'PHP version'             => 'PHP版本',
-    'Fastadmin version'       => 'FastAdmin版本',
-    'Fastadmin addon version' => 'FastAdmin插件版本',
+    'Fastadmin version'       => '主框架版本',
+    'Fastadmin addon version' => '插件版本',
+    'Thinkphp version'        => 'ThinkPHP版本',
     'Sapi name'               => '运行方式',
     'Debug mode'              => '调试模式',
     'Software'                => '环境信息',
@@ -42,5 +43,6 @@ return [
     'Cdn url'                 => '静态资源CDN',
     'Timezone'                => '时区',
     'Language'                => '语言',
+    'View more'               => '查看更多',
     'Security tips'           => '<i class="fa fa-warning"></i> 安全提示：你正在使用默认的后台登录入口，为了你的网站安全，建议你修改后台登录入口，<a href="https://forum.fastadmin.net/thread/7640" target="_blank">点击查看修改方法</a>',
 ];

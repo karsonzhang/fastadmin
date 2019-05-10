@@ -15,19 +15,19 @@
     <div class="form-group">
         <label for="c-name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-name" class="form-control" name="row[name]" type="text" placeholder="{:__('Controller/Action')}" value="{$row.name}">
+            <input id="c-name" class="form-control" name="row[name]" type="text" placeholder="{:__('Controller/Action')}" value="{$row.name|htmlentities}">
         </div>
     </div>
     <div class="form-group">
         <label for="c-title" class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title}">
+            <input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|htmlentities}">
         </div>
     </div>
     <div class="form-group">
         <label for="remark" class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea class="form-control" id="remark" name="row[remark]">{$row.remark}</textarea>
+            <textarea class="form-control" id="remark" name="row[remark]">{$row.remark|htmlentities}</textarea>
         </div>
     </div>
     <div class="form-group">

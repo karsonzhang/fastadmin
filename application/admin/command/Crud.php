@@ -59,6 +59,11 @@ class Crud extends Command
     protected $citySuffix = ['city'];
 
     /**
+     * JSON后缀
+     */
+    protected $jsonSuffix = ['json'];
+
+    /**
      * Selectpage对应的后缀
      */
     protected $selectpageSuffix = ['_id', '_ids'];
@@ -167,6 +172,7 @@ class Crud extends Command
             ->addOption('intdatesuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate date component with suffix', null)
             ->addOption('switchsuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate switch component with suffix', null)
             ->addOption('citysuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate citypicker component with suffix', null)
+            ->addOption('jsonsuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate fieldlist component with suffix', null)
             ->addOption('selectpagesuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate selectpage component with suffix', null)
             ->addOption('selectpagessuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate multiple selectpage component with suffix', null)
             ->addOption('ignorefields', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'ignore fields', null)
@@ -228,6 +234,8 @@ class Crud extends Command
         $switchsuffix = $input->getOption('switchsuffix');
         //城市后缀
         $citysuffix = $input->getOption('citysuffix');
+        //JSON配置后缀
+        $jsonsuffix = $input->getOption('jsonsuffix');
         //selectpage后缀
         $selectpagesuffix = $input->getOption('selectpagesuffix');
         //selectpage多选后缀
@@ -260,6 +268,9 @@ class Crud extends Command
         }
         if ($citysuffix) {
             $this->citySuffix = $citysuffix;
+        }
+        if ($jsonsuffix) {
+            $this->jsonSuffix = $jsonsuffix;
         }
         if ($selectpagesuffix) {
             $this->selectpageSuffix = $selectpagesuffix;
@@ -581,7 +592,7 @@ class Crud extends Command
                     $cssClassArr = ['form-control'];
                     $fieldName = "row[{$field}]";
                     $defaultValue = $v['COLUMN_DEFAULT'];
-                    $editValue = "{\$row.{$field}}";
+                    $editValue = "{\$row.{$field}|htmlentities}";
                     // 如果默认值非null,则是一个必选项
                     if ($v['IS_NULLABLE'] == 'NO') {
                         $attrArr['data-rule'] = 'required';
@@ -688,6 +699,12 @@ class Crud extends Command
                         $attrArr['data-toggle'] = "city-picker";
                         $formAddElement = sprintf("<div class='control-relative'>%s</div>", Form::input('text', $fieldName, $defaultValue, $attrArr));
                         $formEditElement = sprintf("<div class='control-relative'>%s</div>", Form::input('text', $fieldName, $editValue, $attrArr));
+                    } elseif ($inputType == 'fieldlist') {
+                        $itemArr = $this->getItemArray($itemArr, $field, $v['COLUMN_COMMENT']);
+                        $itemKey = isset($itemArr['key']) ? ucfirst($itemArr['key']) : 'Key';
+                        $itemValue = isset($itemArr['value']) ? ucfirst($itemArr['value']) : 'Value';
+                        $formAddElement = $this->getReplacedStub('html/' . $inputType, ['field' => $field, 'fieldName' => $fieldName, 'itemKey' => $itemKey, 'itemValue' => $itemValue, 'fieldValue' => $defaultValue]);
+                        $formEditElement = $this->getReplacedStub('html/' . $inputType, ['field' => $field, 'fieldName' => $fieldName, 'itemKey' => $itemKey, 'itemValue' => $itemValue, 'fieldValue' => $editValue]);
                     } else {
                         $search = $replace = '';
                         //特殊字段为关联搜索
@@ -753,7 +770,7 @@ class Crud extends Command
                 }
 
                 //过滤text类型字段
-                if ($v['DATA_TYPE'] != 'text') {
+                if ($v['DATA_TYPE'] != 'text' && $inputType != 'fieldlist') {
                     //主键
                     if ($v['COLUMN_KEY'] == 'PRI' && !$priDefined) {
                         $priDefined = true;
@@ -768,7 +785,7 @@ class Crud extends Command
                         $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '', $itemArr);
                     }
                     if ($this->headingFilterField && $this->headingFilterField == $field && $itemArr) {
-                        $headingHtml = $this->getReplacedStub('html/heading-html', ['field' => $field]);
+                        $headingHtml = $this->getReplacedStub('html/heading-html', ['field' => $field, 'fieldName' => Loader::parseName($field, 1, false)]);
                     }
                     //排序方式,如果有指定排序字段,否则按主键排序
                     $order = $field == $this->sortField ? $this->sortField : $order;
@@ -1081,9 +1098,9 @@ EOD;
     /**
      * 获取已解析相关信息
      * @param string $module 模块名称
-     * @param string $name 自定义名称
-     * @param string $table 数据表名
-     * @param string $type 解析类型，本例中为controller、model、validate
+     * @param string $name   自定义名称
+     * @param string $table  数据表名
+     * @param string $type   解析类型，本例中为controller、model、validate
      * @return array
      */
     protected function getParseNameData($module, $name, $table, $type)
@@ -1113,7 +1130,7 @@ EOD;
     /**
      * 写入到文件
      * @param string $name
-     * @param array $data
+     * @param array  $data
      * @param string $pathname
      * @return mixed
      */
@@ -1134,7 +1151,7 @@ EOD;
     /**
      * 获取替换后的数据
      * @param string $name
-     * @param array $data
+     * @param array  $data
      * @return string
      */
     protected function getReplacedStub($name, $data)
@@ -1199,7 +1216,7 @@ EOD;
 
     /**
      * 读取数据和语言数组列表
-     * @param array $arr
+     * @param array   $arr
      * @param boolean $withTpl
      * @return array
      */
@@ -1314,13 +1331,17 @@ EOD;
         if ($this->isMatchSuffix($fieldsName, $this->citySuffix) && ($v['DATA_TYPE'] == 'varchar' || $v['DATA_TYPE'] == 'char')) {
             $inputType = "citypicker";
         }
+        // 指定后缀结尾JSON配置
+        if ($this->isMatchSuffix($fieldsName, $this->jsonSuffix) && ($v['DATA_TYPE'] == 'varchar' || $v['DATA_TYPE'] == 'text')) {
+            $inputType = "fieldlist";
+        }
         return $inputType;
     }
 
     /**
      * 判断是否符合指定后缀
-     * @param string $field 字段名称
-     * @param mixed $suffixArr 后缀
+     * @param string $field     字段名称
+     * @param mixed  $suffixArr 后缀
      * @return boolean
      */
     protected function isMatchSuffix($field, $suffixArr)
@@ -1387,7 +1408,7 @@ EOD;
      * @param string $field
      * @param string $datatype
      * @param string $extend
-     * @param array $itemArr
+     * @param array  $itemArr
      * @return string
      */
     protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [])

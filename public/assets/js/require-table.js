@@ -521,13 +521,19 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     //渲染Flag
                     var html = [];
                     var arr = value.split(',');
+                    var color, display, label;
                     $.each(arr, function (i, value) {
                         value = value === null ? '' : value.toString();
                         if (value == '')
                             return true;
-                        var color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
-                        var display = typeof that.searchList !== 'undefined' && typeof that.searchList[value] !== 'undefined' ? that.searchList[value] : __(value.charAt(0).toUpperCase() + value.slice(1));
-                        html.push('<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', display) + '" data-field="' + field + '" data-value="' + value + '"><span class="label label-' + color + '">' + display + '</span></a>');
+                        color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
+                        display = typeof that.searchList !== 'undefined' && typeof that.searchList[value] !== 'undefined' ? that.searchList[value] : __(value.charAt(0).toUpperCase() + value.slice(1));
+                        label = '<span class="label label-' + color + '">' + display + '</span>';
+                        if (that.operate) {
+                            html.push('<a href="javascript:;" class="searchit" data-toggle="tooltip" title="' + __('Click to search %s', display) + '" data-field="' + field + '" data-value="' + value + '">' + label + '</a>');
+                        } else {
+                            html.push(label);
+                        }
                     });
                     return html.join(' ');
                 },

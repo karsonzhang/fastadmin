@@ -3,7 +3,6 @@
 namespace app\index\controller;
 
 use app\common\controller\Frontend;
-use app\common\library\Token;
 
 class Index extends Frontend
 {

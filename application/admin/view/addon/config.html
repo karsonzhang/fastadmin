@@ -21,10 +21,10 @@
                     <div class="col-sm-8 col-xs-12">
                         {switch $item.type}
                         {case string}
-                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
+                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
                         {/case}
                         {case text}
-                        <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value}</textarea>
+                        <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
                         {/case}
                         {case array}
                         <dl class="fieldlist" data-name="row[{$item.name}]">
@@ -33,14 +33,14 @@
                                 <ins>{:__('Array value')}</ins>
                             </dd>
                             <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
-                            <textarea name="row[{$item.name}]" cols="30" rows="5" class="hide">{$item.value|json_encode}</textarea>
+                            <textarea name="row[{$item.name}]" cols="30" rows="5" class="hide">{$item.value|json_encode|htmlentities}</textarea>
                         </dl>
                         {/case}
                         {case datetime}
-                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                         {/case}
                         {case number}
-                        <input {$item.extend} type="number" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                        <input {$item.extend} type="number" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                         {/case}
                         {case checkbox}
                         {foreach name="item.content" item="vo"}
@@ -56,15 +56,14 @@
                         {case value="selects"}
                         <select {$item.extend} name="row[{$item.name}]{$item.type=='selects'?'[]':''}" class="form-control selectpicker" data-tip="{$item.tip}" {$item.type=='selects'?'multiple':''}>
                             {foreach name="item.content" item="vo"}
-                            <option value="{$key}" {in name="key" value="$item.value" }selected{
-                            /in}>{$vo}</option>
+                            <option value="{$key}" {in name="key" value="$item.value" }selected{/in}>{$vo}</option>
                             {/foreach}
                         </select>
                         {/case}
                         {case value="image" break="0"}{/case}
                         {case value="images"}
                         <div class="form-inline">
-                            <input id="c-{$item.name}" class="form-control" size="37" name="row[{$item.name}]" type="text" value="{$item.value}" data-tip="{$item.tip}">
+                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
                             <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                             <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                             <ul class="row list-inline plupload-preview" id="p-{$item.name}"></ul>
@@ -73,7 +72,7 @@
                         {case value="file" break="0"}{/case}
                         {case value="files"}
                         <div class="form-inline">
-                            <input id="c-{$item.name}" class="form-control" size="37" name="row[{$item.name}]" type="text" value="{$item.value}" data-tip="{$item.tip}">
+                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
                             <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                             <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                         </div>

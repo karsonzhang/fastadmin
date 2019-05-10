@@ -75,7 +75,7 @@ class User extends Frontend
      */
     public function register()
     {
-        $url = $this->request->request('url');
+        $url = $this->request->request('url', '', 'trim');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -127,7 +127,7 @@ class User extends Frontend
         //判断来源
         $referer = $this->request->server('HTTP_REFERER');
         if (!$url && (strtolower(parse_url($referer, PHP_URL_HOST)) == strtolower($this->request->host()))
-            && !preg_match("/(user\/login|user\/register)/i", $referer)) {
+            && !preg_match("/(user\/login|user\/register|user\/logout)/i", $referer)) {
             $url = $referer;
         }
         $this->view->assign('url', $url);
@@ -140,7 +140,7 @@ class User extends Frontend
      */
     public function login()
     {
-        $url = $this->request->request('url');
+        $url = $this->request->request('url', '', 'trim');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -181,7 +181,7 @@ class User extends Frontend
         //判断来源
         $referer = $this->request->server('HTTP_REFERER');
         if (!$url && (strtolower(parse_url($referer, PHP_URL_HOST)) == strtolower($this->request->host()))
-            && !preg_match("/(user\/login|user\/register)/i", $referer)) {
+            && !preg_match("/(user\/login|user\/register|user\/logout)/i", $referer)) {
             $url = $referer;
         }
         $this->view->assign('url', $url);

@@ -52,13 +52,13 @@
                                             <div class="col-sm-8 col-xs-12">
                                                 {switch $item.type}
                                                 {case string}
-                                                <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}" />
+                                                <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}" />
                                                 {/case}
                                                 {case text}
-                                                <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value}</textarea>
+                                                <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
                                                 {/case}
                                                 {case editor}
-                                                <textarea {$item.extend} name="row[{$item.name}]" id="editor-{$item.name}" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value}</textarea>
+                                                <textarea {$item.extend} name="row[{$item.name}]" id="editor-{$item.name}" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
                                                 {/case}
                                                 {case array}
                                                 <dl class="fieldlist" data-name="row[{$item.name}]">
@@ -67,7 +67,7 @@
                                                         <ins>{:__('Array value')}</ins>
                                                     </dd>
                                                     <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
-                                                    <textarea name="row[{$item.name}]" class="form-control hide" cols="30" rows="5">{$item.value}</textarea>
+                                                    <textarea name="row[{$item.name}]" class="form-control hide" cols="30" rows="5">{$item.value|htmlentities}</textarea>
                                                 </dl>
                                                 {/case}
                                                 {case datetime}
@@ -97,7 +97,7 @@
                                                 {case value="image" break="0"}{/case}
                                                 {case value="images"}
                                                 <div class="form-inline">
-                                                    <input id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value}" data-tip="{$item.tip}">
+                                                    <input id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
                                                     <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                                                     <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                                                     <span class="msg-box n-right" for="c-{$item.name}"></span>
@@ -107,7 +107,7 @@
                                                 {case value="file" break="0"}{/case}
                                                 {case value="files"}
                                                 <div class="form-inline">
-                                                    <input id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value}" data-tip="{$item.tip}">
+                                                    <input id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
                                                     <span><button type="button" id="plupload-{$item.name}" class="btn btn-danger plupload" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                                                     <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                                                     <span class="msg-box n-right" for="c-{$item.name}"></span>

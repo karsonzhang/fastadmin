@@ -1,53 +1,62 @@
 <style type="text/css">
     .sm-st {
-        background:#fff;
-        padding:20px;
-        -webkit-border-radius:3px;
-        -moz-border-radius:3px;
-        border-radius:3px;
-        margin-bottom:20px;
-        -webkit-box-shadow: 0 1px 0px rgba(0,0,0,0.05);
-        box-shadow: 0 1px 0px rgba(0,0,0,0.05);
+        background: #fff;
+        padding: 20px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        margin-bottom: 20px;
+        -webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
     }
+
     .sm-st-icon {
-        width:60px;
-        height:60px;
-        display:inline-block;
-        line-height:60px;
-        text-align:center;
-        font-size:30px;
-        background:#eee;
-        -webkit-border-radius:5px;
-        -moz-border-radius:5px;
-        border-radius:5px;
-        float:left;
-        margin-right:10px;
-        color:#fff;
+        width: 60px;
+        height: 60px;
+        display: inline-block;
+        line-height: 60px;
+        text-align: center;
+        font-size: 30px;
+        background: #eee;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        float: left;
+        margin-right: 10px;
+        color: #fff;
     }
+
     .sm-st-info {
-        font-size:12px;
-        padding-top:2px;
+        font-size: 12px;
+        padding-top: 2px;
     }
+
     .sm-st-info span {
-        display:block;
-        font-size:24px;
-        font-weight:600;
+        display: block;
+        font-size: 24px;
+        font-weight: 600;
     }
+
     .orange {
-        background:#fa8564 !important;
+        background: #fa8564 !important;
     }
+
     .tar {
-        background:#45cf95 !important;
+        background: #45cf95 !important;
     }
+
     .sm-st .green {
-        background:#86ba41 !important;
+        background: #86ba41 !important;
     }
+
     .pink {
-        background:#AC75F0 !important;
+        background: #AC75F0 !important;
     }
+
     .yellow-b {
         background: #fdd752 !important;
     }
+
     .stat-elem {
 
         background-color: #fff;
@@ -58,12 +67,12 @@
 
     .stat-info {
         text-align: center;
-        background-color:#fff;
+        background-color: #fff;
         border-radius: 5px;
         margin-top: -5px;
         padding: 8px;
-        -webkit-box-shadow: 0 1px 0px rgba(0,0,0,0.05);
-        box-shadow: 0 1px 0px rgba(0,0,0,0.05);
+        -webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
         font-style: italic;
     }
 
@@ -75,12 +84,15 @@
     .st-red {
         background-color: #F05050;
     }
+
     .st-green {
         background-color: #27C24C;
     }
+
     .st-violet {
         background-color: #7266ba;
     }
+
     .st-blue {
         background-color: #23b7e5;
     }
@@ -92,7 +104,7 @@
         text-align: center;
         vertical-align: middle;
         width: 50px;
-        float:left;
+        float: left;
     }
 
     .stat {
@@ -100,26 +112,42 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: inline-block;
-        margin-right: 10px; }
+        margin-right: 10px;
+    }
+
     .stat .value {
         font-size: 20px;
         line-height: 24px;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-weight: 500; }
+        font-weight: 500;
+    }
+
     .stat .name {
         overflow: hidden;
-        text-overflow: ellipsis; }
+        text-overflow: ellipsis;
+    }
+
     .stat.lg .value {
         font-size: 26px;
-        line-height: 28px; }
+        line-height: 28px;
+    }
+
     .stat.lg .name {
-        font-size: 16px; }
-    .stat-col .progress {height:2px;}
-    .stat-col .progress-bar {line-height:2px;height:2px;}
+        font-size: 16px;
+    }
+
+    .stat-col .progress {
+        height: 2px;
+    }
+
+    .stat-col .progress-bar {
+        line-height: 2px;
+        height: 2px;
+    }
 
     .item {
-        padding:30px 0;
+        padding: 30px 0;
     }
 </style>
 {if preg_match('/\/admin\/|admin\.php|admin_d75KABNWt\.php/i', url())}
@@ -187,60 +215,60 @@
                             <div class="card-block">
                                 <div class="row row-sm stats-container">
                                     <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"> <i class="fa fa-rocket"></i> </div>
+                                        <div class="stat-icon"><i class="fa fa-rocket"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$todayusersignup} </div>
-                                            <div class="name"> {:__('Today user signup')} </div>
+                                            <div class="value"> {$todayusersignup}</div>
+                                            <div class="name"> {:__('Today user signup')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 30%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"> <i class="fa fa-shopping-cart"></i> </div>
+                                        <div class="stat-icon"><i class="fa fa-shopping-cart"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$todayuserlogin} </div>
-                                            <div class="name"> {:__('Today user login')} </div>
+                                            <div class="value"> {$todayuserlogin}</div>
+                                            <div class="name"> {:__('Today user login')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"> <i class="fa fa-line-chart"></i> </div>
+                                        <div class="stat-icon"><i class="fa fa-line-chart"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$todayorder} </div>
-                                            <div class="name"> {:__('Today order')} </div>
+                                            <div class="value"> {$todayorder}</div>
+                                            <div class="name"> {:__('Today order')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"> <i class="fa fa-users"></i> </div>
+                                        <div class="stat-icon"><i class="fa fa-users"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$unsettleorder} </div>
-                                            <div class="name"> {:__('Unsettle order')} </div>
+                                            <div class="value"> {$unsettleorder}</div>
+                                            <div class="name"> {:__('Unsettle order')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"> <i class="fa fa-list-alt"></i> </div>
+                                        <div class="stat-icon"><i class="fa fa-list-alt"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$sevendnu} </div>
-                                            <div class="name"> {:__('Seven dnu')} </div>
+                                            <div class="value"> {$sevendnu}</div>
+                                            <div class="name"> {:__('Seven dnu')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"> <i class="fa fa-dollar"></i> </div>
+                                        <div class="stat-icon"><i class="fa fa-dollar"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$sevendau} </div>
-                                            <div class="name"> {:__('Seven dau')} </div>
+                                            <div class="value"> {$sevendau}</div>
+                                            <div class="name"> {:__('Seven dau')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
@@ -299,11 +327,15 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h1 class="no-margins">1234</h1>
-                                            <div class="font-bold"><i class="fa fa-commenting"></i> <small>{:__('Comment count')}</small></div>
+                                            <div class="font-bold"><i class="fa fa-commenting"></i>
+                                                <small>{:__('Comment count')}</small>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <h1 class="no-margins">6754</h1>
-                                            <div class="font-bold"><i class="fa fa-heart"></i> <small>{:__('Like count')}</small></div>
+                                            <div class="font-bold"><i class="fa fa-heart"></i>
+                                                <small>{:__('Like count')}</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -322,11 +354,15 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h1 class="no-margins">5302</h1>
-                                            <div class="font-bold"><i class="fa fa-commenting"></i> <small>{:__('Comment count')}</small></div>
+                                            <div class="font-bold"><i class="fa fa-commenting"></i>
+                                                <small>{:__('Comment count')}</small>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <h1 class="no-margins">8205</h1>
-                                            <div class="font-bold"><i class="fa fa-user"></i> <small>{:__('Like count')}</small></div>
+                                            <div class="font-bold"><i class="fa fa-user"></i>
+                                                <small>{:__('Like count')}</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -335,85 +371,118 @@
                     </div>
                 </div>
 
-                <!--如果需要删除最新新闻和最新发贴，删除HTML后还需要删除dashboard.js中的代码-->
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="box box-danger">
-                            <div class="box-header">
+                            <div class="box-header with-border">
                                 <h3 class="box-title">{:__('Recent news')}</h3>
+
                                 <div class="box-tools pull-right">
-                                    <a href="https://www.fastadmin.net" target="_blank" class="btn btn-box-tool">{:__('More')}</a>
                                 </div>
                             </div>
-                            <div class="box-body" id="news-list">
-                                
+                            <div class="box-body">
+                                <ul class="products-list product-list-in-box">
+                                    {for start="1" end="8"}
+                                    <li class="item">
+                                        <div class="product-img">
+                                            <img src="__CDN__/assets/img/avatar.png" style="height:40px;width:40px;">
+                                        </div>
+                                        <div class="product-info">
+                                            <a href="https://www.fastadmin.net" target="_blank" class="product-title">
+                                                FastAdmin
+                                                <span class="label label-{:$i%3===0?'warning':($i%2===0?'success':'info')} pull-right">开源免费</span>
+                                            </a>
+                                            <span class="product-description">
+                                              一款基于ThinkPHP5+Bootstrap的极速后台开发框架
+                                            </span>
+                                        </div>
+                                    </li>
+                                    {/for}
+                                </ul>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="box box-success">
-                            <div class="box-header">
+                            <div class="box-header with-border">
                                 <h3 class="box-title">{:__('Recent discussion')}</h3>
+
                                 <div class="box-tools pull-right">
-                                    <a href="https://forum.fastadmin.net" class="btn btn-box-tool">{:__('More')}</a>
                                 </div>
                             </div>
-                            <div class="box-body" id="discussion-list">
-                                
+                            <div class="box-body">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li><a href="https://www.fastadmin.net" target="_blank">一款基于ThinkPHP5+Bootstrap的极速后台开发框架<span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">一键生成CRUD控制器模型和视图 <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 4%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">一键压缩打包JS和CSS文件 <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 3%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">一键生成控制器菜单和规则 <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 8%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">一键生成API接口文档 <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 0%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">强大的插件扩展功能，在线安装卸载升级插件 <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 10%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">通用的会员模块和API模块 <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 2%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">共用同一账号体系的Web端会员中心权限验证和API接口会员权限验证 <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 6%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">二级域名部署支持，同时域名支持绑定到插件 <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 0%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">多语言支持，服务端及客户端支持 <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 0%</span></a></li>
+                                    <li><a href="https://www.fastadmin.net" target="_blank">基于Bootstrap开发，自适应手机、平板、PC <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 4%</span></a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="box box-info">
                             <div class="box-header"><h3 class="box-title">{:__('Server info')}</h3></div>
-                            <div class="box-body">
+                            <div class="box-body" style="padding-top:0;">
                                 <table class="table table-striped">
                                     <tbody>
-                                        <tr>
-                                            <td width="140">{:__('FastAdmin version')}</td>
-                                            <td>{$Think.config.fastadmin.version} <a href="javascript:;" class="btn btn-xs btn-checkversion">检查最新版</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('FastAdmin addon version')}</td>
-                                            <td>{$addonversion}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Sapi name')}</td>
-                                            <td>{:php_sapi_name()}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Debug mode')}</td>
-                                            <td>{$Think.config.app_debug?__('Yes'):__('No')}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Software')}</td>
-                                            <td>{$Think.server.SERVER_SOFTWARE}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Upload mode')}</td>
-                                            <td>{$uploadmode}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Upload url')}</td>
-                                            <td>{$config.upload.uploadurl}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Upload Cdn url')}</td>
-                                            <td>{$config.upload.cdnurl}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Timezone')}</td>
-                                            <td>{:date_default_timezone_get()}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Cdn url')}</td>
-                                            <td>__CDN__</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{:__('Language')}</td>
-                                            <td>{$config.language}</td>
-                                        </tr>
-                                    </tbody></table>
+                                    <tr>
+                                        <td width="140">{:__('FastAdmin version')}</td>
+                                        <td>{$Think.config.fastadmin.version} <a href="javascript:;" class="btn btn-xs btn-checkversion">检查最新版</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('FastAdmin addon version')}</td>
+                                        <td>{$addonversion}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Thinkphp version')}</td>
+                                        <td>{:THINK_VERSION}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Sapi name')}</td>
+                                        <td>{:php_sapi_name()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Debug mode')}</td>
+                                        <td>{$Think.config.app_debug?__('Yes'):__('No')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Software')}</td>
+                                        <td>{$Think.server.SERVER_SOFTWARE}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Upload mode')}</td>
+                                        <td>{$uploadmode}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Upload url')}</td>
+                                        <td>{$config.upload.uploadurl}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Upload Cdn url')}</td>
+                                        <td>{$config.upload.cdnurl}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Timezone')}</td>
+                                        <td>{:date_default_timezone_get()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Cdn url')}</td>
+                                        <td>__CDN__</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{:__('Language')}</td>
+                                        <td>{$config.language}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -429,38 +498,10 @@
         </div>
     </div>
 </div>
-<script id="newstpl" type="text/html">
-    <ul class="nav nav-stacked">
-        <%for(var i=0;i < news.length;i++){%>
-        <%var item=news[i];%>
-        <li>
-            <a href="<%=item.url%>" target="_blank">
-                <span class="text"><%=item.title%></span>
-            </a>
-        </li>
-        <%}%>
-    </ul>
-</script>
-<script id="discussiontpl" type="text/html">
-    <ul class="products-list product-list-in-box">
-        <%for(var i=0;i < news.length;i++){%>
-        <%var item=news[i];%>
-        <li class="item">
-            <div class="">
-                <a href="<%=item.url%>" target="_blank" class="product-title"><%=item.title%>
-                    <span class="label label-warning pull-right"><%=item.comments_count%></span></a>
-                <span class="product-description">
-                    <%=item.last_time%>
-                </span>
-            </div>
-        </li>
-        <%}%>
-    </ul>
-</script>
 <script>
     var Orderdata = {
-    column: {:json_encode(array_keys($paylist))},
-            paydata: {:json_encode(array_values($paylist))},
-            createdata: {:json_encode(array_values($createlist))},
+        column: {:json_encode(array_keys($paylist))},
+        paydata: {:json_encode(array_values($paylist))},
+        createdata: {:json_encode(array_values($createlist))},
     };
 </script>

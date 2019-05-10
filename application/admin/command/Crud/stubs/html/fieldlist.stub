@@ -1,0 +1,10 @@
+
+            <dl class="fieldlist" data-name="{%fieldName%}">
+                <dd>
+                    <ins>{:__('{%itemKey%}')}</ins>
+                    <ins>{:__('{%itemValue%}')}</ins>
+                </dd>
+                <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                <textarea name="{%fieldName%}" class="form-control hide" cols="30" rows="5">{%fieldValue%}</textarea>
+            </dl>
+

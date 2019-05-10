@@ -60,15 +60,15 @@
                         <p class="text-muted text-center">{$admin.email}</p>
                         <div class="form-group">
                             <label for="username" class="control-label">{:__('Username')}:</label>
-                            <input type="text" class="form-control" id="username" name="row[username]" value="{$admin.username}" disabled/>
+                            <input type="text" class="form-control" id="username" name="row[username]" value="{$admin.username|htmlentities}" disabled/>
                         </div>
                         <div class="form-group">
                             <label for="email" class="control-label">{:__('Email')}:</label>
-                            <input type="text" class="form-control" id="email" name="row[email]" value="{$admin.email}" data-rule="required;email"/>
+                            <input type="text" class="form-control" id="email" name="row[email]" value="{$admin.email|htmlentities}" data-rule="required;email"/>
                         </div>
                         <div class="form-group">
                             <label for="nickname" class="control-label">{:__('Nickname')}:</label>
-                            <input type="text" class="form-control" id="nickname" name="row[nickname]" value="{$admin.nickname}" data-rule="required"/>
+                            <input type="text" class="form-control" id="nickname" name="row[nickname]" value="{$admin.nickname|htmlentities}" data-rule="required"/>
                         </div>
                         <div class="form-group">
                             <label for="password" class="control-label">{:__('Password')}:</label>

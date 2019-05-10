@@ -241,7 +241,7 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
             }
             //tooltip和popover
             if (!('ontouchstart' in document.documentElement)) {
-                $('body').tooltip({selector: '[data-toggle="tooltip"]', container: 'body'});
+                $('body').tooltip({selector: '[data-toggle="tooltip"]'});
             }
             $('body').popover({selector: '[data-toggle="popover"]'});
         }

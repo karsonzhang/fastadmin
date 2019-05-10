@@ -27,13 +27,13 @@
     <div class="form-group">
         <label for="c-name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-name" data-rule="required" class="form-control" name="row[name]" type="text" value="{$row.name}">
+            <input id="c-name" data-rule="required" class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
         </div>
     </div>
     <div class="form-group">
         <label for="c-nickname" class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-nickname" data-rule="required" class="form-control" name="row[nickname]" type="text" value="{$row.nickname}">
+            <input id="c-nickname" data-rule="required" class="form-control" name="row[nickname]" type="text" value="{$row.nickname|htmlentities}">
         </div>
     </div>
     <div class="form-group">
@@ -52,7 +52,7 @@
         <label for="c-image" class="control-label col-xs-12 col-sm-2">{:__('Image')}:</label>
         <div class="col-xs-12 col-sm-8">
             <div class="input-group">
-                <input id="c-image" class="form-control" size="50" name="row[image]" type="text" value="{$row.image}">
+                <input id="c-image" class="form-control" size="35" name="row[image]" type="text" value="{$row.image}">
                 <div class="input-group-addon no-border no-padding">
                     <span><button type="button" id="plupload-image" class="btn btn-danger plupload" data-input-id="c-image" data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp" data-multiple="false" data-preview-id="p-image"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                     <span><button type="button" id="fachoose-image" class="btn btn-primary fachoose" data-input-id="c-image" data-mimetype="image/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
@@ -65,13 +65,13 @@
     <div class="form-group">
         <label for="c-keywords" class="control-label col-xs-12 col-sm-2">{:__('Keywords')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-keywords" class="form-control" name="row[keywords]" type="text" value="{$row.keywords}">
+            <input id="c-keywords" class="form-control" name="row[keywords]" type="text" value="{$row.keywords|htmlentities}">
         </div>
     </div>
     <div class="form-group">
         <label for="c-description" class="control-label col-xs-12 col-sm-2">{:__('Description')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea id="c-description" class="form-control" name="row[description]">{$row.description}</textarea>
+            <textarea id="c-description" class="form-control" name="row[description]">{$row.description|htmlentities}</textarea>
         </div>
     </div>
     <div class="form-group">

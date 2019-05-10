@@ -10,7 +10,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                 onInit: function (up) {
                     //修复少数安卓浏览器无法上传图片的Bug
                     var input = $("input[type=file]", $(up.settings.button).next());
-                    if (input && input.prop("accept").match(/image\/jpeg/)) {
+                    if (input && input.prop("accept") && input.prop("accept").match(/image\/jpeg/)) {
                         input.prop("accept", "image/jpg," + input.prop("accept"));
                     }
                 },
@@ -69,7 +69,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                                 urlArr.push(inputObj.val());
                             }
                             urlArr.push(data.url);
-                            inputObj.val(urlArr.join(",")).trigger("change");
+                            inputObj.val(urlArr.join(",")).trigger("change").trigger("validate");
                         }
                         //如果有回调函数
                         var onDomUploadSuccess = $(button).data("upload-success");
@@ -311,7 +311,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                                                 urlArr.push($(that).val());
                                             }
                                             urlArr.push(data.url);
-                                            $(that).val(urlArr.join(",")).trigger("change");
+                                            $(that).val(urlArr.join(",")).trigger("change").trigger("validate");
                                         });
                                     }
                                 }
@@ -333,7 +333,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                                                     urlArr.push($(that).val());
                                                 }
                                                 urlArr.push(data.url);
-                                                $(that).val(urlArr.join(",")).trigger("change");
+                                                $(that).val(urlArr.join(",")).trigger("change").trigger("validate");
                                             });
                                         });
                                     }

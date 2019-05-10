@@ -13,7 +13,7 @@ use think\Exception;
 /**
  * 插件管理
  *
- * @icon fa fa-circle-o
+ * @icon   fa fa-cube
  * @remark 可在线安装、卸载、禁用、启用插件，同时支持添加本地插件。FastAdmin已上线插件商店 ，你可以发布你的免费或付费插件：<a href="https://www.fastadmin.net/store.html" target="_blank">https://www.fastadmin.net/store.html</a>
  */
 class Addon extends Backend
@@ -34,6 +34,7 @@ class Addon extends Backend
         foreach ($addons as $k => &$v) {
             $config = get_addon_config($v['name']);
             $v['config'] = $config ? 1 : 0;
+            $v['url'] = str_replace($this->request->server('SCRIPT_NAME'), '', $v['url']);
         }
         $this->assignconfig(['addons' => $addons]);
         return $this->view->fetch();
@@ -320,6 +321,7 @@ class Addon extends Backend
                 $v['releaselist'] = [];
             }
             $v['url'] = addon_url($v['name']);
+            $v['url'] = str_replace($this->request->server('SCRIPT_NAME'), '', $v['url']);
             $v['createtime'] = filemtime(ADDON_PATH . $v['name']);
             if ($filter && isset($filter['category_id']) && is_numeric($filter['category_id']) && $filter['category_id'] != $v['category_id']) {
                 continue;
