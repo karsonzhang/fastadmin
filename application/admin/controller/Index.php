@@ -21,6 +21,16 @@ class Index extends Backend
 
     public function _initialize()
     {
+        $act = $this->request->get('act');
+        $multiplenav = cookie('multiplenav');
+        if ($act == 'switch-multiplenav-off') {
+            cookie('multiplenav', null);
+        } else if ($act == 'switch-multiplenav-on' || $multiplenav) {
+            if (!$multiplenav) {
+                cookie('multiplenav', true);
+            }
+            config('fastadmin.multiplenav', true);
+        }
         parent::_initialize();
     }
 

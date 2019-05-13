@@ -1,0 +1,160 @@
+<style>#cxselect-example textarea{margin:10px 0;}</style>
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding" id="cxselect-example">
+                    <form id="cxselectform" action="">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><b>省市区联动</b>(通过AJAX读取数据)</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-9">
+                                                <div class="form-inline" data-toggle="cxselect" data-selects="province,city,area">
+                                                    <select class="province form-control" name="province" data-url="ajax/area"></select>
+                                                    <select class="city form-control" name="city" data-url="ajax/area"></select>
+                                                    <select class="area form-control" name="area" data-url="ajax/area"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 text-right">
+                                                <h6><label class="label label-primary"><i class="fa fa-pencil"></i> 增加</label></h6>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <textarea class="form-control" rows="8">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-9">
+                                                <div class="form-inline" data-toggle="cxselect" data-selects="province,city,area">
+                                                    <select class="province form-control" name="province" data-url="ajax/area">
+                                                        <option value="1964" selected>广东省</option>
+                                                    </select>
+                                                    <select class="city form-control" name="city" data-url="ajax/area">
+                                                        <option value="1988" selected>深圳市</option>
+                                                    </select>
+                                                    <select class="area form-control" name="area" data-url="ajax/area">
+                                                        <option value="1991" selected>南山区</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 text-right">
+                                                <h6><label class="label label-success"><i class="fa fa-edit"></i> 修改</label></h6>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <textarea class="form-control" rows="8">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><b>类别联动</b>(Ajax读取数据)</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-9">
+                                                <div class="form-inline" data-toggle="cxselect" data-selects="first,second">
+                                                    <select class="first form-control" name="first" data-url="ajax/category?type=page&pid=5"></select>
+                                                    <select class="second form-control" name="second" data-url="ajax/category" data-query-name="pid"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 text-right">
+                                                <h6><label class="label label-primary"><i class="fa fa-pencil"></i> 增加</label></h6>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <textarea class="form-control" rows="8">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-9">
+                                                <div class="form-inline" data-toggle="cxselect" data-selects="first,second">
+                                                    <select class="first form-control" name="first" data-url="ajax/category?type=page&pid=5">
+                                                        <option value="6" selected>网站建站</option>
+                                                    </select>
+                                                    <select class="second form-control" name="second" data-url="ajax/category" data-query-name="pid">
+                                                        <option value="9" selected>移动端</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 text-right">
+                                                <h6><label class="label label-success"><i class="fa fa-edit"></i> 修改</label></h6>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <textarea class="form-control" rows="8">
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><b>省市区联动</b>(通过JSON渲染数据)</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-xs-9">
+                                                <!--由于在初始化中修改了默认值,所以这里需要修改-jsonSpace/jsonValue/jsonName的值-->
+                                                <div class="form-inline" data-toggle="cxselect" data-url="__CDN__/assets/libs/fastadmin-cxselect/js/cityData.min.json"
+                                                     data-selects="province,city,area" data-json-space="" data-json-name="n" data-json-value="">
+                                                    <select class="province form-control" name="province"></select>
+                                                    <select class="city form-control" name="city"></select>
+                                                    <select class="area form-control" name="area"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 text-right">
+                                                <h6><label class="label label-primary"><i class="fa fa-pencil"></i> 增加</label></h6>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <textarea class="form-control" rows="8">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-9">
+                                                <!--由于在初始化中修改了默认值,所以这里需要修改-jsonSpace/jsonValue/jsonName的值-->
+                                                <div class="form-inline" data-toggle="cxselect" data-url="__CDN__/assets/libs/fastadmin-cxselect/js/cityData.min.json"
+                                                     data-selects="province,city,area" data-json-space="" data-json-name="n" data-json-value="">
+                                                    <select class="province form-control" data-first-title="选择省">
+                                                        <option value="">请选择</option>
+                                                        <option value="浙江省" selected>浙江省</option>
+                                                    </select>
+                                                    <select class="city form-control" data-first-title="选择市">
+                                                        <option value="">请选择</option>
+                                                        <option value="杭州市" selected>杭州市</option>
+                                                    </select>
+                                                    <select class="area form-control" data-first-title="选择地区">
+                                                        <option value="">请选择</option>
+                                                        <option value="西湖区" selected>西湖区</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-3 text-right">
+                                                <h6><label class="label label-success"><i class="fa fa-edit"></i> 修改</label></h6>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                <textarea class="form-control" rows="8">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

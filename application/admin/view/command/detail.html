@@ -1,0 +1,42 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>{:__('Title')}</th>
+        <th>{:__('Content')}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{:__('Type')}</td>
+        <td>{$row.type}({$row.type_text})</td>
+    </tr>
+    <tr>
+        <td>{:__('Params')}</td>
+        <td>{$row.params}</td>
+    </tr>
+    <tr>
+        <td>{:__('Command')}</td>
+        <td>{$row.command}</td>
+    </tr>
+    <tr>
+        <td>{:__('Content')}</td>
+        <td>
+            <textarea class="form-control" name="" id="" cols="60" rows="10">{$row.content}</textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>{:__('Executetime')}</td>
+        <td>{$row.executetime|datetime}</td>
+    </tr>
+    <tr>
+        <td>{:__('Status')}</td>
+        <td>{$row.status_text}</td>
+    </tr>
+    </tbody>
+</table>
+<div class="hide layer-footer">
+    <label class="control-label col-xs-12 col-sm-2"></label>
+    <div class="col-xs-12 col-sm-8">
+        <button type="reset" class="btn btn-primary btn-embossed btn-close" onclick="Layer.closeAll();">{:__('Close')}</button>
+    </div>
+</div>

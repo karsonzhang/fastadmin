@@ -1,7 +1,7 @@
 define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, Upload, Validator) {
     var Form = {
         config: {
-            fieldlisttpl: '<dd class="form-inline"><input type="text" name="<%=name%>[<%=index%>][key]" class="form-control" value="<%=row.key%>" size="10" /> <input type="text" name="<%=name%>[<%=index%>][value]" class="form-control" value="<%=row.value%>" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>'
+            fieldlisttpl: '<dd class="form-inline"><input type="text" name="<%=name%>[<%=index%>][key]" class="form-control" value="<%=row.key%>" size="10" /> <input type="text" name="<%=name%>[<%=index%>][value]" class="form-control" value="<%=row.value%>" size="30" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>'
         },
         events: {
             validator: function (form, success, error, submit) {
@@ -89,11 +89,6 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 if ($(".selectpicker", form).size() > 0) {
                     require(['bootstrap-select', 'bootstrap-select-lang'], function () {
                         $('.selectpicker', form).selectpicker();
-                        $(form).on("reset", function () {
-                            setTimeout(function () {
-                                $('.selectpicker').selectpicker('refresh').trigger("change");
-                            }, 1);
-                        });
                     });
                 }
             },
@@ -138,11 +133,6 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 //绑定城市远程插件
                 if ($("[data-toggle='city-picker']", form).size() > 0) {
                     require(['citypicker'], function () {
-                        $(form).on("reset", function () {
-                            setTimeout(function () {
-                                $("[data-toggle='city-picker']").citypicker('refresh');
-                            }, 1);
-                        });
                     });
                 }
             },
@@ -252,9 +242,9 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                                             return false;
                                         }
                                     }
-                                    inputObj.val(result).trigger("change").trigger("validate");
+                                    inputObj.val(result).trigger("change");
                                 } else {
-                                    $("#" + input_id).val(data.url).trigger("change").trigger("validate");
+                                    $("#" + input_id).val(data.url).trigger("change");
                                 }
                             }
                         });
