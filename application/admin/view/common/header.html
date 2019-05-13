@@ -23,7 +23,12 @@
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-
+                <li class="hidden-xs" data-toggle="tooltip" data-placement="right" title="{:$config.fastadmin.multiplenav?'切换为一级菜单模式':'切换为二级
+菜单模式'}">
+                    <a href="{:url('')}?act=switch-multiplenav-{:$config.fastadmin.multiplenav?'off':'on'}" style="padding-top:14px;padding-bottom:14px;">
+                        <i class="fa fa-toggle-{:$config.fastadmin.multiplenav?'on':'off'}" style="font-size:20px;"></i>
+                    </a>
+                </li>
                 <li>
                     <a href="__PUBLIC__" target="_blank"><i class="fa fa-home" style="font-size:14px;"></i></a>
                 </li>

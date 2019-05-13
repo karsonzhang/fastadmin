@@ -1,0 +1,30 @@
+{__NOLAYOUT__}
+<!DOCTYPE html>
+<html lang="{$config.language}">
+    <head>
+        {include file="common/meta" /}
+        <style type="text/css">
+            body, html,#allmap{width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+            #search{position:absolute;top:20px;left:20px;}
+        </style>
+    </head>
+
+    <body class="inside-header inside-aside {:defined('IS_DIALOG') && IS_DIALOG ? 'is-dialog' : ''}">
+        <div class="container-fluid" id="search">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <form role="form" action="">
+                        <div class="input-group" style="width:300px;">
+                            <input type="text" id="searchaddress" class="form-control selectpage" data-primary-key="name" data-source="example/baidumap/selectpage" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-success btn-search" type="button">搜索</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id='allmap'></div>
+        {include file="common/script" /}
+    </body>
+</html>

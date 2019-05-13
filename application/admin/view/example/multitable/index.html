@@ -1,0 +1,27 @@
+<div class="panel panel-default panel-intro">
+    <div class="panel-heading">
+        <div class="panel-lead"><em>多表格（Multitable）</em>用于展示在一个页面展示多个表格数据,并且每次切换时刷新</div>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#first" data-toggle="tab">表格1</a></li>
+            <li><a href="#second" data-toggle="tab">表格2</a></li>
+        </ul>
+    </div>
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="first">
+                <div id="toolbar1" class="toolbar">
+                    {:build_toolbar('refresh')}
+                </div>
+                <table id="table1" class="table table-striped table-bordered table-hover" width="100%">
+                </table>
+            </div>
+            <div class="tab-pane fade" id="second">
+                <div id="toolbar2" class="toolbar">
+                    {:build_toolbar('refresh')}
+                </div>
+                <table id="table2" class="table table-striped table-bordered table-hover" width="100%">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

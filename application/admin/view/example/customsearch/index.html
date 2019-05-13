@@ -1,0 +1,116 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                    <table id="table" class="table table-striped table-bordered table-hover" width="100%">
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script id="customformtpl" type="text/html">
+    <!--form表单必须添加form-commsearch这个类-->
+    <form action="" class="form-commonsearch">
+        <div style="border-radius:2px;margin-bottom:10px;background:#f5f5f5;padding:20px;">
+            <h4>自定义搜索表单</h4>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">ID</label>
+                        <!--显式的operate操作符-->
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <select class="form-control operate" data-name="id" style="width:auto;">
+                                    <option value="=" selected>等于</option>
+                                    <option value=">">大于</option>
+                                    <option value="<">小于</option>
+                                </select>
+                            </div>
+                            <input class="form-control" type="text" name="id" placeholder="" value=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">标题</label>
+                        <!--隐式的operate操作符，必须携带一个class为operate隐藏的文本框,且它的data-name="字段",值为操作符-->
+                        <input class="operate" type="hidden" data-name="title" value="="/>
+                        <input class="form-control" type="text" name="title" placeholder="请输入查找的标题" value=""/>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">管理员ID</label>
+                        <div class="row" data-toggle="cxselect" data-selects="group,admin">
+                            <div class="col-xs-6">
+                                <select class="group form-control" name="group"
+                                        data-url="example/bootstraptable/cxselect?type=group"></select>
+                            </div>
+                            <div class="col-xs-6">
+                                <select class="admin form-control" name="admin_id"
+                                        data-url="example/bootstraptable/cxselect?type=admin"
+                                        data-query-name="group_id"></select>
+                            </div>
+                            <input type="hidden" class="operate" data-name="admin_id" value="="/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">用户名</label>
+                        <input type="hidden" class="operate" data-name="username" value="="/>
+                        <input id="c-category_id" data-source="auth/admin/index" data-primary-key="username"
+                               data-field="username" class="form-control selectpage" name="username" type="text"
+                               value="">
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-3" style="min-height:68px;">
+                    <!--这里添加68px是为了避免刷新时出现元素错位闪屏-->
+                    <div class="form-group">
+                        <label class="control-label">IP</label>
+                        <input type="hidden" class="operate" data-name="ip" value="in"/>
+                        <!--给select一个固定的高度-->
+                        <select id="c-flag" class="form-control selectpicker" multiple name="ip" style="height:31px;">
+                            {foreach name="ipList" item="vo"}
+                            <option value="{$key}" {in name="key" value="" }selected{/in}>{$vo}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">IP</label>
+                        <input type="hidden" class="operate" data-name="createtime" value="RANGE"/>
+                        <input type="text" class="form-control datetimerange" name="createtime" value=""/>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <input type="submit" class="btn btn-success btn-block" value="提交"/>
+                            </div>
+                            <div class="col-xs-6">
+                                <input type="reset" class="btn btn-primary btn-block" value="重置"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
