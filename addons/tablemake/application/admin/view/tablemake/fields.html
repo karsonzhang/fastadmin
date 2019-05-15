@@ -1,0 +1,22 @@
+<div class="panel panel-default panel-intro">
+	<input id="assign-data-ids" type="hidden" value="{$ids}">
+	{:build_heading()}
+	<div class="panel-body">
+		<div id="myTabContent" class="tab-content">
+			<div class="panel-heading"><div class="panel-lead text-red"><b>温馨提示：</b>删除字段后，需要重新生成CRUD，否则会提示找不到字段！</div></div>
+			<div class="panel-heading"><div class="panel-lead text-red"><b>温馨提示：</b>由本插件创建的字段，建议不要在数据库直接修改字段名，否则将导致数据不同步！</div></div>
+			<div class="tab-pane fade active in" id="one">
+				<div class="widget-body no-padding">
+					<div id="toolbar" class="toolbar">
+						{:build_toolbar('refresh,add,delete')}
+					</div>
+					<table id="table" class="table table-striped table-bordered table-hover"
+						   data-operate-detail="{:$auth->check('tablemake/fields')}"
+						   data-operate-del="{:$auth->check('tablemake/del')}"
+						   width="100%">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

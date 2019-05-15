@@ -1,0 +1,132 @@
+<style>.form-input{ display: none;}</style>
+<input id="assign-data-mid" type="hidden" value="{$mid}">
+<form id="field_add-form" class="field_add-form form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+	<input id="c-name" data-rule="required" class="form-control form-control" name="row[mid]" type="hidden" value="{$mid}">
+	<div class="panel-heading"><div class="panel-lead text-red"><b>温馨提示：</b>无需添加id字段，系统已经自动创建；增加字段后，需要重新生成CRUD，不然新增加的字段不会生效！</div></div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2">类型：</label>
+		<div class="col-xs-12 col-sm-5">
+			<div class="radio">
+				<label for="row[category]-1"><input id="row[category]-1" class="field-category" data-required="title,name,suffix,length,default" name="row[category]"  type="radio" value="1" checked/> 标准字段</label>
+				<label for="row[category]-2"><input id="row[category]-2" class="field-category" data-required="title,name,type,length,default" name="row[category]" type="radio" value="2" /> 自定义字段</label>
+				<label for="row[category]-3"><input id="row[category]-3" class="field-category" data-required="title,special" name="row[category]" type="radio" value="3" /> 特殊字段</label>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group form-input form-input-title">
+		<label class="control-label col-xs-12 col-sm-2">字段标题：</label>
+		<div class="col-xs-12 col-sm-5">
+			<input id="c-name" data-rule="required" class="form-control form-control" placeholder="字段标题，不可重复" name="row[title]" type="text" value="">
+		</div>
+	</div>
+
+
+
+	<div class="form-group form-input form-input-name">
+		<label class="control-label col-xs-12 col-sm-2">字段名称：</label>
+		<div class="col-xs-12 col-sm-5">
+			<input id="c-table" data-rule="required" class="form-control form-control" placeholder="字段名称，不可重复" name="row[name]" type="text" value="">
+		</div>
+	</div>
+	<div class="form-group form-input form-input-special">
+		<label class="control-label col-xs-12 col-sm-2">特殊字段：</label>
+		<div class="col-xs-12 col-sm-5">
+			<input type="hidden" class="operate" data-name="row[special]" value="in"/>
+			<!--给select一个固定的高度-->
+			<select id="c-flag" class="form-control "  name="row[special]" style="height:31px;">
+				<option value="">----请选择----</option>
+				<option value="category_id">[category_id]--分类ID/选择分类的下拉框-单选</option>
+				<option value="category_ids">[category_ids]--多选分类ID/选择分类的下拉框-多选</option>
+				<option value="weigh">[weigh]--权重/后台的排序字段，可上下拖动排序</option>
+				<option value="createtime">[createtime]--创建时间/记录添加时间字段,不需要手动维护</option>
+				<option value="updatetime">[updatetime]--更新时间/记录更新时间的字段,不需要手动维护</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group form-input form-input-suffix">
+		<label class="control-label col-xs-12 col-sm-2">字段后缀：</label>
+		<div class="col-xs-12 col-sm-5">
+			<input type="hidden" class="operate" data-name="row[suffix]" value=""/>
+			<!--给select一个固定的高度-->
+			<select id="field-suffix" class="form-control  form-selection" name="row[suffix]" style="height:31px;">
+				<option value="">----请选择----</option>
+				<option value="text">[text]--文本输入框</option>
+				<option value="number">[number]--数字输入框</option>
+				<option value="time">[time]--日期时间</option>
+				<option value="image">[image]--图片文件-单图</option>
+				<option value="images">[images]--图片文件-多图</option>
+				<option value="file">[file]--文件上传-单文件</option>
+				<option value="files">[files]--文件上传-多文件</option>
+				<option value="avatar">[avatar]--头像上传-单图</option>
+				<option value="avatars">[avatars]--头像上传-多图</option>
+				<option value="content">[content]--富文本编辑器</option>
+				<option value="_id">[_id]--关联字段-单选</option>
+				<option value="_ids">[_ids]--关联字段-多选</option>
+				<option value="list-enum">[list]--单选下拉列表</option>
+				<option value="list-set">[list]--多选下拉列表</option>
+				<option value="data-enum">[data]--单选框</option>
+				<option value="data-set">[data]--复选框</option>
+				<option value="switch">[switch]--开关组件</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group form-input form-input-type">
+		<label class="control-label col-xs-12 col-sm-2">字段类型：</label>
+		<div class="col-xs-12 col-sm-5">
+			<input type="hidden" class="operate" data-name="row[type]" value=""/>
+			<!--给select一个固定的高度-->
+			<select id="field-type" class="form-control form-selection" name="row[type]" style="height:31px;">
+				<option value="">----请选择----</option>
+				<option value="varchar">[varchar]--文本输入框</option>
+				<option value="int">[int]--整形，type为number的文本框</option>
+				<option value="enum">[enum]--枚举型，单选下拉列表框</option>
+				<option value="set">[set]--set型，多选下拉列表框</option>
+				<option value="float">[float]--浮点型，type为number的文本框，步长根据小数点位数生成</option>
+				<option value="text">[text]--文本型，textarea文本框</option>
+				<option value="datetime">[datetime]--日期时间，日期时间的组件</option>
+				<option value="date">[date]--日期型，日期型的组件</option>
+				<option value="year">[year]--年类型，年份选择的组件</option>
+				<option value="timestamp">[timestamp]--时间戳，日期时间的组件</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group form-input form-input-comment">
+		<label class="control-label col-xs-12 col-sm-2">选项：</label>
+		<div class="col-xs-12 col-sm-5">
+			<dl class="fieldlist" data-name="row[comment]" >
+				<dd>
+					<ins>键名</ins>
+					<ins>键值</ins>
+				</dd>
+				<dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i>{:__('Append')}</a></dd>
+				<textarea name="row[comment]" class="form-control hide" cols="30" rows="5">{"option_01":"选项一","option_02":"选项2"}</textarea>
+			</dl>
+		</div>
+
+	</div>
+	<div class="form-group form-input form-input-length">
+		<label class="control-label col-xs-12 col-sm-2">字段长度：</label>
+		<div class="col-xs-12 col-sm-5">
+			<input id="row-length" data-rule="" class="form-control form-control" placeholder="字段长度，浮点类型可用“10,2”方式表示" name="row[length]" type="text" value="">
+		</div>
+	</div>
+
+	<div class="form-group form-input form-input-default">
+		<label class="control-label col-xs-12 col-sm-2">默认值：</label>
+		<div class="col-xs-12 col-sm-5">
+			<input id="row-default" data-rule="" class="form-control form-control" placeholder="字段默认值，错误的默认值会保存失败" name="row[default]" type="text" value="">
+		</div>
+	</div>
+
+	<div class="form-group layer-footer" style=" display: none">
+		<label class="control-label col-xs-12 col-sm-2"></label>
+		<div class="col-xs-12 col-sm-5">
+			<button type="submit" class="btn btn-success btn-embossed ">{:__('OK')}</button>
+			<button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+		</div>
+	</div>
+</form>
