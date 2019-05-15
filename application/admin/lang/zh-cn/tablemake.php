@@ -1,0 +1,30 @@
+<?php
+
+return [
+	'Id' => 'ID',
+	'mid' => '模型ID',
+	'm_name' => '模型名称',
+	'm_table' => '模型表名',
+	'm_desc' => '模型描述',
+	'Admin_id' => '管理员ID',
+	'Category_id' => '分类ID(单选)',
+	'Flag' => '标志(多选)',
+	'Flag hot' => '热门',
+	'Flag index' => '首页',
+	'Flag recommend' => '推荐',
+	'Title' => '标题',
+	'Content' => '内容',
+	'Image' => '图片',
+	'Keywords' => '关键字',
+	'Description' => '描述',
+	'Views' => '点击',
+	'Refreshtime' => '刷新时间(int)',
+	'Createtime' => '创建时间',
+	'Updatetime' => '更新时间',
+	'Weigh' => '权重',
+	'Status' => '状态',
+	'State' => '状态值',
+	'State 0' => '未审核',
+	'State 1' => '正常',
+	'State 2' => '推荐'
+];

@@ -1,0 +1,41 @@
+{
+  "name": "nice-validator",
+  "description": "Simple, smart and pleasant verification solution.",
+  "moduleType": [
+    "amd",
+    "node",
+    "globals"
+  ],
+  "keywords": [
+    "jquery",
+    "validation",
+    "form",
+    "validator",
+    "validate",
+    "nice-validator",
+    "jquery-plugin"
+  ],
+  "authors": [
+    "Jony Zhang <niceue@live.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/niceue/nice-validator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/niceue/nice-validator.git"
+  },
+  "main": "dist/jquery.validator.js",
+  "dependencies": {
+    "jquery": ">=1.7"
+  },
+  "ignore": [
+    ".*",
+    "src",
+    "test",
+    "gulpfile.js",
+    "*.json",
+    "*.md",
+    "*.yml",
+    "!README.md"
+  ]
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Used With jQuery Form Plugin</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+
+<form id="form1" class="form" data-validator-option="{timely:2, focusCleanup:true}">
+
+    <div class="form-item">
+        <label class="label">Username</label>
+        <input type="text" name="username"
+            data-rule="required; username;"
+            data-rule-username="[/[\w\d]{4,30}/, 'Please enter 3-12 digits, letters, underscores']"
+            data-tip="You can use letters, numbers and periods"
+        >
+    </div>
+    <div class="form-item">
+        <label class="label">Password</label>
+        <input type="password" name="pwd"
+            data-rule="Password: required; length(8~16)"
+            data-tip="Please fill in at least eight characters"
+        >
+    </div>
+
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+
+</form>
+
+<script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.form/3.51/jquery.form.min.js"></script>
+<script src="../dist/jquery.validator.js?local=en"></script>
+<script>
+$(function(){
+    // See: http://malsup.com/jquery/form/#api
+
+    // Way 1: use .ajaxForm() directly
+    $('#form1').ajaxForm({
+        url: 'http://www.mocky.io/v2/5703d5b52700006b2606b00e',
+        success: function(d) {
+            alert(d.message)
+        }
+    });
+
+    // Way 2: use .ajaxSubmit() after valid form
+    /*$('#form1').on('valid.form', function(){
+       $(this).ajaxSubmit({
+            url: 'http://www.mocky.io/v2/5703d5b52700006b2606b00e',
+            success: function(d) {
+                alert(d.message)
+            }
+        });
+    });*/
+
+    // Way 3: ditto
+    /*$('#form1').validator({
+        valid: function(){
+            $(this).ajaxSubmit({
+                url: 'http://www.mocky.io/v2/5703d5b52700006b2606b00e',
+                success: function(d) {
+                    alert(d.message)
+                }
+            });
+        }
+    });*/
+});
+</script>
+</body>
+</html>

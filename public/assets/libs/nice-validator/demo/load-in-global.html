@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Load in Global</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+
+<form class="form" data-validator-option="{timely:2}">
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <input type="password" name="password" data-rule="required;" placeholder="Password">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+<script src="../dist/jquery.validator.js?local=en"></script>
+</body>
+</html>

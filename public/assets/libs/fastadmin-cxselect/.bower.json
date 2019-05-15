@@ -1,0 +1,14 @@
+{
+  "name": "fastadmin-cxselect",
+  "homepage": "https://github.com/karsonzhang/fastadmin-cxselect",
+  "version": "1.4.1",
+  "_release": "1.4.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.4.1",
+    "commit": "ec3b35ea0611024781630661356e19c71e6e2c88"
+  },
+  "_source": "https://github.com/karsonzhang/fastadmin-cxselect.git",
+  "_target": "~1.4.0",
+  "_originalSource": "fastadmin-cxselect"
+}

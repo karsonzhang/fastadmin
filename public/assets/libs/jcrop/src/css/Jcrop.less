@@ -1,0 +1,278 @@
+
+@white: white;
+@black: black;
+
+@selectionBorderWidth: 1px;
+@selectionBackgroundImage: "Jcrop.gif";
+@selectionBackgroundColor: @white;
+@selectionBackground: @selectionBackgroundColor url(@selectionBackgroundImage);
+
+// Setting some variables to 
+// Used to set handle and dragbar size/width
+// To center on a 1px selection line, use an odd number
+@grabSize: 9px;
+
+// Used to offset handles and dragbar
+// Default value will center on 1px selection line
+@grabOffset: (floor(@grabSize/2)+1) * -1;
+
+@handleSize: @grabSize;
+@handleOffset: @grabOffset;
+@handleBorderWidth: 1px;
+@handleBorderColor: #eee;
+@handleBorderStyle: solid;
+@handleBackgroundColor: rgba(49,28,28,0.58);
+@handleOpacity: 0.8;
+
+@dragbarWidth: @grabSize;
+@dragbarOffset: @grabOffset;
+
+/*
+  The outer-most container in a typical Jcrop instance
+  If you are having difficulty with formatting related to styles
+  on a parent element, place any fixes here or in a like selector
+
+  You can also style this element if you want to add a border, etc
+  A better method for styling can be seen below with .jcrop-light
+  (Add a class to the holder and style elements for that extended class)
+*/
+.jcrop-active {
+  direction: ltr;
+  text-align: left;
+  box-sizing: border-box;
+
+  /* IE10 touch compatibility */ -ms-touch-action: none;
+}
+
+.jcrop-dragging {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.jcrop-selection {
+  z-index: 2;
+  &.jcrop-current { z-index: 4; }
+}
+
+/* Selection Borders */
+.jcrop-border {
+  background: @selectionBackground;
+  line-height: 1px !important;
+  font-size: 0 !important;
+  overflow: hidden;
+  position: absolute;
+  filter: Alpha(opacity=50) !important;
+  opacity: 0.5 !important;
+  &.ord-w, &.ord-e, &.ord-n { top: 0px; }
+  &.ord-n, &.ord-s { width: 100%; height: @selectionBorderWidth !important; }
+  &.ord-w, &.ord-e { height: 100%; width: @selectionBorderWidth !important; }
+  &.ord-e { right: -@selectionBorderWidth; }
+  &.ord-n { top: -@selectionBorderWidth; }
+  &.ord-w { left: -@selectionBorderWidth; }
+  &.ord-s { bottom: -@selectionBorderWidth; }
+}
+
+.jcrop-selection {
+  position: absolute;
+}
+
+.jcrop-box {
+  z-index: 2;
+  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0;
+  &:hover { background: none; }
+  &:active { background: none; }
+  &:focus { outline: 1px rgba(128,128,128,.65) dotted; }
+}
+
+.jcrop-active, .jcrop-box { position: relative; }
+.jcrop-box { width: 100%; height: 100%; cursor: move; }
+
+.handles (@handleSize;@handleOffset;@bgColor;@bgOpacity;@borderWidth;@borderColor;@borderStyle) {
+
+  z-index: 4;
+  @ieopacity: @bgOpacity * 100;
+  font-size: 0;
+  background-color: @bgColor;
+  border: @borderWidth @borderColor @borderStyle;
+  width: @handleSize;
+  height: @handleSize;
+  font-size: 0;
+  position: absolute;
+  filter: Alpha(opacity=@ieopacity) !important;
+  opacity: @bgOpacity !important;
+
+  &.ord-n {left:50%;margin-left:@handleOffset;margin-top:@handleOffset;top:0;cursor:n-resize;}
+  &.ord-s {bottom:0;left:50%;margin-bottom:@handleOffset;margin-left:@handleOffset;cursor:s-resize;}
+  &.ord-e {margin-right:@handleOffset;margin-top:@handleOffset;right:0;top:50%;cursor:e-resize;}
+  &.ord-w {left:0;margin-left:@handleOffset;margin-top:@handleOffset;top:50%;cursor:w-resize;}
+  &.ord-nw {left:0;margin-left:@handleOffset;margin-top:@handleOffset;top:0;cursor:nw-resize;}
+  &.ord-ne {margin-right:@handleOffset;margin-top:@handleOffset;right:0;top:0;cursor:ne-resize;}
+  &.ord-se {bottom:0;margin-bottom:@handleOffset;margin-right:@handleOffset;right:0;cursor:se-resize;}
+  &.ord-sw {bottom:0;left:0;margin-bottom:@handleOffset;margin-left:@handleOffset;cursor:sw-resize;}
+
+}
+
+.standard-handles (@handleSize;@bgColor;@bgOpacity;@borderColor) {
+  @handleOffset: (floor(@handleSize/2)+1) * -1;
+  .handles(@handleSize;@handleOffset;@bgColor;@bgOpacity;@handleBorderWidth;@borderColor;@handleBorderStyle);
+}
+
+/* Selection Handles */
+
+.jcrop-handle {
+  .standard-handles(@handleSize;@handleBackgroundColor;@handleOpacity;@handleBorderColor);
+}
+
+/* Larger Selection Handles for Touch */
+
+.jcrop-touch .jcrop-handle {
+  .standard-handles(@handleSize * 2;@handleBackgroundColor;@handleOpacity;@handleBorderColor);
+}
+
+/* Selection Dragbars */
+
+.jcrop-dragbar {
+
+  font-size: 0;
+  position: absolute;
+
+  &.ord-n, &.ord-s {height:@dragbarWidth !important;width:100%;}
+  &.ord-e, &.ord-w { top:0px; height:100%;width:@dragbarWidth !important;}
+  &.ord-n {margin-top:@dragbarOffset;cursor:n-resize; top:0px; }
+  &.ord-s {bottom:0;margin-bottom:@dragbarOffset;cursor:s-resize;}
+  &.ord-e {margin-right:@dragbarOffset;right:0;cursor:e-resize;}
+  &.ord-w {margin-left:@dragbarOffset;cursor:w-resize;}
+
+}
+
+/* Shading panels */
+
+.jcrop-shades {
+  position: relative;
+  top: 0;
+  left: 0;
+  div { cursor: crosshair; }
+}
+
+/* Various special states */
+
+.jcrop-noresize {
+  .jcrop-dragbar,
+  .jcrop-handle
+    { display: none; }
+}
+
+.jcrop-selection.jcrop-nodrag .jcrop-box,
+.jcrop-nodrag .jcrop-shades div
+  { cursor: default; }
+
+/* The "jcrop-light" class/extension */
+
+.jcrop-light {
+  .jcrop-border {
+    background: @white;
+    filter:Alpha(opacity=70)!important;
+    opacity:.70!important;
+  }
+  .jcrop-handle {
+    background-color: @black;
+    border-color: @white;
+  }
+}
+
+/* The "jcrop-dark" class/extension */
+
+.jcrop-dark {
+  .jcrop-border {
+    background: @black;
+    filter: Alpha(opacity=70) !important;
+    opacity: 0.7 !important;
+  }
+  .jcrop-handle {
+    background-color: @white;
+    border-color: @black;
+  }
+}
+
+/* Simple macro to turn off the antlines */
+
+.solid-line {
+  .jcrop-border {
+    background: @selectionBackgroundColor;
+  }
+}
+
+.jcrop-thumb {
+  position: absolute;
+  overflow: hidden;
+  z-index: 5;
+}
+
+/* Fix for twitter bootstrap et al. */
+
+.jcrop-active img,
+.jcrop-thumb img,
+.jcrop-thumb canvas {
+  min-width: none;
+  min-height: none;
+  max-width: none;
+  max-height: none;
+}
+
+/* Improved multiple selection styles - in progress */
+
+.jcrop-hl-active {
+  .jcrop-border {
+    filter:Alpha(opacity=20)!important;
+    opacity:.20!important;
+  }
+  .jcrop-handle {
+    filter:Alpha(opacity=10)!important;
+    opacity:.10!important;
+  }
+  .jcrop-selection:hover {
+    .jcrop-border {
+      background-color: #ccc;
+      filter:Alpha(opacity=50)!important;
+      opacity:.50!important;
+    }
+    /*
+    .jcrop-handle {
+      filter:Alpha(opacity=35)!important;
+      opacity:.35!important;
+    }
+    */
+  }
+  .jcrop-selection.jcrop-current {
+    .jcrop-border {
+      background: gray url('Jcrop.gif');
+      opacity:.35!important;
+      filter:Alpha(opacity=35)!important;
+    }
+    .jcrop-handle {
+      filter:Alpha(opacity=30)!important;
+      opacity:.30!important;
+    }
+  }
+  .jcrop-selection.jcrop-focus {
+    .jcrop-border {
+      background: url('Jcrop.gif');
+      opacity:.65!important;
+      filter:Alpha(opacity=65)!important;
+    }
+    .jcrop-handle {
+      filter:Alpha(opacity=60)!important;
+      opacity:.60!important;
+    }
+  }
+}
+
+/* Prevent background on button element */
+button.jcrop-box { background: none; }

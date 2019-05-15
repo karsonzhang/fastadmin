@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Display</title>
+    <link rel="stylesheet" href="demo.css">
+
+    <script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+    <script src="../dist/jquery.validator.js?local=en"></script>
+</head>
+
+<body>
+
+<form class="form" data-validator-option="{timely:2}">
+    <h3>Default behavior</h3>
+    <p class="note">data-rule="required"</p>
+    <div class="form-item">
+        <input type="text" name="name" data-rule="required">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2}">
+    <h3>Set the field display by rule string</h3>
+    <p class="note">data-rule="Name: required"</p>
+    <div class="form-item">
+        <input type="text" name="name" data-rule="Name:required">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2}">
+    <h3>Set the field display by bind display</h3>
+    <p class="note">data-rule="required" data-display="Name"</p>
+    <div class="form-item">
+        <input type="text" name="name" data-rule="required" data-display="Name">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" id="form4">
+    <h3>Dynamic get field display.</h3>
+    <div class="form-item">
+        <label class="label">Name</label>
+        <input type="text" name="name" data-rule="required">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+<script>
+$('#form4').validator({
+    timely:2,
+    display: function(el) {
+        return $(el).closest('.form-item').find('label.label').text();
+    }
+});
+</script>
+
+
+</body>
+</html>

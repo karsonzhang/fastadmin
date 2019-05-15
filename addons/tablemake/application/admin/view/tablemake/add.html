@@ -1,0 +1,53 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2">{:__('m_name')}：</label>
+		<div class="col-xs-12 col-sm-8">
+			<input id="c-name" data-rule="required" class="form-control form-control" placeholder="模型名称，用于区分多个模型，不能重复" name="row[name]" type="text" value="">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2"></label>
+		<div class="col-xs-12 col-sm-8">
+			<span class="n-msg" style="color: #ff0000;">*{:__('m_name')}不可重复</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2">{:__('m_table')}：</label>
+		<div class="col-xs-12 col-sm-8">
+			<input id="c-table" data-rule="required" class="form-control form-control" placeholder="表名称会自动加上系统的表前缀：{$prefix}" name="row[table]" type="text" value="">
+		</div>
+
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2"></label>
+		<div class="col-xs-12 col-sm-8">
+			<span class="n-msg" style="color: #ff0000;">*{:__('m_table')}不可重复</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2">{:__('m_desc')}：</label>
+		<div class="col-xs-12 col-sm-8">
+			<input id="c-desc"  class="form-control form-control" name="row[desc]" type="text" value="">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-2"></label>
+		<div class="col-xs-12 col-sm-8">
+			保存后，系统会自动创建一个表，自带字段：id，id为主键，开发完成后，索引请自行根据实际情况添加。
+		</div>
+	</div>
+
+	<div class="form-group layer-footer">
+		<label class="control-label col-xs-12 col-sm-2"></label>
+		<div class="col-xs-12 col-sm-8">
+			<button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+			<button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+		</div>
+	</div>
+</form>
+
+
+

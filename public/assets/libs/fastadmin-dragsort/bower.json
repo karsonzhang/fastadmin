@@ -1,0 +1,24 @@
+{
+  "name": "dragsort",
+  "version": "0.5.2",
+  "authors": [
+    "Michael McDonald"
+  ],
+  "description": "A javascript file that provides the ability to sort lists using drag and drop.",
+  "main": "jquery.dragsort.js",
+  "keywords": [
+    "javascript",
+    "sort",
+    "jquery"
+  ],
+  "license": "http://dragsort.codeplex.com/license",
+  "homepage": "http://dragsort.codeplex.com/",
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "examples"
+  ],
+  "dependencies": {
+    "jquery": ">=1.6.0 <3.0.0"
+  }
+}

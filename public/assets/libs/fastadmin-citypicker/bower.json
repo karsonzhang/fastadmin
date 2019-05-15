@@ -1,0 +1,48 @@
+{
+  "name": "fastadmin-citypicker",
+  "description": "A simple jQuery plugin for picking provinces, cities and districts of China.",
+  "main": [
+    "dist/js/city-picker.js"
+  ],
+  "keywords": [
+    "中国",
+    "省份",
+    "城市",
+    "行政区",
+    "省市区",
+    "三级联动",
+    "地址选择器",
+    "China",
+    "province",
+    "provinces",
+    "city",
+    "cities",
+    "district",
+    "districts",
+    "pick",
+    "picker",
+    "picking",
+    "jquery",
+    "plugin",
+    "html",
+    "css",
+    "javascript",
+    "front-end",
+    "web",
+    "development"
+  ],
+  "authors": [
+    "Tao Shi"
+  ],
+  "homepage": "https://github.com/karsonzhang/fastadmin-citypicker",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "docs"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.9.1"
+  }
+}

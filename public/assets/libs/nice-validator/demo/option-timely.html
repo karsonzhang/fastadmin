@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Timely</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+
+<form class="form" data-validator-option="{timely:0}">
+    <h3>timely: 0 <span class="note">(only validation on submit)</span></h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:1, focusCleanup:true}">
+    <h3>timely: 1 <span class="note">(default, validation on blur)</span></h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2, focusCleanup:true}">
+    <h3>timely: 2 <span class="note">(validation on input)</span></h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:3, focusCleanup:true}">
+    <h3>timely: 3 <span class="note">(validation on input and blur)</span></h3>
+    <p>Unlike "timely:2", when focusout an empty field.</p>
+    <div class="form-item">
+        <input type="text" name="user[email]"
+         data-rule="required;email"
+         data-tip="Please fill a email." placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:8, focusCleanup:true, theme:'yellow_right'}">
+    <h3>timely: 8 <span class="note">(validation on input, show every rule message)</span></h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:9, focusCleanup:true, theme:'yellow_right'}">
+    <h3>timely: 9 <span class="note">(validation on input and blur, show every rule message)</span></h3>
+    <p>Unlike "timely:8", when focusout an empty field.</p>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{focusCleanup:true, theme:'yellow_right'}">
+    <h3>Set different timely value in one form</h3>
+    <div class="form-item">
+        <input type="text" name="field0" data-rule="required;length(6~)" data-timely="0" placeholder="timely:0,  submit">
+    </div>
+    <div class="form-item">
+        <input type="text" name="field1" data-rule="required;length(6~)" data-timely="1" placeholder="timely:1,  submit / focusout" data-ok="">
+    </div>
+    <div class="form-item">
+        <input type="text" name="field2" data-rule="required;length(6~)" data-timely="2" placeholder="timely:2,  submit / input" data-tip="Just a test!">
+    </div>
+    <div class="form-item">
+        <input type="text" name="field3" data-rule="required;length(6~)" data-timely="3" placeholder="timely:3,  submit / input / focusout">
+    </div>
+    <div class="form-item">
+        <input type="text" name="field8" data-rule="required;length(6~)" data-timely="8" placeholder="timely:8,  submit / input">
+    </div>
+    <div class="form-item">
+        <input type="text" name="field9" data-rule="required;length(6~)" data-timely="9" placeholder="timely:9,  submit / input / focusout">
+    </div>
+
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+<script src="../dist/jquery.validator.js?local=en"></script>
+</body>
+</html>

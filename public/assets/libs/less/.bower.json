@@ -1,0 +1,35 @@
+{
+  "name": "less",
+  "main": "dist/less.js",
+  "ignore": [
+    "**/.*",
+    "benchmark",
+    "bin",
+    "build",
+    "gradle",
+    "lib",
+    "test",
+    "*.md",
+    "LICENSE",
+    "Gruntfile.js",
+    "*.json",
+    "*.yml",
+    "build.gradle",
+    "gradlew",
+    "gradlew.bat",
+    ".gitattributes",
+    ".jshintrc",
+    ".npmignore"
+  ],
+  "homepage": "https://github.com/less/less",
+  "version": "2.7.3",
+  "_release": "2.7.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.7.3",
+    "commit": "42742b139e246afd8d349c84fafd2acc5ba9a081"
+  },
+  "_source": "https://github.com/less/less.git",
+  "_target": "~2.7.1",
+  "_originalSource": "less"
+}
