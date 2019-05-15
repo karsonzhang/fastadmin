@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Full Example</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+
+<form class="form" data-validator-option="{timely:2, focusCleanup:true}">
+
+    <div class="form-item">
+        <label class="label">Username</label>
+        <input type="text" name="username"
+            data-rule="required;username;"
+            data-rule-username="[/^[\w\d]{3,12}$/, 'Please enter 3-12 digits, letters, underscores']"
+            data-tip="You can use letters, numbers and periods"
+        >
+    </div>
+    <div class="form-item">
+        <label class="label">Password</label>
+        <input type="password" name="pwd"
+            data-rule="Password: required; length(8~16)"
+            data-tip="Please fill in at least eight characters"
+        >
+    </div>
+    <div class="form-item">
+        <label class="label">Verify Password</label>
+        <input type="password" name="pwdAgain" data-rule="Verify Password: required; match(pwd)">
+    </div>
+    <div class="form-item">
+        <label class="label">Gender</label>
+        <select name="gender" data-rule="required">
+            <option value="">select ...</option>
+            <option value="1">Male</option>
+            <option value="2">Female</option>
+            <option value="3">Other</option>
+        </select>
+    </div>
+    <div class="form-item">
+        <label class="label">Email</label>
+        <input type="text" name="email" data-rule="required;email">
+    </div>
+    <div class="form-item">
+        <label class="label">Interest</label>
+        <label><input type="checkbox" name="interest" data-rule="checked">sports</label>
+        <label><input type="checkbox" name="interest">movie</label>
+        <label><input type="checkbox" name="interest">game</label>
+    </div>
+    <div class="form-item">
+        <label class="label">Note</label>
+        <textarea data-rule="required;"></textarea>
+    </div>
+
+    <div class="form-item">
+        <label><input type="checkbox" id="agree_arguments" data-rule="checked">I agree to the service agreement.</label>
+    </div>
+
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+<script src="../dist/jquery.validator.min.js?local=en"></script>
+</body>
+</html>

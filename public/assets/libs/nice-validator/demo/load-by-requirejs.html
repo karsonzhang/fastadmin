@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Load By RequireJS</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+
+<form id="form1" class="form">
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <input type="password" name="password" data-rule="required;" placeholder="Password">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/requirejs/2.1.22/require.min.js"></script>
+<script>
+requirejs.config({
+    baseUrl: '../',
+    paths: {
+        jquery: 'https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min',
+        validator: 'dist/local/zh-CN'
+    },
+    shim: {
+        validator: ['../dist/jquery.validator.js?css']
+    }
+});
+
+
+// Way 1: Use plugin methods
+require(['jquery', 'validator'], function($){
+    $('#form1').validator({
+        timely: 2,
+        stopOnError: true,
+        theme: 'yellow_right'
+    });
+});
+
+
+// Way 2: Just include nice-validator
+// require(['validator']);
+
+
+// Way 3: Define a module dependency nice-validator
+// define('some-module', ['jquery', 'validator'], function($){
+//     // some code
+// });
+</script>
+</body>
+</html>

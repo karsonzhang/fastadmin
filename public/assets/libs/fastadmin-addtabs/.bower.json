@@ -1,0 +1,14 @@
+{
+  "name": "fastadmin-addtabs",
+  "homepage": "https://github.com/karsonzhang/jquery-addtabs",
+  "version": "1.0.4",
+  "_release": "1.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.4",
+    "commit": "24fe25f1c247673baeab8e5b11630e82bea9c1e9"
+  },
+  "_source": "https://github.com/karsonzhang/jquery-addtabs.git",
+  "_target": "~1.0.3",
+  "_originalSource": "fastadmin-addtabs"
+}

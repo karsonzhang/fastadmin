@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Required By Condition</title>
+    <link rel="stylesheet" href="demo.css">
+
+    <script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+    <script src="../dist/jquery.validator.min.js?local=en"></script>
+</head>
+
+<body>
+
+<form id="form1" class="form" data-validator-option="{timely:3,focusCleanup:true}">
+    <h3>required( dependency-expression )</h3>
+    <div class="form-item">
+        <label for="isCompany"><input type="checkbox" id="isCompany" checked>Company</label>
+    </div>
+    <div class="form-item">
+        <input type="text" name="companyName" data-rule="required(#isCompany:checked)">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form id="form2" class="form">
+    <h3>required( dependency-callback )</h3>
+    <div class="form-item">
+        <label><input type="checkbox" id="isPersonal" checked>Personal</label>
+    </div>
+    <div class="form-item">
+        <input type="text" name="email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<script>
+$('#form2').validator({
+    timely: 3,
+    focusCleanup: true,
+    rules: {
+        isPersonal: function() {
+            return $('#isPersonal').prop('checked');
+        }
+    },
+    fields: {
+        email: 'required(isPersonal); email'
+    }
+});
+</script>
+
+</body>
+</html>

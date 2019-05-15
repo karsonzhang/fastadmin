@@ -1,0 +1,23 @@
+{
+  "name": "cxselect",
+  "version": "1.4.0",
+  "description": "cxSelect 是基于 jQuery 的多级联动菜单插件，适用于省市、商品分类等联动菜单。",
+  "keywords": ["jquery plugin","select"],
+  "main": "./js/jquery.cxselect.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "jquery": ">=1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ciaoca/cxSelect.git"
+  },
+  "author": "Ciaoca <ciaoca@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ciaoca/cxSelect/issues"
+  },
+  "homepage": "http://code.ciaoca.com/jquery/cxSelect/"
+}

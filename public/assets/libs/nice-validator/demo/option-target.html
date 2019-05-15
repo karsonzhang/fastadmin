@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Target</title>
+    <link rel="stylesheet" href="demo.css">
+
+    <script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+    <script src="../dist/jquery.validator.js?local=en"></script>
+</head>
+
+<body>
+
+<form class="form" data-validator-option="{timely:2, theme:'yellow_right'}">
+    <h3>Target to other input</h3>
+    <div class="form-item">
+        <label class="label">Name</label>
+        <input type="text" class="input-sm" name="firstName" data-target="#lastName" data-rule="required" placeholder="First Name">
+        <input type="text" class="input-sm" name="lastName" id="lastName" data-rule="required" placeholder="Last Name">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+<form class="form" data-validator-option="{timely:2, theme:'simple_right'}">
+    <h3>Target to "msg-box"</h3>
+    <div class="form-item">
+        <input type="text" name="name" data-rule="Name:required" data-target="#holdMsg" placeholder="Name">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+        <span class="msg-box" id="holdMsg"></span>
+    </div>
+</form>
+
+
+<form class="form" data-validator-option="{timely:2}">
+    <h3>Target to a container</h3>
+    <div id="msgContainer"></div>
+    <div class="form-item">
+        <input type="text" name="name" data-rule="Name:required" data-target="#msgContainer">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+<form class="form" id="form4">
+    <h3>Dynamic message place.</h3>
+    <div class="form-item">
+        <label class="label">Name</label>
+        <input type="text" class="input-sm" name="firstName" data-rule="required" placeholder="First Name">
+        <input type="text" class="input-sm" name="lastName"  data-rule="required" placeholder="Last Name">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+<script>
+$('#form4').validator({
+    timely:2,
+    stopOnError: true,
+    display: function(input) {
+        return $(input).attr('placeholder');
+    },
+    target: function(input) {
+        var $formitem = $(input).closest('.form-item'),
+            $msgbox = $formitem.find('span.msg-box');
+        if (!$msgbox.length) {
+            $msgbox = $('<span class="msg-box"></span>').appendTo($formitem);
+        }
+        return $msgbox;
+    }
+});
+</script>
+
+
+</body>
+</html>

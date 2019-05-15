@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Contenteditable</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<form id="form1" class="form" data-validator-option="{timely:2}">
+    <div class="form-item">
+        <div contenteditable id="email" data-rule="required;email"></div>
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+<script src="../dist/jquery.validator.js?local=en"></script>
+<script>
+$('#form1').on('valid.form', function(){
+  alert('ok')
+});
+</script>
+</body>
+</html>

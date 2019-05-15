@@ -1,0 +1,38 @@
+body {font: 100%/1.5 "Helvetica", "Arial", "Microsoft Yahei";}
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select,
+textarea,
+[contenteditable] {
+    width:250px; height:26px; line-height: 26px;
+    padding: 0;
+    padding-left: 5px;
+    box-sizing: border-box;
+    border: 1px solid #d9d9d9;
+    border-top: 1px solid #c0c0c0;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus,
+[contenteditable]:focus {
+    outline: none;
+    border-color: #1E90FF;
+    box-shadow: 0 0 4px rgba(30,144,255,.5);
+}
+[contenteditable] {display: inline-block; overflow: hidden; white-space: nowrap;}
+.form {max-width:600px;margin: 40px 20px;}
+.form h3 {font-weight: 400; margin: 1.2em 0 .8em;}
+.form p {margin: .8em 0;}
+.form .note {color:#ccc; font-weight:200; font-size: .9em}
+.form-item {margin: .8em 0;}
+.form-item .label {display:block; margin:10px 0 2px; font-size:14px;}
+.form-item .n-invalid {border:1px solid #c00;}
+.form-item .n-invalid:focus {outline: none; border-color:#c00; box-shadow: 0 0 4px rgba(192,0,0,0.5);}
+
+.form-item button {padding:5px 20px;}
+
+.form-item .input-sm {width:120px;}

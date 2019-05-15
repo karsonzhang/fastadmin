@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Themes</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+
+<body>
+
+<form class="form" data-validator-option="{timely:2}">
+    <h3>Default theme</h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <input type="password" name="password" data-rule="required;length(6~16)" placeholder="Password">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2, theme:'yellow_right'}">
+    <h3>Tip on right</h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <input type="password" name="password" data-rule="required;length(6~16)" placeholder="Password">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2, theme:'yellow_right_effect'}">
+    <h3>Tip with an effect</h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2, theme:'yellow_top'}">
+    <h3>Tip on top</h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2, theme:'simple_right', showOk:''}">
+    <h3>Simple message on right</h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+<form class="form" data-validator-option="{timely:2, theme:'simple_bottom'}">
+    <h3>Simple message on bottom</h3>
+    <div class="form-item">
+        <input type="text" name="user[email]" data-rule="required;email" placeholder="Email">
+    </div>
+    <div class="form-item">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/jquery/1.12.3/jquery.min.js"></script>
+<script src="../dist/jquery.validator.min.js?local=en"></script>
+</body>
+</html>
