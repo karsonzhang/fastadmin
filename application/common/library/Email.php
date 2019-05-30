@@ -64,13 +64,13 @@ class Email
         $this->mail->isSMTP();
         $this->mail->SMTPAuth = true;
         $this->mail->Host = $this->options['mail_smtp_host'];
-        $this->mail->Username = $this->options['mail_smtp_user'];
+        $this->mail->Username = $this->options['mail_from'];
         $this->mail->Password = $this->options['mail_smtp_pass'];
         $this->mail->SMTPSecure = isset($securArr[$this->options['mail_verify_type']]) ? $securArr[$this->options['mail_verify_type']] : '';
         $this->mail->Port = $this->options['mail_smtp_port'];
 
         //设置发件人
-        $this->from($this->options['mail_from']);
+        $this->from($this->options['mail_from'], $this->options['mail_smtp_user']);
     }
 
     /**
