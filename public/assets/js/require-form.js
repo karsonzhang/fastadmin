@@ -20,7 +20,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     },
                     dataFilter: function (data) {
                         if (data.code === 1) {
-                            return "";
+                            return data.msg ? { "ok": data.msg } : '';
                         } else {
                             return data.msg;
                         }
