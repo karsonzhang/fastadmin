@@ -277,7 +277,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                                     pid: pid,
                                     field: Table.config.dragsortfield,
                                     orderway: options.sortOrder,
-                                    table: options.extend.table
+                                    table: options.extend.table,
+                                    pk: options.pk
                                 }
                             };
                             Fast.api.ajax(params, function (data, ret) {
@@ -409,7 +410,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         });
                         Layer.photos({
                             photos: {
-                                "start":$(this).index(".img-center"),
+                                "start": $(this).index(".img-center"),
                                 "data": data
                             },
                             anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）

@@ -147,12 +147,14 @@ class Ajax extends Backend
         $field = $this->request->post("field");
         //操作的数据表
         $table = $this->request->post("table");
+        //主键
+        $pk = $this->request->post("pk");
         //排序的方式
         $orderway = $this->request->post("orderway", "", 'strtolower');
         $orderway = $orderway == 'asc' ? 'ASC' : 'DESC';
         $sour = $weighdata = [];
         $ids = explode(',', $ids);
-        $prikey = 'id';
+        $prikey = $pk ? $pk : (Db::name($table)->getPk() ?: 'id');
         $pid = $this->request->post("pid");
         //限制更新的字段
         $field = in_array($field, ['weigh']) ? $field : 'weigh';
@@ -160,9 +162,9 @@ class Ajax extends Backend
         // 如果设定了pid的值,此时只匹配满足条件的ID,其它忽略
         if ($pid !== '') {
             $hasids = [];
-            $list = Db::name($table)->where($prikey, 'in', $ids)->where('pid', 'in', $pid)->field('id,pid')->select();
+            $list = Db::name($table)->where($prikey, 'in', $ids)->where('pid', 'in', $pid)->field("{$prikey},pid")->select();
             foreach ($list as $k => $v) {
-                $hasids[] = $v['id'];
+                $hasids[] = $v[$prikey];
             }
             $ids = array_values(array_intersect($ids, $hasids));
         }
