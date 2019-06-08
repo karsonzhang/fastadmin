@@ -72,10 +72,9 @@ class Auth extends \fast\Auth
     {
         $admin = Admin::get(intval($this->id));
         if (!$admin) {
-            return true;
+            $admin->token = '';
+            $admin->save();
         }
-        $admin->token = '';
-        $admin->save();
         $this->logined = false; //重置登录状态
         Session::delete("admin");
         Cookie::delete("keeplogin");
