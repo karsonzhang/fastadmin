@@ -93,9 +93,9 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                 if (url.indexOf("{ids}") > -1) {
                     var ids = 0;
                     var tableId = $(elem).data("table-id");
-                    if (tableId && $(tableId).size() > 0 && $(tableId).data("bootstrap.table")) {
+                    if (tableId && $("#" + tableId).size() > 0 && $("#" + tableId).data("bootstrap.table")) {
                         var Table = require("table");
-                        ids = Table.api.selectedids($(tableId)).join(",");
+                        ids = Table.api.selectedids($("#" + tableId)).join(",");
                     }
                     url = url.replace(/\{ids\}/g, ids);
                 }
