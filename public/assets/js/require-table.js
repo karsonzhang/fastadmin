@@ -171,7 +171,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var field = $(this).closest("ul").data("field");
                     var value = $(this).data("value");
                     $("select[name='" + field + "'] option[value='" + value + "']", table.closest(".bootstrap-table").find(".commonsearch-table")).prop("selected", true);
-                    table.bootstrapTable('refresh', {});
+                    table.bootstrapTable('refresh', {pageNumber:1});
                     return false;
                 });
                 // 刷新按钮事件
