@@ -7,6 +7,7 @@
                 <div class="widget-body no-padding">
                     <div id="toolbar" class="toolbar">
                         {:build_toolbar('refresh')}
+                        <span><button type="button" id="plupload-image" class="btn btn-success plupload" data-mimetype="{$Think.get.mimetype|default=''}" data-multiple="true"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                         {if request()->get('multiple') == 'true'}
                         <a class="btn btn-danger btn-choose-multi"><i class="fa fa-check"></i> {:__('Choose')}</a>
                         {/if}

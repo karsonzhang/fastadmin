@@ -71,6 +71,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 sortName: 'id',
+                showToggle: false,
+                showExport: false,
                 columns: [
                     [
                         {field: 'state', checkbox: true,},
@@ -115,6 +117,11 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
 
             // 为表格绑定事件
             Table.api.bindevent(table);
+            require(['upload'], function (Upload) {
+                Upload.api.plupload($("#toolbar .plupload"), function () {
+                    $(".btn-refresh").trigger("click");
+                });
+            });
         },
         add: function () {
             Controller.api.bindevent();

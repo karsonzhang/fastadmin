@@ -3730,7 +3730,7 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2019-02-26 17:13:43                </div>
+                    Generated on 2019-06-28 12:14:48                </div>
                 <div class="col-md-6" align="right">
                     <a href="https://www.fastadmin.net" target="_blank">FastAdmin</a>
                 </div>
@@ -3810,8 +3810,8 @@
             $(document).ready(function () {
 
                 if (storage) {
-                    $('#token').val(storage.getItem('token'));
-                    $('#apiUrl').val(storage.getItem('apiUrl'));
+                    storage.getItem('token') && $('#token').val(storage.getItem('token'));
+                    storage.getItem('apiUrl') && $('#apiUrl').val(storage.getItem('apiUrl'));
                 }
 
                 $('[data-toggle="tooltip"]').tooltip({

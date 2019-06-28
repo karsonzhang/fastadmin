@@ -191,6 +191,7 @@ class Addon extends Backend
             $tmpFile = $addonTmpDir . $info->getSaveName();
             try {
                 Service::unzip($tmpName);
+                unset($info);
                 @unlink($tmpFile);
                 $infoFile = $tmpAddonDir . 'info.ini';
                 if (!is_file($infoFile)) {
@@ -235,6 +236,7 @@ class Addon extends Backend
                     throw new Exception(__($e->getMessage()));
                 }
             } catch (Exception $e) {
+                unset($info);
                 @unlink($tmpFile);
                 @rmdirs($tmpAddonDir);
                 $this->error(__($e->getMessage()));

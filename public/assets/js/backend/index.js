@@ -459,6 +459,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     avatar: data.avatar
                 }));
                 location.href = Backend.api.fixurl(data.url);
+            }, function (data) {
+                $("input[name=captcha]").next(".input-group-addon").find("img").trigger("click");
             });
         }
     };

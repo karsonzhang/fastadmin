@@ -103,6 +103,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         return __('Choose');
                     }
                 }, locales);
+                $.fn.bootstrapTable.defaults.exportTypes = defaults.exportTypes;
             },
             // 绑定事件
             bindevent: function (table) {

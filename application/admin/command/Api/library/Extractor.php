@@ -245,6 +245,7 @@ class Extractor
                 return \think\Loader::parseName($item);
             }, $suffixArr));
             $urlArr[] = $method->getName();
+
             $methodAnnotations['ApiRoute'] = [implode('/', $urlArr)];
         }
         if (!isset($methodAnnotations['ApiSector'])) {

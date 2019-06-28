@@ -428,8 +428,8 @@
             $(document).ready(function () {
 
                 if (storage) {
-                    $('#token').val(storage.getItem('token'));
-                    $('#apiUrl').val(storage.getItem('apiUrl'));
+                    storage.getItem('token') && $('#token').val(storage.getItem('token'));
+                    storage.getItem('apiUrl') && $('#apiUrl').val(storage.getItem('apiUrl'));
                 }
 
                 $('[data-toggle="tooltip"]').tooltip({

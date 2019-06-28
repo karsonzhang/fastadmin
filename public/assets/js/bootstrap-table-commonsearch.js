@@ -40,7 +40,9 @@
         // 重置搜索
         form.on("click", "button[type=reset]", function (event) {
             form[0].reset();
-            that.onCommonSearch();
+            setTimeout(function () {
+                that.onCommonSearch();
+            }, 0);
         });
 
     };

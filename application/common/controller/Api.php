@@ -11,6 +11,7 @@ use think\Lang;
 use think\Loader;
 use think\Request;
 use think\Response;
+use think\Route;
 
 /**
  * API控制器基类
@@ -90,6 +91,25 @@ class Api
      */
     protected function _initialize()
     {
+        if (Config::get('url_domain_deploy')) {
+            $domain = Route::rules('domain');
+            if (isset($domain['api'])) {
+                if (isset($_SERVER['HTTP_ORIGIN'])) {
+                    header("Access-Control-Allow-Origin: " . $this->request->server('HTTP_ORIGIN'));
+                    header('Access-Control-Allow-Credentials: true');
+                    header('Access-Control-Max-Age: 86400');
+                }
+                if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+                    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+                        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+                    }
+                    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+                        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+                    }
+                }
+            }
+        }
+
         //移除HTML标签
         $this->request->filter('trim,strip_tags,htmlspecialchars');
 

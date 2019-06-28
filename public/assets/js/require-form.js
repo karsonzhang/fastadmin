@@ -272,7 +272,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             var textarea = $("textarea[name='" + name + "']", form);
                             var container = textarea.closest("dl");
                             var template = container.data("template");
-                            $.each($("input,select", container).serializeArray(), function (i, j) {
+                            $.each($("input,select,textarea", container).serializeArray(), function (i, j) {
                                 var reg = /\[(\w+)\]\[(\w+)\]$/g;
                                 var match = reg.exec(j.name);
                                 if (!match)
