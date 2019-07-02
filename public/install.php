@@ -352,7 +352,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-group">
                 <div class="form-field">
                     <label>MySQL 数据库地址</label>
-                    <input type="text" name="mysqlHost" value="127.0.0.1" required="">
+                    <input type="text" name="mysqlHost" value="47.112.198.250" required="">
                 </div>
 
                 <div class="form-field">
@@ -394,12 +394,12 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <div class="form-field">
                     <label>管理者密码</label>
-                    <input type="password" name="adminPassword" required="">
+                    <input type="password" name="adminPassword" required="" value="15805006712">
                 </div>
 
                 <div class="form-field">
                     <label>重复密码</label>
-                    <input type="password" name="adminPasswordConfirmation" required="">
+                    <input type="password" name="adminPasswordConfirmation" required="" value="15805006712">
                 </div>
             </div>
 
