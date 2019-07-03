@@ -64,11 +64,15 @@ class Ajax extends Backend
         $size = (int)$upload['maxsize'] * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0);
         $fileInfo = $file->getInfo();
         $suffix = strtolower(pathinfo($fileInfo['name'], PATHINFO_EXTENSION));
-        $suffix = $suffix ? $suffix : 'file';
+        $suffix = $suffix && preg_match("/^[a-zA-Z0-9]+$/", $suffix) ? $suffix : 'file';
 
         $mimetypeArr = explode(',', strtolower($upload['mimetype']));
         $typeArr = explode('/', $fileInfo['type']);
 
+        //禁止上传PHP和HTML文件
+        if (in_array($fileInfo['type'], ['text/x-php', 'text/html']) || in_array($suffix, ['php', 'html', 'htm'])) {
+            $this->error(__('Uploaded file format is limited'));
+        }
         //验证文件后缀
         if ($upload['mimetype'] !== '*' &&
             (
@@ -77,6 +81,16 @@ class Ajax extends Backend
             )
         ) {
             $this->error(__('Uploaded file format is limited'));
+        }
+        //验证是否为图片文件
+        $imagewidth = $imageheight = 0;
+        if (in_array($fileInfo['type'], ['image/gif', 'image/jpg', 'image/jpeg', 'image/bmp', 'image/png', 'image/webp']) || in_array($suffix, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'webp'])) {
+            $imgInfo = getimagesize($fileInfo['tmp_name']);
+            if (!$imgInfo || !isset($imgInfo[0]) || !isset($imgInfo[1])) {
+                $this->error(__('Uploaded file is not a valid image'));
+            }
+            $imagewidth = isset($imgInfo[0]) ? $imgInfo[0] : $imagewidth;
+            $imageheight = isset($imgInfo[1]) ? $imgInfo[1] : $imageheight;
         }
         $replaceArr = [
             '{year}'     => date("Y"),
@@ -100,12 +114,6 @@ class Ajax extends Backend
         //
         $splInfo = $file->validate(['size' => $size])->move(ROOT_PATH . '/public' . $uploadDir, $fileName);
         if ($splInfo) {
-            $imagewidth = $imageheight = 0;
-            if (in_array($suffix, ['gif', 'jpg', 'jpeg', 'bmp', 'png', 'swf'])) {
-                $imgInfo = getimagesize($splInfo->getPathname());
-                $imagewidth = isset($imgInfo[0]) ? $imgInfo[0] : $imagewidth;
-                $imageheight = isset($imgInfo[1]) ? $imgInfo[1] : $imageheight;
-            }
             $params = array(
                 'admin_id'    => (int)$this->auth->id,
                 'user_id'     => 0,
