@@ -120,7 +120,7 @@ class Addon extends Command
                             $output->warning($v);
                         }
                         $output->info("Are you sure you want to " . ($action == 'enable' ? 'override' : 'delete') . " all those files?  Type 'yes' to continue: ");
-                        $line = fgets(STDIN);
+                        $line = fgets(defined('STDIN') ? STDIN : fopen('php://stdin', 'r'));
                         if (trim($line) != 'yes') {
                             throw new Exception("Operation is aborted!");
                         }
@@ -156,7 +156,7 @@ class Addon extends Command
                             $output->warning($v);
                         }
                         $output->info("Are you sure you want to override all those files?  Type 'yes' to continue: ");
-                        $line = fgets(STDIN);
+                        $line = fgets(defined('STDIN') ? STDIN : fopen('php://stdin', 'r'));
                         if (trim($line) != 'yes') {
                             throw new Exception("Operation is aborted!");
                         }
@@ -186,7 +186,7 @@ class Addon extends Command
                             $output->warning($v);
                         }
                         $output->info("Are you sure you want to delete all those files?  Type 'yes' to continue: ");
-                        $line = fgets(STDIN);
+                        $line = fgets(defined('STDIN') ? STDIN : fopen('php://stdin', 'r'));
                         if (trim($line) != 'yes') {
                             throw new Exception("Operation is aborted!");
                         }

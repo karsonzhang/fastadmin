@@ -92,7 +92,7 @@ class User extends Frontend
                 'email'     => 'require|email',
                 'mobile'    => 'regex:/^1\d{10}$/',
                 'captcha'   => 'require|captcha',
-                '__token__' => 'token',
+                '__token__' => 'require|token',
             ];
 
             $msg = [
@@ -152,7 +152,7 @@ class User extends Frontend
             $rule = [
                 'account'   => 'require|length:3,50',
                 'password'  => 'require|length:6,30',
-                '__token__' => 'token',
+                '__token__' => 'require|token',
             ];
 
             $msg = [
