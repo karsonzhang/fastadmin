@@ -84,6 +84,7 @@ return [
     'Install successful'             => '安装成功',
     'Uninstall successful'           => '卸载成功',
     'Operate successful'             => '操作成功',
+    'Addon name incorrect'           => '插件名称不正确',
     'Addon info file was not found'  => '插件配置文件未找到',
     'Addon info file data incorrect' => '插件配置信息不正确',
     'Addon already exists'           => '上传的插件已经存在',
