@@ -642,7 +642,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         text = typeof j.text === 'function' ? j.text.call(table, row, j) : j.text ? j.text : '';
                         title = typeof j.title === 'function' ? j.title.call(table, row, j) : j.title ? j.title : text;
                         refresh = j.refresh ? 'data-refresh="' + j.refresh + '"' : '';
-                        confirm = typeof j.confirm === 'function' ? j.confirm.call(table, row, j) : (typeof j.confirm !== 'undefined' ? j.disable : false);
+                        confirm = typeof j.confirm === 'function' ? j.confirm.call(table, row, j) : (typeof j.confirm !== 'undefined' ? j.confirm : false);
                         confirm = confirm ? 'data-confirm="' + confirm + '"' : '';
                         extend = j.extend ? j.extend : '';
                         disable = typeof j.disable === 'function' ? j.disable.call(table, row, j) : (typeof j.disable !== 'undefined' ? j.disable : false);
