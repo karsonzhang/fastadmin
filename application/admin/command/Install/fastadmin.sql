@@ -19,7 +19,7 @@ CREATE TABLE `fa_admin` (
   `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '昵称',
   `password` varchar(32) NOT NULL DEFAULT '' COMMENT '密码',
   `salt` varchar(30) NOT NULL DEFAULT '' COMMENT '密码盐',
-  `avatar` varchar(100) NOT NULL DEFAULT '' COMMENT '头像',
+  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `email` varchar(100) NOT NULL DEFAULT '' COMMENT '电子邮箱',
   `loginfailure` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '失败次数',
   `logintime` int(10) DEFAULT NULL COMMENT '登录时间',
