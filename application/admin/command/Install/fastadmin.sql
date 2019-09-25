@@ -23,6 +23,7 @@ CREATE TABLE `fa_admin` (
   `email` varchar(100) NOT NULL DEFAULT '' COMMENT '电子邮箱',
   `loginfailure` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '失败次数',
   `logintime` int(10) DEFAULT NULL COMMENT '登录时间',
+  `loginip` varchar(50) DEFAULT NULL COMMENT '登录IP',
   `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
   `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `token` varchar(59) NOT NULL DEFAULT '' COMMENT 'Session标识',

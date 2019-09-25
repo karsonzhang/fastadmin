@@ -30,9 +30,9 @@ class Auth extends \fast\Auth
     /**
      * 管理员登录
      *
-     * @param   string $username 用户名
-     * @param   string $password 密码
-     * @param   int    $keeptime 有效时长
+     * @param string $username 用户名
+     * @param string $password 密码
+     * @param int    $keeptime 有效时长
      * @return  boolean
      */
     public function login($username, $password, $keeptime = 0)
@@ -58,6 +58,7 @@ class Auth extends \fast\Auth
         }
         $admin->loginfailure = 0;
         $admin->logintime = time();
+        $admin->loginip = request()->ip(0, false);
         $admin->token = Random::uuid();
         $admin->save();
         Session::set("admin", $admin->toArray());
@@ -101,6 +102,11 @@ class Auth extends \fast\Auth
             if ($key != md5(md5($id) . md5($keeptime) . md5($expiretime) . $admin->token)) {
                 return false;
             }
+            $ip = request()->ip(0, false);
+            //IP有变动
+            if ($admin->loginip != $ip) {
+                return false;
+            }
             Session::set("admin", $admin->toArray());
             //刷新自动登录的时效
             $this->keeplogin($keeptime);
@@ -113,7 +119,7 @@ class Auth extends \fast\Auth
     /**
      * 刷新保持登录的Cookie
      *
-     * @param   int $keeptime
+     * @param int $keeptime
      * @return  boolean
      */
     protected function keeplogin($keeptime = 0)
@@ -177,6 +183,9 @@ class Auth extends \fast\Auth
             if (!$my || $my['token'] != $admin['token']) {
                 return false;
             }
+        }
+        if (!isset($admin['loginip']) || $admin['loginip'] != request()->ip(0, false)) {
+            return false;
         }
         $this->logined = true;
         return true;
@@ -258,10 +267,17 @@ class Auth extends \fast\Auth
         foreach ($groups as $k => $v) {
             $groupIds[] = $v['id'];
         }
+        $originGroupIds = $groupIds;
+        foreach ($groups as $k => $v) {
+            if (in_array($v['pid'], $originGroupIds)) {
+                $groupIds = array_diff($groupIds, [$v['id']]);
+                unset($groups[$k]);
+            }
+        }
         // 取出所有分组
         $groupList = \app\admin\model\AuthGroup::where(['status' => 'normal'])->select();
         $objList = [];
-        foreach ($groups as $K => $v) {
+        foreach ($groups as $k => $v) {
             if ($v['rules'] === '*') {
                 $objList = $groupList;
                 break;
@@ -295,7 +311,6 @@ class Auth extends \fast\Auth
             field('uid,group_id')
                 ->where('group_id', 'in', $groupIds)
                 ->select();
-
             foreach ($authGroupList as $k => $v) {
                 $childrenAdminIds[] = $v['uid'];
             }
@@ -340,7 +355,7 @@ class Auth extends \fast\Auth
     /**
      * 获取左侧和顶部菜单栏
      *
-     * @param array  $params    URL对应的badge数据
+     * @param array  $params URL对应的badge数据
      * @param string $fixedPage 默认页
      * @return array
      */
@@ -435,18 +450,36 @@ class Auth extends \fast\Auth
                 $selectParentIds = $tree->getParentsIds($select_id, true);
             }
             foreach ($topList as $index => $item) {
-                $childList = Tree::instance()->getTreeMenu($item['id'], '<li class="@class" pid="@pid"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
+                $childList = Tree::instance()->getTreeMenu(
+                    $item['id'],
+                    '<li class="@class" pid="@pid"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
+                    $select_id,
+                    '',
+                    'ul',
+                    'class="treeview-menu"'
+                );
                 $current = in_array($item['id'], $selectParentIds);
                 $url = $childList ? 'javascript:;' : url($item['url']);
                 $addtabs = $childList || !$url ? "" : (stripos($url, "?") !== false ? "&" : "?") . "ref=addtabs";
-                $childList = str_replace('" pid="' . $item['id'] . '"', ' treeview ' . ($current ? '' : 'hidden') . '" pid="' . $item['id'] . '"', $childList);
+                $childList = str_replace(
+                    '" pid="' . $item['id'] . '"',
+                    ' treeview ' . ($current ? '' : 'hidden') . '" pid="' . $item['id'] . '"',
+                    $childList
+                );
                 $nav .= '<li class="' . ($current ? 'active' : '') . '"><a href="' . $url . $addtabs . '" addtabs="' . $item['id'] . '" url="' . $url . '"><i class="' . $item['icon'] . '"></i> <span>' . $item['title'] . '</span> <span class="pull-right-container"> </span></a> </li>';
                 $menu .= $childList;
             }
         } else {
             // 构造菜单数据
             Tree::instance()->init($ruleList);
-            $menu = Tree::instance()->getTreeMenu(0, '<li class="@class"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>', $select_id, '', 'ul', 'class="treeview-menu"');
+            $menu = Tree::instance()->getTreeMenu(
+                0,
+                '<li class="@class"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
+                $select_id,
+                '',
+                'ul',
+                'class="treeview-menu"'
+            );
             if ($selected) {
                 $nav .= '<li role="presentation" id="tab_' . $selected['id'] . '" class="' . ($referer ? '' : 'active') . '"><a href="#con_' . $selected['id'] . '" node-id="' . $selected['id'] . '" aria-controls="' . $selected['id'] . '" role="tab" data-toggle="tab"><i class="' . $selected['icon'] . ' fa-fw"></i> <span>' . $selected['title'] . '</span> </a></li>';
             }

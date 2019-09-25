@@ -16,6 +16,7 @@
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
+@import url("../libs/bootstrap-slider/slider.css");
 
 @main-bg: #f1f4f6;
 @panel-intro-bg: darken(@main-bg, 3%);
@@ -954,7 +955,7 @@ table.table-nowrap {
     }
     //样式二关闭按钮
     .layui-layer-close2, .layui-layer-close2:hover {
-      background: url('../libs/layer/dist/theme/default/icon.png') no-repeat -149px -31px !important;
+      background: url('../libs/fastadmin-layer/dist/theme/default/icon.png') no-repeat -149px -31px !important;
       top: -30px;
       right: -30px;
       &:after {
@@ -1045,7 +1046,7 @@ table.table-nowrap {
 }
 
 /*平板样式*/
-@media (max-width: @screen-tablet) {
+@media (max-width: @screen-xs-max) {
 
   body .wrapper .main-header .logo {
     background: none;

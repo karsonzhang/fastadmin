@@ -490,7 +490,7 @@ class Backend extends Controller
                     'pid'       => isset($item['pid']) ? $item['pid'] : 0
                 ];
             }
-            if ($istree) {
+            if ($istree && !$primaryvalue) {
                 $tree = Tree::instance();
                 $tree->init(collection($list)->toArray(), 'pid');
                 $list = $tree->getTreeList($tree->getTreeArray(0), $field);

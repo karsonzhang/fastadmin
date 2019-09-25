@@ -3,10 +3,10 @@
     <!-- 管理员信息 -->
     <div class="user-panel hidden-xs">
         <div class="pull-left image">
-            <a href="general/profile" class="addtabsit"><img src="{$admin.avatar|cdnurl}" class="img-circle" /></a>
+            <a href="general/profile" class="addtabsit"><img src="{$admin.avatar|cdnurl|htmlentities}" class="img-circle" /></a>
         </div>
         <div class="pull-left info">
-            <p>{$admin.nickname}</p>
+            <p>{$admin.nickname|htmlentities}</p>
             <i class="fa fa-circle text-success"></i> {:__('Online')}
         </div>
     </div>

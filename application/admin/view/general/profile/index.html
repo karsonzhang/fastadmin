@@ -46,18 +46,18 @@
             <div class="panel-body">
 
                 <form id="update-form" role="form" data-toggle="validator" method="POST" action="{:url('general.profile/update')}">
-                    <input type="hidden" id="c-avatar" name="row[avatar]" value="{$admin.avatar}"/>
+                    <input type="hidden" id="c-avatar" name="row[avatar]" value="{$admin.avatar|htmlentities}"/>
                     <div class="box-body box-profile">
 
                         <div class="profile-avatar-container">
-                            <img class="profile-user-img img-responsive img-circle plupload" src="{$admin.avatar|cdnurl}" alt="">
+                            <img class="profile-user-img img-responsive img-circle plupload" src="{$admin.avatar|cdnurl|htmlentities}" alt="">
                             <div class="profile-avatar-text img-circle">{:__('Click to edit')}</div>
                             <button id="plupload-avatar" class="plupload" data-input-id="c-avatar"><i class="fa fa-upload"></i> {:__('Upload')}</button>
                         </div>
 
-                        <h3 class="profile-username text-center">{$admin.username}</h3>
+                        <h3 class="profile-username text-center">{$admin.username|htmlentities}</h3>
 
-                        <p class="text-muted text-center">{$admin.email}</p>
+                        <p class="text-muted text-center">{$admin.email|htmlentities}</p>
                         <div class="form-group">
                             <label for="username" class="control-label">{:__('Username')}:</label>
                             <input type="text" class="form-control" id="username" name="row[username]" value="{$admin.username|htmlentities}" disabled/>

@@ -533,7 +533,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Click to toggle status') + '" class="btn btn-toggle btn-' + (row.addon.state == 1 ? "disable" : "enable") + '" data-action="' + (row.addon.state == 1 ? "disable" : "enable") + '" data-name="' + row.name + '"><i class="fa ' + (row.addon.state == 0 ? 'fa-toggle-on fa-rotate-180 text-gray' : 'fa-toggle-on text-success') + ' fa-2x"></i></a>';
                 },
                 author: function (value, row, index) {
-                    return '<a href="https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes" target="_blank" data-toggle="tooltip" title="' + __('Click to contact developer') + '" class="text-primary">' + value + '</a>';
+                    var url = 'javascript:';
+                    if (typeof row.homepage !== 'undefined') {
+                        url = row.homepage;
+                    } else if (typeof row.qq !== 'undefined') {
+                        url = 'https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes';
+                    }
+                    return '<a href="' + url + '" target="_blank" data-toggle="tooltip" title="' + __('Click to contact developer') + '" class="text-primary">' + value + '</a>';
                 },
                 price: function (value, row, index) {
                     if (isNaN(value)) {

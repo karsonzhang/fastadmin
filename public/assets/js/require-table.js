@@ -434,7 +434,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 image: function (value, row, index) {
                     value = value ? value : '/assets/img/blank.gif';
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    return '<a href="javascript:void(0)" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>';
+                    return '<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>';
                 },
                 images: function (value, row, index) {
                     value = value === null ? '' : value.toString();
@@ -443,9 +443,13 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var html = [];
                     $.each(arr, function (i, value) {
                         value = value ? value : '/assets/img/blank.gif';
-                        html.push('<a href="javascript:void(0)" target="_blank"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>');
+                        html.push('<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>');
                     });
                     return html.join(' ');
+                },
+                content: function (value, row, index) {
+                    var width = this.width != undefined ? this.width : 250;
+                    return "<div style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:" + width + "px;'>" + value + "</div>";
                 },
                 status: function (value, row, index) {
                     var custom = {normal: 'success', hidden: 'gray', deleted: 'danger', locked: 'info'};

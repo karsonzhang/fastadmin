@@ -918,7 +918,7 @@ table.table-nowrap thead > tr > th {
   }
 }
 /*平板样式*/
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   body .wrapper .main-header .logo {
     background: none;
     color: #fff;
@@ -997,4 +997,4 @@ table.table-nowrap thead > tr > th {
 .btn-switcher .text-gray {
   color: #d2d6de !important;
 }
-/*# sourceMappingURL=../css/backend.css.map */
+/*# sourceMappingURL=backend.css.map */

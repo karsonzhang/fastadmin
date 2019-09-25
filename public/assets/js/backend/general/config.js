@@ -67,8 +67,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 var that = this;
                 Layer.prompt({title: __('Please input your email'), formType: 0}, function (value, index) {
                     Backend.api.ajax({
-                        url: "general/config/emailtest?receiver=" + value,
-                        data: $(that).closest("form").serialize()
+                        url: "general/config/emailtest",
+                        data: $(that).closest("form").serialize() + "&receiver=" + value
                     });
                 });
 
@@ -79,7 +79,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 var that = this;
                 Layer.confirm(__('Are you sure you want to delete this item?'), {icon: 3, title:'提示'}, function (index) {
                     Backend.api.ajax({
-                        url: "general/config/del?receiver=" + value,
+                        url: "general/config/del",
                         data: {name: $(that).data("name")}
                     }, function () {
                         $(that).closest("tr").remove();

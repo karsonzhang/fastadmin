@@ -6,6 +6,7 @@ use app\common\controller\Backend;
 use app\common\library\Email;
 use app\common\model\Config as ConfigModel;
 use think\Exception;
+use think\Validate;
 
 /**
  * 系统配置
@@ -50,8 +51,8 @@ class Config extends Backend
             if (in_array($value['type'], ['select', 'selects', 'checkbox', 'radio'])) {
                 $value['value'] = explode(',', $value['value']);
             }
-            $value['content'] = json_decode($value['content'], TRUE);
-			$value['tip'] = htmlspecialchars($value['tip']);
+            $value['content'] = json_decode($value['content'], true);
+            $value['tip'] = htmlspecialchars($value['tip']);
             $siteList[$v['group']]['list'][] = $value;
         }
         $index = 0;
@@ -106,7 +107,7 @@ class Config extends Backend
      * 编辑
      * @param null $ids
      */
-    public function edit($ids = NULL)
+    public function edit($ids = null)
     {
         if ($this->request->isPost()) {
             $row = $this->request->post("row/a");
@@ -136,11 +137,15 @@ class Config extends Backend
         }
     }
 
+    /**
+     * 删除
+     * @param string $ids
+     */
     public function del($ids = "")
     {
-        $name = $this->request->request('name');
+        $name = $this->request->post('name');
         $config = ConfigModel::getByName($name);
-        if ($config) {
+        if ($name && $config) {
             try {
                 $config->delete();
                 $this->refreshFile();
@@ -160,17 +165,19 @@ class Config extends Backend
     {
         $config = [];
         foreach ($this->model->all() as $k => $v) {
-
             $value = $v->toArray();
             if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files'])) {
                 $value['value'] = explode(',', $value['value']);
             }
             if ($value['type'] == 'array') {
-                $value['value'] = (array)json_decode($value['value'], TRUE);
+                $value['value'] = (array)json_decode($value['value'], true);
             }
             $config[$value['name']] = $value['value'];
         }
-        file_put_contents(APP_PATH . 'extra' . DS . 'site.php', '<?php' . "\n\nreturn " . var_export($config, true) . ";");
+        file_put_contents(
+            APP_PATH . 'extra' . DS . 'site.php',
+            '<?php' . "\n\nreturn " . var_export($config, true) . ";"
+        );
     }
 
     /**
@@ -181,7 +188,6 @@ class Config extends Backend
     {
         $params = $this->request->post("row/a");
         if ($params) {
-
             $config = $this->model->get($params);
             if (!$config) {
                 return $this->success();
@@ -200,19 +206,25 @@ class Config extends Backend
     public function emailtest()
     {
         $row = $this->request->post('row/a');
-        \think\Config::set('site', array_merge(\think\Config::get('site'), $row));
-        $receiver = $this->request->request("receiver");
-        $email = new Email;
-        $result = $email
-            ->to($receiver)
-            ->subject(__("This is a test mail"))
-            ->message('<div style="min-height:550px; padding: 100px 55px 200px;">' . __('This is a test mail content') . '</div>')
-            ->send();
-        if ($result) {
-            $this->success();
+        $receiver = $this->request->post("receiver");
+        if ($receiver) {
+            if (!Validate::is($receiver, "email")) {
+                $this->error(__('Please input correct email'));
+            }
+            \think\Config::set('site', array_merge(\think\Config::get('site'), $row));
+            $email = new Email;
+            $result = $email
+                ->to($receiver)
+                ->subject(__("This is a test mail"))
+                ->message('<div style="min-height:550px; padding: 100px 55px 200px;">' . __('This is a test mail content') . '</div>')
+                ->send();
+            if ($result) {
+                $this->success();
+            } else {
+                $this->error($email->getError());
+            }
         } else {
-            $this->error($email->getError());
+            return $this->error(__('Invalid parameters'));
         }
     }
-
 }
