@@ -72,6 +72,7 @@ class Config extends Backend
     public function add()
     {
         if ($this->request->isPost()) {
+            $this->token();
             $params = $this->request->post("row/a");
             if ($params) {
                 foreach ($params as $k => &$v) {
@@ -110,6 +111,7 @@ class Config extends Backend
     public function edit($ids = null)
     {
         if ($this->request->isPost()) {
+            $this->token();
             $row = $this->request->post("row/a");
             if ($row) {
                 $configList = [];

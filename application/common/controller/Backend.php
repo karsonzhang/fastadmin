@@ -10,6 +10,7 @@ use think\Lang;
 use think\Loader;
 use think\Session;
 use fast\Tree;
+use think\Validate;
 
 /**
  * 后台控制器基类
@@ -504,5 +505,21 @@ class Backend extends Controller
         }
         //这里一定要返回有list这个字段,total是可选的,如果total<=list的数量,则会隐藏分页按钮
         return json(['list' => $list, 'total' => $total]);
+    }
+
+    /**
+     * 刷新Token
+     */
+    protected function token()
+    {
+        $token = $this->request->post('__token__');
+
+        //验证Token
+        if (!Validate::is($token, "token", ['__token__' => $token])) {
+            $this->error(__('Token verification error'), '', ['__token__' => $this->request->token()]);
+        }
+
+        //刷新Token
+        $this->request->token();
     }
 }

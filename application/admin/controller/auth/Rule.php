@@ -69,6 +69,7 @@ class Rule extends Backend
     public function add()
     {
         if ($this->request->isPost()) {
+            $this->token();
             $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params) {
                 if (!$params['ismenu'] && !$params['pid']) {
@@ -96,6 +97,7 @@ class Rule extends Backend
             $this->error(__('No Results were found'));
         }
         if ($this->request->isPost()) {
+            $this->token();
             $params = $this->request->post("row/a", [], 'strip_tags');
             if ($params) {
                 if (!$params['ismenu'] && !$params['pid']) {

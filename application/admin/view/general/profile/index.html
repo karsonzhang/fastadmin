@@ -46,6 +46,7 @@
             <div class="panel-body">
 
                 <form id="update-form" role="form" data-toggle="validator" method="POST" action="{:url('general.profile/update')}">
+                    {:token()}
                     <input type="hidden" id="c-avatar" name="row[avatar]" value="{$admin.avatar|htmlentities}"/>
                     <div class="box-body box-profile">
 

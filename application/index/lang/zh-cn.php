@@ -119,6 +119,7 @@ return [
     'Invalid parameters'                                     => '未知参数',
     'No results were found'                                  => '记录未找到',
     'Parameter %s can not be empty'                          => '参数%s不能为空',
+    'Token verification error'                               => 'Token验证错误！',
     'You have no permission'                                 => '你没有权限访问',
     'An unexpected error occurred'                           => '发生了一个意外错误,程序猿正在紧急处理中',
     'This page will be re-directed in %s seconds'            => '页面将在 %s 秒后自动跳转',

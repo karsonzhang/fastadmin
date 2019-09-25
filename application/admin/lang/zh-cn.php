@@ -137,6 +137,7 @@ return [
     'Are you sure you want to delete this item?'            => '确定删除此项?',
     'Are you sure you want to delete or turncate?'          => '确定删除或清空?',
     'Are you sure you want to truncate?'                    => '确定清空?',
+    'Token verification error'                              => 'Token验证错误！',
     'You have no permission'                                => '你没有权限访问',
     'Please enter your username'                            => '请输入你的用户名',
     'Please enter your password'                            => '请输入你的密码',

@@ -34,6 +34,7 @@
             <div class="tab-pane fade {$vo.active ? 'active in' : ''}" id="{$vo.name}">
                 <div class="widget-body no-padding">
                     <form id="{$vo.name}-form" class="edit-form form-horizontal" role="form" data-toggle="validator" method="POST" action="{:url('general.config/edit')}">
+                        {:token()}
                         <table class="table table-striped">
                             <thead>
                                 <tr>
