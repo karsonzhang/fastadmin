@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use app\common\controller\Frontend;
+use app\common\library\Sms;
 use think\Config;
 use think\Cookie;
 use think\Hook;
@@ -85,13 +86,13 @@ class User extends Frontend
             $email = $this->request->post('email');
             $mobile = $this->request->post('mobile', '');
             $captcha = $this->request->post('captcha');
+            $code = $this->request->post('code');
             $token = $this->request->post('__token__');
             $rule = [
                 'username'  => 'require|length:3,30',
                 'password'  => 'require|length:6,30',
                 'email'     => 'require|email',
                 'mobile'    => 'regex:/^1\d{10}$/',
-                'captcha'   => 'require|captcha',
                 '__token__' => 'require|token',
             ];
 
@@ -100,8 +101,8 @@ class User extends Frontend
                 'username.length'  => 'Username must be 3 to 30 characters',
                 'password.require' => 'Password can not be empty',
                 'password.length'  => 'Password must be 6 to 30 characters',
-                'captcha.require'  => 'Captcha can not be empty',
-                'captcha.captcha'  => 'Captcha is incorrect',
+                //'captcha.require'  => 'Captcha can not be empty',
+                //'captcha.captcha'  => 'Captcha is incorrect',
                 'email'            => 'Email is incorrect',
                 'mobile'           => 'Mobile is incorrect',
             ];
@@ -110,9 +111,13 @@ class User extends Frontend
                 'password'  => $password,
                 'email'     => $email,
                 'mobile'    => $mobile,
-                'captcha'   => $captcha,
+                //'captcha'   => $captcha,
                 '__token__' => $token,
             ];
+            $ret = Sms::check($mobile, $code, 'register');
+            if (!$ret) {
+                $this->error(__('Captcha is incorrect'));
+            }
             $validate = new Validate($rule, $msg);
             $result = $validate->check($data);
             if (!$result) {

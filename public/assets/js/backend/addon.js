@@ -62,6 +62,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
+                queryParams: function (params) {
+                    var userinfo = Controller.api.userinfo.get();
+                    $.extend(params, {
+                        uid: userinfo ? userinfo.id : '',
+                        token: userinfo ? userinfo.token : '',
+                        version: Config.fastadmin.version
+                    });
+                    return params;
+                },
                 columns: [
                     [
                         {field: 'id', title: 'ID', operate: false, visible: false},
@@ -144,8 +153,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 commonSearch: true,
                 searchFormVisible: true,
                 searchFormTemplate: 'searchformtpl',
-                pageSize: 12,
-                pagination: false,
+                pageSize: 30,
             });
 
             // 为表格绑定事件

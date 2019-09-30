@@ -7,6 +7,7 @@ use fast\Random;
 use fast\Tree;
 use think\Config;
 use think\Cookie;
+use think\Hook;
 use think\Request;
 use think\Session;
 
@@ -361,6 +362,8 @@ class Auth extends \fast\Auth
      */
     public function getSidebar($params = [], $fixedPage = 'dashboard')
     {
+        // 边栏开始
+        Hook::listen("admin_sidebar_begin", $params);
         $colorArr = ['red', 'green', 'yellow', 'blue', 'teal', 'orange', 'purple'];
         $colorNums = count($colorArr);
         $badgeList = [];

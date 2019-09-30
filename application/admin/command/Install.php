@@ -74,6 +74,9 @@ class Install extends Command
 
         file_put_contents($installLockFile, 1);
 
+        //后台入口文件
+        $adminFile = ROOT_PATH . 'public' . DS . 'admin.php';
+
         $dbConfigFile = APP_PATH . 'database.php';
         $config = @file_get_contents($dbConfigFile);
         $callback = function ($matches) use ($hostname, $hostport, $username, $password, $database, $prefix) {
@@ -87,6 +90,16 @@ class Install extends Command
         $config = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $config);
         // 写入数据库配置
         file_put_contents($dbConfigFile, $config);
+
+        // 修改后台入口
+        if (is_file($adminFile)) {
+            $x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $adminName = substr(str_shuffle(str_repeat($x, ceil(10 / strlen($x)))), 1, 10) . '.php';
+            rename($adminFile, ROOT_PATH . 'public' . DS . $adminName);
+            $output->highlight("Admin url:http://www.yoursite.com/{$adminName}");
+        }
+        $output->highlight("Admin username:admin");
+        $output->highlight("Admin password:123456");
 
         \think\Cache::rm('__menu__');
 

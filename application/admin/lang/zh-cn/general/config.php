@@ -53,6 +53,7 @@ return [
     'Mail vertify type'           => 'SMTP验证方式',
     'Mail from'                   => '发件人邮箱',
     'Name already exist'          => '变量名称已经存在',
+    'Add new config'              => '点击添加新的配置',
     'Send a test message'         => '发送测试邮件',
     'This is a test mail content' => '这是一封来自FastAdmin校验邮件,用于校验邮件配置是否正常!',
     'This is a test mail'         => '这是一封来自FastAdmin的邮件',

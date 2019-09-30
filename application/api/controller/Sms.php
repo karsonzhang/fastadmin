@@ -5,6 +5,7 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\library\Sms as Smslib;
 use app\common\model\User;
+use think\Hook;
 
 /**
  * 手机短信接口
@@ -50,11 +51,14 @@ class Sms extends Api
                 $this->error(__('未注册'));
             }
         }
+        if (!Hook::get('sms_send')) {
+            $this->error(__('请在后台插件管理安装短信验证插件'));
+        }
         $ret = Smslib::send($mobile, null, $event);
         if ($ret) {
             $this->success(__('发送成功'));
         } else {
-            $this->error(__('发送失败'));
+            $this->error(__('发送失败，请检查短信配置是否正确'));
         }
     }
 

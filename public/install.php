@@ -23,15 +23,15 @@ define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS
 // 判断文件或目录是否有写的权限
 function is_really_writable($file)
 {
-    if (DIRECTORY_SEPARATOR == '/' AND @ ini_get("safe_mode") == FALSE) {
+    if (DIRECTORY_SEPARATOR == '/' AND @ ini_get("safe_mode") == false) {
         return is_writable($file);
     }
-    if (!is_file($file) OR ($fp = @fopen($file, "r+")) === FALSE) {
-        return FALSE;
+    if (!is_file($file) OR ($fp = @fopen($file, "r+")) === false) {
+        return false;
     }
 
     fclose($fp);
-    return TRUE;
+    return true;
 }
 
 $sitename = "FastAdmin";
@@ -59,31 +59,40 @@ $errInfo = '';
 //数据库配置文件
 $dbConfigFile = APP_PATH . 'database.php';
 
+//后台入口文件
+$adminFile = ROOT_PATH . 'public' . DS . 'admin.php';
+
 // 锁定的文件
 $lockFile = INSTALL_PATH . 'install.lock';
 if (is_file($lockFile)) {
     $errInfo = "当前已经安装{$sitename}，如果需要重新安装，请手动移除application/admin/command/Install/install.lock文件";
-} else if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-    $errInfo = "当前版本(" . PHP_VERSION . ")过低，请使用PHP5.5以上版本";
-} else if (!extension_loaded("PDO")) {
-    $errInfo = "当前未开启PDO，无法进行安装";
-} else if (!is_really_writable($dbConfigFile)) {
-    $open_basedir = ini_get('open_basedir');
-    if ($open_basedir) {
-        $dirArr = explode(PATH_SEPARATOR, $open_basedir);
-        if ($dirArr && in_array(__DIR__, $dirArr)) {
-            $errInfo = '当前服务器因配置了open_basedir，导致无法读取父目录<br><a href="https://forum.fastadmin.net/thread/1145?ref=install" target="_blank">点击查看解决办法</a>';
-        }
-    }
-    if (!$errInfo) {
-        $errInfo = '当前权限不足，无法写入配置文件application/database.php<br><a href="https://forum.fastadmin.net/thread/1145?ref=install" target="_blank">点击查看解决办法</a>';
-    }
 } else {
-    $dirArr = [];
-    foreach ($checkDirs as $k => $v) {
-        if (!is_dir(ROOT_PATH . $v)) {
-            $errInfo = '当前代码仅包含核心代码，请前往官网下载完整包或资源包覆盖后再尝试安装，<a href="https://www.fastadmin.net/download.html?ref=install" target="_blank">立即前往下载</a>';
-            break;
+    if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+        $errInfo = "当前版本(" . PHP_VERSION . ")过低，请使用PHP5.5以上版本";
+    } else {
+        if (!extension_loaded("PDO")) {
+            $errInfo = "当前未开启PDO，无法进行安装";
+        } else {
+            if (!is_really_writable($dbConfigFile)) {
+                $open_basedir = ini_get('open_basedir');
+                if ($open_basedir) {
+                    $dirArr = explode(PATH_SEPARATOR, $open_basedir);
+                    if ($dirArr && in_array(__DIR__, $dirArr)) {
+                        $errInfo = '当前服务器因配置了open_basedir，导致无法读取父目录<br><a href="https://forum.fastadmin.net/thread/1145?ref=install" target="_blank">点击查看解决办法</a>';
+                    }
+                }
+                if (!$errInfo) {
+                    $errInfo = '当前权限不足，无法写入配置文件application/database.php<br><a href="https://forum.fastadmin.net/thread/1145?ref=install" target="_blank">点击查看解决办法</a>';
+                }
+            } else {
+                $dirArr = [];
+                foreach ($checkDirs as $k => $v) {
+                    if (!is_dir(ROOT_PATH . $v)) {
+                        $errInfo = '当前代码仅包含核心代码，请前往官网下载完整包或资源包覆盖后再尝试安装，<a href="https://www.fastadmin.net/download.html?ref=install" target="_blank">立即前往下载</a>';
+                        break;
+                    }
+                }
+            }
         }
     }
 }
@@ -110,22 +119,19 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     $adminPasswordConfirmation = isset($_POST['adminPasswordConfirmation']) ? $_POST['adminPasswordConfirmation'] : '123456';
     $adminEmail = isset($_POST['adminEmail']) ? $_POST['adminEmail'] : 'admin@admin.com';
 
+    if (!preg_match("/^\w{3,12}$/", $adminUsername)) {
+        echo "用户名只能由3-12位数字、字母、下划线组合";
+        exit;
+    }
+    if (!preg_match("/^[\S]{6,16}$/", $adminPassword)) {
+        echo "密码长度必须在6-16位之间，不能包含空格";
+        exit;
+    }
     if ($adminPassword !== $adminPasswordConfirmation) {
         echo "两次输入的密码不一致";
         exit;
-    } else if (!preg_match("/^\w+$/", $adminUsername)) {
-        echo "用户名只能输入字母、数字、下划线";
-        exit;
-    } else if (!preg_match("/^[\S]+$/", $adminPassword)) {
-        echo "密码不能包含空格";
-        exit;
-    } else if (strlen($adminUsername) < 3 || strlen($adminUsername) > 12) {
-        echo "用户名请输入3~12位字符";
-        exit;
-    } else if (strlen($adminPassword) < 6 || strlen($adminPassword) > 16 || stripos($adminPassword, ' ') !== false) {
-        echo "密码请输入6~16位字符,不能包含空格";
-        exit;
     }
+
     try {
         //检测能否读取安装文件
         $sql = @file_get_contents(INSTALL_PATH . 'fastadmin.sql');
@@ -177,7 +183,14 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
         $newSalt = substr(md5(uniqid(true)), 0, 6);
         $newPassword = md5(md5($adminPassword) . $newSalt);
         $pdo->query("UPDATE {$mysqlPrefix}admin SET username = '{$adminUsername}', email = '{$adminEmail}',password = '{$newPassword}', salt = '{$newSalt}' WHERE username = 'admin'");
-        echo "success";
+
+        $adminName = '';
+        if (is_file($adminFile)) {
+            $x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $adminName = substr(str_shuffle(str_repeat($x, ceil(10 / strlen($x)))), 1, 10) . '.php';
+            rename($adminFile, ROOT_PATH . 'public' . DS . $adminName);
+        }
+        echo "success|{$adminName}";
     } catch (PDOException $e) {
         $err = $e->getMessage();
     } catch (Exception $e) {
@@ -202,16 +215,18 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             margin: 0;
             padding: 0;
             line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body, input, button {
-            font-family: 'Open Sans', sans-serif;
-            font-size: 16px;
+            font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, 'Microsoft Yahei', Arial, sans-serif;
+            font-size: 14px;
             color: #7E96B3;
         }
 
         .container {
-            max-width: 515px;
+            max-width: 480px;
             margin: 0 auto;
             padding: 20px;
             text-align: center;
@@ -236,6 +251,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             font-weight: normal;
             color: #3C5675;
             margin-bottom: 0;
+            margin-top: 0;
         }
 
         form {
@@ -300,7 +316,16 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             opacity: 0.5;
         }
 
-        #error, .error, #success, .success {
+        .form-buttons {
+            height: 52px;
+            line-height: 52px;
+        }
+
+        .form-buttons .btn {
+            margin-right: 5px;
+        }
+
+        #error, .error, #success, .success, #warmtips, .warmtips {
             background: #D83E3E;
             color: #fff;
             padding: 15px 20px;
@@ -316,13 +341,29 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             color: white;
             text-decoration: underline;
         }
+
+        #warmtips {
+            background: #ffcdcd;
+            font-size: 14px;
+            color: #e74c3c;
+        }
+
+        #warmtips a {
+            background: #ffffff7a;
+            display: block;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 10px;
+            color: #e21a1a;
+            border-radius: 3px;
+        }
     </style>
 </head>
 
 <body>
 <div class="container">
     <h1>
-        <svg width="100px" height="120px" viewBox="0 0 768 830" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        <svg width="80px" height="96px" viewBox="0 0 768 830" version="1.1" xmlns="http://www.w3.org/2000/svg"
              xmlns:xlink="http://www.w3.org/1999/xlink">
             <g id="logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                 <path d="M64.433651,605.899968 C20.067302,536.265612 0,469.698785 0,389.731348 C0,174.488668 171.922656,0 384,0 C596.077344,0 768,174.488668 768,389.731348 C768,469.698785 747.932698,536.265612 703.566349,605.899968 C614.4,753.480595 441.6,870.4 384,870.4 C326.4,870.4 153.6,753.480595 64.433651,605.899968 L64.433651,605.899968 Z"
@@ -336,7 +377,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     <div>
 
         <p>若你在安装中遇到麻烦可点击 <a href="<?php echo $link['doc']; ?>" target="_blank">安装文档</a> <a
-                    href="<?php echo $link['forum']; ?>" target="_blank">交流社区</a> <a
+                    href="<?php echo $link['forum']; ?>" target="_blank">问答社区</a> <a
                     href="<?php echo $link['qqun']; ?>">QQ交流群</a></p>
         <!--<p><?php echo $sitename; ?>还支持在命令行php think install一键安装</p>-->
 
@@ -348,6 +389,7 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endif; ?>
             <div id="error" style="display:none"></div>
             <div id="success" style="display:none"></div>
+            <div id="warmtips" style="display:none"></div>
 
             <div class="form-group">
                 <div class="form-field">
@@ -417,18 +459,28 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 $('form').on('submit', function (e) {
                     e.preventDefault();
-
+                    var form = this;
                     var $button = $(this).find('button')
                         .text('安装中...')
                         .prop('disabled', true);
 
                     $.post('', $(this).serialize())
                         .done(function (ret) {
-                            if (ret === 'success') {
+                            if (ret.substr(0, 7) === 'success') {
+                                var retArr = ret.split(/\|/);
                                 $('#error').hide();
-                                $("#success").text("安装成功！开始你的<?php echo $sitename; ?>之旅吧！").show();
-                                $('<a class="btn" href="./">访问首页</a> <a class="btn" href="./index.php/admin/index/login" style="background:#18bc9c">访问后台</a>').insertAfter($button);
+                                $(".form-group", form).remove();
                                 $button.remove();
+                                $("#success").text("安装成功！开始你的<?php echo $sitename; ?>之旅吧！").show();
+
+                                $buttons = $(".form-buttons", form);
+                                $('<a class="btn" href="./">访问首页</a>').appendTo($buttons);
+
+                                if (typeof retArr[1] !== 'undefined' && retArr[1] !== '') {
+                                    var url = location.href.replace(/install\.php/, retArr[1]);
+                                    $("#warmtips").html('温馨提示：请将以下后台登录入口添加到你的收藏夹，为了你的安全，不要泄漏或发送给他人！如有泄漏请及时修改！<a href="' + url + '">' + url + '</a>').show();
+                                    $('<a class="btn" href="' + url + '" id="btn-admin" style="background:#18bc9c">访问后台</a>').appendTo($buttons);
+                                }
                                 localStorage.setItem("fastep", "installed");
                             } else {
                                 $('#error').show().text(ret);

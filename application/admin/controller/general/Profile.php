@@ -6,6 +6,7 @@ use app\admin\model\Admin;
 use app\common\controller\Backend;
 use fast\Random;
 use think\Session;
+use think\Validate;
 
 /**
  * 个人配置
@@ -59,9 +60,19 @@ class Profile extends Backend
                 array_flip(array('email', 'nickname', 'password', 'avatar'))
             ));
             unset($v);
+            if (!Validate::is($params['email'], "email")) {
+                $this->error(__("Please input correct email"));
+            }
             if (isset($params['password'])) {
+                if (!Validate::is($params['password'], "/^[\S]{6,16}$/")) {
+                    $this->error(__("Please input correct password"));
+                }
                 $params['salt'] = Random::alnum();
                 $params['password'] = md5(md5($params['password']) . $params['salt']);
+            }
+            $exist = Admin::where('email', $params['email'])->where('id', '<>', $this->auth->id)->find();
+            if ($exist) {
+                $this->error(__("Email already exists"));
             }
             if ($params) {
                 $admin = Admin::get($this->auth->id);
