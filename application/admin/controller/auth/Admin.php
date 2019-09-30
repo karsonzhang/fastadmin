@@ -7,6 +7,7 @@ use app\admin\model\AuthGroupAccess;
 use app\common\controller\Backend;
 use fast\Random;
 use fast\Tree;
+use think\Validate;
 
 /**
  * 管理员管理
@@ -122,6 +123,9 @@ class Admin extends Backend
             $this->token();
             $params = $this->request->post("row/a");
             if ($params) {
+                if(!Validate::is($params['password'], '\S{6,16}')){
+                    $this->error(__("Please input correct password"));
+                }
                 $params['salt'] = Random::alnum();
                 $params['password'] = md5(md5($params['password']) . $params['salt']);
                 $params['avatar'] = '/assets/img/avatar.png'; //设置新管理员默认头像。
@@ -159,6 +163,9 @@ class Admin extends Backend
             $params = $this->request->post("row/a");
             if ($params) {
                 if ($params['password']) {
+                    if(!Validate::is($params['password'], '\S{6,16}')){
+                        $this->error(__("Please input correct password"));
+                    }
                     $params['salt'] = Random::alnum();
                     $params['password'] = md5(md5($params['password']) . $params['salt']);
                 } else {
@@ -167,8 +174,9 @@ class Admin extends Backend
                 //这里需要针对username和email做唯一验证
                 $adminValidate = \think\Loader::validate('Admin');
                 $adminValidate->rule([
-                    'username' => 'require|max:50|unique:admin,username,' . $row->id,
-                    'email'    => 'require|email|unique:admin,email,' . $row->id
+                    'username' => 'require|regex:\w{3,12}|unique:admin,username,' . $row->id,
+                    'email'    => 'require|email|unique:admin,email,' . $row->id,
+                    'password' => 'regex:\S{32}',
                 ]);
                 $result = $row->validate('Admin.edit')->save($params);
                 if ($result === false) {
