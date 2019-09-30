@@ -86,7 +86,6 @@ class User extends Frontend
             $email = $this->request->post('email');
             $mobile = $this->request->post('mobile', '');
             $captcha = $this->request->post('captcha');
-            $code = $this->request->post('code');
             $token = $this->request->post('__token__');
             $rule = [
                 'username'  => 'require|length:3,30',
@@ -114,7 +113,7 @@ class User extends Frontend
                 //'captcha'   => $captcha,
                 '__token__' => $token,
             ];
-            $ret = Sms::check($mobile, $code, 'register');
+            $ret = Sms::check($mobile, $captcha, 'register');
             if (!$ret) {
                 $this->error(__('Captcha is incorrect'));
             }
