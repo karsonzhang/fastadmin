@@ -21,7 +21,7 @@ class Config extends Backend
      * @var \app\common\model\Config
      */
     protected $model = null;
-    protected $noNeedRight = ['check'];
+    protected $noNeedRight = ['check', 'rulelist'];
 
     public function _initialize()
     {
@@ -62,6 +62,7 @@ class Config extends Backend
         }
         $this->view->assign('siteList', $siteList);
         $this->view->assign('typeList', ConfigModel::getTypeList());
+        $this->view->assign('ruleList', ConfigModel::getRegexList());
         $this->view->assign('groupList', ConfigModel::getGroupList());
         return $this->view->fetch();
     }
@@ -199,6 +200,32 @@ class Config extends Backend
         } else {
             return $this->error(__('Invalid parameters'));
         }
+    }
+
+    /**
+     * 规则列表
+     * @internal
+     */
+    public function rulelist()
+    {
+        //主键
+        $primarykey = $this->request->request("keyField");
+        //主键值
+        $keyValue = $this->request->request("keyValue", "");
+
+        $keyValueArr = array_filter(explode(',', $keyValue));
+        $regexList = \app\common\model\Config::getRegexList();
+        $list = [];
+        foreach ($regexList as $k => $v) {
+            if ($keyValueArr) {
+                if (in_array($k, $keyValueArr)) {
+                    $list[] = ['id' => $k, 'name' => $v];
+                }
+            } else {
+                $list[] = ['id' => $k, 'name' => $v];
+            }
+        }
+        return json(['list' => $list]);
     }
 
     /**

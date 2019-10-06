@@ -431,7 +431,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     complete: function (xhr) {
                         var token = xhr.getResponseHeader('__token__');
                         if (token) {
-                            $("input[name='__token__']", form).val(token);
+                            $("input[name='__token__']").val(token);
                         }
                     }
                 }, function (data, ret) {
@@ -439,7 +439,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     if (data && typeof data === 'object') {
                         //刷新客户端token
                         if (typeof data.token !== 'undefined') {
-                            $("input[name='__token__']", form).val(data.token);
+                            $("input[name='__token__']").val(data.token);
                         }
                         //调用客户端事件
                         if (typeof data.callback !== 'undefined' && typeof data.callback === 'function') {
@@ -453,7 +453,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     }
                 }, function (data, ret) {
                     if (data && typeof data === 'object' && typeof data.token !== 'undefined') {
-                        $("input[name='__token__']", form).val(data.token);
+                        $("input[name='__token__']").val(data.token);
                     }
                     if (typeof error === 'function') {
                         if (false === error.call(form, data, ret)) {
