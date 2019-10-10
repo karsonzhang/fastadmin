@@ -123,7 +123,7 @@ class Admin extends Backend
             $this->token();
             $params = $this->request->post("row/a");
             if ($params) {
-                if(!Validate::is($params['password'], '\S{6,16}')){
+                if (!Validate::is($params['password'], '\S{6,16}')) {
                     $this->error(__("Please input correct password"));
                 }
                 $params['salt'] = Random::alnum();
@@ -158,12 +158,15 @@ class Admin extends Backend
         if (!$row) {
             $this->error(__('No Results were found'));
         }
+        if (!in_array($row->id, $this->childrenAdminIds)) {
+            $this->error(__('You have no permission'));
+        }
         if ($this->request->isPost()) {
             $this->token();
             $params = $this->request->post("row/a");
             if ($params) {
                 if ($params['password']) {
-                    if(!Validate::is($params['password'], '\S{6,16}')){
+                    if (!Validate::is($params['password'], '\S{6,16}')) {
                         $this->error(__("Please input correct password"));
                     }
                     $params['salt'] = Random::alnum();
@@ -216,6 +219,7 @@ class Admin extends Backend
     public function del($ids = "")
     {
         if ($ids) {
+            $ids = array_intersect($this->childrenAdminIds, array_filter(explode(',', $ids)));
             // 避免越权删除管理员
             $childrenGroupIds = $this->childrenGroupIds;
             $adminList = $this->model->where('id', 'in', $ids)->where('id', 'in', function ($query) use ($childrenGroupIds) {
@@ -226,7 +230,7 @@ class Admin extends Backend
                 foreach ($adminList as $k => $v) {
                     $deleteIds[] = $v->id;
                 }
-                $deleteIds = array_diff($deleteIds, [$this->auth->id]);
+                $deleteIds = array_values(array_diff($deleteIds, [$this->auth->id]));
                 if ($deleteIds) {
                     $this->model->destroy($deleteIds);
                     model('AuthGroupAccess')->where('uid', 'in', $deleteIds)->delete();
@@ -234,7 +238,7 @@ class Admin extends Backend
                 }
             }
         }
-        $this->error();
+        $this->error(__('You have no permission'));
     }
 
     /**
