@@ -74,7 +74,7 @@ class Config extends Backend
     {
         if ($this->request->isPost()) {
             $this->token();
-            $params = $this->request->post("row/a");
+            $params = $this->request->post("row/a", [], 'trim');
             if ($params) {
                 foreach ($params as $k => &$v) {
                     $v = is_array($v) ? implode(',', $v) : $v;
@@ -113,7 +113,7 @@ class Config extends Backend
     {
         if ($this->request->isPost()) {
             $this->token();
-            $row = $this->request->post("row/a");
+            $row = $this->request->post("row/a", [], 'trim');
             if ($row) {
                 $configList = [];
                 foreach ($this->model->all() as $v) {

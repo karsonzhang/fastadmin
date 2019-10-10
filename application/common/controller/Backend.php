@@ -267,6 +267,7 @@ class Backend extends Controller
         if ($relationSearch) {
             if (!empty($this->model)) {
                 $name = \think\Loader::parseName(basename(str_replace('\\', '/', get_class($this->model))));
+                $name = $this->model->getTable();
                 $tableName = $name . '.';
             }
             $sortArr = explode(',', $sort);

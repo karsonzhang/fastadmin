@@ -61,7 +61,7 @@ class Addon extends Backend
             $this->error(__('No Results were found'));
         }
         if ($this->request->isPost()) {
-            $params = $this->request->post("row/a");
+            $params = $this->request->post("row/a", [], 'trim');
             if ($params) {
                 foreach ($config as $k => &$v) {
                     if (isset($params[$v['name']])) {
