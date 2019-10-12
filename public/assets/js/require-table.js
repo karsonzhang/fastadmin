@@ -72,6 +72,29 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             destroyallbtn: '.btn-destroyall',
             dragsortfield: 'weigh',
         },
+        button: {
+            edit: {
+                name: 'edit',
+                icon: 'fa fa-pencil',
+                title: __('Edit'),
+                extend: 'data-toggle="tooltip"',
+                classname: 'btn btn-xs btn-success btn-editone'
+            },
+            del: {
+                name: 'del',
+                icon: 'fa fa-trash',
+                title: __('Del'),
+                extend: 'data-toggle="tooltip"',
+                classname: 'btn btn-xs btn-danger btn-delone'
+            },
+            dragsort: {
+                name: 'dragsort',
+                icon: 'fa fa-arrows',
+                title: __('Drag to sort'),
+                extend: 'data-toggle="tooltip"',
+                classname: 'btn btn-xs btn-primary btn-dragsort'
+            }
+        },
         api: {
             init: function (defaults, columnDefaults, locales) {
                 defaults = defaults ? defaults : {};
@@ -121,6 +144,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         return;
                     }
                     Toastr.error(__('Unknown data format'));
+                });
+                //当加载数据成功时
+                table.on('load-success.bs.table', function (e, data) {
+                    if (typeof data.rows === 'undefined' && typeof data.code != 'undefined') {
+                        Toastr.error(data.msg);
+                    }
                 });
                 //当刷新表格时
                 table.on('refresh.bs.table', function (e, settings, data) {
@@ -573,32 +602,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         names.push(item.name);
                     });
                     if (options.extend.dragsort_url !== '' && names.indexOf('dragsort') === -1) {
-                        buttons.push({
-                            name: 'dragsort',
-                            icon: 'fa fa-arrows',
-                            title: __('Drag to sort'),
-                            extend: 'data-toggle="tooltip"',
-                            classname: 'btn btn-xs btn-primary btn-dragsort'
-                        });
+                        buttons.push(Table.button.dragsort);
                     }
                     if (options.extend.edit_url !== '' && names.indexOf('edit') === -1) {
-                        buttons.push({
-                            name: 'edit',
-                            icon: 'fa fa-pencil',
-                            title: __('Edit'),
-                            extend: 'data-toggle="tooltip"',
-                            classname: 'btn btn-xs btn-success btn-editone',
-                            url: options.extend.edit_url
-                        });
+                        Table.button.edit.url = options.extend.edit_url;
+                        buttons.push(Table.button.edit);
                     }
                     if (options.extend.del_url !== '' && names.indexOf('del') === -1) {
-                        buttons.push({
-                            name: 'del',
-                            icon: 'fa fa-trash',
-                            title: __('Del'),
-                            extend: 'data-toggle="tooltip"',
-                            classname: 'btn btn-xs btn-danger btn-delone'
-                        });
+                        buttons.push(Table.button.del);
                     }
                     return Table.api.buttonlink(this, buttons, value, row, index, 'operate');
                 }
