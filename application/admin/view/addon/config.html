@@ -36,8 +36,14 @@
                             <textarea name="row[{$item.name}]" cols="30" rows="5" class="hide">{$item.value|json_encode|htmlentities}</textarea>
                         </dl>
                         {/case}
+                        {case date}
+                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                        {/case}
+                        {case time}
+                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                        {/case}
                         {case datetime}
-                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                        <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                         {/case}
                         {case number}
                         <input {$item.extend} type="number" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
