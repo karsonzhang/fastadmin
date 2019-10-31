@@ -441,19 +441,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 var userinfo = Controller.api.userinfo.get();
                 var uid = userinfo ? userinfo.id : 0;
 
-                if ($(that).data("type") !== 'free') {
-                    if (parseInt(uid) === 0) {
-                        return Layer.alert(__('Not login tips'), {
-                            title: __('Warning'),
-                            btn: [__('Login now'), __('Continue install')],
-                            yes: function (index, layero) {
-                                $(".btn-userinfo").trigger("click");
-                            },
-                            btn2: function () {
-                                install(name, version, false);
-                            }
-                        });
-                    }
+                if (parseInt(uid) === 0) {
+                    return Layer.alert(__('Not login tips'), {
+                        title: __('Warning'),
+                        btn: [__('Login now')],
+                        yes: function (index, layero) {
+                            $(".btn-userinfo").trigger("click");
+                        },
+                        btn2: function () {
+                            install(name, version, false);
+                        }
+                    });
                 }
                 install(name, version, false);
             });

@@ -59,7 +59,7 @@ class Auth extends \fast\Auth
         }
         $admin->loginfailure = 0;
         $admin->logintime = time();
-        $admin->loginip = request()->ip(0, false);
+        $admin->loginip = request()->ip();
         $admin->token = Random::uuid();
         $admin->save();
         Session::set("admin", $admin->toArray());
@@ -103,7 +103,7 @@ class Auth extends \fast\Auth
             if ($key != md5(md5($id) . md5($keeptime) . md5($expiretime) . $admin->token)) {
                 return false;
             }
-            $ip = request()->ip(0, false);
+            $ip = request()->ip();
             //IP有变动
             if ($admin->loginip != $ip) {
                 return false;
@@ -183,11 +183,16 @@ class Auth extends \fast\Auth
         if (Config::get('fastadmin.login_unique')) {
             $my = Admin::get($admin['id']);
             if (!$my || $my['token'] != $admin['token']) {
+                $this->logout();
                 return false;
             }
         }
-        if (!isset($admin['loginip']) || $admin['loginip'] != request()->ip(0, false)) {
-            return false;
+        //判断管理员IP是否变动
+        if (Config::get('fastadmin.loginip_check')) {
+            if (!isset($admin['loginip']) || $admin['loginip'] != request()->ip()) {
+                $this->logout();
+                return false;
+            }
         }
         $this->logined = true;
         return true;

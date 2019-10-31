@@ -256,7 +256,7 @@ class Auth
             try {
                 $salt = Random::alnum();
                 $newpassword = $this->getEncryptPassword($newpassword, $salt);
-                $this->_user->save(['password' => $newpassword, 'salt' => $salt]);
+                $this->_user->save(['loginfailure' => 0, 'password' => $newpassword, 'salt' => $salt]);
 
                 Token::delete($this->_token);
                 //修改密码成功的事件
@@ -298,6 +298,8 @@ class Auth
                 //记录本次登录的IP和时间
                 $user->loginip = $ip;
                 $user->logintime = $time;
+                //重置登录失败次数
+                $user->loginfailure = 0;
 
                 $user->save();
 

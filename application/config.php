@@ -265,6 +265,8 @@ return [
         'login_failure_retry' => true,
         //是否同一账号同一时间只能在一个地方登录
         'login_unique'        => false,
+        //是否开启IP变动检测
+        'loginip_check'      => true,
         //登录页默认背景图
         'login_background'    => "/assets/img/loginbg.jpg",
         //是否启用多级菜单导航
@@ -272,7 +274,7 @@ return [
         //自动检测更新
         'checkupdate'         => false,
         //版本号
-        'version'             => '1.0.0.20190930_beta',
+        'version'             => '1.0.0.20191101_beta',
         //API接口地址
         'api_url'             => 'https://api.fastadmin.net',
     ],

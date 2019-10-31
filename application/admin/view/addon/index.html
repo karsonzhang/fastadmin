@@ -233,6 +233,7 @@
         </tbody>
     </table>
 </script>
+<!--@formatter:off-->
 <script id="operatetpl" type="text/html">
     <% var labelarr = ['primary', 'success', 'info', 'danger', 'warning']; %>
     <% var label = labelarr[item.id % 5]; %>
@@ -240,63 +241,62 @@
 
     <div class="operate" data-id="<%=item.id%>" data-name="<%=item.name%>">
         <% if(!addon){ %>
-        <% if(typeof item.releaselist !="undefined" && item.releaselist.length>1){%>
-        <span class="btn-group">
+            <% if(typeof item.releaselist !="undefined" && item.releaselist.length>1){%>
+                <span class="btn-group">
+                    <a href="javascript:;" class="btn btn-xs btn-primary btn-success btn-install"
+                       data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"
+                       data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
+                    <a class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                        <span class="fa fa-caret-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <% for(var j=0;j< item.releaselist.length;j++){ %>
+                        <li><a href="javascript:;" class="btn-install" data-type="<%=item.price<=0?'free':'price';%>"
+                               data-donateimage="<%=item.donateimage%>"
+                               data-version="<%=item.releaselist[j].version%>"><%=item.releaselist[j].version%></a></li>
+                        <% } %>
+                    </ul>
+                </span>
+            <% }else{%>
                 <a href="javascript:;" class="btn btn-xs btn-primary btn-success btn-install"
                    data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"
                    data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
-                <a class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" href="javascript:;">
-                    <span class="fa fa-caret-down"></span>
+            <% } %>
+
+            <% if(item.demourl){ %>
+                <a href="<%=item.demourl%>" class="btn btn-xs btn-primary btn-info btn-demo" target="_blank">
+                    <i class="fa fa-flash"></i> {:__('Demo')}
                 </a>
-                <ul class="dropdown-menu">
-                    <% for(var j=0;j< item.releaselist.length;j++){ %>
-                    <li><a href="javascript:;" class="btn-install" data-type="<%=item.price<=0?'free':'price';%>"
-                           data-donateimage="<%=item.donateimage%>"
-                           data-version="<%=item.releaselist[j].version%>"><%=item.releaselist[j].version%></a></li>
-                    <% } %>
-                </ul>
-            </span>
-        <% }else{%>
-        <a href="javascript:;" class="btn btn-xs btn-primary btn-success btn-install"
-           data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"
-           data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
-        <% } %>
-
-        <% if(item.demourl){ %>
-        <a href="<%=item.demourl%>" class="btn btn-xs btn-primary btn-info btn-demo" target="_blank">
-            <i class="fa fa-flash"></i> {:__('Demo')}
-        </a>
-        <% } %>
+            <% } %>
         <% } else {%>
-        <% if(addon.version!=item.version){%>
-        <% if(typeof item.releaselist !="undefined" && item.releaselist.length>1){%>
-        <span class="btn-group">
-                                <a href="javascript:;" class="btn btn-xs btn-info btn-success btn-upgrade"
-                                   data-version="<%=item.version%>"><i class="fa fa-cloud"></i> {:__('Upgrade')}</a>
-                                <a class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown"
-                                   href="javascript:;">
-                                    <span class="fa fa-caret-down"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <% for(var j=0;j< item.releaselist.length;j++){ %>
-                                    <li><a href="javascript:;" class="btn-upgrade"
-                                           data-version="<%=item.releaselist[j].version%>"><%=item.releaselist[j].version%></a></li>
-                                    <% } %>
-                                </ul>
-                            </span>
-        <% }else{%>
-        <a href="javascript:;" class="btn btn-xs btn-info btn-upgrade" title="{:__('Upgrade')}" data-version="<%=item.version%>"><i
-                class="fa fa-cloud"></i> {:__('Upgrade')}</a>
-        <% }%>
-        <% }%>
-        <% if(addon.config){ %>
-        <a href="javascript:;" class="btn btn-xs btn-primary btn-config" title="{:__('Setting')}"><i class="fa fa-pencil"></i>
-            {:__('Setting')}</a>
+            <% if(addon.version!=item.version){%>
+                <% if(typeof item.releaselist !="undefined" && item.releaselist.length>1){%>
+                    <span class="btn-group">
+                        <a href="javascript:;" class="btn btn-xs btn-info btn-success btn-upgrade"
+                           data-version="<%=item.version%>"><i class="fa fa-cloud"></i> {:__('Upgrade')}</a>
+                        <a class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown"
+                           href="javascript:;">
+                            <span class="fa fa-caret-down"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <% for(var j=0;j< item.releaselist.length;j++){ %>
+                            <li><a href="javascript:;" class="btn-upgrade"
+                                   data-version="<%=item.releaselist[j].version%>"><%=item.releaselist[j].version%></a></li>
+                            <% } %>
+                        </ul>
+                    </span>
+                <% }else{%>
+                    <a href="javascript:;" class="btn btn-xs btn-info btn-upgrade" title="{:__('Upgrade')}" data-version="<%=item.version%>"><i
+                        class="fa fa-cloud"></i> {:__('Upgrade')}</a>
+                <% }%>
+            <% }%>
+            <% if(addon.config){ %>
+                <a href="javascript:;" class="btn btn-xs btn-primary btn-config" title="{:__('Setting')}"><i class="fa fa-pencil"></i>
+                    {:__('Setting')}</a>
+            <% } %>
+            <a href="javascript:;" class="btn btn-xs btn-danger btn-uninstall" title="{:__('Uninstall')}"><i class="fa fa-times"></i>
+                {:__('Uninstall')}</a>
         <% } %>
-        <a href="javascript:;" class="btn btn-xs btn-danger btn-uninstall" title="{:__('Uninstall')}"><i class="fa fa-times"></i>
-            {:__('Uninstall')}</a>
-        <% } %>
-
-
     </div>
 </script>
+<!--@formatter:on-->

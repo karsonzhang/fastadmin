@@ -9,7 +9,7 @@
         {volist name="row" id="vo"  }
             <tr>
                 <td>{:__($key)}</td>
-                <td>{$vo}</td>
+                <td>{$vo|htmlentities}</td>
             </tr>
         {/volist}
     </tbody>

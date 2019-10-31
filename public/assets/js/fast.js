@@ -83,7 +83,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                         Fast.events.onAjaxError(ret, error);
                     }
                 }, options);
-                $.ajax(options);
+                return $.ajax(options);
             },
             //修复URL
             fixurl: function (url) {

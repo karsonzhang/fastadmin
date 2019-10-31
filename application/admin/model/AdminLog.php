@@ -35,7 +35,7 @@ class AdminLog extends Model
         $username = $auth->isLogin() ? $auth->username : __('Unknown');
         $content = self::$content;
         if (!$content) {
-            $content = request()->param();
+            $content = request()->param('', null, 'trim,strip_tags,htmlspecialchars');
             foreach ($content as $k => $v) {
                 if (is_string($v) && strlen($v) > 200 || stripos($k, 'password') !== false) {
                     unset($content[$k]);
