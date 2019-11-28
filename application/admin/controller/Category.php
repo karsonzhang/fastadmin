@@ -9,7 +9,7 @@ use fast\Tree;
 /**
  * 分类管理
  *
- * @icon fa fa-list
+ * @icon   fa fa-list
  * @remark 用于统一管理网站的所有分类,分类可进行无限级分类,分类类型请在常规管理->系统配置->字典配置中添加
  */
 class Category extends Backend
@@ -102,7 +102,7 @@ class Category extends Backend
                 $params = $this->preExcludeFields($params);
 
                 if ($params['pid'] != $row['pid']) {
-                    $childrenIds = Tree::instance()->init(collection(\app\common\model\Category::select())->toArray())->getChildrenIds($row['id']， true);
+                    $childrenIds = Tree::instance()->init(collection(\app\common\model\Category::select())->toArray())->getChildrenIds($row['id'], true);
                     if (in_array($params['pid'], $childrenIds)) {
                         $this->error(__('Can not change the parent to child or itself'));
                     }

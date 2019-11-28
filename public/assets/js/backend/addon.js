@@ -153,7 +153,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 commonSearch: true,
                 searchFormVisible: true,
                 searchFormTemplate: 'searchformtpl',
-                pageSize: 30,
+                pageSize: 50,
             });
 
             // 为表格绑定事件

@@ -997,4 +997,12 @@ table.table-nowrap thead > tr > th {
 .btn-switcher .text-gray {
   color: #d2d6de !important;
 }
+.jumpto input {
+  height: 31px;
+  width: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+  display: inline-block;
+}
 /*# sourceMappingURL=backend.css.map */

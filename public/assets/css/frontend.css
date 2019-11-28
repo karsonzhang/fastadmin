@@ -510,4 +510,12 @@ main.content {
   padding: .5em .93em;
   font-size: 14px;
 }
-/*# sourceMappingURL=../css/frontend.css.map */
+.jumpto input {
+  height: 31px;
+  width: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+  display: inline-block;
+}
+/*# sourceMappingURL=frontend.css.map */

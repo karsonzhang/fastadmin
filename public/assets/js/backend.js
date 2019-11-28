@@ -162,13 +162,14 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                 var options = $.extend({}, $(that).data() || {});
                 var url = Backend.api.replaceids(that, $(that).attr('href'));
                 var title = $(that).attr("title") || $(that).data("title") || $(that).data('original-title');
+                var icon = $(that).attr("icon") || $(that).data("icon");
                 if (typeof options.confirm !== 'undefined') {
                     Layer.confirm(options.confirm, function (index) {
-                        Backend.api.addtabs(url, title);
+                        Backend.api.addtabs(url, title, icon);
                         Layer.close(index);
                     });
                 } else {
-                    Backend.api.addtabs(url, title);
+                    Backend.api.addtabs(url, title, icon);
                 }
                 return false;
             });

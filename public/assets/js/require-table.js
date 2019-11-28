@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template'], function ($, undefined, Moment) {
+define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template', 'bootstrap-table-jumpto'], function ($, undefined, Moment) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -27,6 +27,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             dblClickToEdit: true, //是否启用双击编辑
             singleSelect: false, //是否启用单选
             showRefresh: false,
+            showJumpto: true,
             locale: 'zh-CN',
             showToggle: true,
             showColumns: true,
@@ -124,6 +125,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     },
                     formatCommonChoose: function () {
                         return __('Choose');
+                    },
+                    formatJumpto: function () {
+                        return __('Go');
                     }
                 }, locales);
                 if (typeof defaults.exportTypes != 'undefined') {
@@ -434,7 +438,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 image: {
                     'click .img-center': function (e, value, row, index) {
                         var data = [];
-                        value = value.split(",");
+                        value = value.toString().split(",");
                         $.each(value, function (index, value) {
                             data.push({
                                 src: Fast.api.cdnurl(value),

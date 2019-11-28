@@ -3,12 +3,12 @@
 namespace app\admin\library\traits;
 
 use app\admin\library\Auth;
+use Exception;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use think\Db;
-use think\Exception;
 use think\exception\PDOException;
 use think\exception\ValidateException;
 
@@ -470,7 +470,7 @@ trait Backend
                 $msg = "导入失败，包含【{$matches[1]}】的记录已存在";
             };
             $this->error($msg);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error($e->getMessage());
         }
 

@@ -56,6 +56,7 @@ return [
     'Execute'                                               => '执行',
     'Close'                                                 => '关闭',
     'Choose'                                                => '选择',
+    'Go'                                                    => '跳转',
     'Search'                                                => '搜索',
     'Refresh'                                               => '刷新',
     'Install'                                               => '安装',

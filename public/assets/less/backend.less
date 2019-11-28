@@ -46,6 +46,7 @@ body.is-dialog {
   .logo, .navbar {
     .transition(none);
   }
+
   .navbar {
     position: relative;
   }
@@ -62,9 +63,11 @@ html.ios-fix, html.ios-fix body {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
+
 .wrapper {
   height: 100%;
 }
+
 #header {
   background: #fff;
   //box-shadow: 0 2px 2px rgba(0,0,0,.05),0 1px 0 rgba(0,0,0,.05);
@@ -72,7 +75,7 @@ html.ios-fix, html.ios-fix body {
 
 .content-wrapper {
   position: relative;
-  height:100%;
+  height: 100%;
 }
 
 .control-relative {
@@ -119,6 +122,7 @@ html.ios-fix, html.ios-fix body {
       color: #fff;
       background-color: @brand-danger;
     }
+
     &.btn-primary {
       color: #fff;
       background-color: @brand-primary;
@@ -187,6 +191,7 @@ table.table-template {
     color: #777 !important;
     text-decoration: none !important;
   }
+
   .breadcrumb {
     display: inline-block;
     margin: 0;
@@ -199,6 +204,7 @@ table.table-template {
   .breadcrumb li {
     color: #aaa;
   }
+
   .shortcut {
     a {
       margin-left: 10px;
@@ -211,6 +217,7 @@ table.table-template {
   #main {
     background: #fff;
   }
+
   .layer-footer {
     display: none;
   }
@@ -229,14 +236,17 @@ form.form-horizontal .control-label {
 .panel-intro {
   margin-bottom: 0;
   border: none;
+
   > .panel-heading {
     padding: 15px;
     padding-bottom: 0;
     background: @panel-intro-bg;
     border-color: @panel-intro-bg;
     position: relative;
+
     .panel-lead {
       margin-bottom: 15px;
+
       em {
         display: block;
         font-weight: bold;
@@ -257,10 +267,12 @@ form.form-horizontal .control-label {
       position: absolute;
       top: 8px;
       right: 8px;
+
       .fa {
         font-size: 14px;
       }
     }
+
     .nav-tabs {
       border-bottom: 0;
       margin-bottom: 0;
@@ -273,11 +285,13 @@ form.form-horizontal .control-label {
       border: 1px solid @panel-intro-bg;
       border-bottom-color: transparent;
     }
+
     .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
       border: 1px solid @panel-intro-bg;
       color: #7b8a8b;
       background-color: darken(@panel-intro-bg, 10%);
     }
+
     .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
       color: #7b8a8b;
       background-color: #ffffff;
@@ -291,9 +305,11 @@ form.form-horizontal .control-label {
 .panel-tabs {
   .panel-heading {
     padding: 12px 15px 12px 15px;
+
     .panel-lead {
       margin-bottom: 0px;
     }
+
     .panel-title {
 
     }
@@ -309,15 +325,18 @@ form.form-horizontal .control-label {
     background: @main-bg;
     border-color: @main-bg;
   }
+
   .nav-tabs > li > a {
     padding: 12px 15px;
     background-color: @panel-intro-bg;
     border: 1px solid @main-bg;
   }
+
   .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
     border: 1px solid @panel-intro-bg;
     background-color: @panel-intro-bg;
   }
+
   .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     border-color: @main-bg;
     border-bottom-color: transparent;
@@ -327,14 +346,18 @@ form.form-horizontal .control-label {
 /*顶栏addtabs*/
 .nav-addtabs {
   height: 100%;
+
   &.disable-top-badge {
     > li > a > .pull-right-container {
       display: none;
     }
   }
+
   border: none;
+
   > li {
     margin: 0;
+
     > a {
       height: 50px;
       line-height: 50px;
@@ -344,12 +367,14 @@ form.form-horizontal .control-label {
       border-right: 1px solid rgba(0, 0, 0, 0.05);
       margin: 0;
       color: #95a5a6;
+
       &:hover, &:focus {
         border: none;
         color: #2c3e50;
         border-right: 1px solid rgba(0, 0, 0, 0.05);
       }
     }
+
     &.active > a {
       height: 50px;
       line-height: 50px;
@@ -360,6 +385,7 @@ form.form-horizontal .control-label {
       background: #f1f4f6;
       color: #2c3e50;
       overflow: hidden;
+
       &:hover, &:focus {
         border: none;
         color: #2c3e50;
@@ -367,6 +393,7 @@ form.form-horizontal .control-label {
         border-right: 1px solid rgba(0, 0, 0, 0.05);
       }
     }
+
     .close-tab {
       font-size: 10px;
       position: absolute;
@@ -385,17 +412,21 @@ form.form-horizontal .control-label {
         text-decoration: inherit;
         font-size: 18px;
       }
+
       display: none;
     }
   }
+
   .open > a {
     &:hover, &:focus {
       border-right: 1px solid rgba(0, 0, 0, 0.05);
     }
   }
+
   ul li {
     position: relative;
   }
+
   li:hover > .close-tab {
     display: block;
   }
@@ -416,6 +447,7 @@ form.form-horizontal .control-label {
   border-bottom: 1px solid transparent;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   position: relative;
+
   .sidebar-toggle {
     position: absolute;
     width: 45px;
@@ -424,11 +456,13 @@ form.form-horizontal .control-label {
     line-height: 50px;
     padding: 0;
   }
+
   .nav-addtabs {
     position: absolute;
     left: 45px;
     z-index: 98;
   }
+
   .navbar-custom-menu {
     position: absolute;
     top: 0;
@@ -451,14 +485,18 @@ form.form-horizontal .control-label {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+
   .nav-addtabs {
     height: 100%;
+
     &.disable-top-badge {
       > li > a > .pull-right-container {
         display: none;
       }
     }
+
     border: none;
+
     > li {
       border: 1px solid #eee;
       border-radius: 3px;
@@ -467,6 +505,7 @@ form.form-horizontal .control-label {
       line-height: 30px;
       margin: 2px 5px 2px 0;
       background: #fff;
+
       > a {
         display: block;
         color: #495060 !important;
@@ -480,10 +519,12 @@ form.form-horizontal .control-label {
         background: none;
         border: none;
       }
+
       &.active {
         border-color: #bdbebd;
         background-color: #f7f7f7;
       }
+
       .close-tab {
         font-size: 10px;
         position: absolute;
@@ -503,13 +544,16 @@ form.form-horizontal .control-label {
           font-size: 18px;
         }
       }
+
       &:hover, &:focus {
         border-color: #bdbebd;
       }
     }
+
     ul li {
       position: relative;
     }
+
     li:hover > .close-tab {
       display: block;
       border-color: #222e32;
@@ -521,6 +565,7 @@ form.form-horizontal .control-label {
 
 .main-sidebar .sidebar-form {
   overflow: visible;
+
   .menuresult {
     z-index: 999;
     position: absolute;
@@ -533,6 +578,7 @@ form.form-horizontal .control-label {
     border-top: none;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+
     a {
       border-top: 1px solid #eee;
       display: block;
@@ -542,6 +588,7 @@ form.form-horizontal .control-label {
       display: block;
       padding: 10px 15px;
       color: #222d32;
+
       &:hover {
         background: #eee;
       }
@@ -559,9 +606,11 @@ form.form-horizontal .control-label {
       display: block;
     }
   }
+
   > li .badge {
     margin-top: 0;
   }
+
   .treeview-menu > li > a {
     font-size: inherit;
   }
@@ -588,13 +637,16 @@ form.form-horizontal .control-label {
 .fieldlist dd {
   display: block;
   margin: 5px 0;
+
   input {
     display: inline-block;
     width: 300px;
   }
+
   input:first-child {
     width: 110px;
   }
+
   ins {
     width: 110px;
     display: inline-block;
@@ -608,6 +660,7 @@ form.form-horizontal .control-label {
   height: 100%;
   min-height: 150px;
   min-width: 300px;
+
   .form-body {
     width: 100%;
     overflow: auto;
@@ -617,6 +670,7 @@ form.form-horizontal .control-label {
     bottom: 50px;
     padding: 15px;
   }
+
   .form-footer {
     height: 50px;
     line-height: 50px;
@@ -627,6 +681,7 @@ form.form-horizontal .control-label {
     bottom: 0;
     margin: 0;
   }
+
   .form-footer .form-group {
     margin-left: 0;
     margin-right: 0;
@@ -638,6 +693,7 @@ form.form-horizontal .control-label {
     display: block;
     clear: both;
   }
+
   .jstree-leaf:not(:first-child) {
     float: left;
     background: none;
@@ -645,6 +701,7 @@ form.form-horizontal .control-label {
     min-width: 80px;
     clear: none;
   }
+
   .jstree-leaf {
     float: left;
     margin-left: 0;
@@ -653,17 +710,21 @@ form.form-horizontal .control-label {
     clear: none;
     color: #777;
   }
+
   .jstree-leaf > .jstree-icon, .jstree-leaf .jstree-themeicon {
     display: none;
   }
+
   .jstree-last {
     background-image: url("../img/32px.png");
     background-position: -292px -4px;
     background-repeat: repeat-y;
   }
+
   .jstree-children {
     .clearfix();
   }
+
   .jstree-themeicon {
     display: none;
   }
@@ -692,17 +753,22 @@ form.form-horizontal .control-label {
 .plupload-preview {
   padding: 0 10px;
   margin-bottom: 0;
+
   li {
     margin-top: 15px;
   }
+
   .thumbnail {
     margin-bottom: 10px;
   }
+
   a {
     display: block;
+
     &:first-child {
       height: 90px;
     }
+
     img {
       height: 80px;
       object-fit: cover;
@@ -775,6 +841,7 @@ table.table-nowrap {
 
 .dropdown-submenu {
   position: relative;
+
   > .dropdown-menu {
     overflow: auto;
     top: 0;
@@ -783,14 +850,17 @@ table.table-nowrap {
     margin-left: -1px;
     .border-radius(0 6px 6px 6px);
   }
+
   &:hover {
     > .dropdown-menu {
       display: block;
     }
+
     > a:after {
       border-left-color: #fff;
     }
   }
+
   > a:after {
     display: block;
     content: " ";
@@ -804,8 +874,10 @@ table.table-nowrap {
     margin-top: 5px;
     margin-right: -10px;
   }
+
   &.pull-left {
     float: none;
+
     > .dropdown-menu {
       left: -100%;
       margin-left: 10px;
@@ -859,6 +931,7 @@ table.table-nowrap {
     ~ .layui-layer-setwin {
       top: 0px;
       height: 42px;
+
       > a {
         height: 42px;
         line-height: 42px;
@@ -871,19 +944,24 @@ table.table-nowrap {
     border: none !important;
     box-shadow: 1px 1px 50px rgba(0, 0, 0, .3) !important;
   }
+
   &.layui-layer-iframe {
     //overflow:hidden!important;
     overflow: visible;
   }
+
   .layui-layer-moves {
     .box-sizing(content-box);
   }
+
   /*自定义底部灰色操作区*/
+
   .layui-layer-btn {
     text-align: center !important;
     padding: 10px !important;
     background: #ecf0f1;
     overflow: hidden;
+
     a {
       background-color: #95a5a6;
       border-color: #95a5a6;
@@ -892,11 +970,13 @@ table.table-nowrap {
       margin-top: 0;
       border: 1px solid transparent;
     }
+
     .layui-layer-btn0 {
       background-color: #18bc9c;
       border-color: #18bc9c;
     }
   }
+
   .layui-layer-footer {
     padding: 8px 20px;
     background-color: #ecf0f1;
@@ -907,9 +987,11 @@ table.table-nowrap {
   .layui-layer-setwin {
     > a {
       background: none !important;
+
       cite {
         display: none;
       }
+
       &:after {
         content: "\e625";
         font-family: iconfont;
@@ -922,42 +1004,53 @@ table.table-nowrap {
         margin: 0;
         z-index: 1;
       }
+
       &:hover {
         text-decoration: none !important;
         background: none !important;
       }
+
       &:focus {
         text-decoration: none !important;
       }
     }
+
     .layui-layer-min {
       display: none;
+
       &:after {
         content: "\e625";
       }
     }
+
     .layui-layer-max {
       display: none;
+
       &:after {
         content: "\e623";
       }
     }
+
     .layui-layer-maxmin {
       display: none;
+
       &:after {
         content: "\e624";
       }
     }
+
     .layui-layer-close1 {
       &:after {
         content: "\e626";
       }
     }
+
     //样式二关闭按钮
     .layui-layer-close2, .layui-layer-close2:hover {
       background: url('../libs/fastadmin-layer/dist/theme/default/icon.png') no-repeat -149px -31px !important;
       top: -30px;
       right: -30px;
+
       &:after {
         display: none;
       }
@@ -976,12 +1069,14 @@ table.table-nowrap {
 .layui-layer-fast-tab {
   .layui-layer-title {
     .layui-this {
-      color:#333;
+      color: #333;
     }
   }
+
   .layui-layer-content {
     .layui-layer-tabmain {
-      margin:0;padding:0;
+      margin: 0;
+      padding: 0;
     }
   }
 }
@@ -1008,12 +1103,14 @@ table.table-nowrap {
     .nav-addtabs {
       //display: none;
     }
+
     .navbar-custom-menu {
       ul li a {
         padding-left: 10px;
         padding-right: 10px;
       }
     }
+
     .navbar-nav > .user-menu .user-image {
       margin-top: -3px;
     }
@@ -1065,13 +1162,16 @@ table.table-nowrap {
     width: 100px;
     height: 70px;
     font-size: 13px;
+
     i.fa {
       font-size: 24px;
     }
+
     span {
       margin-top: 5px;
       display: block;
     }
+
     &.active {
       color: #222d32;
     }
@@ -1080,12 +1180,15 @@ table.table-nowrap {
   body .wrapper .main-header .navbar .dropdown-menu li {
     > a {
       color: #333;
+
       &:hover {
         background: #eee;
       }
     }
+
     &.active > a {
       color: #fff;
+
       &:hover {
         background: #222d32
       }
@@ -1104,10 +1207,12 @@ table.table-nowrap {
       left: 0;
       text-align: right;
       width: 100%;
+
       .msg-wrap {
         position: relative;
       }
     }
+
     .col-xs-12 > .n-right {
       .msg-wrap {
         margin-right: 15px;
@@ -1120,6 +1225,7 @@ table.table-nowrap {
 .radio, .checkbox {
   > label {
     margin-right: 10px;
+
     > input {
       margin: 2px 0 0;
     }
@@ -1136,7 +1242,17 @@ table.table-nowrap {
     opacity: .6;
     cursor: not-allowed;
   }
+
   .text-gray {
     color: #d2d6de !important;
   }
+}
+
+.jumpto input {
+  height: 31px;
+  width: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+  display: inline-block;
 }

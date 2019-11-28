@@ -9,8 +9,8 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
             events: {
                 onInit: function (up) {
                     //修复少数安卓浏览器无法上传图片的Bug
-                    var input = $("input[type=file]", $(up.settings.button).next());
-                    if (input && input.prop("accept") && input.prop("accept").match(/image\/jpeg/)) {
+                    var input = $("input[type=file]", up.settings.container);
+                    if (input && input.prop("accept") && input.prop("accept").match(/image\//)) {
                         input.prop("accept", "image/jpg," + input.prop("accept"));
                     }
                 },
@@ -214,6 +214,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                             url: url,
                             multipart_params: $.isArray(multipart) ? {} : multipart,
                             init: {
+                                Init: Upload.events.onInit,
                                 PostInit: Upload.events.onPostInit,
                                 FilesAdded: Upload.events.onFileAdded,
                                 BeforeUpload: Upload.events.onBeforeUpload,

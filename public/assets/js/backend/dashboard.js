@@ -96,9 +96,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
                             data: Orderdata.createdata
                         }]
                 });
-                if ($("#echart").width() != $("#echart canvas").width() && $("#echart canvas").width() < $("#echart").width()) {
-                    myChart.resize();
-                }
             }, 2000);
             $(window).resize(function () {
                 myChart.resize();
@@ -106,6 +103,12 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
 
             $(document).on("click", ".btn-checkversion", function () {
                 top.window.$("[data-toggle=checkupdate]").trigger("click");
+            });
+
+            $(document).on("click", ".btn-refresh", function () {
+                setTimeout(function () {
+                    myChart.resize();
+                }, 0);
             });
 
         }
