@@ -29,7 +29,7 @@ require.config({
         'bootstrap-daterangepicker': '../libs/bootstrap-daterangepicker/daterangepicker',
         'bootstrap-select': '../libs/bootstrap-select/dist/js/bootstrap-select.min',
         'bootstrap-select-lang': '../libs/bootstrap-select/dist/js/i18n/defaults-zh_CN',
-        'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table',
+        'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
         'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
         'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
         'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',

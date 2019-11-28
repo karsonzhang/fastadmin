@@ -1,6 +1,7 @@
 {
-  "directory" : "public/assets/libs",
+  "directory": "public/assets/libs",
   "ignoredDependencies": [
+    "es6-promise",
     "file-saver",
     "html2canvas",
     "jspdf",
