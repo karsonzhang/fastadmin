@@ -95,7 +95,7 @@ class Group extends Backend
             $params = $this->request->post("row/a", [], 'strip_tags');
             $params['rules'] = explode(',', $params['rules']);
             if (!in_array($params['pid'], $this->childrenGroupIds)) {
-                $this->error(__('The parent group can not be its own child'));
+                $this->error(__('The parent group exceeds permission limit'));
             }
             $parentmodel = model("AuthGroup")->get($params['pid']);
             if (!$parentmodel) {
@@ -125,6 +125,9 @@ class Group extends Backend
      */
     public function edit($ids = null)
     {
+        if (!in_array($ids, $this->childrenGroupIds)) {
+            $this->error(__('You have no permission'));
+        }
         $row = $this->model->get(['id' => $ids]);
         if (!$row) {
             $this->error(__('No Results were found'));
@@ -132,9 +135,13 @@ class Group extends Backend
         if ($this->request->isPost()) {
             $this->token();
             $params = $this->request->post("row/a", [], 'strip_tags');
-            // 父节点不能是它自身的子节点
+            //父节点不能是非权限内节点
             if (!in_array($params['pid'], $this->childrenGroupIds)) {
-                $this->error(__('The parent group can not be its own child'));
+                $this->error(__('The parent group exceeds permission limit'));
+            }
+            // 父节点不能是它自身的子节点或自己本身
+            if (in_array($params['pid'], Tree::instance()->getChildrenIds($row->id,true))){
+                $this->error(__('The parent group can not be its own child or itself'));
             }
             $params['rules'] = explode(',', $params['rules']);
 
