@@ -26,6 +26,9 @@ class Rule extends Backend
     public function _initialize()
     {
         parent::_initialize();
+        if (!$this->auth->isSuperAdmin()){
+            $this->error(__('Access is allowed only to the super management group'));
+        }
         $this->model = model('AuthRule');
         // 必须将结果集转换为数组
         $ruleList = collection($this->model->order('weigh', 'desc')->order('id', 'asc')->select())->toArray();

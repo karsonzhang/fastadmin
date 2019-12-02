@@ -180,4 +180,6 @@ return [
     'Admin log tips'                                        => '管理员可以查看自己所拥有的权限的管理员日志',
     'Group tips'                                            => '角色组可以有多个,角色有上下级层级关系,如果子角色有角色组和管理员的权限则可以派生属于自己组别的下级角色组或管理员',
     'Rule tips'                                             => '规则通常对应一个控制器的方法,同时左侧的菜单栏数据也从规则中体现,通常建议通过命令行进行生成规则节点',
+    'Access is allowed only to the super management group'  => '仅超级管理组能访问',
+    'Local addon'                                           => '本地插件',
 ];

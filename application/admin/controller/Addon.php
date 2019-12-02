@@ -23,6 +23,9 @@ class Addon extends Backend
     public function _initialize()
     {
         parent::_initialize();
+        if (!$this->auth->isSuperAdmin() && in_array($this->request->action(), ['install', 'uninstall', 'local', 'upgrade'])) {
+            $this->error(__('Access is allowed only to the super management group'));
+        }
     }
 
     /**
