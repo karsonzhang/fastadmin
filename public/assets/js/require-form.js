@@ -208,7 +208,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             $(this).on('cancel.daterangepicker', function (ev, picker) {
                                 $(this).val('').trigger('blur');
                             });
-                            $(this).daterangepicker($.extend({}, options, $(this).data()), callback);
+                            $(this).daterangepicker($.extend(true, options, $(this).data()), callback);
                         });
                     });
                 }
