@@ -203,10 +203,15 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !ids.length);
                 });
                 // 绑定TAB事件
-                $('.panel-heading ul[data-field] li a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                    var field = $(this).closest("ul").data("field");
+                $('.panel-heading [data-field] a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                    var field = $(this).closest("[data-field]").data("field");
                     var value = $(this).data("value");
-                    $("select[name='" + field + "'] option[value='" + value + "']", table.closest(".bootstrap-table").find(".commonsearch-table")).prop("selected", true);
+                    var object = $("[name='" + field + "']", table.closest(".bootstrap-table").find(".commonsearch-table"));
+                    if (object.prop('tagName') == "SELECT") {
+                        $("option[value='" + value + "']", object).prop("selected", true);
+                    } else {
+                        object.val(value);
+                    }
                     table.bootstrapTable('refresh', {pageNumber: 1});
                     return false;
                 });

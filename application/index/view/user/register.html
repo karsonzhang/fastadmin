@@ -34,18 +34,18 @@
                         <p class="help-block"></p>
                     </div>
                 </div>
+
+                {if $captchaType}
                 <div class="form-group">
                     <label class="control-label">{:__('Captcha')}</label>
                     <div class="controls">
                         <div class="input-group">
-                            <input type="text" name="captcha" class="form-control input-lg" data-rule="required;length(4);integer[+];remote({:url('api/validate/check_sms_correct')}, event=register, mobile:#mobile)" />
-                            <span class="input-group-btn" style="padding:0;border:none;">
-                                <a href="javascript:;" class="btn btn-info btn-captcha btn-lg" data-url="{:url('api/sms/send')}" data-type="mobile" data-event="register">发送验证码</a>
-                            </span>
+                            {include file="common/captcha" event="register" type="$captchaType" /}
                         </div>
                         <p class="help-block"></p>
                     </div>
                 </div>
+                {/if}
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block">{:__('Sign up')}</button>

@@ -46,11 +46,11 @@ class Addon extends Backend
     /**
      * 配置
      */
-    public function config($ids = null)
+    public function config($name = null)
     {
-        $name = $this->request->get("name");
+        $name = $name ? $name : $this->request->get("name");
         if (!$name) {
-            $this->error(__('Parameter %s can not be empty', $ids ? 'id' : 'name'));
+            $this->error(__('Parameter %s can not be empty', 'name'));
         }
         if (!preg_match("/^[a-zA-Z0-9]+$/", $name)) {
             $this->error(__('Addon name incorrect'));

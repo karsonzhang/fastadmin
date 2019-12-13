@@ -345,24 +345,33 @@ class Auth extends \fast\Auth
         if ($this->breadcrumb || !$path) {
             return $this->breadcrumb;
         }
-        $path_rule_id = 0;
+        $titleArr = [];
+        $menuArr = [];
+        $urlArr = explode('/', $path);
+        foreach ($urlArr as $index => $item) {
+            $pathArr[implode('/', array_slice($urlArr, 0, $index + 1))] = $index;
+        }
+        if (!$this->rules && $this->id) {
+            $this->getRuleList();
+        }
         foreach ($this->rules as $rule) {
-            $path_rule_id = $rule['name'] == $path ? $rule['id'] : $path_rule_id;
-        }
-        if ($path_rule_id) {
-            $this->breadcrumb = Tree::instance()->init($this->rules)->getParents($path_rule_id, true);
-            foreach ($this->breadcrumb as $k => &$v) {
-                $v['url'] = url($v['name']);
-                $v['title'] = __($v['title']);
+            if (isset($pathArr[$rule['name']])) {
+                $rule['title'] = __($rule['title']);
+                $rule['url'] = url($rule['name']);
+                $titleArr[$pathArr[$rule['name']]] = $rule['title'];
+                $menuArr[$pathArr[$rule['name']]] = $rule;
             }
+
         }
+        ksort($menuArr);
+        $this->breadcrumb = $menuArr;
         return $this->breadcrumb;
     }
 
     /**
      * 获取左侧和顶部菜单栏
      *
-     * @param array  $params URL对应的badge数据
+     * @param array  $params    URL对应的badge数据
      * @param string $fixedPage 默认页
      * @return array
      */
