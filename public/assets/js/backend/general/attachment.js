@@ -32,7 +32,13 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'imageheight', title: __('Imageheight'), sortable: true},
                         {field: 'imagetype', title: __('Imagetype'), formatter: Table.api.formatter.search},
                         {field: 'storage', title: __('Storage'), formatter: Table.api.formatter.search},
-                        {field: 'filesize', title: __('Filesize'), operate: 'BETWEEN', sortable: true},
+                        {
+                            field: 'filesize', title: __('Filesize'), operate: 'BETWEEN', sortable: true, formatter: function (value, row, index) {
+                                var size = parseFloat(value);
+                                var i = Math.floor(Math.log(size) / Math.log(1024));
+                                return (size / Math.pow(1024, i)).toFixed(i < 2 ? 0 : 2) * 1 + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][i];
+                            }
+                        },
                         {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},
                         {
                             field: 'createtime',
