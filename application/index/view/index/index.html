@@ -175,30 +175,6 @@
                 $(window).on("scroll", function () {
                     $("#mainNav").toggleClass("affix", $(window).height() - $(window).scrollTop() <= 50);
                 });
-
-                // 发送版本统计信息，请移除
-                try {
-                    var installed = localStorage.getItem("installed");
-                    if (!installed) {
-                        $.ajax({
-                            url: "{$Think.config.fastadmin.api_url}/statistics/installed",
-                            data: {
-                                version: "{:config('fastadmin.version')}",
-                                os: "{$Think.PHP_OS}",
-                                sapi: "{$Think.PHP_SAPI}",
-                                tpversion: "{$Think.THINK_VERSION}",
-                                phpversion: "{$Think.PHP_VERSION}",
-                                software: "{$Request.server.SERVER_SOFTWARE}",
-                                url: location.href,
-                            },
-                            dataType: 'jsonp',
-                        });
-                        localStorage.setItem("installed", true);
-                    }
-                } catch (e) {
-
-                }
-
             });
         </script>
 
