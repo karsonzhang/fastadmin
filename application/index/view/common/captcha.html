@@ -2,7 +2,7 @@
 {if "[type]" == 'email'}
     <input type="text" name="captcha" class="form-control input-lg" data-rule="required;length(4);integer[+];remote({:url('api/validate/check_ems_correct')}, event=[event], email:#email)" />
     <span class="input-group-btn" style="padding:0;border:none;">
-        <a href="javascript:;" class="btn btn-info btn-captcha btn-lg" data-url="{:url('api/email/send')}" data-type="email" data-event="[event]">发送验证码</a>
+        <a href="javascript:;" class="btn btn-info btn-captcha btn-lg" data-url="{:url('api/ems/send')}" data-type="email" data-event="[event]">发送验证码</a>
     </span>
 {elseif "[type]" == 'mobile'/}
     <input type="text" name="captcha" class="form-control input-lg" data-rule="required;length(4);integer[+];remote({:url('api/validate/check_sms_correct')}, event=[event], mobile:#mobile)" />
