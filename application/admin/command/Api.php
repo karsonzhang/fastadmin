@@ -26,6 +26,7 @@ class Api extends Command
             ->addOption('author', 'a', Option::VALUE_OPTIONAL, 'document author', $site['name'])
             ->addOption('class', 'c', Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'extend class', null)
             ->addOption('language', 'l', Option::VALUE_OPTIONAL, 'language', 'zh-cn')
+            ->addOption('controller', 't', Option::VALUE_REQUIRED | Option::VALUE_IS_ARRAY, 'controller name', null)
             ->setDescription('Build Api document from controller');
     }
 
