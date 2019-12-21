@@ -81,16 +81,25 @@ class Api extends Command
                 throw new Exception("Please make sure opcache already enabled, Get help:https://forum.fastadmin.net/d/1321");
             }
         }
+        //控制器名
+        $controller = $input->getOption('controller') ?: '';
+        if(!$controller) {
+            $controllerDir = $moduleDir . Config::get('url_controller_layer') . DS;
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($controllerDir),
+                \RecursiveIteratorIterator::LEAVES_ONLY
+            );
 
-        $controllerDir = $moduleDir . Config::get('url_controller_layer') . DS;
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($controllerDir),
-            \RecursiveIteratorIterator::LEAVES_ONLY
-        );
-
-        foreach ($files as $name => $file) {
-            if (!$file->isDir() && $file->getExtension() == 'php') {
-                $filePath = $file->getRealPath();
+            foreach ($files as $name => $file) {
+                if (!$file->isDir() && $file->getExtension() == 'php') {
+                    $filePath = $file->getRealPath();
+                    $classes[] = $this->get_class_from_file($filePath);
+                }
+            }
+        }
+        else{
+            foreach ($controller as $index => $item) {
+                $filePath=$moduleDir . Config::get('url_controller_layer') . DS .$item.'.php';
                 $classes[] = $this->get_class_from_file($filePath);
             }
         }
