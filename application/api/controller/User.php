@@ -202,7 +202,7 @@ class User extends Api
     /**
      * 修改手机号
      *
-     * @param string $email   手机号
+     * @param string $mobile   手机号
      * @param string $captcha 验证码
      */
     public function changemobile()
