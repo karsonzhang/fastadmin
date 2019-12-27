@@ -9,6 +9,7 @@ use think\Cache;
 use think\Config;
 use think\Db;
 use think\Lang;
+use think\Validate;
 
 /**
  * Ajax异步请求接口
@@ -155,6 +156,9 @@ class Ajax extends Backend
         $field = $this->request->post("field");
         //操作的数据表
         $table = $this->request->post("table");
+        if (!Validate::is($table, "alphaDash")) {
+            $this->error();
+        }
         //主键
         $pk = $this->request->post("pk");
         //排序的方式
@@ -214,16 +218,19 @@ class Ajax extends Backend
             case 'content':
                 rmdirs(CACHE_PATH, false);
                 Cache::clear();
-                if ($type == 'content')
+                if ($type == 'content') {
                     break;
+                }
             case 'template':
                 rmdirs(TEMP_PATH, false);
-                if ($type == 'template')
+                if ($type == 'template') {
                     break;
+                }
             case 'addons':
                 Service::refresh();
-                if ($type == 'addons')
+                if ($type == 'addons') {
                     break;
+                }
         }
 
         \think\Hook::listen("wipecache_after");

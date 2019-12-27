@@ -119,7 +119,7 @@ class User extends Frontend
                 if ($captchaType == 'mobile') {
                     $captchaResult = Sms::check($mobile, $captcha, 'register');
                 } elseif ($captchaType == 'email') {
-                    $captchaResult = Ems::check($mobile, $captcha, 'register');
+                    $captchaResult = Ems::check($email, $captcha, 'register');
                 } elseif ($captchaType == 'wechat') {
                     $captchaResult = WechatCaptcha::check($captcha, 'register');
                 } elseif ($captchaType == 'text') {
