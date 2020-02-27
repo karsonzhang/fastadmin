@@ -60,7 +60,7 @@ class Http
             } else {
                 $defaults[CURLOPT_CUSTOMREQUEST] = $method;
             }
-            $defaults[CURLOPT_POSTFIELDS] = $query_string;
+            $defaults[CURLOPT_POSTFIELDS] = $params;
         }
 
         $defaults[CURLOPT_HEADER] = false;
