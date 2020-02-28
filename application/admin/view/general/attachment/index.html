@@ -1,12 +1,21 @@
 <div class="panel panel-default panel-intro">
-    {:build_heading()}
+
+    <div class="panel-heading">
+        {:build_heading(null,FALSE)}
+        <ul class="nav nav-tabs" data-field="mimetype">
+            <li class="active"><a href="#t-all" data-value="" data-toggle="tab">{:__('All')}</a></li>
+            {foreach name="mimetypeList" item="vo"}
+            <li><a href="#t-{$key}" data-value="{$key}" data-toggle="tab">{$vo}</a></li>
+            {/foreach}
+        </ul>
+    </div>
 
     <div class="panel-body">
         <div id="myTabContent" class="tab-content">
             <div class="tab-pane fade active in" id="one">
                 <div class="widget-body no-padding">
                     <div id="toolbar" class="toolbar">
-                        {:build_toolbar()}
+                        {:build_toolbar('refresh,add,edit,del')}
                     </div>
                     <table id="table" class="table table-striped table-bordered table-hover" width="100%">
                     </table>

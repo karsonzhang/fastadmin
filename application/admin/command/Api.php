@@ -96,6 +96,7 @@ class Api extends Command
         $classes = array_unique(array_filter($classes));
 
         $config = [
+            'sitename'    => config('site.name'),
             'title'       => $title,
             'author'      => $author,
             'description' => '',
@@ -115,8 +116,8 @@ class Api extends Command
      * get full qualified class name
      *
      * @param string $path_to_file
-     * @author JBYRNE http://jarretbyrne.com/2015/06/197/
      * @return string
+     * @author JBYRNE http://jarretbyrne.com/2015/06/197/
      */
     protected function get_class_from_file($path_to_file)
     {

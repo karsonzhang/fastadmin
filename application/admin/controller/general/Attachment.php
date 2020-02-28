@@ -7,7 +7,7 @@ use app\common\controller\Backend;
 /**
  * 附件管理
  *
- * @icon fa fa-circle-o
+ * @icon   fa fa-circle-o
  * @remark 主要用于管理上传到又拍云的数据或上传至本服务的上传数据
  */
 class Attachment extends Backend
@@ -22,6 +22,7 @@ class Attachment extends Backend
     {
         parent::_initialize();
         $this->model = model('Attachment');
+        $this->view->assign("mimetypeList", \app\common\model\Attachment::getMimetypeList());
     }
 
     /**
@@ -34,13 +35,17 @@ class Attachment extends Backend
         if ($this->request->isAjax()) {
             $mimetypeQuery = [];
             $filter = $this->request->request('filter');
-            $filterArr = (array)json_decode($filter, TRUE);
-            if (isset($filterArr['mimetype']) && stripos($filterArr['mimetype'], ',') !== false) {
+            $filterArr = (array)json_decode($filter, true);
+            if (isset($filterArr['mimetype']) && preg_match("/[]\,|\*]/", $filterArr['mimetype'])) {
                 $this->request->get(['filter' => json_encode(array_diff_key($filterArr, ['mimetype' => '']))]);
                 $mimetypeQuery = function ($query) use ($filterArr) {
                     $mimetypeArr = explode(',', $filterArr['mimetype']);
                     foreach ($mimetypeArr as $index => $item) {
-                        $query->whereOr('mimetype', 'like', '%' . $item . '%');
+                        if (stripos($item, "/*") !== false) {
+                            $query->whereOr('mimetype', 'like', str_replace("/*", "/", $item) . '%');
+                        } else {
+                            $query->whereOr('mimetype', 'like', '%' . $item . '%');
+                        }
                     }
                 };
             }

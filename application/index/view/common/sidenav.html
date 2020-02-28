@@ -1,7 +1,7 @@
 <div class="sidenav">
     {:hook('user_sidenav_before')}
     <ul class="list-group">
-        <li class="list-group-heading">{:__('User center')}</li>
+        <li class="list-group-heading">{:__('Member center')}</li>
         <li class="list-group-item {:$config['actionname']=='index'?'active':''}"> <a href="{:url('user/index')}"><i class="fa fa-user-circle fa-fw"></i> {:__('User center')}</a> </li>
         <li class="list-group-item {:$config['actionname']=='profile'?'active':''}"> <a href="{:url('user/profile')}"><i class="fa fa-user-o fa-fw"></i> {:__('Profile')}</a> </li>
         <li class="list-group-item {:$config['actionname']=='changepwd'?'active':''}"> <a href="{:url('user/changepwd')}"><i class="fa fa-key fa-fw"></i> {:__('Change password')}</a> </li>

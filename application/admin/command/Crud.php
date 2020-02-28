@@ -440,6 +440,11 @@ class Crud extends Command
                 }
             }
 
+            //继续删除菜单
+            if ($menu) {
+                exec("php think menu -c {$controllerUrl} -d 1 -f 1");
+            }
+
             $output->info("Delete Successed");
             return;
         }
@@ -1454,6 +1459,9 @@ EOD;
         }
         if (in_array($formatter, ['image', 'images'])) {
             $html .= ", events: Table.api.events.image";
+        }
+        if (in_array($formatter, ['toggle'])) {
+            $html .= ", table: table";
         }
         if ($itemArr && !$formatter) {
             $formatter = 'normal';

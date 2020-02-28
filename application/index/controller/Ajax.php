@@ -22,14 +22,19 @@ class Ajax extends Frontend
     public function lang()
     {
         header('Content-Type: application/javascript');
-        $callback = $this->request->get('callback');
+        header("Cache-Control: public");
+        header("Pragma: cache");
+
+        $offset = 30 * 60 * 60 * 24; // 缓存一个月
+        header("Expires: " . gmdate("D, d M Y H:i:s", time() + $offset) . " GMT");
+
         $controllername = input("controllername");
         $this->loadlang($controllername);
         //强制输出JSON Object
         $result = jsonp(Lang::get(), 200, [], ['json_encode_param' => JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE]);
         return $result;
     }
-    
+
     /**
      * 上传文件
      */

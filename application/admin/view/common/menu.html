@@ -30,15 +30,10 @@
     </div>
 
     <!--如果想始终显示子菜单,则给ul加上show-submenu类即可,当multiplenav开启的情况下默认为展开-->
-    <ul class="sidebar-menu {if $config.fastadmin.multiplenav}show-submenu{/if}">
+    <ul class="sidebar-menu {if $Think.config.fastadmin.multiplenav}show-submenu{/if}">
 
         <!-- 菜单可以在 后台管理->权限管理->菜单规则 中进行增删改排序 -->
         {$menulist}
 
-        <!--以下4行可以删除或改成自己的链接,但建议你在你的网站上添加一个FastAdmin的链接-->
-        <li class="header" data-rel="external">{:__('Links')}</li>
-        <li data-rel="external"><a href="https://doc.fastadmin.net" target="_blank"><i class="fa fa-list text-red"></i> <span>{:__('Docs')}</span></a></li>
-        <li data-rel="external"><a href="https://forum.fastadmin.net" target="_blank"><i class="fa fa-comment text-yellow"></i> <span>{:__('Forum')}</span></a></li>
-        <li data-rel="external"><a href="https://jq.qq.com/?_wv=1027&k=487PNBb" target="_blank"><i class="fa fa-qq text-aqua"></i> <span>{:__('QQ qun')}</span></a></li>
     </ul>
 </section>

@@ -22,7 +22,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 sortName: 'id',
                 columns: [
                     [
-                        {field: 'state', checkbox: true,},
+                        {field: 'state', checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'admin_id', title: __('Admin_id'), visible: false, addClass: "selectpage", extend: "data-source='auth/admin/index' data-field='nickname'"},
                         {field: 'user_id', title: __('User_id'), visible: false, addClass: "selectpage", extend: "data-source='user/user/index' data-field='nickname'"},
@@ -70,8 +70,27 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     index_url: 'general/attachment/select',
                 }
             });
+            var urlArr = [];
 
             var table = $("#table");
+
+            table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function (e, row) {
+                if (e.type == 'check' || e.type == 'uncheck') {
+                    row = [row];
+                } else {
+                    urlArr = [];
+                }
+                $.each(row, function (i, j) {
+                    if (e.type.indexOf("uncheck") > -1) {
+                        var index = urlArr.indexOf(j.url);
+                        if (index > -1) {
+                            urlArr.splice(index, 1);
+                        }
+                    } else {
+                        urlArr.indexOf(j.url) == -1 && urlArr.push(j.url);
+                    }
+                });
+            });
 
             // 初始化表格
             table.bootstrapTable({
@@ -81,10 +100,10 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 showExport: false,
                 columns: [
                     [
-                        {field: 'state', checkbox: true,},
+                        {field: 'state', checkbox: true},
                         {field: 'id', title: __('Id')},
-                        {field: 'admin_id', title: __('Admin_id'), visible: false},
-                        {field: 'user_id', title: __('User_id'), visible: false},
+                        {field: 'admin_id', title: __('Admin_id'), formatter: Table.api.formatter.search, visible: false},
+                        {field: 'user_id', title: __('User_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
                         {field: 'imagewidth', title: __('Imagewidth'), operate: false},
                         {field: 'imageheight', title: __('Imageheight'), operate: false},
@@ -112,10 +131,10 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
 
             // 选中多个
             $(document).on("click", ".btn-choose-multi", function () {
-                var urlArr = new Array();
-                $.each(table.bootstrapTable("getAllSelections"), function (i, j) {
-                    urlArr.push(j.url);
-                });
+                // var urlArr = [];
+                // $.each(table.bootstrapTable("getAllSelections"), function (i, j) {
+                //     urlArr.push(j.url);
+                // });
                 var multiple = Backend.api.query('multiple');
                 multiple = multiple == 'true' ? true : false;
                 Fast.api.close({url: urlArr.join(","), multiple: multiple});

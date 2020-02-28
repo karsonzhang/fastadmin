@@ -11,7 +11,7 @@ use think\Validate;
 /**
  * 系统配置
  *
- * @icon fa fa-cogs
+ * @icon   fa fa-cogs
  * @remark 可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除
  */
 class Config extends Backend
@@ -27,6 +27,11 @@ class Config extends Backend
     {
         parent::_initialize();
         $this->model = model('Config');
+        ConfigModel::event('before_write', function ($row) {
+            if (isset($row['name']) && $row['name'] == 'name' && preg_match("/fast" . "admin/i", $row['value'])) {
+                throw new Exception(__("Site name incorrect"));
+            }
+        });
     }
 
     /**
@@ -79,25 +84,25 @@ class Config extends Backend
                 foreach ($params as $k => &$v) {
                     $v = is_array($v) ? implode(',', $v) : $v;
                 }
+                if (in_array($params['type'], ['select', 'selects', 'checkbox', 'radio', 'array'])) {
+                    $params['content'] = json_encode(ConfigModel::decode($params['content']), JSON_UNESCAPED_UNICODE);
+                } else {
+                    $params['content'] = '';
+                }
                 try {
-                    if (in_array($params['type'], ['select', 'selects', 'checkbox', 'radio', 'array'])) {
-                        $params['content'] = json_encode(ConfigModel::decode($params['content']), JSON_UNESCAPED_UNICODE);
-                    } else {
-                        $params['content'] = '';
-                    }
                     $result = $this->model->create($params);
-                    if ($result !== false) {
-                        try {
-                            $this->refreshFile();
-                        } catch (Exception $e) {
-                            $this->error($e->getMessage());
-                        }
-                        $this->success();
-                    } else {
-                        $this->error($this->model->getError());
-                    }
                 } catch (Exception $e) {
                     $this->error($e->getMessage());
+                }
+                if ($result !== false) {
+                    try {
+                        $this->refreshFile();
+                    } catch (Exception $e) {
+                        $this->error($e->getMessage());
+                    }
+                    $this->success();
+                } else {
+                    $this->error($this->model->getError());
                 }
             }
             $this->error(__('Parameter %s can not be empty', ''));
@@ -128,7 +133,11 @@ class Config extends Backend
                         $configList[] = $v->toArray();
                     }
                 }
-                $this->model->allowField(true)->saveAll($configList);
+                try {
+                    $this->model->allowField(true)->saveAll($configList);
+                } catch (Exception $e) {
+                    $this->error($e->getMessage());
+                }
                 try {
                     $this->refreshFile();
                 } catch (Exception $e) {

@@ -39,7 +39,7 @@ class Addon extends Backend
             $v['config'] = $config ? 1 : 0;
             $v['url'] = str_replace($this->request->server('SCRIPT_NAME'), '', $v['url']);
         }
-        $this->assignconfig(['addons' => $addons]);
+        $this->assignconfig(['addons' => $addons, 'api_url' => config('fastadmin.api_url'), 'faversion' => config('fastadmin.version')]);
         return $this->view->fetch();
     }
 

@@ -63,11 +63,12 @@
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
         {:build_heading(null,FALSE)}
+        {if $Think.config.fastadmin.api_url}
         <ul class="nav nav-tabs nav-category">
             <li class="active"><a href="javascript:;" data-id="">{:__('All')}</a></li>
             <li><a href="javascript:;" data-id="0">{:__('Uncategoried')}</a></li>
         </ul>
-
+        {/if}
     </div>
 
     <div class="panel-body">
@@ -76,25 +77,18 @@
                 <div class="widget-body no-padding">
                     <div id="toolbar" class="toolbar">
                         {:build_toolbar('refresh')}
-                        <button type="button" id="plupload-addon" class="btn btn-danger plupload" data-url="addon/local"
-                                data-mimetype="application/zip" data-multiple="false"><i class="fa fa-upload"></i>
+                        <button type="button" id="plupload-addon" class="btn btn-danger plupload" data-url="addon/local" data-mimetype="application/zip" data-multiple="false"><i class="fa fa-upload"></i>
                             {:__('Offline install')}
                         </button>
+                        {if $Think.config.fastadmin.api_url}
                         <div class="btn-group">
-                            <a href="#" class="btn btn-info btn-switch active" data-type="all"
-                               data-url="{$config.fastadmin.api_url}/addon/index"><i class="fa fa-list"></i>
-                                {:__('All')}</a>
-                            <a href="#" class="btn btn-info btn-switch" data-type="free"
-                               data-url="{$config.fastadmin.api_url}/addon/index"><i class="fa fa-gift"></i>
-                                {:__('Free')}</a>
-                            <a href="#" class="btn btn-info btn-switch" data-type="price"
-                               data-url="{$config.fastadmin.api_url}/addon/index"><i class="fa fa-rmb"></i>
-                                {:__('Paying')}</a>
-                            <a href="#" class="btn btn-info btn-switch" data-type="local" data-url="addon/downloaded"><i
-                                    class="fa fa-laptop"></i> {:__('Local addon')}</a>
+                            <a href="#" class="btn btn-info btn-switch active" data-type="all"><i class="fa fa-list"></i> {:__('All')}</a>
+                            <a href="#" class="btn btn-info btn-switch" data-type="free"><i class="fa fa-gift"></i> {:__('Free')}</a>
+                            <a href="#" class="btn btn-info btn-switch" data-type="price"><i class="fa fa-rmb"></i> {:__('Paying')}</a>
+                            <a href="#" class="btn btn-info btn-switch" data-type="local" data-url="addon/downloaded"><i class="fa fa-laptop"></i> {:__('Local addon')}</a>
                         </div>
-                        <a class="btn btn-primary btn-userinfo" href="javascript:;"><i class="fa fa-user"></i>
-                            {:__('Userinfo')}</a>
+                        <a class="btn btn-primary btn-userinfo" href="javascript:;"><i class="fa fa-user"></i> {:__('Userinfo')}</a>
+                        {/if}
                     </div>
                     <table id="table" class="table table-striped table-bordered table-hover" width="100%">
 
@@ -135,7 +129,7 @@
                     <div class="form-group">
                         <label class="control-label">{:__('Version')}</label>
                         <input type="hidden" class="operate" data-name="faversion" value="="/>
-                        <input class="form-control" name="faversion" type="text" value="{$config.fastadmin.version}">
+                        <input class="form-control" name="faversion" type="text" value="{$Think.config.fastadmin.version}">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">

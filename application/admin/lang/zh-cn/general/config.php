@@ -55,6 +55,7 @@ return [
     'Mail smtp password'          => 'SMTP密码',
     'Mail vertify type'           => 'SMTP验证方式',
     'Mail from'                   => '发件人邮箱',
+    'Site name incorrect'         => '网站名称错误',
     'Name already exist'          => '变量名称已经存在',
     'Add new config'              => '点击添加新的配置',
     'Send a test message'         => '发送测试邮件',

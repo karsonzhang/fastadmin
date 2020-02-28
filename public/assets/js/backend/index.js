@@ -52,89 +52,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 Backend.api.addtabs($(this).data("url"));
             });
 
-            //读取首次登录推荐插件列表
-            if (localStorage.getItem("fastep") == "installed") {
-                $.ajax({
-                    url: Config.fastadmin.api_url + '/addon/recommend',
-                    type: 'post',
-                    dataType: 'jsonp',
-                    success: function (ret) {
-                        require(['template'], function (Template) {
-                            var install = function (name, title) {
-                                Fast.api.ajax({
-                                    url: 'addon/install',
-                                    data: {name: name, faversion: Config.fastadmin.version}
-                                }, function (data, ret) {
-                                    Fast.api.refreshmenu();
-                                });
-                            };
-                            $(document).on('click', '.btn-install', function () {
-                                $(this).prop("disabled", true).addClass("disabled");
-                                $("input[name=addon]:checked").each(function () {
-                                    install($(this).data("name"));
-                                });
-                                return false;
-                            });
-                            $(document).on('click', '.btn-notnow', function () {
-                                Layer.closeAll();
-                            });
-                            Layer.open({
-                                type: 1, skin: 'layui-layer-page', area: ["860px", "620px"], title: '',
-                                content: Template.render(ret.tpl, {addonlist: ret.rows})
-                            });
-                            localStorage.setItem("fastep", "dashboard");
-                        });
-                    }
-                });
-            }
-
-            //版本检测
-            var checkupdate = function (ignoreversion, tips) {
-                $.ajax({
-                    url: Config.fastadmin.api_url + '/version/check',
-                    type: 'post',
-                    data: {version: Config.fastadmin.version},
-                    dataType: 'jsonp',
-                    success: function (ret) {
-                        if (ret.data && ignoreversion !== ret.data.newversion) {
-                            Layer.open({
-                                title: __('Discover new version'),
-                                maxHeight: 400,
-                                content: '<h5 style="background-color:#f7f7f7; font-size:14px; padding: 10px;">' + __('Your current version') + ':' + ret.data.version + '，' + __('New version') + ':' + ret.data.newversion + '</h5><span class="label label-danger">' + __('Release notes') + '</span><br/>' + ret.data.upgradetext,
-                                btn: [__('Go to download'), __('Ignore this version'), __('Do not remind again')],
-                                btn2: function (index, layero) {
-                                    localStorage.setItem("ignoreversion", ret.data.newversion);
-                                },
-                                btn3: function (index, layero) {
-                                    localStorage.setItem("ignoreversion", "*");
-                                },
-                                success: function (layero, index) {
-                                    $(".layui-layer-btn0", layero).attr("href", ret.data.downloadurl).attr("target", "_blank");
-                                }
-                            });
-                        } else {
-                            if (tips) {
-                                Toastr.success(__('Currently is the latest version'));
-                            }
-                        }
-                    }, error: function (e) {
-                        if (tips) {
-                            Toastr.error(__('Unknown data format') + ":" + e.message);
-                        }
-                    }
-                });
-            };
-
-            //读取版本检测信息
-            var ignoreversion = localStorage.getItem("ignoreversion");
-            if (Config.fastadmin.checkupdate && ignoreversion !== "*") {
-                checkupdate(ignoreversion, false);
-            }
-            //手动检测版本信息
-            $("a[data-toggle='checkupdate']").on('click', function () {
-                checkupdate('', true);
-            });
-
             //切换左侧sidebar显示隐藏
             $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
                 $(".sidebar-menu li").removeClass("active");
@@ -188,7 +105,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
-            var multiplenav = Config.fastadmin.multiplenav;
+            var multiplenav = $("#secondnav").size() > 0 ? true : false;
             var firstnav = $("#firstnav .nav-addtabs");
             var nav = multiplenav ? $("#secondnav .nav-addtabs") : firstnav;
 
@@ -287,7 +204,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             if ($("ul.sidebar-menu li.active a").size() > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
             } else {
-                if (Config.fastadmin.multiplenav) {
+                if (multiplenav) {
                     $("li:first > a", firstnav).trigger("click");
                 } else {
                     $("ul.sidebar-menu li a[url!='javascript:;']:first").trigger("click");

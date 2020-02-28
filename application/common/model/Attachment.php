@@ -21,6 +21,19 @@ class Attachment extends Model
         return is_numeric($value) ? $value : strtotime($value);
     }
 
+    public static function getMimetypeList()
+    {
+        $data = [
+            "image/*"        => "图片",
+            "audio/*"        => "音频",
+            "video/*"        => "视频",
+            "text/*"         => "文档",
+            "application/*"  => "应用",
+            "zip,rar,7z,tar" => "压缩包",
+        ];
+        return $data;
+    }
+
     protected static function init()
     {
         // 如果已经上传该资源，则不再记录

@@ -28,13 +28,6 @@
                     <a href="__PUBLIC__" target="_blank"><i class="fa fa-home" style="font-size:14px;"></i></a>
                 </li>
 
-                <!-- 账号信息下拉框 -->
-                <li class="hidden-xs">
-                    <a href="javascript:;" data-toggle="checkupdate" title="{:__('Check for updates')}">
-                        <i class="fa fa-refresh"></i>
-                    </a>
-                </li>
-
                 <!-- 清除缓存 -->
                 <li>
                     <a href="javascript:;" data-toggle="dropdown" title="{:__('Wipe cache')}">
@@ -85,20 +78,6 @@
                                 <small>{$admin.logintime|date="Y-m-d H:i:s",###}</small>
                             </p>
                         </li>
-                        <!-- Menu Body -->
-                        <li class="user-body">
-                            <div class="row">
-                                <div class="col-xs-4 text-center">
-                                    <a href="https://www.fastadmin.net" target="_blank">{:__('FastAdmin')}</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="https://forum.fastadmin.net" target="_blank">{:__('Forum')}</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="https://doc.fastadmin.net" target="_blank">{:__('Docs')}</a>
-                                </div>
-                            </div>
-                        </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
@@ -120,7 +99,7 @@
         </div>
     </div>
 
-    {if $config.fastadmin.multiplenav}
+    {if $Think.config.fastadmin.multiplenav}
     <!--第二级菜单,只有在multiplenav开启时才显示-->
     <div id="secondnav">
         <ul class="nav nav-tabs nav-addtabs disable-top-badge" role="tablist">

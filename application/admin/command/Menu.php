@@ -203,13 +203,17 @@ class Menu extends Command
         $tempClassFile = __DIR__ . DS . $uniqueName . ".php";
         file_put_contents($tempClassFile, $classContent);
         $className = "\\app\\admin\\command\\" . $uniqueName;
+
+        //删除临时文件
+        register_shutdown_function(function () use ($tempClassFile) {
+            if ($tempClassFile) {
+                //删除临时文件
+                @unlink($tempClassFile);
+            }
+        });
+
         //反射机制调用类的注释和方法名
         $reflector = new ReflectionClass($className);
-
-        if (isset($tempClassFile)) {
-            //删除临时文件
-            @unlink($tempClassFile);
-        }
 
         //只匹配公共的方法
         $methods = $reflector->getMethods(ReflectionMethod::IS_PUBLIC);

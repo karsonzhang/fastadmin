@@ -34,8 +34,8 @@ class Addon extends Command
     {
         $name = $input->getOption('name') ?: '';
         $action = $input->getOption('action') ?: '';
-        if (stripos($name, 'addons/') !== false) {
-            $name = explode('/', $name)[1];
+        if (stripos($name, 'addons' . DS) !== false) {
+            $name = explode(DS, $name)[1];
         }
         //强制覆盖
         $force = $input->getOption('force');

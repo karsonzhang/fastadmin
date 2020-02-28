@@ -16,19 +16,11 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="{:url('/')}" style="padding:6px 15px;"><img src="__CDN__/assets/img/logo.png" style="height:40px;" alt=""></a>
+                    <a class="navbar-brand" href="{:url('/')}">{$site.name}</a>
                 </div>
                 <div class="collapse navbar-collapse" id="header-navbar">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="https://www.fastadmin.net" target="_blank">{:__('Home')}</a></li>
-                        <li><a href="https://www.fastadmin.net/store.html" target="_blank">{:__('Store')}</a></li>
-                        <li><a href="https://www.fastadmin.net/wxapp.html" target="_blank">{:__('Wxapp')}</a></li>
-                        <li><a href="https://www.fastadmin.net/service.html" target="_blank">{:__('Services')}</a></li>
-                        <li><a href="https://www.fastadmin.net/download.html" target="_blank">{:__('Download')}</a></li>
-                        <li><a href="https://www.fastadmin.net/demo.html" target="_blank">{:__('Demo')}</a></li>
-                        <li><a href="https://www.fastadmin.net/donate.html" target="_blank">{:__('Donation')}</a></li>
-                        <li><a href="https://forum.fastadmin.net" target="_blank">{:__('Forum')}</a></li>
-                        <li><a href="https://doc.fastadmin.net" target="_blank">{:__('Docs')}</a></li>
+                        <li><a href="{:url('/')}" target="_blank">{:__('Home')}</a></li>
                         <li class="dropdown">
                             {if $user}
                             <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown" style="padding-top: 10px;height: 50px;">
@@ -60,8 +52,7 @@
         </main>
 
         <footer class="footer" style="clear:both">
-            <!-- FastAdmin是开源程序，建议在您的网站底部保留一个FastAdmin的链接 -->
-            <p class="copyright">Copyright&nbsp;©&nbsp;2017-2019 Powered by <a href="https://www.fastadmin.net" target="_blank">FastAdmin</a> All Rights Reserved <a href="http://www.beian.miit.gov.cn" target="_blank">{$site.beian|htmlentities}</a></p>
+            <p class="copyright">Copyright&nbsp;©&nbsp;2017-2020 {$site.name} All Rights Reserved <a href="http://www.beian.miit.gov.cn" target="_blank">{$site.beian|htmlentities}</a></p>
         </footer>
 
         {include file="common/script" /}

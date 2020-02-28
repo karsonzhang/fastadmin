@@ -16,7 +16,7 @@
             <a href="javascript:;" class="btn btn-info btn-captcha btn-lg" data-url="{:addon_url('wechat/captcha/send')}" data-type="wechat" data-event="[event]">获取验证码</a>
         </span>
     {else/}
-        请在后台插件管理中安装《<a href="https://www.fastadmin.net/store/wechat.html" target="_blank">微信管理插件</a>》
+        请在后台插件管理中安装《微信管理插件》
     {/if}
 {elseif "[type]" == 'text' /}
     <input type="text" name="captcha" class="form-control input-lg" data-rule="required;length(4)" />

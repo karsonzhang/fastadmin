@@ -5,8 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
-        <meta name="author" content="FastAdmin">
-        <title>FastAdmin</title>
+        <title>我的网站</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -109,7 +108,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="https://www.fastadmin.net" target="_blank">FastAdmin</a>
+                    <a class="navbar-brand" href="./" target="_blank">我的网站</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <form class="navbar-form navbar-right">
@@ -2086,6 +2085,12 @@
                                                         <td>是</td>
                                                         <td>手机号</td>
                                                     </tr>
+                                                                                                        <tr>
+                                                        <td>code</td>
+                                                        <td>string</td>
+                                                        <td>是</td>
+                                                        <td>验证码</td>
+                                                    </tr>
                                                                                                     </tbody>
                                             </table>
                                                                                     </div>
@@ -2119,6 +2124,10 @@
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="mobile">mobile</label>
                                                             <input type="string" class="form-control input-sm" id="mobile" required placeholder="手机号" name="mobile">
+                                                        </div>
+                                                                                                                <div class="form-group">
+                                                            <label class="control-label" for="code">code</label>
+                                                            <input type="string" class="form-control input-sm" id="code" required placeholder="验证码" name="code">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <button type="submit" class="btn btn-success send" rel="16">提交</button>
@@ -2555,7 +2564,7 @@
                                                 </thead>
                                                 <tbody>
                                                                                                         <tr>
-                                                        <td>email</td>
+                                                        <td>mobile</td>
                                                         <td>string</td>
                                                         <td>是</td>
                                                         <td>手机号</td>
@@ -2585,8 +2594,8 @@
                                                 <div class="panel-body">
                                                     <form enctype="application/x-www-form-urlencoded" role="form" action="/api/user/changemobile" method="get" name="form20" id="form20">
                                                                                                                 <div class="form-group">
-                                                            <label class="control-label" for="email">email</label>
-                                                            <input type="string" class="form-control input-sm" id="email" required placeholder="手机号" name="email">
+                                                            <label class="control-label" for="mobile">mobile</label>
+                                                            <input type="string" class="form-control input-sm" id="mobile" required placeholder="手机号" name="mobile">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="captcha">captcha</label>
@@ -3730,9 +3739,9 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2019-06-28 12:14:48                </div>
+                    Generated on 2020-02-16 16:01:35                </div>
                 <div class="col-md-6" align="right">
-                    <a href="https://www.fastadmin.net" target="_blank">FastAdmin</a>
+                    <a href="./" target="_blank">我的网站</a>
                 </div>
             </div>
 
