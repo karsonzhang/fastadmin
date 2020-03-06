@@ -27,7 +27,7 @@ class Email
      */
     public $options = [
         'charset' => 'utf-8', //编码格式
-        'debug'   => 0, //调式模式
+        'debug'   => false, //调式模式
     ];
 
     /**
@@ -55,14 +55,17 @@ class Email
             $this->options = array_merge($this->options, $config);
         }
         $this->options = array_merge($this->options, $options);
-        vendor('phpmailer.phpmailer.PHPMailerAutoload');
         $securArr = [1 => 'tls', 2 => 'ssl'];
 
-        $this->mail = new \PHPMailer(true);
+        $this->mail = new \PHPMailer\PHPMailer\PHPMailer(true);
         $this->mail->CharSet = $this->options['charset'];
-        $this->mail->SMTPDebug = $this->options['debug'];
-        $this->mail->isSMTP();
-        $this->mail->SMTPAuth = true;
+        if ($this->options['mail_type'] == 1) {
+            $this->mail->SMTPDebug = $this->options['debug'];
+            $this->mail->isSMTP();
+            $this->mail->SMTPAuth = true;
+        } else {
+            $this->mail->isMail();
+        }
         $this->mail->Host = $this->options['mail_smtp_host'];
         $this->mail->Username = $this->options['mail_from'];
         $this->mail->Password = $this->options['mail_smtp_pass'];
@@ -75,52 +78,115 @@ class Email
 
     /**
      * 设置邮件主题
-     * @param string $subject
+     * @param string $subject 邮件主题
      * @return $this
      */
     public function subject($subject)
     {
-        $this->options['subject'] = $subject;
+        $this->mail->Subject = $subject;
         return $this;
     }
 
     /**
      * 设置发件人
-     * @param string $email
-     * @param string $name
+     * @param string $email 发件人邮箱
+     * @param string $name  发件人名称
      * @return $this
      */
     public function from($email, $name = '')
     {
-        $this->options['from'] = $email;
-        $this->options['from_name'] = $name;
+        $this->mail->setFrom($email, $name);
         return $this;
     }
 
     /**
      * 设置收件人
-     * @param string $email
-     * @param string $name
+     * @param mixed  $email 收件人,多个收件人以,进行分隔
+     * @param string $name  收件人名称
      * @return $this
      */
     public function to($email, $name = '')
     {
-        $this->options['to'] = $email;
-        $this->options['to_name'] = $name;
+        $emailArr = $this->buildAddress($email);
+        foreach ($emailArr as $address => $name) {
+            $this->mail->addAddress($address, $name);
+        }
+
+        return $this;
+    }
+
+    /**
+     * 设置抄送
+     * @param mixed  $email 收件人,多个收件人以,进行分隔
+     * @param string $name  收件人名称
+     * @return Email
+     */
+    public function cc($email, $name = '')
+    {
+        $emailArr = $this->buildAddress($email);
+        foreach ($emailArr as $address => $name) {
+            $this->mail->addCC($address, $name);
+        }
+        return $this;
+    }
+
+    /**
+     * 设置密送
+     * @param mixed  $email 收件人,多个收件人以,进行分隔
+     * @param string $name  收件人名称
+     * @return Email
+     */
+    public function bcc($email, $name = '')
+    {
+        $emailArr = $this->buildAddress($email);
+        foreach ($emailArr as $address => $name) {
+            $this->mail->addBCC($address, $name);
+        }
         return $this;
     }
 
     /**
      * 设置邮件正文
-     * @param string  $body
-     * @param boolean $ishtml
+     * @param string  $body   邮件下方
+     * @param boolean $ishtml 是否HTML格式
      * @return $this
      */
     public function message($body, $ishtml = true)
     {
-        $this->options['body'] = $body;
-        $this->options['ishtml'] = $ishtml;
+        if ($ishtml) {
+            $this->mail->msgHTML($body);
+        } else {
+            $this->mail->Body = $body;
+        }
         return $this;
+    }
+
+    /**
+     * 添加附件
+     * @param string $path 附件路径
+     * @param string $name 附件名称
+     * @return Email
+     */
+    public function attachment($path, $name = '')
+    {
+        $this->mail->addAttachment($path, $name);
+        return $this;
+    }
+
+    /**
+     * 构建Email地址
+     * @param mixed $emails Email数据
+     * @return array
+     */
+    protected function buildAddress($emails)
+    {
+        $emails = is_array($emails) ? $emails : explode(',', str_replace(";", ",", $emails));
+        $result = [];
+        foreach ($emails as $key => $value) {
+            $email = is_numeric($key) ? $value : $key;
+            $result[$email] = is_numeric($key) ? "" : $value;
+        }
+        return $result;
     }
 
     /**
@@ -148,38 +214,17 @@ class Email
     public function send()
     {
         $result = false;
-        switch ($this->options['mail_type']) {
-            case 1:
-                //使用phpmailer发送
-                $this->mail->setFrom($this->options['from'], $this->options['from_name']);
-                $this->mail->addAddress($this->options['to'], $this->options['to_name']);
-                $this->mail->Subject = $this->options['subject'];
-                if ($this->options['ishtml']) {
-                    $this->mail->msgHTML($this->options['body']);
-                } else {
-                    $this->mail->Body = $this->options['body'];
-                }
-                try {
-                    $result = $this->mail->send();
-                } catch (\phpmailerException $e) {
-                    $this->setError($e->getMessage());
-                }
+        if (in_array($this->options['mail_type'], [1, 2])) {
+            try {
+                $result = $this->mail->send();
+            } catch (\PHPMailer\PHPMailer\Exception $e) {
+                $this->setError($e->getMessage());
+            }
 
-                $this->setError($result ? '' : $this->mail->ErrorInfo);
-                break;
-            case 2:
-                //使用mail方法发送邮件
-                $headers = 'MIME-Version: 1.0' . "\r\n";
-                $headers .= "Content-type: text/html; charset=" . $this->options['charset'] . "\r\n";
-                $headers .= "To: {$this->options['to_name']} <{$this->options['to']}>\r\n"; //收件人
-                $headers .= "From: {$this->options['from_name']} <{$this->options['from']}>\r\n"; //发件人
-                $result = mail($this->options['to'], $this->options['subject'], $this->options['body'], $headers);
-                $this->setError($result ? '' : error_get_last()['message']);
-                break;
-            default:
-                //邮件功能已关闭
-                $this->setError(__('Mail already closed'));
-                break;
+            $this->setError($result ? '' : $this->mail->ErrorInfo);
+        } else {
+            //邮件功能已关闭
+            $this->setError(__('Mail already closed'));
         }
         return $result;
     }
