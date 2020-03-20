@@ -202,6 +202,7 @@ class Backend extends Controller
             'jsname'         => 'backend/' . str_replace('.', '/', $controllername),
             'moduleurl'      => rtrim(url("/{$modulename}", '', false), '/'),
             'language'       => $lang,
+            'tableLanguage'  => ($lang == 'zh-cn' ? 'zh-CN' : 'en-US'),
             'referer'        => Session::get("referer")
         ];
         $config = array_merge($config, Config::get("view_replace_str"));
