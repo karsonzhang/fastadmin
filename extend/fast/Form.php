@@ -870,7 +870,7 @@ EOD;
         $checked = is_array($checked) ? $checked : explode(',', $checked);
         foreach ($list as $k => $v) {
             $options['id'] = "{$name}-{$k}";
-            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox("{$name}[{$k}}]", $k, in_array($k, $checked), $options));
+            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox("{$name}[{$k}]", $k, in_array($k, $checked), $options));
         }
         return '<div class="checkbox">' . implode(' ', $html) . '</div>';
     }
