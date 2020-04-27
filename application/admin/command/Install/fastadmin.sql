@@ -97,7 +97,7 @@ CREATE TABLE `fa_auth_group` (
   `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
   `status` varchar(30) NOT NULL DEFAULT '' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='分组表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT='分组表';
 
 -- ----------------------------
 -- Records of fa_auth_group
