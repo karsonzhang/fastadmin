@@ -14,6 +14,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             var table = $("#table");
 
+            // 弹窗自适应宽高
+            var area = Fast.config.openArea != undefined ? Fast.config.openArea : [$(window).width() > 800 ? '800px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
+
             table.on('load-success.bs.table', function (e, json) {
                 if (json && typeof json.category != 'undefined' && $(".nav-category li").size() == 2) {
                     $.each(json.category, function (i, j) {
@@ -202,7 +205,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Layer.open({
                         content: Template("logintpl", {}),
                         zIndex: 99,
-                        area: ['430px', '350px'],
+                        area: area,
                         title: __('Login FastAdmin'),
                         resize: false,
                         btn: [__('Login'), __('Register')],
@@ -240,7 +243,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     }, function (data) {
                         Layer.open({
                             content: Template("userinfotpl", userinfo),
-                            area: ['430px', '360px'],
+                            area: area,
                             title: __('Userinfo'),
                             resize: false,
                             btn: [__('Logout'), __('Cancel')],
@@ -301,7 +304,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         Layer.open({
                             content: Template("paytpl", ret.data),
                             shade: 0.8,
-                            area: ['800px', '600px'],
+                            area: area,
                             skin: 'layui-layer-msg layui-layer-pay',
                             title: false,
                             closeBtn: true,
@@ -319,7 +322,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             return;
                         }
                         top.Fast.api.open(ret.data.payurl, __('Pay now'), {
-                            area: ["650px", "700px"],
+                            area: area,
                             end: function () {
                                 top.Layer.alert(__('Pay tips'));
                             }
@@ -329,7 +332,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         Layer.open({
                             content: Template("conflicttpl", ret.data),
                             shade: 0.8,
-                            area: ['800px', '600px'],
+                            area: area,
                             title: __('Warning'),
                             btn: [__('Continue install'), __('Cancel')],
                             end: function () {
@@ -362,7 +365,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         Layer.open({
                             content: Template("conflicttpl", ret.data),
                             shade: 0.8,
-                            area: ['800px', '600px'],
+                            area: area,
                             title: __('Warning'),
                             btn: [__('Continue uninstall'), __('Cancel')],
                             end: function () {
@@ -396,7 +399,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         Layer.open({
                             content: Template("conflicttpl", ret.data),
                             shade: 0.8,
-                            area: ['800px', '600px'],
+                            area: area,
                             title: __('Warning'),
                             btn: [__('Continue operate'), __('Cancel')],
                             end: function () {
