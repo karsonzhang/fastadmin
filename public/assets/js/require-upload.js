@@ -4,7 +4,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
             config: {
                 container: document.body,
                 classname: '.plupload:not([initialized])',
-                previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" onerror="this.src=\'' + Fast.api.fixurl("ajax/icon") + '?suffix=\'+\'<%=fullurl%>\'.split(\'.\').pop();this.onerror=null;" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
+                previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" onerror="this.src=\'' + Fast.api.fixurl("ajax/icon") + '?suffix=<%=suffix%>\';this.onerror=null;" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
             },
             events: {
                 onInit: function (up) {
@@ -303,7 +303,9 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                                     if (!j) {
                                         return true;
                                     }
-                                    var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: (json && typeof json[i] !== 'undefined' ? json[i] : null)};
+                                    var suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(j);
+                                    suffix = suffix ? suffix[1] : 'file';
+                                    var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: (json && typeof json[i] !== 'undefined' ? json[i] : null), suffix: suffix};
                                     var html = tpl ? Template(tpl, data) : Template.render(Upload.config.previewtpl, data);
                                     $("#" + preview_id).append(html);
                                 });

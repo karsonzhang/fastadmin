@@ -15,6 +15,10 @@ return [
     'app_init'     => [],
     // 应用开始
     'app_begin'    => [],
+    // 应用调度
+    'app_dispatch' => [
+        'app\\common\\behavior\\Common',
+    ],
     // 模块初始化
     'module_init'  => [
         'app\\common\\behavior\\Common',
