@@ -8,6 +8,16 @@ use think\Loader;
 
 class Common
 {
+
+    public function appDispatch(&$dispatch)
+    {
+        $pathinfoArr = explode('/', request()->pathinfo());
+        if (!Config::get('url_domain_deploy') && $pathinfoArr && in_array($pathinfoArr[0], ['index', 'api'])) {
+            //如果是以index或api开始的URL则关闭路由检测
+            \think\App::route(false);
+        }
+    }
+
     public function moduleInit(&$request)
     {
         // 设置mbstring字符编码
