@@ -10,6 +10,14 @@ class User extends Validate
      * 验证规则
      */
     protected $rule = [
+        'username' => 'require|regex:\w{3,12}|unique:user',
+        'nickname' => 'require|unique:user',
+        'password' => 'regex:\S{6,32}',
+        'email'    => 'require|email|unique:user',
+        'mobile'   => 'require|unique:user'
+    ];
+    
+    /**
     ];
     /**
      * 提示消息
@@ -21,7 +29,7 @@ class User extends Validate
      */
     protected $scene = [
         'add'  => [],
-        'edit' => [],
+        'edit' => ['username', 'email', 'nickname', 'password', 'email', 'mobile'],
     ];
-    
+
 }
