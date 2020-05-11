@@ -18,6 +18,9 @@ class User extends Validate
     ];
     
     /**
+     * 字段描述
+     */
+    protected $field = [
     ];
     /**
      * 提示消息
@@ -32,4 +35,16 @@ class User extends Validate
         'edit' => ['username', 'email', 'nickname', 'password', 'email', 'mobile'],
     ];
 
+    public function __construct(array $rules = [], $message = [], $field = [])
+    {
+        $this->field = [
+            'username' => __('Username'),
+            'nickname' => __('Nickname'),
+            'password' => __('Password'),
+            'email'    => __('Email'),
+            'mobile'   => __('Mobile')
+        ];
+        parent::__construct($rules, $message, $field);
+    }
+    
 }
