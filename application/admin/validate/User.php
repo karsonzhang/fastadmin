@@ -10,6 +10,17 @@ class User extends Validate
      * 验证规则
      */
     protected $rule = [
+        'username' => 'require|regex:\w{3,12}|unique:user',
+        'nickname' => 'require|unique:user',
+        'password' => 'regex:\S{6,32}',
+        'email'    => 'require|email|unique:user',
+        'mobile'   => 'require|unique:user'
+    ];
+    
+    /**
+     * 字段描述
+     */
+    protected $field = [
     ];
     /**
      * 提示消息
@@ -21,7 +32,19 @@ class User extends Validate
      */
     protected $scene = [
         'add'  => [],
-        'edit' => [],
+        'edit' => ['username', 'email', 'nickname', 'password', 'email', 'mobile'],
     ];
+
+    public function __construct(array $rules = [], $message = [], $field = [])
+    {
+        $this->field = [
+            'username' => __('Username'),
+            'nickname' => __('Nickname'),
+            'password' => __('Password'),
+            'email'    => __('Email'),
+            'mobile'   => __('Mobile')
+        ];
+        parent::__construct($rules, $message, $field);
+    }
     
 }

@@ -66,6 +66,7 @@ class User extends Backend
     public function edit($ids = NULL)
     {
         $row = $this->model->get($ids);
+        $this->modelValidate = true;
         if (!$row)
             $this->error(__('No Results were found'));
         $this->view->assign('groupList', build_select('row[group_id]', \app\admin\model\UserGroup::column('id,name'), $row['group_id'], ['class' => 'form-control selectpicker']));
