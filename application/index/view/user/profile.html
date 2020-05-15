@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <label class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
                             <div class="col-xs-12 col-sm-4">
-                                <input type="text" class="form-control" id="nickname" name="nickname" value="{$user.nickname|htmlentities}" data-rule="required" placeholder="">
+                                <input type="text" class="form-control" id="nickname" name="nickname" value="{$user.nickname|htmlentities}" data-rule="required;remote({:url('api/validate/check_nickname_available')}, id={$user.id})" placeholder="">
                             </div>
                         </div>
                         <div class="form-group">

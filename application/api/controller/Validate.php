@@ -54,6 +54,23 @@ class Validate extends Api
     }
 
     /**
+     * 检测昵称
+     *
+     * @param string $nickname 昵称
+     * @param string $id       排除会员ID
+     */
+    public function check_nickname_available()
+    {
+        $email = $this->request->request('nickname');
+        $id = (int)$this->request->request('id');
+        $count = User::where('nickname', '=', $email)->where('id', '<>', $id)->count();
+        if ($count > 0) {
+            $this->error(__('昵称已经被占用'));
+        }
+        $this->success();
+    }
+
+    /**
      * 检测手机
      *
      * @param string $mobile 手机号
