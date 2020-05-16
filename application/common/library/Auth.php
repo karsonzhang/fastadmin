@@ -125,9 +125,13 @@ class Auth
      */
     public function register($username, $password, $email = '', $mobile = '', $extend = [])
     {
-        // 检测用户名或邮箱、手机号是否存在
+        // 检测用户名、昵称、邮箱、手机号是否存在
         if (User::getByUsername($username)) {
             $this->setError('Username already exist');
+            return false;
+        }
+        if (User::getByNickname($username)) {
+            $this->setError('Nickname already exist');
             return false;
         }
         if ($email && User::getByEmail($email)) {

@@ -29,6 +29,7 @@ return [
     'Email is incorrect'                    => '邮箱格式不正确',
     'Mobile is incorrect'                   => '手机格式不正确',
     'Username already exist'                => '用户名已经存在',
+    'Nickname already exist'                => '昵称已经存在',
     'Email already exist'                   => '邮箱已经存在',
     'Mobile already exist'                  => '手机号已经存在',
     'Username is incorrect'                 => '用户名不正确',
