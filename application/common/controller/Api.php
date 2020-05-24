@@ -116,7 +116,7 @@ class Api
         $this->auth = Auth::instance();
 
         $modulename = $this->request->module();
-        $controllername = strtolower($this->request->controller());
+        $controllername = Loader::parseName($this->request->controller());
         $actionname = strtolower($this->request->action());
 
         // token

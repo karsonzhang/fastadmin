@@ -220,7 +220,7 @@ class Builder
             $methods = array_merge(array_flip(array_keys($methodSectorArr)), $methods);
         }
         $docslist = array_merge(array_flip(array_keys($sectorArr)), $docslist);
-
+        $docslist = array_filter($docslist , function($v) {return is_array($v) ; }) ;
         return $docslist;
     }
 
