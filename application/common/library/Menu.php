@@ -23,7 +23,7 @@ class Menu
         } else {
             $pid = $parent;
         }
-        $allow = array_flip(['file', 'name', 'title', 'icon', 'condition', 'remark', 'ismenu']);
+        $allow = array_flip(['file', 'name', 'title', 'icon', 'condition', 'remark', 'ismenu', 'weigh']);
         foreach ($menu as $k => $v) {
             $hasChild = isset($v['sublist']) && $v['sublist'] ? true : false;
 
