@@ -1,4 +1,5 @@
 <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    {:token()}
     <input type="hidden" name="row[rules]" value="{$row.rules}" />
     <div class="form-group">
         <label for="c-name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
@@ -18,10 +19,10 @@
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
         <div class="col-xs-12 col-sm-8">
-            
+
             <div class="radio">
             {foreach name="statusList" item="vo"}
-            <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" type="radio" value="{$key}" {in name="key" value="$row.status"}checked{/in} /> {$vo}</label> 
+            <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" type="radio" value="{$key}" {in name="key" value="$row.status"}checked{/in} /> {$vo}</label>
             {/foreach}
             </div>
 

@@ -316,7 +316,10 @@ class Addon extends Backend
         $onlineaddons = Cache::get("onlineaddons");
         if (!is_array($onlineaddons)) {
             $onlineaddons = [];
-            $result = Http::sendRequest(config('fastadmin.api_url') . '/addon/index');
+            $result = Http::sendRequest(config('fastadmin.api_url') . '/addon/index', [], 'GET', [
+                CURLOPT_HTTPHEADER => ['Accept-Encoding:gzip'],
+                CURLOPT_ENCODING   => "gzip"
+            ]);
             if ($result['ret']) {
                 $json = (array)json_decode($result['msg'], true);
                 $rows = isset($json['rows']) ? $json['rows'] : [];

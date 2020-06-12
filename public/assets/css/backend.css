@@ -1005,4 +1005,11 @@ table.table-nowrap thead > tr > th {
   text-align: center;
   display: inline-block;
 }
+.sidebar-menu li.treeview-open > a > .fa-angle-left,
+.sidebar-menu li.treeview-open > a > .pull-right-container > .fa-angle-left {
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
 /*# sourceMappingURL=backend.css.map */

@@ -28,7 +28,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             singleSelect: false, //是否启用单选
             showRefresh: false,
             showJumpto: true,
-            locale: 'zh-CN',
+            locale: Config.language == 'zh-cn' ? 'zh-CN' : 'en-US',
             showToggle: true,
             showColumns: true,
             pk: 'id',

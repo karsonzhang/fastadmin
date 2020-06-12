@@ -82,6 +82,17 @@ class Category extends Backend
     }
 
     /**
+     * 添加
+     */
+    public function add()
+    {
+        if ($this->request->isPost()) {
+            $this->token();
+        }
+        return parent::add();
+    }
+
+    /**
      * 编辑
      */
     public function edit($ids = null)
@@ -97,6 +108,7 @@ class Category extends Backend
             }
         }
         if ($this->request->isPost()) {
+            $this->token();
             $params = $this->request->post("row/a");
             if ($params) {
                 $params = $this->preExcludeFields($params);

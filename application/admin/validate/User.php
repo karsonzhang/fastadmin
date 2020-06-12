@@ -10,13 +10,13 @@ class User extends Validate
      * 验证规则
      */
     protected $rule = [
-        'username' => 'require|regex:\w{3,12}|unique:user',
+        'username' => 'require|regex:\w{3,32}|unique:user',
         'nickname' => 'require|unique:user',
         'password' => 'regex:\S{6,32}',
         'email'    => 'require|email|unique:user',
-        'mobile'   => 'require|unique:user'
+        'mobile'   => 'unique:user'
     ];
-    
+
     /**
      * 字段描述
      */
@@ -46,5 +46,5 @@ class User extends Validate
         ];
         parent::__construct($rules, $message, $field);
     }
-    
+
 }

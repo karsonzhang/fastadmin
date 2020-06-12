@@ -3,7 +3,7 @@
   "description": "the fastest admin framework",
   "main": "",
   "license": "Apache2.0",
-  "homepage": "http://www.fastadmin.net",
+  "homepage": "https://www.fastadmin.net",
   "private": true,
   "dependencies": {
     "jquery": "^2.1.4",

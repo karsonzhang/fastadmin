@@ -3,6 +3,7 @@
 namespace app\admin\controller\user;
 
 use app\common\controller\Backend;
+use app\common\library\Auth;
 
 /**
  * 会员管理
@@ -13,7 +14,7 @@ class User extends Backend
 {
 
     protected $relationSearch = true;
-
+    protected $searchFields = 'id,username,nickname';
 
     /**
      * @var \app\admin\model\User
@@ -61,16 +62,45 @@ class User extends Backend
     }
 
     /**
+     * 添加
+     */
+    public function add()
+    {
+        if ($this->request->isPost()) {
+            $this->token();
+        }
+        return parent::add();
+    }
+
+    /**
      * 编辑
      */
-    public function edit($ids = NULL)
+    public function edit($ids = null)
+    {
+        if ($this->request->isPost()) {
+            $this->token();
+        }
+        $row = $this->model->get($ids);
+        $this->modelValidate = true;
+        if (!$row) {
+            $this->error(__('No Results were found'));
+        }
+        $this->view->assign('groupList', build_select('row[group_id]', \app\admin\model\UserGroup::column('id,name'), $row['group_id'], ['class' => 'form-control selectpicker']));
+        return parent::edit($ids);
+    }
+
+    /**
+     * 删除
+     */
+    public function del($ids = "")
     {
         $row = $this->model->get($ids);
         $this->modelValidate = true;
-        if (!$row)
+        if (!$row) {
             $this->error(__('No Results were found'));
-        $this->view->assign('groupList', build_select('row[group_id]', \app\admin\model\UserGroup::column('id,name'), $row['group_id'], ['class' => 'form-control selectpicker']));
-        return parent::edit($ids);
+        }
+        Auth::instance()->delete($row['id']);
+        $this->success();
     }
 
 }

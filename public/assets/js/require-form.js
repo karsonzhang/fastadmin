@@ -83,6 +83,12 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
 
                 //移除提交按钮的disabled类
                 $(".layer-footer [type=submit],.fixed-footer [type=submit],.normal-footer [type=submit]", form).removeClass("disabled");
+                //自定义关闭按钮事件
+                form.on("click", ".layer-close", function () {
+                    var index = parent.Layer.getFrameIndex(window.name);
+                    parent.Layer.close(index);
+                    return false;
+                });
             },
             selectpicker: function (form) {
                 //绑定select元素事件

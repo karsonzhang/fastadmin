@@ -5,10 +5,17 @@
         {include file="common/meta" /}
     </head>
     <body class="hold-transition skin-green sidebar-mini fixed {if $Think.config.fastadmin.multiplenav}multiplenav{/if}" id="tabs">
+
         <div class="wrapper">
 
             <!-- 头部区域 -->
             <header id="header" class="main-header">
+                {if preg_match('/\/admin\/|admin\.php|admin_d75KABNWt\.php/i', url())}
+                <div class="alert alert-danger-light text-center" style="margin-bottom:0;border:none;">
+                    {:__('Security tips')}
+                </div>
+                {/if}
+
                 {include file='common/header' /}
             </header>
 

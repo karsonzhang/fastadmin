@@ -26,16 +26,23 @@ class Group extends Backend
 
     public function add()
     {
+        if ($this->request->isPost()) {
+            $this->token();
+        }
         $nodeList = \app\admin\model\UserRule::getTreeList();
         $this->assign("nodeList", $nodeList);
         return parent::add();
     }
 
-    public function edit($ids = NULL)
+    public function edit($ids = null)
     {
+        if ($this->request->isPost()) {
+            $this->token();
+        }
         $row = $this->model->get($ids);
-        if (!$row)
+        if (!$row) {
             $this->error(__('No Results were found'));
+        }
         $rules = explode(',', $row['rules']);
         $nodeList = \app\admin\model\UserRule::getTreeList($rules);
         $this->assign("nodeList", $nodeList);

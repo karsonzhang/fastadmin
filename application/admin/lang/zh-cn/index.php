@@ -54,4 +54,5 @@ return [
     'Forum'                                                      => '交流社区',
     'QQ qun'                                                     => 'QQ交流群',
     'Captcha'                                                    => '验证码',
+    'Security tips'                                              => '<i class="fa fa-warning"></i> 安全提示：为了你的后台安全，请勿将后台管理入口设置为admin或admin.php',
 ];

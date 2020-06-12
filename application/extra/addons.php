@@ -8,4 +8,7 @@ return array (
   'route' => 
   array (
   ),
+  'priority' => 
+  array (
+  ),
 );

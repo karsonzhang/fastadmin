@@ -52,7 +52,7 @@
             var interval = setInterval(function () {
                 var time = --wait.innerHTML;
                 if (time <= 0) {
-					location.href = history.length <= 1 ? "/" : "{$url}";
+					location.href = "{$url}";
                     clearInterval(interval);
                 }
             }, 1000);

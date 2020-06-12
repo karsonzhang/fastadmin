@@ -408,7 +408,6 @@ function _init() {
                 //Get the clicked link and the next element
                 var $this = $(this);
                 var checkElement = $this.next();
-
                 //Check if the next element is a menu and is visible
                 if ((checkElement.is('.treeview-menu')) && (checkElement.is(':visible')) && (!$('body').hasClass('sidebar-collapse'))) {
                     //Close the menu
@@ -418,6 +417,7 @@ function _init() {
                         //_this.layout.fix();
                     });
                     checkElement.parent("li").removeClass("active");
+                    checkElement.parent("li").removeClass('treeview-open');
                 }
                 //If the menu is not visible
                 else if ((checkElement.is('.treeview-menu')) && (!checkElement.is(':visible'))) {
@@ -429,6 +429,7 @@ function _init() {
                         var ul = parent.find('ul:visible').slideUp(animationSpeed);
                         //Remove the menu-open class from the parent
                         ul.removeClass('menu-open');
+                        parent.find('li.treeview').removeClass("treeview-open");
                     }
                     //Get the parent li
                     var parent_li = $this.parent("li");
@@ -442,6 +443,7 @@ function _init() {
                         //Fix the layout in case the sidebar stretches over the height of the window
                         _this.layout.fix();
                     });
+                    parent_li.addClass('treeview-open');
                 } else {
                     if (!$this.parent().hasClass("active")) {
                         $this.parent().addClass("active");

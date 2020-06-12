@@ -90,7 +90,8 @@ class User extends Model
         $user = self::get($user_id);
         if ($user && $money != 0) {
             $before = $user->money;
-            $after = $user->money + $money;
+            //$after = $user->money + $money;
+            $after = function_exists('bcadd') ? bcadd($user->money, $money, 2) : $user->money + $money;
             //更新会员信息
             $user->save(['money' => $after]);
             //写入日志

@@ -1,6 +1,6 @@
 /*
  FastAdmin Install SQL
- Date: 2020年04月23日
+ Date: 2020-06-11 22:11:09
 */
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -52,6 +52,27 @@ CREATE TABLE `fa_admin_log` (
   PRIMARY KEY (`id`),
   KEY `name` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT='管理员日志表';
+
+-- ----------------------------
+-- Table structure for fa_area
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_area`;
+CREATE TABLE `fa_area` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `pid` int(10) DEFAULT NULL COMMENT '父id',
+  `shortname` varchar(100) DEFAULT NULL COMMENT '简称',
+  `name` varchar(100) DEFAULT NULL COMMENT '名称',
+  `mergename` varchar(255) DEFAULT NULL COMMENT '全称',
+  `level` tinyint(4) DEFAULT NULL COMMENT '层级 0 1 2 省市区县',
+  `pinyin` varchar(100) DEFAULT NULL COMMENT '拼音',
+  `code` varchar(100) DEFAULT NULL COMMENT '长途区号',
+  `zip` varchar(100) DEFAULT NULL COMMENT '邮编',
+  `first` varchar(50) DEFAULT NULL COMMENT '首字母',
+  `lng` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT='地区表';
 
 -- ----------------------------
 -- Table structure for fa_attachment
@@ -337,7 +358,7 @@ CREATE TABLE `fa_ems`  (
   `code` varchar(10) NOT NULL DEFAULT '' COMMENT '验证码',
   `times` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '验证次数',
   `ip` varchar(30) NOT NULL DEFAULT '' COMMENT 'IP',
-  `createtime` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '创建时间',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT='邮箱验证码表';
 
@@ -418,7 +439,7 @@ CREATE TABLE `fa_user` (
   `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
   `level` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '等级',
   `gender` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别',
-  `birthday` date COMMENT '生日',
+  `birthday` date DEFAULT NULL COMMENT '生日',
   `bio` varchar(100) NOT NULL DEFAULT '' COMMENT '格言',
   `money` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '余额',
   `score` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分',
@@ -546,4 +567,24 @@ CREATE TABLE `fa_user_token` (
   `expiretime` int(10) DEFAULT NULL COMMENT '过期时间',
   PRIMARY KEY (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT='会员Token表';
+
+-- ----------------------------
+-- Table structure for fa_version
+-- ----------------------------
+DROP TABLE IF EXISTS `fa_version`;
+CREATE TABLE `fa_version`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `oldversion` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '旧版本号',
+  `newversion` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '新版本号',
+  `packagesize` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '包大小',
+  `content` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '升级内容',
+  `downloadurl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '下载地址',
+  `enforce` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '强制更新',
+  `createtime` int(10) DEFAULT NULL COMMENT '创建时间',
+  `updatetime` int(10) DEFAULT NULL COMMENT '更新时间',
+  `weigh` int(10) NOT NULL DEFAULT 0 COMMENT '权重',
+  `status` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '状态',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT='版本表';
+
 SET FOREIGN_KEY_CHECKS = 1;

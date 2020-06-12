@@ -13,7 +13,6 @@ use fast\Tree;
 class Rule extends Backend
 {
 
-
     /**
      * @var \app\admin\model\UserRule
      */
@@ -28,8 +27,7 @@ class Rule extends Backend
         $this->view->assign("statusList", $this->model->getStatusList());
         // 必须将结果集转换为数组
         $ruleList = collection($this->model->order('weigh', 'desc')->select())->toArray();
-        foreach ($ruleList as $k => &$v)
-        {
+        foreach ($ruleList as $k => &$v) {
             $v['title'] = __($v['title']);
             $v['remark'] = __($v['remark']);
         }
@@ -37,10 +35,10 @@ class Rule extends Backend
         Tree::instance()->init($ruleList);
         $this->rulelist = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0), 'title');
         $ruledata = [0 => __('None')];
-        foreach ($this->rulelist as $k => &$v)
-        {
-            if (!$v['ismenu'])
+        foreach ($this->rulelist as $k => &$v) {
+            if (!$v['ismenu']) {
                 continue;
+            }
             $ruledata[$v['id']] = $v['title'];
         }
         $this->view->assign('ruledata', $ruledata);
@@ -51,8 +49,7 @@ class Rule extends Backend
      */
     public function index()
     {
-        if ($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
             $list = $this->rulelist;
             $total = count($this->rulelist);
 
@@ -64,21 +61,40 @@ class Rule extends Backend
     }
 
     /**
+     * 添加
+     */
+    public function add()
+    {
+        if ($this->request->isPost()) {
+            $this->token();
+        }
+        return parent::add();
+    }
+
+    /**
+     * 编辑
+     */
+    public function edit($ids = null)
+    {
+        if ($this->request->isPost()) {
+            $this->token();
+        }
+        return parent::edit($ids);
+    }
+
+    /**
      * 删除
      */
     public function del($ids = "")
     {
-        if ($ids)
-        {
+        if ($ids) {
             $delIds = [];
-            foreach (explode(',', $ids) as $k => $v)
-            {
-                $delIds = array_merge($delIds, Tree::instance()->getChildrenIds($v, TRUE));
+            foreach (explode(',', $ids) as $k => $v) {
+                $delIds = array_merge($delIds, Tree::instance()->getChildrenIds($v, true));
             }
             $delIds = array_unique($delIds);
             $count = $this->model->where('id', 'in', $delIds)->delete();
-            if ($count)
-            {
+            if ($count) {
                 $this->success();
             }
         }

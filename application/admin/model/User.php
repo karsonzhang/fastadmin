@@ -101,6 +101,11 @@ class User extends Model
         return $value && !is_numeric($value) ? strtotime($value) : $value;
     }
 
+    protected function setBirthdayAttr($value)
+    {
+        return $value ? $value : null;
+    }
+
     public function group()
     {
         return $this->belongsTo('UserGroup', 'group_id', 'id', [], 'LEFT')->setEagerlyType(0);
