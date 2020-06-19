@@ -567,6 +567,14 @@ class Crud extends Command
 
             //循环所有字段,开始构造视图的HTML和JS信息
             foreach ($columnList as $k => $v) {
+                // 含有字段备注时，提取备注信息。
+                // '=>' 用于标识字段备注
+                $memo = '';
+                if (stripos($v['COLUMN_COMMENT'], '=>') !== false) {
+                    list($v['COLUMN_COMMENT'], $memo) = explode('=>', $v['COLUMN_COMMENT']);
+                    $memo = '<span class="help-block">' . $memo . '</span>';
+                }
+                
                 $field = $v['COLUMN_NAME'];
                 $itemArr = [];
                 // 这里构建Enum和Set类型的列表数据
@@ -765,10 +773,17 @@ class Crud extends Command
                         }
                         //如果是图片或文件
                         if ($isUpload) {
-                            $formAddElement = $this->getImageUpload($field, $formAddElement);
-                            $formEditElement = $this->getImageUpload($field, $formEditElement);
+                            $formAddElement = $this->getImageUpload($field, $formAddElement, $memo);
+                            $formEditElement = $this->getImageUpload($field, $formEditElement, $memo);
                         }
                     }
+
+                    //添加备注
+                    if ($memo && (!isset($isUpload) || !$isUpload)){
+                        $formAddElement = $formAddElement . $memo;
+                        $formEditElement = $formEditElement . $memo;
+                    }
+
                     //构造添加和编辑HTML信息
                     $addList[] = $this->getFormGroup($field, $formAddElement);
                     $editList[] = $this->getFormGroup($field, $formEditElement);
@@ -1385,7 +1400,7 @@ EOD;
      * @param string $content
      * @return string
      */
-    protected function getImageUpload($field, $content)
+    protected function getImageUpload($field, $content, $memo= '')
     {
         $uploadfilter = $selectfilter = '';
         if ($this->isMatchSuffix($field, $this->imageField)) {
@@ -1404,6 +1419,7 @@ EOD;
                 </div>
                 <span class="msg-box n-right" for="c-{$field}"></span>
             </div>
+            {$memo}
             {$previewcontainer}
 EOD;
     }
