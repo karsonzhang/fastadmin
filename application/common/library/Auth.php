@@ -71,6 +71,14 @@ class Auth
     }
 
     /**
+     * 兼容调用user模型的属性
+     */
+    public function __isset($name)
+    {
+        return isset($this->_user) ? isset($this->_user->$name) : false;
+    }
+
+    /**
      * 根据Token初始化
      *
      * @param string $token Token
