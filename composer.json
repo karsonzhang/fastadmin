@@ -22,7 +22,9 @@
         "karsonzhang/fastadmin-addons": "~1.1.11",
         "overtrue/pinyin": "~3.0",
         "phpoffice/phpspreadsheet": "^1.2",
-        "overtrue/wechat": "~4.1"
+        "overtrue/wechat": "4.2.11",
+        "league/oauth2-server": "8.0",
+        "topthink/think-queue": "v1.1.6"
     },
     "config": {
         "preferred-install": "dist"
