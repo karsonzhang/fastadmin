@@ -137,7 +137,7 @@
                                             <label for="row[{$item.name}]-no"><input id="row[{$item.name}]-no" name="row[{$item.name}]" type="radio" value="0" {$item.value?'':'checked'} data-tip="{$item.tip}" /> {:__('No')}</label>
                                             {/case}
                                             {case custom}
-                                            {$item.extend}
+                                            {$item.extend_html}
                                             {/case}
                                             {/switch}
                                         </div>
