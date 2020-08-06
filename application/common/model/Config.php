@@ -19,6 +19,7 @@ class Config extends Model
     protected $updateTime = false;
     // 追加属性
     protected $append = [
+        'extend_html'
     ];
 
     /**
@@ -72,7 +73,7 @@ class Config extends Model
         return $regexList;
     }
 
-    public function getExtendAttr($value, $data)
+    public function getExtendHtmlAttr($value, $data)
     {
         $result = preg_replace_callback("/\{([a-zA-Z]+)\}/", function ($matches) use ($data) {
             if (isset($data[$matches[1]])) {

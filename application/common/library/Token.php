@@ -108,7 +108,7 @@ class Token
      */
     public static function get($token, $default = false)
     {
-        return self::init()->get($token, $default);
+        return self::init()->get($token) ?: $default;
     }
 
     /**
@@ -148,7 +148,7 @@ class Token
     /**
      * 清除Token
      * @access public
-     * @param  string $token Token标记
+     * @param  int user_id 用户编号
      * @return boolean
      */
     public static function clear($user_id = null)
