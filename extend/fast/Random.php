@@ -42,7 +42,7 @@ class Random
     }
 
     /**
-     * 生成制定长度的无0随机数字
+     * 生成指定长度的无0随机数字
      *
      * @param int $len 长度
      * @return string
