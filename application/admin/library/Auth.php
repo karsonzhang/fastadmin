@@ -183,7 +183,9 @@ class Auth extends \fast\Auth
         if (Config::get('fastadmin.login_unique')) {
             $my = Admin::get($admin['id']);
             if (!$my || $my['token'] != $admin['token']) {
-                $this->logout();
+                $this->logined = false; //重置登录状态
+                Session::delete("admin");
+                Cookie::delete("keeplogin");
                 return false;
             }
         }
