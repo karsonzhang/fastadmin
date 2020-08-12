@@ -87,6 +87,7 @@ CREATE TABLE `fa_attachment` (
   `imageheight` varchar(30) NOT NULL DEFAULT '' COMMENT '高度',
   `imagetype` varchar(30) NOT NULL DEFAULT '' COMMENT '图片类型',
   `imageframes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '图片帧数',
+  `filename` varchar(100) NOT NULL DEFAULT '' COMMENT '文件名称',
   `filesize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `mimetype` varchar(100) NOT NULL DEFAULT '' COMMENT 'mime类型',
   `extparam` varchar(255) NOT NULL DEFAULT '' COMMENT '透传数据',
