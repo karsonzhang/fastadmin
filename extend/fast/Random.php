@@ -42,7 +42,7 @@ class Random
     }
 
     /**
-     * 数字和字母组合的随机字符串
+     * 生成指定长度的无0随机数字
      *
      * @param int $len 长度
      * @return string
