@@ -200,6 +200,7 @@ trait Backend
      */
     public function del($ids = "")
     {
+        $ids = $this->request->post("ids");
         if ($ids) {
             $pk = $this->model->getPk();
             $adminIds = $this->getDataLimitAdminIds();
@@ -307,6 +308,7 @@ trait Backend
     public function multi($ids = "")
     {
         $ids = $ids ? $ids : $this->request->param("ids");
+        $ids = $this->request->param("ids");
         if ($ids) {
             if ($this->request->has('params')) {
                 parse_str($this->request->post("params"), $values);

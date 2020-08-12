@@ -1394,12 +1394,12 @@ EOD;
         }
         $multiple = substr($field, -1) == 's' ? ' data-multiple="true"' : ' data-multiple="false"';
         $preview = ' data-preview-id="p-' . $field . '"';
-        $previewcontainer = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $field . '"></ul>' : '';
+        $previewcontainer = $preview ? '<ul class="row list-inline faupload-preview" id="p-' . $field . '"></ul>' : '';
         return <<<EOD
 <div class="input-group">
                 {$content}
                 <div class="input-group-addon no-border no-padding">
-                    <span><button type="button" id="plupload-{$field}" class="btn btn-danger plupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button type="button" id="faupload-{$field}" class="btn btn-danger faupload" data-input-id="c-{$field}"{$uploadfilter}{$multiple}{$preview}><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                     <span><button type="button" id="fachoose-{$field}" class="btn btn-primary fachoose" data-input-id="c-{$field}"{$selectfilter}{$multiple}><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                 </div>
                 <span class="msg-box n-right" for="c-{$field}"></span>

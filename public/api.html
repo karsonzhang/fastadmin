@@ -186,11 +186,12 @@
                     <div class="child collapse" id="验证接口">
                                                 <a href="javascript:;" data-id="23" class="list-group-item">检测邮箱</a>
                                                 <a href="javascript:;" data-id="24" class="list-group-item">检测用户名</a>
-                                                <a href="javascript:;" data-id="25" class="list-group-item">检测手机</a>
+                                                <a href="javascript:;" data-id="25" class="list-group-item">检测昵称</a>
                                                 <a href="javascript:;" data-id="26" class="list-group-item">检测手机</a>
-                                                <a href="javascript:;" data-id="27" class="list-group-item">检测邮箱</a>
-                                                <a href="javascript:;" data-id="28" class="list-group-item">检测手机验证码</a>
-                                                <a href="javascript:;" data-id="29" class="list-group-item">检测邮箱验证码</a>
+                                                <a href="javascript:;" data-id="27" class="list-group-item">检测手机</a>
+                                                <a href="javascript:;" data-id="28" class="list-group-item">检测邮箱</a>
+                                                <a href="javascript:;" data-id="29" class="list-group-item">检测手机验证码</a>
+                                                <a href="javascript:;" data-id="30" class="list-group-item">检测邮箱验证码</a>
                                             </div>
                                     </div>
             </div>
@@ -3137,7 +3138,7 @@
                     <div class="panel-heading" id="heading-25">
                         <h4 class="panel-title">
                             <span class="label label-success">GET</span>
-                            <a data-toggle="collapse" data-parent="#accordion25" href="#collapseOne25"> 检测手机 <span class="text-muted">/api/validate/check_mobile_available</span></a>
+                            <a data-toggle="collapse" data-parent="#accordion25" href="#collapseOne25"> 检测昵称 <span class="text-muted">/api/validate/check_nickname_available</span></a>
                         </h4>
                     </div>
                     <div id="collapseOne25" class="panel-collapse collapse">
@@ -3155,7 +3156,7 @@
 
                                 <div class="tab-pane active" id="info25">
                                     <div class="well">
-                                        检测手机                                    </div>
+                                        检测昵称                                    </div>
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><strong>Headers</strong></div>
                                         <div class="panel-body">
@@ -3176,10 +3177,10 @@
                                                 </thead>
                                                 <tbody>
                                                                                                         <tr>
-                                                        <td>mobile</td>
+                                                        <td>nickname</td>
                                                         <td>string</td>
                                                         <td>是</td>
-                                                        <td>手机号</td>
+                                                        <td>昵称</td>
                                                     </tr>
                                                                                                         <tr>
                                                         <td>id</td>
@@ -3204,10 +3205,10 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_mobile_available" method="get" name="form25" id="form25">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_nickname_available" method="get" name="form25" id="form25">
                                                                                                                 <div class="form-group">
-                                                            <label class="control-label" for="mobile">mobile</label>
-                                                            <input type="string" class="form-control input-sm" id="mobile" required placeholder="手机号" name="mobile">
+                                                            <label class="control-label" for="nickname">nickname</label>
+                                                            <input type="string" class="form-control input-sm" id="nickname" required placeholder="昵称" name="nickname">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="id">id</label>
@@ -3257,7 +3258,7 @@
                     <div class="panel-heading" id="heading-26">
                         <h4 class="panel-title">
                             <span class="label label-success">GET</span>
-                            <a data-toggle="collapse" data-parent="#accordion26" href="#collapseOne26"> 检测手机 <span class="text-muted">/api/validate/check_mobile_exist</span></a>
+                            <a data-toggle="collapse" data-parent="#accordion26" href="#collapseOne26"> 检测手机 <span class="text-muted">/api/validate/check_mobile_available</span></a>
                         </h4>
                     </div>
                     <div id="collapseOne26" class="panel-collapse collapse">
@@ -3301,6 +3302,12 @@
                                                         <td>是</td>
                                                         <td>手机号</td>
                                                     </tr>
+                                                                                                        <tr>
+                                                        <td>id</td>
+                                                        <td>string</td>
+                                                        <td>是</td>
+                                                        <td>排除会员ID</td>
+                                                    </tr>
                                                                                                     </tbody>
                                             </table>
                                                                                     </div>
@@ -3318,10 +3325,14 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_mobile_exist" method="get" name="form26" id="form26">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_mobile_available" method="get" name="form26" id="form26">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="mobile">mobile</label>
                                                             <input type="string" class="form-control input-sm" id="mobile" required placeholder="手机号" name="mobile">
+                                                        </div>
+                                                                                                                <div class="form-group">
+                                                            <label class="control-label" for="id">id</label>
+                                                            <input type="string" class="form-control input-sm" id="id" required placeholder="排除会员ID" name="id">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <button type="submit" class="btn btn-success send" rel="26">提交</button>
@@ -3367,7 +3378,7 @@
                     <div class="panel-heading" id="heading-27">
                         <h4 class="panel-title">
                             <span class="label label-success">GET</span>
-                            <a data-toggle="collapse" data-parent="#accordion27" href="#collapseOne27"> 检测邮箱 <span class="text-muted">/api/validate/check_email_exist</span></a>
+                            <a data-toggle="collapse" data-parent="#accordion27" href="#collapseOne27"> 检测手机 <span class="text-muted">/api/validate/check_mobile_exist</span></a>
                         </h4>
                     </div>
                     <div id="collapseOne27" class="panel-collapse collapse">
@@ -3385,7 +3396,7 @@
 
                                 <div class="tab-pane active" id="info27">
                                     <div class="well">
-                                        检测邮箱                                    </div>
+                                        检测手机                                    </div>
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><strong>Headers</strong></div>
                                         <div class="panel-body">
@@ -3409,7 +3420,7 @@
                                                         <td>mobile</td>
                                                         <td>string</td>
                                                         <td>是</td>
-                                                        <td>邮箱</td>
+                                                        <td>手机号</td>
                                                     </tr>
                                                                                                     </tbody>
                                             </table>
@@ -3428,10 +3439,10 @@
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_email_exist" method="get" name="form27" id="form27">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_mobile_exist" method="get" name="form27" id="form27">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="mobile">mobile</label>
-                                                            <input type="string" class="form-control input-sm" id="mobile" required placeholder="邮箱" name="mobile">
+                                                            <input type="string" class="form-control input-sm" id="mobile" required placeholder="手机号" name="mobile">
                                                         </div>
                                                                                                                 <div class="form-group">
                                                             <button type="submit" class="btn btn-success send" rel="27">提交</button>
@@ -3477,7 +3488,7 @@
                     <div class="panel-heading" id="heading-28">
                         <h4 class="panel-title">
                             <span class="label label-success">GET</span>
-                            <a data-toggle="collapse" data-parent="#accordion28" href="#collapseOne28"> 检测手机验证码 <span class="text-muted">/api/validate/check_sms_correct</span></a>
+                            <a data-toggle="collapse" data-parent="#accordion28" href="#collapseOne28"> 检测邮箱 <span class="text-muted">/api/validate/check_email_exist</span></a>
                         </h4>
                     </div>
                     <div id="collapseOne28" class="panel-collapse collapse">
@@ -3494,6 +3505,116 @@
                             <div class="tab-content">
 
                                 <div class="tab-pane active" id="info28">
+                                    <div class="well">
+                                        检测邮箱                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><strong>Headers</strong></div>
+                                        <div class="panel-body">
+                                                                                        无
+                                                                                    </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><strong>参数</strong></div>
+                                        <div class="panel-body">
+                                                                                        <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>名称</th>
+                                                        <th>类型</th>
+                                                        <th>必选</th>
+                                                        <th>描述</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                                                                        <tr>
+                                                        <td>mobile</td>
+                                                        <td>string</td>
+                                                        <td>是</td>
+                                                        <td>邮箱</td>
+                                                    </tr>
+                                                                                                    </tbody>
+                                            </table>
+                                                                                    </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><strong>正文</strong></div>
+                                        <div class="panel-body">
+                                            无                                        </div>
+                                    </div>
+                                </div><!-- #info -->
+
+                                <div class="tab-pane" id="sandbox28">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                                                                        <div class="panel panel-default">
+                                                <div class="panel-heading"><strong>参数</strong></div>
+                                                <div class="panel-body">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_email_exist" method="get" name="form28" id="form28">
+                                                                                                                <div class="form-group">
+                                                            <label class="control-label" for="mobile">mobile</label>
+                                                            <input type="string" class="form-control input-sm" id="mobile" required placeholder="邮箱" name="mobile">
+                                                        </div>
+                                                                                                                <div class="form-group">
+                                                            <button type="submit" class="btn btn-success send" rel="28">提交</button>
+                                                            <button type="reset" class="btn btn-info" rel="28">重置</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading"><strong>响应输出</strong></div>
+                                                <div class="panel-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12" style="overflow-x:auto">
+                                                            <pre id="response_headers28"></pre>
+                                                            <pre id="response28"></pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading"><strong>返回参数</strong></div>
+                                                <div class="panel-body">
+                                                                                                        无
+                                                                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- #sandbox -->
+
+                                <div class="tab-pane" id="sample28">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <pre id="sample_response28">无</pre>
+                                        </div>
+                                    </div>
+                                </div><!-- #sample -->
+
+                            </div><!-- .tab-content -->
+                        </div>
+                    </div>
+                </div>
+                                <div class="panel panel-default">
+                    <div class="panel-heading" id="heading-29">
+                        <h4 class="panel-title">
+                            <span class="label label-success">GET</span>
+                            <a data-toggle="collapse" data-parent="#accordion29" href="#collapseOne29"> 检测手机验证码 <span class="text-muted">/api/validate/check_sms_correct</span></a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne29" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" id="doctab29">
+                                <li class="active"><a href="#info29" data-toggle="tab">基础信息</a></li>
+                                <li><a href="#sandbox29" data-toggle="tab">在线测试</a></li>
+                                <li><a href="#sample29" data-toggle="tab">返回示例</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+
+                                <div class="tab-pane active" id="info29">
                                     <div class="well">
                                         检测手机验证码                                    </div>
                                     <div class="panel panel-default">
@@ -3544,13 +3665,13 @@
                                     </div>
                                 </div><!-- #info -->
 
-                                <div class="tab-pane" id="sandbox28">
+                                <div class="tab-pane" id="sandbox29">
                                     <div class="row">
                                         <div class="col-md-12">
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_sms_correct" method="get" name="form28" id="form28">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_sms_correct" method="get" name="form29" id="form29">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="mobile">mobile</label>
                                                             <input type="string" class="form-control input-sm" id="mobile" required placeholder="手机号" name="mobile">
@@ -3564,8 +3685,8 @@
                                                             <input type="string" class="form-control input-sm" id="event" required placeholder="事件" name="event">
                                                         </div>
                                                                                                                 <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="28">提交</button>
-                                                            <button type="reset" class="btn btn-info" rel="28">重置</button>
+                                                            <button type="submit" class="btn btn-success send" rel="29">提交</button>
+                                                            <button type="reset" class="btn btn-info" rel="29">重置</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -3575,8 +3696,8 @@
                                                 <div class="panel-body">
                                                     <div class="row">
                                                         <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers28"></pre>
-                                                            <pre id="response28"></pre>
+                                                            <pre id="response_headers29"></pre>
+                                                            <pre id="response29"></pre>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -3591,10 +3712,10 @@
                                     </div>
                                 </div><!-- #sandbox -->
 
-                                <div class="tab-pane" id="sample28">
+                                <div class="tab-pane" id="sample29">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <pre id="sample_response28">无</pre>
+                                            <pre id="sample_response29">无</pre>
                                         </div>
                                     </div>
                                 </div><!-- #sample -->
@@ -3604,26 +3725,26 @@
                     </div>
                 </div>
                                 <div class="panel panel-default">
-                    <div class="panel-heading" id="heading-29">
+                    <div class="panel-heading" id="heading-30">
                         <h4 class="panel-title">
                             <span class="label label-success">GET</span>
-                            <a data-toggle="collapse" data-parent="#accordion29" href="#collapseOne29"> 检测邮箱验证码 <span class="text-muted">/api/validate/check_ems_correct</span></a>
+                            <a data-toggle="collapse" data-parent="#accordion30" href="#collapseOne30"> 检测邮箱验证码 <span class="text-muted">/api/validate/check_ems_correct</span></a>
                         </h4>
                     </div>
-                    <div id="collapseOne29" class="panel-collapse collapse">
+                    <div id="collapseOne30" class="panel-collapse collapse">
                         <div class="panel-body">
 
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" id="doctab29">
-                                <li class="active"><a href="#info29" data-toggle="tab">基础信息</a></li>
-                                <li><a href="#sandbox29" data-toggle="tab">在线测试</a></li>
-                                <li><a href="#sample29" data-toggle="tab">返回示例</a></li>
+                            <ul class="nav nav-tabs" id="doctab30">
+                                <li class="active"><a href="#info30" data-toggle="tab">基础信息</a></li>
+                                <li><a href="#sandbox30" data-toggle="tab">在线测试</a></li>
+                                <li><a href="#sample30" data-toggle="tab">返回示例</a></li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
 
-                                <div class="tab-pane active" id="info29">
+                                <div class="tab-pane active" id="info30">
                                     <div class="well">
                                         检测邮箱验证码                                    </div>
                                     <div class="panel panel-default">
@@ -3674,13 +3795,13 @@
                                     </div>
                                 </div><!-- #info -->
 
-                                <div class="tab-pane" id="sandbox29">
+                                <div class="tab-pane" id="sandbox30">
                                     <div class="row">
                                         <div class="col-md-12">
                                                                                         <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>参数</strong></div>
                                                 <div class="panel-body">
-                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_ems_correct" method="get" name="form29" id="form29">
+                                                    <form enctype="application/x-www-form-urlencoded" role="form" action="/api/validate/check_ems_correct" method="get" name="form30" id="form30">
                                                                                                                 <div class="form-group">
                                                             <label class="control-label" for="email">email</label>
                                                             <input type="string" class="form-control input-sm" id="email" required placeholder="邮箱" name="email">
@@ -3694,8 +3815,8 @@
                                                             <input type="string" class="form-control input-sm" id="event" required placeholder="事件" name="event">
                                                         </div>
                                                                                                                 <div class="form-group">
-                                                            <button type="submit" class="btn btn-success send" rel="29">提交</button>
-                                                            <button type="reset" class="btn btn-info" rel="29">重置</button>
+                                                            <button type="submit" class="btn btn-success send" rel="30">提交</button>
+                                                            <button type="reset" class="btn btn-info" rel="30">重置</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -3705,8 +3826,8 @@
                                                 <div class="panel-body">
                                                     <div class="row">
                                                         <div class="col-md-12" style="overflow-x:auto">
-                                                            <pre id="response_headers29"></pre>
-                                                            <pre id="response29"></pre>
+                                                            <pre id="response_headers30"></pre>
+                                                            <pre id="response30"></pre>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -3721,10 +3842,10 @@
                                     </div>
                                 </div><!-- #sandbox -->
 
-                                <div class="tab-pane" id="sample29">
+                                <div class="tab-pane" id="sample30">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <pre id="sample_response29">无</pre>
+                                            <pre id="sample_response30">无</pre>
                                         </div>
                                     </div>
                                 </div><!-- #sample -->
@@ -3739,7 +3860,7 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on 2020-02-16 16:01:35                </div>
+                    Generated on 2020-08-12 21:00:33                </div>
                 <div class="col-md-6" align="right">
                     <a href="./" target="_blank">我的网站</a>
                 </div>

@@ -228,7 +228,7 @@ class Backend extends Controller
      */
     protected function loadlang($name)
     {
-        $name =  Loader::parseName($name);
+        $name = Loader::parseName($name);
         Lang::load(APP_PATH . $this->request->module() . '/lang/' . $this->request->langset() . '/' . str_replace('.', '/', $name) . '.php');
     }
 
@@ -456,8 +456,11 @@ class Backend extends Controller
             $where = function ($query) use ($word, $andor, $field, $searchfield, $custom) {
                 $logic = $andor == 'AND' ? '&' : '|';
                 $searchfield = is_array($searchfield) ? implode($logic, $searchfield) : $searchfield;
-                foreach ($word as $k => $v) {
-                    $query->where(str_replace(',', $logic, $searchfield), "like", "%{$v}%");
+                $word = array_filter($word);
+                if ($word) {
+                    foreach ($word as $k => $v) {
+                        $query->where(str_replace(',', $logic, $searchfield), "like", "%{$v}%");
+                    }
                 }
                 if ($custom && is_array($custom)) {
                     foreach ($custom as $k => $v) {
@@ -517,7 +520,7 @@ class Backend extends Controller
         $token = $this->request->post('__token__');
 
         //验证Token
-        if (!Validate::is($token, "token", ['__token__' => $token])) {
+        if (!Validate::make()->check(['__token__' => $token], ['__token__' => 'require|token'])) {
             $this->error(__('Token verification error'), '', ['__token__' => $this->request->token()]);
         }
 

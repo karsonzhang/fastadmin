@@ -57,7 +57,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             valign: 'middle',
         },
         config: {
-            firsttd: 'tbody tr td:first-child:not(:has(div.card-views))',
+            firsttd: 'tbody>tr>td.bs-checkbox',
             toolbar: '.toolbar',
             refreshbtn: '.btn-refresh',
             addbtn: '.btn-add',
@@ -169,10 +169,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 table.on('post-body.bs.table', function (e, settings, json, xhr) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', true);
-                    if ($(Table.config.firsttd, table).find("input[type='checkbox'][data-index]").size() > 0) {
-                        // 挺拽选择,需要重新绑定事件
+                    if ($(Table.config.firsttd + ":first", table).find("input[type='checkbox'][data-index]").size() > 0) {
+                        // 拖拽选择,需要重新绑定事件
                         require(['drag', 'drop'], function () {
-                            $(Table.config.firsttd, table).drag("start", function (ev, dd) {
+                            var firsttd = $(Table.config.firsttd, table);
+                            firsttd.drag("start", function (ev, dd) {
                                 return $('<div class="selection" />').css('opacity', .65).appendTo(document.body);
                             }).drag(function (ev, dd) {
                                 $(dd.proxy).css({
@@ -184,7 +185,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             }).drag("end", function (ev, dd) {
                                 $(dd.proxy).remove();
                             });
-                            $(Table.config.firsttd, table).drop("start", function () {
+                            firsttd.drop("start", function () {
                                 Table.api.toggleattr(this);
                             }).drop(function () {
                                 Table.api.toggleattr(this);
@@ -231,7 +232,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 // 导入按钮事件
                 if ($(Table.config.importbtn, toolbar).size() > 0) {
                     require(['upload'], function (Upload) {
-                        Upload.api.plupload($(Table.config.importbtn, toolbar), function (data, ret) {
+                        Upload.api.upload($(Table.config.importbtn, toolbar), function (data, ret) {
                             Fast.api.ajax({
                                 url: options.extend.import_url,
                                 data: {file: data.url},
@@ -382,8 +383,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 var options = table.bootstrapTable('getOptions');
                 var data = element ? $(element).data() : {};
                 var ids = ($.isArray(ids) ? ids.join(",") : ids);
-                var url = typeof data.url !== "undefined" ? data.url : (action == "del" ? options.extend.del_url : options.extend.multi_url);
-                url = this.replaceurl(url, {ids: ids}, table);
+                var url = typeof data.url !== "undefined" ? Table.api.replaceurl(data.url, {ids: ids}, table) : (action == "del" ? options.extend.del_url : options.extend.multi_url);
                 var params = typeof data.params !== "undefined" ? (typeof data.params == 'object' ? $.param(data.params) : data.params) : '';
                 var options = {url: url, data: {action: action, ids: ids, params: params}};
                 Fast.api.ajax(options, function (data, ret) {

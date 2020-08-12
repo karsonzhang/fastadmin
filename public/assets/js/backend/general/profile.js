@@ -38,12 +38,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'upload'], function (
             Table.api.bindevent(table);//当内容渲染完成后
 
             // 给上传按钮添加上传成功事件
-            $("#plupload-avatar").data("upload-success", function (data) {
+            $("#faupload-avatar").data("upload-success", function (data) {
                 var url = Backend.api.cdnurl(data.url);
                 $(".profile-user-img").prop("src", url);
                 Toastr.success("上传成功！");
             });
-            
+
             // 给表单绑定事件
             Form.api.bindevent($("#update-form"), function () {
                 $("input[name='row[password]']").val('');

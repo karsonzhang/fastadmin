@@ -145,7 +145,7 @@ class Frontend extends Controller
         $token = $this->request->post('__token__');
 
         //验证Token
-        if (!Validate::is($token, "token", ['__token__' => $token])) {
+        if (!Validate::make()->check(['__token__' => $token], ['__token__' => 'require|token'])) {
             $this->error(__('Token verification error'), '', ['__token__' => $this->request->token()]);
         }
 

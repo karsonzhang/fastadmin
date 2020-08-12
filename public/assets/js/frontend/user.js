@@ -74,7 +74,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
         },
         profile: function () {
             // 给上传按钮添加上传成功事件
-            $("#plupload-avatar").data("upload-success", function (data) {
+            $("#faupload-avatar").data("upload-success", function (data) {
                 var url = Fast.api.cdnurl(data.url);
                 $(".profile-user-img").prop("src", url);
                 Toastr.success(__('Upload successful'));

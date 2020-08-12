@@ -10,6 +10,7 @@ return [
     'Imagetype'          => '图片类型',
     'Imageframes'        => '图片帧数',
     'Preview'            => '预览',
+    'Filename'           => '文件名',
     'Filesize'           => '文件大小',
     'Mimetype'           => 'Mime类型',
     'Extparam'           => '透传数据',

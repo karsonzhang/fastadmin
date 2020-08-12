@@ -164,7 +164,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             // 离线安装
             require(['upload'], function (Upload) {
-                Upload.api.plupload("#plupload-addon", function (data, ret) {
+                Upload.api.upload("#faupload-addon", function (data, ret) {
                     Config['addons'][data.addon.name] = data.addon;
                     Toastr.success(ret.msg);
                     operate(data.addon.name, 'enable', false);

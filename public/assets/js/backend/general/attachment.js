@@ -27,11 +27,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'admin_id', title: __('Admin_id'), visible: false, addClass: "selectpage", extend: "data-source='auth/admin/index' data-field='nickname'"},
                         {field: 'user_id', title: __('User_id'), visible: false, addClass: "selectpage", extend: "data-source='user/user/index' data-field='nickname'"},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
-                        {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url},
-                        {field: 'imagewidth', title: __('Imagewidth'), sortable: true},
-                        {field: 'imageheight', title: __('Imageheight'), sortable: true},
-                        {field: 'imagetype', title: __('Imagetype'), formatter: Table.api.formatter.search},
-                        {field: 'storage', title: __('Storage'), formatter: Table.api.formatter.search},
+                        {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url, visible: false},
+                        {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
                         {
                             field: 'filesize', title: __('Filesize'), operate: 'BETWEEN', sortable: true, formatter: function (value, row, index) {
                                 var size = parseFloat(value);
@@ -39,6 +36,10 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                                 return (size / Math.pow(1024, i)).toFixed(i < 2 ? 0 : 2) * 1 + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][i];
                             }
                         },
+                        {field: 'imagewidth', title: __('Imagewidth'), sortable: true},
+                        {field: 'imageheight', title: __('Imageheight'), sortable: true},
+                        {field: 'imagetype', title: __('Imagetype'), formatter: Table.api.formatter.search, operate: 'like'},
+                        {field: 'storage', title: __('Storage'), formatter: Table.api.formatter.search, operate: 'like'},
                         {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},
                         {
                             field: 'createtime',
@@ -105,6 +106,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'admin_id', title: __('Admin_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'user_id', title: __('User_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
+                        {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
                         {field: 'imagewidth', title: __('Imagewidth'), operate: false},
                         {field: 'imageheight', title: __('Imageheight'), operate: false},
                         {
@@ -143,7 +145,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             // 为表格绑定事件
             Table.api.bindevent(table);
             require(['upload'], function (Upload) {
-                Upload.api.plupload($("#toolbar .plupload"), function () {
+                Upload.api.faupload($("#toolbar .faupload"), function () {
                     $(".btn-refresh").trigger("click");
                 });
             });

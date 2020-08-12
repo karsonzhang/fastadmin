@@ -19,12 +19,12 @@
         "topthink/framework": "~5.0.24",
         "topthink/think-captcha": "^1.0",
         "phpmailer/phpmailer": "~6.1.6",
-        "karsonzhang/fastadmin-addons": "~1.1.11",
+        "karsonzhang/fastadmin-addons": "~1.2.0",
         "overtrue/pinyin": "~3.0",
         "phpoffice/phpspreadsheet": "^1.2",
         "overtrue/wechat": "4.2.11",
-        "league/oauth2-server": "8.0",
-        "topthink/think-queue": "v1.1.6"
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "config": {
         "preferred-install": "dist"

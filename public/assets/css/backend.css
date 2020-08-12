@@ -119,6 +119,20 @@ table.table-template {
   right: 0;
   top: 0;
 }
+.sp_container .sp_element_box {
+  overflow: unset;
+}
+.sp_container .sp_element_box > li.input_box {
+  position: unset;
+}
+.sp_container .sp_element_box .msg-box {
+  right: -24px;
+}
+@media (max-width: 767px) {
+  .sp_container .sp_element_box .msg-box {
+    left: inherit;
+  }
+}
 .toast-top-right-index {
   top: 62px;
   right: 12px;
@@ -132,6 +146,12 @@ table.table-template {
   line-height: 1;
   margin-bottom: -5px;
   padding: 10px 20px;
+}
+select.bs-select-hidden,
+select.selectpicker {
+  display: inherit !important;
+  max-height: 31px;
+  overflow: hidden;
 }
 .img-center {
   margin: 0 auto;
@@ -599,6 +619,7 @@ form.form-horizontal .control-label {
 .nice-validator select,
 .nice-validator textarea,
 .nice-validator [contenteditable] {
+  vertical-align: top;
   display: inline-block;
   *display: inline;
   *zoom: 1;
@@ -608,23 +629,29 @@ form.form-horizontal .control-label {
   display: inherit;
 }
 /*预览区域*/
-.plupload-preview {
+.plupload-preview,
+.faupload-preview {
   padding: 0 10px;
   margin-bottom: 0;
 }
-.plupload-preview li {
+.plupload-preview li,
+.faupload-preview li {
   margin-top: 15px;
 }
-.plupload-preview .thumbnail {
+.plupload-preview .thumbnail,
+.faupload-preview .thumbnail {
   margin-bottom: 10px;
 }
-.plupload-preview a {
+.plupload-preview a,
+.faupload-preview a {
   display: block;
 }
-.plupload-preview a:first-child {
+.plupload-preview a:first-child,
+.faupload-preview a:first-child {
   height: 90px;
 }
-.plupload-preview a img {
+.plupload-preview a img,
+.faupload-preview a img {
   height: 80px;
   object-fit: cover;
 }
@@ -877,7 +904,7 @@ table.table-nowrap thead > tr > th {
   margin: 0;
   padding: 0;
 }
-.n-bootstrap .input-group > .n-right {
+.input-group > .msg-box.n-right {
   position: absolute;
 }
 @media (min-width: 564px) {

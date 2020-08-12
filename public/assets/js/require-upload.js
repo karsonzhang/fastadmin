@@ -1,62 +1,21 @@
-define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, Plupload, Template) {
+define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, Dropzone, Template) {
     var Upload = {
             list: {},
+            options: {},
             config: {
                 container: document.body,
-                classname: '.plupload:not([initialized])',
+                classname: '.plupload:not([initialized]),.faupload:not([initialized])',
                 previewtpl: '<li class="col-xs-3"><a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" class="thumbnail"><img src="<%=fullurl%>" onerror="this.src=\'' + Fast.api.fixurl("ajax/icon") + '?suffix=<%=suffix%>\';this.onerror=null;" class="img-responsive"></a><a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a></li>',
             },
             events: {
-                onInit: function (up) {
-                    //修复少数安卓浏览器无法上传图片的Bug
-                    var input = $("input[type=file]", up.settings.container);
-                    if (input && input.prop("accept") && input.prop("accept").match(/image\//)) {
-                        input.prop("accept", "image/jpg," + input.prop("accept"));
-                    }
-                },
-                //初始化完成
-                onPostInit: function (up) {
-
-                },
-                //文件添加成功后
-                onFileAdded: function (up, files) {
-                    var button = up.settings.button;
-                    $(button).data("bakup-html", $(button).html());
-                    var maxcount = $(button).data("maxcount");
-                    var input_id = $(button).data("input-id") ? $(button).data("input-id") : "";
-                    maxcount = typeof maxcount !== "undefined" ? maxcount : 0;
-                    if (maxcount > 0 && input_id) {
-                        var inputObj = $("#" + input_id);
-                        if (inputObj.size() > 0) {
-                            var value = $.trim(inputObj.val());
-                            var nums = value === '' ? 0 : value.split(/\,/).length;
-                            var remains = maxcount - nums;
-                            if (files.length > remains) {
-                                for (var i = 0; i < files.length; i++) {
-                                    up.removeFile(files[i]);
-                                }
-                                Toastr.error(__('You can upload up to %d file%s', remains));
-                                return false;
-                            }
-                        }
-                    }
-                    //添加后立即上传
-                    setTimeout(function () {
-                        up.start();
-                    }, 1);
-                },
-                //上传进行中的回调
-                onUploadProgress: function (up, file) {
-
-                },
-                //上传之前的回调
-                onBeforeUpload: function (up, file) {
+                //初始化
+                onInit: function () {
 
                 },
                 //上传成功的回调
-                onUploadSuccess: function (up, ret) {
-                    var button = up.settings.button;
-                    var onUploadSuccess = up.settings.onUploadSuccess;
+                onUploadSuccess: function (up, ret, file) {
+                    var button = up.element;
+                    var onUploadSuccess = up.options.onUploadSuccess;
                     var data = typeof ret.data !== 'undefined' ? ret.data : null;
                     //上传成功后回调
                     if (button) {
@@ -92,9 +51,9 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     }
                 },
                 //上传错误的回调
-                onUploadError: function (up, ret) {
-                    var button = up.settings.button;
-                    var onUploadError = up.settings.onUploadError;
+                onUploadError: function (up, ret, file) {
+                    var button = up.element;
+                    var onUploadError = up.options.onUploadError;
                     var data = typeof ret.data !== 'undefined' ? ret.data : null;
                     if (button) {
                         var onDomUploadError = $(button).data("upload-error");
@@ -119,7 +78,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                     Toastr.error(ret.msg + "(code:" + ret.code + ")");
                 },
                 //服务器响应数据后
-                onUploadResponse: function (response) {
+                onUploadResponse: function (response, up, file) {
                     try {
                         var ret = typeof response === 'object' ? response : JSON.parse(response);
                         if (!ret.hasOwnProperty('code')) {
@@ -132,8 +91,8 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                 },
                 //上传全部结束后
                 onUploadComplete: function (up, files) {
-                    var button = up.settings.button;
-                    var onUploadComplete = up.settings.onUploadComplete;
+                    var button = up.element;
+                    var onUploadComplete = up.options.onUploadComplete;
                     if (button) {
                         var onDomUploadComplete = $(button).data("upload-complete");
                         if (onDomUploadComplete) {
@@ -157,8 +116,8 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                 }
             },
             api: {
-                //Plupload上传
-                plupload: function (element, onUploadSuccess, onUploadError, onUploadComplete) {
+                //上传接口
+                upload: function (element, onUploadSuccess, onUploadError, onUploadComplete) {
                     element = typeof element === 'undefined' ? Upload.config.classname : element;
                     $(element, Upload.config.container).each(function () {
                         if ($(this).attr("initialized")) {
@@ -169,6 +128,7 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                         var id = $(this).prop("id");
                         var url = $(this).data("url");
                         var maxsize = $(this).data("maxsize");
+                        var maxcount = $(this).data("maxcount");
                         var mimetype = $(this).data("mimetype");
                         var multipart = $(this).data("multipart");
                         var multiple = $(this).data("multiple");
@@ -189,65 +149,136 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                         multipart = typeof multipart !== "undefined" ? multipart : Config.upload.multipart;
                         //是否支持批量上传
                         multiple = typeof multiple !== "undefined" ? multiple : Config.upload.multiple;
-                        var mimetypeArr = new Array();
-                        //支持后缀和Mimetype格式,以,分隔
-                        if (mimetype && mimetype !== "*" && mimetype.indexOf("/") === -1) {
-                            var tempArr = mimetype.split(',');
-                            for (var i = 0; i < tempArr.length; i++) {
-                                mimetypeArr.push({title: __('Files'), extensions: tempArr[i]});
-                            }
-                            mimetype = mimetypeArr;
-                        }
-                        //生成Plupload实例
-                        Upload.list[id] = new Plupload.Uploader({
-                            runtimes: 'html5,flash,silverlight,html4',
-                            multi_selection: multiple, //是否允许多选批量上传
-                            browse_button: id, // 浏览按钮的ID
-                            container: $(this).parent().get(0), //取按钮的上级元素
-                            flash_swf_url: '/assets/libs/plupload/js/Moxie.swf',
-                            silverlight_xap_url: '/assets/libs/plupload/js/Moxie.xap',
-                            drop_element: [id, $(this).data("input-id")],
-                            filters: {
-                                max_file_size: maxsize,
-                                mime_types: mimetype,
-                            },
+                        //后缀特殊处理
+                        mimetype = mimetype.split(",").map(function (k) {
+                            return k.indexOf("/") > -1 ? k : (!k || k === "*" || k.charAt(0) === "." ? k : "." + k);
+                        }).join(",");
+
+                        //最大文件限制转换成mb
+                        var maxFilesize = (function (maxsize) {
+                            var matches = maxsize.toString().match(/^([0-9\.]+)(\w+)$/);
+                            var size = matches ? parseFloat(matches[1]) : parseFloat(maxsize),
+                                unit = matches ? matches[2].toLowerCase() : 'b';
+                            var unitDict = {'b': 0, 'k': 1, 'kb': 1, 'm': 2, 'mb': 2, 'gb': 3, 'g': 3, 'tb': 4, 't': 4};
+                            var y = typeof unitDict[unit] !== 'undefined' ? unitDict[unit] : 0;
+                            var bytes = size * Math.pow(1024, y);
+                            return bytes / Math.pow(1024, 2);
+                        }(maxsize));
+
+                        var options = $("#" + id).data() || {};
+                        delete options.success;
+                        delete options.url;
+                        multipart = $.isArray(multipart) ? {} : multipart;
+
+                        Upload.list[id] = new Dropzone("#" + id, $.extend({
                             url: url,
-                            multipart_params: $.isArray(multipart) ? {} : multipart,
-                            init: {
-                                Init: Upload.events.onInit,
-                                PostInit: Upload.events.onPostInit,
-                                FilesAdded: Upload.events.onFileAdded,
-                                BeforeUpload: Upload.events.onBeforeUpload,
-                                UploadProgress: function (up, file) {
-                                    var button = up.settings.button;
-                                    $(button).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + file.percent + "%");
-                                    Upload.events.onUploadProgress(up, file);
-                                },
-                                FileUploaded: function (up, file, info) {
-                                    var button = up.settings.button;
-                                    //还原按钮文字及状态
-                                    $(button).prop("disabled", false).html($(button).data("bakup-html"));
-                                    var ret = Upload.events.onUploadResponse(info.response, info, up, file);
-                                    file.ret = ret;
-                                    if (ret.code === 1) {
-                                        Upload.events.onUploadSuccess(up, ret, file);
-                                    } else {
-                                        Upload.events.onUploadError(up, ret, file);
-                                    }
-                                },
-                                UploadComplete: Upload.events.onUploadComplete,
-                                Error: function (up, err) {
-                                    var button = up.settings.button;
-                                    $(button).prop("disabled", false).html($(button).data("bakup-html"));
-                                    var ret = {code: err.code, msg: err.message, data: null};
-                                    Upload.events.onUploadError(up, ret);
+                            params: function (files, xhr, chunk) {
+                                var params = multipart;
+                                if (chunk) {
+                                    return $.extend({}, params, {
+                                        filesize: chunk.file.size,
+                                        filename: chunk.file.name,
+                                        chunkid: chunk.file.upload.uuid,
+                                        chunkindex: chunk.index,
+                                        chunkcount: chunk.file.upload.totalChunkCount,
+                                        chunksize: this.options.chunkSize,
+                                        chunkfilesize: chunk.dataBlock.data.size,
+                                        width: chunk.file.width || 0,
+                                        height: chunk.file.height || 0,
+                                        type: chunk.file.type,
+                                    });
                                 }
+                                return params;
+                            },
+                            maxFilesize: maxFilesize,
+                            acceptedFiles: mimetype,
+                            maxFiles: (maxcount && parseInt(maxcount) > 1 ? maxcount : (multiple ? null : 1)),
+                            previewsContainer: false,
+                            dictDefaultMessage: __("Drop files here to upload"),
+                            dictFallbackMessage: __("Your browser does not support drag'n'drop file uploads"),
+                            dictFallbackText: __("Please use the fallback form below to upload your files like in the olden days"),
+                            dictFileTooBig: __("File is too big (%sMiB), Max filesize: %sMiB", "{{filesize}}", "{{maxFilesize}}"),
+                            dictInvalidFileType: __("You can't upload files of this type"),
+                            dictResponseError: __("Server responded with %s code.", "{{statusCode}}"),
+                            dictCancelUpload: __("Cancel upload"),
+                            dictUploadCanceled: __("Upload canceled"),
+                            dictCancelUploadConfirmation: __("Are you sure you want to cancel this upload?"),
+                            dictRemoveFile: __("Remove file"),
+                            dictMaxFilesExceeded: __("You can only upload a maximum of %s files", "{{maxFiles}}"),
+                            init: function () {
+                                Upload.events.onInit.call(this);
+                                //必须添加dz-message，否则点击icon无法唤起上传窗口
+                                $(">i", this.element).addClass("dz-message");
+                                this.options.elementHtml = $(this.element).html();
+                            },
+                            addedfiles: function (files) {
+                                if (this.options.maxFiles && this.options.maxFiles > 0 && this.options.inputId) {
+                                    var inputObj = $("#" + this.options.inputId);
+                                    if (inputObj.size() > 0) {
+                                        var value = $.trim(inputObj.val());
+                                        var nums = value === '' ? 0 : value.split(/\,/).length;
+                                        var remain = this.options.maxFiles - nums;
+                                        if (remain === 0 || files.length > remain) {
+                                            files = Array.prototype.slice.call(files, remain);
+                                            for (var i = 0; i < files.length; i++) {
+                                                this.removeFile(files[i]);
+                                            }
+                                            Toastr.error(__("You can only upload a maximum of %s files", this.options.maxFiles));
+                                        }
+                                    }
+                                }
+                            },
+                            success: function (file, response) {
+                                var ret = Upload.events.onUploadResponse(response, this, file);
+                                file.ret = ret;
+                                if (ret.code === 1) {
+                                    Upload.events.onUploadSuccess(this, ret, file);
+                                } else {
+                                    Upload.events.onUploadError(this, ret, file);
+                                }
+                            },
+                            error: function (file, response, xhr) {
+                                var ret = {code: 0, data: null, msg: response};
+                                Upload.events.onUploadError(this, ret, file);
+                            },
+                            uploadprogress: function (file, progress, bytesSent) {
+
+                            },
+                            totaluploadprogress: function (progress, bytesSent) {
+                                if (this.getActiveFiles().length > 0) {
+                                    $(this.element).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + Math.floor(progress) + "%");
+                                }
+                            },
+                            queuecomplete: function () {
+                                Upload.events.onUploadComplete(this, this.files);
+                                this.removeAllFiles(true);
+                                $(this.element).prop("disabled", false).html(this.options.elementHtml);
+                            },
+                            chunkSuccess: function (chunk, file, response) {
+                            },
+                            chunksUploaded: function (file, done) {
+                                var that = this;
+                                Fast.api.ajax({
+                                    url: this.options.url,
+                                    data: {
+                                        action: 'merge',
+                                        filesize: file.size,
+                                        filename: file.name,
+                                        chunkid: file.upload.uuid,
+                                        chunkcount: file.upload.totalChunkCount,
+                                    }
+                                }, function (data, ret) {
+                                    done(JSON.stringify(ret));
+                                    return false;
+                                }, function (data, ret) {
+                                    file.accepted = false;
+                                    that._errorProcessing([file], ret.msg);
+                                });
                             },
                             onUploadSuccess: onUploadSuccess,
                             onUploadError: onUploadError,
                             onUploadComplete: onUploadComplete,
-                            button: that
-                        });
+                        }, Upload.options, options));
 
                         //拖动排序
                         if (preview_id && multiple) {
@@ -335,70 +366,46 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                             });
                         }
                         if (input_id) {
-                            //粘贴上传
-                            $("body").on('paste', "#" + input_id, function (event) {
-                                var that = this;
-                                var image, pasteEvent;
-                                pasteEvent = event.originalEvent;
-                                if (pasteEvent.clipboardData && pasteEvent.clipboardData.items) {
-                                    image = Upload.api.getImageFromClipboard(pasteEvent);
-                                    if (image) {
-                                        event.preventDefault();
-                                        var button = $(".plupload[data-input-id='" + $(that).attr("id") + "']");
-                                        Upload.api.send(image, function (data) {
-                                            var urlArr = [];
-                                            if (button && button.data("multiple") && $(that).val() !== '') {
-                                                urlArr.push($(that).val());
-                                            }
-                                            urlArr.push(data.url);
-                                            $(that).val(urlArr.join(",")).trigger("change").trigger("validate");
-                                        });
+                            //粘贴上传、拖拽上传
+                            $("body").on('paste drop', "#" + input_id, function (event) {
+                                var originEvent = event.originalEvent;
+                                var button = $(".plupload[data-input-id='" + $(this).attr("id") + "'],.faupload[data-input-id='" + $(this).attr("id") + "']");
+                                if (event.type === 'paste' && originEvent.clipboardData && originEvent.clipboardData.items) {
+                                    var items = originEvent.clipboardData.items;
+                                    if ((items.length === 1 && items[0].type.indexOf("text") > -1) || (items.length === 2 && items[1].type.indexOf("text") > -1)) {
+
+                                    } else {
+                                        Upload.list[button.attr("id")].paste(originEvent);
+                                        return false;
                                     }
                                 }
-                            });
-                            //拖拽上传
-                            $("body").on('drop', "#" + input_id, function (event) {
-                                var that = this;
-                                var images, pasteEvent;
-                                pasteEvent = event.originalEvent;
-                                if (pasteEvent.dataTransfer && pasteEvent.dataTransfer.files) {
-                                    images = Upload.api.getImageFromDrop(pasteEvent);
-                                    if (images.length > 0) {
-                                        event.preventDefault();
-                                        var button = $(".plupload[data-input-id='" + $(that).attr("id") + "']");
-                                        $.each(images, function (i, image) {
-                                            Upload.api.send(image, function (data) {
-                                                var urlArr = [];
-                                                if (button && button.data("multiple") && $(that).val() !== '') {
-                                                    urlArr.push($(that).val());
-                                                }
-                                                urlArr.push(data.url);
-                                                $(that).val(urlArr.join(",")).trigger("change").trigger("validate");
-                                            });
-                                        });
-                                    }
+                                if (event.type === 'drop' && originEvent.dataTransfer && originEvent.dataTransfer.files) {
+                                    Upload.list[button.attr("id")].drop(originEvent);
+                                    return false;
                                 }
                             });
                         }
-                        Upload.list[id].init();
                     });
+                },
+                /**
+                 * @deprecated Use upload instead.
+                 */
+                plupload: function (element, onUploadSuccess, onUploadError, onUploadComplete) {
+                    return Upload.api.upload(element, onUploadSuccess, onUploadError, onUploadComplete);
                 },
                 // AJAX异步上传
                 send: function (file, onUploadSuccess, onUploadError, onUploadComplete) {
                     var index = Layer.msg(__('Uploading'), {offset: 't', time: 0});
-                    var id = Plupload.guid();
-                    var _onPostInit = Upload.events.onPostInit;
-                    Upload.events.onPostInit = function () {
-                        // 当加载完成后添加文件并上传
-                        Upload.list[id].addFile(file);
-                        //Upload.list[id].start();
-                    };
-                    $('<button type="button" id="' + id + '" class="btn btn-danger hidden plupload" />').appendTo("body");
+                    var id = "dropzone-" + Dropzone.uuidv4();
+                    $('<button type="button" id="' + id + '" class="btn btn-danger hidden faupload" />').appendTo("body");
                     $("#" + id).data("upload-complete", function (files) {
-                        Upload.events.onPostInit = _onPostInit;
                         Layer.close(index);
+                        Upload.list[id].removeAllFiles(true);
                     });
-                    Upload.api.plupload("#" + id, onUploadSuccess, onUploadError, onUploadComplete);
+                    Upload.api.upload("#" + id, onUploadSuccess, onUploadError, onUploadComplete);
+                    setTimeout(function () {
+                        Upload.list[id].addFile(file);
+                    }, 1);
                 },
                 custom: {
                     //自定义上传完成回调
@@ -406,31 +413,6 @@ define(['jquery', 'bootstrap', 'plupload', 'template'], function ($, undefined, 
                         console.log(this, response);
                         alert("Custom Callback,Response URL:" + response.url);
                     },
-                },
-                getImageFromClipboard: function (data) {
-                    var i, item;
-                    i = 0;
-                    while (i < data.clipboardData.items.length) {
-                        item = data.clipboardData.items[i];
-                        if (item.type.indexOf("image") !== -1) {
-                            return item.getAsFile() || false;
-                        }
-                        i++;
-                    }
-                    return false;
-                },
-                getImageFromDrop: function (data) {
-                    var i, item, images;
-                    i = 0;
-                    images = [];
-                    while (i < data.dataTransfer.files.length) {
-                        item = data.dataTransfer.files[i];
-                        if (item.type.indexOf("image") !== -1) {
-                            images.push(item);
-                        }
-                        i++;
-                    }
-                    return images;
                 }
             }
         }

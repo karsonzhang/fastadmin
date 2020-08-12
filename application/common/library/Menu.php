@@ -90,6 +90,21 @@ class Menu
     }
 
     /**
+     * 升级菜单
+     * @param string $name 插件名称
+     * @param array  $menu 新菜单
+     * @return bool
+     */
+    public static function upgrade($name, $menu)
+    {
+        $old = AuthRule::where('name', 'like', "{$name}%")->select();
+        $old = collection($old)->toArray();
+        $old = array_column($old, null, 'name');
+        self::menuUpdate($menu, $old);
+        return true;
+    }
+
+    /**
      * 导出指定名称的菜单规则
      * @param string $name
      * @return array
@@ -107,6 +122,44 @@ class Menu
             $menuList = Tree::instance()->init($ruleList)->getTreeArray($menu['id']);
         }
         return $menuList;
+    }
+
+    /**
+     * 菜单升级
+     * @param array $newMenu
+     * @param array $oldMenu
+     * @param int   $parent
+     * @throws Exception
+     */
+    private static function menuUpdate($newMenu, $oldMenu, $parent = 0)
+    {
+        if (!is_numeric($parent)) {
+            $parentRule = AuthRule::getByName($parent);
+            $pid = $parentRule ? $parentRule['id'] : 0;
+        } else {
+            $pid = $parent;
+        }
+        $allow = array_flip(['file', 'name', 'title', 'icon', 'condition', 'remark', 'ismenu', 'weigh']);
+        foreach ($newMenu as $k => $v) {
+            $hasChild = isset($v['sublist']) && $v['sublist'] ? true : false;
+            $data = array_intersect_key($v, $allow);
+            $data['ismenu'] = isset($data['ismenu']) ? $data['ismenu'] : ($hasChild ? 1 : 0);
+            $data['icon'] = isset($data['icon']) ? $data['icon'] : ($hasChild ? 'fa fa-list' : 'fa fa-circle-o');
+            $data['pid'] = $pid;
+            $data['status'] = 'normal';
+            try {
+                if (!isset($oldMenu[$data['name']])) {
+                    $menu = AuthRule::create($data);
+                } else {
+                    $menu = $oldMenu[$data['name']];
+                }
+                if ($hasChild) {
+                    self::menuUpdate($v['sublist'], $oldMenu, $menu['id']);
+                }
+            } catch (PDOException $e) {
+                throw new Exception($e->getMessage());
+            }
+        }
     }
 
     /**

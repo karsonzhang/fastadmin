@@ -221,10 +221,22 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     });
                 }
             },
+            /**
+             * 绑定上传事件
+             * @param form
+             * @deprecated Use faupload instead.
+             */
             plupload: function (form) {
-                //绑定plupload上传元素事件
-                if ($(".plupload", form).size() > 0) {
-                    Upload.api.plupload($(".plupload", form));
+                Form.events.faupload(form);
+            },
+            /**
+             * 绑定上传事件
+             * @param form
+             */
+            faupload: function (form) {
+                //绑定上传元素事件
+                if ($(".plupload,.faupload", form).size() > 0) {
+                    Upload.api.upload($(".plupload,.faupload", form));
                 }
             },
             faselect: function (form) {
@@ -495,7 +507,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
 
                 events.datetimepicker(form);
 
-                events.plupload(form);
+                events.faupload(form);
 
                 events.faselect(form);
 

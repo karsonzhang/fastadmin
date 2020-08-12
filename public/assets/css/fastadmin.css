@@ -943,8 +943,7 @@ a:focus {
  */
 /*Dropdowns in general*/
 .dropdown-menu {
-  box-shadow: none;
-  border-color: #eee;
+  border: none;
 }
 .dropdown-menu > li > a {
   /*color: #777;*/
@@ -5829,4 +5828,4 @@ fieldset[disabled] .btn-yahoo.active {
     white-space: normal !important;
   }
 }
-/*# sourceMappingURL=../css/fastadmin.css.map */
+/*# sourceMappingURL=fastadmin.css.map */

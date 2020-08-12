@@ -40,7 +40,7 @@ body {
     border:none;
 }
 .navbar-nav {
-    li > a {
+    > li > a {
         font-size:14px;
     }
 }
@@ -57,7 +57,7 @@ body {
 }
 
 /*预览区域*/
-.plupload-preview {
+.plupload-preview,.faupload-preview {
     padding:0 10px;
     margin-bottom:0;
     li {
@@ -89,6 +89,21 @@ body {
     .layui-layer-content {
         padding: 12px 25px;
         text-align: center;
+    }
+}
+
+.input-group > .msg-box.n-right {
+    position: absolute;
+}
+
+/*修复radio和checkbox样式对齐*/
+.radio, .checkbox {
+    > label {
+        margin-right: 10px;
+
+        > input {
+            margin: 2px 0 0;
+        }
     }
 }
 

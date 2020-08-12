@@ -55,7 +55,6 @@ return [
     'New mobile'                            => '新手机号',
     'Change password successful'            => '修改密码成功',
     'Captcha is incorrect'                  => '验证码不正确',
-    'Upload successful'                     => '上传成功',
     'Logged in successful'                  => '登录成功',
     'Logout successful'                     => '注销成功',
     'User center already closed'            => '会员中心已经关闭',

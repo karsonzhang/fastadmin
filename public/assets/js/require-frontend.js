@@ -1,11 +1,10 @@
 require.config({
     urlArgs: "v=" + requirejs.s.contexts._.config.config.site.version,
     packages: [{
-            name: 'moment',
-            location: '../libs/moment',
-            main: 'moment'
-        }
-    ],
+        name: 'moment',
+        location: '../libs/moment',
+        main: 'moment'
+    }],
     //在打包压缩时将会把include中的模块合并到主文件中
     include: ['css', 'layer', 'toastr', 'fast', 'frontend', 'frontend-init'],
     paths: {
@@ -16,6 +15,7 @@ require.config({
         'validator': 'require-validator',
         'drag': 'jquery.drag.min',
         'drop': 'jquery.drop.min',
+        'dropzone': 'dropzone.min',
         'echarts': 'echarts.min',
         'echarts-theme': 'echarts-theme',
         'adminlte': 'adminlte',
@@ -41,7 +41,6 @@ require.config({
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
         'validator-core': '../libs/nice-validator/dist/jquery.validator',
         'validator-lang': '../libs/nice-validator/dist/local/zh-CN',
-        'plupload': '../libs/plupload/js/plupload.min',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/fastadmin-layer/dist/layer',
@@ -113,11 +112,7 @@ require.config({
 //        'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css', ],
         'bootstrap-select-lang': ['bootstrap-select'],
 //        'toastr': ['css!../libs/toastr/toastr.min.css'],
-        'jstree': ['css!../libs/jstree/dist/themes/default/style.css', ],
-        'plupload': {
-            deps: ['../libs/plupload/js/moxie.min'],
-            exports: "plupload"
-        },
+        'jstree': ['css!../libs/jstree/dist/themes/default/style.css'],
 //        'layer': ['css!../libs/fastadmin-layer/dist/theme/default/layer.css'],
 //        'validator-core': ['css!../libs/nice-validator/dist/jquery.validator.css'],
         'validator-lang': ['validator-core'],

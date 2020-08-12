@@ -21,7 +21,7 @@ body {
 .navbar {
   border: none;
 }
-.navbar-nav li > a {
+.navbar-nav > li > a {
   font-size: 14px;
 }
 .toast-top-center {
@@ -37,23 +37,29 @@ body {
   display: inherit;
 }
 /*预览区域*/
-.plupload-preview {
+.plupload-preview,
+.faupload-preview {
   padding: 0 10px;
   margin-bottom: 0;
 }
-.plupload-preview li {
+.plupload-preview li,
+.faupload-preview li {
   margin-top: 10px;
 }
-.plupload-preview .thumbnail {
+.plupload-preview .thumbnail,
+.faupload-preview .thumbnail {
   margin-bottom: 10px;
 }
-.plupload-preview a {
+.plupload-preview a,
+.faupload-preview a {
   display: block;
 }
-.plupload-preview a:first-child {
+.plupload-preview a:first-child,
+.faupload-preview a:first-child {
   height: 90px;
 }
-.plupload-preview a img {
+.plupload-preview a img,
+.faupload-preview a img {
   height: 80px;
   object-fit: cover;
 }
@@ -69,6 +75,18 @@ body {
 .layui-layer-fast-msg .layui-layer-content {
   padding: 12px 25px;
   text-align: center;
+}
+.input-group > .msg-box.n-right {
+  position: absolute;
+}
+/*修复radio和checkbox样式对齐*/
+.radio > label,
+.checkbox > label {
+  margin-right: 10px;
+}
+.radio > label > input,
+.checkbox > label > input {
+  margin: 2px 0 0;
 }
 #header-navbar li.dropdown ul.dropdown-menu {
   min-width: 94px;

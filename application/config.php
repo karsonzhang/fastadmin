@@ -276,7 +276,7 @@ return [
         //自动检测更新
         'checkupdate'           => false,
         //版本号
-        'version'               => '1.1.0.20200612_beta',
+        'version'               => '1.2.0',
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],
