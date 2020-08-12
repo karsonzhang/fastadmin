@@ -190,7 +190,7 @@ class Builder
                 if ($subdomain) {
                     $route = substr($route, 4);
                 }
-                $docslist[$section][$name] = [
+                $docslist[$section][$class . $name] = [
                     'id'                => $counter,
                     'method'            => is_array($docs['ApiMethod'][0]) ? $docs['ApiMethod'][0]['data'] : $docs['ApiMethod'][0],
                     'method_label'      => $this->generateBadgeForMethod($docs),
