@@ -64,8 +64,9 @@
                 var query = Fast.api.query(vObjCol.field);
                 var operate = Fast.api.query(vObjCol.field + "-operate");
 
-                vObjCol.defaultValue = that.options.renderDefault && query ? query : (typeof vObjCol.defaultValue === 'undefined' ? '' : vObjCol.defaultValue);
-                vObjCol.operate = that.options.renderDefault && operate ? operate : (typeof vObjCol.operate === 'undefined' ? '=' : vObjCol.operate);
+                var renderDefault = that.options.renderDefault && (typeof vObjCol.renderDefault == 'undefined' || vObjCol.renderDefault);
+                vObjCol.defaultValue = renderDefault && query ? query : (typeof vObjCol.defaultValue === 'undefined' ? '' : vObjCol.defaultValue);
+                vObjCol.operate = renderDefault && operate ? operate : (typeof vObjCol.operate === 'undefined' ? '=' : vObjCol.operate);
                 ColumnsForSearch.push(vObjCol);
 
                 htmlForm.push('<div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">');
@@ -333,7 +334,7 @@
                 } else if (obj.size() > 1) {
                     $("form [name='" + $(this).data("field") + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);
                 } else {
-                    obj.val(value);
+                    obj.val(value + "");
                 }
                 obj.trigger("change");
                 $("form", that.$commonsearch).trigger("submit");
@@ -382,8 +383,8 @@
                     [value, item, i], value);
 
                 if (!($.inArray(key, that.header.fields) !== -1 &&
-                        (typeof value === 'string' || typeof value === 'number') &&
-                        (value + '').toLowerCase().indexOf(fval) !== -1)) {
+                    (typeof value === 'string' || typeof value === 'number') &&
+                    (value + '').toLowerCase().indexOf(fval) !== -1)) {
                     return false;
                 }
             }

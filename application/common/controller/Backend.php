@@ -296,6 +296,17 @@ class Backend extends Controller
             }
             $v = !is_array($v) ? trim($v) : $v;
             $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
+            //null和空字符串特殊处理
+            if (!is_array($v)) {
+                if (in_array(strtoupper($v), ['NULL', 'NOT NULL'])) {
+                    $sym = strtoupper($v);
+                }
+                if (in_array($v, ['""', "''"])) {
+                    $v = '';
+                    $sym = '=';
+                }
+            }
+
             switch ($sym) {
                 case '=':
                 case '<>':
