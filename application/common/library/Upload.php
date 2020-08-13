@@ -248,6 +248,9 @@ class Upload
         $destDir = RUNTIME_PATH . 'chunks';
         $fileName = $chunkid . "-" . $chunkindex . '.part';
         $destFile = $destDir . DS . $fileName;
+        if (!is_dir($destDir)) {
+            @mkdir($destDir, 0755, true);
+        }
         if (!move_uploaded_file($this->file->getPathname(), $destFile)) {
             throw new UploadException(__('Chunk file write error'));
         }
