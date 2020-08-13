@@ -152,7 +152,7 @@ class Upload
             '{sec}'      => date("s"),
             '{random}'   => Random::alnum(16),
             '{random32}' => Random::alnum(32),
-            '{filename}' => $filename,
+            '{filename}' => substr($filename, 0, 100),
             '{suffix}'   => $suffix,
             '{.suffix}'  => $suffix ? '.' . $suffix : '',
             '{filemd5}'  => $md5,
@@ -300,7 +300,7 @@ class Upload
         $params = array(
             'admin_id'    => (int)session('admin.id'),
             'user_id'     => (int)cookie('uid'),
-            'filename'    => htmlspecialchars(strip_tags($this->fileInfo['name'])),
+            'filename'    => substr(htmlspecialchars(strip_tags($this->fileInfo['name'])), 0, 100),
             'filesize'    => $this->fileInfo['size'],
             'imagewidth'  => $this->fileInfo['imagewidth'],
             'imageheight' => $this->fileInfo['imageheight'],

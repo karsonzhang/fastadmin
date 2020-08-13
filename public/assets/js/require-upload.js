@@ -156,6 +156,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         mimetype = mimetype.split(",").map(function (k) {
                             return k.indexOf("/") > -1 ? k : (!k || k === "*" || k.charAt(0) === "." ? k : "." + k);
                         }).join(",");
+                        mimetype = mimetype === '*' ? null : mimetype;
 
                         //最大文件限制转换成mb
                         var maxFilesize = (function (maxsize) {
