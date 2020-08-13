@@ -90,13 +90,12 @@ class Upload
         $mimetypeArr = explode(',', strtolower($this->config['mimetype']));
         $typeArr = explode('/', $this->fileInfo['type']);
         //验证文件后缀
-        if ($this->config['mimetype'] !== '*' &&
-            (!in_array($this->fileInfo['suffix'], $mimetypeArr) || (stripos($typeArr[0] . '/', $this->config['mimetype']) !== false && (!in_array($this->fileInfo['type'], $mimetypeArr) && !in_array($typeArr[0] . '/*', $mimetypeArr))))
-        ) {
-            throw new UploadException(__('Uploaded file format is limited'));
-            return false;
+        if ($this->config['mimetype'] === '*'
+            || in_array($this->fileInfo['suffix'], $mimetypeArr) || in_array('.' . $this->fileInfo['suffix'], $mimetypeArr)
+            || in_array($this->fileInfo['type'], $mimetypeArr) || in_array($typeArr[0] . "/*", $mimetypeArr)) {
+            return true;
         }
-        return true;
+        throw new UploadException(__('Uploaded file format is limited'));
     }
 
     protected function checkImage($force = false)
