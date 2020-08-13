@@ -26,7 +26,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'id', title: __('Id')},
                         {field: 'admin_id', title: __('Admin_id'), visible: false, addClass: "selectpage", extend: "data-source='auth/admin/index' data-field='nickname'"},
                         {field: 'user_id', title: __('User_id'), visible: false, addClass: "selectpage", extend: "data-source='user/user/index' data-field='nickname'"},
-                        {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
+                        {field: 'preview', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
                         {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url, visible: false},
                         {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
                         {
@@ -145,12 +145,16 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             // 为表格绑定事件
             Table.api.bindevent(table);
             require(['upload'], function (Upload) {
-                Upload.api.faupload($("#toolbar .faupload"), function () {
+                Upload.api.upload($("#toolbar .faupload"), function () {
                     $(".btn-refresh").trigger("click");
                 });
             });
         },
         add: function () {
+            //上传完成后刷新父窗口
+            $(".faupload").data("upload-complete", function (files) {
+                window.parent.$(".btn-refresh").trigger("click");
+            });
             Controller.api.bindevent();
         },
         edit: function () {
@@ -163,14 +167,14 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             formatter: {
                 thumb: function (value, row, index) {
                     if (row.mimetype.indexOf("image") > -1) {
-                        var style = row.storage == 'upyun' ? '!/fwfh/120x90' : '';
+                        var style = row.storage === 'upyun' ? '!/fwfh/120x90' : '';
                         return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + style + '" alt="" style="max-height:90px;max-width:120px"></a>';
                     } else {
-                        return '<a href="' + row.fullurl + '" target="_blank"><img src="https://tool.fastadmin.net/icon/' + row.imagetype + '.png" alt=""></a>';
+                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt=""></a>';
                     }
                 },
                 url: function (value, row, index) {
-                    return '<a href="' + row.fullurl + '" target="_blank" class="label bg-green">' + value + '</a>';
+                    return '<a href="' + row.fullurl + '" target="_blank" class="label bg-green">' + row.url + '</a>';
                 },
             }
         }

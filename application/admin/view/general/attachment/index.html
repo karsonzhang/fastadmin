@@ -17,7 +17,10 @@
                     <div id="toolbar" class="toolbar">
                         {:build_toolbar('refresh,add,edit,del')}
                     </div>
-                    <table id="table" class="table table-striped table-bordered table-hover" width="100%">
+                    <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
+                           data-operate-edit="{:$auth->check('general/attachment/edit')}"
+                           data-operate-del="{:$auth->check('general/attachment/del')}"
+                           width="100%">
                     </table>
                 </div>
             </div>

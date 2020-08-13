@@ -212,7 +212,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 this.options.elementHtml = $(this.element).html();
                             },
                             addedfiles: function (files) {
-                                if (this.options.maxFiles && this.options.maxFiles > 0 && this.options.inputId) {
+                                if (this.options.maxFiles && (!this.options.maxFiles || this.options.maxFiles > 1) && this.options.inputId) {
                                     var inputObj = $("#" + this.options.inputId);
                                     if (inputObj.size() > 0) {
                                         var value = $.trim(inputObj.val());
@@ -391,6 +391,12 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                  * @deprecated Use upload instead.
                  */
                 plupload: function (element, onUploadSuccess, onUploadError, onUploadComplete) {
+                    return Upload.api.upload(element, onUploadSuccess, onUploadError, onUploadComplete);
+                },
+                /**
+                 * @deprecated Use upload instead.
+                 */
+                faupload: function (element, onUploadSuccess, onUploadError, onUploadComplete) {
                     return Upload.api.upload(element, onUploadSuccess, onUploadError, onUploadComplete);
                 },
                 // AJAX异步上传
