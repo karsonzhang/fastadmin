@@ -174,6 +174,14 @@ class Upload
         var_dump($array);
     }
 
+    /**
+     * 合并分片文件
+     * @param string $chunkid
+     * @param int    $chunkcount
+     * @param string $filename
+     * @return attachment|\think\Model
+     * @throws UploadException
+     */
     public function merge($chunkid, $chunkcount, $filename)
     {
         $filePath = $this->chunkDir . DS . $chunkid;

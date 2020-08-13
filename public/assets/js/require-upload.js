@@ -141,6 +141,9 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         //上传URL
                         url = url ? url : Config.upload.uploadurl;
                         url = Fast.api.fixurl(url);
+                        var chunking = Config.upload.chunking || false,
+                            chunkSize = Config.upload.chunksize || 2097152;
+
                         //最大可上传文件大小
                         maxsize = typeof maxsize !== "undefined" ? maxsize : Config.upload.maxsize;
                         //文件类型
@@ -190,6 +193,8 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 }
                                 return params;
                             },
+                            chunking: chunking,
+                            chunkSize: chunkSize,
                             maxFilesize: maxFilesize,
                             acceptedFiles: mimetype,
                             maxFiles: (maxcount && parseInt(maxcount) > 1 ? maxcount : (multiple ? null : 1)),

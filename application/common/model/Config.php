@@ -171,6 +171,8 @@ class Config extends Model
             'bucket'    => 'local',
             'maxsize'   => $uploadcfg['maxsize'],
             'mimetype'  => $uploadcfg['mimetype'],
+            'chunking'  => $uploadcfg['chunking'],
+            'chunksize' => $uploadcfg['chunksize'],
             'multipart' => [],
             'multiple'  => $uploadcfg['multiple'],
         ];

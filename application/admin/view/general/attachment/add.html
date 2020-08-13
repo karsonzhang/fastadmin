@@ -11,9 +11,6 @@
         <label for="c-third" class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
             <button type="button" id="faupload-third" class="btn btn-danger faupload" data-multiple="true" data-input-id="c-third" ><i class="fa fa-upload"></i> {:__("Upload to third")}</button>
-            {if config('upload.chunking')}
-            <button type="button" id="faupload-third-chunk" class="btn btn-danger faupload" data-chunking="true" data-multiple="true" data-input-id="c-third" ><i class="fa fa-upload"></i> {:__("Upload to third by chunk")}</button>
-            {/if}
         </div>
     </div>
     {/if}
@@ -29,9 +26,6 @@
         <label for="c-local" class="control-label col-xs-12 col-sm-2"></label>
         <div class="col-xs-12 col-sm-8">
             <button type="button" id="faupload-local" class="btn btn-primary faupload" data-input-id="c-local" data-url="{:url('ajax/upload')}"><i class="fa fa-upload"></i> {:__("Upload to local")}</button>
-            {if config('upload.chunking')}
-            <button type="button" id="faupload-local-chunking" class="btn btn-primary faupload" data-chunking="true" data-input-id="c-local" data-url="{:url('ajax/upload')}"><i class="fa fa-upload"></i> {:__("Upload to local by chunk")}</button>
-            {/if}
         </div>
     </div>
 
