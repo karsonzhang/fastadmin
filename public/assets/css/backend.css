@@ -153,9 +153,28 @@ select.selectpicker {
   max-height: 31px;
   overflow: hidden;
 }
-select.bs-select-hidden[multiple] > option,
-select.selectpicker[multiple] > option {
+select.bs-select-hidden[multiple],
+select.selectpicker[multiple] {
   height: 31px;
+  padding: 0;
+  background: #f4f4f4;
+}
+select.bs-select-hidden[multiple] option,
+select.selectpicker[multiple] option {
+  color: #f4f4f4;
+  zoom: 1;
+  filter: alpha(opacity=0);
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+}
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance:none) {
+    select.bs-select-hidden[multiple],
+    select.selectpicker[multiple] {
+      visibility: hidden;
+    }
+  }
 }
 .img-center {
   margin: 0 auto;

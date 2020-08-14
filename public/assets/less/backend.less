@@ -197,8 +197,23 @@ select.bs-select-hidden, select.selectpicker {
   display: inherit !important;
   max-height: 31px;
   overflow: hidden;
-  &[multiple] > option {
-    height:31px;
+
+  &[multiple] {
+    height: 31px;
+    //visibility: hidden;
+    padding: 0;
+    background: #f4f4f4;
+
+    option {
+      color: #f4f4f4;
+      .opacity(0);
+    }
+
+    @media not all and (min-resolution: .001dpcm) {
+      @supports (-webkit-appearance:none) {
+        visibility: hidden;
+      }
+    }
   }
 }
 
