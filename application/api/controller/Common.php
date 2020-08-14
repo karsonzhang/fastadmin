@@ -69,7 +69,7 @@ class Common extends Api
                 } catch (UploadException $e) {
                     $this->error($e->getMessage());
                 }
-                $this->success(__('Uploaded successful'), '', ['url' => $attachment->url]);
+                $this->success(__('Uploaded successful'), ['url' => $attachment->url]);
             } elseif ($method == 'clean') {
                 //删除冗余的分片文件
                 try {
@@ -102,7 +102,7 @@ class Common extends Api
                 $this->error($e->getMessage());
             }
 
-            $this->success(__('Uploaded successful'), '', ['url' => $attachment->url]);
+            $this->success(__('Uploaded successful'), ['url' => $attachment->url]);
         }
 
     }

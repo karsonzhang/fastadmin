@@ -77,7 +77,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
             $("#faupload-avatar").data("upload-success", function (data) {
                 var url = Fast.api.cdnurl(data.url);
                 $(".profile-user-img").prop("src", url);
-                Toastr.success(__('Upload successful'));
+                Toastr.success(__('Uploaded successful'));
             });
             Form.api.bindevent($("#profile-form"));
             $(document).on("click", ".btn-change", function () {

@@ -125,7 +125,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         }
                         $(this).attr("initialized", true);
                         var that = this;
-                        var id = $(this).prop("id");
+                        var id = $(this).prop("id") || $(this).prop("name") || Dropzone.uuidv4();
                         var url = $(this).data("url");
                         var maxsize = $(this).data("maxsize");
                         var maxcount = $(this).data("maxcount");
@@ -169,12 +169,12 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             return bytes / Math.pow(1024, 2);
                         }(maxsize));
 
-                        var options = $("#" + id).data() || {};
+                        var options = $(this).data() || {};
                         delete options.success;
                         delete options.url;
                         multipart = $.isArray(multipart) ? {} : multipart;
 
-                        Upload.list[id] = new Dropzone("#" + id, $.extend({
+                        Upload.list[id] = new Dropzone(this, $.extend({
                             url: url,
                             params: function (files, xhr, chunk) {
                                 var params = multipart;
