@@ -153,6 +153,10 @@ select.selectpicker {
   max-height: 31px;
   overflow: hidden;
 }
+select.bs-select-hidden[multiple] > option,
+select.selectpicker[multiple] > option {
+  height: 31px;
+}
 .img-center {
   margin: 0 auto;
   display: inline;
