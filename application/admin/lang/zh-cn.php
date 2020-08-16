@@ -163,6 +163,8 @@ return [
     'File is too big (%sMiB), Max filesize: %sMiB'          => '当前上传(%sM)，最大允许上传文件大小:%sM',
     'An unexpected error occurred'                          => '发生了一个意外错误,程序猿正在紧急处理中',
     'This page will be re-directed in %s seconds'           => '页面将在 %s 秒后自动跳转',
+    'Click to uncheck all'                                  => '点击取消全部',
+    'Multiple selection mode: %s checked'                    => '跨页选择模式，已选 %s 项',
     //菜单
     'Dashboard'                                             => '控制台',
     'General'                                               => '常规管理',

@@ -2378,6 +2378,70 @@ select.form-control {
 .btn-default.hover {
   background-color: #e7e7e7;
 }
+.btn-primary-light {
+  background-color: #E2E5E8;
+  border-color: #D0D4D8;
+  color: #85878A;
+}
+.btn-primary-light:hover,
+.btn-primary-light:active,
+.btn-primary-light.hover {
+  background-color: #d4d8dd;
+  border-color: #c6ccd1;
+  color: #85878A;
+}
+.btn-success-light {
+  background-color: #dff0d8;
+  border-color: #d1eac8;
+  color: #468847;
+}
+.btn-success-light:hover,
+.btn-success-light:active,
+.btn-success-light.hover {
+  background-color: #d0e9c6;
+  border-color: #c1e2b3;
+  color: #468847;
+}
+.btn-danger-light,
+.btn-error-light {
+  background-color: #f2dede;
+  border-color: #ebcdcd;
+  color: #b94a48;
+}
+.btn-danger-light:hover,
+.btn-error-light:hover,
+.btn-danger-light:active,
+.btn-error-light:active,
+.btn-danger-light.hover,
+.btn-error-light.hover {
+  background-color: #ebcccc;
+  border-color: #e4b9b9;
+  color: #b94a48;
+}
+.btn-warning-light {
+  background-color: #fcf8e3;
+  border-color: #faf3cd;
+  color: #c09853;
+}
+.btn-warning-light:hover,
+.btn-warning-light:active,
+.btn-warning-light.hover {
+  background-color: #faf2cc;
+  border-color: #f7ecb5;
+  color: #c09853;
+}
+.btn-info-light {
+  background-color: #d9edf7;
+  border-color: #c6e4f3;
+  color: #3a87ad;
+}
+.btn-info-light:hover,
+.btn-info-light:active,
+.btn-info-light.hover {
+  background-color: #c4e3f3;
+  border-color: #afd9ee;
+  color: #3a87ad;
+}
 .btn-outline {
   border: 1px solid #fff;
   background: transparent;

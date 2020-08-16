@@ -72,6 +72,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 }
             });
             var urlArr = [];
+            var multiple = Backend.api.query('multiple');
+            multiple = multiple == 'true' ? true : false;
 
             var table = $("#table");
 
@@ -101,7 +103,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 showExport: false,
                 columns: [
                     [
-                        {field: 'state', checkbox: true},
+                        {field: 'state', checkbox: multiple, visible: multiple},
                         {field: 'id', title: __('Id')},
                         {field: 'admin_id', title: __('Admin_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'user_id', title: __('User_id'), formatter: Table.api.formatter.search, visible: false},
@@ -119,8 +121,6 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {
                             field: 'operate', title: __('Operate'), events: {
                                 'click .btn-chooseone': function (e, value, row, index) {
-                                    var multiple = Backend.api.query('multiple');
-                                    multiple = multiple == 'true' ? true : false;
                                     Fast.api.close({url: row.url, multiple: multiple});
                                 },
                             }, formatter: function () {
@@ -133,12 +133,6 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
 
             // 选中多个
             $(document).on("click", ".btn-choose-multi", function () {
-                // var urlArr = [];
-                // $.each(table.bootstrapTable("getAllSelections"), function (i, j) {
-                //     urlArr.push(j.url);
-                // });
-                var multiple = Backend.api.query('multiple');
-                multiple = multiple == 'true' ? true : false;
                 Fast.api.close({url: urlArr.join(","), multiple: multiple});
             });
 

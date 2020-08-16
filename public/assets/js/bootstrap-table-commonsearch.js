@@ -295,6 +295,7 @@
                 $(this).css("min-width", column['width']);
             }
         });
+        this.options.stateField = this.header.stateField;
     };
     BootstrapTable.prototype.initToolbar = function () {
         _initToolbar.apply(this, Array.prototype.slice.apply(arguments));
