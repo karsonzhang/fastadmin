@@ -496,6 +496,9 @@ class Backend extends Controller
             }
             //如果有primaryvalue,说明当前是初始化传值,按照选择顺序排序
             if ($primaryvalue !== null) {
+                $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
+                $primaryvalue = implode(',', array_map([$this->model->getConnection(), 'quote'], $primaryvalue));
+                
                 $datalist = $this->model->where($where)
                                         ->orderRaw("FIELD(`{$primarykey}`, {$primaryvalue})")
                                         ->page($page, $pagesize)
