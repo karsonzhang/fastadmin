@@ -363,11 +363,24 @@ if (!function_exists('hsv2rgb')) {
     }
 }
 
-if (!function_exists('cors_request_check')) {
+if (!function_exists('check_nav_active')) {
     /**
      * 跨域检测
      */
-    function cors_request_check()
+    function check_nav_active($url, $classname = 'active')
+    {
+        $auth = \app\common\library\Auth::instance();
+        $requestUrl = $auth->getRequestUri();
+        $url = ltrim($url, '/');
+        return $requestUrl === str_replace(".", "/", $url) ? $classname : '';
+    }
+}
+
+if (!function_exists('check_cors_request')) {
+    /**
+     * 跨域检测
+     */
+    function check_cors_request()
     {
         if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN']) {
             $info = parse_url($_SERVER['HTTP_ORIGIN']);

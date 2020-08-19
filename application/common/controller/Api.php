@@ -92,7 +92,7 @@ class Api
     protected function _initialize()
     {
         //跨域请求检测
-        cors_request_check();
+        check_cors_request();
 
         //移除HTML标签
         $this->request->filter('trim,strip_tags,htmlspecialchars');
