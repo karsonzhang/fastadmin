@@ -211,7 +211,7 @@ class Crud extends Command
         //关联表
         $relation = $input->getOption('relation');
         //自定义关联表模型
-        $relationModel = $input->getOption('relationmodel');
+        $relationModels = $input->getOption('relationmodel');
         //模式
         $relationMode = $mode = $input->getOption('relationmode');
         //外键
@@ -337,7 +337,7 @@ class Crud extends Command
                     }
                 }
                 $relationTableInfo = $relationTableInfo[0];
-                $relationModel = isset($relationModel[$index]) ? $relationModel[$index] : '';
+                $relationModel = isset($relationModels[$index]) ? $relationModels[$index] : '';
 
                 list($relationNamespace, $relationName, $relationFile) = $this->getModelData($modelModuleName, $relationModel, $relationName);
 
