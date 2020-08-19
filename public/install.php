@@ -21,7 +21,7 @@ require __DIR__ . '/../thinkphp/base.php';
 \think\Route::bind('\app\admin\command\Install', 'controller');
 
 // 关闭路由
-\think\App::route(true);
+\think\App::route(false);
 
 // 设置根url
 \think\Url::root('');
