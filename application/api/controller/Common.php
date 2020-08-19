@@ -50,6 +50,8 @@ class Common extends Api
     public function upload()
     {
         Config::set('default_return_type', 'json');
+        //必须设定cdnurl为空,否则cdnurl函数计算错误
+        Config::set('upload.cdnurl', '');
         $chunkid = $this->request->post("chunkid");
         if ($chunkid) {
             if (!Config::get('upload.chunking')) {
@@ -69,7 +71,7 @@ class Common extends Api
                 } catch (UploadException $e) {
                     $this->error($e->getMessage());
                 }
-                $this->success(__('Uploaded successful'), ['url' => $attachment->url]);
+                $this->success(__('Uploaded successful'), ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
             } elseif ($method == 'clean') {
                 //删除冗余的分片文件
                 try {
@@ -102,7 +104,7 @@ class Common extends Api
                 $this->error($e->getMessage());
             }
 
-            $this->success(__('Uploaded successful'), ['url' => $attachment->url]);
+            $this->success(__('Uploaded successful'), ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
         }
 
     }

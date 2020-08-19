@@ -241,8 +241,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
             },
             faselect: function (form) {
                 //绑定fachoose选择附件事件
-                if ($(".fachoose", form).size() > 0) {
-                    $(".fachoose", form).on('click', function () {
+                if ($(".faselect,.fachoose", form).size() > 0) {
+                    $(".faselect,.fachoose", form).on('click', function () {
                         var that = this;
                         var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
                         var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';

@@ -273,6 +273,8 @@ return [
         'login_background'      => "/assets/img/loginbg.jpg",
         //是否启用多级菜单导航
         'multiplenav'           => false,
+        //允许跨域的域名,多个以,分隔
+        'cors_request_domain'   => 'localhost,127.0.0.1',
         //自动检测更新
         'checkupdate'           => false,
         //版本号

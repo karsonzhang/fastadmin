@@ -165,9 +165,12 @@ class Config extends Model
     {
         $uploadcfg = config('upload');
 
+        $uploadurl = request()->module() ? $uploadcfg['uploadurl'] : ($uploadcfg['uploadurl'] === 'ajax/upload' ? 'index/' . $uploadcfg['uploadurl'] : $uploadcfg['uploadurl']);
+
+        $uploadurl = url($uploadurl, '', false, true);
         $upload = [
             'cdnurl'    => $uploadcfg['cdnurl'],
-            'uploadurl' => $uploadcfg['uploadurl'],
+            'uploadurl' => $uploadurl,
             'bucket'    => 'local',
             'maxsize'   => $uploadcfg['maxsize'],
             'mimetype'  => $uploadcfg['mimetype'],
@@ -175,6 +178,7 @@ class Config extends Model
             'chunksize' => $uploadcfg['chunksize'],
             'multipart' => [],
             'multiple'  => $uploadcfg['multiple'],
+            'storage'   => 'local'
         ];
         return $upload;
     }

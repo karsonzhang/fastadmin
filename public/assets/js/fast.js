@@ -68,6 +68,9 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 options = $.extend({
                     type: "POST",
                     dataType: "json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
                     success: function (ret) {
                         index && Layer.close(index);
                         ret = Fast.events.onAjaxResponse(ret);
