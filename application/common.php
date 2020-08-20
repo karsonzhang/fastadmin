@@ -365,7 +365,7 @@ if (!function_exists('hsv2rgb')) {
 
 if (!function_exists('check_nav_active')) {
     /**
-     * 跨域检测
+     * 检测会员中心导航是否高亮
      */
     function check_nav_active($url, $classname = 'active')
     {

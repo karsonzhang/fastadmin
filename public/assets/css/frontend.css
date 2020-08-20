@@ -24,6 +24,10 @@ body {
 .navbar-nav > li > a {
   font-size: 14px;
 }
+.navbar-nav ul.dropdown-menu > li > a {
+  padding: 5px 20px;
+  font-size: 13px;
+}
 .toast-top-center {
   top: 50px;
 }
@@ -444,7 +448,7 @@ main.content {
 }
 .sidenav .list-group .list-group-item.active {
   border-left: 2px solid #46c37b;
-  background: none;
+  background-color: #f5f5f5;
 }
 .sidenav .list-group .list-group-item.active > a {
   color: #46c37b;
