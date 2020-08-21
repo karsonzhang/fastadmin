@@ -59,35 +59,35 @@
                                         <div class="col-sm-8 col-xs-12">
                                             {switch $item.type}
                                             {case string}
-                                            <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-rule="{$item.rule}" data-tip="{$item.tip}"/>
                                             {/case}
                                             {case text}
-                                            <textarea {$item.extend} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
+                                            <textarea {$item.extend_html} name="row[{$item.name}]" class="form-control" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
                                             {/case}
                                             {case editor}
-                                            <textarea {$item.extend} name="row[{$item.name}]" id="editor-{$item.name}" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
+                                            <textarea {$item.extend_html} name="row[{$item.name}]" id="editor-{$item.name}" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
                                             {/case}
                                             {case array}
-                                            <dl class="fieldlist" data-name="row[{$item.name}]">
+                                            <dl {$item.extend_html} class="fieldlist" data-name="row[{$item.name}]">
                                                 <dd>
-                                                    <ins>{:__('Array key')}</ins>
-                                                    <ins>{:__('Array value')}</ins>
+                                                    <ins>{:isset($item["setting"]["key"])&&$item["setting"]["key"]?$item["setting"]["key"]:__('Array key')}</ins>
+                                                    <ins>{:isset($item["setting"]["value"])&&$item["setting"]["value"]?$item["setting"]["value"]:__('Array value')}</ins>
                                                 </dd>
                                                 <dd><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
                                                 <textarea name="row[{$item.name}]" class="form-control hide" cols="30" rows="5">{$item.value|htmlentities}</textarea>
                                             </dl>
                                             {/case}
                                             {case date}
-                                            <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case time}
-                                            <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case datetime}
-                                            <input {$item.extend} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case number}
-                                            <input {$item.extend} type="number" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="number" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case checkbox}
                                             {foreach name="item.content" item="vo"}
@@ -101,7 +101,7 @@
                                             {/case}
                                             {case value="select" break="0"}{/case}
                                             {case value="selects"}
-                                            <select {$item.extend} name="row[{$item.name}]{$item.type=='selects'?'[]':''}" class="form-control selectpicker" data-tip="{$item.tip}" {$item.type=='selects'?'multiple':''}>
+                                            <select {$item.extend_html} name="row[{$item.name}]{$item.type=='selects'?'[]':''}" class="form-control selectpicker" data-tip="{$item.tip}" {$item.type=='selects'?'multiple':''}>
                                                 {foreach name="item.content" item="vo"}
                                                 <option value="{$key}" {in name="key" value="$item.value" }selected{/in}>{$vo}</option>
                                                 {/foreach}
@@ -135,6 +135,15 @@
                                             {case bool}
                                             <label for="row[{$item.name}]-yes"><input id="row[{$item.name}]-yes" name="row[{$item.name}]" type="radio" value="1" {$item.value?'checked':''} data-tip="{$item.tip}" /> {:__('Yes')}</label>
                                             <label for="row[{$item.name}]-no"><input id="row[{$item.name}]-no" name="row[{$item.name}]" type="radio" value="0" {$item.value?'':'checked'} data-tip="{$item.tip}" /> {:__('No')}</label>
+                                            {/case}
+                                            {case city}
+                                            <div style="position:relative">
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" id="c-{$item.name}" value="{$item.value|htmlentities}" class="form-control" data-toggle="city-picker" data-tip="{$item.tip}" data-rule="{$item.rule}" />
+                                            </div>
+                                            {/case}
+                                            {case value="selectpage" break="0"}{/case}
+                                            {case value="selectpages"}
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" id="c-{$item.name}" value="{$item.value|htmlentities}" class="form-control selectpage" data-source="{:url('general/config/selectpage')}?id={$item.id}" data-primary-key="{$item.setting.primarykey}" data-field="{$item.setting.field}" data-multiple="{$item.type=='selectpage'?'false':'true'}" data-tip="{$item.tip}" data-rule="{$item.rule}" />
                                             {/case}
                                             {case custom}
                                             {$item.extend_html}
@@ -170,21 +179,21 @@
                 <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="{:url('general.config/add')}">
                     {:token()}
                     <div class="form-group">
-                        <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
-                        <div class="col-xs-12 col-sm-4">
-                            <select name="row[type]" class="form-control selectpicker">
-                                {foreach name="typeList" item="vo"}
-                                <option value="{$key}" {in name="key" value="string" }selected{/in}>{$vo}</option>
-                                {/foreach}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-xs-12 col-sm-2">{:__('Group')}:</label>
                         <div class="col-xs-12 col-sm-4">
                             <select name="row[group]" class="form-control selectpicker">
                                 {foreach name="groupList" item="vo"}
                                 <option value="{$key}" {in name="key" value="basic" }selected{/in}>{$vo}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <select name="row[type]" id="c-type" class="form-control selectpicker">
+                                {foreach name="typeList" item="vo"}
+                                <option value="{$key}" {in name="key" value="string" }selected{/in}>{$vo}</option>
                                 {/foreach}
                             </select>
                         </div>
@@ -199,6 +208,52 @@
                         <label for="title" class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
                         <div class="col-xs-12 col-sm-4">
                             <input type="text" class="form-control" id="title" name="row[title]" value="" data-rule="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group hidden tf tf-selectpage tf-selectpages">
+                        <label for="c-selectpage-table" class="control-label col-xs-12 col-sm-2">{:__('Selectpage table')}:</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <select id="c-selectpage-table" name="row[setting][table]" class="form-control selectpicker" data-live-search="true">
+                                <option value="">{:__('Please select table')}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group hidden tf tf-selectpage tf-selectpages">
+                        <label for="c-selectpage-primarykey" class="control-label col-xs-12 col-sm-2">{:__('Selectpage primarykey')}:</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <select name="row[setting][primarykey]" class="form-control selectpicker" id="c-selectpage-primarykey"></select>
+                        </div>
+                    </div>
+                    <div class="form-group hidden tf tf-selectpage tf-selectpages">
+                        <label for="c-selectpage-field" class="control-label col-xs-12 col-sm-2">{:__('Selectpage field')}:</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <select name="row[setting][field]" class="form-control selectpicker" id="c-selectpage-field"></select>
+                        </div>
+                    </div>
+                    <div class="form-group hidden tf tf-selectpage tf-selectpages">
+                        <label class="control-label col-xs-12 col-sm-2">{:__('Selectpage conditions')}:</label>
+                        <div class="col-xs-12 col-sm-8">
+                            <dl class="fieldlist" data-name="row[setting][conditions]">
+                                <dd>
+                                    <ins>{:__('Field title')}</ins>
+                                    <ins>{:__('Field value')}</ins>
+                                </dd>
+
+                                <dd><a href="javascript:;" class="append btn btn-sm btn-success"><i class="fa fa-plus"></i> {:__('Append')}</a></dd>
+                                <textarea name="row[setting][conditions]" class="form-control hide" cols="30" rows="5"></textarea>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="form-group hidden tf tf-array">
+                        <label for="c-array-key" class="control-label col-xs-12 col-sm-2">{:__('Array key')}:</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <input type="text" name="row[setting][key]" class="form-control" id="c-array-key">
+                        </div>
+                    </div>
+                    <div class="form-group hidden tf tf-array">
+                        <label for="c-array-value" class="control-label col-xs-12 col-sm-2">{:__('Array value')}:</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <input type="text" name="row[setting][value]" class="form-control" id="c-array-value">
                         </div>
                     </div>
                     <div class="form-group">

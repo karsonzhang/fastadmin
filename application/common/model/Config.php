@@ -21,6 +21,9 @@ class Config extends Model
     protected $append = [
         'extend_html'
     ];
+    protected $type = [
+        'setting' => 'json',
+    ];
 
     /**
      * 读取配置类型

@@ -198,7 +198,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     });
                 });
                 //当内容渲染完成后
-                table.on('post-body.bs.table', function (e, settings, json, xhr) {
+                table.on('post-body.bs.table', function (e, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
                     if ($(Table.config.checkboxtd + ":first", table).find("input[type='checkbox'][data-index]").size() > 0) {
                         // 拖拽选择,需要重新绑定事件

@@ -13,6 +13,7 @@ body {
 body {
   padding-top: 50px;
   font-size: 13px;
+  background: #f4f6f8;
 }
 .dropdown:hover .dropdown-menu {
   display: block;
@@ -100,13 +101,24 @@ form.form-horizontal .control-label {
 }
 .panel-default {
   padding: 0 15px;
-  border-color: #e4ecf3;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 .panel-default > .panel-heading {
   position: relative;
   font-size: 16px;
   padding: 15px 0;
   background: #fff;
+  border-bottom: 1px solid #f5f5f5;
+}
+.panel-default h2.page-header {
+  margin-top: 0;
+  height: 50px;
+  line-height: 31px;
+  font-size: 18px;
+  padding: 10px 0;
   border-bottom: 1px solid #f5f5f5;
 }
 .panel-default > .panel-heading .panel-title {
@@ -320,7 +332,6 @@ footer.footer .copyright a:hover {
   -moz-background-clip: padding;
   border-radius: 4px;
   background-clip: padding-box;
-  border: 1px solid #e4ecf3;
 }
 .login-section {
   margin: 50px auto;
@@ -346,7 +357,7 @@ footer.footer .copyright a:hover {
   font-size: 16px;
   text-align: center;
   color: #616161;
-  background-color: #f5f5f5;
+  background-color: #ececec;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
@@ -400,13 +411,6 @@ main.content {
   padding: 20px 0 10px 0;
   margin-bottom: 20px;
   background-color: #fff;
-  -webkit-border-radius: 4px;
-  -webkit-background-clip: padding-box;
-  -moz-border-radius: 4px;
-  -moz-background-clip: padding;
-  border-radius: 4px;
-  background-clip: padding-box;
-  border: 1px solid #e4ecf3;
 }
 .sidenav .list-group:last-child {
   margin-bottom: 0;
@@ -439,7 +443,8 @@ main.content {
   background-clip: padding-box;
 }
 .sidenav .list-group .list-group-item:hover {
-  background-color: #f5f5f5;
+  border-left: 2px solid rgba(245, 245, 245, 0.38);
+  background-color: rgba(245, 245, 245, 0.38);
 }
 .sidenav .list-group .list-group-item > a {
   display: block;
@@ -448,7 +453,7 @@ main.content {
 }
 .sidenav .list-group .list-group-item.active {
   border-left: 2px solid #46c37b;
-  background-color: #f5f5f5;
+  background-color: rgba(245, 245, 245, 0.38);
 }
 .sidenav .list-group .list-group-item.active > a {
   color: #46c37b;

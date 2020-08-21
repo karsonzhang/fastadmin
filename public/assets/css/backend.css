@@ -385,13 +385,6 @@ form.form-horizontal .control-label {
 .nav-addtabs li:hover > .close-tab {
   display: block;
 }
-.multiplenav .content-wrapper,
-.multiplenav .right-side {
-  padding-top: 94px;
-}
-.multiplenav #firstnav .nav-addtabs {
-  padding-right: 450px;
-}
 #firstnav {
   height: 50px;
   border-bottom: 1px solid transparent;
@@ -420,6 +413,7 @@ form.form-horizontal .control-label {
 }
 /*次栏菜单栏*/
 #secondnav {
+  display: none;
   height: 44px;
   position: absolute;
   top: 50px;
@@ -494,6 +488,20 @@ form.form-horizontal .control-label {
   display: block;
   border-color: #222e32;
   color: #222e32;
+}
+.multiplenav .content-wrapper,
+.multiplenav .right-side {
+  padding-top: 50px;
+}
+.multiplenav #firstnav .nav-addtabs {
+  padding-right: 450px;
+}
+.multipletab #secondnav {
+  display: block;
+}
+.multipletab.multiplenav .content-wrapper,
+.multipletab.multiplenav .right-side {
+  padding-top: 94px;
 }
 .main-sidebar .sidebar-form {
   overflow: visible;

@@ -27,6 +27,53 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 }, 1500);
             });
 
+            //渲染关联显示字段和存储字段
+            var renderselect = function (id, data, defaultvalue) {
+                var html = [];
+                for (var i = 0; i < data.length; i++) {
+                    html.push("<option value='" + data[i].name + "' " + (defaultvalue == data[i].name ? "selected" : "") + " data-subtext='" + data[i].title + "'>" + data[i].name + "</option>");
+                }
+                var select = $(id);
+                $(select).html(html.join(""));
+                select.trigger("change");
+                if (select.data("selectpicker")) {
+                    select.selectpicker('refresh');
+                }
+            };
+            //关联表切换
+            $(document).on('change', "#c-selectpage-table", function (e, first) {
+                var that = this;
+                Fast.api.ajax({
+                    url: "general/config/get_fields_list",
+                    data: {table: $(that).val()},
+                }, function (data, ret) {
+                    renderselect("#c-selectpage-primarykey", data.fieldList, first ? $("#c-selectpage-primarykey").data("value") : '');
+                    renderselect("#c-selectpage-field", data.fieldList, first ? $("#c-selectpage-field").data("value") : '');
+                    return false;
+                });
+                return false;
+            });
+            //如果编辑模式则渲染已知数据
+            if (['selectpage', 'selectpages'].indexOf($("#c-type").val()) > -1) {
+                $("#c-selectpage-table").trigger("change", true);
+            }
+
+            //切换类型时
+            $(document).on("change", "#c-type", function () {
+                var value = $(this).val();
+                $(".tf").addClass("hidden");
+                $(".tf.tf-" + value).removeClass("hidden");
+                if (["selectpage", "selectpages"].indexOf(value) > -1 && $("#c-selectpage-table option").size() == 1) {
+                    //异步加载表列表
+                    Fast.api.ajax({
+                        url: "general/config/get_table_list",
+                    }, function (data, ret) {
+                        renderselect("#c-selectpage-table", data.tableList);
+                        return false;
+                    });
+                }
+            });
+
             //切换显示隐藏变量字典列表
             $(document).on("change", "form#add-form select[name='row[type]']", function (e) {
                 $("#add-content-container").toggleClass("hide", ['select', 'selects', 'checkbox', 'radio'].indexOf($(this).val()) > -1 ? false : true);

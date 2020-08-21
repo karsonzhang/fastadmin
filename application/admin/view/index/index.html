@@ -4,7 +4,7 @@
         <!-- 加载样式及META信息 -->
         {include file="common/meta" /}
     </head>
-    <body class="hold-transition skin-green sidebar-mini fixed {if $Think.config.fastadmin.multiplenav}multiplenav{/if}" id="tabs">
+    <body class="hold-transition skin-green {$Think.config.fastadmin.adminskin} sidebar-mini fixed {:$Think.config.fastadmin.multipletab?'multipletab':''} {:$Think.config.fastadmin.multiplenav?'multiplenav':''}" id="tabs">
 
         <div class="wrapper">
 
