@@ -8,6 +8,7 @@ use think\addons\AddonException;
 use think\addons\Service;
 use think\Cache;
 use think\Config;
+use think\Db;
 use think\Exception;
 
 /**
@@ -19,6 +20,7 @@ use think\Exception;
 class Addon extends Backend
 {
     protected $model = null;
+    protected $noNeedRight = ['get_table_list'];
 
     public function _initialize()
     {
@@ -144,14 +146,26 @@ class Addon extends Backend
     {
         $name = $this->request->post("name");
         $force = (int)$this->request->post("force");
+        $droptables = (int)$this->request->post("droptables");
         if (!$name) {
             $this->error(__('Parameter %s can not be empty', 'name'));
         }
         if (!preg_match("/^[a-zA-Z0-9]+$/", $name)) {
             $this->error(__('Addon name incorrect'));
         }
+        //只有开启调试且为超级管理员才允许删除相关数据库
+        $tables = [];
+        if ($droptables && Config::get("app_debug") && $this->auth->isSuperAdmin()) {
+            $tables = get_addon_tables($name);
+        }
         try {
             Service::uninstall($name, $force);
+            if ($tables) {
+                //删除插件关联表
+                foreach ($tables as $index => $table) {
+                    Db::execute("DROP TABLE IF EXISTS `{$table}`");
+                }
+            }
             $this->success(__('Uninstall successful'));
         } catch (AddonException $e) {
             $this->result($e->getData(), $e->getCode(), __($e->getMessage()));
@@ -366,5 +380,15 @@ class Addon extends Backend
 
         $callback = $this->request->get('callback') ? "jsonp" : "json";
         return $callback($result);
+    }
+
+    /**
+     * 获取插件相关表
+     */
+    public function get_table_list()
+    {
+        $name = $this->request->post("name");
+        $tables = get_addon_tables($name);
+        $this->success('', null, ['tables' => $tables]);
     }
 }

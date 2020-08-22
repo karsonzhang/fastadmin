@@ -53,11 +53,13 @@
         position: absolute;
         box-shadow: 0px 0px 2px #f11414;
     }
+
     .form-userinfo .breadcrumb {
-        margin-bottom:10px;
+        margin-bottom: 10px;
     }
+
     .btn-toggle {
-        padding:0;
+        padding: 0;
     }
 </style>
 <div class="panel panel-default panel-intro">
@@ -170,8 +172,8 @@
                     <div class="col-lg-12">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input type="password" class="form-control" id="inputPassword" value=""
-                               placeholder="{:__('Your password')}">
+                            <input type="password" class="form-control" id="inputPassword" value=""
+                                   placeholder="{:__('Your password')}">
                         </div>
                     </div>
                 </div>
@@ -203,6 +205,17 @@
             <%=paycode%>
         </div>
         <%}%>
+    </div>
+</script>
+<script id="uninstalltpl" type="text/html">
+    <div class="">
+        <div class=""><%=__("Are you sure you want to unstall %s?", addon['title'])%>
+            <p class="text-danger">{:__('Delete all the addon file and cannot be recovered!')} </p>
+            {if config('app_debug')}
+            <p class="text-danger"><input type="checkbox" name="droptables" id="droptables" data-name="<%=addon['name']%>"/> {:__('Delete all the addon database and cannot be recovered!')} </p>
+            {/if}
+            <p class="text-danger">{:__('Please backup important data manually before uninstall!')}</p>
+        </div>
     </div>
 </script>
 <script id="conflicttpl" type="text/html">
