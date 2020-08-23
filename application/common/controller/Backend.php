@@ -266,7 +266,6 @@ class Backend extends Controller
         $tableName = '';
         if ($relationSearch) {
             if (!empty($this->model)) {
-                $name = \think\Loader::parseName(basename(str_replace('\\', '/', get_class($this->model))));
                 $name = $this->model->getTable();
                 $tableName = $name . '.';
             }
@@ -290,6 +289,9 @@ class Backend extends Controller
             $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
         }
         foreach ($filter as $k => $v) {
+            if (!preg_match('/^[a-zA-Z0-9_\-\.]+$/', $k)) {
+                continue;
+            }
             $sym = isset($op[$k]) ? $op[$k] : '=';
             if (stripos($k, ".") === false) {
                 $k = $tableName . $k;
@@ -327,7 +329,12 @@ class Backend extends Controller
                 case 'FINDIN':
                 case 'FINDINSET':
                 case 'FIND_IN_SET':
-                    $where[] = "FIND_IN_SET('{$v}', " . ($relationSearch ? $k : '`' . str_replace('.', '`.`', $k) . '`') . ")";
+                    $v = is_array($v) ? $v : explode(',', str_replace(' ', ',', $v));
+                    foreach ($v as $index => $item) {
+                        $item = str_replace([' ', ',', "'"], '', $item);
+                        $item = addslashes(htmlentities(strip_tags($item)));
+                        $where[] = "FIND_IN_SET('{$item}', `" . ($relationSearch ? str_replace('.', '`.`', $k) : $k) . "`)";
+                    }
                     break;
                 case 'IN':
                 case 'IN(...)':
@@ -367,10 +374,6 @@ class Backend extends Controller
                         $arr = $arr[0];
                     }
                     $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
-                    break;
-                case 'LIKE':
-                case 'LIKE %...%':
-                    $where[] = [$k, 'LIKE', "%{$v}%"];
                     break;
                 case 'NULL':
                 case 'IS NULL':
