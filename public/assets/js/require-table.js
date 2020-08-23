@@ -328,11 +328,28 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     });
                     return false;
                 });
-                //还原或删除
-                $(document).on('click', Table.config.restoreallbtn + ',' + Table.config.restoreonebtn + ',' + Table.config.destroyonebtn, function () {
+                //全部还原
+                $(document).on('click', Table.config.restoreallbtn, function () {
                     var that = this;
                     var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
                     Fast.api.ajax(url, function () {
+                        Layer.closeAll();
+                        table.trigger("uncheckbox");
+                        table.bootstrapTable('refresh');
+                    }, function () {
+                        Layer.closeAll();
+                    });
+                    return false;
+                });
+                //销毁或删除
+                $(document).on('click', Table.config.restoreonebtn + ',' + Table.config.destroyonebtn, function () {
+                    var that = this;
+                    var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
+                    var row = Fast.api.getrowbyindex(table, $(that).data("row-index"));
+                    Fast.api.ajax({
+                        url: url,
+                        data: {ids: row[options.pk]}
+                    }, function () {
                         table.trigger("uncheckbox");
                         table.bootstrapTable('refresh');
                     });
@@ -444,7 +461,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 var options = table.bootstrapTable('getOptions');
                 var data = element ? $(element).data() : {};
                 ids = ($.isArray(ids) ? ids.join(",") : ids);
-                var url = typeof data.url !== "undefined" ? Table.api.replaceurl(data.url, {ids: ids}, table) : (action == "del" ? options.extend.del_url : options.extend.multi_url);
+                var url = typeof data.url !== "undefined" ? data.url : (action == "del" ? options.extend.del_url : options.extend.multi_url);
                 var params = typeof data.params !== "undefined" ? (typeof data.params == 'object' ? $.param(data.params) : data.params) : '';
                 options = {url: url, data: {action: action, ids: ids, params: params}};
                 Fast.api.ajax(options, function (data, ret) {
