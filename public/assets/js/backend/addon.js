@@ -225,7 +225,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Layer.open({
                         content: Template("logintpl", {}),
                         zIndex: 99,
-                        area: area,
+                        area: [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '400px' : '95%'],
                         title: __('Login FastAdmin'),
                         resize: false,
                         btn: [__('Login'), __('Register')],
@@ -566,10 +566,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     var url = 'javascript:';
                     if (typeof row.homepage !== 'undefined') {
                         url = row.homepage;
-                    } else if (typeof row.qq !== 'undefined') {
+                    } else if (typeof row.qq !== 'undefined' && row.qq) {
                         url = 'https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes';
                     }
-                    return '<a href="' + url + '" target="_blank" data-toggle="tooltip" title="' + __('Click to contact developer') + '" class="text-primary">' + value + '</a>';
+                    return '<a href="' + url + '" target="_blank" data-toggle="tooltip" class="text-primary">' + value + '</a>';
                 },
                 price: function (value, row, index) {
                     if (isNaN(value)) {

@@ -191,7 +191,6 @@
                 </div>
             </fieldset>
             <div class="breadcrumb"><a href="https://www.fastadmin.net/user/myaddon.html" target="_blank"><i class="fa fa-money"></i> {:__('My addons')}</a></div>
-            <div class="breadcrumb"><a href="https://www.fastadmin.net/user/addon.html" target="_blank"><i class="fa fa-upload"></i> {:__('My posts')}</a></div>
         </form>
     </div>
 </script>
@@ -264,7 +263,7 @@
                         <% } %>
                     </ul>
                 </span>
-            <% }else{%>
+            <% }else if(typeof item.releaselist !="undefined" && item.releaselist.length>0){%>
                 <a href="javascript:;" class="btn btn-xs btn-primary btn-success btn-install"
                    data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"
                    data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
@@ -273,6 +272,12 @@
             <% if(item.demourl){ %>
                 <a href="<%=item.demourl%>" class="btn btn-xs btn-primary btn-info btn-demo" target="_blank">
                     <i class="fa fa-flash"></i> {:__('Demo')}
+                </a>
+            <% } %>
+
+            <% if(item.button){ %>
+                <a href="<%=item.url%>" class="btn btn-xs btn-primary btn-info" target="_blank">
+                    <%=item.button%>
                 </a>
             <% } %>
         <% } else {%>

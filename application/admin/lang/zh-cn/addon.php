@@ -2,7 +2,7 @@
 
 return [
     'Id'                                                      => 'ID',
-    'Title'                                                   => '插件名称',
+    'Title'                                                   => '名称',
     'Value'                                                   => '配置值',
     'Array key'                                               => '键',
     'Array value'                                             => '值',
@@ -21,7 +21,6 @@ return [
     'Pay tips'                                                => '扫码支付后如果仍然无法立即下载，请不要重复支付，请稍后再重试安装！',
     'Pay click tips'                                          => '请点击这里在新窗口中进行支付！',
     'Pay new window tips'                                     => '请在新弹出的窗口中进行支付，支付完成后再重新点击安装按钮进行安装！',
-    'Uninstall tips'                                          => '确认卸载<b>[%s]</b>？<p class="text-danger">卸载将会删除所有插件文件且不可找回!!! 插件如果有创建数据库表请手动删除!!!</p>如有重要数据请备份后再操作！',
     'Upgrade tips'                                            => '确认升级<b>[%s]</b>？<p class="text-danger">升级后可能出现部分冗余数据记录,请根据需要移除即可!!!</p>如有重要数据请备份后再操作！',
     'Offline installed tips'                                  => '插件安装成功！清除浏览器缓存和框架缓存后生效！',
     'Online installed tips'                                   => '插件安装成功！清除浏览器缓存和框架缓存后生效！',
@@ -41,7 +40,6 @@ return [
     'Click to toggle status'                                  => '点击切换插件状态',
     'Click to contact developer'                              => '点击与插件开发者取得联系',
     'My addons'                                               => '我购买的插件',
-    'My posts'                                                => '我发布的插件',
     'Index'                                                   => '前台',
     'All'                                                     => '全部',
     'Uncategoried'                                            => '未归类',

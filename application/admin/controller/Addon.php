@@ -328,7 +328,7 @@ class Addon extends Backend
         $search = $this->request->get("search");
         $search = htmlspecialchars(strip_tags($search));
         $onlineaddons = Cache::get("onlineaddons");
-        if (!is_array($onlineaddons)) {
+        if (!is_array($onlineaddons) && config('fastadmin.api_url')) {
             $onlineaddons = [];
             $result = Http::sendRequest(config('fastadmin.api_url') . '/addon/index', [], 'GET', [
                 CURLOPT_HTTPHEADER => ['Accept-Encoding:gzip'],
