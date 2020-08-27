@@ -24,12 +24,12 @@ class Attachment extends Model
     public static function getMimetypeList()
     {
         $data = [
-            "image/*"        => "图片",
-            "audio/*"        => "音频",
-            "video/*"        => "视频",
-            "text/*"         => "文档",
-            "application/*"  => "应用",
-            "zip,rar,7z,tar" => "压缩包",
+            "image/*"        => __("Image"),
+            "audio/*"        => __("Audio"),
+            "video/*"        => __("Video"),
+            "text/*"         => __("Text"),
+            "application/*"  => __("Application"),
+            "zip,rar,7z,tar" => __("Zip"),
         ];
         return $data;
     }
