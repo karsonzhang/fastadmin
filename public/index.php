@@ -14,9 +14,9 @@
 define('APP_PATH', __DIR__ . '/../application/');
 
 // 判断是否安装
-if (!is_file(APP_PATH . 'admin/command/Install/install.lock'))
-{
-    header("location:./install.php");
+if (!is_file(APP_PATH . 'admin/command/Install/install.lock')) {
+    $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+    header("Location: {$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$uri}/install.php");
     exit;
 }
 

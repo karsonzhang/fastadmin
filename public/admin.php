@@ -11,14 +11,14 @@
 // +----------------------------------------------------------------------
 // [ 后台入口文件 ]
 // 使用此文件可以达到隐藏admin模块的效果
-// 建议将admin.php改成其它任意的文件名，同时修改config.php中的'deny_module_list',把admin模块也添加进去
+// 为了你的安全，强烈不建议将此文件名修改成admin.php
 // 定义应用目录
 define('APP_PATH', __DIR__ . '/../application/');
 
 // 判断是否安装
-if (!is_file(APP_PATH . 'admin/command/Install/install.lock'))
-{
-    header("location:./install.php");
+if (!is_file(APP_PATH . 'admin/command/Install/install.lock')) {
+    $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+    header("Location: {$_SERVER['REQUEST_SCHEME']}://{$_SERVER['HTTP_HOST']}{$uri}/install.php");
     exit;
 }
 
