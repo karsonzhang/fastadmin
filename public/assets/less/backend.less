@@ -794,6 +794,10 @@ form.form-horizontal .control-label {
     tbody .selected td {
         background-color: rgba(216, 224, 230, .5);
     }
+
+    .bs-checkbox {
+        min-width: 36px;
+    }
 }
 
 /*修复nice-validator新版下的一处BUG*/
@@ -1315,6 +1319,49 @@ table.table-nowrap {
     margin-right: 5px;
     text-align: center;
     display: inline-block;
+}
+
+.fixed-columns, .fixed-columns-right {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    z-index: 1;
+    box-shadow: 0 -1px 8px rgba(0, 0, 0, .08);
+}
+
+.fixed-columns {
+    left: 0;
+
+    .fixed-table-body {
+        overflow: hidden !important
+    }
+}
+
+.fixed-columns-right {
+    right: 0;
+    box-shadow: -1px 0 8px rgba(0, 0, 0, .08);
+
+    .fixed-table-body {
+        overflow-x: hidden !important
+    }
+}
+
+.fix-sticky {
+    position: fixed;
+    z-index: 100;
+
+    thead {
+        background: #fff;
+
+        th, th:first-child {
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 1px solid #eee;
+            border-radius: 0;
+        }
+    }
 }
 
 .sidebar-menu li.treeview-open > a > .fa-angle-left, .sidebar-menu li.treeview-open > a > .pull-right-container > .fa-angle-left {
