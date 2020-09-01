@@ -93,14 +93,18 @@
                                             <input {$item.extend_html} type="number" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case checkbox}
+                                            <div class="checkbox">
                                             {foreach name="item.content" item="vo"}
                                             <label for="row[{$item.name}][]-{$key}"><input id="row[{$item.name}][]-{$key}" name="row[{$item.name}][]" type="checkbox" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
                                             {/foreach}
+                                            </div>
                                             {/case}
                                             {case radio}
+                                            <div class="radio">
                                             {foreach name="item.content" item="vo"}
                                             <label for="row[{$item.name}]-{$key}"><input id="row[{$item.name}]-{$key}" name="row[{$item.name}]" type="radio" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
                                             {/foreach}
+                                            </div>
                                             {/case}
                                             {case value="select" break="0"}{/case}
                                             {case value="selects"}

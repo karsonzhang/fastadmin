@@ -435,7 +435,17 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 });
                 table.on("click", "[data-id].btn-change", function (e) {
                     e.preventDefault();
-                    Table.api.multi($(this).data("action") ? $(this).data("action") : '', [$(this).data("id")], table, this);
+                    var switcher = $.proxy(function () {
+                        Table.api.multi($(this).data("action") ? $(this).data("action") : '', [$(this).data("id")], table, this);
+                    }, this);
+                    if (typeof $(this).data("confirm") !== 'undefined') {
+                        Layer.confirm($(this).data("confirm"), function (index) {
+                            switcher();
+                            Layer.close(index);
+                        });
+                    } else {
+                        switcher();
+                    }
                 });
                 table.on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
@@ -615,12 +625,16 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var yes = typeof this.yes !== 'undefined' ? this.yes : 1;
                     var no = typeof this.no !== 'undefined' ? this.no : 0;
                     var url = typeof this.url !== 'undefined' ? this.url : '';
+                    var confirm = '';
                     var disable = false;
+                    if (typeof this.confirm !== "undefined") {
+                        confirm = typeof this.confirm === "function" ? this.confirm.call(this, value, row, index) : this.confirm;
+                    }
                     if (typeof this.disable !== "undefined") {
                         disable = typeof this.disable === "function" ? this.disable.call(this, value, row, index) : this.disable;
                     }
                     return "<a href='javascript:;' data-toggle='tooltip' title='" + __('Click to toggle') + "' class='btn-change " + (disable ? 'btn disabled' : '') + "' data-id='"
-                        + row[pk] + "' " + (url ? "data-url='" + url + "'" : "") + " data-params='" + this.field + "=" + (value == yes ? no : yes) + "'><i class='fa fa-toggle-on " + (value == yes ? 'text-' + color : 'fa-flip-horizontal text-gray') + " fa-2x'></i></a>";
+                        + row[pk] + "' " + (url ? "data-url='" + url + "'" : "") + (confirm ? "data-confirm='" + confirm + "'" : "") + " data-params='" + this.field + "=" + (value == yes ? no : yes) + "'><i class='fa fa-toggle-on " + (value == yes ? 'text-' + color : 'fa-flip-horizontal text-gray') + " fa-2x'></i></a>";
                 },
                 url: function (value, row, index) {
                     value = value === null ? '' : value.toString();

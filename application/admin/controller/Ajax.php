@@ -173,6 +173,9 @@ class Ajax extends Backend
                     $offset = isset($temp[$m - 1]) ? $temp[$m - 1] : $sour_id;
                 }
             }
+            if (!isset($weighdata[$offset])) {
+                continue;
+            }
             $weighids[$n] = $weighdata[$offset];
             Db::name($table)->where($prikey, $n)->update([$field => $weighdata[$offset]]);
         }

@@ -382,20 +382,31 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     if ($(this).hasClass("disabled")) {
                         return false;
                     }
-                    var input = $(this).prev("input");
-                    input = $(this).data("input-id") ? $("#" + $(this).data("input-id")) : input;
-                    if (input.size() > 0) {
-                        var yes = $(this).data("yes");
-                        var no = $(this).data("no");
-                        if (input.val() == yes) {
-                            input.val(no);
-                            $("i", this).addClass("fa-flip-horizontal text-gray");
-                        } else {
-                            input.val(yes);
-                            $("i", this).removeClass("fa-flip-horizontal text-gray");
+                    var switcher = $.proxy(function () {
+                        var input = $(this).prev("input");
+                        input = $(this).data("input-id") ? $("#" + $(this).data("input-id")) : input;
+                        if (input.size() > 0) {
+                            var yes = $(this).data("yes");
+                            var no = $(this).data("no");
+                            if (input.val() == yes) {
+                                input.val(no);
+                                $("i", this).addClass("fa-flip-horizontal text-gray");
+                            } else {
+                                input.val(yes);
+                                $("i", this).removeClass("fa-flip-horizontal text-gray");
+                            }
+                            input.trigger('change');
                         }
-                        input.trigger('change');
+                    }, this);
+                    if (typeof $(this).data("confirm") !== 'undefined') {
+                        Layer.confirm($(this).data("confirm"), function (index) {
+                            switcher();
+                            Layer.close(index);
+                        });
+                    } else {
+                        switcher();
                     }
+
                     return false;
                 });
             },
