@@ -248,7 +248,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
                         var admin_id = $(this).data("admin-id") ? $(this).data("admin-id") : '';
                         var user_id = $(this).data("user-id") ? $(this).data("user-id") : '';
-                        parent.Fast.api.open("general/attachment/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
+                        var url = $(this).data("url") ? $(this).data("url") : (typeof Backend !== 'undefined' ? "general/attachment/select" : "user/attachment");
+                        parent.Fast.api.open(url + "?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
                             callback: function (data) {
                                 var button = $("#" + $(that).attr("id"));
                                 var maxcount = $(button).data("maxcount");

@@ -21,6 +21,7 @@ return [
     'Date'                        => '日期',
     'Time'                        => '时间',
     'Datetime'                    => '日期时间',
+    'Datetimerange'               => '日期时间区间',
     'Image'                       => '图片',
     'Images'                      => '图片(多)',
     'File'                        => '文件',

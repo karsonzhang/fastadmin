@@ -78,16 +78,19 @@
                                             </dl>
                                             {/case}
                                             {case date}
-                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case time}
-                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case datetime}
-                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            {/case}
+                                            {case datetimerange}
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control datetimerange" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case number}
-                                            <input {$item.extend_html} type="number" name="row[{$item.name}]" value="{$item.value}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
+                                            <input {$item.extend_html} type="number" name="row[{$item.name}]" value="{$item.value|htmlentities}" class="form-control" data-tip="{$item.tip}" data-rule="{$item.rule}"/>
                                             {/case}
                                             {case checkbox}
                                             {foreach name="item.content" item="vo"}

@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="__CDN__/assets/libs/bootstrap-table/dist/bootstrap-table.min.css">
+{if $Think.get.dialog}
+<style>
+    body {
+        padding-top: 0;
+        background: #fff;
+    }
+
+    nav.navbar-fixed-top, footer.footer {
+        display: none;
+    }
+
+    main.content {
+        padding: 0;
+    }
+
+    .fixed-table-container {
+        border: none;
+    }
+
+    .panel-heading .nav-tabs {
+        padding: 0 15px;
+    }
+
+    .panel-heading .nav-tabs li {
+        font-size: 14px;
+    }
+</style>
+{/if}
+<div class="panel panel-default panel-intro" style="padding:0;">
+    {if !$Think.get.mimetype||$Think.get.mimetype=='*'}
+    <div class="panel-heading">
+        <ul class="nav nav-tabs" data-field="mimetype">
+            <li class="active"><a href="#t-all" data-value="" data-toggle="tab">{:__('All')}</a></li>
+            {foreach name="mimetypeList" item="vo"}
+            <li><a href="#t-{$key}" data-value="{$key}" data-toggle="tab">{$vo}</a></li>
+            {/foreach}
+        </ul>
+    </div>
+    {/if}
+
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新"><i class="fa fa-refresh"></i> </a>
+                        <span><button type="button" id="faupload-image" class="btn btn-success faupload" data-mimetype="{$Think.get.mimetype|default=''}" data-multiple="true"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                        {if request()->get('multiple') == 'true'}
+                        <a class="btn btn-danger btn-choose-multi"><i class="fa fa-check"></i> {:__('Choose')}</a>
+                        {/if}
+                    </div>
+                    <table id="table" class="table table-bordered table-hover" width="100%">
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

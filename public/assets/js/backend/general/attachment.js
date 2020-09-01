@@ -103,7 +103,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 showExport: false,
                 columns: [
                     [
-                        {field: 'state', checkbox: multiple, visible: multiple},
+                        {field: 'state', checkbox: multiple, visible: multiple, operate:false},
                         {field: 'id', title: __('Id')},
                         {field: 'admin_id', title: __('Admin_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'user_id', title: __('User_id'), formatter: Table.api.formatter.search, visible: false},
