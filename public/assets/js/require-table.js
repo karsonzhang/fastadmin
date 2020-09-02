@@ -199,9 +199,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 }
                 //渲染内容前
                 table.on('pre-body.bs.table', function (e, data) {
-                    $.each(data, function (i, row) {
-                        row[options.stateField] = $.inArray(row[options.pk], options.selectedIds) > -1;
-                    });
+                    if (options.maintainSelected) {
+                        $.each(data, function (i, row) {
+                            row[options.stateField] = $.inArray(row[options.pk], options.selectedIds) > -1;
+                        });
+                    }
                 });
                 //当内容渲染完成后
                 table.on('post-body.bs.table', function (e, data) {

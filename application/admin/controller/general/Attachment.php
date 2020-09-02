@@ -103,6 +103,10 @@ class Attachment extends Backend
      */
     public function del($ids = "")
     {
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         if ($ids) {
             \think\Hook::add('upload_delete', function ($params) {
                 if ($params['storage'] == 'local') {

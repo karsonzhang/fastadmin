@@ -52,6 +52,7 @@ class User extends Backend
                 ->limit($offset, $limit)
                 ->select();
             foreach ($list as $k => $v) {
+                $v->avatar = $v->avatar ? cdnurl($v->avatar, true) : letter_avatar($v->nickname);
                 $v->hidden(['password', 'salt']);
             }
             $result = array("total" => $total, "rows" => $list);
@@ -94,6 +95,10 @@ class User extends Backend
      */
     public function del($ids = "")
     {
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         $row = $this->model->get($ids);
         $this->modelValidate = true;
         if (!$row) {

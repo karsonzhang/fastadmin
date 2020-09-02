@@ -11,7 +11,7 @@ use think\Exception;
 /**
  * 角色组
  *
- * @icon fa fa-group
+ * @icon   fa fa-group
  * @remark 角色组可以有多个,角色有上下级层级关系,如果子角色有角色组和管理员的权限则可以派生属于自己组别下级的角色组或管理员
  */
 class Group extends Backend
@@ -140,7 +140,7 @@ class Group extends Backend
                 $this->error(__('The parent group exceeds permission limit'));
             }
             // 父节点不能是它自身的子节点或自己本身
-            if (in_array($params['pid'], Tree::instance()->getChildrenIds($row->id,true))){
+            if (in_array($params['pid'], Tree::instance()->getChildrenIds($row->id, true))) {
                 $this->error(__('The parent group can not be its own child or itself'));
             }
             $params['rules'] = explode(',', $params['rules']);
@@ -163,16 +163,16 @@ class Group extends Backend
                 Db::startTrans();
                 try {
                     $row->save($params);
-                    $children_auth_groups = model("AuthGroup")->all(['id'=>['in',implode(',',(Tree::instance()->getChildrenIds($row->id)))]]);
+                    $children_auth_groups = model("AuthGroup")->all(['id' => ['in', implode(',', (Tree::instance()->getChildrenIds($row->id)))]]);
                     $childparams = [];
-                    foreach ($children_auth_groups as $key=>$children_auth_group) {
+                    foreach ($children_auth_groups as $key => $children_auth_group) {
                         $childparams[$key]['id'] = $children_auth_group->id;
                         $childparams[$key]['rules'] = implode(',', array_intersect(explode(',', $children_auth_group->rules), $rules));
                     }
                     model("AuthGroup")->saveAll($childparams);
                     Db::commit();
                     $this->success();
-                }catch (Exception $e){
+                } catch (Exception $e) {
                     Db::rollback();
                     $this->error($e->getMessage());
                 }
@@ -189,6 +189,10 @@ class Group extends Backend
      */
     public function del($ids = "")
     {
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         if ($ids) {
             $ids = explode(',', $ids);
             $grouplist = $this->auth->getGroups();
