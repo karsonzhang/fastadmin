@@ -18,7 +18,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             var table = $("#table");
             var tableOptions = {
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
-                escape: false,
                 pk: 'id',
                 sortName: 'weigh',
                 pagination: false,
@@ -29,7 +28,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'type', title: __('Type'), operate: false, searchList: Config.searchList, formatter: Table.api.formatter.label},
-                        {field: 'name', title: __('Name'), align: 'left'},
+                        {field: 'name', title: __('Name'), align: 'left', formatter:function (value, row, index) {
+                                return value.toString().replace(/(&|&amp;)nbsp;/g, '');
+                            }
+                        },
                         {field: 'nickname', title: __('Nickname')},
                         {field: 'flag', title: __('Flag'), formatter: Table.api.formatter.flag},
                         {field: 'image', title: __('Image'), operate: false, events: Table.api.events.image, formatter: Table.api.formatter.image},

@@ -21,13 +21,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'weigh',
-                escape: false,
                 columns: [
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'pid', title: __('Pid'), visible: false},
-                        {field: 'title', title: __('Title'), align: 'left'},
+                        {field: 'title', title: __('Title'), align: 'left', formatter:function (value, row, index) {
+                                return value.toString().replace(/(&|&amp;)nbsp;/g, '');
+                            }
+                        },
                         {field: 'name', title: __('Name'), align: 'left'},
                         {field: 'remark', title: __('Remark')},
                         {field: 'ismenu', title: __('Ismenu'), formatter: Table.api.formatter.toggle},

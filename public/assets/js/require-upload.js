@@ -141,8 +141,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         //上传URL
                         url = url ? url : Config.upload.uploadurl;
                         url = Fast.api.fixurl(url);
-                        var chunking = Config.upload.chunking || false,
-                            chunkSize = Config.upload.chunksize || 2097152;
+                        var chunking = false, chunkSize = Config.upload.chunksize || 2097152;
 
                         //最大可上传文件大小
                         maxsize = typeof maxsize !== "undefined" ? maxsize : Config.upload.maxsize;
