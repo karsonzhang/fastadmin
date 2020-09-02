@@ -4,8 +4,13 @@
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
 @import url("../libs/fastadmin-layer/dist/theme/default/layer.css");
+@import url("../libs/bootstrap-table/dist/bootstrap-table.min.css");
+@import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
 @import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
+@import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
+@import url("../libs/fastadmin-selectpage/selectpage.css");
+@import url("../libs/bootstrap-slider/slider.css");
 html,
 body {
   height: 100%;
