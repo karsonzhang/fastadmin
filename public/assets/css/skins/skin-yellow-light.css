@@ -2,6 +2,9 @@
  * Skin: Yellow
  * ------------
  */
+.skin-yellow-light .main-header {
+  background-color: #f39c12;
+}
 .skin-yellow-light .main-header .navbar {
   background-color: #f39c12;
 }

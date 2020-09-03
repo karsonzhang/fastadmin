@@ -2,6 +2,9 @@
  * Skin: Blue
  * ----------
  */
+.skin-blue .main-header {
+  background-color: #3c8dbc;
+}
 .skin-blue .main-header .navbar {
   background-color: #3c8dbc;
 }
@@ -652,6 +655,9 @@
  * Skin: Green
  * -----------
  */
+.skin-green .main-header {
+  background-color: #18bc9c;
+}
 .skin-green .main-header .navbar {
   background-color: #18bc9c;
 }
@@ -791,6 +797,9 @@
  * Skin: Green
  * -----------
  */
+.skin-green-light .main-header {
+  background-color: #18bc9c;
+}
 .skin-green-light .main-header .navbar {
   background-color: #18bc9c;
 }
@@ -944,6 +953,9 @@
  * Skin: Red
  * ---------
  */
+.skin-red .main-header {
+  background-color: #e74c3c;
+}
 .skin-red .main-header .navbar {
   background-color: #e74c3c;
 }
@@ -1083,6 +1095,9 @@
  * Skin: Red
  * ---------
  */
+.skin-red-light .main-header {
+  background-color: #e74c3c;
+}
 .skin-red-light .main-header .navbar {
   background-color: #e74c3c;
 }
@@ -1236,6 +1251,9 @@
  * Skin: Yellow
  * ------------
  */
+.skin-yellow .main-header {
+  background-color: #f39c12;
+}
 .skin-yellow .main-header .navbar {
   background-color: #f39c12;
 }
@@ -1375,6 +1393,9 @@
  * Skin: Yellow
  * ------------
  */
+.skin-yellow-light .main-header {
+  background-color: #f39c12;
+}
 .skin-yellow-light .main-header .navbar {
   background-color: #f39c12;
 }
@@ -1528,6 +1549,9 @@
  * Skin: Purple
  * ------------
  */
+.skin-purple .main-header {
+  background-color: #605ca8;
+}
 .skin-purple .main-header .navbar {
   background-color: #605ca8;
 }
@@ -1667,6 +1691,9 @@
  * Skin: Purple
  * ------------
  */
+.skin-purple-light .main-header {
+  background-color: #605ca8;
+}
 .skin-purple-light .main-header .navbar {
   background-color: #605ca8;
 }

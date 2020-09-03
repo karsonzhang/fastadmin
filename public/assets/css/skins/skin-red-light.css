@@ -2,6 +2,9 @@
  * Skin: Red
  * ---------
  */
+.skin-red-light .main-header {
+  background-color: #e74c3c;
+}
 .skin-red-light .main-header .navbar {
   background-color: #e74c3c;
 }

@@ -28,13 +28,6 @@ body.is-dialog {
   border: 1px solid #8B9;
   background-color: #BEC;
 }
-.main-header .logo,
-.main-header .navbar {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
-  transition: none;
-}
 .main-header .navbar {
   position: relative;
 }
@@ -51,9 +44,6 @@ html.ios-fix body {
 }
 .wrapper {
   height: 100%;
-}
-#header {
-  background: #fff;
 }
 .content-wrapper {
   position: relative;
