@@ -277,6 +277,8 @@ return [
         'multipletab'           => true,
         //后台皮肤,为空时表示使用skin-green
         'adminskin'             => '',
+        //后台是否启用面包屑
+        'breadcrumb'            => false,
         //允许跨域的域名,多个以,分隔
         'cors_request_domain'   => 'localhost,127.0.0.1',
         //版本号

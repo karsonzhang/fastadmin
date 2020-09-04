@@ -487,7 +487,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     return false;
                 }
                 Template.helper("__", __);
-                Layer.confirm(Template("uninstalltpl", {addon: Config['addons'][name]}), function (index, layero) {
+                Layer.confirm(Template("uninstalltpl", {addon: Config['addons'][name]}), {focusBtn: false}, function (index, layero) {
                     uninstall(name, false, $("input[name='droptables']", layero).prop("checked"));
                 });
             });

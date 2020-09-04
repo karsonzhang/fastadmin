@@ -161,8 +161,13 @@ class Addon extends Backend
         try {
             Service::uninstall($name, $force);
             if ($tables) {
+                $prefix = Config::get('database.prefix');
                 //删除插件关联表
                 foreach ($tables as $index => $table) {
+                    //忽略非插件标识的表名
+                    if (!preg_match("/^{$prefix}{$name}/", $table)) {
+                        continue;
+                    }
                     Db::execute("DROP TABLE IF EXISTS `{$table}`");
                 }
             }
@@ -389,6 +394,14 @@ class Addon extends Backend
     {
         $name = $this->request->post("name");
         $tables = get_addon_tables($name);
+        $prefix = Config::get('database.prefix');
+        foreach ($tables as $index => $table) {
+            //忽略非插件标识的表名
+            if (!preg_match("/^{$prefix}{$name}/", $table)) {
+                unset($tables[$index]);
+            }
+        }
+        $tables = array_values($tables);
         $this->success('', null, ['tables' => $tables]);
     }
 }

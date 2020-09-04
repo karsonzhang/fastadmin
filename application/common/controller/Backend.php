@@ -173,8 +173,11 @@ class Backend extends Controller
         }
 
         // 设置面包屑导航数据
-        $breadcrumb = $this->auth->getBreadCrumb($path);
-        array_pop($breadcrumb);
+        $breadcrumb = [];
+        if (!IS_DIALOG && !config('fastadmin.multiplenav') && config('fastadmin.breadcrumb')) {
+            $breadcrumb = $this->auth->getBreadCrumb($path);
+            array_pop($breadcrumb);
+        }
         $this->view->breadcrumb = $breadcrumb;
 
         // 如果有使用模板布局

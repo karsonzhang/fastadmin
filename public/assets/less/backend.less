@@ -1321,27 +1321,26 @@ table.table-nowrap {
     position: absolute;
     top: 0;
     height: 100%;
+    min-height: 41px;
     background-color: #fff;
     box-sizing: border-box;
     z-index: 1;
     box-shadow: 0 -1px 8px rgba(0, 0, 0, .08);
+
+    .fixed-table-body {
+        min-height: 41px;
+        overflow-x: hidden !important
+    }
+
 }
 
 .fixed-columns {
     left: 0;
-
-    .fixed-table-body {
-        overflow: hidden !important
-    }
 }
 
 .fixed-columns-right {
     right: 0;
     box-shadow: -1px 0 8px rgba(0, 0, 0, .08);
-
-    .fixed-table-body {
-        overflow-x: hidden !important
-    }
 }
 
 .fix-sticky {
