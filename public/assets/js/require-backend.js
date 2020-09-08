@@ -12,7 +12,6 @@ require.config({
         'form': 'require-form',
         'table': 'require-table',
         'upload': 'require-upload',
-        'validator': 'require-validator',
         'drag': 'jquery.drag.min',
         'drop': 'jquery.drop.min',
         'dropzone': 'dropzone.min',
@@ -41,7 +40,7 @@ require.config({
         'sortable': '../libs/Sortable/Sortable.min',
         'addtabs': '../libs/fastadmin-addtabs/jquery.addtabs',
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
-        'validator-core': '../libs/nice-validator/dist/jquery.validator',
+        'validator': '../libs/nice-validator/dist/jquery.validator',
         'validator-lang': '../libs/nice-validator/dist/local/zh-CN',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
@@ -58,10 +57,7 @@ require.config({
         'addons': ['backend'],
         'bootstrap': ['jquery'],
         'bootstrap-table': {
-            deps: [
-                'bootstrap',
-//                'css!../libs/bootstrap-table/dist/bootstrap-table.min.css'
-            ],
+            deps: ['bootstrap'],
             exports: '$.fn.bootstrapTable'
         },
         'bootstrap-table-lang': {
@@ -113,16 +109,10 @@ require.config({
         ],
         'bootstrap-datetimepicker': [
             'moment/locale/zh-cn',
-//            'css!../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
         ],
-//        'bootstrap-select': ['css!../libs/bootstrap-select/dist/css/bootstrap-select.min.css',],
         'bootstrap-select-lang': ['bootstrap-select'],
-//        'toastr': ['css!../libs/toastr/toastr.min.css'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css'],
-//        'layer': ['css!../libs/fastadmin-layer/dist/theme/default/layer.css'],
-//        'validator-core': ['css!../libs/nice-validator/dist/jquery.validator.css'],
-        'validator-lang': ['validator-core'],
-//        'selectpage': ['css!../libs/fastadmin-selectpage/selectpage.css'],
+        'validator-lang': ['validator'],
         'citypicker': ['citypicker-data', 'css!../libs/fastadmin-citypicker/dist/css/city-picker.css']
     },
     baseUrl: requirejs.s.contexts._.config.config.site.cdnurl + '/assets/js/', //资源基础路径

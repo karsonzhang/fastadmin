@@ -8,6 +8,7 @@ use think\Controller;
 use think\Hook;
 use think\Lang;
 use think\Loader;
+use think\Model;
 use think\Session;
 use fast\Tree;
 use think\Validate;
@@ -430,7 +431,7 @@ class Backend extends Controller
     protected function selectpage()
     {
         //设置过滤方法
-        $this->request->filter(['strip_tags', 'htmlspecialchars']);
+        $this->request->filter(['trim', 'strip_tags', 'htmlspecialchars']);
 
         //搜索关键词,客户端输入以空格分开,这里接收为数组
         $word = (array)$this->request->request("q_word/a");
@@ -473,11 +474,18 @@ class Backend extends Controller
             $where = function ($query) use ($word, $andor, $field, $searchfield, $custom) {
                 $logic = $andor == 'AND' ? '&' : '|';
                 $searchfield = is_array($searchfield) ? implode($logic, $searchfield) : $searchfield;
-                $word = array_filter($word);
-                if ($word) {
-                    foreach ($word as $k => $v) {
-                        $query->where(str_replace(',', $logic, $searchfield), "like", "%{$v}%");
-                    }
+                $searchfield = str_replace(',', $logic, $searchfield);
+                $word = array_filter(array_unique($word));
+                if (count($word) == 1) {
+                    $query->where($searchfield, "like", "%" . reset($word) . "%");
+                } else {
+                    $query->where(function ($query) use ($word, $searchfield) {
+                        foreach ($word as $index => $item) {
+                            $query->whereOr(function ($query) use ($item, $searchfield) {
+                                $query->where($searchfield, "like", "%{$item}%");
+                            });
+                        }
+                    });
                 }
                 if ($custom && is_array($custom)) {
                     foreach ($custom as $k => $v) {
@@ -500,18 +508,23 @@ class Backend extends Controller
             if (is_array($adminIds)) {
                 $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
+            $fields = is_array($this->selectpageFields) ? $this->selectpageFields : ($this->selectpageFields && $this->selectpageFields != '*' ? explode(',', $this->selectpageFields) : []);
             $datalist = $this->model->where($where)
                 ->order($order)
                 ->page($page, $pagesize)
-                ->field($this->selectpageFields)
                 ->select();
             foreach ($datalist as $index => $item) {
                 unset($item['password'], $item['salt']);
-                $list[] = [
-                    $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
-                    $field      => isset($item[$field]) ? $item[$field] : '',
-                    'pid'       => isset($item['pid']) ? $item['pid'] : 0
-                ];
+                if ($this->selectpageFields == '*') {
+                    $result = [
+                        $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
+                        $field      => isset($item[$field]) ? $item[$field] : '',
+                    ];
+                } else {
+                    $result = array_intersect_key(($item instanceof Model ? $item->toArray() : (array)$item), array_flip($fields));
+                }
+                $result['pid'] = isset($item['pid']) ? $item['pid'] : (isset($item['parent_id']) ? $item['parent_id'] : 0);
+                $list[] = $result;
             }
             if ($istree && !$primaryvalue) {
                 $tree = Tree::instance();

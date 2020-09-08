@@ -18,7 +18,7 @@
 .skin-green .main-header .navbar .nav .open > a:hover,
 .skin-green .main-header .navbar .nav .open > a:focus,
 .skin-green .main-header .navbar .nav > .active > a {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
 .skin-green .main-header .navbar .sidebar-toggle {
@@ -26,7 +26,7 @@
 }
 .skin-green .main-header .navbar .sidebar-toggle:hover {
   color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 .skin-green .main-header .navbar .sidebar-toggle {
   color: #fff;
@@ -52,6 +52,17 @@
 }
 .skin-green .main-header .logo:hover {
   background-color: #15a185;
+}
+@media (max-width: 767px) {
+  .skin-green .main-header .logo {
+    background-color: #18bc9c;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+    border-right: none;
+  }
+  .skin-green .main-header .logo:hover {
+    background-color: #17b798;
+  }
 }
 .skin-green .main-header li.user-header {
   background-color: #18bc9c;

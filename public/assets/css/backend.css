@@ -334,7 +334,6 @@ form.form-horizontal .control-label {
   padding: 0 15px;
   border-radius: 0;
   border: none;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
   background: #f1f4f6;
   color: #2c3e50;
   overflow: hidden;
@@ -539,7 +538,7 @@ form.form-horizontal .control-label {
 }
 @media (min-width: 768px) {
   .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
-    top: 41px;
+    top: 42px;
   }
   .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
     top: 7px !important;
@@ -973,9 +972,7 @@ table.table-nowrap thead > tr > th {
 }
 /*平板样式*/
 @media (max-width: 767px) {
-  body .wrapper .main-header .logo {
-    background: none;
-    color: #fff;
+  .wrapper .main-header .logo {
     border-bottom: 0 solid transparent;
     position: absolute;
     top: 0;
@@ -984,32 +981,32 @@ table.table-nowrap thead > tr > th {
     left: 50%;
     margin-left: -65px;
   }
-  body .sidebar .mobilenav a.btn-app {
+  .sidebar .mobilenav a.btn-app {
     color: #444;
     width: 100px;
     height: 70px;
     font-size: 13px;
   }
-  body .sidebar .mobilenav a.btn-app i.fa {
+  .sidebar .mobilenav a.btn-app i.fa {
     font-size: 24px;
   }
-  body .sidebar .mobilenav a.btn-app span {
+  .sidebar .mobilenav a.btn-app span {
     margin-top: 5px;
     display: block;
   }
-  body .sidebar .mobilenav a.btn-app.active {
+  .sidebar .mobilenav a.btn-app.active {
     color: #222d32;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li > a {
+  .wrapper .main-header .navbar .dropdown-menu li > a {
     color: #333;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li > a:hover {
+  .wrapper .main-header .navbar .dropdown-menu li > a:hover {
     background: #eee;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li.active > a {
+  .wrapper .main-header .navbar .dropdown-menu li.active > a {
     color: #fff;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li.active > a:hover {
+  .wrapper .main-header .navbar .dropdown-menu li.active > a:hover {
     background: #222d32;
   }
   .main-sidebar,

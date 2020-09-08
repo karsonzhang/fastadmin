@@ -8,48 +8,64 @@
 @import "../fastadmin/mixins.less";
 
 .skin-red-light {
-  //Navbar
-  .main-header {
-    background-color:@red;
-    .navbar {
-      .navbar-variant(@red; #fff);
-      .sidebar-toggle {
-        color: #fff;
-        &:hover {
-          background-color: darken(@red, 5%);
-        }
-      }
-      @media (max-width: @screen-header-collapse) {
-        .dropdown-menu {
-          li {
-            &.divider {
-              background-color: rgba(255, 255, 255, 0.1);
+    //Navbar
+    .main-header {
+        background-color: @red;
+
+        .navbar {
+            .navbar-variant(@red; #fff; #f6f6f6; rgba(0, 0, 0, 0.05));
+
+            .sidebar-toggle {
+                color: #fff;
+
+                &:hover {
+                    background-color: darken(@red, 5%);
+                }
             }
-            a {
-              color: #fff;
-              &:hover {
-                background: darken(@red, 5%);
-              }
+
+            @media (max-width: @screen-header-collapse) {
+                .dropdown-menu {
+                    li {
+                        &.divider {
+                            background-color: rgba(255, 255, 255, 0.1);
+                        }
+
+                        a {
+                            color: #fff;
+
+                            &:hover {
+                                background: darken(@red, 5%);
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-    //Logo
-    .logo {
-      .logo-variant(@red);
+
+        //Logo
+        .logo {
+            .logo-variant(@red);
+        }
+
+        li.user-header {
+            background-color: @red;
+        }
     }
 
-    li.user-header {
-      background-color: @red;
+    //Content Header
+    .content-header {
+        background: transparent;
     }
-  }
 
-  //Content Header
-  .content-header {
-    background: transparent;
-  }
+    //Create the sidebar skin
+    .skin-light-sidebar(@red);
 
-  //Create the sidebar skin
-  .skin-light-sidebar(@red);
+    .main-sidebar {
+        .box-shadow(7px 0 14px rgba(0, 0, 0, .03));
+    }
+
+    .content-wrapper,
+    .main-footer {
+        border-left: none;
+    }
 }

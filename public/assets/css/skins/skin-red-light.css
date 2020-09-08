@@ -18,7 +18,7 @@
 .skin-red-light .main-header .navbar .nav .open > a:hover,
 .skin-red-light .main-header .navbar .nav .open > a:focus,
 .skin-red-light .main-header .navbar .nav > .active > a {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
 .skin-red-light .main-header .navbar .sidebar-toggle {
@@ -26,7 +26,7 @@
 }
 .skin-red-light .main-header .navbar .sidebar-toggle:hover {
   color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 .skin-red-light .main-header .navbar .sidebar-toggle {
   color: #fff;
@@ -153,5 +153,13 @@
   .skin-red-light.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     border-left: 1px solid #d2d6de;
   }
+}
+.skin-red-light .main-sidebar {
+  -webkit-box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+  box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+}
+.skin-red-light .content-wrapper,
+.skin-red-light .main-footer {
+  border-left: none;
 }
 /*# sourceMappingURL=skin-red-light.css.map */

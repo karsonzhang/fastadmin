@@ -1,0 +1,221 @@
+/*
+ * Skin: Black red
+ * -----------
+ */
+.skin-black-red .main-header {
+  background: #222d32;
+  -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+}
+.skin-black-red .main-header .navbar-toggle {
+  color: #333;
+}
+.skin-black-red .main-header .navbar-brand {
+  color: #333;
+  border-right: 1px solid #eee;
+}
+.skin-black-red .main-header .navbar {
+  background-color: #fff;
+}
+.skin-black-red .main-header .navbar .nav > li > a {
+  color: #666;
+}
+.skin-black-red .main-header .navbar .nav > li > a:hover,
+.skin-black-red .main-header .navbar .nav > li > a:active,
+.skin-black-red .main-header .navbar .nav > li > a:focus,
+.skin-black-red .main-header .navbar .nav .open > a,
+.skin-black-red .main-header .navbar .nav .open > a:hover,
+.skin-black-red .main-header .navbar .nav .open > a:focus,
+.skin-black-red .main-header .navbar .nav > .active > a {
+  background: rgba(0, 0, 0, 0.02);
+  color: #444;
+}
+.skin-black-red .main-header .navbar .sidebar-toggle {
+  color: #666;
+}
+.skin-black-red .main-header .navbar .sidebar-toggle:hover {
+  color: #444;
+  background: rgba(0, 0, 0, 0.02);
+}
+.skin-black-red .main-header .navbar > .sidebar-toggle {
+  color: #333;
+  border-right: 1px solid #eee;
+}
+.skin-black-red .main-header .navbar .navbar-nav > li > a {
+  border-right: 1px solid #eee;
+}
+.skin-black-red .main-header .navbar .navbar-custom-menu .navbar-nav > li > a,
+.skin-black-red .main-header .navbar .navbar-right > li > a {
+  border-left: 1px solid #eee;
+  border-left: none;
+  border-right-width: 0;
+}
+.skin-black-red .main-header .logo {
+  background-color: #222d32;
+  color: #fff;
+  border-bottom: 0 solid transparent;
+  border-right: 1px solid #222d32;
+}
+.skin-black-red .main-header .logo:hover {
+  background-color: #202a2f;
+}
+@media (max-width: 767px) {
+  .skin-black-red .main-header .logo {
+    background-color: #fff;
+    color: #333;
+    border-bottom: 0 solid transparent;
+    border-right: none;
+  }
+  .skin-black-red .main-header .logo:hover {
+    background-color: #fcfcfc;
+  }
+}
+.skin-black-red .main-header li.user-header {
+  background-color: #222;
+}
+.skin-black-red .main-header .nav-addtabs > li > a,
+.skin-black-red .main-header .nav-addtabs > li.active > a {
+  border-right: none;
+}
+.skin-black-red .content-header {
+  background: transparent;
+  box-shadow: none;
+}
+.skin-black-red .wrapper,
+.skin-black-red .main-sidebar,
+.skin-black-red .left-side {
+  background-color: #222d32;
+}
+.skin-black-red .user-panel > .info,
+.skin-black-red .user-panel > .info > a {
+  color: #fff;
+}
+.skin-black-red .sidebar-menu > li.header {
+  color: #4b646f;
+  background: #1a2226;
+}
+.skin-black-red .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+}
+.skin-black-red .sidebar-menu > li:hover > a,
+.skin-black-red .sidebar-menu > li.active > a {
+  color: #fff;
+  background: #1e282c;
+  border-left-color: #fff;
+}
+.skin-black-red .sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background: #2c3b41;
+}
+.skin-black-red .sidebar a {
+  color: #b8c7ce;
+}
+.skin-black-red .sidebar a:hover {
+  text-decoration: none;
+}
+.skin-black-red .treeview-menu > li > a {
+  color: #8aa4af;
+}
+.skin-black-red .treeview-menu > li.active > a,
+.skin-black-red .treeview-menu > li > a:hover {
+  color: #fff;
+}
+.skin-black-red .sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  background-color: #374850;
+  margin: 10px 10px;
+}
+.skin-black-red .sidebar-form input[type="text"],
+.skin-black-red .sidebar-form .btn {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+}
+.skin-black-red .sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}
+.skin-black-red .sidebar-form input[type="text"]:focus,
+.skin-black-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  background-color: #fff;
+  color: #666;
+}
+.skin-black-red .sidebar-form input[type="text"]:focus + .input-group-btn {
+  background: #fff;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
+}
+.skin-black-red .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  border-left-color: #fff;
+}
+.skin-black-red .sidebar-form .btn {
+  color: #999;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
+}
+.skin-black-red .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+}
+.skin-black-red .sidebar-menu > li:hover > a,
+.skin-black-red .sidebar-menu > li.active > a {
+  color: #fff;
+  background: #e74c3c;
+  border-left-color: #e74c3c;
+}
+.skin-black-red .sidebar-menu > li:hover > a {
+  border-left-color: transparent;
+}
+.skin-black-red .treeview-menu > li > a {
+  padding-left: 18px;
+}
+.skin-black-red .treeview-menu > li.active > a,
+.skin-black-red .treeview-menu > li > a:hover {
+  background-color: #e74c3c;
+}
+.skin-black-red .sidebar-menu > li > .treeview-menu {
+  margin: 0;
+}
+.skin-black-red .sidebar-menu li.treeview > a {
+  background: transparent;
+  border-left-color: transparent;
+}
+.skin-black-red .sidebar-menu li.treeview > a:hover {
+  color: #fff;
+  background: #e74c3c;
+}
+.skin-black-red .sidebar-menu .treeview-menu {
+  padding-left: 0;
+}
+.skin-black-red .sidebar-menu .treeview-menu .treeview-menu {
+  padding-left: 0;
+}
+.skin-black-red .sidebar-menu .treeview-menu .treeview-menu > li > a {
+  padding-left: 30px;
+}
+.skin-black-red .sidebar-menu .treeview-menu li.treeview > a {
+  background: transparent;
+  border-left-color: transparent;
+}
+.skin-black-red .sidebar-menu .treeview-menu li.treeview > a:hover {
+  color: #fff;
+  background: #e74c3c;
+}
+.skin-black-red.sidebar-collapse .sidebar-menu li:hover > a,
+.skin-black-red.sidebar-collapse .sidebar-menu li.active > a {
+  color: #fff;
+  background: #e74c3c;
+}
+.skin-black-red.sidebar-collapse .sidebar-menu .treeview-menu li.active > a {
+  color: #fff;
+  background: #e74c3c;
+}
+/*# sourceMappingURL=skin-black-red.css.map */

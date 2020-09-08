@@ -2,14 +2,11 @@
  * Skin: Purple
  * ------------
  */
-.skin-purple .main-header {
-  background-color: #605ca8;
-}
 .skin-purple .main-header .navbar {
-  background-color: #605ca8;
+  background-color: #fff;
 }
 .skin-purple .main-header .navbar .nav > li > a {
-  color: #fff;
+  color: #444;
 }
 .skin-purple .main-header .navbar .nav > li > a:hover,
 .skin-purple .main-header .navbar .nav > li > a:active,
@@ -18,21 +15,15 @@
 .skin-purple .main-header .navbar .nav .open > a:hover,
 .skin-purple .main-header .navbar .nav .open > a:focus,
 .skin-purple .main-header .navbar .nav > .active > a {
-  background: rgba(0, 0, 0, 0.1);
-  color: #f6f6f6;
+  background: rgba(0, 0, 0, 0.02);
+  color: #605ca8;
 }
 .skin-purple .main-header .navbar .sidebar-toggle {
-  color: #fff;
+  color: #444;
 }
 .skin-purple .main-header .navbar .sidebar-toggle:hover {
-  color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
-}
-.skin-purple .main-header .navbar .sidebar-toggle {
-  color: #fff;
-}
-.skin-purple .main-header .navbar .sidebar-toggle:hover {
-  background-color: #555299;
+  color: #605ca8;
+  background: rgba(0, 0, 0, 0.02);
 }
 @media (max-width: 767px) {
   .skin-purple .main-header .navbar .dropdown-menu li.divider {
@@ -45,16 +36,33 @@
     background: #555299;
   }
 }
-.skin-purple .main-header .logo {
-  background-color: #555299;
+.skin-purple .main-header > .logo {
+  background-color: #605ca8;
   color: #fff;
   border-bottom: 0 solid transparent;
+  border-right: 1px solid #605ca8;
+  box-shadow: none;
 }
-.skin-purple .main-header .logo:hover {
-  background-color: #545096;
+.skin-purple .main-header > .logo:hover {
+  background-color: #5d59a6;
+}
+@media (max-width: 767px) {
+  .skin-purple .main-header > .logo {
+    background-color: #fff;
+    color: #222;
+    border-bottom: 0 solid transparent;
+    border-right: none;
+  }
+  .skin-purple .main-header > .logo:hover {
+    background-color: #fcfcfc;
+  }
 }
 .skin-purple .main-header li.user-header {
   background-color: #605ca8;
+}
+.skin-purple .main-header .nav-addtabs > li > a,
+.skin-purple .main-header .nav-addtabs > li.active > a {
+  border-right: none;
 }
 .skin-purple .content-header {
   background: transparent;
@@ -62,15 +70,15 @@
 .skin-purple .wrapper,
 .skin-purple .main-sidebar,
 .skin-purple .left-side {
-  background-color: #222d32;
+  background-color: #605ca8;
 }
 .skin-purple .user-panel > .info,
 .skin-purple .user-panel > .info > a {
   color: #fff;
 }
 .skin-purple .sidebar-menu > li.header {
-  color: #4b646f;
-  background: #1a2226;
+  color: #a19fcb;
+  background: #57539c;
 }
 .skin-purple .sidebar-menu > li > a {
   border-left: 3px solid transparent;
@@ -78,21 +86,21 @@
 .skin-purple .sidebar-menu > li:hover > a,
 .skin-purple .sidebar-menu > li.active > a {
   color: #fff;
-  background: #1e282c;
-  border-left-color: #605ca8;
+  background: #5b57a3;
+  border-left-color: #fff;
 }
 .skin-purple .sidebar-menu > li > .treeview-menu {
   margin: 0 1px;
-  background: #2c3b41;
+  background: #706db1;
 }
 .skin-purple .sidebar a {
-  color: #b8c7ce;
+  color: #c8c5ff;
 }
 .skin-purple .sidebar a:hover {
   text-decoration: none;
 }
 .skin-purple .treeview-menu > li > a {
-  color: #8aa4af;
+  color: #c8c5ff;
 }
 .skin-purple .treeview-menu > li.active > a,
 .skin-purple .treeview-menu > li > a:hover {
@@ -100,14 +108,14 @@
 }
 .skin-purple .sidebar-form {
   border-radius: 3px;
-  border: 1px solid #374850;
-  background-color: #374850;
+  border: 1px solid #807dba;
+  background-color: #807dba;
   margin: 10px 10px;
 }
 .skin-purple .sidebar-form input[type="text"],
 .skin-purple .sidebar-form .btn {
   box-shadow: none;
-  background-color: #374850;
+  background-color: #807dba;
   border: 1px solid transparent;
   height: 35px;
 }
@@ -139,5 +147,19 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
+}
+.skin-purple .sidebar-form input[type="text"]::-moz-placeholder {
+  color: #fff;
+  opacity: 1;
+}
+.skin-purple .sidebar-form input[type="text"]:-ms-input-placeholder {
+  color: #fff;
+}
+.skin-purple .sidebar-form input[type="text"]::-webkit-input-placeholder {
+  color: #fff;
+}
+.skin-purple .sidebar-form input[type="text"],
+.skin-purple .sidebar-form .btn {
+  color: #fff;
 }
 /*# sourceMappingURL=skin-purple.css.map */

@@ -54,7 +54,9 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             //切换左侧sidebar显示隐藏
             $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
-                $(".sidebar-menu li").removeClass("active");
+                if (!$(this).parent("li").hasClass("treeview")) {
+                    $(".sidebar-menu li").removeClass("active");
+                }
                 //当外部触发隐藏的a时,触发父辈a的事件
                 if (!$(this).closest("ul").is(":visible")) {
                     //如果不需要左侧的菜单栏联动可以注释下面一行即可
@@ -231,17 +233,23 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             var my_skins = [
                 "skin-blue",
-                "skin-white",
+                "skin-black",
                 "skin-red",
                 "skin-yellow",
                 "skin-purple",
                 "skin-green",
                 "skin-blue-light",
-                "skin-white-light",
+                "skin-black-light",
                 "skin-red-light",
                 "skin-yellow-light",
                 "skin-purple-light",
-                "skin-green-light"
+                "skin-green-light",
+                "skin-black-blue",
+                "skin-black-purple",
+                "skin-black-red",
+                "skin-black-green",
+                "skin-black-yellow",
+                "skin-black-pink",
             ];
             setup();
 

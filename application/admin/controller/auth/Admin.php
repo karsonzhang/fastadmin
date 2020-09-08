@@ -22,6 +22,8 @@ class Admin extends Backend
      * @var \app\admin\model\Admin
      */
     protected $model = null;
+    protected $selectpageFields = 'id,username,nickname,avatar';
+    protected $searchFields = 'id,username,nickname';
     protected $childrenGroupIds = [];
     protected $childrenAdminIds = [];
 

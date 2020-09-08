@@ -1,5 +1,5 @@
 /*
- * Skin: Blue
+ * Skin: Black
  * -----------
  */
 @import "../bootstrap-less/mixins.less";
@@ -7,13 +7,10 @@
 @import "../fastadmin/variables.less";
 @import "../fastadmin/mixins.less";
 
-@blue: #4e73df;
-@sidebar-dark-bg: #4e73df;
-@sidebar-dark-color: #ccd9ff;
-@sidebar-dark-submenu-color: #ccd9ff;
-
-.skin-blue {
+.skin-black {
+    //Navbar & Logo
     .main-header {
+        .box-shadow(0px 1px 1px rgba(0, 0, 0, 0.05));
 
         .navbar-toggle {
             color: #333;
@@ -25,7 +22,7 @@
         }
 
         .navbar {
-            .navbar-variant(#fff; #444; @blue; rgba(0, 0, 0, .02));
+            .navbar-variant(#fff; #666; #444; rgba(0, 0, 0, .02));
 
             > .sidebar-toggle {
                 color: #333;
@@ -50,10 +47,9 @@
             }
         }
 
-        > .logo {
-            .logo-variant(@blue; #fff);
-            border-right: 1px solid @blue;
-            box-shadow: none;
+        .logo {
+            .logo-variant(@sidebar-dark-bg; #fff);
+            border-right: 1px solid @sidebar-dark-bg;
             @media (max-width: @screen-header-collapse) {
                 .logo-variant(#fff; #222);
                 border-right: none;
@@ -61,7 +57,7 @@
         }
 
         li.user-header {
-            background-color: @blue;
+            background-color: #222;
         }
 
         .nav-addtabs > li > a, .nav-addtabs > li.active > a {
@@ -69,18 +65,13 @@
         }
     }
 
+    //Content Header
     .content-header {
         background: transparent;
         box-shadow: none;
     }
 
+    //Create the sidebar skin
     .skin-dark-sidebar(#fff);
 
-    .sidebar-form input[type="text"] {
-        .placeholder(#fff);
-    }
-
-    .sidebar-form input[type="text"], .sidebar-form .btn {
-        color: #fff;
-    }
 }
