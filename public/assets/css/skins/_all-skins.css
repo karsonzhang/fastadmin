@@ -71,7 +71,7 @@
 }
 .skin-blue .main-header .nav-addtabs > li > a,
 .skin-blue .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-blue .content-header {
   background: transparent;
@@ -420,7 +420,7 @@
 }
 .skin-black .main-header .nav-addtabs > li > a,
 .skin-black .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black .content-header {
   background: transparent;
@@ -1704,7 +1704,7 @@
 }
 .skin-purple .main-header .nav-addtabs > li > a,
 .skin-purple .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-purple .content-header {
   background: transparent;
@@ -2045,7 +2045,7 @@
 }
 .skin-black-blue .main-header .nav-addtabs > li > a,
 .skin-black-blue .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black-blue .content-header {
   background: transparent;
@@ -2265,7 +2265,7 @@
 }
 .skin-black-purple .main-header .nav-addtabs > li > a,
 .skin-black-purple .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black-purple .content-header {
   background: transparent;
@@ -2485,7 +2485,7 @@
 }
 .skin-black-green .main-header .nav-addtabs > li > a,
 .skin-black-green .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black-green .content-header {
   background: transparent;
@@ -2705,7 +2705,7 @@
 }
 .skin-black-red .main-header .nav-addtabs > li > a,
 .skin-black-red .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black-red .content-header {
   background: transparent;
@@ -2925,7 +2925,7 @@
 }
 .skin-black-yellow .main-header .nav-addtabs > li > a,
 .skin-black-yellow .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black-yellow .content-header {
   background: transparent;
@@ -3145,7 +3145,7 @@
 }
 .skin-black-pink .main-header .nav-addtabs > li > a,
 .skin-black-pink .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black-pink .content-header {
   background: transparent;

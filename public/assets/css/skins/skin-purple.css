@@ -62,7 +62,7 @@
 }
 .skin-purple .main-header .nav-addtabs > li > a,
 .skin-purple .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-purple .content-header {
   background: transparent;

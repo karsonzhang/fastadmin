@@ -75,7 +75,7 @@
 }
 .skin-black-blue .main-header .nav-addtabs > li > a,
 .skin-black-blue .main-header .nav-addtabs > li.active > a {
-  border-right: none;
+  border-right-color: transparent;
 }
 .skin-black-blue .content-header {
   background: transparent;
