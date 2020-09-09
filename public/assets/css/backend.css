@@ -990,6 +990,7 @@ table.table-nowrap thead > tr > th {
   }
   .sidebar .mobilenav a.btn-app i.fa {
     font-size: 24px;
+    display: inline-block;
   }
   .sidebar .mobilenav a.btn-app span {
     margin-top: 5px;

@@ -101,6 +101,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 sortName: 'id',
                 showToggle: false,
                 showExport: false,
+                maintainSelected: true,
                 columns: [
                     [
                         {field: 'state', checkbox: multiple, visible: multiple, operate: false},
@@ -117,7 +118,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                                 return value.replace(/\*/g, '%');
                             }
                         },
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, datetimeFormat: 'YYYY-MM-DD', operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                         {
                             field: 'operate', title: __('Operate'), events: {
                                 'click .btn-chooseone': function (e, value, row, index) {
@@ -171,7 +172,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     return '<a href="' + row.fullurl + '" target="_blank" class="label bg-green">' + row.url + '</a>';
                 },
                 filename: function (value, row, index) {
-                    return '<div style="width:200px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
+                    return '<div style="width:180px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
                 },
             }
         }
