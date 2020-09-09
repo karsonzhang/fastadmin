@@ -3,7 +3,7 @@
 namespace fast;
 
 /**
- * 字符串类
+ * Http 请求类
  */
 class Http
 {
