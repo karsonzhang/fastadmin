@@ -7,55 +7,73 @@
 @import "../fastadmin/variables.less";
 @import "../fastadmin/mixins.less";
 
+@light-blue: #4e73df;
+
 .skin-blue-light {
-  //Navbar
-  .main-header {
-    .navbar {
-      .navbar-variant(@light-blue; #fff);
-      .sidebar-toggle {
-        color: #fff;
-        &:hover {
-          background-color: darken(@light-blue, 5%);
-        }
-      }
-      @media (max-width: @screen-header-collapse) {
-        .dropdown-menu {
-          li {
-            &.divider {
-              background-color: rgba(255, 255, 255, 0.1);
+    //Navbar
+    .main-header {
+        .navbar {
+            .navbar-variant(@light-blue; #fff; #f6f6f6; rgba(0, 0, 0, 0.05));
+
+            .sidebar-toggle {
+                color: #fff;
+
+                &:hover {
+                    background-color: darken(@light-blue, 5%);
+                }
             }
-            a {
-              color: #fff;
-              &:hover {
-                background: darken(@light-blue, 5%);
-              }
+
+            @media (max-width: @screen-header-collapse) {
+                .dropdown-menu {
+                    li {
+                        &.divider {
+                            background-color: rgba(255, 255, 255, 0.1);
+                        }
+
+                        a {
+                            color: #fff;
+
+                            &:hover {
+                                background: darken(@light-blue, 5%);
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-    //Logo
-    .logo {
-      .logo-variant(@light-blue);
+
+        //Logo
+        .logo {
+            .logo-variant(@light-blue);
+        }
+
+        li.user-header {
+            background-color: @light-blue;
+        }
     }
 
-    li.user-header {
-      background-color: @light-blue;
+    //Content Header
+    .content-header {
+        background: transparent;
     }
-  }
 
-  //Content Header
-  .content-header {
-    background: transparent;
-  }
+    //Create the sidebar skin
+    .skin-light-sidebar(@light-blue);
 
-  //Create the sidebar skin
-  .skin-light-sidebar(@light-blue);
-  .main-footer {
-    border-top-color: @gray;
-  }
+    .main-footer {
+        border-top-color: @gray;
+    }
+
+    .main-sidebar {
+        .box-shadow(7px 0 14px rgba(0, 0, 0, .03));
+    }
+
+    .content-wrapper,
+    .main-footer {
+        border-left: none;
+    }
 }
 
 .skin-blue.layout-top-nav .main-header > .logo {
-  .logo-variant(@light-blue);
+    .logo-variant(@light-blue);
 }

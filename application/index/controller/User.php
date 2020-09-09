@@ -6,6 +6,7 @@ use addons\wechat\model\WechatCaptcha;
 use app\common\controller\Frontend;
 use app\common\library\Ems;
 use app\common\library\Sms;
+use app\common\model\Attachment;
 use think\Config;
 use think\Cookie;
 use think\Hook;
@@ -270,6 +271,55 @@ class User extends Frontend
             }
         }
         $this->view->assign('title', __('Change password'));
+        return $this->view->fetch();
+    }
+
+    public function attachment()
+    {
+        //设置过滤方法
+        $this->request->filter(['strip_tags']);
+        if ($this->request->isAjax()) {
+            $mimetypeQuery = [];
+            $filter = $this->request->request('filter');
+            $filterArr = (array)json_decode($filter, true);
+            if (isset($filterArr['mimetype']) && preg_match("/[]\,|\*]/", $filterArr['mimetype'])) {
+                $this->request->get(['filter' => json_encode(array_diff_key($filterArr, ['mimetype' => '']))]);
+                $mimetypeQuery = function ($query) use ($filterArr) {
+                    $mimetypeArr = explode(',', $filterArr['mimetype']);
+                    foreach ($mimetypeArr as $index => $item) {
+                        if (stripos($item, "/*") !== false) {
+                            $query->whereOr('mimetype', 'like', str_replace("/*", "/", $item) . '%');
+                        } else {
+                            $query->whereOr('mimetype', 'like', '%' . $item . '%');
+                        }
+                    }
+                };
+            }
+            $model = new Attachment();
+            $offset = $this->request->get("offset", 0);
+            $limit = $this->request->get("limit", 0);
+            $total = $model
+                ->where($mimetypeQuery)
+                ->where('user_id', $this->auth->id)
+                ->order("id", "DESC")
+                ->count();
+
+            $list = $model
+                ->where($mimetypeQuery)
+                ->where('user_id', $this->auth->id)
+                ->order("id", "DESC")
+                ->limit($offset, $limit)
+                ->select();
+            $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $this->request->root());
+            foreach ($list as $k => &$v) {
+                $v['fullurl'] = ($v['storage'] == 'local' ? $cdnurl : $this->view->config['upload']['cdnurl']) . $v['url'];
+            }
+            unset($v);
+            $result = array("total" => $total, "rows" => $list);
+
+            return json($result);
+        }
+        $this->view->assign("mimetypeList", \app\common\model\Attachment::getMimetypeList());
         return $this->view->fetch();
     }
 }

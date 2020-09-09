@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, Upload, Validator) {
+define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], function ($, undefined, Upload, Validator, undefined) {
     var Form = {
         config: {
             fieldlisttpl: '<dd class="form-inline"><input type="text" name="<%=name%>[<%=index%>][key]" class="form-control" value="<%=row.key%>" size="10" /> <input type="text" name="<%=name%>[<%=index%>][value]" class="form-control" value="<%=row.value%>" /> <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span> <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span></dd>'
@@ -241,14 +241,15 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
             },
             faselect: function (form) {
                 //绑定fachoose选择附件事件
-                if ($(".fachoose", form).size() > 0) {
-                    $(".fachoose", form).on('click', function () {
+                if ($(".faselect,.fachoose", form).size() > 0) {
+                    $(".faselect,.fachoose", form).on('click', function () {
                         var that = this;
                         var multiple = $(this).data("multiple") ? $(this).data("multiple") : false;
                         var mimetype = $(this).data("mimetype") ? $(this).data("mimetype") : '';
                         var admin_id = $(this).data("admin-id") ? $(this).data("admin-id") : '';
                         var user_id = $(this).data("user-id") ? $(this).data("user-id") : '';
-                        parent.Fast.api.open("general/attachment/select?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
+                        var url = $(this).data("url") ? $(this).data("url") : (typeof Backend !== 'undefined' ? "general/attachment/select" : "user/attachment");
+                        parent.Fast.api.open(url + "?element_id=" + $(this).attr("id") + "&multiple=" + multiple + "&mimetype=" + mimetype + "&admin_id=" + admin_id + "&user_id=" + user_id, __('Choose'), {
                             callback: function (data) {
                                 var button = $("#" + $(that).attr("id"));
                                 var maxcount = $(button).data("maxcount");
@@ -381,20 +382,31 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                     if ($(this).hasClass("disabled")) {
                         return false;
                     }
-                    var input = $(this).prev("input");
-                    input = $(this).data("input-id") ? $("#" + $(this).data("input-id")) : input;
-                    if (input.size() > 0) {
-                        var yes = $(this).data("yes");
-                        var no = $(this).data("no");
-                        if (input.val() == yes) {
-                            input.val(no);
-                            $("i", this).addClass("fa-flip-horizontal text-gray");
-                        } else {
-                            input.val(yes);
-                            $("i", this).removeClass("fa-flip-horizontal text-gray");
+                    var switcher = $.proxy(function () {
+                        var input = $(this).prev("input");
+                        input = $(this).data("input-id") ? $("#" + $(this).data("input-id")) : input;
+                        if (input.size() > 0) {
+                            var yes = $(this).data("yes");
+                            var no = $(this).data("no");
+                            if (input.val() == yes) {
+                                input.val(no);
+                                $("i", this).addClass("fa-flip-horizontal text-gray");
+                            } else {
+                                input.val(yes);
+                                $("i", this).removeClass("fa-flip-horizontal text-gray");
+                            }
+                            input.trigger('change');
                         }
-                        input.trigger('change');
+                    }, this);
+                    if (typeof $(this).data("confirm") !== 'undefined') {
+                        Layer.confirm($(this).data("confirm"), function (index) {
+                            switcher();
+                            Layer.close(index);
+                        });
+                    } else {
+                        switcher();
                     }
+
                     return false;
                 });
             },

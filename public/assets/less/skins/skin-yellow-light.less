@@ -1,5 +1,5 @@
 /*
- * Skin: Yellow
+ * Skin: Yellow light
  * ------------
  */
 @import "../bootstrap-less/mixins.less";
@@ -8,47 +8,64 @@
 @import "../fastadmin/mixins.less";
 
 .skin-yellow-light {
-  //Navbar
-  .main-header {
-    .navbar {
-      .navbar-variant(@yellow; #fff);
-      .sidebar-toggle {
-        color: #fff;
-        &:hover {
-          background-color: darken(@yellow, 5%);
-        }
-      }
-      @media (max-width: @screen-header-collapse) {
-        .dropdown-menu {
-          li {
-            &.divider {
-              background-color: rgba(255, 255, 255, 0.1);
+    //Navbar
+    .main-header {
+        background-color: @yellow;
+
+        .navbar {
+            .navbar-variant(@yellow; #fff; #f6f6f6; rgba(0, 0, 0, 0.05));
+
+            .sidebar-toggle {
+                color: #fff;
+
+                &:hover {
+                    background-color: darken(@yellow, 5%);
+                }
             }
-            a {
-              color: #fff;
-              &:hover {
-                background: darken(@yellow, 5%);
-              }
+
+            @media (max-width: @screen-header-collapse) {
+                .dropdown-menu {
+                    li {
+                        &.divider {
+                            background-color: rgba(255, 255, 255, 0.1);
+                        }
+
+                        a {
+                            color: #fff;
+
+                            &:hover {
+                                background: darken(@yellow, 5%);
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-    //Logo
-    .logo {
-      .logo-variant(@yellow);
+
+        //Logo
+        .logo {
+            .logo-variant(@yellow);
+        }
+
+        li.user-header {
+            background-color: @yellow;
+        }
     }
 
-    li.user-header {
-      background-color: @yellow;
+    //Content Header
+    .content-header {
+        background: transparent;
     }
-  }
 
-  //Content Header
-  .content-header {
-    background: transparent;
-  }
+    //Create the sidebar skin
+    .skin-light-sidebar(@yellow);
 
-  //Create the sidebar skin
-  .skin-light-sidebar(@yellow);
+    .main-sidebar {
+        .box-shadow(7px 0 14px rgba(0, 0, 0, .03));
+    }
+
+    .content-wrapper,
+    .main-footer {
+        border-left: none;
+    }
 }

@@ -1,11 +1,12 @@
-<div class="sidenav">
+<div class="sidebar-toggle"><i class="fa fa-bars"></i></div>
+<div class="sidenav" id="sidebar-nav">
     {:hook('user_sidenav_before')}
     <ul class="list-group">
         <li class="list-group-heading">{:__('Member center')}</li>
-        <li class="list-group-item {:$config['actionname']=='index'?'active':''}"> <a href="{:url('user/index')}"><i class="fa fa-user-circle fa-fw"></i> {:__('User center')}</a> </li>
-        <li class="list-group-item {:$config['actionname']=='profile'?'active':''}"> <a href="{:url('user/profile')}"><i class="fa fa-user-o fa-fw"></i> {:__('Profile')}</a> </li>
-        <li class="list-group-item {:$config['actionname']=='changepwd'?'active':''}"> <a href="{:url('user/changepwd')}"><i class="fa fa-key fa-fw"></i> {:__('Change password')}</a> </li>
-        <li class="list-group-item {:$config['actionname']=='logout'?'active':''}"> <a href="{:url('user/logout')}"><i class="fa fa-sign-out fa-fw"></i> {:__('Sign out')}</a> </li>
+        <li class="list-group-item {:check_nav_active('user/index')}"> <a href="{:url('user/index')}"><i class="fa fa-user-circle fa-fw"></i> {:__('User center')}</a> </li>
+        <li class="list-group-item {:check_nav_active('user/profile')}"> <a href="{:url('user/profile')}"><i class="fa fa-user-o fa-fw"></i> {:__('Profile')}</a> </li>
+        <li class="list-group-item {:check_nav_active('user/changepwd')}"> <a href="{:url('user/changepwd')}"><i class="fa fa-key fa-fw"></i> {:__('Change password')}</a> </li>
+        <li class="list-group-item {:check_nav_active('user/logout')}"> <a href="{:url('user/logout')}"><i class="fa fa-sign-out fa-fw"></i> {:__('Sign out')}</a> </li>
     </ul>
     {:hook('user_sidenav_after')}
 </div>

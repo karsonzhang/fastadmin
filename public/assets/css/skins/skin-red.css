@@ -2,6 +2,9 @@
  * Skin: Red
  * ---------
  */
+.skin-red .main-header {
+  background-color: #e74c3c;
+}
 .skin-red .main-header .navbar {
   background-color: #e74c3c;
 }
@@ -15,7 +18,7 @@
 .skin-red .main-header .navbar .nav .open > a:hover,
 .skin-red .main-header .navbar .nav .open > a:focus,
 .skin-red .main-header .navbar .nav > .active > a {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
 .skin-red .main-header .navbar .sidebar-toggle {
@@ -23,7 +26,7 @@
 }
 .skin-red .main-header .navbar .sidebar-toggle:hover {
   color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 .skin-red .main-header .navbar .sidebar-toggle {
   color: #fff;
@@ -49,6 +52,17 @@
 }
 .skin-red .main-header .logo:hover {
   background-color: #e43321;
+}
+@media (max-width: 767px) {
+  .skin-red .main-header .logo {
+    background-color: #e74c3c;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+    border-right: none;
+  }
+  .skin-red .main-header .logo:hover {
+    background-color: #e64837;
+  }
 }
 .skin-red .main-header li.user-header {
   background-color: #e74c3c;

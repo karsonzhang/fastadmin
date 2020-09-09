@@ -1,7 +1,10 @@
 /*
- * Skin: Yellow
+ * Skin: Yellow light
  * ------------
  */
+.skin-yellow-light .main-header {
+  background-color: #f39c12;
+}
 .skin-yellow-light .main-header .navbar {
   background-color: #f39c12;
 }
@@ -15,7 +18,7 @@
 .skin-yellow-light .main-header .navbar .nav .open > a:hover,
 .skin-yellow-light .main-header .navbar .nav .open > a:focus,
 .skin-yellow-light .main-header .navbar .nav > .active > a {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
 .skin-yellow-light .main-header .navbar .sidebar-toggle {
@@ -23,7 +26,7 @@
 }
 .skin-yellow-light .main-header .navbar .sidebar-toggle:hover {
   color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 .skin-yellow-light .main-header .navbar .sidebar-toggle {
   color: #fff;
@@ -150,5 +153,13 @@
   .skin-yellow-light.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     border-left: 1px solid #d2d6de;
   }
+}
+.skin-yellow-light .main-sidebar {
+  -webkit-box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+  box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+}
+.skin-yellow-light .content-wrapper,
+.skin-yellow-light .main-footer {
+  border-left: none;
 }
 /*# sourceMappingURL=skin-yellow-light.css.map */

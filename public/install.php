@@ -20,7 +20,7 @@ require __DIR__ . '/../thinkphp/base.php';
 // 绑定到安装控制器
 \think\Route::bind('\app\admin\command\Install', 'controller');
 
-// 关闭路由
+// 开启路由
 \think\App::route(true);
 
 // 设置根url

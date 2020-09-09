@@ -200,7 +200,10 @@ trait Backend
      */
     public function del($ids = "")
     {
-        $ids = $this->request->post("ids");
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         if ($ids) {
             $pk = $this->model->getPk();
             $adminIds = $this->getDataLimitAdminIds();
@@ -237,6 +240,10 @@ trait Backend
      */
     public function destroy($ids = "")
     {
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         $pk = $this->model->getPk();
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds)) {
@@ -273,6 +280,10 @@ trait Backend
      */
     public function restore($ids = "")
     {
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         $pk = $this->model->getPk();
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds)) {
@@ -307,8 +318,10 @@ trait Backend
      */
     public function multi($ids = "")
     {
-        $ids = $ids ? $ids : $this->request->param("ids");
-        $ids = $this->request->param("ids");
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         if ($ids) {
             if ($this->request->has('params')) {
                 parse_str($this->request->post("params"), $values);

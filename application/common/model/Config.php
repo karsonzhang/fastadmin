@@ -21,6 +21,9 @@ class Config extends Model
     protected $append = [
         'extend_html'
     ];
+    protected $type = [
+        'setting' => 'json',
+    ];
 
     /**
      * 读取配置类型
@@ -29,27 +32,28 @@ class Config extends Model
     public static function getTypeList()
     {
         $typeList = [
-            'string'      => __('String'),
-            'text'        => __('Text'),
-            'editor'      => __('Editor'),
-            'number'      => __('Number'),
-            'date'        => __('Date'),
-            'time'        => __('Time'),
-            'datetime'    => __('Datetime'),
-            'select'      => __('Select'),
-            'selects'     => __('Selects'),
-            'image'       => __('Image'),
-            'images'      => __('Images'),
-            'file'        => __('File'),
-            'files'       => __('Files'),
-            'switch'      => __('Switch'),
-            'checkbox'    => __('Checkbox'),
-            'radio'       => __('Radio'),
-            'city'        => __('City'),
-            'selectpage'  => __('Selectpage'),
-            'selectpages' => __('Selectpages'),
-            'array'       => __('Array'),
-            'custom'      => __('Custom'),
+            'string'        => __('String'),
+            'text'          => __('Text'),
+            'editor'        => __('Editor'),
+            'number'        => __('Number'),
+            'date'          => __('Date'),
+            'time'          => __('Time'),
+            'datetime'      => __('Datetime'),
+            'datetimerange' => __('Datetimerange'),
+            'select'        => __('Select'),
+            'selects'       => __('Selects'),
+            'image'         => __('Image'),
+            'images'        => __('Images'),
+            'file'          => __('File'),
+            'files'         => __('Files'),
+            'switch'        => __('Switch'),
+            'checkbox'      => __('Checkbox'),
+            'radio'         => __('Radio'),
+            'city'          => __('City'),
+            'selectpage'    => __('Selectpage'),
+            'selectpages'   => __('Selectpages'),
+            'array'         => __('Array'),
+            'custom'        => __('Custom'),
         ];
         return $typeList;
     }
@@ -165,9 +169,12 @@ class Config extends Model
     {
         $uploadcfg = config('upload');
 
+        $uploadurl = request()->module() ? $uploadcfg['uploadurl'] : ($uploadcfg['uploadurl'] === 'ajax/upload' ? 'index/' . $uploadcfg['uploadurl'] : $uploadcfg['uploadurl']);
+
+        $uploadurl = url($uploadurl, '', false, true);
         $upload = [
             'cdnurl'    => $uploadcfg['cdnurl'],
-            'uploadurl' => $uploadcfg['uploadurl'],
+            'uploadurl' => $uploadurl,
             'bucket'    => 'local',
             'maxsize'   => $uploadcfg['maxsize'],
             'mimetype'  => $uploadcfg['mimetype'],
@@ -175,6 +182,7 @@ class Config extends Model
             'chunksize' => $uploadcfg['chunksize'],
             'multipart' => [],
             'multiple'  => $uploadcfg['multiple'],
+            'storage'   => 'local'
         ];
         return $upload;
     }

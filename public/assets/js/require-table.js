@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template', 'bootstrap-table-jumpto'], function ($, undefined, Moment) {
+define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template', 'bootstrap-table-jumpto', 'bootstrap-table-fixed-columns'], function ($, undefined, Moment) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -20,8 +20,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 fileName: 'export_' + Moment().format("YYYY-MM-DD"),
                 ignoreColumn: [0, 'operate'] //默认不导出第一列(checkbox)与操作(operate)列
             },
-            pageSize: 10,
-            pageList: [10, 25, 50, 'All'],
+            pageSize: localStorage.getItem("pagesize") || 10,
+            pageList: [10, 15, 20, 25, 50, 'All'],
             pagination: true,
             clickToSelect: true, //是否启用点击选中
             dblClickToEdit: true, //是否启用双击编辑
@@ -181,6 +181,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 table.on('refresh.bs.table', function (e, settings, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").addClass("fa-spin");
                 });
+                //当表格分页变更时
+                table.on('page-change.bs.table', function (e, page, pagesize) {
+                    if (!isNaN(pagesize)) {
+                        localStorage.setItem("pagesize", pagesize);
+                    }
+                });
                 //当执行搜索时
                 table.on('search.bs.table common-search.bs.table', function (e, settings, data) {
                     table.trigger("uncheckbox");
@@ -193,12 +199,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 }
                 //渲染内容前
                 table.on('pre-body.bs.table', function (e, data) {
-                    $.each(data, function (i, row) {
-                        row[options.stateField] = $.inArray(row[options.pk], options.selectedIds) > -1;
-                    });
+                    if (options.maintainSelected) {
+                        $.each(data, function (i, row) {
+                            row[options.stateField] = $.inArray(row[options.pk], options.selectedIds) > -1;
+                        });
+                    }
                 });
                 //当内容渲染完成后
-                table.on('post-body.bs.table', function (e, settings, json, xhr) {
+                table.on('post-body.bs.table', function (e, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
                     if ($(Table.config.checkboxtd + ":first", table).find("input[type='checkbox'][data-index]").size() > 0) {
                         // 拖拽选择,需要重新绑定事件
@@ -328,11 +336,28 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     });
                     return false;
                 });
-                //还原或删除
-                $(document).on('click', Table.config.restoreallbtn + ',' + Table.config.restoreonebtn + ',' + Table.config.destroyonebtn, function () {
+                //全部还原
+                $(document).on('click', Table.config.restoreallbtn, function () {
                     var that = this;
                     var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
                     Fast.api.ajax(url, function () {
+                        Layer.closeAll();
+                        table.trigger("uncheckbox");
+                        table.bootstrapTable('refresh');
+                    }, function () {
+                        Layer.closeAll();
+                    });
+                    return false;
+                });
+                //销毁或删除
+                $(document).on('click', Table.config.restoreonebtn + ',' + Table.config.destroyonebtn, function () {
+                    var that = this;
+                    var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
+                    var row = Fast.api.getrowbyindex(table, $(that).data("row-index"));
+                    Fast.api.ajax({
+                        url: url,
+                        data: {ids: row[options.pk]}
+                    }, function () {
                         table.trigger("uncheckbox");
                         table.bootstrapTable('refresh');
                     });
@@ -412,7 +437,17 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 });
                 table.on("click", "[data-id].btn-change", function (e) {
                     e.preventDefault();
-                    Table.api.multi($(this).data("action") ? $(this).data("action") : '', [$(this).data("id")], table, this);
+                    var switcher = $.proxy(function () {
+                        Table.api.multi($(this).data("action") ? $(this).data("action") : '', [$(this).data("id")], table, this);
+                    }, this);
+                    if (typeof $(this).data("confirm") !== 'undefined') {
+                        Layer.confirm($(this).data("confirm"), function (index) {
+                            switcher();
+                            Layer.close(index);
+                        });
+                    } else {
+                        switcher();
+                    }
                 });
                 table.on("click", "[data-id].btn-edit", function (e) {
                     e.preventDefault();
@@ -444,7 +479,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 var options = table.bootstrapTable('getOptions');
                 var data = element ? $(element).data() : {};
                 ids = ($.isArray(ids) ? ids.join(",") : ids);
-                var url = typeof data.url !== "undefined" ? Table.api.replaceurl(data.url, {ids: ids}, table) : (action == "del" ? options.extend.del_url : options.extend.multi_url);
+                var url = typeof data.url !== "undefined" ? data.url : (action == "del" ? options.extend.del_url : options.extend.multi_url);
                 var params = typeof data.params !== "undefined" ? (typeof data.params == 'object' ? $.param(data.params) : data.params) : '';
                 options = {url: url, data: {action: action, ids: ids, params: params}};
                 Fast.api.ajax(options, function (data, ret) {
@@ -592,12 +627,16 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var yes = typeof this.yes !== 'undefined' ? this.yes : 1;
                     var no = typeof this.no !== 'undefined' ? this.no : 0;
                     var url = typeof this.url !== 'undefined' ? this.url : '';
+                    var confirm = '';
                     var disable = false;
+                    if (typeof this.confirm !== "undefined") {
+                        confirm = typeof this.confirm === "function" ? this.confirm.call(this, value, row, index) : this.confirm;
+                    }
                     if (typeof this.disable !== "undefined") {
                         disable = typeof this.disable === "function" ? this.disable.call(this, value, row, index) : this.disable;
                     }
                     return "<a href='javascript:;' data-toggle='tooltip' title='" + __('Click to toggle') + "' class='btn-change " + (disable ? 'btn disabled' : '') + "' data-id='"
-                        + row[pk] + "' " + (url ? "data-url='" + url + "'" : "") + " data-params='" + this.field + "=" + (value == yes ? no : yes) + "'><i class='fa fa-toggle-on " + (value == yes ? 'text-' + color : 'fa-flip-horizontal text-gray') + " fa-2x'></i></a>";
+                        + row[pk] + "' " + (url ? "data-url='" + url + "'" : "") + (confirm ? "data-confirm='" + confirm + "'" : "") + " data-params='" + this.field + "=" + (value == yes ? no : yes) + "'><i class='fa fa-toggle-on " + (value == yes ? 'text-' + color : 'fa-flip-horizontal text-gray') + " fa-2x'></i></a>";
                 },
                 url: function (value, row, index) {
                     value = value === null ? '' : value.toString();

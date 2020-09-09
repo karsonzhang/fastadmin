@@ -196,6 +196,26 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 table.bootstrapTable('refresh', {url: $(this).data("url"), pageNumber: 1});
                 return false;
             });
+            var tables = [];
+            $(document).on("click", "#droptables", function () {
+                if ($(this).prop("checked")) {
+                    Fast.api.ajax({
+                        url: "addon/get_table_list",
+                        async: false,
+                        data: {name: $(this).data("name")}
+                    }, function (data) {
+                        tables = data.tables;
+                        return false;
+                    });
+                    var html;
+                    html = tables.length > 0 ? '<div class="alert alert-warning-light droptablestips" style="max-width:480px;max-height:300px;overflow-y: auto;">' + __('The following data tables will be deleted') + '：<br>' + tables.join("<br>") + '</div>'
+                        : '<div class="alert alert-warning-light droptablestips">' + __('The Addon did not create a data table') + '</div>';
+                    $(html).insertAfter($(this).closest("p"));
+                } else {
+                    $(".droptablestips").remove();
+                }
+                $(window).resize();
+            });
 
             // 会员信息
             $(document).on("click", ".btn-userinfo", function () {
@@ -205,7 +225,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Layer.open({
                         content: Template("logintpl", {}),
                         zIndex: 99,
-                        area: area,
+                        area: [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '400px' : '95%'],
                         title: __('Login FastAdmin'),
                         resize: false,
                         btn: [__('Login'), __('Register')],
@@ -350,10 +370,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 });
             };
 
-            var uninstall = function (name, force) {
+            var uninstall = function (name, force, droptables) {
                 Fast.api.ajax({
                     url: 'addon/uninstall',
-                    data: {name: name, force: force ? 1 : 0}
+                    data: {name: name, force: force ? 1 : 0, droptables: droptables ? 1 : 0}
                 }, function (data, ret) {
                     delete Config['addons'][name];
                     Layer.closeAll();
@@ -372,7 +392,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
                             },
                             yes: function () {
-                                uninstall(name, true);
+                                uninstall(name, true, droptables);
                             }
                         });
 
@@ -466,8 +486,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Layer.alert(__('Please disable addon first'), {icon: 7});
                     return false;
                 }
-                Layer.confirm(__('Uninstall tips', Config['addons'][name].title), function () {
-                    uninstall(name, false);
+                Template.helper("__", __);
+                Layer.confirm(Template("uninstalltpl", {addon: Config['addons'][name]}), {focusBtn: false}, function (index, layero) {
+                    uninstall(name, false, $("input[name='droptables']", layero).prop("checked"));
                 });
             });
 
@@ -545,10 +566,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     var url = 'javascript:';
                     if (typeof row.homepage !== 'undefined') {
                         url = row.homepage;
-                    } else if (typeof row.qq !== 'undefined') {
+                    } else if (typeof row.qq !== 'undefined' && row.qq) {
                         url = 'https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes';
                     }
-                    return '<a href="' + url + '" target="_blank" data-toggle="tooltip" title="' + __('Click to contact developer') + '" class="text-primary">' + value + '</a>';
+                    return '<a href="' + url + '" target="_blank" data-toggle="tooltip" class="text-primary">' + value + '</a>';
                 },
                 price: function (value, row, index) {
                     if (isNaN(value)) {

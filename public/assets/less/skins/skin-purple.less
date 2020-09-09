@@ -7,48 +7,70 @@
 @import "../fastadmin/variables.less";
 @import "../fastadmin/mixins.less";
 
+@sidebar-dark-bg: @purple;
+@sidebar-dark-color: #c8c5ff;
+@sidebar-dark-submenu-color: #c8c5ff;
+
 .skin-purple {
-  //Navbar
-  .main-header {
-    .navbar {
-      .navbar-variant(@purple; #fff);
-      .sidebar-toggle {
+    //Navbar
+    .main-header {
+        .navbar {
+            .navbar-variant(#fff; #444; @purple; rgba(0, 0, 0, .02));
+
+            @media (max-width: @screen-header-collapse) {
+                .dropdown-menu {
+                    li {
+                        &.divider {
+                            background-color: rgba(255, 255, 255, 0.1);
+                        }
+
+                        a {
+                            color: #fff;
+
+                            &:hover {
+                                background: darken(@purple, 5%);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Logo
+
+        > .logo {
+            .logo-variant(@purple; #fff);
+            border-right: 1px solid @purple;
+            box-shadow: none;
+            @media (max-width: @screen-header-collapse) {
+                .logo-variant(#fff; #222);
+                border-right: none;
+            }
+        }
+
+        li.user-header {
+            background-color: @purple;
+        }
+
+        .nav-addtabs > li > a, .nav-addtabs > li.active > a {
+            border-right-color: transparent;
+        }
+
+    }
+
+    //Content Header
+    .content-header {
+        background: transparent;
+    }
+
+    //Create the sidebar skin
+    .skin-dark-sidebar(#fff);
+
+    .sidebar-form input[type="text"] {
+        .placeholder(#fff);
+    }
+
+    .sidebar-form input[type="text"], .sidebar-form .btn {
         color: #fff;
-        &:hover {
-          background-color: darken(@purple, 5%);
-        }
-      }
-      @media (max-width: @screen-header-collapse) {
-        .dropdown-menu {
-          li {
-            &.divider {
-              background-color: rgba(255, 255, 255, 0.1);
-            }
-            a {
-              color: #fff;
-              &:hover {
-                background: darken(@purple, 5%);
-              }
-            }
-          }
-        }
-      }
     }
-    //Logo
-    .logo {
-      .logo-variant(darken(@purple, 5%));
-    }
-
-    li.user-header {
-      background-color: @purple;
-    }
-  }
-
-  //Content Header
-  .content-header {
-    background: transparent;
-  }
-
-  //Create the sidebar skin
-  .skin-dark-sidebar(@purple);
 }

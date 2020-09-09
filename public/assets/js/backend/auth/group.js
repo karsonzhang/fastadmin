@@ -42,13 +42,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
-                escape: false,
                 columns: [
                     [
                         {field: 'state', checkbox: true,},
                         {field: 'id', title: 'ID'},
                         {field: 'pid', title: __('Parent')},
-                        {field: 'name', title: __('Name'), align: 'left'},
+                        {field: 'name', title: __('Name'), align: 'left', formatter:function (value, row, index) {
+                                return value.toString().replace(/(&|&amp;)nbsp;/g, '');
+                            }
+                        },
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
                         {
                             field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: function (value, row, index) {

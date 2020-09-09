@@ -1,58 +1,87 @@
 /*
  * Skin: Blue
- * ----------
+ * -----------
  */
 @import "../bootstrap-less/mixins.less";
 @import "../bootstrap-less/variables.less";
 @import "../fastadmin/variables.less";
 @import "../fastadmin/mixins.less";
 
+@blue: #4e73df;
+@sidebar-dark-bg: #4e73df;
+@sidebar-dark-color: #ccd9ff;
+@sidebar-dark-submenu-color: #ccd9ff;
+
 .skin-blue {
-    //Navbar
     .main-header {
+
+        .navbar-toggle {
+            color: #333;
+        }
+
+        .navbar-brand {
+            color: #333;
+            border-right: 1px solid #eee;
+        }
+
         .navbar {
-            .navbar-variant(@light-blue; #fff);
-            .sidebar-toggle {
-                color: #fff;
-                &:hover {
-                    background-color: darken(@light-blue, 5%);
+            .navbar-variant(#fff; #444; @blue; rgba(0, 0, 0, .02));
+
+            > .sidebar-toggle {
+                color: #333;
+                border-right: 1px solid #eee;
+            }
+
+            .navbar-nav {
+                > li > a {
+                    border-right: 1px solid #eee;
                 }
             }
-            @media (max-width: @screen-header-collapse) {
-                .dropdown-menu {
-                    li {
-                        &.divider {
-                            background-color: rgba(255, 255, 255, 0.1);
-                        }
-                        a {
-                            color: #fff;
-                            &:hover {
-                                background: darken(@light-blue, 5%);
-                            }
-                        }
+
+            .navbar-custom-menu .navbar-nav,
+            .navbar-right {
+                > li {
+                    > a {
+                        border-left: 1px solid #eee;
+                        border-left: none;
+                        border-right-width: 0;
                     }
                 }
             }
         }
-        //Logo
-        .logo {
-            .logo-variant(darken(@light-blue, 5%));
+
+        > .logo {
+            .logo-variant(@blue; #fff);
+            border-right: 1px solid @blue;
+            box-shadow: none;
+            @media (max-width: @screen-header-collapse) {
+                .logo-variant(#fff; #222);
+                border-right: none;
+            }
         }
 
         li.user-header {
-            background-color: @light-blue;
+            background-color: @blue;
         }
+
+        .nav-addtabs > li > a, .nav-addtabs > li.active > a {
+            border-right-color: transparent;
+        }
+
     }
 
-    //Content Header
     .content-header {
         background: transparent;
+        box-shadow: none;
     }
 
-    //Create the sidebar skin
-    .skin-dark-sidebar(@light-blue);
-}
+    .skin-dark-sidebar(#fff);
 
-.skin-blue.layout-top-nav .main-header > .logo {
-    .logo-variant(@light-blue);
+    .sidebar-form input[type="text"] {
+        .placeholder(#fff);
+    }
+
+    .sidebar-form input[type="text"], .sidebar-form .btn {
+        color: #fff;
+    }
 }

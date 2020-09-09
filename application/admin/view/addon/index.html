@@ -53,11 +53,13 @@
         position: absolute;
         box-shadow: 0px 0px 2px #f11414;
     }
+
     .form-userinfo .breadcrumb {
-        margin-bottom:10px;
+        margin-bottom: 10px;
     }
+
     .btn-toggle {
-        padding:0;
+        padding: 0;
     }
 </style>
 <div class="panel panel-default panel-intro">
@@ -77,7 +79,7 @@
                 <div class="widget-body no-padding">
                     <div id="toolbar" class="toolbar">
                         {:build_toolbar('refresh')}
-                        <button type="button" id="faupload-addon" class="btn btn-danger faupload" data-url="addon/local" data-mimetype="zip" data-multiple="false"><i class="fa fa-upload"></i>
+                        <button type="button" id="faupload-addon" class="btn btn-danger faupload" data-url="addon/local" data-chunking="false" data-mimetype="zip" data-multiple="false"><i class="fa fa-upload"></i>
                             {:__('Offline install')}
                         </button>
                         {if $Think.config.fastadmin.api_url}
@@ -170,8 +172,8 @@
                     <div class="col-lg-12">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input type="password" class="form-control" id="inputPassword" value=""
-                               placeholder="{:__('Your password')}">
+                            <input type="password" class="form-control" id="inputPassword" value=""
+                                   placeholder="{:__('Your password')}">
                         </div>
                     </div>
                 </div>
@@ -189,7 +191,6 @@
                 </div>
             </fieldset>
             <div class="breadcrumb"><a href="https://www.fastadmin.net/user/myaddon.html" target="_blank"><i class="fa fa-money"></i> {:__('My addons')}</a></div>
-            <div class="breadcrumb"><a href="https://www.fastadmin.net/user/addon.html" target="_blank"><i class="fa fa-upload"></i> {:__('My posts')}</a></div>
         </form>
     </div>
 </script>
@@ -203,6 +204,17 @@
             <%=paycode%>
         </div>
         <%}%>
+    </div>
+</script>
+<script id="uninstalltpl" type="text/html">
+    <div class="">
+        <div class=""><%=__("Are you sure you want to unstall %s?", addon['title'])%>
+            <p class="text-danger">{:__('Delete all the addon file and cannot be recovered!')} </p>
+            {if config('app_debug')}
+            <p class="text-danger"><input type="checkbox" name="droptables" id="droptables" data-name="<%=addon['name']%>"/> {:__('Delete all the addon database and cannot be recovered!')} </p>
+            {/if}
+            <p class="text-danger">{:__('Please backup important data manually before uninstall!')}</p>
+        </div>
     </div>
 </script>
 <script id="conflicttpl" type="text/html">
@@ -251,7 +263,7 @@
                         <% } %>
                     </ul>
                 </span>
-            <% }else{%>
+            <% }else if(typeof item.releaselist !="undefined" && item.releaselist.length>0){%>
                 <a href="javascript:;" class="btn btn-xs btn-primary btn-success btn-install"
                    data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"
                    data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
@@ -260,6 +272,12 @@
             <% if(item.demourl){ %>
                 <a href="<%=item.demourl%>" class="btn btn-xs btn-primary btn-info btn-demo" target="_blank">
                     <i class="fa fa-flash"></i> {:__('Demo')}
+                </a>
+            <% } %>
+
+            <% if(item.button){ %>
+                <a href="<%=item.url%>" class="btn btn-xs btn-primary btn-info" target="_blank">
+                    <%=item.button%>
                 </a>
             <% } %>
         <% } else {%>

@@ -28,13 +28,6 @@ body.is-dialog {
   border: 1px solid #8B9;
   background-color: #BEC;
 }
-.main-header .logo,
-.main-header .navbar {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
-  transition: none;
-}
 .main-header .navbar {
   position: relative;
 }
@@ -51,9 +44,6 @@ html.ios-fix body {
 }
 .wrapper {
   height: 100%;
-}
-#header {
-  background: #fff;
 }
 .content-wrapper {
   position: relative;
@@ -336,7 +326,7 @@ form.form-horizontal .control-label {
 .nav-addtabs > li > a:focus {
   border: none;
   color: #2c3e50;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.02);
 }
 .nav-addtabs > li.active > a {
   height: 50px;
@@ -344,7 +334,7 @@ form.form-horizontal .control-label {
   padding: 0 15px;
   border-radius: 0;
   border: none;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.02);
   background: #f1f4f6;
   color: #2c3e50;
   overflow: hidden;
@@ -354,7 +344,7 @@ form.form-horizontal .control-label {
   border: none;
   color: #2c3e50;
   background: #f1f4f6;
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.02);
 }
 .nav-addtabs > li .close-tab {
   font-size: 10px;
@@ -385,13 +375,6 @@ form.form-horizontal .control-label {
 .nav-addtabs li:hover > .close-tab {
   display: block;
 }
-.multiplenav .content-wrapper,
-.multiplenav .right-side {
-  padding-top: 94px;
-}
-.multiplenav #firstnav .nav-addtabs {
-  padding-right: 450px;
-}
 #firstnav {
   height: 50px;
   border-bottom: 1px solid transparent;
@@ -420,6 +403,7 @@ form.form-horizontal .control-label {
 }
 /*次栏菜单栏*/
 #secondnav {
+  display: none;
   height: 44px;
   position: absolute;
   top: 50px;
@@ -495,6 +479,20 @@ form.form-horizontal .control-label {
   border-color: #222e32;
   color: #222e32;
 }
+.multiplenav .content-wrapper,
+.multiplenav .right-side {
+  padding-top: 50px;
+}
+.multiplenav #firstnav .nav-addtabs {
+  padding-right: 450px;
+}
+.multipletab #secondnav {
+  display: block;
+}
+.multipletab.multiplenav .content-wrapper,
+.multipletab.multiplenav .right-side {
+  padding-top: 94px;
+}
 .main-sidebar .sidebar-form {
   overflow: visible;
 }
@@ -541,7 +539,7 @@ form.form-horizontal .control-label {
 }
 @media (min-width: 768px) {
   .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
-    top: 41px;
+    top: 42px;
   }
   .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
     top: 7px !important;
@@ -639,6 +637,9 @@ form.form-horizontal .control-label {
 }
 .fixed-table-container tbody .selected td {
   background-color: rgba(216, 224, 230, 0.5);
+}
+.fixed-table-container .bs-checkbox {
+  min-width: 36px;
 }
 /*修复nice-validator新版下的一处BUG*/
 .nice-validator input,
@@ -972,9 +973,7 @@ table.table-nowrap thead > tr > th {
 }
 /*平板样式*/
 @media (max-width: 767px) {
-  body .wrapper .main-header .logo {
-    background: none;
-    color: #fff;
+  .wrapper .main-header .logo {
     border-bottom: 0 solid transparent;
     position: absolute;
     top: 0;
@@ -983,32 +982,32 @@ table.table-nowrap thead > tr > th {
     left: 50%;
     margin-left: -65px;
   }
-  body .sidebar .mobilenav a.btn-app {
+  .sidebar .mobilenav a.btn-app {
     color: #444;
     width: 100px;
     height: 70px;
     font-size: 13px;
   }
-  body .sidebar .mobilenav a.btn-app i.fa {
+  .sidebar .mobilenav a.btn-app i.fa {
     font-size: 24px;
   }
-  body .sidebar .mobilenav a.btn-app span {
+  .sidebar .mobilenav a.btn-app span {
     margin-top: 5px;
     display: block;
   }
-  body .sidebar .mobilenav a.btn-app.active {
+  .sidebar .mobilenav a.btn-app.active {
     color: #222d32;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li > a {
+  .wrapper .main-header .navbar .dropdown-menu li > a {
     color: #333;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li > a:hover {
+  .wrapper .main-header .navbar .dropdown-menu li > a:hover {
     background: #eee;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li.active > a {
+  .wrapper .main-header .navbar .dropdown-menu li.active > a {
     color: #fff;
   }
-  body .wrapper .main-header .navbar .dropdown-menu li.active > a:hover {
+  .wrapper .main-header .navbar .dropdown-menu li.active > a:hover {
     background: #222d32;
   }
   .main-sidebar,
@@ -1057,6 +1056,43 @@ table.table-nowrap thead > tr > th {
   margin-right: 5px;
   text-align: center;
   display: inline-block;
+}
+.fixed-columns,
+.fixed-columns-right {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  min-height: 41px;
+  background-color: #fff;
+  box-sizing: border-box;
+  z-index: 1;
+  box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.08);
+}
+.fixed-columns .fixed-table-body,
+.fixed-columns-right .fixed-table-body {
+  min-height: 41px;
+  overflow-x: hidden !important;
+}
+.fixed-columns {
+  left: 0;
+}
+.fixed-columns-right {
+  right: 0;
+  box-shadow: -1px 0 8px rgba(0, 0, 0, 0.08);
+}
+.fix-sticky {
+  position: fixed;
+  z-index: 100;
+}
+.fix-sticky thead {
+  background: #fff;
+}
+.fix-sticky thead th,
+.fix-sticky thead th:first-child {
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 1px solid #eee;
+  border-radius: 0;
 }
 .sidebar-menu li.treeview-open > a > .fa-angle-left,
 .sidebar-menu li.treeview-open > a > .pull-right-container > .fa-angle-left {

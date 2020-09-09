@@ -1,0 +1,165 @@
+/*
+ * Skin: Black pink
+ * -----------
+ */
+@import "../bootstrap-less/mixins.less";
+@import "../bootstrap-less/variables.less";
+@import "../fastadmin/variables.less";
+@import "../fastadmin/mixins.less";
+
+@primary: #f5549f;
+.skin-black-pink {
+
+    .main-header {
+        background: @sidebar-dark-bg;
+        .box-shadow(0px 1px 1px rgba(0, 0, 0, 0.05));
+
+        .navbar-toggle {
+            color: #333;
+        }
+
+        .navbar-brand {
+            color: #333;
+            border-right: 1px solid #eee;
+        }
+
+        .navbar {
+            .navbar-variant(#fff; #666; #444; rgba(0, 0, 0, .02));
+
+            > .sidebar-toggle {
+                color: #333;
+                border-right: 1px solid #eee;
+            }
+
+            .navbar-nav {
+                > li > a {
+                    border-right: 1px solid #eee;
+                }
+            }
+
+            .navbar-custom-menu .navbar-nav,
+            .navbar-right {
+                > li {
+                    > a {
+                        border-left: 1px solid #eee;
+                        border-left: none;
+                        border-right-width: 0;
+                    }
+                }
+            }
+        }
+
+        .logo {
+            .logo-variant(@sidebar-dark-bg; #fff);
+            border-right: 1px solid @sidebar-dark-bg;
+            @media (max-width: @screen-header-collapse) {
+                .logo-variant(#fff; #333);
+                border-right: none;
+            }
+        }
+
+        li.user-header {
+            background-color: #222;
+        }
+
+        .nav-addtabs > li > a, .nav-addtabs > li.active > a {
+            border-right-color: transparent;
+        }
+
+    }
+
+    //Content Header
+    .content-header {
+        background: transparent;
+        box-shadow: none;
+    }
+
+    //Create the sidebar skin
+    .skin-dark-sidebar(#fff);
+
+    .sidebar-menu > li {
+
+        //links
+        > a {
+            border-left: 3px solid transparent;
+        }
+
+        //Hover and active states
+        &:hover > a, &.active > a {
+            color: @sidebar-dark-hover-color;
+            background: @primary;
+            border-left-color: @primary;
+        }
+
+        //Hover and active states
+        &:hover > a {
+            border-left-color: transparent;
+        }
+    }
+
+    .treeview-menu {
+        > li {
+            > a {
+                padding-left: 18px;
+            }
+
+            &.active > a, > a:hover {
+                background-color: @primary;
+            }
+        }
+    }
+
+    .sidebar-menu {
+        > li > .treeview-menu {
+            margin: 0;
+        }
+
+        li.treeview > a {
+            background: transparent;
+            border-left-color: transparent;
+
+            &:hover {
+                color: @sidebar-dark-hover-color;
+                background: @primary;
+            }
+        }
+
+        .treeview-menu {
+            padding-left: 0;
+
+            .treeview-menu {
+                padding-left: 0;
+
+                > li > a {
+                    padding-left: 30px;
+                }
+            }
+
+            li.treeview > a {
+                background: transparent;
+                border-left-color: transparent;
+
+                &:hover {
+                    color: @sidebar-dark-hover-color;
+                    background: @primary;
+                }
+            }
+        }
+    }
+
+    &.sidebar-collapse {
+        .sidebar-menu {
+            li:hover > a, li.active > a {
+                color: @sidebar-dark-hover-color;
+                background: @primary;
+            }
+
+            .treeview-menu {
+                li.active > a {
+                    color: @sidebar-dark-hover-color;
+                    background: @primary;
+                }
+            }
+        }
+    }
+}

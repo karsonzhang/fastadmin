@@ -149,6 +149,16 @@
     .item {
         padding: 30px 0;
     }
+
+
+
+    #statistics .panel {
+        min-height: 150px;
+    }
+
+    #statistics .panel h5 {
+        font-size: 13px;
+    }
 </style>
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
@@ -275,15 +285,15 @@
                     </div>
                 </div>
 
-                <div class="row" style="margin-top:15px;">
+                <div class="row" style="margin-top:15px;" id="statistics">
 
                     <div class="col-lg-12">
                     </div>
                     <div class="col-xs-6 col-md-3">
-                        <div class="panel bg-blue">
+                        <div class="panel bg-blue-gradient no-border">
                             <div class="panel-body">
                                 <div class="panel-title">
-                                    <span class="label label-success pull-right">{:__('Real time')}</span>
+                                    <span class="label label-primary pull-right">{:__('Real time')}</span>
                                     <h5>{:__('Category count')}</h5>
                                 </div>
                                 <div class="panel-content">
@@ -295,10 +305,10 @@
                         </div>
                     </div>
                     <div class="col-xs-6 col-md-3">
-                        <div class="panel bg-aqua-gradient">
+                        <div class="panel bg-aqua-gradient no-border">
                             <div class="panel-body">
                                 <div class="ibox-title">
-                                    <span class="label label-info pull-right">{:__('Real time')}</span>
+                                    <span class="label label-primary pull-right">{:__('Real time')}</span>
                                     <h5>{:__('Attachment count')}</h5>
                                 </div>
                                 <div class="ibox-content">
@@ -311,7 +321,7 @@
                     </div>
 
                     <div class="col-xs-6 col-md-3">
-                        <div class="panel bg-purple-gradient">
+                        <div class="panel bg-purple-gradient no-border">
                             <div class="panel-body">
                                 <div class="ibox-title">
                                     <span class="label label-primary pull-right">{:__('Real time')}</span>
@@ -338,7 +348,7 @@
                         </div>
                     </div>
                     <div class="col-xs-6 col-md-3">
-                        <div class="panel bg-green-gradient">
+                        <div class="panel bg-green-gradient no-border">
                             <div class="panel-body">
                                 <div class="ibox-title">
                                     <span class="label label-primary pull-right">{:__('Real time')}</span>
@@ -376,6 +386,7 @@
         </div>
     </div>
 </div>
+<!--@formatter:off-->
 <script>
     var Orderdata = {
         column: {:json_encode(array_keys($paylist))},
@@ -383,3 +394,4 @@
         createdata: {:json_encode(array_values($createlist))},
     };
 </script>
+<!--@formatter:on-->

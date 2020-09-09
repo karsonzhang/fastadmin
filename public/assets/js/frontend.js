@@ -67,6 +67,39 @@ define(['fast', 'template', 'moment'], function (Fast, Template, Moment) {
                 $('body').tooltip({selector: '[data-toggle="tooltip"]'});
             }
             $('body').popover({selector: '[data-toggle="popover"]'});
+
+            // 手机端左右滑动切换菜单栏
+            if ('ontouchstart' in document.documentElement) {
+                var startX, startY, moveEndX, moveEndY, relativeX, relativeY, element;
+                element = $('body', document);
+                element.on("touchstart", function (e) {
+                    startX = e.originalEvent.changedTouches[0].pageX;
+                    startY = e.originalEvent.changedTouches[0].pageY;
+                });
+                element.on("touchend", function (e) {
+                    moveEndX = e.originalEvent.changedTouches[0].pageX;
+                    moveEndY = e.originalEvent.changedTouches[0].pageY;
+                    relativeX = moveEndX - startX;
+                    relativeY = moveEndY - startY;
+
+                    // 判断标准
+                    //右滑
+                    if (relativeX > 45) {
+                        if ((Math.abs(relativeX) - Math.abs(relativeY)) > 50) {
+                            element.addClass("sidebar-open");
+                        }
+                    }
+                    //左滑
+                    else if (relativeX < -45) {
+                        if ((Math.abs(relativeX) - Math.abs(relativeY)) > 50) {
+                            element.removeClass("sidebar-open");
+                        }
+                    }
+                });
+            }
+            $(document).on("click", ".sidebar-toggle", function () {
+                $("body").toggleClass("sidebar-open");
+            });
         }
     };
     Frontend.api = $.extend(Fast.api, Frontend.api);

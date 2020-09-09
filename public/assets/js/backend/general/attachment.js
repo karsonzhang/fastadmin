@@ -28,7 +28,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'user_id', title: __('User_id'), visible: false, addClass: "selectpage", extend: "data-source='user/user/index' data-field='nickname'"},
                         {field: 'preview', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
                         {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url, visible: false},
-                        {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
+                        {field: 'filename', title: __('Filename'), formatter: Controller.api.formatter.filename, operate: 'like'},
                         {
                             field: 'filesize', title: __('Filesize'), operate: 'BETWEEN', sortable: true, formatter: function (value, row, index) {
                                 var size = parseFloat(value);
@@ -103,12 +103,12 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 showExport: false,
                 columns: [
                     [
-                        {field: 'state', checkbox: multiple, visible: multiple},
+                        {field: 'state', checkbox: multiple, visible: multiple, operate: false},
                         {field: 'id', title: __('Id')},
                         {field: 'admin_id', title: __('Admin_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'user_id', title: __('User_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
-                        {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
+                        {field: 'filename', title: __('Filename'), formatter: Controller.api.formatter.filename, operate: 'like'},
                         {field: 'imagewidth', title: __('Imagewidth'), operate: false},
                         {field: 'imageheight', title: __('Imageheight'), operate: false},
                         {
@@ -169,6 +169,9 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 },
                 url: function (value, row, index) {
                     return '<a href="' + row.fullurl + '" target="_blank" class="label bg-green">' + row.url + '</a>';
+                },
+                filename: function (value, row, index) {
+                    return '<div style="width:200px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
                 },
             }
         }

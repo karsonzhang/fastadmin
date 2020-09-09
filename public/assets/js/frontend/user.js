@@ -98,6 +98,95 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                     }
                 });
             });
+        },
+        attachment: function () {
+            require(['table'], function (Table) {
+
+                // 初始化表格参数配置
+                Table.api.init({
+                    extend: {
+                        index_url: 'user/attachment',
+                    }
+                });
+                var urlArr = [];
+                var multiple = Fast.api.query('multiple');
+                multiple = multiple == 'true' ? true : false;
+
+                var table = $("#table");
+
+                table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function (e, row) {
+                    if (e.type == 'check' || e.type == 'uncheck') {
+                        row = [row];
+                    } else {
+                        urlArr = [];
+                    }
+                    $.each(row, function (i, j) {
+                        if (e.type.indexOf("uncheck") > -1) {
+                            var index = urlArr.indexOf(j.url);
+                            if (index > -1) {
+                                urlArr.splice(index, 1);
+                            }
+                        } else {
+                            urlArr.indexOf(j.url) == -1 && urlArr.push(j.url);
+                        }
+                    });
+                });
+
+                // 初始化表格
+                table.bootstrapTable({
+                    url: $.fn.bootstrapTable.defaults.extend.index_url,
+                    sortName: 'id',
+                    showToggle: false,
+                    showExport: false,
+                    columns: [
+                        [
+                            {field: 'state', checkbox: multiple, visible: multiple, operate:false},
+                            {field: 'id', title: __('Id')},
+                            {field: 'url', title: __('Preview'), formatter: function (value, row, index) {
+                                    if (row.mimetype.indexOf("image") > -1) {
+                                        var style = row.storage === 'upyun' ? '!/fwfh/120x90' : '';
+                                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + style + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                                    } else {
+                                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                                    }
+                                }, operate: false},
+                            {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
+                            {field: 'imagewidth', title: __('Imagewidth'), operate: false},
+                            {field: 'imageheight', title: __('Imageheight'), operate: false},
+                            {
+                                field: 'mimetype', title: __('Mimetype'), operate: 'LIKE %...%',
+                                process: function (value, arg) {
+                                    return value.replace(/\*/g, '%');
+                                }
+                            },
+                            {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                            {
+                                field: 'operate', title: __('Operate'), events: {
+                                    'click .btn-chooseone': function (e, value, row, index) {
+                                        Fast.api.close({url: row.url, multiple: multiple});
+                                    },
+                                }, formatter: function () {
+                                    return '<a href="javascript:;" class="btn btn-danger btn-chooseone btn-xs"><i class="fa fa-check"></i> ' + __('Choose') + '</a>';
+                                }
+                            }
+                        ]
+                    ]
+                });
+
+                // 选中多个
+                $(document).on("click", ".btn-choose-multi", function () {
+                    Fast.api.close({url: urlArr.join(","), multiple: multiple});
+                });
+
+                // 为表格绑定事件
+                Table.api.bindevent(table);
+                require(['upload'], function (Upload) {
+                    Upload.api.upload($("#toolbar .faupload"), function () {
+                        $(".btn-refresh").trigger("click");
+                    });
+                });
+
+            });
         }
     };
     return Controller;

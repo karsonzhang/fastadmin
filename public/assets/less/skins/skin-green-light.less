@@ -8,48 +8,68 @@
 @import "../fastadmin/mixins.less";
 
 .skin-green-light {
-  //Navbar
-  .main-header {
-    .navbar {
-      .navbar-variant(@green; #fff);
-      .sidebar-toggle {
-        color: #fff;
-        &:hover {
-          background-color: darken(@green, 5%);
-        }
-      }
-      @media (max-width: @screen-header-collapse) {
-        .dropdown-menu {
-          li {
-            &.divider {
-              background-color: rgba(255, 255, 255, 0.1);
+    //Navbar
+    .main-header {
+        background-color: @green;
+
+        .navbar {
+            .navbar-variant(@green; #fff; #f6f6f6; rgba(0, 0, 0, 0.05));
+
+            .sidebar-toggle {
+                color: #fff;
+
+                &:hover {
+                    background-color: darken(@green, 5%);
+                }
             }
-            a {
-              color: #fff;
-              &:hover {
-                background: darken(@green, 5%);
-              }
+
+            @media (max-width: @screen-header-collapse) {
+                .dropdown-menu {
+                    li {
+                        &.divider {
+                            background-color: rgba(255, 255, 255, 0.1);
+                        }
+
+                        a {
+                            color: #fff;
+
+                            &:hover {
+                                background: darken(@green, 5%);
+                            }
+                        }
+                    }
+                }
             }
-          }
         }
-      }
+
+        //Logo
+        .logo {
+            .logo-variant(@green);
+        }
+
+        li.user-header {
+            background-color: @green;
+        }
     }
-    //Logo
-    .logo {
-      .logo-variant(@green);
+
+    //Content Header
+    .content-header {
+        background: transparent;
     }
 
-    li.user-header {
-      background-color: @green;
+    //Create the sidebar skin
+    .skin-light-sidebar(@green);
+
+    .main-sidebar {
+        .box-shadow(7px 0 14px rgba(0, 0, 0, .03));
     }
-  }
 
-  //Content Header
-  .content-header {
-    background: transparent;
-  }
+    .content-wrapper,
+    .main-footer {
+        border-left: none;
+    }
 
-  //Create the sidebar skin
-  .skin-light-sidebar(@green);
-
+    #firstnav {
+        box-shadow: none;
+    }
 }

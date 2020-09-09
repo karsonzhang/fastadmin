@@ -12,6 +12,7 @@ use think\Loader;
 use think\Request;
 use think\Response;
 use think\Route;
+use think\Validate;
 
 /**
  * API控制器基类
@@ -91,24 +92,8 @@ class Api
      */
     protected function _initialize()
     {
-        if (Config::get('url_domain_deploy')) {
-            $domain = Route::rules('domain');
-            if (isset($domain['api'])) {
-                if (isset($_SERVER['HTTP_ORIGIN'])) {
-                    header("Access-Control-Allow-Origin: " . $this->request->server('HTTP_ORIGIN'));
-                    header('Access-Control-Allow-Credentials: true');
-                    header('Access-Control-Max-Age: 86400');
-                }
-                if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-                    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
-                        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-                    }
-                    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
-                        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-                    }
-                }
-            }
-        }
+        //跨域请求检测
+        check_cors_request();
 
         //移除HTML标签
         $this->request->filter('trim,strip_tags,htmlspecialchars');
@@ -164,7 +149,7 @@ class Api
      */
     protected function loadlang($name)
     {
-        $name =  Loader::parseName($name);
+        $name = Loader::parseName($name);
         Lang::load(APP_PATH . $this->request->module() . '/lang/' . $this->request->langset() . '/' . str_replace('.', '/', $name) . '.php');
     }
 
@@ -230,8 +215,8 @@ class Api
     /**
      * 前置操作
      * @access protected
-     * @param  string $method  前置操作方法名
-     * @param  array  $options 调用参数 ['only'=>[...]] 或者 ['except'=>[...]]
+     * @param string $method  前置操作方法名
+     * @param array  $options 调用参数 ['only'=>[...]] 或者 ['except'=>[...]]
      * @return void
      */
     protected function beforeAction($method, $options = [])
@@ -273,11 +258,11 @@ class Api
     /**
      * 验证数据
      * @access protected
-     * @param  array        $data     数据
-     * @param  string|array $validate 验证器名或者验证规则数组
-     * @param  array        $message  提示信息
-     * @param  bool         $batch    是否批量验证
-     * @param  mixed        $callback 回调方法（闭包）
+     * @param array        $data     数据
+     * @param string|array $validate 验证器名或者验证规则数组
+     * @param array        $message  提示信息
+     * @param bool         $batch    是否批量验证
+     * @param mixed        $callback 回调方法（闭包）
      * @return array|string|true
      * @throws ValidateException
      */
@@ -319,5 +304,21 @@ class Api
         }
 
         return true;
+    }
+
+    /**
+     * 刷新Token
+     */
+    protected function token()
+    {
+        $token = $this->request->param('__token__');
+
+        //验证Token
+        if (!Validate::make()->check(['__token__' => $token], ['__token__' => 'require|token'])) {
+            $this->error(__('Token verification error'), ['__token__' => $this->request->token()]);
+        }
+
+        //刷新Token
+        $this->request->token();
     }
 }

@@ -95,7 +95,7 @@
                                         searchList = ret;
                                     }
                                     var optionList = createOptionList(searchList, vObjCol, that);
-                                    $("form.form-commonsearch select[name='" + vObjCol.field + "']", that.$container).html(optionList.join(''));
+                                    $("form.form-commonsearch select[name='" + vObjCol.field + "']", that.$container).html(optionList.join('')).trigger("change");
                                 });
                             })(vObjCol, that);
                         } else {
@@ -292,7 +292,7 @@
         this.$header.find('th[data-field]').each(function (i) {
             var column = $(this).data();
             if (typeof column['width'] !== 'undefined') {
-                $(this).css("min-width", column['width']);
+                $(this).css("max-width", column['width']);
             }
         });
         this.options.stateField = this.header.stateField;

@@ -179,6 +179,9 @@ class Auth
             $this->_token = Random::uuid();
             Token::set($this->_token, $user->id, $this->keeptime);
 
+            //设置登录状态
+            $this->_logined = true;
+
             //注册成功的事件
             Hook::listen("user_register_successed", $this->_user, $data);
             Db::commit();

@@ -22,6 +22,8 @@ class Admin extends Backend
      * @var \app\admin\model\Admin
      */
     protected $model = null;
+    protected $selectpageFields = 'id,username,nickname,avatar';
+    protected $searchFields = 'id,username,nickname';
     protected $childrenGroupIds = [];
     protected $childrenAdminIds = [];
 
@@ -218,6 +220,10 @@ class Admin extends Backend
      */
     public function del($ids = "")
     {
+        if (!$this->request->isPost()) {
+            $this->error(__("Invalid parameters"));
+        }
+        $ids = $ids ? $ids : $this->request->post("ids");
         if ($ids) {
             $ids = array_intersect($this->childrenAdminIds, array_filter(explode(',', $ids)));
             // 避免越权删除管理员

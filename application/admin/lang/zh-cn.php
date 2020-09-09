@@ -96,6 +96,9 @@ return [
     'End time'                                              => '结束时间',
     'Create time'                                           => '创建时间',
     'Update time'                                           => '更新时间',
+    'Createtime'                                            => '创建时间',
+    'Updatetime'                                            => '更新时间',
+    'Deletetime'                                            => '删除时间',
     'Flag'                                                  => '标志',
     'Drag to sort'                                          => '拖动进行排序',
     'Redirect now'                                          => '立即跳转',
@@ -164,7 +167,7 @@ return [
     'An unexpected error occurred'                          => '发生了一个意外错误,程序猿正在紧急处理中',
     'This page will be re-directed in %s seconds'           => '页面将在 %s 秒后自动跳转',
     'Click to uncheck all'                                  => '点击取消全部',
-    'Multiple selection mode: %s checked'                    => '跨页选择模式，已选 %s 项',
+    'Multiple selection mode: %s checked'                   => '跨页选择模式，已选 %s 项',
     //菜单
     'Dashboard'                                             => '控制台',
     'General'                                               => '常规管理',

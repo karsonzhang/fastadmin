@@ -12,7 +12,7 @@ use think\Lang;
 class Ajax extends Frontend
 {
 
-    protected $noNeedLogin = ['lang'];
+    protected $noNeedLogin = ['lang', 'upload'];
     protected $noNeedRight = ['*'];
     protected $layout = '';
 

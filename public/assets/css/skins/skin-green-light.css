@@ -2,6 +2,9 @@
  * Skin: Green
  * -----------
  */
+.skin-green-light .main-header {
+  background-color: #18bc9c;
+}
 .skin-green-light .main-header .navbar {
   background-color: #18bc9c;
 }
@@ -15,7 +18,7 @@
 .skin-green-light .main-header .navbar .nav .open > a:hover,
 .skin-green-light .main-header .navbar .nav .open > a:focus,
 .skin-green-light .main-header .navbar .nav > .active > a {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
 .skin-green-light .main-header .navbar .sidebar-toggle {
@@ -23,7 +26,7 @@
 }
 .skin-green-light .main-header .navbar .sidebar-toggle:hover {
   color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 .skin-green-light .main-header .navbar .sidebar-toggle {
   color: #fff;
@@ -150,5 +153,16 @@
   .skin-green-light.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     border-left: 1px solid #d2d6de;
   }
+}
+.skin-green-light .main-sidebar {
+  -webkit-box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+  box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+}
+.skin-green-light .content-wrapper,
+.skin-green-light .main-footer {
+  border-left: none;
+}
+.skin-green-light #firstnav {
+  box-shadow: none;
 }
 /*# sourceMappingURL=skin-green-light.css.map */

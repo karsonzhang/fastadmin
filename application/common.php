@@ -97,7 +97,7 @@ if (!function_exists('is_really_writable')) {
 
     /**
      * 判断文件或文件夹是否可写
-     * @param    string $file 文件或目录
+     * @param string $file 文件或目录
      * @return    bool
      */
     function is_really_writable($file)
@@ -360,5 +360,61 @@ if (!function_exists('hsv2rgb')) {
             floor($g * 255),
             floor($b * 255)
         ];
+    }
+}
+
+if (!function_exists('check_nav_active')) {
+    /**
+     * 检测会员中心导航是否高亮
+     */
+    function check_nav_active($url, $classname = 'active')
+    {
+        $auth = \app\common\library\Auth::instance();
+        $requestUrl = $auth->getRequestUri();
+        $url = ltrim($url, '/');
+        return $requestUrl === str_replace(".", "/", $url) ? $classname : '';
+    }
+}
+
+if (!function_exists('check_cors_request')) {
+    /**
+     * 跨域检测
+     */
+    function check_cors_request()
+    {
+        if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN']) {
+            $info = parse_url($_SERVER['HTTP_ORIGIN']);
+            $domainArr = explode(',', config('fastadmin.cors_request_domain'));
+            $domainArr[] = request()->host();
+            if (in_array("*", $domainArr) || in_array($_SERVER['HTTP_ORIGIN'], $domainArr) || (isset($info['host']) && in_array($info['host'], $domainArr))) {
+                header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+            } else {
+                header('HTTP/1.1 403 Forbidden');
+                exit;
+            }
+
+            header('Access-Control-Allow-Credentials: true');
+            header('Access-Control-Max-Age: 86400');
+
+            if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+                if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+                    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+                }
+                if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+                    header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+                }
+                exit;
+            }
+        }
+    }
+}
+
+if (!function_exists('xss_clean')) {
+    /**
+     * 清理XSS
+     */
+    function xss_clean($content, $is_image = false)
+    {
+        return \app\common\library\Security::instance()->xss_clean($content, $is_image);
     }
 }

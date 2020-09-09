@@ -8,6 +8,7 @@ use think\Controller;
 use think\Hook;
 use think\Lang;
 use think\Loader;
+use think\Model;
 use think\Session;
 use fast\Tree;
 use think\Validate;
@@ -149,7 +150,7 @@ class Backend extends Controller
             }
             // 判断是否需要验证权限
             if (!$this->auth->match($this->noNeedRight)) {
-                // 判断控制器和方法判断是否有对应权限
+                // 判断控制器和方法是否有对应权限
                 if (!$this->auth->check($path)) {
                     Hook::listen('admin_nopermission', $this);
                     $this->error(__('You have no permission'), '');
@@ -173,8 +174,11 @@ class Backend extends Controller
         }
 
         // 设置面包屑导航数据
-        $breadcrumb = $this->auth->getBreadCrumb($path);
-        array_pop($breadcrumb);
+        $breadcrumb = [];
+        if (!IS_DIALOG && !config('fastadmin.multiplenav') && config('fastadmin.breadcrumb')) {
+            $breadcrumb = $this->auth->getBreadCrumb($path);
+            array_pop($breadcrumb);
+        }
         $this->view->breadcrumb = $breadcrumb;
 
         // 如果有使用模板布局
@@ -266,7 +270,6 @@ class Backend extends Controller
         $tableName = '';
         if ($relationSearch) {
             if (!empty($this->model)) {
-                $name = \think\Loader::parseName(basename(str_replace('\\', '/', get_class($this->model))));
                 $name = $this->model->getTable();
                 $tableName = $name . '.';
             }
@@ -290,6 +293,9 @@ class Backend extends Controller
             $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
         }
         foreach ($filter as $k => $v) {
+            if (!preg_match('/^[a-zA-Z0-9_\-\.]+$/', $k)) {
+                continue;
+            }
             $sym = isset($op[$k]) ? $op[$k] : '=';
             if (stripos($k, ".") === false) {
                 $k = $tableName . $k;
@@ -327,7 +333,12 @@ class Backend extends Controller
                 case 'FINDIN':
                 case 'FINDINSET':
                 case 'FIND_IN_SET':
-                    $where[] = "FIND_IN_SET('{$v}', " . ($relationSearch ? $k : '`' . str_replace('.', '`.`', $k) . '`') . ")";
+                    $v = is_array($v) ? $v : explode(',', str_replace(' ', ',', $v));
+                    foreach ($v as $index => $item) {
+                        $item = str_replace([' ', ',', "'"], '', $item);
+                        $item = addslashes(htmlentities(strip_tags($item)));
+                        $where[] = "FIND_IN_SET('{$item}', `" . ($relationSearch ? str_replace('.', '`.`', $k) : $k) . "`)";
+                    }
                     break;
                 case 'IN':
                 case 'IN(...)':
@@ -367,10 +378,6 @@ class Backend extends Controller
                         $arr = $arr[0];
                     }
                     $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
-                    break;
-                case 'LIKE':
-                case 'LIKE %...%':
-                    $where[] = [$k, 'LIKE', "%{$v}%"];
                     break;
                 case 'NULL':
                 case 'IS NULL':
@@ -424,7 +431,7 @@ class Backend extends Controller
     protected function selectpage()
     {
         //设置过滤方法
-        $this->request->filter(['strip_tags', 'htmlspecialchars']);
+        $this->request->filter(['trim', 'strip_tags', 'htmlspecialchars']);
 
         //搜索关键词,客户端输入以空格分开,这里接收为数组
         $word = (array)$this->request->request("q_word/a");
@@ -467,11 +474,18 @@ class Backend extends Controller
             $where = function ($query) use ($word, $andor, $field, $searchfield, $custom) {
                 $logic = $andor == 'AND' ? '&' : '|';
                 $searchfield = is_array($searchfield) ? implode($logic, $searchfield) : $searchfield;
-                $word = array_filter($word);
-                if ($word) {
-                    foreach ($word as $k => $v) {
-                        $query->where(str_replace(',', $logic, $searchfield), "like", "%{$v}%");
-                    }
+                $searchfield = str_replace(',', $logic, $searchfield);
+                $word = array_filter(array_unique($word));
+                if (count($word) == 1) {
+                    $query->where($searchfield, "like", "%" . reset($word) . "%");
+                } else {
+                    $query->where(function ($query) use ($word, $searchfield) {
+                        foreach ($word as $index => $item) {
+                            $query->whereOr(function ($query) use ($item, $searchfield) {
+                                $query->where($searchfield, "like", "%{$item}%");
+                            });
+                        }
+                    });
                 }
                 if ($custom && is_array($custom)) {
                     foreach ($custom as $k => $v) {
@@ -494,6 +508,9 @@ class Backend extends Controller
             if (is_array($adminIds)) {
                 $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
+
+            $fields = is_array($this->selectpageFields) ? $this->selectpageFields : ($this->selectpageFields && $this->selectpageFields != '*' ? explode(',', $this->selectpageFields) : []);
+            
             //如果有primaryvalue,说明当前是初始化传值,按照选择顺序排序
             if ($primaryvalue !== null) {
                 $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
@@ -514,11 +531,16 @@ class Backend extends Controller
 
             foreach ($datalist as $index => $item) {
                 unset($item['password'], $item['salt']);
-                $list[] = [
-                    $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
-                    $field      => isset($item[$field]) ? $item[$field] : '',
-                    'pid'       => isset($item['pid']) ? $item['pid'] : 0
-                ];
+                if ($this->selectpageFields == '*') {
+                    $result = [
+                        $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
+                        $field      => isset($item[$field]) ? $item[$field] : '',
+                    ];
+                } else {
+                    $result = array_intersect_key(($item instanceof Model ? $item->toArray() : (array)$item), array_flip($fields));
+                }
+                $result['pid'] = isset($item['pid']) ? $item['pid'] : (isset($item['parent_id']) ? $item['parent_id'] : 0);
+                $list[] = $result;
             }
             if ($istree && !$primaryvalue) {
                 $tree = Tree::instance();
@@ -541,7 +563,7 @@ class Backend extends Controller
      */
     protected function token()
     {
-        $token = $this->request->post('__token__');
+        $token = $this->request->param('__token__');
 
         //验证Token
         if (!Validate::make()->check(['__token__' => $token], ['__token__' => 'require|token'])) {

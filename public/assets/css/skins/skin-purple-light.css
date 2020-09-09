@@ -2,6 +2,9 @@
  * Skin: Purple
  * ------------
  */
+.skin-purple-light .main-header {
+  background-color: #605ca8;
+}
 .skin-purple-light .main-header .navbar {
   background-color: #605ca8;
 }
@@ -15,7 +18,7 @@
 .skin-purple-light .main-header .navbar .nav .open > a:hover,
 .skin-purple-light .main-header .navbar .nav .open > a:focus,
 .skin-purple-light .main-header .navbar .nav > .active > a {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
 .skin-purple-light .main-header .navbar .sidebar-toggle {
@@ -23,7 +26,7 @@
 }
 .skin-purple-light .main-header .navbar .sidebar-toggle:hover {
   color: #f6f6f6;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
 }
 .skin-purple-light .main-header .navbar .sidebar-toggle {
   color: #fff;
@@ -150,5 +153,13 @@
   .skin-purple-light.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     border-left: 1px solid #d2d6de;
   }
+}
+.skin-purple-light .main-sidebar {
+  -webkit-box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+  box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
+}
+.skin-purple-light .content-wrapper,
+.skin-purple-light .main-footer {
+  border-left: none;
 }
 /*# sourceMappingURL=skin-purple-light.css.map */

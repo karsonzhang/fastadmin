@@ -142,7 +142,7 @@ class Frontend extends Controller
      */
     protected function token()
     {
-        $token = $this->request->post('__token__');
+        $token = $this->request->param('__token__');
 
         //验证Token
         if (!Validate::make()->check(['__token__' => $token], ['__token__' => 'require|token'])) {

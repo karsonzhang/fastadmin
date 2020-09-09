@@ -1,0 +1,76 @@
+/*
+ * Skin: Black
+ * -----------
+ */
+@import "../bootstrap-less/mixins.less";
+@import "../bootstrap-less/variables.less";
+@import "../fastadmin/variables.less";
+@import "../fastadmin/mixins.less";
+
+.skin-black {
+    //Navbar & Logo
+    .main-header {
+        .box-shadow(0px 1px 1px rgba(0, 0, 0, 0.05));
+
+        .navbar-toggle {
+            color: #333;
+        }
+
+        .navbar-brand {
+            color: #333;
+            border-right: 1px solid #eee;
+        }
+
+        .navbar {
+            .navbar-variant(#fff; #666; #444; rgba(0, 0, 0, .02));
+
+            > .sidebar-toggle {
+                color: #333;
+                border-right: 1px solid #eee;
+            }
+
+            .navbar-nav {
+                > li > a {
+                    border-right: 1px solid #eee;
+                }
+            }
+
+            .navbar-custom-menu .navbar-nav,
+            .navbar-right {
+                > li {
+                    > a {
+                        border-left: 1px solid #eee;
+                        border-left: none;
+                        border-right-width: 0;
+                    }
+                }
+            }
+        }
+
+        .logo {
+            .logo-variant(@sidebar-dark-bg; #fff);
+            border-right: 1px solid @sidebar-dark-bg;
+            @media (max-width: @screen-header-collapse) {
+                .logo-variant(#fff; #222);
+                border-right: none;
+            }
+        }
+
+        li.user-header {
+            background-color: #222;
+        }
+
+        .nav-addtabs > li > a, .nav-addtabs > li.active > a {
+            border-right-color: transparent;
+        }    }
+
+    //Content Header
+    .content-header {
+        background: transparent;
+        box-shadow: none;
+    }
+
+    //Create the sidebar skin
+    .skin-dark-sidebar(#fff);
+
+}

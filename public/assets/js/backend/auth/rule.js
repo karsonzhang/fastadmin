@@ -59,8 +59,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 为表格绑定事件
             Table.api.bindevent(table);
 
+            //表格内容渲染前
+            table.on('pre-body.bs.table', function (e, data) {
+                var options = table.bootstrapTable("getOptions");
+                options.escape = true;
+            });
             //当内容渲染完成后
-            table.on('post-body.bs.table', function (e, settings, json, xhr) {
+            table.on('post-body.bs.table', function (e, data) {
+                var options = table.bootstrapTable("getOptions");
+                options.escape = false;
                 //默认隐藏所有子节点
                 //$("a.btn[data-id][data-pid][data-pid!=0]").closest("tr").hide();
                 $(".btn-node-sub.disabled").closest("tr").hide();
@@ -114,6 +121,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
         api: {
             formatter: {
                 title: function (value, row, index) {
+                    value = value.toString().replace(/(&|&amp;)nbsp;/g, '');
                     return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
                 },
                 name: function (value, row, index) {
