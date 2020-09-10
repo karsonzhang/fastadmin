@@ -338,6 +338,20 @@ form.form-horizontal .control-label {
             border-bottom-color: transparent;
             cursor: default;
         }
+
+        @media (max-width: @screen-tablet) {
+            .nav-tabs {
+                white-space: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden;
+                margin-bottom: -1px;
+
+                > li {
+                    display: inline-block;
+                    float: none;
+                }
+            }
+        }
     }
 }
 
@@ -595,7 +609,7 @@ form.form-horizontal .control-label {
 }
 
 .multiplenav {
-    .content-wrapper, .right-side {
+    .content-wrapper, .right-side, .main-sidebar {
         padding-top: 50px;
     }
 
@@ -606,12 +620,10 @@ form.form-horizontal .control-label {
 
 @media (max-width: 767px) {
     .multipletab {
-        .fixed .content-wrapper, .fixed .right-side {
-            padding-top: 94px;
-        }
-
-        .content-wrapper, .right-side {
-            padding-top: 94px;
+        &.multiplenav {
+            .content-wrapper, .right-side {
+                padding-top: 94px;
+            }
         }
     }
 }
@@ -1266,7 +1278,7 @@ table.table-nowrap {
         padding-top: 50px;
     }
 
-    .multiplenav {
+    .multipletab.multiplenav {
         .main-sidebar {
             padding-top: 95px;
         }

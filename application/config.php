@@ -275,7 +275,7 @@ return [
         'multiplenav'           => false,
         //是否开启多选项卡(仅在开启多级菜单时起作用)
         'multipletab'           => true,
-        //后台皮肤,为空时表示使用skin-green
+        //后台皮肤,为空时表示使用skin-black-green
         'adminskin'             => '',
         //后台是否启用面包屑
         'breadcrumb'            => false,

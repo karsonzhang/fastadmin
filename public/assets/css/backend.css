@@ -271,6 +271,18 @@ form.form-horizontal .control-label {
   border-bottom-color: transparent;
   cursor: default;
 }
+@media (max-width: 768px) {
+  .panel-intro > .panel-heading .nav-tabs {
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: -1px;
+  }
+  .panel-intro > .panel-heading .nav-tabs > li {
+    display: inline-block;
+    float: none;
+  }
+}
 /*单表格*/
 .panel-tabs .panel-heading {
   padding: 12px 15px 12px 15px;
@@ -480,19 +492,16 @@ form.form-horizontal .control-label {
   color: #222e32;
 }
 .multiplenav .content-wrapper,
-.multiplenav .right-side {
+.multiplenav .right-side,
+.multiplenav .main-sidebar {
   padding-top: 50px;
 }
 .multiplenav #firstnav .nav-addtabs {
   padding-right: 450px;
 }
 @media (max-width: 767px) {
-  .multipletab .fixed .content-wrapper,
-  .multipletab .fixed .right-side {
-    padding-top: 94px;
-  }
-  .multipletab .content-wrapper,
-  .multipletab .right-side {
+  .multipletab.multiplenav .content-wrapper,
+  .multipletab.multiplenav .right-side {
     padding-top: 94px;
   }
 }
@@ -1022,7 +1031,7 @@ table.table-nowrap thead > tr > th {
   .left-side {
     padding-top: 50px;
   }
-  .multiplenav .main-sidebar {
+  .multipletab.multiplenav .main-sidebar {
     padding-top: 95px;
   }
   .n-bootstrap .n-right {

@@ -55,10 +55,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             //切换左侧sidebar显示隐藏
             $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
                 var nextul = $(this).next("ul");
-                if (nextul.length > 0) {
-                    return;
-                }
-                if (!$(this).parent("li").hasClass("treeview") || ($("body").hasClass("multiplenav") && $(this).parent().parent().hasClass("sidebar-menu"))) {
+                if (nextul.length == 0 && (!$(this).parent("li").hasClass("treeview") || ($("body").hasClass("multiplenav") && $(this).parent().parent().hasClass("sidebar-menu")))) {
                     $(".sidebar-menu li").removeClass("active");
                 }
                 //当外部触发隐藏的a时,触发父辈a的事件

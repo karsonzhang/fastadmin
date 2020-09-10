@@ -20,6 +20,15 @@
     .edit-form table > tbody > tr:hover td a.btn-delcfg {
         visibility: visible;
     }
+
+    @media (max-width: 767px) {
+        .edit-form table tr th:nth-last-child(-n + 2), .edit-form table tr td:nth-last-child(-n + 2) {
+            display: none;
+        }
+        .edit-form table tr td .msg-box {
+            display: none;
+        }
+    }
 </style>
 <div class="panel panel-default panel-intro">
     <div class="panel-heading">
@@ -36,6 +45,7 @@
 
     <div class="panel-body">
         <div id="myTabContent" class="tab-content">
+            <!--@formatter:off-->
             {foreach $siteList as $index=>$vo}
             <div class="tab-pane fade {$vo.active ? 'active in' : ''}" id="{$vo.name}">
                 <div class="widget-body no-padding">
@@ -316,6 +326,7 @@ value2|title2</textarea>
                 </form>
 
             </div>
+            <!--@formatter:on-->
         </div>
     </div>
 </div>
