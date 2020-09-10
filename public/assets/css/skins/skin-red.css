@@ -79,6 +79,9 @@
 .skin-red .user-panel > .info > a {
   color: #fff;
 }
+.skin-red .sidebar-menu .treeview-menu {
+  padding-left: 3px;
+}
 .skin-red .sidebar-menu > li.header {
   color: #4b646f;
   background: #1a2226;
@@ -93,7 +96,6 @@
   border-left-color: #e74c3c;
 }
 .skin-red .sidebar-menu > li > .treeview-menu {
-  margin: 0 1px;
   background: #2c3b41;
 }
 .skin-red .sidebar a {
@@ -150,5 +152,15 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
+}
+@media (max-width: 767px) {
+  .skin-red.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #374850;
+    color: #fff;
+  }
+  .skin-red.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #e74c3c;
+    color: #fff;
+  }
 }
 /*# sourceMappingURL=skin-red.css.map */

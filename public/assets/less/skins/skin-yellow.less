@@ -63,4 +63,18 @@
 
     //Create the sidebar skin
     .skin-dark-sidebar(@yellow);
+
+    &.multiplenav {
+        @media (max-width: @screen-header-collapse) {
+            .sidebar .mobilenav a.btn-app {
+                background: lighten(@sidebar-dark-bg, 10%);
+                color: #fff;
+
+                &.active {
+                    background: @yellow;
+                    color: #fff;
+                }
+            }
+        }
+    }
 }

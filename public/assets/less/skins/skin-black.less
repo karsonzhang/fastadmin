@@ -7,6 +7,7 @@
 @import "../fastadmin/variables.less";
 @import "../fastadmin/mixins.less";
 
+@sidebar-dark-submenu-bg: darken(@sidebar-dark-bg, 3%);
 .skin-black {
     //Navbar & Logo
     .main-header {
@@ -73,4 +74,29 @@
     //Create the sidebar skin
     .skin-dark-sidebar(#fff);
 
+    &.multiplenav {
+        @media (max-width: @screen-header-collapse) {
+            .main-header {
+                .navbar {
+                    .navbar-variant(@sidebar-dark-bg; #fff);
+                }
+
+
+                > .logo {
+                    .logo-variant(@sidebar-dark-bg; #fff);
+                }
+            }
+
+            .sidebar .mobilenav a.btn-app {
+                background: lighten(@sidebar-dark-bg, 10%);
+                color: #fff;
+
+                &.active {
+                    background: #fff;
+                    color: lighten(@sidebar-dark-bg, 10%);
+                }
+            }
+        }
+    }
 }
+

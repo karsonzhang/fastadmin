@@ -5,7 +5,7 @@
 @import "lesshat.less";
 @import url("../css/bootstrap.css");
 @import url("../css/fastadmin.css");
-@import url("../css/skins/skin-green.css");
+@import url("../css/skins/skin-black-green.css");
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
@@ -604,6 +604,18 @@ form.form-horizontal .control-label {
     }
 }
 
+@media (max-width: 767px) {
+    .multipletab {
+        .fixed .content-wrapper, .fixed .right-side {
+            padding-top: 94px;
+        }
+
+        .content-wrapper, .right-side {
+            padding-top: 94px;
+        }
+    }
+}
+
 .multipletab {
     #secondnav {
         display: block;
@@ -612,6 +624,10 @@ form.form-horizontal .control-label {
     &.multiplenav {
         .content-wrapper, .right-side {
             padding-top: 94px;
+        }
+
+        #firstnav .nav-tabs {
+            overflow: hidden;
         }
     }
 }
@@ -1186,16 +1202,6 @@ table.table-nowrap {
         padding-top: 50px;
     }
 
-    .multiplenav {
-        .fixed .content-wrapper, .fixed .right-side {
-            padding-top: 94px;
-        }
-
-        .content-wrapper, .right-side {
-            padding-top: 94px;
-        }
-    }
-
     .main-sidebar, .left-side {
         padding-top: 144px;
     }
@@ -1220,6 +1226,8 @@ table.table-nowrap {
         width: 100px;
         height: 70px;
         font-size: 13px;
+        border: none;
+        background: #fff;
 
         i.fa {
             font-size: 24px;
@@ -1256,6 +1264,12 @@ table.table-nowrap {
 
     .main-sidebar, .left-side {
         padding-top: 50px;
+    }
+
+    .multiplenav {
+        .main-sidebar {
+            padding-top: 95px;
+        }
     }
 
     .n-bootstrap {

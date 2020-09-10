@@ -98,18 +98,15 @@
 }
 .skin-black-light .sidebar-menu > li > a {
   border-left: 3px solid transparent;
-  font-weight: 600;
 }
 .skin-black-light .sidebar-menu > li:hover > a,
 .skin-black-light .sidebar-menu > li.active > a {
   color: #000;
   background: #f4f4f5;
+  border-left-color: #222d32;
 }
 .skin-black-light .sidebar-menu > li.active {
-  border-left-color: #fff;
-}
-.skin-black-light .sidebar-menu > li.active > a {
-  font-weight: 600;
+  border-left-color: #222d32;
 }
 .skin-black-light .sidebar-menu > li > .treeview-menu {
   background: #f4f4f5;
@@ -176,5 +173,15 @@
 .skin-black-light .content-wrapper,
 .skin-black-light .main-footer {
   border-left: none;
+}
+@media (max-width: 767px) {
+  .skin-black-light.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #eceff3;
+    color: #757575;
+  }
+  .skin-black-light.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #222d32;
+    color: #fff;
+  }
 }
 /*# sourceMappingURL=skin-black-light.css.map */

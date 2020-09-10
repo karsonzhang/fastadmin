@@ -119,6 +119,9 @@
     }
   }
   //Sidebar Menu. First level links
+  .sidebar-menu .treeview-menu {
+    padding-left: 3px;
+  }
   .sidebar-menu > li {
     //Section Headning
     &.header {
@@ -137,7 +140,7 @@
     }
     //First Level Submenu
     > .treeview-menu {
-      margin: 0 1px;
+      //margin: 0 1px;
       background: @sidebar-dark-submenu-bg;
     }
   }
@@ -225,13 +228,14 @@
     //links
     > a {
       border-left: 3px solid transparent;
-      font-weight: 600;
+      //font-weight: 600;
     }
     //Hover and active states
     &:hover > a,
     &.active > a {
       color: @sidebar-light-hover-color;
       background: @sidebar-light-hover-bg;
+      border-left-color: @icon-active-color;
     }
     &:hover > a {
 
@@ -239,7 +243,7 @@
     &.active {
       border-left-color: @icon-active-color;
       > a {
-        font-weight: 600;
+        //font-weight: 600;
       }
     }
     //First Level Submenu

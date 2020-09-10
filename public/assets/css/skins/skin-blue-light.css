@@ -80,18 +80,15 @@
 }
 .skin-blue-light .sidebar-menu > li > a {
   border-left: 3px solid transparent;
-  font-weight: 600;
 }
 .skin-blue-light .sidebar-menu > li:hover > a,
 .skin-blue-light .sidebar-menu > li.active > a {
   color: #000;
   background: #f4f4f5;
+  border-left-color: #4e73df;
 }
 .skin-blue-light .sidebar-menu > li.active {
   border-left-color: #4e73df;
-}
-.skin-blue-light .sidebar-menu > li.active > a {
-  font-weight: 600;
 }
 .skin-blue-light .sidebar-menu > li > .treeview-menu {
   background: #f4f4f5;
@@ -162,12 +159,14 @@
 .skin-blue-light .main-footer {
   border-left: none;
 }
-.skin-blue.layout-top-nav .main-header > .logo {
-  background-color: #4e73df;
-  color: #fff;
-  border-bottom: 0 solid transparent;
-}
-.skin-blue.layout-top-nav .main-header > .logo:hover {
-  background-color: #4a70de;
+@media (max-width: 767px) {
+  .skin-blue-light.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #eceff3;
+    color: #757575;
+  }
+  .skin-blue-light.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #4e73df;
+    color: #fff;
+  }
 }
 /*# sourceMappingURL=skin-blue-light.css.map */

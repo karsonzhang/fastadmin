@@ -76,6 +76,9 @@
 .skin-purple .user-panel > .info > a {
   color: #fff;
 }
+.skin-purple .sidebar-menu .treeview-menu {
+  padding-left: 3px;
+}
 .skin-purple .sidebar-menu > li.header {
   color: #a19fcb;
   background: #57539c;
@@ -90,8 +93,7 @@
   border-left-color: #fff;
 }
 .skin-purple .sidebar-menu > li > .treeview-menu {
-  margin: 0 1px;
-  background: #706db1;
+  background: #5955a0;
 }
 .skin-purple .sidebar a {
   color: #c8c5ff;
@@ -161,5 +163,46 @@
 .skin-purple .sidebar-form input[type="text"],
 .skin-purple .sidebar-form .btn {
   color: #fff;
+}
+@media (max-width: 767px) {
+  .skin-purple.multiplenav .main-header .navbar {
+    background-color: #605ca8;
+  }
+  .skin-purple.multiplenav .main-header .navbar .nav > li > a {
+    color: #fff;
+  }
+  .skin-purple.multiplenav .main-header .navbar .nav > li > a:hover,
+  .skin-purple.multiplenav .main-header .navbar .nav > li > a:active,
+  .skin-purple.multiplenav .main-header .navbar .nav > li > a:focus,
+  .skin-purple.multiplenav .main-header .navbar .nav .open > a,
+  .skin-purple.multiplenav .main-header .navbar .nav .open > a:hover,
+  .skin-purple.multiplenav .main-header .navbar .nav .open > a:focus,
+  .skin-purple.multiplenav .main-header .navbar .nav > .active > a {
+    background: rgba(0, 0, 0, 0.1);
+    color: #f6f6f6;
+  }
+  .skin-purple.multiplenav .main-header .navbar .sidebar-toggle {
+    color: #fff;
+  }
+  .skin-purple.multiplenav .main-header .navbar .sidebar-toggle:hover {
+    color: #f6f6f6;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .skin-purple.multiplenav .main-header > .logo {
+    background-color: #605ca8;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+  }
+  .skin-purple.multiplenav .main-header > .logo:hover {
+    background-color: #5d59a6;
+  }
+  .skin-purple.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #807dba;
+    color: #fff;
+  }
+  .skin-purple.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #fff;
+    color: #807dba;
+  }
 }
 /*# sourceMappingURL=skin-purple.css.map */

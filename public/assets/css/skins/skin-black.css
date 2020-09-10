@@ -89,6 +89,9 @@
 .skin-black .user-panel > .info > a {
   color: #fff;
 }
+.skin-black .sidebar-menu .treeview-menu {
+  padding-left: 3px;
+}
 .skin-black .sidebar-menu > li.header {
   color: #4b646f;
   background: #1a2226;
@@ -103,8 +106,7 @@
   border-left-color: #fff;
 }
 .skin-black .sidebar-menu > li > .treeview-menu {
-  margin: 0 1px;
-  background: #2c3b41;
+  background: #1c2529;
 }
 .skin-black .sidebar a {
   color: #b8c7ce;
@@ -113,7 +115,7 @@
   text-decoration: none;
 }
 .skin-black .treeview-menu > li > a {
-  color: #8aa4af;
+  color: #72919f;
 }
 .skin-black .treeview-menu > li.active > a,
 .skin-black .treeview-menu > li > a:hover {
@@ -160,5 +162,46 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
+}
+@media (max-width: 767px) {
+  .skin-black.multiplenav .main-header .navbar {
+    background-color: #222d32;
+  }
+  .skin-black.multiplenav .main-header .navbar .nav > li > a {
+    color: #fff;
+  }
+  .skin-black.multiplenav .main-header .navbar .nav > li > a:hover,
+  .skin-black.multiplenav .main-header .navbar .nav > li > a:active,
+  .skin-black.multiplenav .main-header .navbar .nav > li > a:focus,
+  .skin-black.multiplenav .main-header .navbar .nav .open > a,
+  .skin-black.multiplenav .main-header .navbar .nav .open > a:hover,
+  .skin-black.multiplenav .main-header .navbar .nav .open > a:focus,
+  .skin-black.multiplenav .main-header .navbar .nav > .active > a {
+    background: rgba(0, 0, 0, 0.1);
+    color: #f6f6f6;
+  }
+  .skin-black.multiplenav .main-header .navbar .sidebar-toggle {
+    color: #fff;
+  }
+  .skin-black.multiplenav .main-header .navbar .sidebar-toggle:hover {
+    color: #f6f6f6;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .skin-black.multiplenav .main-header > .logo {
+    background-color: #222d32;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+  }
+  .skin-black.multiplenav .main-header > .logo:hover {
+    background-color: #202a2f;
+  }
+  .skin-black.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #374850;
+    color: #fff;
+  }
+  .skin-black.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #fff;
+    color: #374850;
+  }
 }
 /*# sourceMappingURL=skin-black.css.map */

@@ -79,6 +79,9 @@
 .skin-yellow .user-panel > .info > a {
   color: #fff;
 }
+.skin-yellow .sidebar-menu .treeview-menu {
+  padding-left: 3px;
+}
 .skin-yellow .sidebar-menu > li.header {
   color: #4b646f;
   background: #1a2226;
@@ -93,7 +96,6 @@
   border-left-color: #f39c12;
 }
 .skin-yellow .sidebar-menu > li > .treeview-menu {
-  margin: 0 1px;
   background: #2c3b41;
 }
 .skin-yellow .sidebar a {
@@ -150,5 +152,15 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
+}
+@media (max-width: 767px) {
+  .skin-yellow.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #374850;
+    color: #fff;
+  }
+  .skin-yellow.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #f39c12;
+    color: #fff;
+  }
 }
 /*# sourceMappingURL=skin-yellow.css.map */
