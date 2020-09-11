@@ -110,7 +110,7 @@ class Index extends Backend
     }
 
     /**
-     * 注销登录
+     * 退出登录
      */
     public function logout()
     {

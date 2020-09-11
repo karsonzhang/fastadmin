@@ -31,7 +31,7 @@ class Attachment extends Backend
     public function index()
     {
         //设置过滤方法
-        $this->request->filter(['strip_tags']);
+        $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
             $mimetypeQuery = [];
             $filter = $this->request->request('filter');
@@ -51,24 +51,19 @@ class Attachment extends Backend
             }
 
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-            $total = $this->model
-                ->where($mimetypeQuery)
-                ->where($where)
-                ->order($sort, $order)
-                ->count();
 
             $list = $this->model
                 ->where($mimetypeQuery)
                 ->where($where)
                 ->order($sort, $order)
-                ->limit($offset, $limit)
-                ->select();
+                ->paginate($limit);
+
             $cdnurl = preg_replace("/\/(\w+)\.php$/i", '', $this->request->root());
             foreach ($list as $k => &$v) {
                 $v['fullurl'] = ($v['storage'] == 'local' ? $cdnurl : $this->view->config['upload']['cdnurl']) . $v['url'];
             }
             unset($v);
-            $result = array("total" => $total, "rows" => $list);
+            $result = array("total" => $list->total(), "rows" => $list->items());
 
             return json($result);
         }

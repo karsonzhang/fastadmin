@@ -19,8 +19,7 @@
                     {%relationWithList%}
                     ->where($where)
                     ->order($sort, $order)
-                    ->limit($offset, $limit)
-                    ->paginate();
+                    ->paginate($limit);
 
             foreach ($list as $row) {
                 {%visibleFieldList%}

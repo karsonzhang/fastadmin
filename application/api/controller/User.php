@@ -128,7 +128,7 @@ class User extends Api
     }
 
     /**
-     * 注销登录
+     * 退出登录
      */
     public function logout()
     {

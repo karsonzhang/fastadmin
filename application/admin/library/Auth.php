@@ -68,7 +68,7 @@ class Auth extends \fast\Auth
     }
 
     /**
-     * 注销登录
+     * 退出登录
      */
     public function logout()
     {

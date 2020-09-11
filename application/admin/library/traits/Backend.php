@@ -43,7 +43,7 @@ trait Backend
     public function index()
     {
         //设置过滤方法
-        $this->request->filter(['strip_tags']);
+        $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
             //如果发送的来源是Selectpage，则转发到Selectpage
             if ($this->request->request('keyField')) {
@@ -54,8 +54,7 @@ trait Backend
             $list = $this->model
                 ->where($where)
                 ->order($sort, $order)
-                ->limit($offset, $limit)
-                ->paginate();
+                ->paginate($limit);
 
             $result = array("total" => $list->total(), "rows" => $list->items());
 

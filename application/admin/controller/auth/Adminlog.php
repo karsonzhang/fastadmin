@@ -40,21 +40,17 @@ class Adminlog extends Backend
      */
     public function index()
     {
+        //设置过滤方法
+        $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-            $total = $this->model
-                ->where($where)
-                ->where('admin_id', 'in', $this->childrenAdminIds)
-                ->order($sort, $order)
-                ->count();
-
             $list = $this->model
                 ->where($where)
                 ->where('admin_id', 'in', $this->childrenAdminIds)
                 ->order($sort, $order)
-                ->limit($offset, $limit)
-                ->select();
-            $result = array("total" => $total, "rows" => $list);
+                ->paginate($limit);
+
+            $result = array("total" => $list->total(), "rows" => $list->items());
 
             return json($result);
         }

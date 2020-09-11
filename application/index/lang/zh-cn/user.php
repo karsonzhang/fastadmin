@@ -56,7 +56,7 @@ return [
     'Change password successful'            => '修改密码成功',
     'Captcha is incorrect'                  => '验证码不正确',
     'Logged in successful'                  => '登录成功',
-    'Logout successful'                     => '注销成功',
+    'Logout successful'                     => '退出成功',
     'User center already closed'            => '会员中心已经关闭',
     'Operation failed'                      => '操作失败',
     'Invalid parameters'                    => '参数不正确',
