@@ -50,19 +50,14 @@ trait Backend
                 return $this->selectpage();
             }
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-            $total = $this->model
-                ->where($where)
-                ->order($sort, $order)
-                ->count();
 
             $list = $this->model
                 ->where($where)
                 ->order($sort, $order)
                 ->limit($offset, $limit)
-                ->select();
+                ->paginate();
 
-            $list = collection($list)->toArray();
-            $result = array("total" => $total, "rows" => $list);
+            $result = array("total" => $list->total(), "rows" => $list->items());
 
             return json($result);
         }
@@ -75,7 +70,7 @@ trait Backend
     public function recyclebin()
     {
         //设置过滤方法
-        $this->request->filter(['strip_tags']);
+        $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model

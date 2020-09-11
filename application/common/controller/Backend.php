@@ -377,6 +377,12 @@ class Backend extends Controller
                         $sym = $sym == 'RANGE' ? '>=' : '<';
                         $arr = $arr[0];
                     }
+                    $tableArr = explode('.', $k);
+                    if (count($tableArr) > 1) {
+                        //修复关联模型下时间无法搜索的BUG
+                        $relation = Loader::parseName($tableArr[0], 1, false);
+                        $this->model->alias([$this->model->$relation()->getTable() => $tableArr[0]]);
+                    }
                     $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
                     break;
                 case 'NULL':
