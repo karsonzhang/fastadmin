@@ -6,7 +6,7 @@
     <style type="text/css">
         body {
             color: #999;
-            background: #f1f4fd url('{$background}');
+            background-color: #f1f4fd;
             background-size: cover;
         }
 
@@ -71,7 +71,20 @@
             margin-bottom: 15px;
         }
 
+        #login-form .form-control {
+            font-size: 13px;
+        }
+
     </style>
+    <!--@formatter:off-->
+    {if $background}
+        <style type="text/css">
+            body{
+                background-image: url('{$background}');
+            }
+        </style>
+    {/if}
+    <!--@formatter:on-->
 </head>
 <body>
 <div class="container">
