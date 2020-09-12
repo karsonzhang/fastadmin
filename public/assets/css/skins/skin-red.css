@@ -21,6 +21,9 @@
   background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
+.skin-red .main-header .navbar .nav-addtabs li > .close-tab {
+  color: #f6f6f6;
+}
 .skin-red .main-header .navbar .sidebar-toggle {
   color: #fff;
 }

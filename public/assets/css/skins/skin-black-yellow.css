@@ -23,6 +23,9 @@
   background: rgba(0, 0, 0, 0.02);
   color: #333;
 }
+.skin-black-yellow .main-header .navbar .nav-addtabs li > .close-tab {
+  color: #333;
+}
 .skin-black-yellow .main-header .navbar .sidebar-toggle {
   color: #666;
 }
@@ -53,6 +56,9 @@
   .skin-black-yellow .main-header .navbar .nav .open > a:focus,
   .skin-black-yellow .main-header .navbar .nav > .active > a {
     background: rgba(0, 0, 0, 0.1);
+    color: #f6f6f6;
+  }
+  .skin-black-yellow .main-header .navbar .nav-addtabs li > .close-tab {
     color: #f6f6f6;
   }
   .skin-black-yellow .main-header .navbar .sidebar-toggle {

@@ -25,6 +25,9 @@
   background: rgba(0, 0, 0, 0.02);
   color: #4e73df;
 }
+.skin-blue .main-header .navbar .nav-addtabs li > .close-tab {
+  color: #4e73df;
+}
 .skin-blue .main-header .navbar .sidebar-toggle {
   color: #444;
 }
@@ -189,6 +192,9 @@
   .skin-blue.multiplenav .main-header .navbar .nav .open > a:focus,
   .skin-blue.multiplenav .main-header .navbar .nav > .active > a {
     background: rgba(0, 0, 0, 0.1);
+    color: #f6f6f6;
+  }
+  .skin-blue.multiplenav .main-header .navbar .nav-addtabs li > .close-tab {
     color: #f6f6f6;
   }
   .skin-blue.multiplenav .main-header .navbar .sidebar-toggle {
