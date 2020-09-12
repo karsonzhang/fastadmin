@@ -72,20 +72,14 @@ trait Backend
         $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
-            $total = $this->model
-                ->onlyTrashed()
-                ->where($where)
-                ->order($sort, $order)
-                ->count();
 
             $list = $this->model
                 ->onlyTrashed()
                 ->where($where)
                 ->order($sort, $order)
-                ->limit($offset, $limit)
-                ->select();
+                ->paginate($limit);
 
-            $result = array("total" => $total, "rows" => $list);
+            $result = array("total" => $list->total(), "rows" => $list->items());
 
             return json($result);
         }
