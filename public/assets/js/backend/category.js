@@ -29,7 +29,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: __('Id')},
                         {field: 'type', title: __('Type'), operate: false, searchList: Config.searchList, formatter: Table.api.formatter.label},
                         {field: 'name', title: __('Name'), align: 'left', formatter:function (value, row, index) {
-                                return value.toString().replace(/(&|&amp;)nbsp;/g, '');
+                                return value.toString().replace(/(&|&amp;)nbsp;/g, '&nbsp;');
                             }
                         },
                         {field: 'nickname', title: __('Nickname')},

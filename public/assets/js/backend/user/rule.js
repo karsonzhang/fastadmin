@@ -27,7 +27,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'id', title: __('Id')},
                         {field: 'pid', title: __('Pid'), visible: false},
                         {field: 'title', title: __('Title'), align: 'left', formatter:function (value, row, index) {
-                                return value.toString().replace(/(&|&amp;)nbsp;/g, '');
+                                return value.toString().replace(/(&|&amp;)nbsp;/g, '&nbsp;');
                             }
                         },
                         {field: 'name', title: __('Name'), align: 'left'},
