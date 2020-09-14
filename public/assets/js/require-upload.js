@@ -75,7 +75,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             return;
                         }
                     }
-                    Toastr.error(ret.msg + "(code:" + ret.code + ")");
+                    Toastr.error(ret.msg.toString().replace(/(<([^>]+)>)/gi, "") + "(code:" + ret.code + ")");
                 },
                 //服务器响应数据后
                 onUploadResponse: function (response, up, file) {
@@ -243,7 +243,9 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 }
                             },
                             error: function (file, response, xhr) {
-                                var ret = {code: 0, data: null, msg: response};
+                                var responseObj = $("<div>" + xhr.responseText + "</div>");
+                                responseObj.find("style, title, script").remove();
+                                var ret = {code: 0, data: null, msg: responseObj.text()};
                                 Upload.events.onUploadError(this, ret, file);
                             },
                             uploadprogress: function (file, progress, bytesSent) {
