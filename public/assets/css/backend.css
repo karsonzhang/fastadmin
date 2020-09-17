@@ -173,6 +173,24 @@ select.selectpicker[multiple] option {
     }
   }
 }
+input.selectpage {
+  color: transparent;
+  pointer-events: none;
+}
+.sp_container input.selectpage {
+  color: inherit;
+  pointer-events: inherit;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.sp_container .sp_element_box input.selectpage {
+  padding-left: 0;
+  padding-right: 0;
+}
+.sp_container .sp_element_box li:first-child input.selectpage {
+  padding-left: 9px;
+  padding-right: 9px;
+}
 .img-center {
   margin: 0 auto;
   display: inline;
