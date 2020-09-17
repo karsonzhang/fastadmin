@@ -262,7 +262,7 @@ class Backend extends Controller
         $sort = $this->request->get("sort", !empty($this->model) && $this->model->getPk() ? $this->model->getPk() : 'id');
         $order = $this->request->get("order", "DESC");
         $offset = $this->request->get("offset/d", 0);
-        $limit = $this->request->get("limit/d", 10);
+        $limit = $this->request->get("limit/d", 999999);
         //新增自动计算页码
         $page = $limit ? intval($offset / $limit) + 1 : 1;
         if ($this->request->has("page")) {
@@ -390,7 +390,7 @@ class Backend extends Controller
                         $relation = Loader::parseName($tableArr[0], 1, false);
                         $this->model->alias([$this->model->$relation()->getTable() => $tableArr[0]]);
                     }
-                    $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
+                    $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' TIME', $arr];
                     break;
                 case 'NULL':
                 case 'IS NULL':
@@ -471,7 +471,7 @@ class Backend extends Controller
         $ishtml = $this->request->request("isHtml", 0);
         if ($istree) {
             $word = [];
-            $pagesize = 99999;
+            $pagesize = 999999;
         }
         $order = [];
         foreach ($orderby as $k => $v) {
@@ -482,7 +482,7 @@ class Backend extends Controller
         //如果有primaryvalue,说明当前是初始化传值
         if ($primaryvalue !== null) {
             $where = [$primarykey => ['in', $primaryvalue]];
-            $pagesize = 99999;
+            $pagesize = 999999;
         } else {
             $where = function ($query) use ($word, $andor, $field, $searchfield, $custom) {
                 $logic = $andor == 'AND' ? '&' : '|';

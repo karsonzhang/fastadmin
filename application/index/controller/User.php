@@ -244,6 +244,7 @@ class User extends Frontend
             ];
 
             $msg = [
+                'renewpassword.confirm' => __('Password and confirm password don\'t match')
             ];
             $data = [
                 'oldpassword'   => $oldpassword,

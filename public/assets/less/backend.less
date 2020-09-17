@@ -59,6 +59,11 @@ html.ios-fix, html.ios-fix body {
     height: 100%;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+
+    .wrapper, .tab-pane {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
 .wrapper {
@@ -1205,8 +1210,23 @@ table.table-nowrap {
     }
 
     .fixed-table-toolbar {
-        .columns-right.btn-group {
-            display: none;
+        > .bs-bars {
+            float: none !important;
+        }
+
+        .toolbar {
+            a.btn-refresh, a.btn-del, a.btn-add, a.btn-edit, a.btn-import, a.btn-more, a.btn-recyclebin, a.btn-mini-xs {
+                font-size: 0;
+
+                .fa {
+                    font-size: initial;
+                }
+            }
+        }
+
+        .search {
+            max-width: 110px;
+            float: left !important;
         }
     }
 
@@ -1349,7 +1369,7 @@ table.table-nowrap {
     min-height: 41px;
     background-color: #fff;
     box-sizing: border-box;
-    z-index: 1;
+    z-index: 2;
     box-shadow: 0 -1px 8px rgba(0, 0, 0, .08);
 
     .fixed-table-body {
@@ -1390,3 +1410,4 @@ table.table-nowrap {
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg);
 }
+

@@ -14,10 +14,16 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
             idTable: 'commonTable',
             showExport: true,
-            exportDataType: "all",
+            exportDataType: "auto",
             exportTypes: ['json', 'xml', 'csv', 'txt', 'doc', 'excel'],
             exportOptions: {
                 fileName: 'export_' + Moment().format("YYYY-MM-DD"),
+                preventInjection: false,
+                mso: {
+                    onMsoNumberFormat: function (cell, row, col) {
+                        return !isNaN($(cell).text()) ? '\\@' : '';
+                    },
+                },
                 ignoreColumn: [0, 'operate'] //默认不导出第一列(checkbox)与操作(operate)列
             },
             pageSize: localStorage.getItem("pagesize") || 10,
@@ -39,6 +45,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             paginationNextText: __("Next"),
             paginationLastText: __("Last"),
             cardView: false, //卡片视图
+            iosCardView: true, //ios卡片视图
             checkOnInit: true, //是否在初始化时判断
             escape: true, //是否对内容进行转义
             selectedIds: [],
@@ -103,10 +110,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 defaults = defaults ? defaults : {};
                 columnDefaults = columnDefaults ? columnDefaults : {};
                 locales = locales ? locales : {};
-                // 如果是iOS设备则启用卡片视图
-                if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
-                    Table.defaults.cardView = true;
-                }
                 $.fn.bootstrapTable.Constructor.prototype.getSelectItem = function () {
                     return this.$selectItem;
                 };
@@ -135,6 +138,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         return __('Go');
                     }
                 }, locales);
+                // 如果是iOS设备则判断是否启用卡片视图
+                if ($.fn.bootstrapTable.defaults.iosCardView && navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+                    Table.defaults.cardView = true;
+                    $.fn.bootstrapTable.defaults.cardView = true;
+                }
                 if (typeof defaults.exportTypes != 'undefined') {
                     $.fn.bootstrapTable.defaults.exportTypes = defaults.exportTypes;
                 }
@@ -227,9 +235,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             checkboxtd.drop("start", function () {
                                 Table.api.toggleattr(this);
                             }).drop(function () {
-                                Table.api.toggleattr(this);
-                            }).drop("end", function () {
-                                Table.api.toggleattr(this);
+                                // Table.api.toggleattr(this);
+                            }).drop("end", function (e) {
+                                var that = this;
+                                setTimeout(function () {
+                                    if (e.type === 'mousemove') {
+                                        Table.api.toggleattr(that);
+                                    }
+                                }, 0);
                             });
                             $.drop({
                                 multi: true
@@ -237,6 +250,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         });
                     }
                 });
+                var exportDataType = options.exportDataType;
                 // 处理选中筛选框后按钮的状态统一变更
                 table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table post-body.bs.table', function (e) {
                     var allIds = table.bootstrapTable("getData").map(function (item) {
@@ -262,8 +276,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         options.selectedIds = selectedIds;
                         options.selectedData = selectedData;
                     }
+                    //如果导出类型为auto时则自动判断
+                    if (exportDataType === 'auto') {
+                        options.exportDataType = selectedIds.length > 0 ? 'selected' : 'all';
+                    }
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !options.selectedIds.length);
-
                 });
                 // 绑定TAB事件
                 $('.panel-heading [data-field] a[data-toggle="tab"]').on('shown.bs.tab', function (e) {

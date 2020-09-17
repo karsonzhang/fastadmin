@@ -42,6 +42,13 @@ html.ios-fix body {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
+html.ios-fix .wrapper,
+html.ios-fix body .wrapper,
+html.ios-fix .tab-pane,
+html.ios-fix body .tab-pane {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .wrapper {
   height: 100%;
 }
@@ -973,8 +980,32 @@ table.table-nowrap thead > tr > th {
   #firstnav .navbar-nav > .user-menu .user-image {
     margin-top: -3px;
   }
-  .fixed-table-toolbar .columns-right.btn-group {
-    display: none;
+  .fixed-table-toolbar > .bs-bars {
+    float: none !important;
+  }
+  .fixed-table-toolbar .toolbar a.btn-refresh,
+  .fixed-table-toolbar .toolbar a.btn-del,
+  .fixed-table-toolbar .toolbar a.btn-add,
+  .fixed-table-toolbar .toolbar a.btn-edit,
+  .fixed-table-toolbar .toolbar a.btn-import,
+  .fixed-table-toolbar .toolbar a.btn-more,
+  .fixed-table-toolbar .toolbar a.btn-recyclebin,
+  .fixed-table-toolbar .toolbar a.btn-mini-xs {
+    font-size: 0;
+  }
+  .fixed-table-toolbar .toolbar a.btn-refresh .fa,
+  .fixed-table-toolbar .toolbar a.btn-del .fa,
+  .fixed-table-toolbar .toolbar a.btn-add .fa,
+  .fixed-table-toolbar .toolbar a.btn-edit .fa,
+  .fixed-table-toolbar .toolbar a.btn-import .fa,
+  .fixed-table-toolbar .toolbar a.btn-more .fa,
+  .fixed-table-toolbar .toolbar a.btn-recyclebin .fa,
+  .fixed-table-toolbar .toolbar a.btn-mini-xs .fa {
+    font-size: initial;
+  }
+  .fixed-table-toolbar .search {
+    max-width: 110px;
+    float: left !important;
   }
   .fixed .content-wrapper,
   .fixed .right-side {
@@ -1085,7 +1116,7 @@ table.table-nowrap thead > tr > th {
   min-height: 41px;
   background-color: #fff;
   box-sizing: border-box;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.08);
 }
 .fixed-columns .fixed-table-body,

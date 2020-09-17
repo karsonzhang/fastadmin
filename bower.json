@@ -9,7 +9,7 @@
     "jquery": "^2.1.4",
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.6.1",
-    "bootstrap-table": "fastadmin-bootstraptable#~1.11.3",
+    "bootstrap-table": "fastadmin-bootstraptable#~1.11.5",
     "jstree": "~3.3.2",
     "moment": "^2.20.1",
     "toastr": "~2.1.3",
