@@ -291,7 +291,8 @@
         _initHeader.apply(this, Array.prototype.slice.apply(arguments));
         this.$header.find('th[data-field]').each(function (i) {
             var column = $(this).data();
-            if (typeof column['width'] !== 'undefined') {
+            if (typeof column['width'] !== 'undefined' && column['width'].toString().indexOf("%") === -1) {
+                $(".th-inner", this).outerWidth(column['width']);
                 $(this).css("max-width", column['width']);
             }
         });
