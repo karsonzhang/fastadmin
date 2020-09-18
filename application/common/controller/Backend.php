@@ -388,7 +388,7 @@ class Backend extends Controller
                         $arr = $arr[0];
                     }
                     $tableArr = explode('.', $k);
-                    if (count($tableArr) > 1 && $tableArr[0] != $name && !in_array($tableArr[0], $alias)) {
+                    if (count($tableArr) > 1 && $tableArr[0] != $name && !in_array($tableArr[0], $alias) && !empty($this->model)) {
                         //修复关联模型下时间无法搜索的BUG
                         $relation = Loader::parseName($tableArr[0], 1, false);
                         $alias[$this->model->$relation()->getTable()] = $tableArr[0];
@@ -406,12 +406,15 @@ class Backend extends Controller
             }
             $index++;
         }
-
-        $this->model->alias($alias);
+        if (!empty($this->model)) {
+            $this->model->alias($alias);
+        }
         $model = $this->model;
         $where = function ($query) use ($where, $alias, $bind, &$model) {
-            $model->alias($alias);
-            $model->bind($bind);
+            if (!empty($model)) {
+                $model->alias($alias);
+                $model->bind($bind);
+            }
             foreach ($where as $k => $v) {
                 if (is_array($v)) {
                     call_user_func_array([$query, 'where'], $v);
