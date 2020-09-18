@@ -1459,7 +1459,7 @@ EOD;
         }
 
         if (in_array($datatype, ['date', 'datetime']) || $formatter === 'datetime') {
-            $html .= ", operate:'RANGE', addclass:'datetimerange'";
+            $html .= ", operate:'RANGE', addclass:'datetimerange', autocomplete:false";
         } elseif (in_array($datatype, ['float', 'double', 'decimal'])) {
             $html .= ", operate:'BETWEEN'";
         }
