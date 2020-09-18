@@ -162,8 +162,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             formatter: {
                 thumb: function (value, row, index) {
                     if (row.mimetype.indexOf("image") > -1) {
-                        var style = row.storage === 'upyun' ? '!/fwfh/120x90' : '';
-                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + style + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + row.thumb_style + '" alt="" style="max-height:90px;max-width:120px"></a>';
                     } else {
                         return '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
                     }

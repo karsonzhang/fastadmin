@@ -273,39 +273,41 @@ class Backend extends Controller
         $op = (array)json_decode($op, true);
         $filter = $filter ? $filter : [];
         $where = [];
+        $alias = [];
+        $bind = [];
         $name = '';
-        $tableName = '';
-        if ($relationSearch) {
-            if (!empty($this->model)) {
-                $name = $this->model->getTable();
-                $tableName = $name . '.';
-            }
-            $sortArr = explode(',', $sort);
-            foreach ($sortArr as $index => & $item) {
-                $item = stripos($item, ".") === false ? $tableName . trim($item) : $item;
-            }
-            unset($item);
-            $sort = implode(',', $sortArr);
+        $aliasName = '';
+        if (!empty($this->model)) {
+            $name = $this->model->getTable();
+            $alias[$name] = Loader::parseName(basename(str_replace('\\', '/', get_class($this->model))));
+            $aliasName = $alias[$name] . '.';
         }
+        $sortArr = explode(',', $sort);
+        foreach ($sortArr as $index => & $item) {
+            $item = stripos($item, ".") === false ? $aliasName . trim($item) : $item;
+        }
+        unset($item);
+        $sort = implode(',', $sortArr);
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds)) {
-            $where[] = [$tableName . $this->dataLimitField, 'in', $adminIds];
+            $where[] = [$aliasName . $this->dataLimitField, 'in', $adminIds];
         }
         if ($search) {
             $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
             foreach ($searcharr as $k => &$v) {
-                $v = stripos($v, ".") === false ? $tableName . $v : $v;
+                $v = stripos($v, ".") === false ? $aliasName . $v : $v;
             }
             unset($v);
             $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
         }
+        $index = 0;
         foreach ($filter as $k => $v) {
             if (!preg_match('/^[a-zA-Z0-9_\-\.]+$/', $k)) {
                 continue;
             }
             $sym = isset($op[$k]) ? $op[$k] : '=';
             if (stripos($k, ".") === false) {
-                $k = $tableName . $k;
+                $k = $aliasName . $k;
             }
             $v = !is_array($v) ? trim($v) : $v;
             $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
@@ -341,10 +343,11 @@ class Backend extends Controller
                 case 'FINDINSET':
                 case 'FIND_IN_SET':
                     $v = is_array($v) ? $v : explode(',', str_replace(' ', ',', $v));
-                    foreach ($v as $index => $item) {
-                        $item = str_replace([' ', ',', "'"], '', $item);
-                        $item = addslashes(htmlentities(strip_tags($item)));
-                        $where[] = "FIND_IN_SET('{$item}', `" . ($relationSearch ? str_replace('.', '`.`', $k) : $k) . "`)";
+                    $findArr = array_values($v);
+                    foreach ($findArr as $idx => $item) {
+                        $bindName = "item_" . $index . "_" . $idx;
+                        $bind[$bindName] = $item;
+                        $where[] = "FIND_IN_SET(:{$bindName}, `" . str_replace('.', '`.`', $k) . "`)";
                     }
                     break;
                 case 'IN':
@@ -385,10 +388,10 @@ class Backend extends Controller
                         $arr = $arr[0];
                     }
                     $tableArr = explode('.', $k);
-                    if (count($tableArr) > 1 && $tableArr[0] != $name) {
+                    if (count($tableArr) > 1 && $tableArr[0] != $name && !in_array($tableArr[0], $alias)) {
                         //修复关联模型下时间无法搜索的BUG
                         $relation = Loader::parseName($tableArr[0], 1, false);
-                        $this->model->alias([$this->model->$relation()->getTable() => $tableArr[0]]);
+                        $alias[$this->model->$relation()->getTable()] = $tableArr[0];
                     }
                     $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' TIME', $arr];
                     break;
@@ -401,8 +404,14 @@ class Backend extends Controller
                 default:
                     break;
             }
+            $index++;
         }
-        $where = function ($query) use ($where) {
+
+        $this->model->alias($alias);
+        $model = $this->model;
+        $where = function ($query) use ($where, $alias, $bind, &$model) {
+            $model->alias($alias);
+            $model->bind($bind);
             foreach ($where as $k => $v) {
                 if (is_array($v)) {
                     call_user_func_array([$query, 'where'], $v);
@@ -411,7 +420,7 @@ class Backend extends Controller
                 }
             }
         };
-        return [$where, $sort, $order, $offset, $limit, $page];
+        return [$where, $sort, $order, $offset, $limit, $page, $alias, $bind];
     }
 
     /**
