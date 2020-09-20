@@ -52,20 +52,6 @@ class User extends Frontend
     }
 
     /**
-     * 空的请求
-     * @param $name
-     * @return mixed
-     */
-    public function _empty($name)
-    {
-        $data = Hook::listen("user_request_empty", $name);
-        foreach ($data as $index => $datum) {
-            $this->view->assign($datum);
-        }
-        return $this->view->fetch('user/' . $name);
-    }
-
-    /**
      * 会员中心
      */
     public function index()
