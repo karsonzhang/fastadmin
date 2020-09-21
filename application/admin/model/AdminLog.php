@@ -4,6 +4,7 @@ namespace app\admin\model;
 
 use app\admin\library\Auth;
 use think\Model;
+use think\Loader;
 
 class AdminLog extends Model
 {
@@ -45,11 +46,14 @@ class AdminLog extends Model
         $title = self::$title;
         if (!$title) {
             $title = [];
-            $breadcrumb = Auth::instance()->getBreadcrumb();
+            $controllername = Loader::parseName(request()->controller());
+            $actionname = strtolower(request()->action());
+            $path = str_replace('.', '/', $controllername) . '/' . $actionname;
+            $breadcrumb = Auth::instance()->getBreadcrumb($path);
             foreach ($breadcrumb as $k => $v) {
                 $title[] = $v['title'];
             }
-            $title = implode(' ', $title);
+            $title = implode(' / ', $title);
         }
         self::create([
             'title'     => $title,
