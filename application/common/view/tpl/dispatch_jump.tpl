@@ -7,10 +7,10 @@
     <link rel="shortcut icon" href="__CDN__/assets/img/favicon.ico" />
     <style type="text/css">
         *{box-sizing:border-box;margin:0;padding:0;font-family:Lantinghei SC,Open Sans,Arial,Hiragino Sans GB,Microsoft YaHei,"微软雅黑",STHeiti,WenQuanYi Micro Hei,SimSun,sans-serif;-webkit-font-smoothing:antialiased}
-        body{padding:70px 0;background:#edf1f4;font-weight:400;font-size:1pc;-webkit-text-size-adjust:none;color:#333}
+        body{padding:70px 50px;background:#edf1f4;font-weight:400;font-size:1pc;-webkit-text-size-adjust:none;color:#333}
         a{outline:0;color:#3498db;text-decoration:none;cursor:pointer}
-        .system-message{margin:20px 5%;padding:40px 20px;background:#fff;box-shadow:1px 1px 1px hsla(0,0%,39%,.1);text-align:center}
-        .system-message h1{margin:0;margin-bottom:9pt;color:#444;font-weight:400;font-size:40px}
+        .system-message{margin:20px auto;padding:50px 0px;background:#fff;box-shadow:0 0 30px hsla(0,0%,39%,.06);text-align:center;width:100%;border-radius:2px;}
+        .system-message h1{margin:0;margin-bottom:9pt;color:#444;font-weight:400;font-size:30px}
         .system-message .jump,.system-message .image{margin:20px 0;padding:0;padding:10px 0;font-weight:400}
         .system-message .jump{font-size:14px}
         .system-message .jump a{color:#333}
@@ -22,15 +22,15 @@
         .copyright p{width:100%;color:#919191;text-align:center;font-size:10px}
         .system-message .btn-grey{border-color:#bbb;color:#bbb}
         .clearfix:after{clear:both;display:block;visibility:hidden;height:0;content:"."}
-        @media (max-width:768px){body {padding:20px 0;}}
-            @media (max-width:480px){.system-message h1{font-size:30px;}}
+        @media (max-width:768px){body {padding:20px;}}
+        @media (max-width:480px){.system-message h1{font-size:30px;}}
     </style>
 </head>
 <body>
 {php}$codeText=$code == 1 ? 'success' : ($code == 0 ? 'error' : 'info');{/php}
 <div class="system-message {$codeText}">
     <div class="image">
-        <img src="__CDN__/assets/img/{$codeText}.svg" alt="" width="150" />
+        <img src="__CDN__/assets/img/{$codeText}.svg" alt="" width="120" />
     </div>
     <h1>{$msg}</h1>
     {if $url}

@@ -48,7 +48,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                         {field: 'id', title: 'ID'},
                         {field: 'pid', title: __('Parent')},
                         {field: 'name', title: __('Name'), align: 'left', formatter:function (value, row, index) {
-                                return value.toString().replace(/(&|&amp;)nbsp;/g, '');
+                                return value.toString().replace(/(&|&amp;)nbsp;/g, '&nbsp;');
                             }
                         },
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},

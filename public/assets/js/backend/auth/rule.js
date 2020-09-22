@@ -121,7 +121,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
         api: {
             formatter: {
                 title: function (value, row, index) {
-                    value = value.toString().replace(/(&|&amp;)nbsp;/g, '');
+                    value = value.toString().replace(/(&|&amp;)nbsp;/g, '&nbsp;');
                     return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
                 },
                 name: function (value, row, index) {

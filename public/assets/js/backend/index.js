@@ -54,7 +54,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             //切换左侧sidebar显示隐藏
             $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
-                if (!$(this).parent("li").hasClass("treeview")) {
+                var nextul = $(this).next("ul");
+                if (nextul.length == 0 && (!$(this).parent("li").hasClass("treeview") || ($("body").hasClass("multiplenav") && $(this).parent().parent().hasClass("sidebar-menu")))) {
                     $(".sidebar-menu li").removeClass("active");
                 }
                 //当外部触发隐藏的a时,触发父辈a的事件
@@ -63,7 +64,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     $(this).closest("ul").prev().trigger("click");
                 }
 
-                var visible = $(this).next("ul").is(":visible");
+                var visible = nextul.is(":visible");
                 if (!visible) {
                     $(this).parents("li").addClass("active");
                 } else {
@@ -130,6 +131,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             });
 
             if (multiplenav) {
+                firstnav.css("overflow", "inherit");
                 //一级菜单自适应
                 $(window).resize(function () {
                     var siblingsWidth = 0;
@@ -144,7 +146,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 firstnav.on("click", "li a", function () {
                     $("li", firstnav).removeClass("active");
                     $(this).closest("li").addClass("active");
-                    $(".sidebar-menu > li.treeview").addClass("hidden");
+                    $(".sidebar-menu > li[pid]").addClass("hidden");
                     if ($(this).attr("url") == "javascript:;") {
                         var sonlist = $(".sidebar-menu > li[pid='" + $(this).attr("addtabs") + "']");
                         sonlist.removeClass("hidden");
@@ -163,6 +165,22 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     }
                 });
 
+                var mobilenav = $(".mobilenav");
+                $("#firstnav .nav-addtabs li a").each(function () {
+                    mobilenav.append($(this).clone().addClass("btn btn-app"));
+                });
+
+                //点击移动端一级菜单
+                mobilenav.on("click", "a", function () {
+                    $("a", mobilenav).removeClass("active");
+                    $(this).addClass("active");
+                    $(".sidebar-menu > li[pid]").addClass("hidden");
+                    if ($(this).attr("url") == "javascript:;") {
+                        var sonlist = $(".sidebar-menu > li[pid='" + $(this).attr("addtabs") + "']");
+                        sonlist.removeClass("hidden");
+                    }
+                });
+
                 //点击左侧菜单栏
                 $(document).on('click', '.sidebar-menu li a[addtabs]', function (e) {
                     var parents = $(this).parentsUntil("ul.sidebar-menu", "li");
@@ -177,22 +195,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                                 obj.trigger("click");
                             }
                         }
-                    }
-                });
-
-                var mobilenav = $(".mobilenav");
-                $("#firstnav .nav-addtabs li a").each(function () {
-                    mobilenav.append($(this).clone().addClass("btn btn-app"));
-                });
-
-                //点击移动端一级菜单
-                mobilenav.on("click", "a", function () {
-                    $("a", mobilenav).removeClass("active");
-                    $(this).addClass("active");
-                    $(".sidebar-menu > li.treeview").addClass("hidden");
-                    if ($(this).attr("url") == "javascript:;") {
-                        var sonlist = $(".sidebar-menu > li[pid='" + $(this).attr("addtabs") + "']");
-                        sonlist.removeClass("hidden");
+                        mobilenav.find("a").removeClass("active");
+                        mobilenav.find("a[addtabs='" + pid + "']").addClass("active");
                     }
                 });
             }

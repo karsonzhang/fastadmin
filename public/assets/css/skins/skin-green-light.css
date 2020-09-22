@@ -21,6 +21,9 @@
   background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
+.skin-green-light .main-header .navbar .nav-addtabs li > .close-tab {
+  color: #f6f6f6;
+}
 .skin-green-light .main-header .navbar .sidebar-toggle {
   color: #fff;
 }
@@ -83,18 +86,15 @@
 }
 .skin-green-light .sidebar-menu > li > a {
   border-left: 3px solid transparent;
-  font-weight: 600;
 }
 .skin-green-light .sidebar-menu > li:hover > a,
 .skin-green-light .sidebar-menu > li.active > a {
   color: #000;
   background: #f4f4f5;
+  border-left-color: #18bc9c;
 }
 .skin-green-light .sidebar-menu > li.active {
   border-left-color: #18bc9c;
-}
-.skin-green-light .sidebar-menu > li.active > a {
-  font-weight: 600;
 }
 .skin-green-light .sidebar-menu > li > .treeview-menu {
   background: #f4f4f5;
@@ -162,7 +162,14 @@
 .skin-green-light .main-footer {
   border-left: none;
 }
-.skin-green-light #firstnav {
-  box-shadow: none;
+@media (max-width: 767px) {
+  .skin-green-light.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #eceff3;
+    color: #757575;
+  }
+  .skin-green-light.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #18bc9c;
+    color: #fff;
+  }
 }
 /*# sourceMappingURL=skin-green-light.css.map */

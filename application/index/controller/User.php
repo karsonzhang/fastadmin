@@ -31,7 +31,7 @@ class User extends Frontend
             $this->error(__('User center already closed'));
         }
 
-        //监听注册登录注销的事件
+        //监听注册登录退出的事件
         Hook::add('user_login_successed', function ($user) use ($auth) {
             $expire = input('post.keeplogin') ? 30 * 86400 : 0;
             Cookie::set('uid', $user->id, $expire);
@@ -208,11 +208,11 @@ class User extends Frontend
     }
 
     /**
-     * 注销登录
+     * 退出登录
      */
     public function logout()
     {
-        //注销本站
+        //退出本站
         $this->auth->logout();
         $this->success(__('Logout successful'), url('user/index'));
     }
@@ -244,6 +244,7 @@ class User extends Frontend
             ];
 
             $msg = [
+                'renewpassword.confirm' => __('Password and confirm password don\'t match')
             ];
             $data = [
                 'oldpassword'   => $oldpassword,

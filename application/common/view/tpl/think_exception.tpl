@@ -44,7 +44,7 @@ $langSet == 'en' && $lang = array_combine(array_keys($lang), array_keys($lang));
         .clearfix:before,.clearfix:after {content:"\0020";display:block;height:0;visibility:hidden;}
         .clearfix:after {clear:both;}
         body.error-page-wrapper,.error-page-wrapper.preview {background-position:center center;background-repeat:no-repeat;background-size:cover;position:relative;}
-        .error-page-wrapper .content-container {border-radius:2px;text-align:center;box-shadow:1px 1px 1px rgba(99,99,99,0.1);padding:50px;background-color:#fff;width:100%;max-width:560px;position:absolute;left:50%;top:50%;margin-top:-220px;margin-left:-280px;}
+        .error-page-wrapper .content-container {border-radius:2px;text-align:center;box-shadow:0 0 30px rgba(99,99,99,0.06);padding:50px;background-color:#fff;width:100%;max-width:560px;position:absolute;left:50%;top:50%;margin-top:-220px;margin-left:-280px;}
         .error-page-wrapper .content-container.in {left:0px;opacity:1;}
         .error-page-wrapper .head-line {transition:color .2s linear;font-size:40px;line-height:60px;letter-spacing:-1px;margin-bottom:20px;color:#777;}
         .error-page-wrapper .subheader {transition:color .2s linear;font-size:32px;line-height:46px;color:#494949;}

@@ -10,6 +10,7 @@
 @sidebar-dark-bg: @purple;
 @sidebar-dark-color: #c8c5ff;
 @sidebar-dark-submenu-color: #c8c5ff;
+@sidebar-dark-submenu-bg: darken(@sidebar-dark-bg, 3%);
 
 .skin-purple {
     //Navbar
@@ -72,5 +73,30 @@
 
     .sidebar-form input[type="text"], .sidebar-form .btn {
         color: #fff;
+    }
+
+    &.multiplenav {
+        @media (max-width: @screen-header-collapse) {
+            .main-header {
+                .navbar {
+                    .navbar-variant(@sidebar-dark-bg; #fff);
+                }
+
+
+                > .logo {
+                    .logo-variant(@sidebar-dark-bg; #fff);
+                }
+            }
+
+            .sidebar .mobilenav a.btn-app {
+                background: lighten(@sidebar-dark-bg, 10%);
+                color: #fff;
+
+                &.active {
+                    background: #fff;
+                    color: lighten(@sidebar-dark-bg, 10%);
+                }
+            }
+        }
     }
 }

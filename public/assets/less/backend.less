@@ -5,7 +5,7 @@
 @import "lesshat.less";
 @import url("../css/bootstrap.css");
 @import url("../css/fastadmin.css");
-@import url("../css/skins/skin-green.css");
+@import url("../css/skins/skin-black-green.css");
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
@@ -59,6 +59,11 @@ html.ios-fix, html.ios-fix body {
     height: 100%;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
+
+    .wrapper, .tab-pane {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
 .wrapper {
@@ -213,6 +218,34 @@ select.bs-select-hidden, select.selectpicker {
     }
 }
 
+input.selectpage {
+    color: transparent;
+    pointer-events: none;
+}
+
+.sp_container {
+    input.selectpage {
+        color: inherit;
+        pointer-events: inherit;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .sp_element_box {
+        input.selectpage {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        li:first-child {
+            input.selectpage {
+                padding-left: 9px;
+                padding-right: 9px;
+            }
+        }
+    }
+}
+
 .img-center {
     margin: 0 auto;
     display: inline;
@@ -337,6 +370,20 @@ form.form-horizontal .control-label {
             background-color: #ffffff;
             border-bottom-color: transparent;
             cursor: default;
+        }
+
+        @media (max-width: @screen-tablet) {
+            .nav-tabs {
+                white-space: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden;
+                margin-bottom: -1px;
+
+                > li {
+                    display: inline-block;
+                    float: none;
+                }
+            }
         }
     }
 }
@@ -595,12 +642,22 @@ form.form-horizontal .control-label {
 }
 
 .multiplenav {
-    .content-wrapper, .right-side {
+    .content-wrapper, .right-side, .main-sidebar {
         padding-top: 50px;
     }
 
     #firstnav .nav-addtabs {
         padding-right: 450px;
+    }
+}
+
+@media (max-width: 767px) {
+    .multipletab {
+        &.multiplenav {
+            .content-wrapper, .right-side {
+                padding-top: 94px;
+            }
+        }
     }
 }
 
@@ -612,6 +669,10 @@ form.form-horizontal .control-label {
     &.multiplenav {
         .content-wrapper, .right-side {
             padding-top: 94px;
+        }
+
+        #firstnav .nav-tabs {
+            overflow: hidden;
         }
     }
 }
@@ -1177,23 +1238,28 @@ table.table-nowrap {
     }
 
     .fixed-table-toolbar {
-        .columns-right.btn-group {
-            display: none;
+        > .bs-bars {
+            float: none !important;
+        }
+
+        .toolbar {
+            a.btn-refresh, a.btn-del, a.btn-add, a.btn-edit, a.btn-import, a.btn-more, a.btn-recyclebin, a.btn-mini-xs {
+                font-size: 0;
+
+                .fa {
+                    font-size: initial;
+                }
+            }
+        }
+
+        .search {
+            max-width: 110px;
+            float: left !important;
         }
     }
 
     .fixed .content-wrapper, .fixed .right-side {
         padding-top: 50px;
-    }
-
-    .multiplenav {
-        .fixed .content-wrapper, .fixed .right-side {
-            padding-top: 94px;
-        }
-
-        .content-wrapper, .right-side {
-            padding-top: 94px;
-        }
     }
 
     .main-sidebar, .left-side {
@@ -1220,9 +1286,12 @@ table.table-nowrap {
         width: 100px;
         height: 70px;
         font-size: 13px;
+        border: none;
+        background: #fff;
 
         i.fa {
             font-size: 24px;
+            display: inline-block;
         }
 
         span {
@@ -1255,6 +1324,12 @@ table.table-nowrap {
 
     .main-sidebar, .left-side {
         padding-top: 50px;
+    }
+
+    .multipletab.multiplenav {
+        .main-sidebar {
+            padding-top: 95px;
+        }
     }
 
     .n-bootstrap {
@@ -1322,7 +1397,7 @@ table.table-nowrap {
     min-height: 41px;
     background-color: #fff;
     box-sizing: border-box;
-    z-index: 1;
+    z-index: 2;
     box-shadow: 0 -1px 8px rgba(0, 0, 0, .08);
 
     .fixed-table-body {
@@ -1363,3 +1438,4 @@ table.table-nowrap {
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg);
 }
+

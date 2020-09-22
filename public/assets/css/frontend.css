@@ -89,6 +89,63 @@ body {
 .input-group > .msg-box.n-right {
   position: absolute;
 }
+.bootstrap-select .status {
+  background: #f0f0f0;
+  clear: both;
+  color: #999;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: -5px;
+  padding: 10px 20px;
+}
+select.bs-select-hidden,
+select.selectpicker {
+  display: inherit !important;
+  max-height: 31px;
+  overflow: hidden;
+}
+select.bs-select-hidden[multiple],
+select.selectpicker[multiple] {
+  height: 31px;
+  padding: 0;
+  background: #f4f4f4;
+}
+select.bs-select-hidden[multiple] option,
+select.selectpicker[multiple] option {
+  color: #f4f4f4;
+  zoom: 1;
+  filter: alpha(opacity=0);
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+}
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance:none) {
+    select.bs-select-hidden[multiple],
+    select.selectpicker[multiple] {
+      visibility: hidden;
+    }
+  }
+}
+input.selectpage {
+  color: transparent;
+  pointer-events: none;
+}
+.sp_container input.selectpage {
+  color: inherit;
+  pointer-events: inherit;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.sp_container .sp_element_box input.selectpage {
+  padding-left: 0;
+  padding-right: 0;
+}
+.sp_container .sp_element_box li:first-child input.selectpage {
+  padding-left: 9px;
+  padding-right: 9px;
+}
 /*修复radio和checkbox样式对齐*/
 .radio > label,
 .checkbox > label {

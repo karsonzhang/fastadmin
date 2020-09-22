@@ -6,20 +6,17 @@
     <style type="text/css">
         body {
             color: #999;
-            background: url('{$background}');
+            background-color: #f1f4fd;
             background-size: cover;
         }
 
         a {
-            color: #fff;
+            color: #444;
         }
 
-        .login-panel {
-            margin-top: 150px;
-        }
 
         .login-screen {
-            max-width: 400px;
+            max-width: 430px;
             padding: 0;
             margin: 100px auto 0 auto;
 
@@ -27,18 +24,12 @@
 
         .login-screen .well {
             border-radius: 3px;
-            -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(227, 227, 227, 0.4);
-        }
-
-        .login-screen .input-group .input-group-addon, .login-screen input.form-control {
-            /*border-color: transparent;*/
-        }
-
-        .login-screen .copyright {
-            text-align: center;
+            -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 1);
+            border: none;
+            overflow: hidden;
+            padding: 0;
         }
 
         @media (max-width: 767px) {
@@ -50,15 +41,26 @@
         .profile-img-card {
             width: 100px;
             height: 100px;
-            margin: 10px auto;
             display: block;
             -moz-border-radius: 50%;
             -webkit-border-radius: 50%;
             border-radius: 50%;
+            margin: -93px auto 30px;
+            border: 5px solid #fff;
         }
 
         .profile-name-card {
             text-align: center;
+        }
+
+        .login-head {
+            background: #899fe1;
+        }
+
+        .login-form {
+            padding: 40px 30px;
+            position: relative;
+            z-index: 99;
         }
 
         #login-form {
@@ -69,13 +71,29 @@
             margin-bottom: 15px;
         }
 
+        #login-form .form-control {
+            font-size: 13px;
+        }
+
     </style>
+    <!--@formatter:off-->
+    {if $background}
+        <style type="text/css">
+            body{
+                background-image: url('{$background}');
+            }
+        </style>
+    {/if}
+    <!--@formatter:on-->
 </head>
 <body>
 <div class="container">
     <div class="login-wrapper">
         <div class="login-screen">
             <div class="well">
+                <div class="login-head">
+                    <img src="__CDN__/assets/img/login-head.png" style="width:100%;"/>
+                </div>
                 <div class="login-form">
                     <img id="profile-img" class="profile-img-card" src="__CDN__/assets/img/avatar.png"/>
                     <p id="profile-name" class="profile-name-card"></p>
@@ -108,7 +126,7 @@
                             </label>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-lg btn-block">{:__('Sign in')}</button>
+                            <button type="submit" class="btn btn-success btn-lg btn-block" style="background:#708eea;">{:__('Sign in')}</button>
                         </div>
                     </form>
                 </div>

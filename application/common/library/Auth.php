@@ -225,7 +225,7 @@ class Auth
     }
 
     /**
-     * 注销
+     * 退出
      *
      * @return boolean
      */
@@ -239,7 +239,7 @@ class Auth
         $this->_logined = false;
         //删除Token
         Token::delete($this->_token);
-        //注销成功的事件
+        //退出成功的事件
         Hook::listen("user_logout_successed", $this->_user);
         return true;
     }

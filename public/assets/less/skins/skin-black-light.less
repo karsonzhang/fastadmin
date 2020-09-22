@@ -69,14 +69,27 @@
     }
 
     //Create the sidebar skin
-    .skin-light-sidebar(#fff);
+    .skin-light-sidebar(#222d32);
 
     .main-sidebar {
         .box-shadow(7px 0 14px rgba(0, 0, 0, .03));
     }
 
-    .content-wrapper,
-    .main-footer {
+    .content-wrapper, .main-footer {
         border-left: none;
+    }
+
+    &.multiplenav {
+        @media (max-width: @screen-header-collapse) {
+            .sidebar .mobilenav a.btn-app {
+                background: #eceff3;
+                color: #757575;
+
+                &.active {
+                    background: #222d32;
+                    color: #fff;
+                }
+            }
+        }
     }
 }

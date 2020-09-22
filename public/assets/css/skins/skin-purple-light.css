@@ -21,6 +21,9 @@
   background: rgba(0, 0, 0, 0.05);
   color: #f6f6f6;
 }
+.skin-purple-light .main-header .navbar .nav-addtabs li > .close-tab {
+  color: #f6f6f6;
+}
 .skin-purple-light .main-header .navbar .sidebar-toggle {
   color: #fff;
 }
@@ -83,18 +86,15 @@
 }
 .skin-purple-light .sidebar-menu > li > a {
   border-left: 3px solid transparent;
-  font-weight: 600;
 }
 .skin-purple-light .sidebar-menu > li:hover > a,
 .skin-purple-light .sidebar-menu > li.active > a {
   color: #000;
   background: #f4f4f5;
+  border-left-color: #605ca8;
 }
 .skin-purple-light .sidebar-menu > li.active {
   border-left-color: #605ca8;
-}
-.skin-purple-light .sidebar-menu > li.active > a {
-  font-weight: 600;
 }
 .skin-purple-light .sidebar-menu > li > .treeview-menu {
   background: #f4f4f5;
@@ -161,5 +161,15 @@
 .skin-purple-light .content-wrapper,
 .skin-purple-light .main-footer {
   border-left: none;
+}
+@media (max-width: 767px) {
+  .skin-purple-light.multiplenav .sidebar .mobilenav a.btn-app {
+    background: #eceff3;
+    color: #757575;
+  }
+  .skin-purple-light.multiplenav .sidebar .mobilenav a.btn-app.active {
+    background: #605ca8;
+    color: #fff;
+  }
 }
 /*# sourceMappingURL=skin-purple-light.css.map */

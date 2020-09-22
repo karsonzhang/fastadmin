@@ -8,44 +8,33 @@
 @import "../fastadmin/mixins.less";
 
 @primary: #4e73df;
+@sidebar-dark-submenu-bg: darken(@sidebar-dark-bg, 5%);
 .skin-black-blue {
 
     .main-header {
         background: @sidebar-dark-bg;
         .box-shadow(0px 1px 1px rgba(0, 0, 0, 0.05));
 
-        .navbar-toggle {
-            color: #333;
-        }
-
-        .navbar-brand {
-            color: #333;
-            border-right: 1px solid #eee;
-        }
-
         .navbar {
-            .navbar-variant(#fff; #666; #444; rgba(0, 0, 0, .02));
-
-            > .sidebar-toggle {
-                color: #333;
-                border-right: 1px solid #eee;
-            }
+            .navbar-variant(#fff; #666; #333; rgba(0, 0, 0, .02));
 
             .navbar-nav {
                 > li > a {
-                    border-right: 1px solid #eee;
+                    border-right: none;
                 }
             }
 
-            .navbar-custom-menu .navbar-nav,
-            .navbar-right {
+            .navbar-custom-menu .navbar-nav, .navbar-right {
                 > li {
                     > a {
-                        border-left: 1px solid #eee;
                         border-left: none;
                         border-right-width: 0;
                     }
                 }
+            }
+
+            @media (max-width: @screen-header-collapse) {
+                .navbar-variant(@sidebar-dark-submenu-bg; #fff);
             }
         }
 
@@ -53,48 +42,27 @@
             .logo-variant(@sidebar-dark-bg; #fff);
             border-right: 1px solid @sidebar-dark-bg;
             @media (max-width: @screen-header-collapse) {
-                .logo-variant(#fff; #333);
+                .logo-variant(@sidebar-dark-submenu-bg, #fff);
                 border-right: none;
             }
         }
 
         li.user-header {
-            background-color: #222;
+            background-color: @sidebar-dark-bg;
         }
 
         .nav-addtabs > li > a, .nav-addtabs > li.active > a {
             border-right-color: transparent;
         }
+
     }
 
-    //Content Header
     .content-header {
         background: transparent;
         box-shadow: none;
     }
 
-    //Create the sidebar skin
     .skin-dark-sidebar(#fff);
-
-    .sidebar-menu > li {
-
-        //links
-        > a {
-            border-left: 3px solid transparent;
-        }
-
-        //Hover and active states
-        &:hover > a, &.active > a {
-            color: @sidebar-dark-hover-color;
-            background: @primary;
-            border-left-color: @primary;
-        }
-
-        //Hover and active states
-        &:hover > a {
-            border-left-color: transparent;
-        }
-    }
 
     .treeview-menu {
         > li {
@@ -102,25 +70,33 @@
                 padding-left: 18px;
             }
 
-            &.active > a, > a:hover {
+            &.active > a {
                 background-color: @primary;
             }
         }
     }
 
     .sidebar-menu {
-        > li > .treeview-menu {
-            margin: 0;
+        > li {
+
+            > a {
+                border-left: 3px solid transparent;
+            }
+
+            &.active > a {
+                color: @sidebar-dark-hover-color;
+                background: @primary;
+                border-left-color: @primary;
+            }
+
+            &:hover > a {
+                border-left-color: transparent;
+            }
         }
 
         li.treeview > a {
             background: transparent;
             border-left-color: transparent;
-
-            &:hover {
-                color: @sidebar-dark-hover-color;
-                background: @primary;
-            }
         }
 
         .treeview-menu {
@@ -137,16 +113,12 @@
             li.treeview > a {
                 background: transparent;
                 border-left-color: transparent;
-
-                &:hover {
-                    color: @sidebar-dark-hover-color;
-                    background: @primary;
-                }
             }
         }
     }
 
     &.sidebar-collapse {
+
         .sidebar-menu {
             li:hover > a, li.active > a {
                 color: @sidebar-dark-hover-color;
@@ -157,6 +129,25 @@
                 li.active > a {
                     color: @sidebar-dark-hover-color;
                     background: @primary;
+                }
+
+                li.treeview > a {
+                    background: transparent;
+                    border-left-color: transparent;
+                }
+            }
+        }
+    }
+
+    &.multiplenav {
+        @media (max-width: @screen-header-collapse) {
+            .sidebar .mobilenav a.btn-app {
+                background: lighten(@sidebar-dark-bg, 10%);
+                color: #fff;
+
+                &.active {
+                    background: @primary;
+                    color: #fff;
                 }
             }
         }

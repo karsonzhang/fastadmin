@@ -1,6 +1,6 @@
 @import url("../css/bootstrap.css");
 @import url("../css/fastadmin.css");
-@import url("../css/skins/skin-green.css");
+@import url("../css/skins/skin-black-green.css");
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
@@ -39,6 +39,13 @@ body.is-dialog {
 html.ios-fix,
 html.ios-fix body {
   height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+html.ios-fix .wrapper,
+html.ios-fix body .wrapper,
+html.ios-fix .tab-pane,
+html.ios-fix body .tab-pane {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -166,6 +173,24 @@ select.selectpicker[multiple] option {
     }
   }
 }
+input.selectpage {
+  color: transparent;
+  pointer-events: none;
+}
+.sp_container input.selectpage {
+  color: inherit;
+  pointer-events: inherit;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.sp_container .sp_element_box input.selectpage {
+  padding-left: 0;
+  padding-right: 0;
+}
+.sp_container .sp_element_box li:first-child input.selectpage {
+  padding-left: 9px;
+  padding-right: 9px;
+}
 .img-center {
   margin: 0 auto;
   display: inline;
@@ -270,6 +295,18 @@ form.form-horizontal .control-label {
   background-color: #ffffff;
   border-bottom-color: transparent;
   cursor: default;
+}
+@media (max-width: 768px) {
+  .panel-intro > .panel-heading .nav-tabs {
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: -1px;
+  }
+  .panel-intro > .panel-heading .nav-tabs > li {
+    display: inline-block;
+    float: none;
+  }
 }
 /*单表格*/
 .panel-tabs .panel-heading {
@@ -480,11 +517,18 @@ form.form-horizontal .control-label {
   color: #222e32;
 }
 .multiplenav .content-wrapper,
-.multiplenav .right-side {
+.multiplenav .right-side,
+.multiplenav .main-sidebar {
   padding-top: 50px;
 }
 .multiplenav #firstnav .nav-addtabs {
   padding-right: 450px;
+}
+@media (max-width: 767px) {
+  .multipletab.multiplenav .content-wrapper,
+  .multipletab.multiplenav .right-side {
+    padding-top: 94px;
+  }
 }
 .multipletab #secondnav {
   display: block;
@@ -492,6 +536,9 @@ form.form-horizontal .control-label {
 .multipletab.multiplenav .content-wrapper,
 .multipletab.multiplenav .right-side {
   padding-top: 94px;
+}
+.multipletab.multiplenav #firstnav .nav-tabs {
+  overflow: hidden;
 }
 .main-sidebar .sidebar-form {
   overflow: visible;
@@ -951,20 +998,36 @@ table.table-nowrap thead > tr > th {
   #firstnav .navbar-nav > .user-menu .user-image {
     margin-top: -3px;
   }
-  .fixed-table-toolbar .columns-right.btn-group {
-    display: none;
+  .fixed-table-toolbar > .bs-bars {
+    float: none !important;
+  }
+  .fixed-table-toolbar .toolbar a.btn-refresh,
+  .fixed-table-toolbar .toolbar a.btn-del,
+  .fixed-table-toolbar .toolbar a.btn-add,
+  .fixed-table-toolbar .toolbar a.btn-edit,
+  .fixed-table-toolbar .toolbar a.btn-import,
+  .fixed-table-toolbar .toolbar a.btn-more,
+  .fixed-table-toolbar .toolbar a.btn-recyclebin,
+  .fixed-table-toolbar .toolbar a.btn-mini-xs {
+    font-size: 0;
+  }
+  .fixed-table-toolbar .toolbar a.btn-refresh .fa,
+  .fixed-table-toolbar .toolbar a.btn-del .fa,
+  .fixed-table-toolbar .toolbar a.btn-add .fa,
+  .fixed-table-toolbar .toolbar a.btn-edit .fa,
+  .fixed-table-toolbar .toolbar a.btn-import .fa,
+  .fixed-table-toolbar .toolbar a.btn-more .fa,
+  .fixed-table-toolbar .toolbar a.btn-recyclebin .fa,
+  .fixed-table-toolbar .toolbar a.btn-mini-xs .fa {
+    font-size: initial;
+  }
+  .fixed-table-toolbar .search {
+    max-width: 110px;
+    float: left !important;
   }
   .fixed .content-wrapper,
   .fixed .right-side {
     padding-top: 50px;
-  }
-  .multiplenav .fixed .content-wrapper,
-  .multiplenav .fixed .right-side {
-    padding-top: 94px;
-  }
-  .multiplenav .content-wrapper,
-  .multiplenav .right-side {
-    padding-top: 94px;
   }
   .main-sidebar,
   .left-side {
@@ -987,9 +1050,12 @@ table.table-nowrap thead > tr > th {
     width: 100px;
     height: 70px;
     font-size: 13px;
+    border: none;
+    background: #fff;
   }
   .sidebar .mobilenav a.btn-app i.fa {
     font-size: 24px;
+    display: inline-block;
   }
   .sidebar .mobilenav a.btn-app span {
     margin-top: 5px;
@@ -1013,6 +1079,9 @@ table.table-nowrap thead > tr > th {
   .main-sidebar,
   .left-side {
     padding-top: 50px;
+  }
+  .multipletab.multiplenav .main-sidebar {
+    padding-top: 95px;
   }
   .n-bootstrap .n-right {
     margin-top: 0;
@@ -1065,7 +1134,7 @@ table.table-nowrap thead > tr > th {
   min-height: 41px;
   background-color: #fff;
   box-sizing: border-box;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.08);
 }
 .fixed-columns .fixed-table-body,

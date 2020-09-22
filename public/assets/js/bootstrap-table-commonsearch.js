@@ -80,6 +80,7 @@
                 var extend = typeof vObjCol.extend === 'undefined' ? '' : vObjCol.extend;
                 var style = typeof vObjCol.style === 'undefined' ? '' : sprintf('style="%s"', vObjCol.style);
                 extend = typeof vObjCol.data !== 'undefined' && extend == '' ? vObjCol.data : extend;
+                extend = typeof vObjCol.autocomplete !== 'undefined' ? extend + ' autocomplete="' + (vObjCol.autocomplete === false || vObjCol.autocomplete === 'off' ? 'off' : 'on') + '"' : extend;
                 if (vObjCol.searchList) {
                     if (typeof vObjCol.searchList === 'function') {
                         htmlForm.push(vObjCol.searchList.call(this, vObjCol));
@@ -291,7 +292,8 @@
         _initHeader.apply(this, Array.prototype.slice.apply(arguments));
         this.$header.find('th[data-field]').each(function (i) {
             var column = $(this).data();
-            if (typeof column['width'] !== 'undefined') {
+            if (typeof column['width'] !== 'undefined' && column['width'].toString().indexOf("%") === -1) {
+                $(".th-inner", this).outerWidth(column['width']);
                 $(this).css("max-width", column['width']);
             }
         });
