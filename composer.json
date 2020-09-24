@@ -24,7 +24,7 @@
         "phpoffice/phpspreadsheet": "^1.2",
         "overtrue/wechat": "4.2.11",
         "nelexa/zip": "^3.3",
-        "symfony/var-exporter ": "^4.4.13",
+        "symfony/var-exporter": "^4.4.13",
         "ext-json": "*",
         "ext-curl": "*"
     },
