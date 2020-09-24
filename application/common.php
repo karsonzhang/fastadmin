@@ -2,6 +2,8 @@
 
 // 公共助手函数
 
+use Symfony\Component\VarExporter\VarExporter;
+
 if (!function_exists('__')) {
 
     /**
@@ -264,29 +266,12 @@ if (!function_exists('var_export_short')) {
 
     /**
      * 返回打印数组结构
-     * @param string $var    数组
-     * @param string $indent 缩进字符
+     * @param string $var 数组
      * @return string
      */
-    function var_export_short($var, $indent = "")
+    function var_export_short($var)
     {
-        switch (gettype($var)) {
-            case "string":
-                return '"' . addcslashes($var, "\\\$\"\r\n\t\v\f") . '"';
-            case "array":
-                $indexed = array_keys($var) === range(0, count($var) - 1);
-                $r = [];
-                foreach ($var as $key => $value) {
-                    $r[] = "$indent    "
-                        . ($indexed ? "" : var_export_short($key) . " => ")
-                        . var_export_short($value, "$indent    ");
-                }
-                return "[\n" . implode(",\n", $r) . "\n" . $indent . "]";
-            case "boolean":
-                return $var ? "TRUE" : "FALSE";
-            default:
-                return var_export($var, true);
-        }
+        return VarExporter::export($var);
     }
 }
 

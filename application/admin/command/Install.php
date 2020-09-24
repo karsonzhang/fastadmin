@@ -245,7 +245,7 @@ class Install extends Command
                 $config[$value['name']] = $value['value'];
             }
             $config['name'] = $siteName;
-            file_put_contents($configFile, '<?php' . "\n\nreturn " . var_export($config, true) . ";");
+            file_put_contents($configFile, '<?php' . "\n\nreturn " . var_export_short($config) . ";\n");
         }
 
         $installLockFile = INSTALL_PATH . "install.lock";

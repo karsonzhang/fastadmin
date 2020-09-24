@@ -1008,7 +1008,7 @@ table.table-nowrap thead > tr > th {
   .fixed-table-toolbar .toolbar a.btn-import,
   .fixed-table-toolbar .toolbar a.btn-more,
   .fixed-table-toolbar .toolbar a.btn-recyclebin,
-  .fixed-table-toolbar .toolbar a.btn-mini-xs {
+  .fixed-table-toolbar .toolbar .btn-mini-xs {
     font-size: 0;
   }
   .fixed-table-toolbar .toolbar a.btn-refresh .fa,
@@ -1018,7 +1018,7 @@ table.table-nowrap thead > tr > th {
   .fixed-table-toolbar .toolbar a.btn-import .fa,
   .fixed-table-toolbar .toolbar a.btn-more .fa,
   .fixed-table-toolbar .toolbar a.btn-recyclebin .fa,
-  .fixed-table-toolbar .toolbar a.btn-mini-xs .fa {
+  .fixed-table-toolbar .toolbar .btn-mini-xs .fa {
     font-size: initial;
   }
   .fixed-table-toolbar .search {

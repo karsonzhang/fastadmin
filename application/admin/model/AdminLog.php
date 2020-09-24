@@ -18,6 +18,10 @@ class AdminLog extends Model
     protected static $title = '';
     //自定义日志内容
     protected static $content = '';
+    //忽略的链接正则列表
+    protected static $ignoreRegex = [
+        '/^(.*)\/(selectpage|index)$/i',
+    ];
 
     public static function setTitle($title)
     {
@@ -29,26 +33,41 @@ class AdminLog extends Model
         self::$content = $content;
     }
 
-    public static function record($title = '')
+    public static function setIgnoreRegex($regex = [])
+    {
+        $regex = is_array($regex) ? $regex : [$regex];
+        self::$ignoreRegex = array_merge(self::$ignoreRegex, $regex);
+    }
+
+    /**
+     * 记录日志
+     * @param string $title
+     * @param string $content
+     */
+    public static function record($title = '', $content = '')
     {
         $auth = Auth::instance();
         $admin_id = $auth->isLogin() ? $auth->id : 0;
         $username = $auth->isLogin() ? $auth->username : __('Unknown');
-        $content = self::$content;
-        if (!$content) {
-            $content = request()->param('', null, 'trim,strip_tags,htmlspecialchars');
-            foreach ($content as $k => $v) {
-                if (is_string($v) && strlen($v) > 200 || stripos($k, 'password') !== false) {
-                    unset($content[$k]);
+
+        $controllername = Loader::parseName(request()->controller());
+        $actionname = strtolower(request()->action());
+        $path = str_replace('.', '/', $controllername) . '/' . $actionname;
+        if (self::$ignoreRegex) {
+            foreach (self::$ignoreRegex as $index => $item) {
+                if (preg_match($item, $path)) {
+                    return;
                 }
             }
         }
-        $title = self::$title;
+        $content = $content ? $content : self::$content;
+        if (!$content) {
+            $content = request()->param('', null, 'trim,strip_tags,htmlspecialchars');
+            $content = self::getPureContent($content);
+        }
+        $title = $title ? $title : self::$title;
         if (!$title) {
             $title = [];
-            $controllername = Loader::parseName(request()->controller());
-            $actionname = strtolower(request()->action());
-            $path = str_replace('.', '/', $controllername) . '/' . $actionname;
             $breadcrumb = Auth::instance()->getBreadcrumb($path);
             foreach ($breadcrumb as $k => $v) {
                 $title[] = $v['title'];
@@ -57,13 +76,35 @@ class AdminLog extends Model
         }
         self::create([
             'title'     => $title,
-            'content'   => !is_scalar($content) ? json_encode($content) : $content,
+            'content'   => !is_scalar($content) ? json_encode($content, JSON_UNESCAPED_UNICODE) : $content,
             'url'       => substr(request()->url(), 0, 1500),
             'admin_id'  => $admin_id,
             'username'  => $username,
             'useragent' => substr(request()->server('HTTP_USER_AGENT'), 0, 255),
             'ip'        => request()->ip()
         ]);
+    }
+
+    /**
+     * 获取已屏蔽关键信息的数据
+     * @param $content
+     * @return false|string
+     */
+    protected static function getPureContent($content)
+    {
+        if (!is_array($content)) {
+            return $content;
+        }
+        foreach ($content as $index => &$item) {
+            if (preg_match("/(password|salt|token)/i", $index)) {
+                $item = "***";
+            } else {
+                if (is_array($item)) {
+                    $item = self::getPureContent($item);
+                }
+            }
+        }
+        return $content;
     }
 
     public function admin()

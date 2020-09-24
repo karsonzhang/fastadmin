@@ -116,7 +116,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             $(document).on('refresh', '.sidebar-menu', function () {
                 Fast.api.ajax({
                     url: 'index/index',
-                    data: {action: 'refreshmenu'}
+                    data: {action: 'refreshmenu'},
+                    loading: false
                 }, function (data) {
                     $(".sidebar-menu li:not([data-rel='external'])").remove();
                     $(".sidebar-menu").prepend(data.menulist);

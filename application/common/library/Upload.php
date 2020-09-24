@@ -311,6 +311,9 @@ class Upload
             $sourceFile = $this->file->getRealPath() ?: $this->file->getPathname();
             $info = $this->file->getInfo();
             $this->file = null;
+            if (!is_dir($destDir)) {
+                @mkdir($destDir, 0755, true);
+            }
             rename($sourceFile, $destFile);
             $file = new File($destFile);
             $file->setSaveName($fileName)->setUploadInfo($info);

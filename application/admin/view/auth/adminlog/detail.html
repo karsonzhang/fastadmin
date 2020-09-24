@@ -1,17 +1,22 @@
-<table class="table table-striped">
+<style>
+    .table-adminlog tr td {
+        word-break: break-all;
+    }
+</style>
+<table class="table table-striped table-adminlog">
     <thead>
-        <tr>
-            <th>{:__('Title')}</th>
-            <th>{:__('Content')}</th>
-        </tr>
+    <tr>
+        <th width="100">{:__('Title')}</th>
+        <th>{:__('Content')}</th>
+    </tr>
     </thead>
     <tbody>
-        {volist name="row" id="vo"  }
-            <tr>
-                <td>{:__($key)}</td>
-                <td>{if $key=='createtime'}{$vo|datetime}{else/}{$vo|htmlentities}{/if}</td>
-            </tr>
-        {/volist}
+    {volist name="row" id="vo" }
+    <tr>
+        <td>{:__($key)}</td>
+        <td>{if $key=='createtime'}{$vo|datetime}{else/}{$vo|htmlentities}{/if}</td>
+    </tr>
+    {/volist}
     </tbody>
 </table>
 <div class="hide layer-footer">

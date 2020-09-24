@@ -190,7 +190,7 @@ class Config extends Backend
         }
         file_put_contents(
             APP_PATH . 'extra' . DS . 'site.php',
-            '<?php' . "\n\nreturn " . var_export($config, true) . ";"
+            '<?php' . "\n\nreturn " . var_export_short($config) . ";\n"
         );
     }
 

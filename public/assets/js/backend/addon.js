@@ -31,6 +31,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         btn: [__('Switch to the local'), __('Try to reload')]
                     }, function (index) {
                         layer.close(index);
+                        $(".panel .nav-tabs").hide();
+                        $(".toolbar > *:not(:first)").hide();
                         $(".btn-switch[data-type='local']").trigger("click");
                     }, function (index) {
                         layer.close(index);
@@ -61,6 +63,15 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             Template.helper("Moment", Moment);
             Template.helper("addons", Config['addons']);
+
+            $("#faupload-addon").data("params", function () {
+                var userinfo = Controller.api.userinfo.get();
+                return {
+                    uid: userinfo ? userinfo.id : '',
+                    token: userinfo ? userinfo.token : '',
+                    version: Config.faversion
+                };
+            });
 
             // 初始化表格
             table.bootstrapTable({
@@ -168,6 +179,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Config['addons'][data.addon.name] = data.addon;
                     Toastr.success(ret.msg);
                     operate(data.addon.name, 'enable', false);
+                    return false;
                 });
             });
 
@@ -220,12 +232,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 会员信息
             $(document).on("click", ".btn-userinfo", function () {
                 var that = this;
+                var area = [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '400px' : '95%'];
                 var userinfo = Controller.api.userinfo.get();
                 if (!userinfo) {
                     Layer.open({
                         content: Template("logintpl", {}),
                         zIndex: 99,
-                        area: [$(window).width() > 800 ? '500px' : '95%', $(window).height() > 600 ? '400px' : '95%'],
+                        area: area,
                         title: __('Login FastAdmin'),
                         resize: false,
                         btn: [__('Login'), __('Register')],
@@ -315,8 +328,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         title: __('Warning'),
                         icon: 1
                     });
-                    $('.btn-refresh').trigger('click');
-                    Fast.api.refreshmenu();
+                    Controller.api.refresh(table, name);
                 }, function (data, ret) {
                     //如果是需要购买的插件则弹出二维码提示
                     if (ret && ret.code === -1) {
@@ -377,8 +389,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 }, function (data, ret) {
                     delete Config['addons'][name];
                     Layer.closeAll();
-                    $('.btn-refresh').trigger('click');
-                    Fast.api.refreshmenu();
+                    Controller.api.refresh(table, name);
                 }, function (data, ret) {
                     if (ret && ret.code === -3) {
                         //插件目录发现影响全局的文件
@@ -411,8 +422,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     var addon = Config['addons'][name];
                     addon.state = action === 'enable' ? 1 : 0;
                     Layer.closeAll();
-                    $('.btn-refresh').trigger('click');
-                    Fast.api.refreshmenu();
+                    Controller.api.refresh(table, name);
                 }, function (data, ret) {
                     if (ret && ret.code === -3) {
                         //插件目录发现影响全局的文件
@@ -445,10 +455,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     url: 'addon/upgrade',
                     data: {name: name, uid: uid, token: token, version: version, faversion: Config.faversion}
                 }, function (data, ret) {
-                    Config['addons'][name].version = version;
+                    Config['addons'][name] = data.addon;
                     Layer.closeAll();
-                    $('.btn-refresh').trigger('click');
-                    Fast.api.refreshmenu();
+                    Controller.api.refresh(table, name);
                 }, function (data, ret) {
                     Layer.alert(ret.msg);
                     return false;
@@ -483,7 +492,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             $(document).on("click", ".btn-uninstall", function () {
                 var name = $(this).closest(".operate").data('name');
                 if (Config['addons'][name].state == 1) {
-                    Layer.alert(__('Please disable addon first'), {icon: 7});
+                    Layer.alert(__('Please disable the add before trying to uninstall'), {icon: 7});
                     return false;
                 }
                 Template.helper("__", __);
@@ -509,7 +518,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             $(document).on("click", ".btn-upgrade", function () {
                 var name = $(this).closest(".operate").data('name');
                 if (Config['addons'][name].state == 1) {
-                    Layer.alert(__('Please disable addon first'), {icon: 7});
+                    Layer.alert(__('Please disable the add before trying to upgrade'), {icon: 7});
                     return false;
                 }
                 var version = $(this).data("version");
@@ -601,6 +610,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     } else {
                         localStorage.removeItem("fastadmin_userinfo");
                     }
+                }
+            },
+            refresh: function (table, name) {
+                //刷新左侧边栏
+                Fast.api.refreshmenu();
+
+                //刷新行数据
+                if ($(".operate[data-name='" + name + "']").length > 0) {
+                    var index = $(".operate[data-name='" + name + "']").closest("tr[data-index]").data("index");
+                    var row = Table.api.getrowbyindex(table, index);
+                    row.addon = typeof Config['addons'][name] !== 'undefined' ? Config['addons'][name] : undefined;
+                    table.bootstrapTable("updateRow", {index: index, row: row});
+                } else if ($(".btn-switch.active").data("type") == "local") {
+                    $(".btn-refresh").trigger("click");
                 }
             }
         }
