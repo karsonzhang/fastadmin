@@ -26,7 +26,8 @@
         "nelexa/zip": "^3.3",
         "symfony/var-exporter": "^4.4.13",
         "ext-json": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-pdo": "*"
     },
     "config": {
         "preferred-install": "dist"

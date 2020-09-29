@@ -535,24 +535,21 @@ class Backend extends Controller
             }
 
             $fields = is_array($this->selectpageFields) ? $this->selectpageFields : ($this->selectpageFields && $this->selectpageFields != '*' ? explode(',', $this->selectpageFields) : []);
-            
+
             //如果有primaryvalue,说明当前是初始化传值,按照选择顺序排序
-            if ($primaryvalue !== null) {
+            if ($primaryvalue !== null && preg_match("/^[a-z0-9_\-]+$/i", $primarykey)) {
                 $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
-                $primaryvalue = implode(',', array_map([$this->model->getConnection(), 'quote'], $primaryvalue));
-                
-                $datalist = $this->model->where($where)
-                                        ->orderRaw("FIELD(`{$primarykey}`, {$primaryvalue})")
-                                        ->page($page, $pagesize)
-                                        ->field($this->selectpageFields)
-                                        ->select();
+                $primaryvalue = implode(',', $primaryvalue);
+
+                $this->model->orderRaw("FIELD(`{$primarykey}`, {$primaryvalue})");
             } else {
-                $datalist = $this->model->where($where)
-                                        ->order($order)
-                                        ->page($page, $pagesize)
-                                        ->field($this->selectpageFields)
-                                        ->select();
+                $this->model->order($order);
             }
+
+            $datalist = $this->model->where($where)
+                ->page($page, $pagesize)
+                ->field($this->selectpageFields)
+                ->select();
 
             foreach ($datalist as $index => $item) {
                 unset($item['password'], $item['salt']);

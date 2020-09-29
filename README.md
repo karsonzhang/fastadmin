@@ -20,14 +20,15 @@ FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台开发框架。
 * 强大的插件扩展功能，在线安装卸载升级插件
 * 通用的会员模块和API模块
 * 共用同一账号体系的Web端会员中心权限验证和API接口会员权限验证
-* 二级域名部署支持，同时域名支持绑定到插件
+* 二级域名部署支持，同时域名支持绑定到应用插件
 * 多语言支持，服务端及客户端支持
 * 支持大文件分片上传、剪切板粘贴上传、拖拽上传，进度条显示，图片上传前压缩
-* 强大的第三方应用模块支持([CMS](https://www.fastadmin.net/store/cms.html)、[博客](https://www.fastadmin.net/store/blog.html)、[知识付费问答](https://www.fastadmin.net/store/ask.html)、[在线投票系统](https://www.fastadmin.net/store/vote.html)、[商城系统](https://www.fastadmin.net/store/shopro.html))
+* 支持表格固定列、固定表头、跨页选择、Excel导出、模板渲染等功能
+* 强大的第三方应用模块支持([CMS](https://www.fastadmin.net/store/cms.html)、[博客](https://www.fastadmin.net/store/blog.html)、[知识付费问答](https://www.fastadmin.net/store/ask.html)、[在线投票系统](https://www.fastadmin.net/store/vote.html)、[B2C商城](https://www.fastadmin.net/store/shopro.html)、[B2B2C商城](https://www.fastadmin.net/store/wanlshop.html))
 * 支持CMS、博客、知识付费问答无缝整合[Xunsearch全文搜索](https://www.fastadmin.net/store/xunsearch.html)
-* 第三方小程序支持([预订小程序](https://www.fastadmin.net/store/ball.html)、[问答小程序](https://www.fastadmin.net/store/questions.html)、[活动报名小程序](https://www.fastadmin.net/store/huodong.html)、[商城小程序](https://www.fastadmin.net/store/xshop.html)、[博客小程序](https://www.fastadmin.net/store/blog.html))
+* 第三方小程序支持([CMS小程序](https://www.fastadmin.net/store/cms.html)、[预订小程序](https://www.fastadmin.net/store/ball.html)、[问答小程序](https://www.fastadmin.net/store/ask.html)、[点餐小程序](https://www.fastadmin.net/store/unidrink.html)、[B2C小程序](https://www.fastadmin.net/store/shopro.html)、[B2B2C小程序](https://www.fastadmin.net/store/wanlshop.html)、[博客小程序](https://www.fastadmin.net/store/blog.html))
 * 整合第三方短信接口(阿里云、腾讯云短信)
-* 无缝整合第三方云存储(七牛云、阿里云OSS、又拍云)功能
+* 无缝整合第三方云存储(七牛云、阿里云OSS、又拍云)功能，支持云储存分片上传
 * 第三方富文本编辑器支持(Summernote、Kindeditor、百度编辑器)
 * 第三方登录(QQ、微信、微博)整合
 * 第三方支付(微信、支付宝)无缝整合，微信支持PC端扫码支付
@@ -48,7 +49,7 @@ https://demo.fastadmin.net
 提　示：演示站数据无法进行修改，请下载源码安装体验全部功能
 
 ## 界面截图
-![控制台](https://gitee.com/uploads/images/2017/0411/113717_e99ff3e7_10933.png "控制台")
+![控制台](https://images.gitee.com/uploads/images/2020/0929/202947_8db2d281_10933.gif "控制台")
 
 ## 问题反馈
 

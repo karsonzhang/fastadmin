@@ -29,7 +29,7 @@ class Ajax extends Backend
         parent::_initialize();
 
         //设置过滤方法
-        $this->request->filter(['strip_tags', 'htmlspecialchars']);
+        $this->request->filter(['trim', 'strip_tags', 'htmlspecialchars']);
     }
 
     /**
@@ -138,8 +138,8 @@ class Ajax extends Backend
         $orderway = $orderway == 'asc' ? 'ASC' : 'DESC';
         $sour = $weighdata = [];
         $ids = explode(',', $ids);
-        $prikey = $pk ? $pk : (Db::name($table)->getPk() ?: 'id');
-        $pid = $this->request->post("pid");
+        $prikey = $pk && preg_match("/^[a-z0-9\-_]+$/i", $pk) ? $pk : (Db::name($table)->getPk() ?: 'id');
+        $pid = $this->request->post("pid", "");
         //限制更新的字段
         $field = in_array($field, ['weigh']) ? $field : 'weigh';
 
@@ -217,20 +217,20 @@ class Ajax extends Backend
      */
     public function category()
     {
-        $type = $this->request->get('type');
-        $pid = $this->request->get('pid');
+        $type = $this->request->get('type', '');
+        $pid = $this->request->get('pid', '');
         $where = ['status' => 'normal'];
-        $categorylist = null;        
+        $categorylist = null;
         if ($pid || $pid === '0') {
             $where['pid'] = $pid;
         }
         if ($type) {
             $where['type'] = $type;
         }
-        
+
         $categorylist = Db::name('category')->where($where)->field('id as value,name')->order('weigh desc,id desc')->select();
 
-        $this->success('', null, $categorylist);
+        $this->success('', '', $categorylist);
     }
 
     /**
@@ -241,27 +241,23 @@ class Ajax extends Backend
         $params = $this->request->get("row/a");
         if (!empty($params)) {
             $province = isset($params['province']) ? $params['province'] : '';
-            $city = isset($params['city']) ? $params['city'] : null;
+            $city = isset($params['city']) ? $params['city'] : '';
         } else {
-            $province = $this->request->get('province');
-            $city = $this->request->get('city');
+            $province = $this->request->get('province', '');
+            $city = $this->request->get('city', '');
         }
         $where = ['pid' => 0, 'level' => 1];
         $provincelist = null;
         if ($province !== '') {
-            if ($province) {
-                $where['pid'] = $province;
-                $where['level'] = 2;
-            }
+            $where['pid'] = $province;
+            $where['level'] = 2;
             if ($city !== '') {
-                if ($city) {
-                    $where['pid'] = $city;
-                    $where['level'] = 3;
-                }
-                $provincelist = Db::name('area')->where($where)->field('id as value,name')->select();
+                $where['pid'] = $city;
+                $where['level'] = 3;
             }
         }
-        $this->success('', null, $provincelist);
+        $provincelist = Db::name('area')->where($where)->field('id as value,name')->select();
+        $this->success('', '', $provincelist);
     }
 
     /**

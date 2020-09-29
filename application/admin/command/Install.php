@@ -90,7 +90,10 @@ class Install extends Command
         $this->request = Request::instance();
 
         define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS);
-        Lang::load(INSTALL_PATH . $this->request->langset() . '.php');
+        $langSet = $this->request->langset();
+        if ($langSet === 'zh-cn') {
+            Lang::load(INSTALL_PATH . $langSet . '.php');
+        }
 
         $installLockFile = INSTALL_PATH . "install.lock";
 
@@ -196,23 +199,19 @@ class Install extends Command
         // 后台入口文件
         $adminFile = ROOT_PATH . 'public' . DS . 'admin.php';
 
-        // 数据库配置文件
-        $dbConfigFile = APP_PATH . 'database.php';
-        $config = @file_get_contents($dbConfigFile);
+        // 生成数据库Env配置文件
+        $envFile = ROOT_PATH . '.env.sample';
+        $envStr = @file_get_contents($envFile);
         $callback = function ($matches) use ($mysqlHostname, $mysqlHostport, $mysqlUsername, $mysqlPassword, $mysqlDatabase, $mysqlPrefix) {
             $field = "mysql" . ucfirst($matches[1]);
             $replace = $$field;
-            if ($matches[1] == 'hostport' && $mysqlHostport == 3306) {
-                $replace = '';
-            }
-            return "'{$matches[1]}'{$matches[2]}=>{$matches[3]}Env::get('database.{$matches[1]}', '{$replace}'),";
+            return "{$matches[1]} = {$replace}" . PHP_EOL;
         };
-        $config = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $config);
+        $envConf = preg_replace_callback('/(hostname|database|username|password|hostport|prefix)\s*=\s*(.*?)\n/', $callback, $envStr);
 
-        // 检测能否成功写入数据库配置
-        $result = @file_put_contents($dbConfigFile, $config);
+        $result = @file_put_contents(ROOT_PATH . '.env', $envConf);
         if (!$result) {
-            throw new Exception(__('The current permissions are insufficient to write the file %s', 'application/database.php'));
+            throw new Exception(__('The current permissions are insufficient to write the file %s', '.env'));
         }
 
         // 变更默认管理员密码
@@ -222,6 +221,12 @@ class Install extends Command
         $newPassword = md5(md5($adminPassword) . $newSalt);
         $data = ['username' => $adminUsername, 'email' => $adminEmail, 'password' => $newPassword, 'salt' => $newSalt];
         $instance->name('admin')->where('username', 'admin')->update($data);
+
+        // 变更前台默认用户的密码,随机生成
+        $newSalt = substr(md5(uniqid(true)), 0, 6);
+        $newPassword = md5(md5(Random::alnum(8)) . $newSalt);
+        $instance->name('user')->where('username', 'admin')->update(['password' => $newPassword, 'salt' => $newSalt]);
+
         // 修改后台入口
         $adminName = '';
         if (is_file($adminFile)) {
@@ -230,9 +235,9 @@ class Install extends Command
         }
 
         //修改站点名称
-        if ($siteName != __('My Website')) {
+        if ($siteName != config('site.name')) {
             $instance->name('config')->where('name', 'name')->update(['value' => $siteName]);
-            $configFile = APP_PATH . 'extra' . DS . 'site.php';
+            $configFile = CONF_PATH . 'extra' . DS . 'site.php';
             $config = include $configFile;
             $configList = $instance->name("config")->select();
             foreach ($configList as $k => $value) {
@@ -270,17 +275,15 @@ class Install extends Command
             'public' . DS . 'assets' . DS . 'libs'
         ];
 
-        //数据库配置文件
-        $dbConfigFile = APP_PATH . 'database.php';
-
-        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-            throw new Exception(__("The current version %s is too low, please use PHP 5.5 or higher", PHP_VERSION));
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            throw new Exception(__("The current version %s is too low, please use PHP 7.0 or higher", PHP_VERSION));
         }
         if (!extension_loaded("PDO")) {
             throw new Exception(__("PDO is not currently installed and cannot be installed"));
         }
-        if (!is_really_writable($dbConfigFile)) {
-            throw new Exception(__('The current permissions are insufficient to write the configuration file application/database.php'));
+        $envConfFile = ROOT_PATH . '.env';
+        if (is_file($envConfFile) && !is_really_writable($envConfFile)) {
+            throw new Exception(__('The current permissions are insufficient to write the file %s', '.env'));
         }
         foreach ($checkDirs as $k => $v) {
             if (!is_dir(ROOT_PATH . $v)) {

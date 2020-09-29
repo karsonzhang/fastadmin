@@ -189,7 +189,7 @@ class Config extends Backend
             $config[$value['name']] = $value['value'];
         }
         file_put_contents(
-            APP_PATH . 'extra' . DS . 'site.php',
+            CONF_PATH . 'extra' . DS . 'site.php',
             '<?php' . "\n\nreturn " . var_export_short($config) . ";\n"
         );
     }
