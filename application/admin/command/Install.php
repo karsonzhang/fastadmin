@@ -90,9 +90,9 @@ class Install extends Command
         $this->request = Request::instance();
 
         define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS);
-        $langSet = $this->request->langset();
-        if ($langSet === 'zh-cn') {
-            Lang::load(INSTALL_PATH . $langSet . '.php');
+        $langSet = strtolower($this->request->langset());
+        if (!$langSet || in_array($langSet, ['zh-cn', 'zh-hans-cn'])) {
+            Lang::load(INSTALL_PATH . 'zh-cn.php');
         }
 
         $installLockFile = INSTALL_PATH . "install.lock";

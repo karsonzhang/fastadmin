@@ -34,6 +34,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             field: 'ismenu',
                             title: __('Ismenu'),
                             align: 'center',
+                            table: table,
                             formatter: Table.api.formatter.toggle
                         },
                         {
@@ -83,6 +84,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 });
                 //点击切换/排序/删除操作后刷新左侧菜单
                 $(".btn-change[data-id],.btn-delone,.btn-dragsort").data("success", function (data, ret) {
+                    if ($(this).hasClass("btn-change")) {
+                        var index = $(this).data("index");
+                        var row = Table.api.getrowbyindex(table, index);
+                        row.ismenu = $("i.fa.text-gray", this).length > 0 ? 1 : 0;
+                        table.bootstrapTable("updateRow", {index: index, row: row});
+                    } else if ($(this).hasClass("btn-delone")) {
+                        if ($(this).closest("tr[data-index]").find("a.btn-node-sub.disabled").length > 0) {
+                            $(this).closest("tr[data-index]").remove();
+                        } else {
+                            table.bootstrapTable('refresh');
+                        }
+                    } else if ($(this).hasClass("btn-dragsort")) {
+                        table.bootstrapTable('refresh');
+                    }
                     Fast.api.refreshmenu();
                     return false;
                 });
