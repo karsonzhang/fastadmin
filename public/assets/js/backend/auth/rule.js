@@ -19,7 +19,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 初始化表格
             table.bootstrapTable({
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
-                sortName: 'weigh',
+                sortName: '',
                 escape: false,
                 columns: [
                     [
