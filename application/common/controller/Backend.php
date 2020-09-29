@@ -533,11 +533,27 @@ class Backend extends Controller
             if (is_array($adminIds)) {
                 $this->model->where($this->dataLimitField, 'in', $adminIds);
             }
+
             $fields = is_array($this->selectpageFields) ? $this->selectpageFields : ($this->selectpageFields && $this->selectpageFields != '*' ? explode(',', $this->selectpageFields) : []);
-            $datalist = $this->model->where($where)
-                ->order($order)
-                ->page($page, $pagesize)
-                ->select();
+            
+            //如果有primaryvalue,说明当前是初始化传值,按照选择顺序排序
+            if ($primaryvalue !== null) {
+                $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
+                $primaryvalue = implode(',', array_map([$this->model->getConnection(), 'quote'], $primaryvalue));
+                
+                $datalist = $this->model->where($where)
+                                        ->orderRaw("FIELD(`{$primarykey}`, {$primaryvalue})")
+                                        ->page($page, $pagesize)
+                                        ->field($this->selectpageFields)
+                                        ->select();
+            } else {
+                $datalist = $this->model->where($where)
+                                        ->order($order)
+                                        ->page($page, $pagesize)
+                                        ->field($this->selectpageFields)
+                                        ->select();
+            }
+
             foreach ($datalist as $index => $item) {
                 unset($item['password'], $item['salt']);
                 if ($this->selectpageFields == '*') {
