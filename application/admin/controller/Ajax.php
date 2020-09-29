@@ -220,17 +220,16 @@ class Ajax extends Backend
         $type = $this->request->get('type');
         $pid = $this->request->get('pid');
         $where = ['status' => 'normal'];
-        $categorylist = null;
-        if ($pid !== '') {
-            if ($type) {
-                $where['type'] = $type;
-            }
-            if ($pid) {
-                $where['pid'] = $pid;
-            }
-
-            $categorylist = Db::name('category')->where($where)->field('id as value,name')->order('weigh desc,id desc')->select();
+        $categorylist = null;        
+        if ($pid || $pid === '0') {
+            $where['pid'] = $pid;
         }
+        if ($type) {
+            $where['type'] = $type;
+        }
+        
+        $categorylist = Db::name('category')->where($where)->field('id as value,name')->order('weigh desc,id desc')->select();
+
         $this->success('', null, $categorylist);
     }
 
