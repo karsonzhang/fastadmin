@@ -203,4 +203,10 @@ return [
     'Rule tips'                                             => '规则通常对应一个控制器的方法,同时左侧的菜单栏数据也从规则中体现,通常建议通过命令行进行生成规则节点',
     'Access is allowed only to the super management group'  => '仅超级管理组能访问',
     'Local addon'                                           => '本地插件',
+    // 前台菜单
+    'Frontend'                                              => '前台',
+    'API Interface'                                         => 'API接口',
+    'User Module'                                           => '会员模块',
+    'Register'                                              => '注册',
+    'User Center'                                           => '会员中心',
 ];
