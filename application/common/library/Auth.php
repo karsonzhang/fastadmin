@@ -156,7 +156,7 @@ class Auth
             'avatar'   => '',
         ];
         $params = array_merge($data, [
-            'nickname'  => $username,
+            'nickname'  => preg_match("/^1[3-9]{1}\d{9}$/",$username) ? substr_replace($username,'****',3,4) : $username,
             'salt'      => Random::alnum(),
             'jointime'  => $time,
             'joinip'    => $ip,
