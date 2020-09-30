@@ -171,7 +171,10 @@ class Config extends Model
 
         $uploadurl = request()->module() ? $uploadcfg['uploadurl'] : ($uploadcfg['uploadurl'] === 'ajax/upload' ? 'index/' . $uploadcfg['uploadurl'] : $uploadcfg['uploadurl']);
 
-        $uploadurl = url($uploadurl, '', false, false);
+        if (!preg_match("/^((?:[a-z]+:)?\/\/)(.*)/i", $uploadurl) && substr($uploadurl, 0, 1) !== '/') {
+            $uploadurl = url($uploadurl, '', false);
+        }
+
         $upload = [
             'cdnurl'    => $uploadcfg['cdnurl'],
             'uploadurl' => $uploadurl,
