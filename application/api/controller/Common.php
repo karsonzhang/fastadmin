@@ -9,6 +9,7 @@ use app\common\model\Area;
 use app\common\model\Version;
 use fast\Random;
 use think\Config;
+use think\Hook;
 
 /**
  * 公共接口
@@ -30,10 +31,28 @@ class Common extends Api
         if ($version = $this->request->request('version')) {
             $lng = $this->request->request('lng');
             $lat = $this->request->request('lat');
+
+            //配置信息
+            $upload = Config::get('upload');
+            //如果非服务端中转模式需要修改为中转
+            if ($upload['storage'] != 'local' && isset($upload['uploadmode']) && $upload['uploadmode'] != 'server') {
+                //临时修改上传模式为服务端中转
+                set_addon_config($upload['storage'], ["uploadmode" => "server"], false);
+
+                $upload = \app\common\model\Config::upload();
+                // 上传信息配置后
+                Hook::listen("upload_config_init", $upload);
+
+                $upload = Config::set('upload', array_merge(Config::get('upload'), $upload));
+            }
+
+            $upload['cdnurl'] = $upload['cdnurl'] ? $upload['cdnurl'] : cdnurl('', true);
+            $upload['uploadurl'] = $upload['bucket'] == 'local' ? cdnurl('/api/common/upload', true) : url($upload['uploadurl'], '', false, true);
+
             $content = [
                 'citydata'    => Area::getCityFromLngLat($lng, $lat),
                 'versiondata' => Version::check($version),
-                'uploaddata'  => Config::get('upload'),
+                'uploaddata'  => $upload,
                 'coverdata'   => Config::get("cover"),
             ];
             $this->success('', $content);
