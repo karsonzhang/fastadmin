@@ -280,7 +280,7 @@ return [
         //后台是否启用面包屑
         'breadcrumb'            => false,
         //是否允许未知来源的插件压缩包
-        'unknownsources'        => true,
+        'unknownsources'        => false,
         //插件启用禁用时是否备份对应的全局文件
         'backup_global_files'   => true,
         //是否开启后台自动日志记录
