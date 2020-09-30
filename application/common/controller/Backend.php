@@ -548,7 +548,6 @@ class Backend extends Controller
 
             $datalist = $this->model->where($where)
                 ->page($page, $pagesize)
-                ->field($this->selectpageFields)
                 ->select();
 
             foreach ($datalist as $index => $item) {
