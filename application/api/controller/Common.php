@@ -47,7 +47,7 @@ class Common extends Api
             }
 
             $upload['cdnurl'] = $upload['cdnurl'] ? $upload['cdnurl'] : cdnurl('', true);
-            $upload['uploadurl'] = preg_match("/^((?:[a-z]+:)?\/\/)(.*)/i", $upload['uploadurl']) ? $upload['uploadurl'] : url($upload['bucket'] == 'local' ? '/api/common/upload' : $upload['uploadurl'], '', false, true);
+            $upload['uploadurl'] = preg_match("/^((?:[a-z]+:)?\/\/)(.*)/i", $upload['uploadurl']) ? $upload['uploadurl'] : url($upload['storage'] == 'local' ? '/api/common/upload' : $upload['uploadurl'], '', false, true);
 
             $content = [
                 'citydata'    => Area::getCityFromLngLat($lng, $lat),
