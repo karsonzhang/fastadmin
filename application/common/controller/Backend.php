@@ -540,12 +540,10 @@ class Backend extends Controller
             if ($primaryvalue !== null && preg_match("/^[a-z0-9_\-]+$/i", $primarykey)) {
                 $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
                 //修复自定义data-primary-key为字符串内容时，给排序字段添加上引号
-                $pk = $this->model->getPk();
-                if ($primarykey != $pk) {
-                    $primaryvalue=   array_map(function ($value) {
-                        return '\'' . $value . '\'';
-                    }, $primaryvalue);
-                }
+                $primaryvalue=   array_map(function ($value) {
+                    return '\'' . $value . '\'';
+                }, $primaryvalue);
+
                 $primaryvalue = implode(',', $primaryvalue);
 
                 $this->model->orderRaw("FIELD(`{$primarykey}`, {$primaryvalue})");
