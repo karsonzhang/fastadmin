@@ -28,7 +28,8 @@ class Config extends Backend
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = model('Config');
+        // $this->model = model('Config');
+        $this->model = new ConfigModel;
         ConfigModel::event('before_write', function ($row) {
             if (isset($row['name']) && $row['name'] == 'name' && preg_match("/fast" . "admin/i", $row['value'])) {
                 throw new Exception(__("Site name incorrect"));
