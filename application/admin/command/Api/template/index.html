@@ -27,12 +27,12 @@
                 font-family: "Roboto", "SF Pro SC", "SF Pro Display", "SF Pro Icons", "PingFang SC", BlinkMacSystemFont, -apple-system, "Segoe UI", "Microsoft Yahei", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
                 font-weight: 400;
             }
-            h2        { font-size: 1.6em; }
+            h2        { font-size: 1.2em; }
             hr        { margin-top: 10px; }
             .tab-pane { padding-top: 10px; }
             .mt0      { margin-top: 0px; }
             .footer   { font-size: 12px; color: #666; }
-            .label    { display: inline-block; min-width: 65px; padding: 0.3em 0.6em 0.3em; }
+            .docs-list .label    { display: inline-block; min-width: 65px; padding: 0.3em 0.6em 0.3em; }
             .string   { color: green; }
             .number   { color: darkorange; }
             .boolean  { color: blue; }
@@ -65,12 +65,24 @@
             #sidebar > .list-group > a{
                 text-indent:0;
             }
+            #sidebar .child > a .tag{
+                position: absolute;
+                right: 10px;
+                top: 11px;
+            }
+            #sidebar .child > a .pull-right{
+                margin-left:3px;
+            }
             #sidebar .child {
                 border:1px solid #ddd;
                 border-bottom:none;
             }
+            #sidebar .child:last-child {
+                border-bottom:1px solid #ddd;
+            }
             #sidebar .child > a {
                 border:0;
+                min-height: 40px;
             }
             #sidebar .list-group a.current {
                 background:#f5f5f5;
@@ -93,6 +105,9 @@
             }
             .label-primary {
                 background-color: #248aff;
+            }
+            .docs-list .panel .panel-body .table {
+                margin-bottom: 0;
             }
 
         </style>
@@ -138,25 +153,34 @@
             <!-- menu -->
             <div id="sidebar">
                 <div class="list-group panel">
-                    {foreach name="docslist" id="docs"}
+                    {foreach name="docsList" id="docs"}
                     <a href="#{$key}" class="list-group-item" data-toggle="collapse" data-parent="#sidebar">{$key}  <i class="fa fa-caret-down"></i></a>
                     <div class="child collapse" id="{$key}">
                         {foreach name="docs" id="api" }
-                        <a href="javascript:;" data-id="{$api.id}" class="list-group-item">{$api.title}</a>
+                        <a href="javascript:;" data-id="{$api.id}" class="list-group-item">{$api.title}
+                            <span class="tag">
+                                {if $api.needRight}
+                                    <span class="label label-danger pull-right">鉴</span>
+                                {/if}
+                                {if $api.needLogin}
+                                    <span class="label label-success pull-right noneedlogin">登</span>
+                                {/if}
+                            </span>
+                        </a>
                         {/foreach}
                     </div>
                     {/foreach}
                 </div>
             </div>
-            <div class="panel-group" id="accordion">
-                {foreach name="docslist" id="docs"}
+            <div class="panel-group docs-list" id="accordion">
+                {foreach name="docsList" id="docs"}
                 <h2>{$key}</h2>
                 <hr>
                 {foreach name="docs" id="api" }
                 <div class="panel panel-default">
                     <div class="panel-heading" id="heading-{$api.id}">
                         <h4 class="panel-title">
-                            <span class="label {$api.method_label}">{$api.method|strtoupper}</span>
+                            <span class="label {$api.methodLabel}">{$api.method|strtoupper}</span>
                             <a data-toggle="collapse" data-parent="#accordion{$api.id}" href="#collapseOne{$api.id}"> {$api.title} <span class="text-muted">{$api.route}</span></a>
                         </h4>
                     </div>
@@ -178,9 +202,26 @@
                                         {$api.summary}
                                     </div>
                                     <div class="panel panel-default">
+                                        <div class="panel-heading"><strong>{$lang.Authorization}</strong></div>
+                                        <div class="panel-body">
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                <tr>
+                                                    <td>{$lang.NeedLogin}</td>
+                                                    <td>{$api.needLogin?'是':'否'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{$lang.NeedRight}</td>
+                                                    <td>{$api.needRight?'是':'否'}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
                                         <div class="panel-heading"><strong>{$lang.Headers}</strong></div>
                                         <div class="panel-body">
-                                            {if $api.headerslist}
+                                            {if $api.headersList}
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
@@ -191,7 +232,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {foreach name="api['headerslist']" id="header"}
+                                                    {foreach name="api['headersList']" id="header"}
                                                     <tr>
                                                         <td>{$header.name}</td>
                                                         <td>{$header.type}</td>
@@ -209,7 +250,7 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><strong>{$lang.Parameters}</strong></div>
                                         <div class="panel-body">
-                                            {if $api.paramslist}
+                                            {if $api.paramsList}
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
@@ -220,7 +261,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {foreach name="api['paramslist']" id="param"}
+                                                    {foreach name="api['paramsList']" id="param"}
                                                     <tr>
                                                         <td>{$param.name}</td>
                                                         <td>{$param.type}</td>
@@ -246,12 +287,12 @@
                                 <div class="tab-pane" id="sandbox{$api.id}">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            {if $api.headerslist}
+                                            {if $api.headersList}
                                             <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>{$lang.Headers}</strong></div>
                                                 <div class="panel-body">
                                                     <div class="headers">
-                                                        {foreach name="api['headerslist']" id="param"}
+                                                        {foreach name="api['headersList']" id="param"}
                                                         <div class="form-group">
                                                             <label class="control-label" for="{$param.name}">{$param.name}</label>
                                                             <input type="{$param.type}" class="form-control input-sm" id="{$param.name}" {if $param.required}required{/if} placeholder="{$param.description} - Ex: {$param.sample}" name="{$param.name}">
@@ -262,11 +303,15 @@
                                             </div>
                                             {/if}
                                             <div class="panel panel-default">
-                                                <div class="panel-heading"><strong>{$lang.Parameters}</strong></div>
+                                                <div class="panel-heading"><strong>{$lang.Parameters}</strong>
+                                                <div class="pull-right">
+                                                    <a href="javascript:" class="btn btn-xs btn-info btn-append">追加</a>
+                                                </div>
+                                                </div>
                                                 <div class="panel-body">
                                                     <form enctype="application/x-www-form-urlencoded" role="form" action="{$api.route}" method="{$api.method}" name="form{$api.id}" id="form{$api.id}">
-                                                        {if $api.paramslist}
-                                                        {foreach name="api['paramslist']" id="param"}
+                                                        {if $api.paramsList}
+                                                        {foreach name="api['paramsList']" id="param"}
                                                         <div class="form-group">
                                                             <label class="control-label" for="{$param.name}">{$param.name}</label>
                                                             <input type="{$param.type}" class="form-control input-sm" id="{$param.name}" {if $param.required}required{/if} placeholder="{$param.description}{if $param.sample} - 例: {$param.sample}{/if}" name="{$param.name}">
@@ -277,7 +322,7 @@
                                                             无
                                                         </div>
                                                         {/if}
-                                                        <div class="form-group">
+                                                        <div class="form-group form-group-submit">
                                                             <button type="submit" class="btn btn-success send" rel="{$api.id}">{$lang.Send}</button>
                                                             <button type="reset" class="btn btn-info" rel="{$api.id}">{$lang.Reset}</button>
                                                         </div>
@@ -298,7 +343,7 @@
                                             <div class="panel panel-default">
                                                 <div class="panel-heading"><strong>{$lang.ReturnParameters}</strong></div>
                                                 <div class="panel-body">
-                                                    {if $api.returnparamslist}
+                                                    {if $api.returnParamsList}
                                                     <table class="table table-hover">
                                                         <thead>
                                                             <tr>
@@ -308,7 +353,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {foreach name="api['returnparamslist']" id="param"}
+                                                            {foreach name="api['returnParamsList']" id="param"}
                                                             <tr>
                                                                 <td>{$param.name}</td>
                                                                 <td>{$param.type}</td>
@@ -346,10 +391,10 @@
 
             <div class="row mt0 footer">
                 <div class="col-md-6" align="left">
-                    Generated on {:date('Y-m-d H:i:s')}
+
                 </div>
                 <div class="col-md-6" align="right">
-                    <a href="./" target="_blank">{$config.sitename}</a>
+                    Generated on {:date('Y-m-d H:i:s')} <a href="./" target="_blank">{$config.sitename}</a>
                 </div>
             </div>
 
@@ -475,7 +520,7 @@
                     $sample.html('<pre>' + str + '</pre>');
                 });
 
-                $('body').on('click', '#save_data', function (e) {
+                $(document).on('click', '#save_data', function (e) {
                     if (storage) {
                         storage.setItem('token', $('#token').val());
                         storage.setItem('apiUrl', $('#apiUrl').val());
@@ -483,8 +528,20 @@
                         alert('Your browser does not support local storage');
                     }
                 });
+                $(document).on('click', '.btn-append', function (e) {
+                    $($("#appendtpl").html()).insertBefore($(this).closest(".panel").find(".form-group-submit"));
+                    return false;
+                });
+                $(document).on('click', '.btn-remove', function (e) {
+                    $(this).closest(".form-group").remove();
+                    return false;
+                });
+                $(document).on('keyup', '.input-custom-name', function (e) {
+                    $(this).closest(".row").find(".input-custom-value").attr("name", $(this).val());
+                    return false;
+                });
 
-                $('body').on('click', '.send', function (e) {
+                $(document).on('click', '.send', function (e) {
                     e.preventDefault();
                     var form = $(this).closest('form');
                     //added /g to get all the matched params instead of only first
@@ -576,6 +633,22 @@
                     return false;
                 });
             });
+        </script>
+        <script type="text/html" id="appendtpl">
+            <div class="form-group">
+                <label class="control-label">自定义</label>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control input-sm input-custom-name" placeholder="名称">
+                    </div>
+                    <div class="col-xs-6">
+                        <input type="text" class="form-control input-sm input-custom-value" placeholder="值">
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <a href="javascript:" class="btn btn-sm btn-danger btn-remove">删除</a>
+                    </div>
+                </div>
+            </div>
         </script>
     </body>
 </html>

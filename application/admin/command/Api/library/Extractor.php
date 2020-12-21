@@ -24,6 +24,8 @@ class Extractor
 
     private static $classMethodAnnotationCache;
 
+    private static $classPropertyValueCache;
+
     /**
      * Indicates that annotations should has strict behavior, 'false' by default
      * @var boolean
@@ -66,14 +68,16 @@ class Extractor
     /**
      * Gets all anotations with pattern @SomeAnnotation() from a given class
      *
-     * @param  string $className class name to get annotations
+     * @param string $className class name to get annotations
      * @return array  self::$classAnnotationCache all annotated elements
      */
     public static function getClassAnnotations($className)
     {
         if (!isset(self::$classAnnotationCache[$className])) {
             $class = new \ReflectionClass($className);
-            self::$classAnnotationCache[$className] = self::parseAnnotations($class->getDocComment());
+            $annotationArr = self::parseAnnotations($class->getDocComment());
+            $annotationArr['ApiTitle'] = !isset($annotationArr['ApiTitle'][0]) || !trim($annotationArr['ApiTitle'][0]) ? [$class->getShortName()] : $annotationArr['ApiTitle'];
+            self::$classAnnotationCache[$className] = $annotationArr;
         }
 
         return self::$classAnnotationCache[$className];
@@ -96,6 +100,17 @@ class Extractor
         return self::$classMethodAnnotationCache[$className];
     }
 
+    public static function getClassPropertyValues($className)
+    {
+        $class = new \ReflectionClass($className);
+
+        foreach ($class->getProperties() as $object) {
+            self::$classPropertyValueCache[$className][$object->name] = self::getClassPropertyValue($className, $object->name);
+        }
+
+        return self::$classMethodAnnotationCache[$className];
+    }
+
     public static function getAllClassAnnotations()
     {
         return self::$classAnnotationCache;
@@ -106,11 +121,25 @@ class Extractor
         return self::$classMethodAnnotationCache;
     }
 
+    public static function getAllClassPropertyValues()
+    {
+        return self::$classPropertyValueCache;
+    }
+
+    public static function getClassPropertyValue($className, $property)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $reflectionClass = new \ReflectionClass($className);
+        $reflectionProperty = $reflectionClass->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        return $reflectionProperty->getValue($reflectionClass->newInstanceWithoutConstructor());
+    }
+
     /**
      * Gets all anotations with pattern @SomeAnnotation() from a determinated method of a given class
      *
-     * @param  string $className class name
-     * @param  string $methodName method name to get annotations
+     * @param string $className  class name
+     * @param string $methodName method name to get annotations
      * @return array  self::$annotationCache all annotated elements of a method given
      */
     public static function getMethodAnnotations($className, $methodName)
@@ -138,8 +167,8 @@ class Extractor
      * Gets all anotations with pattern @SomeAnnotation() from a determinated method of a given class
      * and instance its abcAnnotation class
      *
-     * @param  string $className class name
-     * @param  string $methodName method name to get annotations
+     * @param string $className  class name
+     * @param string $methodName method name to get annotations
      * @return array  self::$annotationCache all annotated objects of a method given
      */
     public function getMethodAnnotationsObjects($className, $methodName)
@@ -189,7 +218,11 @@ class Extractor
         $methodName = $method->getName();
 
         $methodAnnotations = self::parseAnnotations($docblockMethod);
+        $methodAnnotations['ApiTitle'] = !isset($methodAnnotations['ApiTitle'][0]) || !trim($methodAnnotations['ApiTitle'][0]) ? [$method->getName()] : $methodAnnotations['ApiTitle'];
+
         $classAnnotations = self::parseAnnotations($dockblockClass);
+        $classAnnotations['ApiTitle'] = !isset($classAnnotations['ApiTitle'][0]) || !trim($classAnnotations['ApiTitle'][0]) ? [$class->getShortName()] : $classAnnotations['ApiTitle'];
+
         if (isset($methodAnnotations['ApiInternal']) || $methodName == '_initialize' || $methodName == '_empty') {
             return [];
         }
@@ -264,15 +297,15 @@ class Extractor
             }
         }
         $methodAnnotations['ApiPermissionLogin'] = [!in_array('*', $noNeedLogin) && !in_array($methodName, $noNeedLogin)];
-        $methodAnnotations['ApiPermissionRight'] = [!in_array('*', $noNeedRight) && !in_array($methodName, $noNeedRight)];
+        $methodAnnotations['ApiPermissionRight'] = !$methodAnnotations['ApiPermissionLogin'][0] ? false : [!in_array('*', $noNeedRight) && !in_array($methodName, $noNeedRight)];
         return $methodAnnotations;
     }
 
     /**
      * Parse annotations
      *
-     * @param  string $docblock
-     * @param  string $name
+     * @param string $docblock
+     * @param string $name
      * @return array  parsed annotations params
      */
     private static function parseCustomAnnotations($docblock, $name = 'param')
@@ -291,7 +324,7 @@ class Extractor
     /**
      * Parse annotations
      *
-     * @param  string $docblock
+     * @param string $docblock
      * @return array  parsed annotations params
      */
     private static function parseAnnotations($docblock)
@@ -337,7 +370,7 @@ class Extractor
     /**
      * Parse individual annotation arguments
      *
-     * @param  string $content arguments string
+     * @param string $content arguments string
      * @return array  annotated arguments
      */
     private static function parseArgs($content)
@@ -480,8 +513,8 @@ class Extractor
     /**
      * Try determinate the original type variable of a string
      *
-     * @param  string $val string containing possibles variables that can be cast to bool or int
-     * @param  boolean $trim indicate if the value passed should be trimmed after to try cast
+     * @param string  $val  string containing possibles variables that can be cast to bool or int
+     * @param boolean $trim indicate if the value passed should be trimmed after to try cast
      * @return mixed   returns the value converted to original type if was possible
      */
     private static function castValue($val, $trim = false)
