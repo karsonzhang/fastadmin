@@ -199,19 +199,32 @@ class Install extends Command
         // 后台入口文件
         $adminFile = ROOT_PATH . 'public' . DS . 'admin.php';
 
-        // 生成数据库Env配置文件
-        $envFile = ROOT_PATH . '.env.sample';
-        $envStr = @file_get_contents($envFile);
+        // 数据库配置文件
+        $dbConfigFile = APP_PATH . 'database.php';
+        $dbConfigText = @file_get_contents($dbConfigFile);
         $callback = function ($matches) use ($mysqlHostname, $mysqlHostport, $mysqlUsername, $mysqlPassword, $mysqlDatabase, $mysqlPrefix) {
             $field = "mysql" . ucfirst($matches[1]);
             $replace = $$field;
             return "{$matches[1]} = {$replace}" . PHP_EOL;
         };
-        $envConf = preg_replace_callback('/(hostname|database|username|password|hostport|prefix)\s*=\s*(.*?)\n/', $callback, $envStr);
+        $dbConfigText = preg_replace_callback("/'(hostname|database|username|password|hostport|prefix)'(\s+)=>(\s+)Env::get\((.*)\)\,/", $callback, $config);
 
-        $result = @file_put_contents(ROOT_PATH . '.env', $envConf);
+        // 检测能否成功写入数据库配置
+        $result = @file_put_contents($dbConfigFile, $dbConfigText);
         if (!$result) {
             throw new Exception(__('The current permissions are insufficient to write the file %s', '.env'));
+        }
+
+        // 设置新的Token随机密钥key
+        $oldTokenKey = config('token.key');
+        $newTokenKey = \fast\Random::alnum(32);
+        $coreConfigFile = CONF_PATH . 'config.php';
+        $coreConfigText = @file_get_contents($coreConfigFile);
+        $coreConfigText = preg_replace("/'key'(\s+)=>(\s+)'{$oldTokenKey}'/", "'key'\$1=>\$2'{$newTokenKey}'", $coreConfigText);
+
+        $result = @file_put_contents($coreConfigFile, $coreConfigText);
+        if (!$result) {
+            throw new Exception(__('The current permissions are insufficient to write the file %s', 'application/config.php'));
         }
 
         // 变更默认管理员密码
@@ -237,8 +250,8 @@ class Install extends Command
         //修改站点名称
         if ($siteName != config('site.name')) {
             $instance->name('config')->where('name', 'name')->update(['value' => $siteName]);
-            $configFile = CONF_PATH . 'extra' . DS . 'site.php';
-            $config = include $configFile;
+            $siteConfigFile = CONF_PATH . 'extra' . DS . 'site.php';
+            $siteConfig = include $siteConfigFile;
             $configList = $instance->name("config")->select();
             foreach ($configList as $k => $value) {
                 if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files'])) {
@@ -247,10 +260,10 @@ class Install extends Command
                 if ($value['type'] == 'array') {
                     $value['value'] = (array)json_decode($value['value'], true);
                 }
-                $config[$value['name']] = $value['value'];
+                $siteConfig[$value['name']] = $value['value'];
             }
-            $config['name'] = $siteName;
-            file_put_contents($configFile, '<?php' . "\n\nreturn " . var_export_short($config) . ";\n");
+            $siteConfig['name'] = $siteName;
+            file_put_contents($siteConfigFile, '<?php' . "\n\nreturn " . var_export_short($siteConfig) . ";\n");
         }
 
         $installLockFile = INSTALL_PATH . "install.lock";
