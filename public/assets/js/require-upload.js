@@ -243,7 +243,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 }
                             },
                             error: function (file, response, xhr) {
-                                var responseObj = $("<div>" + xhr.responseText + "</div>");
+                                var responseObj = $("<div>" + (xhr && typeof xhr.responseText !== 'undefined' ? xhr.responseText : response) + "</div>");
                                 responseObj.find("style, title, script").remove();
                                 var ret = {code: 0, data: null, msg: responseObj.text()};
                                 Upload.events.onUploadError(this, ret, file);
