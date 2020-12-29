@@ -183,6 +183,7 @@ class Config extends Model
             'mimetype'  => $uploadcfg['mimetype'],
             'chunking'  => $uploadcfg['chunking'],
             'chunksize' => $uploadcfg['chunksize'],
+            'savekey'   => $uploadcfg['savekey'],
             'multipart' => [],
             'multiple'  => $uploadcfg['multiple'],
             'storage'   => 'local'

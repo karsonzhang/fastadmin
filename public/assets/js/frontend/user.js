@@ -140,25 +140,22 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                     showExport: false,
                     columns: [
                         [
-                            {field: 'state', checkbox: multiple, visible: multiple, operate:false},
-                            {field: 'id', title: __('Id')},
-                            {field: 'url', title: __('Preview'), formatter: function (value, row, index) {
+                            {field: 'state', checkbox: multiple, visible: multiple, operate: false},
+                            {field: 'id', title: __('Id'), operate: false},
+                            {
+                                field: 'url', title: __('Preview'), formatter: function (value, row, index) {
                                     if (row.mimetype.indexOf("image") > -1) {
                                         var style = row.storage === 'upyun' ? '!/fwfh/120x90' : '';
                                         return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + style + '" alt="" style="max-height:90px;max-width:120px"></a>';
                                     } else {
                                         return '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
                                     }
-                                }, operate: false},
+                                }, operate: false
+                            },
                             {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
                             {field: 'imagewidth', title: __('Imagewidth'), operate: false},
                             {field: 'imageheight', title: __('Imageheight'), operate: false},
-                            {
-                                field: 'mimetype', title: __('Mimetype'), operate: 'LIKE %...%',
-                                process: function (value, arg) {
-                                    return value.replace(/\*/g, '%');
-                                }
-                            },
+                            {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},
                             {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                             {
                                 field: 'operate', title: __('Operate'), events: {

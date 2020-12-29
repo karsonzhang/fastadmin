@@ -3,6 +3,9 @@
 namespace app\common\library;
 
 use think\Config;
+use Tx\Mailer;
+use Tx\Mailer\Exceptions\CodeException;
+use Tx\Mailer\Exceptions\SendException;
 
 class Email
 {
@@ -20,14 +23,15 @@ class Email
     /**
      * 错误内容
      */
-    protected $_error = '';
+    protected $error = '';
 
     /**
      * 默认配置
      */
     public $options = [
-        'charset' => 'utf-8', //编码格式
-        'debug'   => false, //调式模式
+        'charset'   => 'utf-8', //编码格式
+        'debug'     => false, //调式模式
+        'mail_type' => 0, //状态
     ];
 
     /**
@@ -55,22 +59,12 @@ class Email
             $this->options = array_merge($this->options, $config);
         }
         $this->options = array_merge($this->options, $options);
-        $securArr = [1 => 'tls', 2 => 'ssl'];
+        $secureArr = [0 => '', 1 => 'tls', 2 => 'ssl'];
+        $secure = isset($secureArr[$this->options['mail_verify_type']]) ? $secureArr[$this->options['mail_verify_type']] : '';
 
-        $this->mail = new \PHPMailer\PHPMailer\PHPMailer(true);
-        $this->mail->CharSet = $this->options['charset'];
-        if ($this->options['mail_type'] == 1) {
-            $this->mail->SMTPDebug = $this->options['debug'];
-            $this->mail->isSMTP();
-            $this->mail->SMTPAuth = true;
-        } else {
-            $this->mail->isMail();
-        }
-        $this->mail->Host = $this->options['mail_smtp_host'];
-        $this->mail->Username = $this->options['mail_from'];
-        $this->mail->Password = $this->options['mail_smtp_pass'];
-        $this->mail->SMTPSecure = isset($securArr[$this->options['mail_verify_type']]) ? $securArr[$this->options['mail_verify_type']] : '';
-        $this->mail->Port = $this->options['mail_smtp_port'];
+        $this->mail = new Mailer(new Log);
+        $this->mail->setServer($this->options['mail_smtp_host'], $this->options['mail_smtp_port'], $secure);
+        $this->mail->setAuth($this->options['mail_from'], $this->options['mail_smtp_pass']);
 
         //设置发件人
         $this->from($this->options['mail_from'], $this->options['mail_smtp_user']);
@@ -83,7 +77,7 @@ class Email
      */
     public function subject($subject)
     {
-        $this->mail->Subject = $subject;
+        $this->mail->setSubject($subject);
         return $this;
     }
 
@@ -95,7 +89,7 @@ class Email
      */
     public function from($email, $name = '')
     {
-        $this->mail->setFrom($email, $name);
+        $this->mail->setFrom($name, $email);
         return $this;
     }
 
@@ -109,7 +103,7 @@ class Email
     {
         $emailArr = $this->buildAddress($email);
         foreach ($emailArr as $address => $name) {
-            $this->mail->addAddress($address, $name);
+            $this->mail->addTo($name, $address);
         }
 
         return $this;
@@ -124,6 +118,9 @@ class Email
     public function cc($email, $name = '')
     {
         $emailArr = $this->buildAddress($email);
+        if (count($emailArr) == 1 && $name) {
+            $emailArr[key($emailArr)] = $name;
+        }
         foreach ($emailArr as $address => $name) {
             $this->mail->addCC($address, $name);
         }
@@ -139,8 +136,11 @@ class Email
     public function bcc($email, $name = '')
     {
         $emailArr = $this->buildAddress($email);
+        if (count($emailArr) == 1 && $name) {
+            $emailArr[key($emailArr)] = $name;
+        }
         foreach ($emailArr as $address => $name) {
-            $this->mail->addBCC($address, $name);
+            $this->mail->addBCC($name, $address);
         }
         return $this;
     }
@@ -153,11 +153,7 @@ class Email
      */
     public function message($body, $ishtml = true)
     {
-        if ($ishtml) {
-            $this->mail->msgHTML($body);
-        } else {
-            $this->mail->Body = $body;
-        }
+        $this->mail->setBody($body);
         return $this;
     }
 
@@ -169,7 +165,7 @@ class Email
      */
     public function attachment($path, $name = '')
     {
-        $this->mail->addAttachment($path, $name);
+        $this->mail->addAttachment($name, $path);
         return $this;
     }
 
@@ -180,13 +176,8 @@ class Email
      */
     protected function buildAddress($emails)
     {
-        $emails = is_array($emails) ? $emails : explode(',', str_replace(";", ",", $emails));
-        $result = [];
-        foreach ($emails as $key => $value) {
-            $email = is_numeric($key) ? $value : $key;
-            $result[$email] = is_numeric($key) ? "" : $value;
-        }
-        return $result;
+        $emails = is_array($emails) ? $emails : array_flip(explode(',', str_replace(";", ",", $emails)));
+        return $emails;
     }
 
     /**
@@ -195,7 +186,7 @@ class Email
      */
     public function getError()
     {
-        return $this->_error;
+        return $this->error;
     }
 
     /**
@@ -204,7 +195,7 @@ class Email
      */
     protected function setError($error)
     {
-        $this->_error = $error;
+        $this->error = $error;
     }
 
     /**
@@ -217,11 +208,18 @@ class Email
         if (in_array($this->options['mail_type'], [1, 2])) {
             try {
                 $result = $this->mail->send();
-            } catch (\PHPMailer\PHPMailer\Exception $e) {
+            } catch (SendException $e) {
+                $this->setError($e->getCode() . $e->getMessage());
+            } catch (CodeException $e) {
+                preg_match_all("/Expected: (\d+)\, Got: (\d+)( \| (.*))?\$/i", $e->getMessage(), $matches);
+                $code = isset($matches[2][3]) ? $matches[2][3] : 0;
+                $message = isset($matches[2][0]) ? $matches[4][0] : $e->getMessage();
+                $this->setError($message);
+            } catch (\Exception $e) {
                 $this->setError($e->getMessage());
             }
 
-            $this->setError($result ? '' : $this->mail->ErrorInfo);
+            $this->setError($result ? '' : $this->getError());
         } else {
             //邮件功能已关闭
             $this->setError(__('Mail already closed'));

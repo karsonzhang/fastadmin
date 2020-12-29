@@ -10,7 +10,7 @@ use fast\Tree;
  * 分类管理
  *
  * @icon   fa fa-list
- * @remark 用于统一管理网站的所有分类,分类可进行无限级分类,分类类型请在常规管理->系统配置->字典配置中添加
+ * @remark 用于管理网站的所有分类,分类可进行无限级分类,分类类型请在常规管理->系统配置->字典配置中添加
  */
 class Category extends Backend
 {

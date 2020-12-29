@@ -25,7 +25,7 @@ return [
     'Offline installed tips'                                  => '安装成功！清除浏览器缓存和框架缓存后生效！',
     'Online installed tips'                                   => '安装成功！清除浏览器缓存和框架缓存后生效！',
     'Not login tips'                                          => '你当前未登录FastAdmin，登录后将同步已购买的记录，下载时无需二次付费！',
-    'Please login and try to install'                         => '请登录后再进行离线安装！',
+    'Please login and try to install'                         => '请登录FastAdmin后再进行离线安装！',
     'Not installed tips'                                      => '请安装后再访问插件前台页面！',
     'Not enabled tips'                                        => '插件已经禁用,请启用后再访问插件前台页面！',
     'New version tips'                                        => '发现新版本:%s 点击查看更新日志',

@@ -65,7 +65,7 @@ class User extends Frontend
      */
     public function register()
     {
-        $url = $this->request->request('url', '');
+        $url = $this->request->request('url', '', 'trim');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -144,7 +144,7 @@ class User extends Frontend
      */
     public function login()
     {
-        $url = $this->request->request('url', '');
+        $url = $this->request->request('url', '', 'trim');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -267,6 +267,7 @@ class User extends Frontend
         $this->request->filter(['strip_tags']);
         if ($this->request->isAjax()) {
             $mimetypeQuery = [];
+            $where = [];
             $filter = $this->request->request('filter');
             $filterArr = (array)json_decode($filter, true);
             if (isset($filterArr['mimetype']) && preg_match("/[]\,|\*]/", $filterArr['mimetype'])) {
@@ -281,17 +282,31 @@ class User extends Frontend
                         }
                     }
                 };
+            } elseif (isset($filterArr['mimetype'])) {
+                $where['mimetype'] = ['like', '%' . $filterArr['mimetype'] . '%'];
             }
+
+            if (isset($filterArr['filename'])) {
+                $where['filename'] = ['like', '%' . $filterArr['filename'] . '%'];
+            }
+
+            if (isset($filterArr['createtime'])) {
+                $timeArr = explode(' - ', $filterArr['createtime']);
+                $where['createtime'] = ['between', [strtotime($timeArr[0]), strtotime($timeArr[1])]];
+            }
+
             $model = new Attachment();
             $offset = $this->request->get("offset", 0);
             $limit = $this->request->get("limit", 0);
             $total = $model
+                ->where($where)
                 ->where($mimetypeQuery)
                 ->where('user_id', $this->auth->id)
                 ->order("id", "DESC")
                 ->count();
 
             $list = $model
+                ->where($where)
                 ->where($mimetypeQuery)
                 ->where('user_id', $this->auth->id)
                 ->order("id", "DESC")

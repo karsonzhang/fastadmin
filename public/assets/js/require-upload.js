@@ -141,7 +141,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         //上传URL
                         url = url ? url : Config.upload.uploadurl;
                         url = Fast.api.fixurl(url);
-                        var chunking = false, chunkSize = Config.upload.chunksize || 2097152;
+                        var chunking = false, chunkSize = Config.upload.chunksize || 2097152, timeout = Config.upload.timeout || 600000;
 
                         //最大可上传文件大小
                         maxsize = typeof maxsize !== "undefined" ? maxsize : Config.upload.maxsize;
@@ -198,6 +198,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             maxFilesize: maxFilesize,
                             acceptedFiles: mimetype,
                             maxFiles: (maxcount && parseInt(maxcount) > 1 ? maxcount : (multiple ? null : 1)),
+                            timeout: timeout,
                             previewsContainer: false,
                             dictDefaultMessage: __("Drop files here to upload"),
                             dictFallbackMessage: __("Your browser does not support drag'n'drop file uploads"),
