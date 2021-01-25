@@ -70,8 +70,8 @@ return [
     'Name already exist'          => '变量名称已经存在',
     'Add new config'              => '点击添加新的配置',
     'Send a test message'         => '发送测试邮件',
-    'This is a test mail content' => '这是一封来自FastAdmin校验邮件,用于校验邮件配置是否正常!',
-    'This is a test mail'         => '这是一封来自FastAdmin的邮件',
+    'This is a test mail content' => '这是一封来自{sitename}校验邮件,用于校验邮件配置是否正常!',
+    'This is a test mail'         => '这是一封来自{sitename}的邮件',
     'Please input your email'     => '请输入测试接收者邮箱',
     'Please input correct email'  => '请输入正确的邮箱地址',
 ];

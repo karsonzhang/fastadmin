@@ -51,6 +51,8 @@ return [
     'class_suffix'           => false,
     // 控制器类后缀
     'controller_suffix'      => false,
+    // 获取IP的变量
+    'http_agent_ip'          => 'REMOTE_ADDR',
     // +----------------------------------------------------------------------
     // | 模块设置
     // +----------------------------------------------------------------------
@@ -290,7 +292,7 @@ return [
         //允许跨域的域名,多个以,分隔
         'cors_request_domain'   => 'localhost,127.0.0.1',
         //版本号
-        'version'               => '1.2.0.20201008_beta',
+        'version'               => '1.2.0.20210125_beta',
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],

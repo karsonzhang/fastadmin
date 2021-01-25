@@ -23,9 +23,9 @@ class Api extends Command
             ->addOption('template', 'e', Option::VALUE_OPTIONAL, '', 'index.html')
             ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override general file', false)
             ->addOption('title', 't', Option::VALUE_OPTIONAL, 'document title', $site['name'])
-            ->addOption('author', 'a', Option::VALUE_OPTIONAL, 'document author', $site['name'])
             ->addOption('class', 'c', Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'extend class', null)
             ->addOption('language', 'l', Option::VALUE_OPTIONAL, 'language', 'zh-cn')
+            ->addOption('addon', 'a', Option::VALUE_OPTIONAL, 'addon name', null)
             ->addOption('controller', 'r', Option::VALUE_REQUIRED | Option::VALUE_IS_ARRAY, 'controller name', null)
             ->setDescription('Build Api document from controller');
     }
@@ -59,12 +59,21 @@ class Api extends Command
         $classes = $input->getOption('class');
         // 标题
         $title = $input->getOption('title');
-        // 作者
-        $author = $input->getOption('author');
         // 模块
         $module = $input->getOption('module');
+        // 插件
+        $addon = $input->getOption('addon');
 
-        $moduleDir = APP_PATH . $module . DS;
+        $moduleDir = $addonDir = '';
+        if ($addon) {
+            $addonInfo = get_addon_info($addon);
+            if (!$addonInfo) {
+                throw new Exception('addon not found');
+            }
+            $moduleDir = ADDON_PATH . $addon . DS;
+        } else {
+            $moduleDir = APP_PATH . $module . DS;
+        }
         if (!is_dir($moduleDir)) {
             throw new Exception('module not found');
         }
@@ -81,9 +90,10 @@ class Api extends Command
                 throw new Exception("Please make sure opcache already enabled, Get help:https://forum.fastadmin.net/d/1321");
             }
         }
+
         //控制器名
-        $controller = $input->getOption('controller') ?: '';
-        if(!$controller) {
+        $controller = $input->getOption('controller') ?: [];
+        if (!$controller) {
             $controllerDir = $moduleDir . Config::get('url_controller_layer') . DS;
             $files = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($controllerDir),
@@ -96,26 +106,29 @@ class Api extends Command
                     $classes[] = $this->get_class_from_file($filePath);
                 }
             }
-        }
-        else{
+        } else {
             foreach ($controller as $index => $item) {
-                $filePath=$moduleDir . Config::get('url_controller_layer') . DS .$item.'.php';
+                $filePath = $moduleDir . Config::get('url_controller_layer') . DS . $item . '.php';
                 $classes[] = $this->get_class_from_file($filePath);
             }
         }
+
         $classes = array_unique(array_filter($classes));
 
         $config = [
             'sitename'    => config('site.name'),
             'title'       => $title,
-            'author'      => $author,
+            'author'      => config('site.name'),
             'description' => '',
             'apiurl'      => $url,
             'language'    => $language,
         ];
-        $builder = new Builder($classes);
-        $content = $builder->render($template_file, ['config' => $config, 'lang' => $lang]);
-
+        try {
+            $builder = new Builder($classes);
+            $content = $builder->render($template_file, ['config' => $config, 'lang' => $lang]);
+        } catch (\Exception $e) {
+            print_r($e);
+        }
         if (!file_put_contents($output_file, $content)) {
             throw new Exception('Cannot save the content to ' . $output_file);
         }

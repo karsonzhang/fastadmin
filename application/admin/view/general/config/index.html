@@ -160,7 +160,7 @@
                                             {/case}
                                             {case value="selectpage" break="0"}{/case}
                                             {case value="selectpages"}
-                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" id="c-{$item.name}" value="{$item.value|htmlentities}" class="form-control selectpage" data-source="{:url('general/config/selectpage')}?id={$item.id}" data-primary-key="{$item.setting.primarykey}" data-field="{$item.setting.field}" data-multiple="{$item.type=='selectpage'?'false':'true'}" data-tip="{$item.tip}" data-rule="{$item.rule}" />
+                                            <input {$item.extend_html} type="text" name="row[{$item.name}]" id="c-{$item.name}" value="{$item.value|htmlentities}" class="form-control selectpage" data-source="{:url('general.config/selectpage')}?id={$item.id}" data-primary-key="{$item.setting.primarykey}" data-field="{$item.setting.field}" data-multiple="{$item.type=='selectpage'?'false':'true'}" data-tip="{$item.tip}" data-rule="{$item.rule}" />
                                             {/case}
                                             {case custom}
                                             {$item.extend_html}

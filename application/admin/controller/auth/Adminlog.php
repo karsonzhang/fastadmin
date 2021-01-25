@@ -27,7 +27,7 @@ class Adminlog extends Backend
         $this->model = model('AdminLog');
 
         $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
-        $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin() ? true : false);
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
 
         $groupName = AuthGroup::where('id', 'in', $this->childrenGroupIds)
             ->column('id,name');
@@ -66,6 +66,9 @@ class Adminlog extends Backend
         if (!$row) {
             $this->error(__('No Results were found'));
         }
+        if (!$row['admin_id'] || !in_array($row['admin_id'], $this->childrenAdminIds)) {
+            $this->error(__('You have no permission'));
+        }
         $this->view->assign("row", $row->toArray());
         return $this->view->fetch();
     }
@@ -98,10 +101,7 @@ class Adminlog extends Backend
         }
         $ids = $ids ? $ids : $this->request->post("ids");
         if ($ids) {
-            $childrenGroupIds = $this->childrenGroupIds;
-            $adminList = $this->model->where('id', 'in', $ids)->where('admin_id', 'in', function ($query) use ($childrenGroupIds) {
-                $query->name('auth_group_access')->field('uid');
-            })->select();
+            $adminList = $this->model->where('id', 'in', $ids)->where('admin_id', 'in', $this->childrenAdminIds)->select();
             if ($adminList) {
                 $deleteIds = [];
                 foreach ($adminList as $k => $v) {

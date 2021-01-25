@@ -12,7 +12,7 @@ use think\Validate;
 /**
  * 管理员管理
  *
- * @icon fa fa-users
+ * @icon   fa fa-users
  * @remark 一个管理员可以有多个角色组,左侧的菜单根据管理员所拥有的权限进行生成
  */
 class Admin extends Backend
@@ -32,8 +32,8 @@ class Admin extends Backend
         parent::_initialize();
         $this->model = model('Admin');
 
-        $this->childrenAdminIds = $this->auth->getChildrenAdminIds(true);
-        $this->childrenGroupIds = $this->auth->getChildrenGroupIds(true);
+        $this->childrenAdminIds = $this->auth->getChildrenAdminIds($this->auth->isSuperAdmin());
+        $this->childrenGroupIds = $this->auth->getChildrenGroupIds($this->auth->isSuperAdmin());
 
         $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
 
@@ -136,6 +136,10 @@ class Admin extends Backend
 
                 //过滤不允许的组别,避免越权
                 $group = array_intersect($this->childrenGroupIds, $group);
+                if (!$group) {
+                    $this->error(__('The parent group exceeds permission limit'));
+                }
+
                 $dataset = [];
                 foreach ($group as $value) {
                     $dataset[] = ['uid' => $this->model->id, 'group_id' => $value];
@@ -192,6 +196,9 @@ class Admin extends Backend
 
                 // 过滤不允许的组别,避免越权
                 $group = array_intersect($this->childrenGroupIds, $group);
+                if (!$group) {
+                    $this->error(__('The parent group exceeds permission limit'));
+                }
 
                 $dataset = [];
                 foreach ($group as $value) {

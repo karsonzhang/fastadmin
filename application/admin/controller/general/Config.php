@@ -256,8 +256,8 @@ class Config extends Backend
             $email = new Email;
             $result = $email
                 ->to($receiver)
-                ->subject(__("This is a test mail"))
-                ->message('<div style="min-height:550px; padding: 100px 55px 200px;">' . __('This is a test mail content') . '</div>')
+                ->subject(__("This is a test mail", config('site.name')))
+                ->message('<div style="min-height:550px; padding: 100px 55px 200px;">' . __('This is a test mail content', config('site.name')) . '</div>')
                 ->send();
             if ($result) {
                 $this->success();

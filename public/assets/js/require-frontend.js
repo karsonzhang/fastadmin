@@ -120,7 +120,7 @@ require.config({
             'css': '../libs/require-css/css.min'
         }
     },
-    waitSeconds: 30,
+    waitSeconds: 60,
     charset: 'utf-8' // 文件编码
 });
 

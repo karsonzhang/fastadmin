@@ -24,6 +24,7 @@ class Group extends Backend
     //当前登录管理员所有子组别
     protected $childrenGroupIds = [];
     //当前组别列表数据
+    protected $grouplist = [];
     protected $groupdata = [];
     //无需要权限判断的方法
     protected $noNeedRight = ['roletree'];
@@ -38,20 +39,28 @@ class Group extends Backend
         $groupList = collection(AuthGroup::where('id', 'in', $this->childrenGroupIds)->select())->toArray();
 
         Tree::instance()->init($groupList);
-        $result = [];
+        $groupList = [];
         if ($this->auth->isSuperAdmin()) {
-            $result = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
+            $groupList = Tree::instance()->getTreeList(Tree::instance()->getTreeArray(0));
         } else {
             $groups = $this->auth->getGroups();
+            $groupIds = [];
             foreach ($groups as $m => $n) {
-                $result = array_merge($result, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['pid'])));
+                if (in_array($n['id'], $groupIds) || in_array($n['pid'], $groupIds)) {
+                    continue;
+                }
+                $groupList = array_merge($groupList, Tree::instance()->getTreeList(Tree::instance()->getTreeArray($n['pid'])));
+                foreach ($groupList as $index => $item) {
+                    $groupIds[] = $item['id'];
+                }
             }
         }
         $groupName = [];
-        foreach ($result as $k => $v) {
+        foreach ($groupList as $k => $v) {
             $groupName[$v['id']] = $v['name'];
         }
 
+        $this->grouplist = $groupList;
         $this->groupdata = $groupName;
         $this->assignconfig("admin", ['id' => $this->auth->id, 'group_ids' => $this->auth->getGroupIds()]);
 
@@ -64,19 +73,7 @@ class Group extends Backend
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list = AuthGroup::all(array_keys($this->groupdata));
-            $list = collection($list)->toArray();
-            $groupList = [];
-            foreach ($list as $k => $v) {
-                $groupList[$v['id']] = $v;
-            }
-            $list = [];
-            foreach ($this->groupdata as $k => $v) {
-                if (isset($groupList[$k])) {
-                    $groupList[$k]['name'] = $v;
-                    $list[] = $groupList[$k];
-                }
-            }
+            $list = $this->grouplist;
             $total = count($list);
             $result = array("total" => $total, "rows" => $list);
 

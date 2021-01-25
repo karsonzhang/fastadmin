@@ -180,6 +180,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     Toastr.success(ret.msg);
                     operate(data.addon.name, 'enable', false);
                     return false;
+                }, function (data, ret) {
+                    if (ret.msg && ret.msg.match(/(login|登录)/g)) {
+                        return Layer.alert(ret.msg, {
+                            title: __('Warning'),
+                            btn: [__('Login now')],
+                            yes: function (index, layero) {
+                                $(".btn-userinfo").trigger("click");
+                            }
+                        });
+                    }
                 });
             });
 
@@ -262,7 +272,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             return false;
                         },
                         success: function (layero, index) {
+                            this.checkEnterKey = function(event){
+                                if(event.keyCode === 13){
+                                    $(".layui-layer-btn0").trigger("click");
+                                    return false;
+                                }
+                            };
+                            $(document).on('keydown', this.checkEnterKey);
                             $(".layui-layer-btn1", layero).prop("href", "http://www.fastadmin.net/user/register.html").prop("target", "_blank");
+                        },
+                        end: function(){
+                            $(document).off('keydown', this.checkEnterKey);
                         }
                     });
                 } else {

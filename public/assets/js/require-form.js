@@ -335,7 +335,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             row = row ? row : {};
                             var vars = {index: index, name: name, data: data, row: row};
                             var html = template ? Template(template, vars) : Template.render(Form.config.fieldlisttpl, vars);
-                            $(html).insertBefore($(tagName + ":last", container));
+                            $(html).attr("fieldlist-item", true).insertBefore($(tagName + ":last", container));
                             $(this).trigger("fa.event.appendfieldlist", $(this).closest(tagName).prev());
                         });
                         //移除控制
@@ -362,17 +362,20 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                 return true;
                             }
                             var template = $(this).data("template");
-                            var json = {};
-                            try {
-                                json = JSON.parse(textarea.val());
-                            } catch (e) {
-                            }
-                            $.each(json, function (i, j) {
-                                $(".btn-append,.append", container).trigger('click', template ? j : {
-                                    key: i,
-                                    value: j
+                            textarea.on("fa.event.refreshfieldlist", function () {
+                                $("[fieldlist-item]", container).remove();
+                                var json = {};
+                                try {
+                                    json = JSON.parse($(this).val());
+                                } catch (e) {
+                                }
+                                $.each(json, function (i, j) {
+                                    $(".btn-append,.append", container).trigger('click', template ? j : {
+                                        key: i, value: j
+                                    });
                                 });
                             });
+                            textarea.trigger("fa.event.refreshfieldlist");
                         });
                     });
                 }
