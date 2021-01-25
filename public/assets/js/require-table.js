@@ -254,8 +254,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 var exportDataType = options.exportDataType;
                 // 处理选中筛选框后按钮的状态统一变更
                 table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table post-body.bs.table', function (e) {
-                    var allIds = table.bootstrapTable("getData").map(function (item) {
-                        return item[options.pk];
+                    var allIds = [];
+                    $.each(table.bootstrapTable("getData"), function (i, item) {
+                        allIds.push(typeof item[options.pk] != 'undefined' ? item[options.pk] : '');
                     });
                     var selectedIds = Table.api.selectedids(table, true),
                         selectedData = Table.api.selecteddata(table, true);

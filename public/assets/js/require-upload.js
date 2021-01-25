@@ -344,10 +344,12 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                     }
                                     var suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(j);
                                     suffix = suffix ? suffix[1] : 'file';
-                                    var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: (json && typeof json[i] !== 'undefined' ? json[i] : null), suffix: suffix};
+                                    var value = (json && typeof json[i] !== 'undefined' ? json[i] : null);
+                                    var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: value, row: value, suffix: suffix};
                                     var html = tpl ? Template(tpl, data) : Template.render(Upload.config.previewtpl, data);
                                     $("#" + preview_id).append(html);
                                 });
+                                refresh($("#" + preview_id).data("name"));
                             });
                             $("#" + input_id).trigger("change");
                         }
