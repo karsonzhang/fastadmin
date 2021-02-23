@@ -602,7 +602,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     'click .img-center': function (e, value, row, index) {
                         var data = [];
                         value = value === null ? '' : value.toString();
-                        var arr = value != '' ? split(",") : [];
+                        var arr = value != '' ? value.split(",") : [];
                         $.each(arr, function (index, value) {
                             data.push({
                                 src: Fast.api.cdnurl(value),

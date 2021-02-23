@@ -58,7 +58,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                     location.href = ret.url ? ret.url : "/";
                 }, 1000);
             }, function (data) {
-                $("input[name=captcha]").next(".input-group-addon").find("img").trigger("click");
+                $("input[name=captcha]").next(".input-group-btn").find("img").trigger("click");
             });
         },
         changepwd: function () {

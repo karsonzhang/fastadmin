@@ -539,6 +539,11 @@ class Backend extends Controller
             //如果有primaryvalue,说明当前是初始化传值,按照选择顺序排序
             if ($primaryvalue !== null && preg_match("/^[a-z0-9_\-]+$/i", $primarykey)) {
                 $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
+                //修复自定义data-primary-key为字符串内容时，给排序字段添加上引号
+                $primaryvalue=   array_map(function ($value) {
+                    return '\'' . $value . '\'';
+                }, $primaryvalue);
+
                 $primaryvalue = implode(',', $primaryvalue);
 
                 $this->model->orderRaw("FIELD(`{$primarykey}`, {$primaryvalue})");
