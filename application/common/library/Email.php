@@ -96,10 +96,9 @@ class Email
     /**
      * 设置收件人
      * @param mixed  $email 收件人,多个收件人以,进行分隔
-     * @param string $name  收件人名称
      * @return $this
      */
-    public function to($email, $name = '')
+    public function to($email)
     {
         $emailArr = $this->buildAddress($email);
         foreach ($emailArr as $address => $name) {
