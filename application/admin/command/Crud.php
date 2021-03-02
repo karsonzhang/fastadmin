@@ -173,6 +173,7 @@ class Crud extends Command
             ->addOption('switchsuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate switch component with suffix', null)
             ->addOption('citysuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate citypicker component with suffix', null)
             ->addOption('jsonsuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate fieldlist component with suffix', null)
+            ->addOption('editorsuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate editor component with suffix', null)
             ->addOption('selectpagesuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate selectpage component with suffix', null)
             ->addOption('selectpagessuffix', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'automatically generate multiple selectpage component with suffix', null)
             ->addOption('ignorefields', null, Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'ignore fields', null)
