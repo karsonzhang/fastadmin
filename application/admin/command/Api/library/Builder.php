@@ -165,6 +165,10 @@ class Builder
 
         $sectorArr = [];
         foreach ($allClassAnnotations as $index => &$allClassAnnotation) {
+            // 如果设置隐藏，则不显示在文档
+            if (isset($allClassAnnotation['ApiInternal'])) {
+                continue;
+            }
             $sector = isset($allClassAnnotation['ApiSector']) ? $allClassAnnotation['ApiSector'][0] : $allClassAnnotation['ApiTitle'][0];
             $sectorArr[$sector] = isset($allClassAnnotation['ApiWeigh']) ? $allClassAnnotation['ApiWeigh'][0] : 0;
         }
