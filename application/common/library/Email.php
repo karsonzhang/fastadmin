@@ -62,7 +62,8 @@ class Email
         $secureArr = [0 => '', 1 => 'tls', 2 => 'ssl'];
         $secure = isset($secureArr[$this->options['mail_verify_type']]) ? $secureArr[$this->options['mail_verify_type']] : '';
 
-        $this->mail = new Mailer();
+        $logger = isset($this->options['debug']) && $this->options['debug'] ? new Log : null;
+        $this->mail = new Mailer($logger);
         $this->mail->setServer($this->options['mail_smtp_host'], $this->options['mail_smtp_port'], $secure);
         $this->mail->setAuth($this->options['mail_from'], $this->options['mail_smtp_pass']);
 
