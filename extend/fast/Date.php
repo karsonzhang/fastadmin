@@ -25,9 +25,9 @@ class Date
      * [!!] A list of time zones that PHP supports can be found at
      * <http://php.net/timezones>.
      *
-     * @param   string $remote timezone that to find the offset of
-     * @param   string $local  timezone used as the baseline
-     * @param   mixed  $now    UNIX timestamp or date string
+     * @param string $remote timezone that to find the offset of
+     * @param string $local  timezone used as the baseline
+     * @param mixed  $now    UNIX timestamp or date string
      * @return  integer
      */
     public static function offset($remote, $local = null, $now = null)
@@ -57,9 +57,9 @@ class Date
      * $span = self::span(60, 182, 'minutes,seconds'); // array('minutes' => 2, 'seconds' => 2)
      * $span = self::span(60, 182, 'minutes'); // 2
      *
-     * @param   int    $remote timestamp to find the span of
-     * @param   int    $local  timestamp to use as the baseline
-     * @param   string $output formatting string
+     * @param int    $remote timestamp to find the span of
+     * @param int    $local  timestamp to use as the baseline
+     * @param string $output formatting string
      * @return  string   when only a single output is requested
      * @return  array    associative list of all outputs requested
      * @from https://github.com/kohana/ohanzee-helpers/blob/master/src/Date.php
@@ -117,8 +117,8 @@ class Date
     /**
      * 格式化 UNIX 时间戳为人易读的字符串
      *
-     * @param    int    Unix 时间戳
-     * @param    mixed $local 本地时间
+     * @param int    Unix 时间戳
+     * @param mixed $local 本地时间
      *
      * @return    string    格式化的日期字符串
      */
@@ -167,6 +167,8 @@ class Date
         $minute = is_null($minute) ? date('i') : $minute;
         $position = in_array($position, array('begin', 'start', 'first', 'front'));
 
+        $baseTime = mktime(0, 0, 0, $month, $day, $year);
+
         switch ($type) {
             case 'minute':
                 $time = $position ? mktime($hour, $minute + $offset, 0, $month, $day, $year) : mktime($hour, $minute + $offset, 59, $month, $day, $year);
@@ -178,19 +180,20 @@ class Date
                 $time = $position ? mktime(0, 0, 0, $month, $day + $offset, $year) : mktime(23, 59, 59, $month, $day + $offset, $year);
                 break;
             case 'week':
+                $weekIndex = date("w", $baseTime);
                 $time = $position ?
-                    mktime(0, 0, 0, $month, $day - date("w", mktime(0, 0, 0, $month, $day, $year)) + 1 - 7 * (-$offset), $year) :
-                    mktime(23, 59, 59, $month, $day - date("w", mktime(0, 0, 0, $month, $day, $year)) + 7 - 7 * (-$offset), $year);
+                    strtotime($offset . " weeks", strtotime(date('Y-m-d', strtotime("-" . ($weekIndex ? $weekIndex - 1 : 6) . " days", $baseTime)))) :
+                    strtotime($offset . " weeks", strtotime(date('Y-m-d 23:59:59', strtotime("+" . (6 - ($weekIndex ? $weekIndex - 1 : 6)) . " days", $baseTime))));
                 break;
             case 'month':
-                $_timestamp=mktime(0, 0, 0, $month + $offset, 1, $year);
-                $time = $position ? $_timestamp : mktime(23, 59, 59, $month + $offset, cal_days_in_month(CAL_GREGORIAN, date("m",$_timestamp), date("Y",$_timestamp)), $year);
+                $_timestamp = mktime(0, 0, 0, $month + $offset, 1, $year);
+                $time = $position ? $_timestamp : mktime(23, 59, 59, $month + $offset, cal_days_in_month(CAL_GREGORIAN, date("m", $_timestamp), date("Y", $_timestamp)), $year);
                 break;
             case 'quarter':
-                $_month=date("m",mktime(0, 0, 0, (ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, $day, $year));
+                $_month = date("m", mktime(0, 0, 0, (ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, $day, $year));
                 $time = $position ?
-                    mktime(0, 0, 0, 1 + ((ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) - 1) * 3, 1, $year) :
-                    mktime(23, 59, 59, (ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, cal_days_in_month(CAL_GREGORIAN, $_month, $year), $year);
+                    mktime(0, 0, 0, 1 + ((ceil(date('n', $baseTime) / 3) + $offset) - 1) * 3, 1, $year) :
+                    mktime(23, 59, 59, (ceil(date('n', $baseTime) / 3) + $offset) * 3, cal_days_in_month(CAL_GREGORIAN, (ceil(date('n', $baseTime) / 3) + $offset) * 3, $year), $year);
                 break;
             case 'year':
                 $time = $position ? mktime(0, 0, 0, 1, 1, $year + $offset) : mktime(23, 59, 59, 12, 31, $year + $offset);
