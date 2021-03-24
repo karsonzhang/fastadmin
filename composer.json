@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "topthink/framework": "~5.0.24",
+        "topthink/framework": "dev-master",
         "topthink/think-captcha": "^1.0",
         "karsonzhang/fastadmin-addons": "~1.2.4",
         "overtrue/pinyin": "~3.0",
@@ -30,5 +30,11 @@
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://gitee.com/karson/framework"
+        }
+    ]
 }
