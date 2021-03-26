@@ -37,6 +37,10 @@ class Api extends Command
         $force = $input->getOption('force');
         $url = $input->getOption('url');
         $language = $input->getOption('language');
+        $template = $input->getOption('template');
+        if (!preg_match("/^([a-z0-9]+)\.html\$/i", $template)) {
+            throw new Exception('template file not correct');
+        }
         $language = $language ? $language : 'zh-cn';
         $langFile = $apiDir . 'lang' . DS . $language . '.php';
         if (!is_file($langFile)) {
@@ -51,7 +55,7 @@ class Api extends Command
         }
         // 模板文件
         $template_dir = $apiDir . 'template' . DS;
-        $template_file = $template_dir . $input->getOption('template');
+        $template_file = $template_dir . $template;
         if (!is_file($template_file)) {
             throw new Exception('template file not found');
         }
