@@ -7,6 +7,7 @@ use app\admin\model\AuthGroupAccess;
 use app\common\controller\Backend;
 use fast\Random;
 use fast\Tree;
+use think\Db;
 use think\Validate;
 
 /**
