@@ -68,20 +68,27 @@
                         {/case}
                         {case value="image" break="0"}{/case}
                         {case value="images"}
-                        <div class="form-inline">
-                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
-                            <span><button type="button" id="faupload-{$item.name}" class="btn btn-danger faupload" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
-                            <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
-                            <ul class="row list-inline faupload-preview" id="p-{$item.name}"></ul>
+                        <div class="input-group">
+                            <input {$item.extend} id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}" data-rule="{$item.rule}">
+                            <div class="input-group-addon no-border no-padding">
+                                <span><button type="button" id="faupload-{$item.name}" class="btn btn-danger faupload" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-mimetype="image/*" data-multiple="{$item.type=='image'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                            </div>
+                            <span class="msg-box n-right" for="c-{$item.name}"></span>
                         </div>
+                        <ul class="row list-inline faupload-preview" id="p-{$item.name}"></ul>
                         {/case}
                         {case value="file" break="0"}{/case}
                         {case value="files"}
-                        <div class="form-inline">
-                            <input id="c-{$item.name}" class="form-control" size="35" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}">
-                            <span><button type="button" id="faupload-{$item.name}" class="btn btn-danger faupload" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
-                            <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                        <div class="input-group">
+                            <input {$item.extend} id="c-{$item.name}" class="form-control" size="50" name="row[{$item.name}]" type="text" value="{$item.value|htmlentities}" data-tip="{$item.tip}" data-rule="{$item.rule}">
+                            <div class="input-group-addon no-border no-padding">
+                                <span><button type="button" id="faupload-{$item.name}" class="btn btn-danger faupload" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}" data-preview-id="p-{$item.name}"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                                <span><button type="button" id="fachoose-{$item.name}" class="btn btn-primary fachoose" data-input-id="c-{$item.name}" data-multiple="{$item.type=='file'?'false':'true'}"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                            </div>
+                            <span class="msg-box n-right" for="c-{$item.name}"></span>
                         </div>
+                        <ul class="row list-inline faupload-preview" id="p-{$item.name}"></ul>
                         {/case}
                         {case bool}
                         <label for="row[{$item.name}]-yes"><input id="row[{$item.name}]-yes" name="row[{$item.name}]" type="radio" value="1" {$item.value?'checked':''} data-tip="{$item.tip}" /> {:__('Yes')}</label>
