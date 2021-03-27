@@ -150,7 +150,6 @@
     }
 
 
-
     #statistics .panel {
         min-height: 150px;
     }
@@ -183,28 +182,28 @@
                     </div>
                     <div class="col-sm-3 col-xs-6">
                         <div class="sm-st clearfix">
-                            <span class="sm-st-icon st-violet"><i class="fa fa-book"></i></span>
+                            <span class="sm-st-icon st-violet"><i class="fa fa-magic"></i></span>
                             <div class="sm-st-info">
-                                <span>{$totalviews}</span>
-                                {:__('Total view')}
+                                <span>{$totaladdon}</span>
+                                {:__('Total addon')}
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-3 col-xs-6">
                         <div class="sm-st clearfix">
-                            <span class="sm-st-icon st-blue"><i class="fa fa-shopping-bag"></i></span>
+                            <span class="sm-st-icon st-blue"><i class="fa fa-leaf"></i></span>
                             <div class="sm-st-info">
-                                <span>{$totalorder}</span>
-                                {:__('Total order')}
+                                <span>{$totalcategory}</span>
+                                {:__('Total category')}
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-3 col-xs-6">
                         <div class="sm-st clearfix">
-                            <span class="sm-st-icon st-green"><i class="fa fa-cny"></i></span>
+                            <span class="sm-st-icon st-green"><i class="fa fa-user"></i></span>
                             <div class="sm-st-info">
-                                <span>{$totalorderamount}</span>
-                                {:__('Total order amount')}
+                                <span>{$totaladdon}</span>
+                                {:__('Total admin')}
                             </div>
                         </div>
                     </div>
@@ -229,7 +228,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"><i class="fa fa-shopping-cart"></i></div>
+                                        <div class="stat-icon"><i class="fa fa-vcard"></i></div>
                                         <div class="stat">
                                             <div class="value"> {$todayuserlogin}</div>
                                             <div class="name"> {:__('Today user login')}</div>
@@ -239,27 +238,17 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"><i class="fa fa-line-chart"></i></div>
+                                        <div class="stat-icon"><i class="fa fa-calendar"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$todayorder}</div>
-                                            <div class="name"> {:__('Today order')}</div>
+                                            <div class="value"> {$threednu}</div>
+                                            <div class="name"> {:__('Three dnu')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"><i class="fa fa-users"></i></div>
-                                        <div class="stat">
-                                            <div class="value"> {$unsettleorder}</div>
-                                            <div class="name"> {:__('Unsettle order')}</div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"><i class="fa fa-list-alt"></i></div>
+                                    <div class="col-xs-6 stat-col">
+                                        <div class="stat-icon"><i class="fa fa-calendar-plus-o"></i></div>
                                         <div class="stat">
                                             <div class="value"> {$sevendnu}</div>
                                             <div class="name"> {:__('Seven dnu')}</div>
@@ -268,11 +257,21 @@
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"><i class="fa fa-dollar"></i></div>
+                                    <div class="col-xs-6  stat-col">
+                                        <div class="stat-icon"><i class="fa fa-user-circle"></i></div>
                                         <div class="stat">
                                             <div class="value"> {$sevendau}</div>
                                             <div class="name"> {:__('Seven dau')}</div>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6  stat-col">
+                                        <div class="stat-icon"><i class="fa fa-user-circle-o"></i></div>
+                                        <div class="stat">
+                                            <div class="value"> {$thirtydau}</div>
+                                            <div class="name"> {:__('Thirty dau')}</div>
                                         </div>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-success" style="width: 25%"></div>
@@ -296,9 +295,14 @@
                                     <h5>{:__('Category count')}</h5>
                                 </div>
                                 <div class="panel-content">
-                                    <h1 class="no-margins">1234</h1>
-                                    <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
-                                    <small>{:__('Category count tips')}</small>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h1 class="no-margins">{$totalcategory}</h1>
+                                            <div class="font-bold"><i class="fa fa-magic"></i>
+                                                <small>{:__('Category count tips')}</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -308,12 +312,23 @@
                             <div class="panel-body">
                                 <div class="ibox-title">
                                     <span class="label label-primary pull-right">{:__('Real time')}</span>
-                                    <h5>{:__('Attachment count')}</h5>
+                                    <h5>{:__('Database count')}</h5>
                                 </div>
                                 <div class="ibox-content">
-                                    <h1 class="no-margins">1043</h1>
-                                    <div class="stat-percent font-bold text-gray"><i class="fa fa-modx"></i> 2592</div>
-                                    <small>{:__('Attachment count tips')}</small>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h1 class="no-margins">{$dbtablenums}</h1>
+                                            <div class="font-bold"><i class="fa fa-database"></i>
+                                                <small>{:__('Database table nums')}</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h1 class="no-margins">{$dbsize|format_bytes=###,'',0}</h1>
+                                            <div class="font-bold"><i class="fa fa-filter"></i>
+                                                <small>{:__('Database size')}</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -324,21 +339,21 @@
                             <div class="panel-body">
                                 <div class="ibox-title">
                                     <span class="label label-primary pull-right">{:__('Real time')}</span>
-                                    <h5>{:__('Article count')}</h5>
+                                    <h5>{:__('Attachment count')}</h5>
                                 </div>
                                 <div class="ibox-content">
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h1 class="no-margins">1234</h1>
-                                            <div class="font-bold"><i class="fa fa-commenting"></i>
-                                                <small>{:__('Comment count')}</small>
+                                            <h1 class="no-margins">{$attachmentnums}</h1>
+                                            <div class="font-bold"><i class="fa fa-files-o"></i>
+                                                <small>{:__('Attachment nums')}</small>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <h1 class="no-margins">6754</h1>
-                                            <div class="font-bold"><i class="fa fa-heart"></i>
-                                                <small>{:__('Like count')}</small>
+                                            <h1 class="no-margins">{$attachmentsize|format_bytes=###,'',0}</h1>
+                                            <div class="font-bold"><i class="fa fa-filter"></i>
+                                                <small>{:__('Attachment size')}</small>
                                             </div>
                                         </div>
                                     </div>
@@ -351,21 +366,21 @@
                             <div class="panel-body">
                                 <div class="ibox-title">
                                     <span class="label label-primary pull-right">{:__('Real time')}</span>
-                                    <h5>{:__('News count')}</h5>
+                                    <h5>{:__('Picture count')}</h5>
                                 </div>
                                 <div class="ibox-content">
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h1 class="no-margins">5302</h1>
-                                            <div class="font-bold"><i class="fa fa-commenting"></i>
-                                                <small>{:__('Comment count')}</small>
+                                            <h1 class="no-margins">{$picturenums}</h1>
+                                            <div class="font-bold"><i class="fa fa-picture-o"></i>
+                                                <small>{:__('Picture nums')}</small>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <h1 class="no-margins">8205</h1>
-                                            <div class="font-bold"><i class="fa fa-user"></i>
-                                                <small>{:__('Like count')}</small>
+                                            <h1 class="no-margins">{$picturesize|format_bytes=###,'',0}</h1>
+                                            <div class="font-bold"><i class="fa fa-filter"></i>
+                                                <small>{:__('Picture size')}</small>
                                             </div>
                                         </div>
                                     </div>
@@ -385,12 +400,3 @@
         </div>
     </div>
 </div>
-<!--@formatter:off-->
-<script>
-    var Orderdata = {
-        column: {:json_encode(array_keys($paylist))},
-        paydata: {:json_encode(array_values($paylist))},
-        createdata: {:json_encode(array_values($createlist))},
-    };
-</script>
-<!--@formatter:on-->
