@@ -31,7 +31,7 @@ class Rule extends Backend
         }
         $this->model = model('AuthRule');
         // 必须将结果集转换为数组
-        $ruleList = collection($this->model->field('condition,remark,createtime,updatetime', true)->order('weigh DESC,id ASC')->select())->toArray();
+        $ruleList = \think\Db::name("auth_rule")->field('type,condition,remark,createtime,updatetime', true)->order('weigh DESC,id ASC')->select();
         foreach ($ruleList as $k => &$v) {
             $v['title'] = __($v['title']);
         }
@@ -44,6 +44,7 @@ class Rule extends Backend
                 continue;
             }
             $ruledata[$v['id']] = $v['title'];
+            unset($v['spacer']);
         }
         unset($v);
         $this->view->assign('ruledata', $ruledata);
@@ -57,7 +58,6 @@ class Rule extends Backend
         if ($this->request->isAjax()) {
             $list = $this->rulelist;
             $total = count($this->rulelist);
-
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);
