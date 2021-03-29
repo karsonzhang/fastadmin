@@ -48,6 +48,7 @@ class Rule extends Backend
         }
         unset($v);
         $this->view->assign('ruledata', $ruledata);
+        $this->view->assign("menutypeList", $this->model->getMenutypeList());
     }
 
     /**

@@ -24,6 +24,12 @@
             <input type="text" class="form-control" id="title" name="row[title]" value="" data-rule="required" />
         </div>
     </div>
+    <div class="form-group" data-type="menu">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Url')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="url" name="row[url]" value="" data-rule="" placeholder="{:__('Url tips')}" />
+        </div>
+    </div>
     <div class="form-group">
         <label for="icon" class="control-label col-xs-12 col-sm-2">{:__('Icon')}:</label>
         <div class="col-xs-12 col-sm-8">
@@ -43,6 +49,18 @@
         <label for="remark" class="control-label col-xs-12 col-sm-2">{:__('Condition')}:</label>
         <div class="col-xs-12 col-sm-8">
             <textarea class="form-control" id="condition" name="row[condition]"></textarea>
+        </div>
+    </div>
+    <div class="form-group" data-type="menu">
+        <label for="remark" class="control-label col-xs-12 col-sm-2">{:__('Menutype')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[menutype]', $menutypeList)}
+        </div>
+    </div>
+    <div class="form-group" data-type="menu">
+        <label for="remark" class="control-label col-xs-12 col-sm-2">{:__('Extend')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea class="form-control" id="extend" name="row[extend]"></textarea>
         </div>
     </div>
     <div class="form-group">

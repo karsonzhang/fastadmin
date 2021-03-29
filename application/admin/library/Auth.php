@@ -432,13 +432,16 @@ class Auth extends \fast\Auth
                 continue;
             }
             $v['icon'] = $v['icon'] . ' fa-fw';
-            $v['url'] = '/' . $module . '/' . $v['name'];
+            $v['url'] = isset($v['url']) && $v['url'] ? $v['url'] : '/' . $module . '/' . $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
             $v['py'] = $pinyin->abbr($v['title'], '');
             $v['pinyin'] = $pinyin->permalink($v['title'], '');
             $v['title'] = __($v['title']);
+            $v['url'] = preg_match("/^((?:[a-z]+:)?\/\/|data:image\/)(.*)/i", $v['url']) ? $v['url'] : url($v['url']);
+            $v['menuclass'] = in_array($v['menutype'], ['dialog', 'ajax']) ? 'btn-' . $v['menutype'] : '';
+            $v['menutabs'] = !$v['menutype'] || in_array($v['menutype'], ['default', 'addtabs']) ? 'addtabs="' . $v['id'] . '"' : '';
             $selected = $v['name'] == $fixedPage ? $v : $selected;
-            $referer = url($v['url']) == $refererUrl ? $v : $referer;
+            $referer = $v['url'] == $refererUrl ? $v : $referer;
         }
         $lastArr = array_diff($pidArr, array_filter(array_unique(array_map(function ($item) {
             return $item['pid'];
@@ -451,8 +454,6 @@ class Auth extends \fast\Auth
         if ($selected == $referer) {
             $referer = [];
         }
-        $selected && $selected['url'] = url($selected['url']);
-        $referer && $referer['url'] = url($referer['url']);
 
         $select_id = $selected ? $selected['id'] : 0;
         $menu = $nav = '';
@@ -472,21 +473,21 @@ class Auth extends \fast\Auth
             foreach ($topList as $index => $item) {
                 $childList = Tree::instance()->getTreeMenu(
                     $item['id'],
-                    '<li class="@class" pid="@pid"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
+                    '<li class="@class" pid="@pid"><a @extend href="@url@addtabs" addtabs="@id" class="@menuclass" url="@url" py="@py" pinyin="@pinyin" title="@title"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
                     $select_id,
                     '',
                     'ul',
                     'class="treeview-menu"'
                 );
                 $current = in_array($item['id'], $selectParentIds);
-                $url = $childList ? 'javascript:;' : url($item['url']);
+                $url = $childList ? 'javascript:;' : $item['url'];
                 $addtabs = $childList || !$url ? "" : (stripos($url, "?") !== false ? "&" : "?") . "ref=addtabs";
                 $childList = str_replace(
                     '" pid="' . $item['id'] . '"',
                     ' ' . ($current ? '' : 'hidden') . '" pid="' . $item['id'] . '"',
                     $childList
                 );
-                $nav .= '<li class="' . ($current ? 'active' : '') . '"><a href="' . $url . $addtabs . '" addtabs="' . $item['id'] . '" url="' . $url . '"><i class="' . $item['icon'] . '"></i> <span>' . $item['title'] . '</span> <span class="pull-right-container"> </span></a> </li>';
+                $nav .= '<li class="' . ($current ? 'active' : '') . '"><a ' . $item['extend'] . ' href="' . $url . $addtabs . '" ' . $item['menutabs'] . ' class="' . $item['menuclass'] . '" url="' . $url . '" title="' . $item['title'] . '"><i class="' . $item['icon'] . '"></i> <span>' . $item['title'] . '</span> <span class="pull-right-container"> </span></a> </li>';
                 $menu .= $childList;
             }
         } else {
@@ -494,7 +495,7 @@ class Auth extends \fast\Auth
             Tree::instance()->init($ruleList);
             $menu = Tree::instance()->getTreeMenu(
                 0,
-                '<li class="@class"><a href="@url@addtabs" addtabs="@id" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
+                '<li class="@class"><a @extend href="@url@addtabs" @menutabs class="@menuclass" url="@url" py="@py" pinyin="@pinyin" title="@title"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
                 $select_id,
                 '',
                 'ul',

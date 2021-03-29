@@ -73,7 +73,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             });
 
             //清除缓存
-            $(document).on('click', "ul.wipecache li a,.wipecache", function () {
+            $(document).on('click', "ul.wipecache li a,a.wipecache", function () {
                 $.ajax({
                     url: 'ajax/wipecache',
                     dataType: 'json',

@@ -163,7 +163,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             bindevent: function () {
                 $(document).on('click', "input[name='row[ismenu]']", function () {
                     var name = $("input[name='row[name]']");
-                    name.prop("placeholder", $(this).val() == 1 ? name.data("placeholder-menu") : name.data("placeholder-node"));
+                    var ismenu = $(this).val() == 1;
+                    name.prop("placeholder", ismenu ? name.data("placeholder-menu") : name.data("placeholder-node"));
+                    $('div[data-type="menu"]').toggleClass("hidden", !ismenu);
                 });
                 $("input[name='row[ismenu]']:checked").trigger("click");
 

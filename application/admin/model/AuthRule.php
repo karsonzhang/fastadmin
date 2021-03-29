@@ -26,4 +26,9 @@ class AuthRule extends Model
         return __($value);
     }
 
+    public function getMenutypeList()
+    {
+        return ['addtabs' => __('Addtabs'), 'dialog' => __('Dialog'), 'ajax' => __('Ajax'), 'blank' => __('Blank')];
+    }
+
 }
