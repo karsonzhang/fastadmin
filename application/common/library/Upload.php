@@ -273,6 +273,14 @@ class Upload
             throw new UploadException(__('Chunk file write error'));
         }
         $file = new File($destFile);
+        $info = [
+            'name'     => $fileName,
+            'type'     => $file->getMime(),
+            'tmp_name' => $destFile,
+            'error'    => 0,
+            'size'     => $file->getSize()
+        ];
+        $file->setSaveName($fileName)->setUploadInfo($info);
         $this->setFile($file);
         return $file;
     }

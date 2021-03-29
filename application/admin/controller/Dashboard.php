@@ -23,6 +23,11 @@ class Dashboard extends Backend
      */
     public function index()
     {
+        try {
+            \think\Db::execute("SET @@sql_mode='';");
+        } catch (\Exception $e) {
+
+        }
         $column = [];
         $starttime = Date::unixtime('day', -6);
         $endtime = Date::unixtime('day', 0, 'end');
