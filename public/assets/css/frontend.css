@@ -30,9 +30,9 @@ body {
 .navbar-nav > li > a {
   font-size: 14px;
 }
-.navbar-nav ul.dropdown-menu > li > a {
-  padding: 5px 20px;
+.dropdown-menu > li > a {
   font-size: 13px;
+  padding: 5px 20px;
 }
 .toast-top-center {
   top: 50px;

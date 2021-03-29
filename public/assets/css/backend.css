@@ -23,6 +23,10 @@ body {
 body.is-dialog {
   background: #fff;
 }
+.dropdown-menu > li > a {
+  font-size: 13px;
+  padding: 5px 12px;
+}
 .selection {
   position: absolute;
   border: 1px solid #8B9;
@@ -30,6 +34,12 @@ body.is-dialog {
 }
 .main-header .navbar {
   position: relative;
+}
+.main-header .navbar .dropdown-menu {
+  font-size: 13px;
+}
+.main-header .navbar .dropdown-menu > li > a {
+  padding: 5px 20px;
 }
 .bootstrap-dialog .modal-dialog {
   /*width: 70%;*/

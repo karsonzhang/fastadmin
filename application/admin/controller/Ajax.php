@@ -112,7 +112,6 @@ class Ajax extends Backend
 
             $this->success(__('Uploaded successful'), '', ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
         }
-
     }
 
     /**
@@ -187,25 +186,57 @@ class Ajax extends Backend
      */
     public function wipecache()
     {
-        $type = $this->request->request("type");
-        switch ($type) {
-            case 'all':
-            case 'content':
-                rmdirs(CACHE_PATH, false);
-                Cache::clear();
-                if ($type == 'content') {
-                    break;
-                }
-            case 'template':
-                rmdirs(TEMP_PATH, false);
-                if ($type == 'template') {
-                    break;
-                }
-            case 'addons':
-                Service::refresh();
-                if ($type == 'addons') {
-                    break;
-                }
+        try {
+            $type = $this->request->request("type");
+            switch ($type) {
+                case 'all':
+                    // no break
+                case 'content':
+                    //内容缓存
+                    rmdirs(CACHE_PATH, false);
+                    Cache::clear();
+                    if ($type == 'content') {
+                        break;
+                    }
+                case 'template':
+                    // 模板缓存
+                    rmdirs(TEMP_PATH, false);
+                    if ($type == 'template') {
+                        break;
+                    }
+                case 'addons':
+                    // 插件缓存
+                    Service::refresh();
+                    if ($type == 'addons') {
+                        break;
+                    }
+                case 'browser':
+                    // 浏览器缓存
+                    // 只有生产环境下才修改
+                    if (1 || !config('app_debug')) {
+                        $version = config('site.name');
+                        $version = '1.0.1';
+                        $newversion = preg_replace_callback("/(.*)\.([0-9]+)\$/", function ($match) {
+                            return $match[1] . '.' . ($match[2] + 1);
+                        }, $version);
+                        if ($newversion && $newversion != $version) {
+                            Db::startTrans();
+                            try {
+                                \app\common\model\Config::where('name', 'version')->update(['value' => $newversion]);
+                                \app\common\model\Config::refreshFile();
+                                Db::commit();
+                            } catch (\Exception $e) {
+                                Db::rollback();
+                                exception($e->getMessage());
+                            }
+                        }
+                    }
+                    if ($type == 'browser') {
+                        break;
+                    }
+            }
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
 
         \think\Hook::listen("wipecache_after");

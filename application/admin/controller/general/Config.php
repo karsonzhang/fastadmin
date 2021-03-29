@@ -99,7 +99,7 @@ class Config extends Backend
                 }
                 if ($result !== false) {
                     try {
-                        $this->refreshFile();
+                        ConfigModel::refreshFile();
                     } catch (Exception $e) {
                         $this->error($e->getMessage());
                     }
@@ -142,7 +142,7 @@ class Config extends Backend
                     $this->error($e->getMessage());
                 }
                 try {
-                    $this->refreshFile();
+                    ConfigModel::refreshFile();
                 } catch (Exception $e) {
                     $this->error($e->getMessage());
                 }
@@ -163,7 +163,7 @@ class Config extends Backend
         if ($name && $config) {
             try {
                 $config->delete();
-                $this->refreshFile();
+                ConfigModel::refreshFile();
             } catch (Exception $e) {
                 $this->error($e->getMessage());
             }
@@ -171,28 +171,6 @@ class Config extends Backend
         } else {
             $this->error(__('Invalid parameters'));
         }
-    }
-
-    /**
-     * 刷新配置文件
-     */
-    protected function refreshFile()
-    {
-        $config = [];
-        foreach ($this->model->all() as $k => $v) {
-            $value = $v->toArray();
-            if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files'])) {
-                $value['value'] = explode(',', $value['value']);
-            }
-            if ($value['type'] == 'array') {
-                $value['value'] = (array)json_decode($value['value'], true);
-            }
-            $config[$value['name']] = $value['value'];
-        }
-        file_put_contents(
-            CONF_PATH . 'extra' . DS . 'site.php',
-            '<?php' . "\n\nreturn " . var_export_short($config) . ";\n"
-        );
     }
 
     /**
