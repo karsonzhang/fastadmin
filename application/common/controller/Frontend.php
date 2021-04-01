@@ -48,6 +48,9 @@ class Frontend extends Controller
         $controllername = Loader::parseName($this->request->controller());
         $actionname = strtolower($this->request->action());
 
+        // 检测IP是否允许
+        check_ip_allowed();
+
         // 如果有使用模板布局
         if ($this->layout) {
             $this->view->engine->layout('layout/' . $this->layout);

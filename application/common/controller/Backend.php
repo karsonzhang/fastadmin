@@ -131,6 +131,9 @@ class Backend extends Controller
         // 定义是否AJAX请求
         !defined('IS_AJAX') && define('IS_AJAX', $this->request->isAjax());
 
+        // 检测IP是否允许
+        check_ip_allowed();
+
         $this->auth = Auth::instance();
 
         // 设置当前请求的URI
@@ -540,7 +543,7 @@ class Backend extends Controller
             if ($primaryvalue !== null && preg_match("/^[a-z0-9_\-]+$/i", $primarykey)) {
                 $primaryvalue = array_unique(is_array($primaryvalue) ? $primaryvalue : explode(',', $primaryvalue));
                 //修复自定义data-primary-key为字符串内容时，给排序字段添加上引号
-                $primaryvalue=   array_map(function ($value) {
+                $primaryvalue = array_map(function ($value) {
                     return '\'' . $value . '\'';
                 }, $primaryvalue);
 
