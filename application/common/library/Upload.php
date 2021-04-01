@@ -76,6 +76,7 @@ class Upload
 
         $this->file = $file;
         $this->fileInfo = $fileInfo;
+        $this->checkExecutable();
     }
 
     protected function checkExecutable()
@@ -171,6 +172,9 @@ class Upload
      */
     public function clean($chunkid)
     {
+        if (!preg_match('/^[a-z0-9\-]{36}$/', $chunkid)) {
+            throw new UploadException(__('Invalid parameters'));
+        }
         $iterator = new \GlobIterator($this->chunkDir . DS . $chunkid . '-*', FilesystemIterator::KEY_AS_FILENAME);
         $array = iterator_to_array($iterator);
         foreach ($array as $index => &$item) {
@@ -190,6 +194,10 @@ class Upload
      */
     public function merge($chunkid, $chunkcount, $filename)
     {
+        if (!preg_match('/^[a-z0-9\-]{36}$/', $chunkid)) {
+            throw new UploadException(__('Invalid parameters'));
+        }
+
         $filePath = $this->chunkDir . DS . $chunkid;
 
         $completed = true;
@@ -229,27 +237,34 @@ class Upload
         }
         @fclose($destFile);
 
-        $file = new File($uploadPath);
-        $info = [
-            'name'     => $filename,
-            'type'     => $file->getMime(),
-            'tmp_name' => $uploadPath,
-            'error'    => 0,
-            'size'     => $file->getSize()
-        ];
-        $file->setSaveName($filename)->setUploadInfo($info);
-        $file->isTest(true);
+        $attachment = null;
+        try {
+            $file = new File($uploadPath);
+            $info = [
+                'name'     => $filename,
+                'type'     => $file->getMime(),
+                'tmp_name' => $uploadPath,
+                'error'    => 0,
+                'size'     => $file->getSize()
+            ];
+            $file->setSaveName($filename)->setUploadInfo($info);
+            $file->isTest(true);
 
-        //重新设置文件
-        $this->setFile($file);
+            //重新设置文件
+            $this->setFile($file);
 
-        unset($file);
-        $this->merging = true;
+            unset($file);
+            $this->merging = true;
 
-        //允许大文件
-        $this->config['maxsize'] = "1024G";
+            //允许大文件
+            $this->config['maxsize'] = "1024G";
 
-        return $this->upload();
+            $attachment = $this->upload();
+        } catch (\Exception $e) {
+            @unlink($destFile);
+            throw new UploadException($e->getMessage());
+        }
+        return $attachment;
     }
 
     /**
@@ -261,6 +276,10 @@ class Upload
 
         if ($this->fileInfo['type'] != 'application/octet-stream') {
             throw new UploadException(__('Uploaded file format is limited'));
+        }
+
+        if (!preg_match('/^[a-z0-9\-]{36}$/', $chunkid)) {
+            throw new UploadException(__('Invalid parameters'));
         }
 
         $destDir = RUNTIME_PATH . 'chunks';
