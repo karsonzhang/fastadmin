@@ -213,9 +213,8 @@ class Ajax extends Backend
                 case 'browser':
                     // 浏览器缓存
                     // 只有生产环境下才修改
-                    if (1 || !config('app_debug')) {
-                        $version = config('site.name');
-                        $version = '1.0.1';
+                    if (!config('app_debug')) {
+                        $version = config('site.version');
                         $newversion = preg_replace_callback("/(.*)\.([0-9]+)\$/", function ($match) {
                             return $match[1] . '.' . ($match[2] + 1);
                         }, $version);
