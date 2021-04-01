@@ -44,9 +44,9 @@ class Validate extends Api
      */
     public function check_username_available()
     {
-        $email = $this->request->post('username');
+        $username = $this->request->post('username');
         $id = (int)$this->request->post('id');
-        $count = User::where('username', '=', $email)->where('id', '<>', $id)->count();
+        $count = User::where('username', '=', $username)->where('id', '<>', $id)->count();
         if ($count > 0) {
             $this->error(__('用户名已经被占用'));
         }
@@ -61,9 +61,9 @@ class Validate extends Api
      */
     public function check_nickname_available()
     {
-        $email = $this->request->post('nickname');
+        $nickname = $this->request->post('nickname');
         $id = (int)$this->request->post('id');
-        $count = User::where('nickname', '=', $email)->where('id', '<>', $id)->count();
+        $count = User::where('nickname', '=', $nickname)->where('id', '<>', $id)->count();
         if ($count > 0) {
             $this->error(__('昵称已经被占用'));
         }
