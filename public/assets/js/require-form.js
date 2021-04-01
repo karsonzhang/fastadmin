@@ -325,7 +325,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                         //追加控制
                         $(".fieldlist", form).on("click", ".btn-append,.append", function (e, row) {
                             var container = $(this).closest(".fieldlist");
-                            var tagName = container.data("tag") || "dd";
+                            var tagName = container.data("tag") || (container.is("table") ? "tr" : "dd");
                             var index = container.data("index");
                             var name = container.data("name");
                             var template = container.data("template");
@@ -341,14 +341,14 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                         //移除控制
                         $(".fieldlist", form).on("click", ".btn-remove", function () {
                             var container = $(this).closest(".fieldlist");
-                            var tagName = container.data("tag") || "dd";
+                            var tagName = container.data("tag") || (container.is("table") ? "tr" : "dd");
                             $(this).closest(tagName).remove();
                             refresh(container.data("name"));
                         });
                         //渲染数据&拖拽排序
                         $(".fieldlist", form).each(function () {
                             var container = this;
-                            var tagName = $(this).data("tag") || "dd";
+                            var tagName = $(this).data("tag") || ($(this).is("table") ? "tr" : "dd");
                             $(this).dragsort({
                                 itemSelector: tagName,
                                 dragSelector: ".btn-dragsort",
