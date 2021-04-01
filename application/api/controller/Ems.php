@@ -36,8 +36,8 @@ class Ems extends Api
      */
     public function send()
     {
-        $email = $this->request->request("email");
-        $event = $this->request->request("event");
+        $email = $this->request->post("email");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
 
         $last = Emslib::get($email, $event);
@@ -74,10 +74,10 @@ class Ems extends Api
      */
     public function check()
     {
-        $email = $this->request->request("email");
-        $event = $this->request->request("event");
+        $email = $this->request->post("email");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
-        $captcha = $this->request->request("captcha");
+        $captcha = $this->request->post("captcha");
 
         if ($event) {
             $userinfo = User::getByEmail($email);

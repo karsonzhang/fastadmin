@@ -23,8 +23,8 @@ class Sms extends Api
      */
     public function send()
     {
-        $mobile = $this->request->request("mobile");
-        $event = $this->request->request("event");
+        $mobile = $this->request->post("mobile");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
 
         if (!$mobile || !\think\Validate::regex($mobile, "^1\d{10}$")) {
@@ -71,10 +71,10 @@ class Sms extends Api
      */
     public function check()
     {
-        $mobile = $this->request->request("mobile");
-        $event = $this->request->request("event");
+        $mobile = $this->request->post("mobile");
+        $event = $this->request->post("event");
         $event = $event ? $event : 'register';
-        $captcha = $this->request->request("captcha");
+        $captcha = $this->request->post("captcha");
 
         if (!$mobile || !\think\Validate::regex($mobile, "^1\d{10}$")) {
             $this->error(__('手机号不正确'));
