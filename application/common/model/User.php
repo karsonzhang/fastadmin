@@ -2,6 +2,7 @@
 
 namespace app\common\model;
 
+use think\Db;
 use think\Model;
 
 /**
@@ -22,8 +23,8 @@ class User extends Model
 
     /**
      * 获取个人URL
-     * @param   string $value
-     * @param   array  $data
+     * @param string $value
+     * @param array  $data
      * @return string
      */
     public function getUrlAttr($value, $data)
@@ -33,8 +34,8 @@ class User extends Model
 
     /**
      * 获取头像
-     * @param   string $value
-     * @param   array  $data
+     * @param string $value
+     * @param array  $data
      * @return string
      */
     public function getAvatarAttr($value, $data)
@@ -57,8 +58,8 @@ class User extends Model
 
     /**
      * 获取验证字段数组值
-     * @param   string $value
-     * @param   array  $data
+     * @param string $value
+     * @param array  $data
      * @return  object
      */
     public function getVerificationAttr($value, $data)
@@ -87,15 +88,21 @@ class User extends Model
      */
     public static function money($money, $user_id, $memo)
     {
-        $user = self::get($user_id);
-        if ($user && $money != 0) {
-            $before = $user->money;
-            //$after = $user->money + $money;
-            $after = function_exists('bcadd') ? bcadd($user->money, $money, 2) : $user->money + $money;
-            //更新会员信息
-            $user->save(['money' => $after]);
-            //写入日志
-            MoneyLog::create(['user_id' => $user_id, 'money' => $money, 'before' => $before, 'after' => $after, 'memo' => $memo]);
+        Db::startTrans();
+        try {
+            $user = self::lock(true)->find($user_id);
+            if ($user && $money != 0) {
+                $before = $user->money;
+                //$after = $user->money + $money;
+                $after = function_exists('bcadd') ? bcadd($user->money, $money, 2) : $user->money + $money;
+                //更新会员信息
+                $user->save(['money' => $after]);
+                //写入日志
+                MoneyLog::create(['user_id' => $user_id, 'money' => $money, 'before' => $before, 'after' => $after, 'memo' => $memo]);
+            }
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
         }
     }
 
@@ -107,15 +114,21 @@ class User extends Model
      */
     public static function score($score, $user_id, $memo)
     {
-        $user = self::get($user_id);
-        if ($user && $score != 0) {
-            $before = $user->score;
-            $after = $user->score + $score;
-            $level = self::nextlevel($after);
-            //更新会员信息
-            $user->save(['score' => $after, 'level' => $level]);
-            //写入日志
-            ScoreLog::create(['user_id' => $user_id, 'score' => $score, 'before' => $before, 'after' => $after, 'memo' => $memo]);
+        Db::startTrans();
+        try {
+            $user = self::lock(true)->find($user_id);
+            if ($user && $score != 0) {
+                $before = $user->score;
+                $after = $user->score + $score;
+                $level = self::nextlevel($after);
+                //更新会员信息
+                $user->save(['score' => $after, 'level' => $level]);
+                //写入日志
+                ScoreLog::create(['user_id' => $user_id, 'score' => $score, 'before' => $before, 'after' => $after, 'memo' => $memo]);
+            }
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
         }
     }
 
