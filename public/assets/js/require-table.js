@@ -396,7 +396,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var ids = Table.api.selectedids(table);
                     Layer.confirm(
                         __('Are you sure you want to delete the %s selected item?', ids.length),
-                        {icon: 3, title: __('Warning'), offset: 0, shadeClose: true},
+                        {icon: 3, title: __('Warning'), offset: 0, shadeClose: true, btn: [__('OK'), __('Cancel')]},
                         function (index) {
                             Table.api.multi("del", ids, table, that);
                             Layer.close(index);
@@ -485,7 +485,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var that = this;
                     Layer.confirm(
                         __('Are you sure you want to delete this item?'),
-                        {icon: 3, title: __('Warning'), shadeClose: true},
+                        {icon: 3, title: __('Warning'), shadeClose: true, btn: [__('OK'), __('Cancel')]},
                         function (index) {
                             Table.api.multi("del", id, table, that);
                             Layer.close(index);
@@ -588,7 +588,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         }
                         Layer.confirm(
                             __('Are you sure you want to delete this item?'),
-                            {icon: 3, title: __('Warning'), offset: [top, left], shadeClose: true},
+                            {icon: 3, title: __('Warning'), offset: [top, left], shadeClose: true, btn: [__('OK'), __('Cancel')]},
                             function (index) {
                                 var table = $(that).closest('table');
                                 var options = table.bootstrapTable('getOptions');
