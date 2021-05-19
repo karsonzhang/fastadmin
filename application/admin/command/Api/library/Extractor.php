@@ -297,7 +297,7 @@ class Extractor
             }
         }
         $methodAnnotations['ApiPermissionLogin'] = [!in_array('*', $noNeedLogin) && !in_array($methodName, $noNeedLogin)];
-        $methodAnnotations['ApiPermissionRight'] = !$methodAnnotations['ApiPermissionLogin'][0] ? false : [!in_array('*', $noNeedRight) && !in_array($methodName, $noNeedRight)];
+        $methodAnnotations['ApiPermissionRight'] = !$methodAnnotations['ApiPermissionLogin'][0] ? [false] : [!in_array('*', $noNeedRight) && !in_array($methodName, $noNeedRight)];
         return $methodAnnotations;
     }
 
