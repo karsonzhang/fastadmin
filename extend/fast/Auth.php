@@ -140,7 +140,7 @@ class Auth
 
     /**
      * 根据用户id获取用户组,返回值为数组
-     * @param  int $uid 用户id
+     * @param int $uid  用户id
      * @return array       用户所属的用户组 array(
      *                  array('uid'=>'用户id','group_id'=>'用户组id','name'=>'用户组名称','rules'=>'用户组拥有的规则id,多个,号隔开'),
      *                  ...)
@@ -205,9 +205,17 @@ class Auth
             if (!empty($rule['condition']) && !in_array('*', $ids)) {
                 //根据condition进行验证
                 $user = $this->getUserInfo($uid); //获取用户信息,一维数组
-                $command = preg_replace('/\{(\w*?)\}/', '$user[\'\\1\']', $rule['condition']);
-                @(eval('$condition=(' . $command . ');'));
-                if ($condition) {
+                $nums = 0;
+                $condition = str_replace(['&&', '||'], "\r\n", $rule['condition']);
+                $condition = preg_replace('/\{(\w*?)\}/', '\\1', $condition);
+                $conditionArr = explode("\r\n", $condition);
+                foreach ($conditionArr as $index => $item) {
+                    preg_match("/^(\w+)\s?([\>\<\=]+)\s?(.*)$/", trim($item), $matches);
+                    if ($matches && isset($user[$matches[1]]) && version_compare($user[$matches[1]], $matches[3], $matches[2])) {
+                        $nums++;
+                    }
+                }
+                if ($conditionArr && ((stripos($rule['condition'], "||") !== false && $nums > 0) || count($conditionArr) == $nums)) {
                     $rulelist[$rule['id']] = strtolower($rule['name']);
                 }
             } else {
