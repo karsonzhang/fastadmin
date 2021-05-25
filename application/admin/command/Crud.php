@@ -899,7 +899,7 @@ class Crud extends Command
                 'recyclebinJs'            => '',
                 'headingHtml'             => $headingHtml,
                 'recyclebinHtml'          => $recyclebinHtml,
-                'visibleFieldList'        => $fields ? "\$row->visible(['" . implode("','", array_filter(explode(',', $fields))) . "']);" : '',
+                'visibleFieldList'        => $fields ? "\$row->visible(['" . implode("','", array_filter(in_array($priKey,explode(',', $fields))?explode(',', $fields):explode(',',$priKey.','.$fields))) . "']);" : '',
                 'appendAttrList'          => implode(",\n", $appendAttrList),
                 'getEnumList'             => implode("\n\n", $getEnumArr),
                 'getAttrList'             => implode("\n\n", $getAttrArr),
