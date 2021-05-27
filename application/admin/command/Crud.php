@@ -26,7 +26,8 @@ class Crud extends Command
      * 受保护的系统表,crud不会生效
      */
     protected $systemTable = [
-       'admin', 'attachment', 'auth_group', 'auth_group_access', 'auth_rule', 'category', 'config'
+       'admin','admin_log','auth_group','auth_group_access','auth_rule', 
+       'attachment', 'config','category'
     ];
 
     /**
@@ -313,7 +314,7 @@ class Crud extends Command
         if(in_array(str_replace($prefix,"",$table),$this->systemTable)){
             throw new Exception('system table name can\'t crud');
         }
-        
+
         //模块
         $moduleName = 'admin';
         $modelModuleName = $local ? $moduleName : 'common';
