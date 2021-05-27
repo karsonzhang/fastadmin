@@ -21,6 +21,14 @@ class Crud extends Command
     protected $internalKeywords = [
         'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor'
     ];
+
+    /**
+     * 受保护的系统表,crud不会生效
+     */
+    protected $systemTable = [
+       'admin', 'attachment', 'auth_group', 'auth_group_access', 'auth_rule', 'category', 'config'
+    ];
+
     /**
      * Selectpage搜索字段关联
      */
@@ -204,9 +212,12 @@ class Crud extends Command
         $force = $input->getOption('force');
         //是否为本地model,为0时表示为全局model将会把model放在app/common/model中
         $local = $input->getOption('local');
+        
         if (!$table) {
             throw new Exception('table name can\'t empty');
         }
+        
+    
         //是否生成菜单
         $menu = $input->getOption("menu");
         //关联表
@@ -298,6 +309,11 @@ class Crud extends Command
         $dbname = Config::get($db . '.database');
         $prefix = Config::get($db . '.prefix');
 
+        //系统表无法生成，防止后台错乱
+        if(in_array(str_replace($prefix,"",$table),$this->systemTable)){
+            throw new Exception('system table name can\'t crud');
+        }
+        
         //模块
         $moduleName = 'admin';
         $modelModuleName = $local ? $moduleName : 'common';
