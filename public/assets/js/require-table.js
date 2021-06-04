@@ -285,7 +285,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !options.selectedIds.length);
                 });
                 // 绑定TAB事件
-                $('.panel-heading [data-field] a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $('.panel-heading [data-field] a[data-toggle="tab"]', table.closest(".panel-intro")).on('shown.bs.tab', function (e) {
                     var field = $(this).closest("[data-field]").data("field");
                     var value = $(this).data("value");
                     var object = $("[name='" + field + "']", table.closest(".bootstrap-table").find(".commonsearch-table"));
@@ -297,6 +297,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     table.trigger("uncheckbox");
                     table.bootstrapTable('refresh', {pageNumber: 1});
                     return false;
+                });
+                // 修复重置事件
+                $("form", table.closest(".bootstrap-table").find(".commonsearch-table")).on('reset', function () {
+                    setTimeout(function () {
+                        // $('.panel-heading [data-field] li.active a[data-toggle="tab"]').trigger('shown.bs.tab');
+                    }, 0);
+                    $('.panel-heading [data-field] li', table.closest(".panel-intro")).removeClass('active');
+                    $('.panel-heading [data-field] li:first', table.closest(".panel-intro")).addClass('active');
                 });
                 // 刷新按钮事件
                 toolbar.on('click', Table.config.refreshbtn, function () {
@@ -733,6 +741,16 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     if (typeof this.customField !== 'undefined' && typeof row[this.customField] !== 'undefined') {
                         value = row[this.customField];
                         field = this.customField;
+                    }
+                    if (typeof that.searchList === 'object' && typeof that.custom === 'undefined') {
+                        var i = 0;
+                        var searchValues = Object.values(colorArr);
+                        $.each(that.searchList, function (key, val) {
+                            if (typeof colorArr[key] == 'undefined') {
+                                colorArr[key] = searchValues[i];
+                                i = typeof searchValues[i + 1] === 'undefined' ? 0 : i + 1;
+                            }
+                        });
                     }
 
                     //渲染Flag

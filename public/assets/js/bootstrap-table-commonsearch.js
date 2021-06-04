@@ -40,6 +40,7 @@
         // 重置搜索
         form.on("click", "button[type=reset]", function (event) {
             form[0].reset();
+
             setTimeout(function () {
                 that.onCommonSearch();
             }, 0);
@@ -329,13 +330,19 @@
         });
 
         that.$container.on("click", "." + that.options.searchClass, function () {
-            var obj = $("form [name='" + $(this).data("field") + "']", that.$commonsearch);
+            var value = $(this).data("value");
+            var field = $(this).data("field");
+            var ul = that.$container.closest(".panel-intro").find("ul[data-field='" + field + "']");
+            if (ul.length > 0) {
+                $('li a[data-value="' + value + '"][data-toggle="tab"]', ul).trigger('click');
+                return;
+            }
+            var obj = $("form [name='" + field + "']", that.$commonsearch);
             if (obj.size() > 0) {
-                var value = $(this).data("value");
                 if (obj.is("select")) {
                     $("option[value='" + value + "']", obj).prop("selected", true);
                 } else if (obj.size() > 1) {
-                    $("form [name='" + $(this).data("field") + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);
+                    $("form [name='" + field + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);
                 } else {
                     obj.val(value + "");
                 }
