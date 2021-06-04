@@ -19,6 +19,7 @@ class Attachment extends Backend
     protected $model = null;
 
     protected $searchFields = 'id,filename,url';
+    protected $noNeedRight = ['classify'];
 
     public function _initialize()
     {
@@ -132,10 +133,14 @@ class Attachment extends Backend
     }
 
     /**
-     * 移动
+     * 归类
      */
-    public function move($ids = "")
+    public function classify()
     {
+        if (!$this->auth->check('general/attachment/edit')) {
+            \think\Hook::listen('admin_nopermission', $this);
+            $this->error(__('You have no permission'), '');
+        }
         if (!$this->request->isPost()) {
             $this->error(__("Invalid parameters"));
         }

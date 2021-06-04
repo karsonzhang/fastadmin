@@ -65,16 +65,17 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             // 为表格绑定事件
             Table.api.bindevent(table);
 
-            $(document).on('click', '.btn-move', function () {
+            // 附件归类
+            $(document).on('click', '.btn-classify', function () {
                 var ids = Table.api.selectedids(table);
                 Layer.open({
-                    title: __('Move'),
+                    title: __('Classify'),
                     content: Template("typetpl", {}),
-                    btn: [__('Move')],
+                    btn: [__('OK')],
                     yes: function (index, layero) {
                         var category = $("select[name='category']", layero).val();
                         Fast.api.ajax({
-                            url: "general/attachment/move",
+                            url: "general/attachment/classify",
                             type: "post",
                             data: {category: category, ids: ids.join(',')},
                         }, function () {
