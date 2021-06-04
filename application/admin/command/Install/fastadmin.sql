@@ -80,6 +80,7 @@ CREATE TABLE `fa_area` (
 DROP TABLE IF EXISTS `fa_attachment`;
 CREATE TABLE `fa_attachment` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `category` varchar(50) DEFAULT '' COMMENT '类别',
   `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
   `url` varchar(255) DEFAULT '' COMMENT '物理路径',
@@ -103,7 +104,7 @@ CREATE TABLE `fa_attachment` (
 -- Records of fa_attachment
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_attachment` VALUES (1, 1, 0, '/assets/img/qrcode.png', '150', '150', 'png', 0, 'qrcode.png', 21859, 'image/png', '', 1491635035, 1491635035, 1491635035, 'local', '17163603d0263e4838b9387ff2cd4877e8b018f6');
+INSERT INTO `fa_attachment` VALUES (1, '', 1, 0, '/assets/img/qrcode.png', '150', '150', 'png', 0, 'qrcode.png', 21859, 'image/png', '', 1491635035, 1491635035, 1491635035, 'local', '17163603d0263e4838b9387ff2cd4877e8b018f6');
 COMMIT;
 
 -- ----------------------------
@@ -350,6 +351,7 @@ INSERT INTO `fa_config` VALUES (14, 'mail_smtp_user', 'email', 'Mail smtp user',
 INSERT INTO `fa_config` VALUES (15, 'mail_smtp_pass', 'email', 'Mail smtp password', '（填写您的密码或授权码）', 'string', 'password', '', '', '', '');
 INSERT INTO `fa_config` VALUES (16, 'mail_verify_type', 'email', 'Mail vertify type', '（SMTP验证方式[推荐SSL]）', 'select', '2', '[\"无\",\"TLS\",\"SSL\"]', '', '', '');
 INSERT INTO `fa_config` VALUES (17, 'mail_from', 'email', 'Mail from', '', 'string', '10000@qq.com', '', '', '', '');
+INSERT INTO `fa_config` VALUES (18, 'attachmentcategory', 'dictionary', 'Attachment category', '', 'array', '{\"category1\":\"Category1\",\"category2\":\"Category2\",\"custom\":\"Custom\"}', '', '', '', '');
 COMMIT;
 
 -- ----------------------------

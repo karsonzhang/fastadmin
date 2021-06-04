@@ -23,9 +23,17 @@ return [
     'Createtime'               => '创建日期',
     'Uploadtime'               => '上传时间',
     'Storage'                  => '存储引擎',
+    'Category1'                => '分类一',
+    'Category2'                => '分类二',
+    'Custom'                   => '自定义',
+    'Unclassed'                => '未归类',
+    'Category'                 => '类别',
     'Upload to third'          => '上传到第三方',
     'Upload to local'          => '上传到本地',
     'Upload to third by chunk' => '上传到第三方(分片模式)',
     'Upload to local by chunk' => '上传到本地(分片模式)',
+    'Please enter a new name'  => '请输入新的类别名称',
+    'Please select category'   => '请选择一个类别',
+    'Category not found'       => '指定的类别未找到',
     'Upload from editor'       => '从编辑器上传'
 ];

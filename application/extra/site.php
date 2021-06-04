@@ -25,6 +25,11 @@ return [
         'user' => 'User',
         'example' => 'Example',
     ],
+    'attachmentcategory' => [
+        'category1' => 'Category1',
+        'category2' => 'Category2',
+        'custom' => 'Custom',
+    ],
     'mail_type' => '1',
     'mail_smtp_host' => 'smtp.qq.com',
     'mail_smtp_port' => '465',

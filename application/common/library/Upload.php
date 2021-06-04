@@ -352,10 +352,13 @@ class Upload
             }
         }
         $this->file = $file;
+        $category = request()->post('category');
+        $category = array_key_exists($category, config('site.attachmentcategory') ?? []) ? $category : '';
         $params = array(
             'admin_id'    => (int)session('admin.id'),
             'user_id'     => (int)cookie('uid'),
             'filename'    => substr(htmlspecialchars(strip_tags($this->fileInfo['name'])), 0, 100),
+            'category'    => $category,
             'filesize'    => $this->fileInfo['size'],
             'imagewidth'  => $this->fileInfo['imagewidth'],
             'imageheight' => $this->fileInfo['imageheight'],

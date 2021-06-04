@@ -1,5 +1,18 @@
+
+
 <form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
 
+    <div class="form-group">
+        <label for="c-url" class="control-label col-xs-12 col-sm-2">{:__('Category')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select name="row[category]" class="form-control">
+                <option value="">{:__('Please select category')}</option>
+                {foreach name="categoryList" id="item"}
+                <option value="{$key}" {if $key==$row.category}selected{/if}>{$item}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
     <div class="form-group">
         <label for="c-url" class="control-label col-xs-12 col-sm-2">{:__('Url')}:</label>
         <div class="col-xs-12 col-sm-8">

@@ -60,6 +60,14 @@ class Config extends Backend
                 $value['value'] = explode(',', $value['value']);
             }
             $value['content'] = json_decode($value['content'], true);
+            if (in_array($value['name'], ['categorytype', 'configgroup', 'attachmentcategory'])) {
+                $dictValue = (array)json_decode($value['value'], true);
+                foreach ($dictValue as $index => &$item) {
+                    $item = __($item);
+                }
+                unset($item);
+                $value['value'] = json_encode($dictValue, JSON_UNESCAPED_UNICODE);
+            }
             $value['tip'] = htmlspecialchars($value['tip']);
             $siteList[$v['group']]['list'][] = $value;
         }

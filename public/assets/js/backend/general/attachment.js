@@ -24,11 +24,12 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     [
                         {field: 'state', checkbox: true},
                         {field: 'id', title: __('Id')},
+                        {field: 'category', title: __('Category'), formatter: Table.api.formatter.label, searchList: Config.categoryList},
                         {field: 'admin_id', title: __('Admin_id'), visible: false, addClass: "selectpage", extend: "data-source='auth/admin/index' data-field='nickname'"},
                         {field: 'user_id', title: __('User_id'), visible: false, addClass: "selectpage", extend: "data-source='user/user/index' data-field='nickname'"},
                         {field: 'preview', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
                         {field: 'url', title: __('Url'), formatter: Controller.api.formatter.url, visible: false},
-                        {field: 'filename', title: __('Filename'), formatter: Controller.api.formatter.filename, operate: 'like'},
+                        {field: 'filename', title: __('Filename'), sortable: true, formatter: Controller.api.formatter.filename, operate: 'like'},
                         {
                             field: 'filesize', title: __('Filesize'), operate: 'BETWEEN', sortable: true, formatter: function (value, row, index) {
                                 var size = parseFloat(value);
@@ -38,7 +39,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         },
                         {field: 'imagewidth', title: __('Imagewidth'), sortable: true},
                         {field: 'imageheight', title: __('Imageheight'), sortable: true},
-                        {field: 'imagetype', title: __('Imagetype'), formatter: Table.api.formatter.search, operate: 'like'},
+                        {field: 'imagetype', title: __('Imagetype'), sortable: true, formatter: Table.api.formatter.search, operate: 'like'},
                         {field: 'storage', title: __('Storage'), formatter: Table.api.formatter.search, operate: 'like'},
                         {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},
                         {
@@ -47,7 +48,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                             formatter: Table.api.formatter.datetime,
                             operate: 'RANGE',
                             addclass: 'datetimerange',
-                            sortable: true
+                            sortable: true,
+                            width: 150
                         },
                         {
                             field: 'operate',
@@ -62,6 +64,28 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
 
             // 为表格绑定事件
             Table.api.bindevent(table);
+
+            $(document).on('click', '.btn-move', function () {
+                var ids = Table.api.selectedids(table);
+                Layer.open({
+                    title: __('Move'),
+                    content: Template("typetpl", {}),
+                    btn: [__('Move')],
+                    yes: function (index, layero) {
+                        var category = $("select[name='category']", layero).val();
+                        Fast.api.ajax({
+                            url: "general/attachment/move",
+                            type: "post",
+                            data: {category: category, ids: ids.join(',')},
+                        }, function () {
+                            table.bootstrapTable('refresh', {});
+                            Layer.close(index);
+                        });
+                    },
+                    success: function (layero, index) {
+                    }
+                });
+            });
 
         },
         select: function () {
@@ -106,14 +130,15 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                     [
                         {field: 'state', checkbox: multiple, visible: multiple, operate: false},
                         {field: 'id', title: __('Id')},
+                        {field: 'category', title: __('Category'), formatter: Table.api.formatter.label, searchList: Config.categoryList},
                         {field: 'admin_id', title: __('Admin_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'user_id', title: __('User_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'url', title: __('Preview'), formatter: Controller.api.formatter.thumb, operate: false},
-                        {field: 'filename', title: __('Filename'), formatter: Controller.api.formatter.filename, operate: 'like'},
-                        {field: 'imagewidth', title: __('Imagewidth'), operate: false},
-                        {field: 'imageheight', title: __('Imageheight'), operate: false},
+                        {field: 'filename', title: __('Filename'), sortable: true, formatter: Controller.api.formatter.filename, operate: 'like'},
+                        {field: 'imagewidth', title: __('Imagewidth'), operate: false, sortable: true},
+                        {field: 'imageheight', title: __('Imageheight'), operate: false, sortable: true},
                         {
-                            field: 'mimetype', title: __('Mimetype'), operate: 'LIKE %...%',
+                            field: 'mimetype', title: __('Mimetype'), sortable: true, operate: 'LIKE %...%',
                             process: function (value, arg) {
                                 return value.replace(/\*/g, '%');
                             }
@@ -162,7 +187,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             formatter: {
                 thumb: function (value, row, index) {
                     if (row.mimetype.indexOf("image") > -1) {
-                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + row.thumb_style + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + row.thumb_style + '" alt="" style="max-height:60px;max-width:120px"></a>';
                     } else {
                         return '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
                     }

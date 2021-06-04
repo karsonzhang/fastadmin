@@ -24,6 +24,16 @@ class Attachment extends Model
         return is_numeric($value) ? $value : strtotime($value);
     }
 
+    public function getCategoryAttr($value)
+    {
+        return $value == '' ? 'unclassed' : $value;
+    }
+
+    public function setCategoryAttr($value)
+    {
+        return $value == 'unclassed' ? '' : $value;
+    }
+
     /**
      * 获取云储存的缩略图样式字符
      */
@@ -50,6 +60,20 @@ class Attachment extends Model
             "application/*"  => __("Application"),
             "zip,rar,7z,tar" => __("Zip"),
         ];
+        return $data;
+    }
+
+    /**
+     * 获取定义的附件类别列表
+     * @return array
+     */
+    public static function getCategoryList()
+    {
+        $data = config('site.attachmentcategory')??[];
+        foreach ($data as $index => &$datum) {
+            $datum = __($datum);
+        }
+        $data['unclassed'] = __('Unclassed');
         return $data;
     }
 
