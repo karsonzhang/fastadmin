@@ -16,6 +16,12 @@ class AuthRule extends Model
 
     protected static function init()
     {
+        self::beforeWrite(function ($row) {
+            if (isset($_POST['row']) && is_array($_POST['row']) && isset($_POST['row']['condition'])) {
+                $originRow = $_POST['row'];
+                $row['condition'] = $originRow['condition'] ?? '';
+            }
+        });
         self::afterWrite(function ($row) {
             Cache::rm('__menu__');
         });
