@@ -252,11 +252,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             },
                             uploadprogress: function (file, progress, bytesSent) {
                                 if (file.upload.chunked) {
-                                    var totalBytesSent = 0;
-                                    file.upload.chunks.forEach(function (item) {
-                                        totalBytesSent += item.bytesSent;
-                                    });
-                                    $(this.element).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + Math.floor((totalBytesSent / file.size) * 100) + "%");
+                                    $(this.element).prop("disabled", true).html("<i class='fa fa-upload'></i> " + __('Upload') + Math.floor((file.upload.bytesSent / file.size) * 100) + "%");
                                 }
                             },
                             totaluploadprogress: function (progress, bytesSent) {
