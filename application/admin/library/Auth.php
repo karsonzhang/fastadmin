@@ -407,7 +407,6 @@ class Auth extends \fast\Auth
         $userRule = $this->getRuleList();
         $selected = $referer = [];
         $refererUrl = Session::get('referer');
-        $pinyin = new \Overtrue\Pinyin\Pinyin('Overtrue\Pinyin\MemoryFileDictLoader');
         // 必须将结果集转换为数组
         $ruleList = collection(\app\admin\model\AuthRule::where('status', 'normal')
             ->where('ismenu', 1)
@@ -418,9 +417,8 @@ class Auth extends \fast\Auth
             ->where('ismenu', 0)
             ->where('name', 'like', '%/index')
             ->column('name,pid');
-        $pidArr = array_filter(array_unique(array_map(function ($item) {
-            return $item['pid'];
-        }, $ruleList)));
+        $pidArr = array_unique(array_column($ruleList, 'pid'));
+        unset($pidArr[0]);
         foreach ($ruleList as $k => &$v) {
             if (!in_array($v['name'], $userRule)) {
                 unset($ruleList[$k]);
@@ -434,8 +432,6 @@ class Auth extends \fast\Auth
             $v['icon'] = $v['icon'] . ' fa-fw';
             $v['url'] = isset($v['url']) && $v['url'] ? $v['url'] : '/' . $module . '/' . $v['name'];
             $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
-            $v['py'] = $pinyin->abbr($v['title'], '');
-            $v['pinyin'] = $pinyin->permalink($v['title'], '');
             $v['title'] = __($v['title']);
             $v['url'] = preg_match("/^((?:[a-z]+:)?\/\/|data:image\/)(.*)/i", $v['url']) ? $v['url'] : url($v['url']);
             $v['menuclass'] = in_array($v['menutype'], ['dialog', 'ajax']) ? 'btn-' . $v['menutype'] : '';
@@ -443,11 +439,11 @@ class Auth extends \fast\Auth
             $selected = $v['name'] == $fixedPage ? $v : $selected;
             $referer = $v['url'] == $refererUrl ? $v : $referer;
         }
-        $lastArr = array_diff($pidArr, array_filter(array_unique(array_map(function ($item) {
-            return $item['pid'];
-        }, $ruleList))));
+        $lastArr = array_unique(array_column($ruleList, 'pid'));
+        unset($lastArr[0]);
+        $pidDiffArr = array_diff($pidArr, $lastArr);
         foreach ($ruleList as $index => $item) {
-            if (in_array($item['id'], $lastArr)) {
+            if (in_array($item['id'], $pidDiffArr)) {
                 unset($ruleList[$index]);
             }
         }
