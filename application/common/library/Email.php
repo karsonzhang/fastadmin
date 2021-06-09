@@ -219,6 +219,7 @@ class Email
                 preg_match_all("/Expected: (\d+)\, Got: (\d+)( \| (.*))?\$/i", $e->getMessage(), $matches);
                 $code = isset($matches[2][3]) ? $matches[2][3] : 0;
                 $message = isset($matches[2][0]) ? $matches[4][0] : $e->getMessage();
+                $message = mb_convert_encoding($message, 'UTF-8', 'GBK,GB2312,BIG5');
                 $this->setError($message);
             } catch (\Exception $e) {
                 $this->setError($e->getMessage());
