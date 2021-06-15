@@ -23,11 +23,12 @@ class Crud extends Command
     ];
 
     /**
-     * 受保护的系统表,crud不会生效
+     * 受保护的系统表, crud不会生效
      */
-    protected $systemTable = [
-       'admin','admin_log','auth_group','auth_group_access','auth_rule', 
-       'attachment', 'config','category'
+    protected $systemTables = [
+       'admin', 'admin_log', 'auth_group', 'auth_group_access', 'auth_rule', 
+       'attachment', 'config', 'category', 'ems', 'sms',
+       'user', 'user_group', 'user_rule', 'user_score_log', 'user_token',
     ];
 
     /**
@@ -311,8 +312,8 @@ class Crud extends Command
         $prefix = Config::get($db . '.prefix');
 
         //系统表无法生成，防止后台错乱
-        if(in_array(str_replace($prefix,"",$table),$this->systemTable)){
-            throw new Exception('system table name can\'t crud');
+        if(in_array(str_replace($prefix,"",$table),$this->systemTables)){
+            throw new Exception('system table can\'t be crud');
         }
 
         //模块
