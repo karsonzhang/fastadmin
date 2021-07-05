@@ -604,6 +604,11 @@ class Crud extends Command
                         $attrArr['data-rule'] = 'required';
                     }
 
+                    //如果字段类型为无符号型，则设置<input min=0>
+                    if (stripos($v['COLUMN_TYPE'], 'unsigned') !== false) {
+                        $attrArr['min'] = 0;
+                    }
+
                     if ($inputType == 'select') {
                         $cssClassArr[] = 'selectpicker';
                         $attrArr['class'] = implode(' ', $cssClassArr);
@@ -957,7 +962,7 @@ class Crud extends Command
                 $this->writeToFile('recyclebin', $data, $recyclebinFile);
                 $recyclebinTitle = in_array('title', $fieldArr) ? 'title' : (in_array('name', $fieldArr) ? 'name' : '');
                 $recyclebinTitleJs = $recyclebinTitle ? "\n                        {field: '{$recyclebinTitle}', title: __('" . (ucfirst($recyclebinTitle)) . "'), align: 'left'}," : '';
-                $data['recyclebinJs'] = $this->getReplacedStub('mixins/recyclebinjs', ['recyclebinTitleJs' => $recyclebinTitleJs, 'controllerUrl' => $controllerUrl]);
+                $data['recyclebinJs'] = $this->getReplacedStub('mixins/recyclebinjs', ['deleteTimeField' => $this->deleteTimeField, 'recyclebinTitleJs' => $recyclebinTitleJs, 'controllerUrl' => $controllerUrl]);
             }
             // 生成JS文件
             $this->writeToFile('javascript', $data, $javascriptFile);
@@ -1453,9 +1458,9 @@ EOD;
 
         // 文件、图片、权重等字段默认不加入搜索栏，字符串类型默认LIKE
         $noSearchFiles = ['file$', 'files$', 'image$', 'images$', '^weigh$'];
-        if(preg_match("/" . implode('|', $noSearchFiles) . "/i", $field)){
+        if (preg_match("/" . implode('|', $noSearchFiles) . "/i", $field)) {
             $html .= ", operate: false";
-        }else if(in_array($datatype, ['varchar'])) {
+        } else if (in_array($datatype, ['varchar'])) {
             $html .= ", operate: 'LIKE'";
         }
 

@@ -19,7 +19,7 @@
                         {checkbox: true},
                         {field: 'id', title: __('Id')},{%recyclebinTitleJs%}
                         {
-                            field: 'deletetime',
+                            field: '{%deleteTimeField%}',
                             title: __('Deletetime'),
                             operate: 'RANGE',
                             addclass: 'datetimerange',
