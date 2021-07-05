@@ -473,7 +473,7 @@ class Auth extends \fast\Auth
             foreach ($topList as $index => $item) {
                 $childList = Tree::instance()->getTreeMenu(
                     $item['id'],
-                    '<li class="@class" pid="@pid"><a @extend href="@url@addtabs" addtabs="@id" class="@menuclass" url="@url" py="@py" pinyin="@pinyin" title="@title"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
+                    '<li class="@class" pid="@pid"><a @extend href="@url@addtabs" addtabs="@id" class="@menuclass" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
                     $select_id,
                     '',
                     'ul',
@@ -495,7 +495,7 @@ class Auth extends \fast\Auth
             Tree::instance()->init($ruleList);
             $menu = Tree::instance()->getTreeMenu(
                 0,
-                '<li class="@class"><a @extend href="@url@addtabs" @menutabs class="@menuclass" url="@url" py="@py" pinyin="@pinyin" title="@title"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
+                '<li class="@class"><a @extend href="@url@addtabs" @menutabs class="@menuclass" url="@url" py="@py" pinyin="@pinyin"><i class="@icon"></i> <span>@title</span> <span class="pull-right-container">@caret @badge</span></a> @childlist</li>',
                 $select_id,
                 '',
                 'ul',
