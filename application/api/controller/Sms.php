@@ -18,6 +18,7 @@ class Sms extends Api
     /**
      * 发送验证码
      *
+     * @ApiMethod (POST)
      * @param string $mobile 手机号
      * @param string $event 事件名称
      */
@@ -65,6 +66,7 @@ class Sms extends Api
     /**
      * 检测验证码
      *
+     * @ApiMethod (POST)
      * @param string $mobile 手机号
      * @param string $event 事件名称
      * @param string $captcha 验证码

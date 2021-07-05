@@ -22,6 +22,7 @@ class Validate extends Api
     /**
      * 检测邮箱
      *
+     * @ApiMethod (POST)
      * @param string $email 邮箱
      * @param string $id    排除会员ID
      */
@@ -39,6 +40,7 @@ class Validate extends Api
     /**
      * 检测用户名
      *
+     * @ApiMethod (POST)
      * @param string $username 用户名
      * @param string $id       排除会员ID
      */
@@ -56,6 +58,7 @@ class Validate extends Api
     /**
      * 检测昵称
      *
+     * @ApiMethod (POST)
      * @param string $nickname 昵称
      * @param string $id       排除会员ID
      */
@@ -73,6 +76,7 @@ class Validate extends Api
     /**
      * 检测手机
      *
+     * @ApiMethod (POST)
      * @param string $mobile 手机号
      * @param string $id     排除会员ID
      */
@@ -90,6 +94,7 @@ class Validate extends Api
     /**
      * 检测手机
      *
+     * @ApiMethod (POST)
      * @param string $mobile 手机号
      */
     public function check_mobile_exist()
@@ -105,6 +110,7 @@ class Validate extends Api
     /**
      * 检测邮箱
      *
+     * @ApiMethod (POST)
      * @param string $mobile 邮箱
      */
     public function check_email_exist()
@@ -120,6 +126,7 @@ class Validate extends Api
     /**
      * 检测手机验证码
      *
+     * @ApiMethod (POST)
      * @param string $mobile  手机号
      * @param string $captcha 验证码
      * @param string $event   事件
@@ -138,6 +145,7 @@ class Validate extends Api
     /**
      * 检测邮箱验证码
      *
+     * @ApiMethod (POST)
      * @param string $email   邮箱
      * @param string $captcha 验证码
      * @param string $event   事件

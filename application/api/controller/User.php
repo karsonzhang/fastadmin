@@ -32,13 +32,14 @@ class User extends Api
     /**
      * 会员登录
      *
+     * @ApiMethod (POST)
      * @param string $account  账号
      * @param string $password 密码
      */
     public function login()
     {
-        $account = $this->request->request('account');
-        $password = $this->request->request('password');
+        $account = $this->request->post('account');
+        $password = $this->request->post('password');
         if (!$account || !$password) {
             $this->error(__('Invalid parameters'));
         }
@@ -54,13 +55,14 @@ class User extends Api
     /**
      * 手机验证码登录
      *
+     * @ApiMethod (POST)
      * @param string $mobile  手机号
      * @param string $captcha 验证码
      */
     public function mobilelogin()
     {
-        $mobile = $this->request->request('mobile');
-        $captcha = $this->request->request('captcha');
+        $mobile = $this->request->post('mobile');
+        $captcha = $this->request->post('captcha');
         if (!$mobile || !$captcha) {
             $this->error(__('Invalid parameters'));
         }
@@ -92,6 +94,7 @@ class User extends Api
     /**
      * 注册会员
      *
+     * @ApiMethod (POST)
      * @param string $username 用户名
      * @param string $password 密码
      * @param string $email    邮箱
@@ -100,11 +103,11 @@ class User extends Api
      */
     public function register()
     {
-        $username = $this->request->request('username');
-        $password = $this->request->request('password');
-        $email = $this->request->request('email');
-        $mobile = $this->request->request('mobile');
-        $code = $this->request->request('code');
+        $username = $this->request->post('username');
+        $password = $this->request->post('password');
+        $email = $this->request->post('email');
+        $mobile = $this->request->post('mobile');
+        $code = $this->request->post('code');
         if (!$username || !$password) {
             $this->error(__('Invalid parameters'));
         }
@@ -139,6 +142,7 @@ class User extends Api
     /**
      * 修改会员个人信息
      *
+     * @ApiMethod (POST)
      * @param string $avatar   头像地址
      * @param string $username 用户名
      * @param string $nickname 昵称
@@ -147,10 +151,10 @@ class User extends Api
     public function profile()
     {
         $user = $this->auth->getUser();
-        $username = $this->request->request('username');
-        $nickname = $this->request->request('nickname');
-        $bio = $this->request->request('bio');
-        $avatar = $this->request->request('avatar', '', 'trim,strip_tags,htmlspecialchars');
+        $username = $this->request->post('username');
+        $nickname = $this->request->post('nickname');
+        $bio = $this->request->post('bio');
+        $avatar = $this->request->post('avatar', '', 'trim,strip_tags,htmlspecialchars');
         if ($username) {
             $exists = \app\common\model\User::where('username', $username)->where('id', '<>', $this->auth->id)->find();
             if ($exists) {
@@ -174,6 +178,7 @@ class User extends Api
     /**
      * 修改邮箱
      *
+     * @ApiMethod (POST)
      * @param string $email   邮箱
      * @param string $captcha 验证码
      */
@@ -181,7 +186,7 @@ class User extends Api
     {
         $user = $this->auth->getUser();
         $email = $this->request->post('email');
-        $captcha = $this->request->request('captcha');
+        $captcha = $this->request->post('captcha');
         if (!$email || !$captcha) {
             $this->error(__('Invalid parameters'));
         }
@@ -208,14 +213,15 @@ class User extends Api
     /**
      * 修改手机号
      *
+     * @ApiMethod (POST)
      * @param string $mobile   手机号
      * @param string $captcha 验证码
      */
     public function changemobile()
     {
         $user = $this->auth->getUser();
-        $mobile = $this->request->request('mobile');
-        $captcha = $this->request->request('captcha');
+        $mobile = $this->request->post('mobile');
+        $captcha = $this->request->post('captcha');
         if (!$mobile || !$captcha) {
             $this->error(__('Invalid parameters'));
         }
@@ -242,14 +248,15 @@ class User extends Api
     /**
      * 第三方登录
      *
+     * @ApiMethod (POST)
      * @param string $platform 平台名称
      * @param string $code     Code码
      */
     public function third()
     {
         $url = url('user/index');
-        $platform = $this->request->request("platform");
-        $code = $this->request->request("code");
+        $platform = $this->request->post("platform");
+        $code = $this->request->post("code");
         $config = get_addon_config('third');
         if (!$config || !isset($config[$platform])) {
             $this->error(__('Invalid parameters'));
@@ -273,17 +280,18 @@ class User extends Api
     /**
      * 重置密码
      *
+     * @ApiMethod (POST)
      * @param string $mobile      手机号
      * @param string $newpassword 新密码
      * @param string $captcha     验证码
      */
     public function resetpwd()
     {
-        $type = $this->request->request("type");
-        $mobile = $this->request->request("mobile");
-        $email = $this->request->request("email");
-        $newpassword = $this->request->request("newpassword");
-        $captcha = $this->request->request("captcha");
+        $type = $this->request->post("type");
+        $mobile = $this->request->post("mobile");
+        $email = $this->request->post("email");
+        $newpassword = $this->request->post("newpassword");
+        $captcha = $this->request->post("captcha");
         if (!$newpassword || !$captcha) {
             $this->error(__('Invalid parameters'));
         }
