@@ -3,7 +3,7 @@
 namespace {%modelNamespace%};
 
 use think\Model;
-{%sofeDeleteClassPath%}
+{%softDeleteClassPath%}
 
 class {%modelName%} extends Model
 {
