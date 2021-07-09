@@ -929,7 +929,7 @@ EOD;
      * @param array  $previewAttr
      * @return string
      */
-    public function image($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
+    public function image($name = null, $value = null, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
         $default = [
             'data-mimetype' => 'image/gif,image/jpeg,image/png,image/jpg,image/bmp'
@@ -950,7 +950,7 @@ EOD;
      * @param array  $previewAttr
      * @return string
      */
-    public function images($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
+    public function images($name = null, $value = null, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
         $default = [
             'data-multiple' => 'true',
@@ -972,7 +972,7 @@ EOD;
      * @param array  $previewAttr
      * @return string
      */
-    public function upload($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
+    public function upload($name = null, $value = null, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
         return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
@@ -988,7 +988,7 @@ EOD;
      * @param array  $previewAttr
      * @return string
      */
-    public function uploads($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
+    public function uploads($name = null, $value = null, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
         $default = [
             'data-multiple' => 'true',
@@ -998,7 +998,7 @@ EOD;
         return $this->uploader($name, $value, $inputAttr, $uploadAttr, $chooseAttr, $previewAttr);
     }
 
-    protected function uploader($name = null, $value, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
+    protected function uploader($name = null, $value = null, $inputAttr = [], $uploadAttr = [], $chooseAttr = [], $previewAttr = [])
     {
         $domname = str_replace(['[', ']', '.'], '', $name);
         $options = [
