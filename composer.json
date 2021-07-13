@@ -29,6 +29,7 @@
         "ext-json": "*",
         "ext-curl": "*",
         "ext-pdo": "*",
+        "ext-bcmath": "*",
         "txthinking/mailer": "^2.0"
     },
     "config": {
