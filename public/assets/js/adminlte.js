@@ -312,6 +312,7 @@ function _init() {
                             size: "8px"
                         });
                     }
+                    $(".sidebar").trigger("mouseover");
                 }
             }
         }
@@ -441,7 +442,8 @@ function _init() {
                         //parent.find('li.active').removeClass('active');
                         //parent_li.addClass('active');
                         //Fix the layout in case the sidebar stretches over the height of the window
-                        _this.layout.fix();
+                        // _this.layout.fix();
+                        _this.layout.fixSidebar();
                     });
                     parent_li.addClass('treeview-open');
                 } else {

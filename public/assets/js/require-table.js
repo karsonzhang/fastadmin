@@ -815,6 +815,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             },
             buttonlink: function (column, buttons, value, row, index, type) {
                 var table = column.table;
+                column.clickToSelect = false;
                 type = typeof type === 'undefined' ? 'buttons' : type;
                 var options = table ? table.bootstrapTable('getOptions') : {};
                 var html = [];

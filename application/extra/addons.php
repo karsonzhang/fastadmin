@@ -5,4 +5,5 @@ return [
     'hooks' => [],
     'route' => [],
     'priority' => [],
+    'domain' => '',
 ];

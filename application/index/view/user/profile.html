@@ -44,7 +44,7 @@
                             <label class="control-label col-xs-12 col-sm-2"></label>
                             <div class="col-xs-12 col-sm-4">
                                 <div class="profile-avatar-container">
-                                    <img class="profile-user-img img-responsive img-circle" src="{$user.avatar|cdnurl}" alt="">
+                                    <img class="profile-user-img img-responsive img-circle" src="{$user.avatar|htmlentities|cdnurl}" alt="">
                                     <div class="profile-avatar-text img-circle">{:__('Click to edit')}</div>
                                     <button type="button" id="faupload-avatar" class="faupload" data-mimetype="png,jpg,jpeg,gif" data-input-id="c-avatar"><i class="fa fa-upload"></i> {:__('Upload')}</button>
                                 </div>

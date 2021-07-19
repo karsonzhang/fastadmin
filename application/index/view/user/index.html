@@ -27,18 +27,18 @@
                     <div class="row user-baseinfo">
                         <div class="col-md-3 col-sm-3 col-xs-2 text-center user-center">
                             <a href="{:url('user/profile')}" title="{:__('Click to edit')}">
-                                <span class="avatar-img"><img src="{$user.avatar|cdnurl}" alt=""></span>
+                                <span class="avatar-img"><img src="{$user.avatar|htmlentities|cdnurl}" alt=""></span>
                             </a>
                         </div>
                         <div class="col-md-9 col-sm-9 col-xs-10">
                             <!-- Content -->
                             <div class="ui-content">
                                 <!-- Heading -->
-                                <h4><a href="{:url('user/profile')}">{$user.nickname}</a></h4>
+                                <h4><a href="{:url('user/profile')}">{$user.nickname|htmlentities}</a></h4>
                                 <!-- Paragraph -->
                                 <p>
                                     <a href="{:url('user/profile')}">
-                                        {$user.bio|default=__("This guy hasn't written anything yet")}
+                                        {$user.bio|default=__("This guy hasn't written anything yet")|htmlentities}
                                     </a>
                                 </p>
                                 <!-- Success -->

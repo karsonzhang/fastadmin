@@ -567,16 +567,18 @@ form.form-horizontal .control-label {
   border-top-right-radius: 0;
 }
 .main-sidebar .sidebar-form .menuresult a {
-  border-top: 1px solid #eee;
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
-  margin-bottom: -1px;
   display: block;
+  background-color: #fff;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid #eee;
   padding: 10px 15px;
   color: #222d32;
 }
 .main-sidebar .sidebar-form .menuresult a:hover {
   background: #eee;
+}
+.main-sidebar .sidebar-form .menuresult a:first-child {
+  border-top: 1px solid #eee;
 }
 .input-group .sp_result_area {
   width: 100%;

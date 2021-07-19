@@ -417,8 +417,7 @@ class Auth extends \fast\Auth
             ->where('ismenu', 0)
             ->where('name', 'like', '%/index')
             ->column('name,pid');
-        $pidArr = array_unique(array_column($ruleList, 'pid'));
-        unset($pidArr[0]);
+        $pidArr = array_unique(array_filter(array_column($ruleList, 'pid')));
         foreach ($ruleList as $k => &$v) {
             if (!in_array($v['name'], $userRule)) {
                 unset($ruleList[$k]);
@@ -439,8 +438,7 @@ class Auth extends \fast\Auth
             $selected = $v['name'] == $fixedPage ? $v : $selected;
             $referer = $v['url'] == $refererUrl ? $v : $referer;
         }
-        $lastArr = array_unique(array_column($ruleList, 'pid'));
-        unset($lastArr[0]);
+        $lastArr = array_unique(array_filter(array_column($ruleList, 'pid')));
         $pidDiffArr = array_diff($pidArr, $lastArr);
         foreach ($ruleList as $index => $item) {
             if (in_array($item['id'], $pidDiffArr)) {

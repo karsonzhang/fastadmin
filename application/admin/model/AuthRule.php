@@ -44,14 +44,16 @@ class AuthRule extends Model
         return ['addtabs' => __('Addtabs'), 'dialog' => __('Dialog'), 'ajax' => __('Ajax'), 'blank' => __('Blank')];
     }
 
-    public function setPyAttr($value, $data) {
+    public function setPyAttr($value, $data)
+    {
         if (isset($data['title']) && $data['title']) {
             return self::$pinyin->abbr($data['title']);
         }
         return '';
     }
 
-    public function setPinyinAttr($value, $data) {
+    public function setPinyinAttr($value, $data)
+    {
         if (isset($data['title']) && $data['title']) {
             return self::$pinyin->permalink($data['title'], '');
         }

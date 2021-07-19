@@ -709,17 +709,19 @@ form.form-horizontal .control-label {
         border-top-right-radius: 0;
 
         a {
-            border-top: 1px solid #eee;
             display: block;
             background-color: #fff;
+            border-top: 1px solid transparent;
             border-bottom: 1px solid #eee;
-            margin-bottom: -1px;
-            display: block;
             padding: 10px 15px;
             color: #222d32;
 
             &:hover {
                 background: #eee;
+            }
+
+            &:first-child {
+                border-top: 1px solid #eee;
             }
         }
     }

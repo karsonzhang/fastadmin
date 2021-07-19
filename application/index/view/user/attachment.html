@@ -45,7 +45,7 @@
                 <div class="widget-body no-padding">
                     <div id="toolbar" class="toolbar">
                         <a href="javascript:;" class="btn btn-primary btn-refresh" title="刷新"><i class="fa fa-refresh"></i> </a>
-                        <span><button type="button" id="faupload-image" class="btn btn-success faupload" data-mimetype="{$Think.get.mimetype|default=''}" data-multiple="true"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                        <span><button type="button" id="faupload-image" class="btn btn-success faupload" data-mimetype="{$Think.get.mimetype|default=''|htmlentities}" data-multiple="true"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
                         {if request()->get('multiple') == 'true'}
                         <a class="btn btn-danger btn-choose-multi"><i class="fa fa-check"></i> {:__('Choose')}</a>
                         {/if}

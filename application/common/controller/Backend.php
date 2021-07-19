@@ -134,33 +134,6 @@ class Backend extends Controller
         // 检测IP是否允许
         check_ip_allowed();
 
-        $this->auth = Auth::instance();
-
-        // 设置当前请求的URI
-        $this->auth->setRequestUri($path);
-        // 检测是否需要验证登录
-        if (!$this->auth->match($this->noNeedLogin)) {
-            //检测是否登录
-            if (!$this->auth->isLogin()) {
-                Hook::listen('admin_nologin', $this);
-                $url = Session::get('referer');
-                $url = $url ? $url : $this->request->url();
-                if ($url == '/') {
-                    $this->redirect('index/login', [], 302, ['referer' => $url]);
-                    exit;
-                }
-                $this->error(__('Please login first'), url('index/login', ['url' => $url]));
-            }
-            // 判断是否需要验证权限
-            if (!$this->auth->match($this->noNeedRight)) {
-                // 判断控制器和方法是否有对应权限
-                if (!$this->auth->check($path)) {
-                    Hook::listen('admin_nopermission', $this);
-                    $this->error(__('You have no permission'), '');
-                }
-            }
-        }
-
         // 非选项卡时重定向
         if (!$this->request->isPost() && !IS_AJAX && !IS_ADDTABS && !IS_DIALOG && input("ref") == 'addtabs') {
             $url = preg_replace_callback("/([\?|&]+)ref=addtabs(&?)/i", function ($matches) {
@@ -174,6 +147,33 @@ class Backend extends Controller
             }
             $this->redirect('index/index', [], 302, ['referer' => $url]);
             exit;
+        }
+
+        $this->auth = Auth::instance();
+
+        // 设置当前请求的URI
+        $this->auth->setRequestUri($path);
+        // 检测是否需要验证登录
+        if (!$this->auth->match($this->noNeedLogin)) {
+            //检测是否登录
+            if (!$this->auth->isLogin()) {
+                Hook::listen('admin_nologin', $this);
+                $url = Session::get('referer');
+                $url = $url ? $url : $this->request->url();
+                if (in_array($this->request->pathinfo(), ['/', 'index/index'])) {
+                    $this->redirect('index/login', [], 302, ['referer' => $url]);
+                    exit;
+                }
+                $this->error(__('Please login first'), url('index/login', ['url' => $url]));
+            }
+            // 判断是否需要验证权限
+            if (!$this->auth->match($this->noNeedRight)) {
+                // 判断控制器和方法是否有对应权限
+                if (!$this->auth->check($path)) {
+                    Hook::listen('admin_nopermission', $this);
+                    $this->error(__('You have no permission'), '');
+                }
+            }
         }
 
         // 设置面包屑导航数据
