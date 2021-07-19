@@ -47,12 +47,11 @@ class User extends Model
 
         self::beforeUpdate(function ($row) {
             $changedata = $row->getChangedData();
-            if (isset($changedata['money'])) {
-                $origin = $row->getOriginData();
+            $origin = $row->getOriginData();
+            if (isset($changedata['money']) && (function_exists('bccomp') ? bccomp($changedata['money'], $origin['money'], 2) !== 0 : (double) $changedata['money'] !== (double) $origin['money'])) {
                 MoneyLog::create(['user_id' => $row['id'], 'money' => $changedata['money'] - $origin['money'], 'before' => $origin['money'], 'after' => $changedata['money'], 'memo' => '管理员变更金额']);
             }
-            if (isset($changedata['score'])) {
-                $origin = $row->getOriginData();
+            if (isset($changedata['score']) && (int) $changedata['score'] !== (int) $origin['score']) {
                 ScoreLog::create(['user_id' => $row['id'], 'score' => $changedata['score'] - $origin['score'], 'before' => $origin['score'], 'after' => $changedata['score'], 'memo' => '管理员变更积分']);
             }
         });
