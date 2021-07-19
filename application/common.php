@@ -431,8 +431,8 @@ if (!function_exists('check_cors_request')) {
             if (in_array("*", $domainArr) || in_array($_SERVER['HTTP_ORIGIN'], $domainArr) || (isset($info['host']) && in_array($info['host'], $domainArr))) {
                 header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
             } else {
-                header('HTTP/1.1 403 Forbidden');
-                exit;
+                $response = Response::create('cors 检测无效', 'html', 403);
+                throw new HttpResponseException($response);
             }
 
             header('Access-Control-Allow-Credentials: true');
@@ -445,7 +445,8 @@ if (!function_exists('check_cors_request')) {
                 if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
                     header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
                 }
-                exit;
+                $response = Response::create('', 'json');
+                throw new HttpResponseException($response);
             }
         }
     }
@@ -473,8 +474,8 @@ if (!function_exists('check_ip_allowed')) {
         $forbiddenipArr = !$forbiddenipArr ? [] : $forbiddenipArr;
         $forbiddenipArr = is_array($forbiddenipArr) ? $forbiddenipArr : array_filter(explode("\n", str_replace("\r\n", "\n", $forbiddenipArr)));
         if ($forbiddenipArr && \Symfony\Component\HttpFoundation\IpUtils::checkIp($ip, $forbiddenipArr)) {
-            header('HTTP/1.1 403 Forbidden');
-            exit;
+            $response = Response::create('ip 无权访问', 'html', 403);
+            throw new HttpResponseException($response);
         }
     }
 }
