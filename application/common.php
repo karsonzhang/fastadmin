@@ -3,6 +3,8 @@
 // 公共助手函数
 
 use Symfony\Component\VarExporter\VarExporter;
+use think\exception\HttpResponseException;
+use think\Response;
 
 if (!function_exists('__')) {
 
@@ -431,7 +433,7 @@ if (!function_exists('check_cors_request')) {
             if (in_array("*", $domainArr) || in_array($_SERVER['HTTP_ORIGIN'], $domainArr) || (isset($info['host']) && in_array($info['host'], $domainArr))) {
                 header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
             } else {
-                $response = Response::create('cors 检测无效', 'html', 403);
+                $response = Response::create('跨域检测无效', 'html', 403);
                 throw new HttpResponseException($response);
             }
 
@@ -445,7 +447,7 @@ if (!function_exists('check_cors_request')) {
                 if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
                     header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
                 }
-                $response = Response::create('', 'json');
+                $response = Response::create('', 'html');
                 throw new HttpResponseException($response);
             }
         }
@@ -474,7 +476,7 @@ if (!function_exists('check_ip_allowed')) {
         $forbiddenipArr = !$forbiddenipArr ? [] : $forbiddenipArr;
         $forbiddenipArr = is_array($forbiddenipArr) ? $forbiddenipArr : array_filter(explode("\n", str_replace("\r\n", "\n", $forbiddenipArr)));
         if ($forbiddenipArr && \Symfony\Component\HttpFoundation\IpUtils::checkIp($ip, $forbiddenipArr)) {
-            $response = Response::create('ip 无权访问', 'html', 403);
+            $response = Response::create('请求无权访问', 'html', 403);
             throw new HttpResponseException($response);
         }
     }
