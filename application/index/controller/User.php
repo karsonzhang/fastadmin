@@ -198,9 +198,16 @@ class User extends Frontend
      */
     public function logout()
     {
-        //退出本站
-        $this->auth->logout();
-        $this->success(__('Logout successful'), url('user/index'));
+        if ($this->request->isPost()) {
+            $this->token();
+            //退出本站
+            $this->auth->logout();
+            $this->success(__('Logout successful'), url('user/index'));
+        }
+        $html = "<form id='logout_submit' name='logout_submit' action='' method='post'>" . token() . "<input type='submit' value='ok' style='display:none;'></form>";
+        $html .= "<script>document.forms['logout_submit'].submit();</script>";
+
+        return $html;
     }
 
     /**

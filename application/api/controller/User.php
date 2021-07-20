@@ -105,7 +105,7 @@ class User extends Api
      * @param string $password 密码
      * @param string $email    邮箱
      * @param string $mobile   手机号
-     * @param string $code   验证码
+     * @param string $code     验证码
      */
     public function register()
     {
@@ -138,9 +138,13 @@ class User extends Api
 
     /**
      * 退出登录
+     * @ApiMethod (POST)
      */
     public function logout()
     {
+        if (!$this->request->isPost()) {
+            $this->error(__('Invalid parameters'));
+        }
         $this->auth->logout();
         $this->success(__('Logout successful'));
     }
@@ -220,7 +224,7 @@ class User extends Api
      * 修改手机号
      *
      * @ApiMethod (POST)
-     * @param string $mobile   手机号
+     * @param string $mobile  手机号
      * @param string $captcha 验证码
      */
     public function changemobile()
