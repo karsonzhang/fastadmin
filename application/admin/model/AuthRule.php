@@ -47,7 +47,7 @@ class AuthRule extends Model
     public function setPyAttr($value, $data)
     {
         if (isset($data['title']) && $data['title']) {
-            return self::$pinyin->abbr($data['title']);
+            return self::$pinyin->abbr(__($data['title']));
         }
         return '';
     }
@@ -55,7 +55,7 @@ class AuthRule extends Model
     public function setPinyinAttr($value, $data)
     {
         if (isset($data['title']) && $data['title']) {
-            return self::$pinyin->permalink($data['title'], '');
+            return self::$pinyin->permalink(__($data['title']), '');
         }
         return '';
     }
