@@ -755,6 +755,9 @@ form.form-horizontal .control-label {
 .dropdown-menu.text-left li {
   text-align: left !important;
 }
+.bootstrap-table .fixed-table-loading {
+  padding: 10px 0;
+}
 .bootstrap-table .fixed-table-toolbar .dropdown-menu {
   overflow: auto;
 }
@@ -875,14 +878,16 @@ table.table-nowrap thead > tr > th {
   background: #2c3e50 !important;
   color: #fff !important;
   border-bottom: none;
+  height: 45px;
+  line-height: 45px;
 }
 .layui-layer-fast .layui-layer-title ~ .layui-layer-setwin {
   top: 0px;
-  height: 42px;
+  height: 45px;
 }
 .layui-layer-fast .layui-layer-title ~ .layui-layer-setwin > a {
-  height: 42px;
-  line-height: 42px;
+  height: 45px;
+  line-height: 45px;
   display: inline-block;
 }
 .layui-layer-fast.layui-layer-border {
@@ -920,6 +925,18 @@ table.table-nowrap thead > tr > th {
   background-color: #ecf0f1;
   height: auto;
   text-align: inherit !important;
+}
+.layui-layer-fast .layui-layer-confirm {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  left: 0;
+  bottom: 0;
+  border: none;
+  background: transparent;
+}
+.layui-layer-fast .layui-layer-tab .layui-layer-title span.layui-this {
+  height: 46px;
 }
 .layui-layer-fast .layui-layer-setwin > a {
   background: none !important;

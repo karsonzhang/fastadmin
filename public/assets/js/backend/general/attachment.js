@@ -41,7 +41,7 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         {field: 'imageheight', title: __('Imageheight'), sortable: true},
                         {field: 'imagetype', title: __('Imagetype'), sortable: true, formatter: Table.api.formatter.search, operate: 'like'},
                         {field: 'storage', title: __('Storage'), formatter: Table.api.formatter.search, operate: 'like'},
-                        {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},
+                        {field: 'mimetype', title: __('Mimetype'), formatter: Controller.api.formatter.mimetype},
                         {
                             field: 'createtime',
                             title: __('Createtime'),
@@ -142,7 +142,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                             field: 'mimetype', title: __('Mimetype'), sortable: true, operate: 'LIKE %...%',
                             process: function (value, arg) {
                                 return value.replace(/\*/g, '%');
-                            }
+                            },
+                            formatter: Controller.api.formatter.mimetype
                         },
                         {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, datetimeFormat: 'YYYY-MM-DD', operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                         {
@@ -187,17 +188,22 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             },
             formatter: {
                 thumb: function (value, row, index) {
+                    var html = '';
                     if (row.mimetype.indexOf("image") > -1) {
-                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + row.thumb_style + '" alt="" style="max-height:60px;max-width:120px"></a>';
+                        html = '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + row.thumb_style + '" alt="" style="max-height:60px;max-width:120px"></a>';
                     } else {
-                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                        html = '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
                     }
+                    return '<div style="width:120px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + html + '</div>';
                 },
                 url: function (value, row, index) {
                     return '<a href="' + row.fullurl + '" target="_blank" class="label bg-green">' + row.url + '</a>';
                 },
                 filename: function (value, row, index) {
-                    return '<div style="width:180px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
+                    return '<div style="width:150px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
+                },
+                mimetype: function (value, row, index) {
+                    return '<div style="width:80px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
                 },
             }
         }

@@ -933,6 +933,10 @@ form.form-horizontal .control-label {
     }
 }
 
+.bootstrap-table .fixed-table-loading {
+    padding: 10px 0;
+}
+
 .bootstrap-table .fixed-table-toolbar .dropdown-menu {
     overflow: auto;
 }
@@ -1067,14 +1071,16 @@ table.table-nowrap {
         background: #2c3e50 !important;
         color: #fff !important;
         border-bottom: none;
+        height: 45px;
+        line-height: 45px;
         //只有当包含layui-layer-title标题时才显示按钮
         ~ .layui-layer-setwin {
             top: 0px;
-            height: 42px;
+            height: 45px;
 
             > a {
-                height: 42px;
-                line-height: 42px;
+                height: 45px;
+                line-height: 45px;
                 display: inline-block;
             }
         }
@@ -1122,6 +1128,20 @@ table.table-nowrap {
         background-color: #ecf0f1;
         height: auto;
         text-align: inherit !important;
+    }
+
+    .layui-layer-confirm {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        left: 0;
+        bottom: 0;
+        border: none;
+        background: transparent;
+    }
+
+    .layui-layer-tab .layui-layer-title span.layui-this {
+        height:46px;
     }
 
     .layui-layer-setwin {

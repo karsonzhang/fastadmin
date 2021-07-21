@@ -16,6 +16,8 @@ use think\Validate;
 class Profile extends Backend
 {
 
+    protected $searchFields = 'id,title';
+
     /**
      * 查看
      */

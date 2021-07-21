@@ -39,7 +39,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         },
                         {
                             field: 'id',
-                            title: '<a href="javascript:;" class="btn btn-success btn-xs btn-toggle"><i class="fa fa-chevron-up"></i></a>',
+                            title: '<a href="javascript:;" class="btn btn-success btn-xs btn-toggle" style="border-top:none;"><i class="fa fa-chevron-up"></i></a>',
                             operate: false,
                             formatter: Controller.api.formatter.subnode
                         },
