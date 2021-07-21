@@ -443,7 +443,6 @@ function _init() {
                         //parent_li.addClass('active');
                         //Fix the layout in case the sidebar stretches over the height of the window
                         // _this.layout.fix();
-                        _this.layout.fixSidebar();
                     });
                     parent_li.addClass('treeview-open');
                 } else {

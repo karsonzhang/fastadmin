@@ -228,8 +228,8 @@ class Extractor
         }
 
         $properties = $class->getDefaultProperties();
-        $noNeedLogin = isset($properties['noNeedLogin']) ? is_array($properties['noNeedLogin']) ? $properties['noNeedLogin'] : [$properties['noNeedLogin']] : [];
-        $noNeedRight = isset($properties['noNeedRight']) ? is_array($properties['noNeedRight']) ? $properties['noNeedRight'] : [$properties['noNeedRight']] : [];
+        $noNeedLogin = isset($properties['noNeedLogin']) ? (is_array($properties['noNeedLogin']) ? $properties['noNeedLogin'] : [$properties['noNeedLogin']]) : [];
+        $noNeedRight = isset($properties['noNeedRight']) ? (is_array($properties['noNeedRight']) ? $properties['noNeedRight'] : [$properties['noNeedRight']]) : [];
 
         preg_match_all("/\*[\s]+(.*)(\\r\\n|\\r|\\n)/U", str_replace('/**', '', $docblockMethod), $methodArr);
         preg_match_all("/\*[\s]+(.*)(\\r\\n|\\r|\\n)/U", str_replace('/**', '', $dockblockClass), $classArr);

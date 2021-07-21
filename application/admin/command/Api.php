@@ -22,7 +22,7 @@ class Api extends Command
             ->addOption('output', 'o', Option::VALUE_OPTIONAL, 'output index file name', 'api.html')
             ->addOption('template', 'e', Option::VALUE_OPTIONAL, '', 'index.html')
             ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override general file', false)
-            ->addOption('title', 't', Option::VALUE_OPTIONAL, 'document title', $site['name'])
+            ->addOption('title', 't', Option::VALUE_OPTIONAL, 'document title', $site['name'] ?? '')
             ->addOption('class', 'c', Option::VALUE_OPTIONAL | Option::VALUE_IS_ARRAY, 'extend class', null)
             ->addOption('language', 'l', Option::VALUE_OPTIONAL, 'language', 'zh-cn')
             ->addOption('addon', 'a', Option::VALUE_OPTIONAL, 'addon name', null)
@@ -83,16 +83,7 @@ class Api extends Command
         }
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            if (extension_loaded('Zend OPcache')) {
-                $configuration = opcache_get_configuration();
-                $directives = $configuration['directives'];
-                $configName = request()->isCli() ? 'opcache.enable_cli' : 'opcache.enable';
-                if (!$directives[$configName]) {
-                    throw new Exception("Please make sure {$configName} is turned on, Get help:https://forum.fastadmin.net/d/1321");
-                }
-            } else {
-                throw new Exception("Please make sure opcache already enabled, Get help:https://forum.fastadmin.net/d/1321");
-            }
+            throw new Exception("Requires PHP version 7.0 or newer");
         }
 
         //控制器名
@@ -127,12 +118,10 @@ class Api extends Command
             'apiurl'      => $url,
             'language'    => $language,
         ];
-        try {
-            $builder = new Builder($classes);
-            $content = $builder->render($template_file, ['config' => $config, 'lang' => $lang]);
-        } catch (\Exception $e) {
-            print_r($e);
-        }
+
+        $builder = new Builder($classes);
+        $content = $builder->render($template_file, ['config' => $config, 'lang' => $lang]);
+
         if (!file_put_contents($output_file, $content)) {
             throw new Exception('Cannot save the content to ' . $output_file);
         }
