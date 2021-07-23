@@ -62,6 +62,22 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 ],
             });
 
+            // 绑定过滤事件
+            $('.filter-type ul li a', table.closest(".panel-intro")).on('click', function (e) {
+                $(this).closest("ul").find("li").removeClass("active");
+                $(this).closest("li").addClass("active");
+                var field = 'mimetype';
+                var value = $(this).data("value") || '';
+                var object = $("[name='" + field + "']", table.closest(".bootstrap-table").find(".commonsearch-table"));
+                if (object.prop('tagName') == "SELECT") {
+                    $("option[value='" + value + "']", object).prop("selected", true);
+                } else {
+                    object.val(value);
+                }
+                table.trigger("uncheckbox");
+                table.bootstrapTable('refresh', {pageNumber: 1});
+            });
+
             // 为表格绑定事件
             Table.api.bindevent(table);
 
@@ -157,6 +173,22 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                         }
                     ]
                 ]
+            });
+
+            // 绑定过滤事件
+            $('.filter-type ul li a', table.closest(".panel-intro")).on('click', function (e) {
+                $(this).closest("ul").find("li").removeClass("active");
+                $(this).closest("li").addClass("active");
+                var field = 'mimetype';
+                var value = $(this).data("value") || '';
+                var object = $("[name='" + field + "']", table.closest(".bootstrap-table").find(".commonsearch-table"));
+                if (object.prop('tagName') == "SELECT") {
+                    $("option[value='" + value + "']", object).prop("selected", true);
+                } else {
+                    object.val(value);
+                }
+                table.trigger("uncheckbox");
+                table.bootstrapTable('refresh', {pageNumber: 1});
             });
 
             // 选中多个

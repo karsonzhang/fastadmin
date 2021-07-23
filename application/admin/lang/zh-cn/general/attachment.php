@@ -29,6 +29,7 @@ return [
     'Unclassed'                => '未归类',
     'Category'                 => '类别',
     'Classify'                 => '归类',
+    'Filter Type'              => '类型筛选',
     'Upload to third'          => '上传到第三方',
     'Upload to local'          => '上传到本地',
     'Upload to third by chunk' => '上传到第三方(分片模式)',

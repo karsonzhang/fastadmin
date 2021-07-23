@@ -7,6 +7,15 @@
             {foreach name="categoryList" item="vo"}
             <li><a href="#t-{$key}" data-value="{$key}" data-toggle="tab">{$vo}</a></li>
             {/foreach}
+            <li class="pull-right dropdown filter-type">
+                <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-filter"></i> {:__('Filter Type')}</a>
+                <ul class="dropdown-menu text-left" role="menu">
+                    <li class="active"><a href="javascript:" data-value="">{:__('All')}</a></li>
+                    {foreach name="mimetypeList" id="item"}
+                    <li><a href="javascript:" data-value="{$key}">{$item}</a></li>
+                    {/foreach}
+                </ul>
+            </li>
         </ul>
     </div>
 
