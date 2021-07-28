@@ -42,7 +42,7 @@ class Attachment extends Backend
             $filter = $this->request->request('filter');
             $filterArr = (array)json_decode($filter, true);
             if (isset($filterArr['category']) && $filterArr['category'] == 'unclassed') {
-                $filterArr['category'] = '';
+                $filterArr['category'] = ',unclassed';
                 $this->request->get(['filter' => json_encode(array_diff_key($filterArr, ['category' => '']))]);
             }
             if (isset($filterArr['mimetype']) && preg_match("/[]\,|\*]/", $filterArr['mimetype'])) {
@@ -153,6 +153,7 @@ class Attachment extends Backend
         if ($category && !isset($categoryList[$category])) {
             $this->error(__('Category not found'));
         }
+        $category = $category == 'unclassed' ? '' : $category;
         \app\common\model\Attachment::where('id', 'in', $ids)->update(['category' => $category]);
         $this->success();
     }
