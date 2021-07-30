@@ -413,35 +413,6 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                     return false;
                 });
             },
-            tagsinput: function (form) {
-                //标签输入
-                $("input[data-toggle='tagsinput']").each(function () {
-                    var setting = {
-                        width: 'auto',
-                        defaultText: '输入后空格确认',
-                        minInputWidth: 110,
-                        height: '36px',
-                        placeholderColor: '#999',
-                        onChange: function (row) {
-                            $("input", $(this).next()).parent().focus();
-                            $("input", $(this).next()).trigger("blur.autocomplete").focus();
-                        },
-                    };
-                    var autocomplete = $(this).data("tagsinput-autocomplete");
-                    if (autocomplete) {
-                        if (typeof autocomplete == 'string') {
-                            autocomplete = {url: autocomplete};
-                        }
-                        setting['autocomplete'] = $.extend({
-                            url: '',
-                            minChars: 1,
-                            menuClass: 'autocomplete-tags'
-                        }, autocomplete);
-                    }
-                    setting = $.extend(true, setting, $(this).data("tagsinput") || {});
-                    $(this).tagsInput(setting);
-                });
-            },
             bindevent: function (form) {
 
             },
@@ -560,8 +531,6 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                 events.slider(form);
 
                 events.switcher(form);
-
-                events.tagsinput(form);
             },
             custom: {}
         },
