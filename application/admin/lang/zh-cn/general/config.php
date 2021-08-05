@@ -15,6 +15,7 @@ return [
     'Example'                     => '示例分组',
     'Extend'                      => '扩展属性',
     'String'                      => '字符',
+    'Password'                    => '密码',
     'Text'                        => '文本',
     'Editor'                      => '编辑器',
     'Number'                      => '数字',
