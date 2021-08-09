@@ -33,6 +33,7 @@ class Config extends Model
     {
         $typeList = [
             'string'        => __('String'),
+            'password'      => __('Password'),
             'text'          => __('Text'),
             'editor'        => __('Editor'),
             'number'        => __('Number'),
