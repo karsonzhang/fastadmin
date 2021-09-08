@@ -358,9 +358,6 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                 placeHolderTemplate: $("<" + tagName + "/>")
                             });
                             var textarea = $("textarea[name='" + $(this).data("name") + "']", form);
-                            if (textarea.val() == '') {
-                                return true;
-                            }
                             var template = $(this).data("template");
                             textarea.on("fa.event.refreshfieldlist", function () {
                                 $("[fieldlist-item]", container).remove();
