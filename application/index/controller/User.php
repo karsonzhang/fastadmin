@@ -28,7 +28,7 @@ class User extends Frontend
         $auth = $this->auth;
 
         if (!Config::get('fastadmin.usercenter')) {
-            $this->error(__('User center already closed'));
+            $this->error(__('User center already closed'), '/');
         }
 
         //监听注册登录退出的事件
