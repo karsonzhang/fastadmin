@@ -362,7 +362,7 @@ class Upload
         $params = array(
             'admin_id'    => (int)session('admin.id'),
             'user_id'     => (int)$auth->id,
-            'filename'    => substr(htmlspecialchars(strip_tags($this->fileInfo['name'])), 0, 100),
+            'filename'    => mb_substr(htmlspecialchars(strip_tags($this->fileInfo['name'])), 0, 100),
             'category'    => $category,
             'filesize'    => $this->fileInfo['size'],
             'imagewidth'  => $this->fileInfo['imagewidth'],
