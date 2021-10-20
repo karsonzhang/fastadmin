@@ -67,21 +67,22 @@ class User extends Model
         return ['normal' => __('Normal'), 'hidden' => __('Hidden')];
     }
 
+
     public function getPrevtimeTextAttr($value, $data)
     {
-        $value = $value ? $value : $data['prevtime'];
+        $value = $value ? $value : $data['prevtime'] ?? "";
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
     public function getLogintimeTextAttr($value, $data)
     {
-        $value = $value ? $value : $data['logintime'];
+        $value = $value ? $value : $data['logintime'] ?? "";
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
     public function getJointimeTextAttr($value, $data)
     {
-        $value = $value ? $value : $data['jointime'];
+        $value = $value ? $value : $data['jointime'] ?? "";
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
