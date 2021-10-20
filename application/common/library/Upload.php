@@ -15,19 +15,6 @@ use think\Hook;
  */
 class Upload
 {
-
-    /**
-     * 验证码有效时长
-     * @var int
-     */
-    protected static $expire = 120;
-
-    /**
-     * 最大允许检测的次数
-     * @var int
-     */
-    protected static $maxCheckNums = 10;
-
     protected $merging = false;
 
     protected $chunkDir = null;
