@@ -26,7 +26,7 @@ class Crud extends Command
      * 受保护的系统表, crud不会生效
      */
     protected $systemTables = [
-       'admin', 'admin_log', 'auth_group', 'auth_group_access', 'auth_rule', 
+       'admin', 'admin_log', 'auth_group', 'auth_group_access', 'auth_rule',
        'attachment', 'config', 'category', 'ems', 'sms',
        'user', 'user_group', 'user_rule', 'user_score_log', 'user_token',
     ];
@@ -214,12 +214,12 @@ class Crud extends Command
         $force = $input->getOption('force');
         //是否为本地model,为0时表示为全局model将会把model放在app/common/model中
         $local = $input->getOption('local');
-        
+
         if (!$table) {
             throw new Exception('table name can\'t empty');
         }
-        
-    
+
+
         //是否生成菜单
         $menu = $input->getOption("menu");
         //关联表
@@ -963,7 +963,7 @@ class Crud extends Command
 
             if ($relations) {
                 foreach ($relations as $i => $relation) {
-                    $relation['modelNamespace'] = $data['modelNamespace'];
+                    $relation['modelNamespace'] = $relation['relationNamespace'];
                     if (!is_file($relation['relationFile'])) {
                         // 生成关联模型文件
                         $this->writeToFile('relationmodel', $relation, $relation['relationFile']);
