@@ -24,6 +24,7 @@ return [
     'Please input correct database'                                                                         => '请输入正确的数据库名',
     'Please input correct username'                                                                         => '用户名只能由3-12位数字、字母、下划线组合',
     'Please input correct password'                                                                         => '密码长度必须在6-16位之间，不能包含空格',
+    'Password is too weak'                                                                                  => '密码太简单，请重新输入',
     'The two passwords you entered did not match'                                                           => '两次输入的密码不一致',
     'Please input correct website'                                                                          => '网站名称输入不正确',
     'The current version %s is too low, please use PHP 7.1 or higher'                                       => '当前版本%s过低，请使用PHP7.1以上版本',

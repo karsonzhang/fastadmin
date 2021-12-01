@@ -21,11 +21,12 @@ class Addon extends Command
         $this
             ->setName('addon')
             ->addOption('name', 'a', Option::VALUE_REQUIRED, 'addon name', null)
-            ->addOption('action', 'c', Option::VALUE_REQUIRED, 'action(create/enable/disable/install/uninstall/refresh/upgrade/package/move)', 'create')
+            ->addOption('action', 'c', Option::VALUE_REQUIRED, 'action(create/enable/disable/uninstall/refresh/package/move)', 'create')
             ->addOption('force', 'f', Option::VALUE_OPTIONAL, 'force override', null)
             ->addOption('release', 'r', Option::VALUE_OPTIONAL, 'addon release version', null)
             ->addOption('uid', 'u', Option::VALUE_OPTIONAL, 'fastadmin uid', null)
             ->addOption('token', 't', Option::VALUE_OPTIONAL, 'fastadmin token', null)
+            ->addOption('domain', 'd', Option::VALUE_OPTIONAL, 'domain', null)
             ->addOption('local', 'l', Option::VALUE_OPTIONAL, 'local package', null)
             ->setDescription('Addon manager');
     }
@@ -48,7 +49,7 @@ class Addon extends Command
 
         include dirname(__DIR__) . DS . 'common.php';
 
-        if (!$name) {
+        if (!$name && !in_array($action, ['refresh'])) {
             throw new Exception('Addon name could not be empty');
         }
         if (!$action || !in_array($action, ['create', 'disable', 'enable', 'install', 'uninstall', 'refresh', 'upgrade', 'package', 'move'])) {
@@ -132,42 +133,6 @@ class Addon extends Command
                 }
                 $output->info(ucfirst($action) . " Successed!");
                 break;
-            case 'install':
-                //非覆盖模式时如果存在则报错
-                if (is_dir($addonDir) && !$force) {
-                    throw new Exception("addon already exists!\nIf you need to install again, use the parameter --force=true ");
-                }
-                //如果存在先移除
-                if (is_dir($addonDir)) {
-                    rmdirs($addonDir);
-                }
-                // 获取本地路径
-                $local = $input->getOption('local');
-                try {
-                    Service::install($name, 0, ['version' => $release], $local);
-                } catch (AddonException $e) {
-                    if ($e->getCode() != -3) {
-                        throw new Exception($e->getMessage());
-                    }
-                    if (!$force) {
-                        //如果有冲突文件则提醒
-                        $data = $e->getData();
-                        foreach ($data['conflictlist'] as $k => $v) {
-                            $output->warning($v);
-                        }
-                        $output->info("Are you sure you want to override all those files?  Type 'yes' to continue: ");
-                        $line = fgets(defined('STDIN') ? STDIN : fopen('php://stdin', 'r'));
-                        if (trim($line) != 'yes') {
-                            throw new Exception("Operation is aborted!");
-                        }
-                    }
-                    Service::install($name, 1, ['version' => $release, 'uid' => $uid, 'token' => $token], $local);
-                } catch (Exception $e) {
-                    throw new Exception($e->getMessage());
-                }
-
-                $output->info("Install Successed!");
-                break;
             case 'uninstall':
                 //非覆盖模式时如果存在则报错
                 if (!$force) {
@@ -201,10 +166,6 @@ class Addon extends Command
             case 'refresh':
                 Service::refresh();
                 $output->info("Refresh Successed!");
-                break;
-            case 'upgrade':
-                Service::upgrade($name, ['version' => $release, 'uid' => $uid, 'token' => $token]);
-                $output->info("Upgrade Successed!");
                 break;
             case 'package':
                 $infoFile = $addonDir . 'info.ini';
@@ -256,8 +217,8 @@ class Addon extends Command
             case 'move':
                 $movePath = [
                     'adminOnlySelfDir' => ['admin/behavior', 'admin/controller', 'admin/library', 'admin/model', 'admin/validate', 'admin/view'],
-                    'adminAllSubDir' => ['admin/lang'],
-                    'publicDir' => ['public/assets/addons', 'public/assets/js/backend']
+                    'adminAllSubDir'   => ['admin/lang'],
+                    'publicDir'        => ['public/assets/addons', 'public/assets/js/backend']
                 ];
                 $paths = [];
                 $appPath = str_replace('/', DS, APP_PATH);
@@ -350,7 +311,7 @@ class Addon extends Command
     /**
      * 写入到文件
      * @param string $name
-     * @param array $data
+     * @param array  $data
      * @param string $pathname
      * @return mixed
      */

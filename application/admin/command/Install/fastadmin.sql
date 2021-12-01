@@ -45,7 +45,7 @@ CREATE TABLE `fa_admin_log` (
   `username` varchar(30) DEFAULT '' COMMENT '管理员名字',
   `url` varchar(1500) DEFAULT '' COMMENT '操作页面',
   `title` varchar(100) DEFAULT '' COMMENT '日志标题',
-  `content` text NOT NULL COMMENT '内容',
+  `content` longtext NOT NULL COMMENT '内容',
   `ip` varchar(50) DEFAULT '' COMMENT 'IP',
   `useragent` varchar(255) DEFAULT '' COMMENT 'User-Agent',
   `createtime` int(10) DEFAULT NULL COMMENT '操作时间',
@@ -395,6 +395,7 @@ CREATE TABLE `fa_test` (
   `admin_id` int(10) DEFAULT '0' COMMENT '管理员ID',
   `category_id` int(10) unsigned DEFAULT '0' COMMENT '分类ID(单选)',
   `category_ids` varchar(100) COMMENT '分类ID(多选)',
+  `tags` varchar(255) DEFAULT '' COMMENT '标签',
   `week` enum('monday','tuesday','wednesday') COMMENT '星期(单选):monday=星期一,tuesday=星期二,wednesday=星期三',
   `flag` set('hot','index','recommend') DEFAULT '' COMMENT '标志(多选):hot=热门,index=首页,recommend=推荐',
   `genderdata` enum('male','female') DEFAULT 'male' COMMENT '性别(单选):male=男,female=女',
@@ -408,8 +409,10 @@ CREATE TABLE `fa_test` (
   `description` varchar(255) DEFAULT '' COMMENT '描述',
   `city` varchar(100) DEFAULT '' COMMENT '省市',
   `json` varchar(255) DEFAULT NULL COMMENT '配置:key=名称,value=值',
+  `multiplejson` varchar(1500) DEFAULT '' COMMENT '二维数组:title=标题,intro=介绍,author=作者,age=年龄',
   `price` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '价格',
   `views` int(10) unsigned DEFAULT '0' COMMENT '点击',
+  `workrange` varchar(100) DEFAULT '' COMMENT '时间区间',
   `startdate` date DEFAULT NULL COMMENT '开始日期',
   `activitytime` datetime DEFAULT NULL COMMENT '活动时间(datetime)',
   `year` year(4) DEFAULT NULL COMMENT '年',
@@ -429,7 +432,7 @@ CREATE TABLE `fa_test` (
 -- Records of fa_test
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_test` VALUES (1, 0, 12, '12,13', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '广西壮族自治区/百色市/平果县', '{\"a\":\"1\",\"b\":\"2\"}', 0.00, 0, '2017-07-10', '2017-07-10 18:24:45', 2017, '18:24:45', 1491635035, 1491635035, 1491635035, NULL, 0, 1, 'normal', '1');
+INSERT INTO `fa_test` VALUES (1, 0, 12, '12,13', '互联网,计算机', 'monday', 'hot,index', 'male', 'music,reading', '我是一篇测试文章', '<p>我是测试内容</p>', '/assets/img/avatar.png', '/assets/img/avatar.png,/assets/img/qrcode.png', '/assets/img/avatar.png', '关键字', '描述', '广西壮族自治区/百色市/平果县', '{\"a\":\"1\",\"b\":\"2\"}', '[{\"title\":\"标题一\",\"intro\":\"介绍一\",\"author\":\"小明\",\"age\":\"21\"}]', 0.00, 0, '2020-10-01 00:00:00 - 2021-10-31 23:59:59', '2017-07-10', '2017-07-10 18:24:45', 2017, '18:24:45', 1491635035, 1491635035, 1491635035, NULL, 0, 1, 'normal', '1');
 COMMIT;
 
 -- ----------------------------

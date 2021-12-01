@@ -162,6 +162,10 @@ class Install extends Command
         if (!preg_match("/^[\S]{6,16}$/", $adminPassword)) {
             throw new Exception(__('Please input correct password'));
         }
+        $weakPasswordArr = ['123456', '12345678', '123456789', '654321', '111111', '000000', 'password', 'qwerty', 'abc123', '1qaz2wsx'];
+        if (in_array($adminPassword, $weakPasswordArr)) {
+            throw new Exception(__('Password is too weak'));
+        }
         if ($siteName == '' || preg_match("/fast" . "admin/i", $siteName)) {
             throw new Exception(__('Please input correct website'));
         }
@@ -230,18 +234,19 @@ class Install extends Command
             throw new Exception(__('The current permissions are insufficient to write the file %s', 'application/config.php'));
         }
 
+        $avatar = request()->domain() . '/assets/img/avatar.png';
         // 变更默认管理员密码
         $adminPassword = $adminPassword ? $adminPassword : Random::alnum(8);
         $adminEmail = $adminEmail ? $adminEmail : "admin@admin.com";
         $newSalt = substr(md5(uniqid(true)), 0, 6);
         $newPassword = md5(md5($adminPassword) . $newSalt);
-        $data = ['username' => $adminUsername, 'email' => $adminEmail, 'password' => $newPassword, 'salt' => $newSalt];
+        $data = ['username' => $adminUsername, 'email' => $adminEmail, 'avatar' => $avatar, 'password' => $newPassword, 'salt' => $newSalt];
         $instance->name('admin')->where('username', 'admin')->update($data);
 
         // 变更前台默认用户的密码,随机生成
         $newSalt = substr(md5(uniqid(true)), 0, 6);
         $newPassword = md5(md5(Random::alnum(8)) . $newSalt);
-        $instance->name('user')->where('username', 'admin')->update(['password' => $newPassword, 'salt' => $newSalt]);
+        $instance->name('user')->where('username', 'admin')->update(['avatar' => $avatar, 'password' => $newPassword, 'salt' => $newSalt]);
 
         // 修改后台入口
         $adminName = '';

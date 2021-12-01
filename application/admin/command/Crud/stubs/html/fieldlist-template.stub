@@ -1,0 +1,20 @@
+
+            <table class="table fieldlist" data-name="{%fieldName%}" data-template="{%fieldName%}tpl">
+                <tr>
+                    {%theadList%}
+                    <td width="90">{:__('Operate')}</td>
+                </tr>
+                <tr><td colspan="{%colspan%}">
+                <a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a>
+                <textarea name="{%fieldName%}" class="form-control hide" cols="30" rows="5">{%fieldValue%}</textarea>
+                </td></tr>
+            </table>
+            <script type="text/html" id="{%fieldName%}tpl">
+                <tr>
+                    {%tbodyList%}
+                    <td width="90">
+                        <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
+                        <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
+                    </td>
+                </tr>
+            </script>
