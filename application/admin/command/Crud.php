@@ -633,17 +633,20 @@ class Crud extends Command
         $field = 'id';
         $order = 'id';
         $priDefined = false;
-        $priKey = '';
+        $priKeyArr = [];
         $relationPrimaryKey = '';
         foreach ($columnList as $k => $v) {
             if ($v['COLUMN_KEY'] == 'PRI') {
-                $priKey = $v['COLUMN_NAME'];
-                break;
+                $priKeyArr[] = $v['COLUMN_NAME'];
             }
         }
-        if (!$priKey) {
+        if (!$priKeyArr) {
             throw new Exception('Primary key not found!');
         }
+        if (count($priKeyArr) > 1) {
+            throw new Exception('Multiple primary key not support!');
+        }
+        $priKey = reset($priKeyArr);
 
         $order = $priKey;
 
