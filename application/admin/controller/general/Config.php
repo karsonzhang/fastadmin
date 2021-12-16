@@ -88,6 +88,9 @@ class Config extends Backend
      */
     public function add()
     {
+        if (!config('app_debug')) {
+            $this->error(__('Only work at development environment'));
+        }
         if ($this->request->isPost()) {
             $this->token();
             $params = $this->request->post("row/a", [], 'trim');
@@ -166,6 +169,9 @@ class Config extends Backend
      */
     public function del($ids = "")
     {
+        if (!config('app_debug')) {
+            $this->error(__('Only work at development environment'));
+        }
         $name = $this->request->post('name');
         $config = ConfigModel::getByName($name);
         if ($name && $config) {

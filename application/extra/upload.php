@@ -21,7 +21,7 @@ return [
     /**
      * 可上传的文件类型
      */
-    'mimetype'  => 'jpg,png,bmp,jpeg,gif,zip,rar,xls,xlsx,wav,mp4,mp3,pdf',
+    'mimetype'  => 'jpg,png,bmp,jpeg,gif,webp,zip,rar,xls,xlsx,wav,mp4,mp3,webm,pdf',
     /**
      * 是否支持批量上传
      */
@@ -34,4 +34,12 @@ return [
      * 默认分片大小
      */
     'chunksize' => 2097152,
+    /**
+     * 完整URL模式
+     */
+    'fullmode' => false,
+    /**
+     * 缩略图样式
+     */
+    'thumbstyle' => '',
 ];

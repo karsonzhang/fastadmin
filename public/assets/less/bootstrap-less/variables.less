@@ -18,11 +18,11 @@
 @gray-lighter: lighten(@gray-base, 93.5%);
 // #eee
 
-@brand-primary: #2c3e50;
+@brand-primary: #444c69;
 @brand-success: #18bc9c;
-@brand-info: #3498db;
+@brand-info: #1688f1;
 @brand-warning: #f39c12;
-@brand-danger: #e74c3c;
+@brand-danger: #f75444;
 
 //== Scaffolding
 //
@@ -50,21 +50,21 @@
 @font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base: @font-family-sans-serif;
 
-@font-size-base: 12px;
-@font-size-large: ceil((@font-size-base * 1.25));
+@font-size-base: 13px;
+@font-size-large: ceil((@font-size-base * 1.20));
 // ~18px
 @font-size-small: ceil((@font-size-base * 0.85));
 // ~12px
 
-@font-size-h1: floor((@font-size-base * 2.6));
+@font-size-h1: floor((@font-size-base * 2.0));
 // ~36px
-@font-size-h2: floor((@font-size-base * 2.15));
+@font-size-h2: floor((@font-size-base * 1.8));
 // ~30px
-@font-size-h3: ceil((@font-size-base * 1.7));
+@font-size-h3: ceil((@font-size-base * 1.5));
 // ~24px
-@font-size-h4: ceil((@font-size-base * 1.25));
+@font-size-h4: ceil((@font-size-base * 1.18));
 // ~18px
-@font-size-h5: @font-size-base;
+@font-size-h5: ceil(@font-size-base * 1.07);
 @font-size-h6: ceil((@font-size-base * 0.85));
 // ~12px
 
@@ -208,7 +208,7 @@
 @input-color-placeholder: #999;
 
 //** Default `.form-control` height
-@input-height-base: (@line-height-computed + (@padding-base-vertical * 2) + 2);
+@input-height-base: (@line-height-computed + (@padding-base-vertical * 2) + 3);
 //** Large `.form-control` height
 @input-height-large: (ceil(@font-size-large * @line-height-large) + (@padding-large-vertical * 2) + 2);
 //** Small `.form-control` height
@@ -624,25 +624,25 @@
 @alert-danger-text: @state-danger-text;
 @alert-danger-border: @state-danger-border;
 
-@primary-light-bg:#E2E5E8;
-@primary-light-border:#D0D4D8;
-@primary-light-text:#85878A;
+@primary-light-bg: #E2E5E8;
+@primary-light-border: #D0D4D8;
+@primary-light-text: #85878A;
 
-@success-light-bg:#dff0d8;
-@success-light-border:#d1eac8;
-@success-light-text:#468847;
+@success-light-bg: #dff0d8;
+@success-light-border: #d1eac8;
+@success-light-text: #468847;
 
-@info-light-bg:#d9edf7;
-@info-light-border:#c6e4f3;
-@info-light-text:#3a87ad;
+@info-light-bg: #d9edf7;
+@info-light-border: #c6e4f3;
+@info-light-text: #3a87ad;
 
-@warning-light-bg:#fcf8e3;
-@warning-light-border:#faf3cd;
-@warning-light-text:#c09853;
+@warning-light-bg: #fcf8e3;
+@warning-light-border: #faf3cd;
+@warning-light-text: #c09853;
 
-@danger-light-bg:#f2dede;
-@danger-light-border:#ebcdcd;
-@danger-light-text:#b94a48;
+@danger-light-bg: #f2dede;
+@danger-light-border: #ebcdcd;
+@danger-light-text: #b94a48;
 
 //== Progress bars
 //

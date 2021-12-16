@@ -9,6 +9,10 @@
     //When the sidebar is collapsed...
     &.sidebar-collapse {
 
+      .sidebar-menu:hover {
+        overflow: visible;
+      }
+
       //Apply the new margining to the main content and footer
       .content-wrapper,
       .right-side,
@@ -32,12 +36,12 @@
             margin-right: 0;
           }
           > a > span {
-            border-top-right-radius: 4px;
+            //border-top-right-radius: 4px;
           }
 
           &:not(.treeview) {
             > a > span {
-              border-bottom-right-radius: 4px;
+              //border-bottom-right-radius: 4px;
             }
           }
 
@@ -45,13 +49,31 @@
             //Add some padding to the treeview menu
             padding-top: 5px;
             padding-bottom: 5px;
-            border-bottom-right-radius: 4px;
+            //border-bottom-right-radius: 4px;
+
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.15) transparent;
+            /* Works on Chrome, Edge, and Safari */
+            &::-webkit-scrollbar {
+              width: 8px;
+            }
+
+            &::-webkit-scrollbar-track {
+              background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+              background-color: rgba(255,255,255,.15);
+              border-radius: 20px;
+              border: 3px solid transparent;
+            }
           }
 
           //Show menu items on hover
           &:hover {
             > a {
               //overflow: visible;
+              width: @sidebar-width;
             }
             > a > span:not(.pull-right),//:not(.pull-right-container),
             > .treeview-menu {
@@ -64,22 +86,22 @@
             //position the header & treeview menus
             > a > span {
               top: 0;
-              margin-left: -3px;
+              //margin-left: -3px;
               padding: 12px 5px 12px 20px;
               background-color: inherit;
             }
             > a > .pull-right-container {
-              //display: block!important;
+              display: block!important;
               float: right;
               width: auto!important;
-              left: 200px!important;
+              left: 195px!important;
               top: 10px!important;
               > .label:not(:first-of-type) {
                 display: none;
               }
             }
             > .treeview-menu {
-              top: 44px;
+              top: 46px;
               margin-left: 0;
             }
           }
@@ -130,9 +152,6 @@
   overflow: hidden;
 }
 
-.sidebar-menu:hover {
-  overflow: visible;
-}
 
 .sidebar-form,
 .sidebar-menu > li.header {
@@ -149,3 +168,4 @@
     margin-top: -7px;
   }
 }
+

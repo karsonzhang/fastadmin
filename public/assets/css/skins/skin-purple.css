@@ -86,9 +86,6 @@
   color: #a19fcb;
   background: #57539c;
 }
-.skin-purple .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
-}
 .skin-purple .sidebar-menu > li:hover > a,
 .skin-purple .sidebar-menu > li.active > a {
   color: #fff;
@@ -152,6 +149,15 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
+}
+.skin-purple .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+  padding-left: 12px;
+}
+@media (min-width: 768px) {
+  .skin-purple.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right) {
+    margin-left: -3px;
+  }
 }
 .skin-purple .sidebar-form input[type="text"]::-moz-placeholder {
   color: #fff;

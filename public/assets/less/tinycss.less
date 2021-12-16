@@ -1,0 +1,34 @@
+
+.make-margin-padding(margin, m, 5px, 4);
+.make-margin-padding(padding, p, 5px, 4);
+
+.make-margin-padding(@type, @prefix, @space, @i) when (@i > 0) {
+  .make-margin-padding(@type, @prefix, @space, @i - 1);
+  @pixel: @space * @i;
+  .@{prefix}-@{i} {
+      @{type}-top: @pixel !important;
+      @{type}-right: @pixel !important;
+      @{type}-bottom: @pixel !important;
+      @{type}-left: @pixel !important;
+  }
+  .@{prefix}t-@{i} {
+      @{type}-top: @pixel !important;
+  }
+  .@{prefix}r-@{i} {
+      @{type}-right: @pixel !important;
+  }
+  .@{prefix}b-@{i} {
+      @{type}-bottom: @pixel !important;
+  }
+  .@{prefix}l-@{i} {
+      @{type}-left: @pixel !important;
+  }
+  .@{prefix}x-@{i} {
+      @{type}-left: @pixel !important;
+      @{type}-right: @pixel !important;
+  }
+  .@{prefix}y-@{i} {
+      @{type}-top: @pixel !important;
+      @{type}-bottom: @pixel !important;
+  }
+}

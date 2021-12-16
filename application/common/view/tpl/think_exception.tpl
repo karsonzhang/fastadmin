@@ -39,7 +39,7 @@ $langSet == 'en' && $lang = array_combine(array_keys($lang), array_keys($lang));
         article,aside,details,figcaption,figure,footer,header,hgroup,nav,section {display:block;}
         html {font-size:16px;line-height:24px;width:100%;height:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;overflow-y:scroll;overflow-x:hidden;}
         img {vertical-align:middle;max-width:100%;height:auto;border:0;-ms-interpolation-mode:bicubic;}
-        body {min-height:100%;background:#edf1f4;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",微软雅黑,Arial,sans-serif;}
+        body {min-height:100%;background:#f4f6f8;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:"Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",微软雅黑,Arial,sans-serif;}
         .clearfix {clear:both;zoom:1;}
         .clearfix:before,.clearfix:after {content:"\0020";display:block;height:0;visibility:hidden;}
         .clearfix:after {clear:both;}

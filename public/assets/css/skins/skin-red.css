@@ -3,10 +3,10 @@
  * ---------
  */
 .skin-red .main-header {
-  background-color: #e74c3c;
+  background-color: #f75444;
 }
 .skin-red .main-header .navbar {
-  background-color: #e74c3c;
+  background-color: #f75444;
 }
 .skin-red .main-header .navbar .nav > li > a {
   color: #fff;
@@ -35,7 +35,7 @@
   color: #fff;
 }
 .skin-red .main-header .navbar .sidebar-toggle:hover {
-  background-color: #e43725;
+  background-color: #f63e2c;
 }
 @media (max-width: 767px) {
   .skin-red .main-header .navbar .dropdown-menu li.divider {
@@ -45,30 +45,30 @@
     color: #fff;
   }
   .skin-red .main-header .navbar .dropdown-menu li a:hover {
-    background: #e43725;
+    background: #f63e2c;
   }
 }
 .skin-red .main-header .logo {
-  background-color: #e43725;
+  background-color: #f63e2c;
   color: #fff;
   border-bottom: 0 solid transparent;
 }
 .skin-red .main-header .logo:hover {
-  background-color: #e43321;
+  background-color: #f63927;
 }
 @media (max-width: 767px) {
   .skin-red .main-header .logo {
-    background-color: #e74c3c;
+    background-color: #f75444;
     color: #fff;
     border-bottom: 0 solid transparent;
     border-right: none;
   }
   .skin-red .main-header .logo:hover {
-    background-color: #e64837;
+    background-color: #f7503f;
   }
 }
 .skin-red .main-header li.user-header {
-  background-color: #e74c3c;
+  background-color: #f75444;
 }
 .skin-red .content-header {
   background: transparent;
@@ -89,14 +89,11 @@
   color: #4b646f;
   background: #1a2226;
 }
-.skin-red .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
-}
 .skin-red .sidebar-menu > li:hover > a,
 .skin-red .sidebar-menu > li.active > a {
   color: #fff;
   background: #1e282c;
-  border-left-color: #e74c3c;
+  border-left-color: #f75444;
 }
 .skin-red .sidebar-menu > li > .treeview-menu {
   background: #2c3b41;
@@ -156,13 +153,22 @@
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
 }
+.skin-red .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+  padding-left: 12px;
+}
+@media (min-width: 768px) {
+  .skin-red.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right) {
+    margin-left: -3px;
+  }
+}
 @media (max-width: 767px) {
   .skin-red.multiplenav .sidebar .mobilenav a.btn-app {
     background: #374850;
     color: #fff;
   }
   .skin-red.multiplenav .sidebar .mobilenav a.btn-app.active {
-    background: #e74c3c;
+    background: #f75444;
     color: #fff;
   }
 }

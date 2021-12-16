@@ -10,7 +10,7 @@
                         <a href="javascript:;" class="btn btn-success btn-add {:$auth->check('{%controllerUrl%}/add')?'':'hide'}" title="{:__('Add')}" ><i class="fa fa-plus"></i> {:__('Add')}</a>
                         <a href="javascript:;" class="btn btn-success btn-edit btn-disabled disabled {:$auth->check('{%controllerUrl%}/edit')?'':'hide'}" title="{:__('Edit')}" ><i class="fa fa-pencil"></i> {:__('Edit')}</a>
                         <a href="javascript:;" class="btn btn-danger btn-del btn-disabled disabled {:$auth->check('{%controllerUrl%}/del')?'':'hide'}" title="{:__('Delete')}" ><i class="fa fa-trash"></i> {:__('Delete')}</a>
-                        <a href="javascript:;" class="btn btn-danger btn-import {:$auth->check('{%controllerUrl%}/import')?'':'hide'}" title="{:__('Import')}" id="btn-import-file" data-url="ajax/upload" data-mimetype="csv,xls,xlsx" data-multiple="false"><i class="fa fa-upload"></i> {:__('Import')}</a>
+                        {%importHtml%}
 
                         <div class="dropdown btn-group {:$auth->check('{%controllerUrl%}/multi')?'':'hide'}">
                             <a class="btn btn-primary btn-more dropdown-toggle btn-disabled disabled" data-toggle="dropdown"><i class="fa fa-cog"></i> {:__('More')}</a>
@@ -23,8 +23,8 @@
                         {%recyclebinHtml%}
                     </div>
                     <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
-                           data-operate-edit="{:$auth->check('{%controllerUrl%}/edit')}" 
-                           data-operate-del="{:$auth->check('{%controllerUrl%}/del')}" 
+                           data-operate-edit="{:$auth->check('{%controllerUrl%}/edit')}"
+                           data-operate-del="{:$auth->check('{%controllerUrl%}/del')}"
                            width="100%">
                     </table>
                 </div>

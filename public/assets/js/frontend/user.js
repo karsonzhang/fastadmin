@@ -138,27 +138,32 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                     sortName: 'id',
                     showToggle: false,
                     showExport: false,
+                    fixedColumns: true,
+                    fixedRightNumber: 1,
                     columns: [
                         [
                             {field: 'state', checkbox: multiple, visible: multiple, operate: false},
                             {field: 'id', title: __('Id'), operate: false},
                             {
                                 field: 'url', title: __('Preview'), formatter: function (value, row, index) {
+                                    var html = '';
                                     if (row.mimetype.indexOf("image") > -1) {
-                                        var style = row.storage === 'upyun' ? '!/fwfh/120x90' : '';
-                                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + style + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                                        html = '<a href="' + row.fullurl + '" target="_blank"><img src="' + row.fullurl + row.thumb_style + '" alt="" style="max-height:60px;max-width:120px"></a>';
                                     } else {
-                                        return '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
+                                        html = '<a href="' + row.fullurl + '" target="_blank"><img src="' + Fast.api.fixurl("ajax/icon") + "?suffix=" + row.imagetype + '" alt="" style="max-height:90px;max-width:120px"></a>';
                                     }
-                                }, operate: false
+                                    return '<div style="width:120px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + html + '</div>';
+                                }
                             },
-                            {field: 'filename', title: __('Filename'), formatter: Table.api.formatter.search, operate: 'like'},
+                            {field: 'filename', title: __('Filename'), formatter: function (value, row, index) {
+                                    return '<div style="width:150px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
+                                }, operate: 'like'},
                             {field: 'imagewidth', title: __('Imagewidth'), operate: false},
                             {field: 'imageheight', title: __('Imageheight'), operate: false},
                             {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},
-                            {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                            {field: 'createtime', title: __('Createtime'), width: 120, formatter: Table.api.formatter.datetime, datetimeFormat: 'YYYY-MM-DD', operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                             {
-                                field: 'operate', title: __('Operate'), events: {
+                                field: 'operate', title: __('Operate'), width: 85, events: {
                                     'click .btn-chooseone': function (e, value, row, index) {
                                         Fast.api.close({url: row.url, multiple: multiple});
                                     },

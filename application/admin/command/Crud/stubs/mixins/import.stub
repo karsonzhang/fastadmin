@@ -1,0 +1,4 @@
+    public function import()
+    {
+        parent::import();
+    }

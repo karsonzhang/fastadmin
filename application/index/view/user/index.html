@@ -21,8 +21,7 @@
                 <div class="panel-body">
                     <h2 class="page-header">
                         {:__('Member center')}
-                        <a href="{:url('user/profile')}" class="btn btn-success pull-right"><i class="fa fa-pencil"></i>
-                            {:__('Profile')}</a>
+                        <a href="{:url('user/profile')}" class="btn btn-primary pull-right"><i class="fa fa-pencil"></i> {:__('Profile')}</a>
                     </h2>
                     <div class="row user-baseinfo">
                         <div class="col-md-3 col-sm-3 col-xs-2 text-center user-center">
@@ -36,10 +35,8 @@
                                 <!-- Heading -->
                                 <h4><a href="{:url('user/profile')}">{$user.nickname|htmlentities}</a></h4>
                                 <!-- Paragraph -->
-                                <p>
-                                    <a href="{:url('user/profile')}">
-                                        {$user.bio|default=__("This guy hasn't written anything yet")|htmlentities}
-                                    </a>
+                                <p class="text-muted">
+                                    {$user.bio|default=__("This guy hasn't written anything yet")|htmlentities}
                                 </p>
                                 <!-- Success -->
                             </div>

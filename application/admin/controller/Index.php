@@ -6,6 +6,7 @@ use app\admin\model\AdminLog;
 use app\common\controller\Backend;
 use think\Config;
 use think\Hook;
+use think\Session;
 use think\Validate;
 
 /**
@@ -31,6 +32,13 @@ class Index extends Backend
      */
     public function index()
     {
+        $cookieArr = ['adminskin' => "/^skin\-([a-z\-]+)\$/i", 'multiplenav' => "/^(0|1)\$/", 'multipletab' => "/^(0|1)\$/"];
+        foreach ($cookieArr as $key => $regex) {
+            $cookieValue = $this->request->cookie($key);
+            if (!is_null($cookieValue) && preg_match($regex, $cookieValue)) {
+                config('fastadmin.' . $key, $cookieValue);
+            }
+        }
         //左侧菜单
         list($menulist, $navlist, $fixedmenu, $referermenu) = $this->auth->getSidebar([
             'dashboard' => 'hot',
@@ -44,6 +52,7 @@ class Index extends Backend
                 $this->success('', null, ['menulist' => $menulist, 'navlist' => $navlist]);
             }
         }
+        $this->assignconfig('cookie', ['prefix' => config('cookie.prefix')]);
         $this->view->assign('menulist', $menulist);
         $this->view->assign('navlist', $navlist);
         $this->view->assign('fixedmenu', $fixedmenu);
@@ -99,6 +108,7 @@ class Index extends Backend
 
         // 根据客户端的cookie,判断是否可以自动登录
         if ($this->auth->autologin()) {
+            Session::delete("referer");
             $this->redirect($url);
         }
         $background = Config::get('fastadmin.login_background');

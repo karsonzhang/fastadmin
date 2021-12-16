@@ -7,7 +7,7 @@ use think\Config;
 /**
  * @website https://github.com/calinrada/php-apidoc
  * @author  Calin Rada <rada.calin@gmail.com>
- * @author  Karson <karsonzhang@163.com>
+ * @author  Karson <karson@fastadmin.net>
  */
 class Builder
 {

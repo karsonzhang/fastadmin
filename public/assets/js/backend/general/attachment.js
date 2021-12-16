@@ -143,6 +143,8 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                 showToggle: false,
                 showExport: false,
                 maintainSelected: true,
+                fixedColumns: true,
+                fixedRightNumber: 1,
                 columns: [
                     [
                         {field: 'state', checkbox: multiple, visible: multiple, operate: false},
@@ -161,9 +163,9 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
                             },
                             formatter: Controller.api.formatter.mimetype
                         },
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, datetimeFormat: 'YYYY-MM-DD', operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                        {field: 'createtime', title: __('Createtime'), width: 120, formatter: Table.api.formatter.datetime, datetimeFormat: 'YYYY-MM-DD', operate: 'RANGE', addclass: 'datetimerange', sortable: true},
                         {
-                            field: 'operate', title: __('Operate'), events: {
+                            field: 'operate', title: __('Operate'), width: 85, events: {
                                 'click .btn-chooseone': function (e, value, row, index) {
                                     Fast.api.close({url: row.url, multiple: multiple});
                                 },
@@ -199,6 +201,10 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
             // 为表格绑定事件
             Table.api.bindevent(table);
             require(['upload'], function (Upload) {
+                $("#toolbar .faupload").data("category", function (file) {
+                    var category = $("ul.nav-tabs[data-field='category'] li.active a").data("value");
+                    return category;
+                });
                 Upload.api.upload($("#toolbar .faupload"), function () {
                     $(".btn-refresh").trigger("click");
                 });
@@ -207,7 +213,17 @@ define(['jquery', 'bootstrap', 'backend', 'form', 'table'], function ($, undefin
         add: function () {
             //上传完成后刷新父窗口
             $(".faupload").data("upload-complete", function (files) {
-                window.parent.$(".btn-refresh").trigger("click");
+                setTimeout(function () {
+                    window.parent.$(".btn-refresh").trigger("click");
+                }, 100);
+            });
+            // 获取上传类别
+            $("#faupload-third,#faupload-third-chunking").data("category", function (file) {
+                return $("#category-third").val();
+            });
+            // 获取上传类别
+            $("#faupload-local,#faupload-local-chunking").data("category", function (file) {
+                return $("#category-local").val();
             });
             Controller.api.bindevent();
         },

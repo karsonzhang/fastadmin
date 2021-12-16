@@ -89,9 +89,6 @@
   color: #4b646f;
   background: #1a2226;
 }
-.skin-yellow .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
-}
 .skin-yellow .sidebar-menu > li:hover > a,
 .skin-yellow .sidebar-menu > li.active > a {
   color: #fff;
@@ -155,6 +152,15 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 0;
+}
+.skin-yellow .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+  padding-left: 12px;
+}
+@media (min-width: 768px) {
+  .skin-yellow.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right) {
+    margin-left: -3px;
+  }
 }
 @media (max-width: 767px) {
   .skin-yellow.multiplenav .sidebar .mobilenav a.btn-app {

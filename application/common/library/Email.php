@@ -18,7 +18,7 @@ class Email
     /**
      * phpmailer对象
      */
-    protected $mail = [];
+    protected $mail = null;
 
     /**
      * 错误内容
@@ -96,7 +96,7 @@ class Email
 
     /**
      * 设置收件人
-     * @param mixed  $email 收件人,多个收件人以,进行分隔
+     * @param mixed $email 收件人,多个收件人以,进行分隔
      * @return $this
      */
     public function to($email)
@@ -122,7 +122,7 @@ class Email
             $emailArr[key($emailArr)] = $name;
         }
         foreach ($emailArr as $address => $name) {
-            $this->mail->addCC($address, $name);
+            $this->mail->addCC($name, $address);
         }
         return $this;
     }

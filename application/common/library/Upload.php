@@ -16,18 +16,6 @@ use think\Hook;
 class Upload
 {
 
-    /**
-     * 验证码有效时长
-     * @var int
-     */
-    protected static $expire = 120;
-
-    /**
-     * 最大允许检测的次数
-     * @var int
-     */
-    protected static $maxCheckNums = 10;
-
     protected $merging = false;
 
     protected $chunkDir = null;
@@ -37,7 +25,7 @@ class Upload
     protected $error = '';
 
     /**
-     * @var \think\File
+     * @var File
      */
     protected $file = null;
     protected $fileInfo = null;
@@ -51,16 +39,29 @@ class Upload
         }
     }
 
+    /**
+     * 设置分片目录
+     * @param $dir
+     */
     public function setChunkDir($dir)
     {
         $this->chunkDir = $dir;
     }
 
+    /**
+     * 获取文件
+     * @return File
+     */
     public function getFile()
     {
         return $this->file;
     }
 
+    /**
+     * 设置文件
+     * @param $file
+     * @throws UploadException
+     */
     public function setFile($file)
     {
         if (empty($file)) {
@@ -79,6 +80,11 @@ class Upload
         $this->checkExecutable();
     }
 
+    /**
+     * 检测是否为可执行脚本
+     * @return bool
+     * @throws UploadException
+     */
     protected function checkExecutable()
     {
         //禁止上传PHP和HTML文件
@@ -88,6 +94,11 @@ class Upload
         return true;
     }
 
+    /**
+     * 检测文件类型
+     * @return bool
+     * @throws UploadException
+     */
     protected function checkMimetype()
     {
         $mimetypeArr = explode(',', strtolower($this->config['mimetype']));
@@ -105,6 +116,12 @@ class Upload
         throw new UploadException(__('Uploaded file format is limited'));
     }
 
+    /**
+     * 检测是否图片
+     * @param bool $force
+     * @return bool
+     * @throws UploadException
+     */
     protected function checkImage($force = false)
     {
         //验证是否为图片文件
@@ -121,6 +138,10 @@ class Upload
         }
     }
 
+    /**
+     * 检测文件大小
+     * @throws UploadException
+     */
     protected function checkSize()
     {
         preg_match('/([0-9\.]+)(\w+)/', $this->config['maxsize'], $matches);
@@ -135,11 +156,22 @@ class Upload
         }
     }
 
+    /**
+     * 获取后缀
+     * @return string
+     */
     public function getSuffix()
     {
         return $this->fileInfo['suffix'] ?: 'file';
     }
 
+    /**
+     * 获取存储的文件名
+     * @param string $savekey
+     * @param string $filename
+     * @param string $md5
+     * @return mixed|null
+     */
     public function getSavekey($savekey = null, $filename = null, $md5 = null)
     {
         if ($filename) {
@@ -384,11 +416,19 @@ class Upload
         return $attachment;
     }
 
+    /**
+     * 设置错误信息
+     * @param $msg
+     */
     public function setError($msg)
     {
         $this->error = $msg;
     }
 
+    /**
+     * 获取错误信息
+     * @return string
+     */
     public function getError()
     {
         return $this->error;

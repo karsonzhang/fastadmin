@@ -60,6 +60,19 @@
     //Create the sidebar skin
     .skin-light-sidebar(@light-blue);
 
+    .sidebar-menu > li {
+        > a {
+            border-left: 3px solid transparent;
+            padding-left: 12px;
+        }
+    }
+
+    @media (min-width: @screen-sm) {
+        &.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right) {
+            margin-left: -3px;
+        }
+    }
+
     .main-footer {
         border-top-color: @gray;
     }

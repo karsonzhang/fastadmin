@@ -305,14 +305,38 @@ function _init() {
                     //Destroy if it exists
                     $(".sidebar").slimScroll({destroy: true}).height("auto").css("overflow", "inherit");
                     if (!$("body").hasClass('sidebar-collapse')) {
+                        $(".sidebar").off("mousewheel").css("margin-top", 0);
+                        $('.sidebar .treeview-menu').off('mousewheel').removeAttr("style");
                         //Add slimscroll
                         $(".sidebar").slimscroll({
                             height: ($(window).height() - $(".main-header").height()) + "px",
                             color: "rgba(0,0,0,0.2)",
                             size: "8px"
                         });
+                        $(".sidebar").trigger("mouseover");
+                    } else {
+                        var sidebarHeight = $(".sidebar").height();
+                        var maxHeight = $(window).height() - $(".main-header").height();
+                        var overflowHeight = sidebarHeight + $(".main-header").height() - $(window).height();
+                        if (overflowHeight > 0) {
+                            $(".sidebar").height(maxHeight);
+                            $(".sidebar").on("mousewheel", function (e) {
+                                e.preventDefault();
+                                if (e.originalEvent.pageX < $(".sidebar").width()) {
+                                    var marginTop = parseInt($(".sidebar").css("margin-top").replace("px", "")) + e.originalEvent.wheelDelta;
+                                    if (marginTop < 0 && Math.abs(marginTop) > overflowHeight) {
+                                        marginTop = Math.min(overflowHeight, marginTop);
+                                        marginTop = -overflowHeight;
+                                    }
+                                    marginTop = Math.min(0, marginTop);
+                                    $(".sidebar").css("margin-top", marginTop);
+                                }
+                            });
+                            $('.sidebar .treeview-menu').on('mousewheel', function (e) {
+                                e.stopPropagation();
+                            });
+                        }
                     }
-                    $(".sidebar").trigger("mouseover");
                 }
             }
         }
@@ -370,10 +394,12 @@ function _init() {
             var screenWidth = $.AdminLTE.options.screenSizes.sm - 1;
             //Expand sidebar on hover
             $('.main-sidebar').hover(function () {
-                if ($('body').hasClass('sidebar-mini')
-                    && $("body").hasClass('sidebar-collapse')
-                    && $(window).width() > screenWidth) {
-                    _this.expand();
+                if ($.AdminLTE.options.sidebarExpandOnHover) {
+                    if ($('body').hasClass('sidebar-mini')
+                        && $("body").hasClass('sidebar-collapse')
+                        && $(window).width() > screenWidth) {
+                        _this.expand();
+                    }
                 }
             }, function () {
                 if ($('body').hasClass('sidebar-mini')
@@ -385,10 +411,12 @@ function _init() {
         },
         expand: function () {
             $("body").removeClass('sidebar-collapse').addClass('sidebar-expanded-on-hover');
+            $.AdminLTE.layout.fixSidebar();
         },
         collapse: function () {
             if ($('body').hasClass('sidebar-expanded-on-hover')) {
                 $('body').removeClass('sidebar-expanded-on-hover').addClass('sidebar-collapse');
+                // $.AdminLTE.layout.fixSidebar();
             }
         }
     };
@@ -404,13 +432,36 @@ function _init() {
     $.AdminLTE.tree = function (menu) {
         var _this = this;
         var animationSpeed = $.AdminLTE.options.animationSpeed;
+        $(document).off('mouseenter', menu + ' .sidebar-menu > li')
+            .on('mouseenter', menu + ' .sidebar-menu > li', function () {
+                var treemenu = $(this).find("> .treeview-menu");
+                if (treemenu.length > 0) {
+                    if ($("body").hasClass("sidebar-collapse")) {
+                        var liHeight = $(this).height();
+                        var headerHeight = $(".main-header").height();
+                        var maxBottomHeight = $(window).height() - ($(this).offset().top + headerHeight);
+                        var maxTopHeight = $(window).height() - maxBottomHeight - liHeight;
+                        var maxHeight = maxBottomHeight;
+                        if (maxBottomHeight < 300 || maxTopHeight > maxBottomHeight) {
+                            treemenu.css("top", "unset").css("bottom", liHeight);
+                            maxHeight = maxTopHeight;
+                        }
+                        treemenu.css("max-height", maxHeight).css("overflow-y", "auto");
+                    } else {
+                        treemenu.css("max-height", "inherit").css("overflow-y", "unset");
+                    }
+                }
+            });
         $(document).off('click', menu + ' li a')
             .on('click', menu + ' li a', function (e) {
                 //Get the clicked link and the next element
                 var $this = $(this);
                 var checkElement = $this.next();
                 //Check if the next element is a menu and is visible
-                if ((checkElement.is('.treeview-menu')) && (checkElement.is(':visible')) && (!$('body').hasClass('sidebar-collapse'))) {
+                if ((checkElement.is('.treeview-menu')) && (checkElement.is(':visible'))) {
+                    if ($("body").hasClass("sidebar-collapse") && $this.parent().parent().hasClass("sidebar-menu")) {
+                        return false;
+                    }
                     //Close the menu
                     checkElement.slideUp(animationSpeed, function () {
                         checkElement.removeClass('menu-open');
@@ -450,8 +501,9 @@ function _init() {
                         $this.parent().addClass("active");
                     }
                     // modified by FastAdmin
-                    if ($(".show-submenu", menu).size() == 0) {
+                    if ($(".show-submenu", menu).size() == 0 && $this.parent().parent().hasClass("sidebar-menu")) {
                         $this.parent().siblings().find("ul.menu-open").slideUp();
+                        $this.parent().siblings("li.treeview-open").removeClass("treeview-open");
                     }
                 }
                 //if this isn't a link, prevent the page from being redirected

@@ -175,19 +175,23 @@ class Config extends Model
         if (!preg_match("/^((?:[a-z]+:)?\/\/)(.*)/i", $uploadurl) && substr($uploadurl, 0, 1) !== '/') {
             $uploadurl = url($uploadurl, '', false);
         }
+        $uploadcfg['fullmode'] = isset($uploadcfg['fullmode']) && $uploadcfg['fullmode'] ? true : false;
+        $uploadcfg['thumbstyle'] = $uploadcfg['thumbstyle'] ?? '';
 
         $upload = [
-            'cdnurl'    => $uploadcfg['cdnurl'],
-            'uploadurl' => $uploadurl,
-            'bucket'    => 'local',
-            'maxsize'   => $uploadcfg['maxsize'],
-            'mimetype'  => $uploadcfg['mimetype'],
-            'chunking'  => $uploadcfg['chunking'],
-            'chunksize' => $uploadcfg['chunksize'],
-            'savekey'   => $uploadcfg['savekey'],
-            'multipart' => [],
-            'multiple'  => $uploadcfg['multiple'],
-            'storage'   => 'local'
+            'cdnurl'     => $uploadcfg['cdnurl'],
+            'uploadurl'  => $uploadurl,
+            'bucket'     => 'local',
+            'maxsize'    => $uploadcfg['maxsize'],
+            'mimetype'   => $uploadcfg['mimetype'],
+            'chunking'   => $uploadcfg['chunking'],
+            'chunksize'  => $uploadcfg['chunksize'],
+            'savekey'    => $uploadcfg['savekey'],
+            'multipart'  => [],
+            'multiple'   => $uploadcfg['multiple'],
+            'fullmode'   => $uploadcfg['fullmode'],
+            'thumbstyle' => $uploadcfg['thumbstyle'],
+            'storage'    => 'local'
         ];
         return $upload;
     }

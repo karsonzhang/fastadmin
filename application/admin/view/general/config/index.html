@@ -25,6 +25,7 @@
         .edit-form table tr th:nth-last-child(-n + 2), .edit-form table tr td:nth-last-child(-n + 2) {
             display: none;
         }
+
         .edit-form table tr td .msg-box {
             display: none;
         }
@@ -37,9 +38,11 @@
             {foreach $siteList as $index=>$vo}
             <li class="{$vo.active?'active':''}"><a href="#{$vo.name}" data-toggle="tab">{:__($vo.title)}</a></li>
             {/foreach}
+            {if $Think.config.app_debug}
             <li data-toggle="tooltip" title="{:__('Add new config')}">
                 <a href="#addcfg" data-toggle="tab"><i class="fa fa-plus"></i></a>
             </li>
+            {/if}
         </ul>
     </div>
 
@@ -56,8 +59,10 @@
                             <tr>
                                 <th width="15%">{:__('Title')}</th>
                                 <th width="68%">{:__('Value')}</th>
+                                {if $Think.config.app_debug}
                                 <th width="15%">{:__('Name')}</th>
                                 <th width="2%"></th>
+                                {/if}
                             </tr>
                             </thead>
                             <tbody>
@@ -174,8 +179,10 @@
                                     </div>
 
                                 </td>
+                                {if $Think.config.app_debug}
                                 <td>{php}echo "{\$site.". $item['name'] . "}";{/php}</td>
-                                <td>{if $item['id']>17}<a href="javascript:;" class="btn-delcfg text-muted" data-name="{$item.name}"><i class="fa fa-times"></i></a>{/if}</td>
+                                <td>{if $item['id']>18}<a href="javascript:;" class="btn-delcfg text-muted" data-name="{$item.name}"><i class="fa fa-times"></i></a>{/if}</td>
+                                {/if}
                             </tr>
                             {/foreach}
                             </tbody>
@@ -183,11 +190,15 @@
                             <tr>
                                 <td></td>
                                 <td>
-                                    <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
-                                    <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                                    <div class="layer-footer">
+                                        <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                                        <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                                    </div>
                                 </td>
+                                {if $Think.config.app_debug}
                                 <td></td>
                                 <td></td>
+                                {/if}
                             </tr>
                             </tfoot>
                         </table>
@@ -321,8 +332,12 @@ value2|title2</textarea>
                     <div class="form-group">
                         <label class="control-label col-xs-12 col-sm-2"></label>
                         <div class="col-xs-12 col-sm-4">
-                            <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+                            {if !$Think.config.app_debug}
+                            <button type="button" class="btn btn-primary disabled">{:__('Only work at development environment')}</button>
+                            {else/}
+                            <button type="submit" class="btn btn-primary btn-embossed">{:__('OK')}</button>
                             <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                            {/if}
                         </div>
                     </div>
 

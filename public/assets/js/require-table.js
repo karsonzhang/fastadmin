@@ -611,9 +611,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         var data = [];
                         value = value === null ? '' : value.toString();
                         var arr = value != '' ? value.split(",") : [];
+                        var url;
                         $.each(arr, function (index, value) {
+                            url = Fast.api.cdnurl(value);
                             data.push({
-                                src: Fast.api.cdnurl(value),
+                                src: url,
+                                thumb: url + Config.upload.thumbstyle
                             });
                         });
                         Layer.photos({
@@ -638,7 +641,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     value = value == null || value.length === 0 ? '' : value.toString();
                     value = value ? value : '/assets/img/blank.gif';
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    return '<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>';
+                    return '<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value, true) + Config.upload.thumbstyle + '" /></a>';
                 },
                 images: function (value, row, index) {
                     value = value == null || value.length === 0 ? '' : value.toString();
@@ -647,7 +650,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var html = [];
                     $.each(arr, function (i, value) {
                         value = value ? value : '/assets/img/blank.gif';
-                        html.push('<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value) + '" /></a>');
+                        html.push('<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value, true) + Config.upload.thumbstyle + '" /></a>');
                     });
                     return html.join(' ');
                 },

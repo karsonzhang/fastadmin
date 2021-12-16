@@ -34,15 +34,10 @@
         <label for="icon" class="control-label col-xs-12 col-sm-2">{:__('Icon')}:</label>
         <div class="col-xs-12 col-sm-8">
             <div class="input-group input-groupp-md">
+                <span class="input-group-addon"><i class="{$row.icon}" id="icon-style"></i></span>
                 <input type="text" class="form-control" id="icon" name="row[icon]" value="{$row.icon}" />
                 <a href="javascript:;" class="btn-search-icon input-group-addon">{:__('Search icon')}</a>
             </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input type="text" class="form-control" id="weigh" name="row[weigh]" value="{$row.weigh}" data-rule="required" />
         </div>
     </div>
     <div class="form-group">
@@ -66,7 +61,13 @@
     <div class="form-group">
         <label for="remark" class="control-label col-xs-12 col-sm-2">{:__('Remark')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <textarea class="form-control" id="remark" name="row[remark]">{$row.remark|htmlentities}</textarea>
+            <textarea class="form-control" id="remark" name="row[remark]">{$row.remark|__|htmlentities}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="weigh" name="row[weigh]" value="{$row.weigh}" data-rule="required" />
         </div>
     </div>
     <div class="form-group">
@@ -78,7 +79,7 @@
     <div class="form-group hidden layer-footer">
         <div class="col-xs-2"></div>
         <div class="col-xs-12 col-sm-8">
-            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
             <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
         </div>
     </div>

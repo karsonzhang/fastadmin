@@ -84,9 +84,6 @@
   color: #848484;
   background: #f9fafc;
 }
-.skin-purple-light .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
-}
 .skin-purple-light .sidebar-menu > li:hover > a,
 .skin-purple-light .sidebar-menu > li.active > a {
   color: #000;
@@ -152,6 +149,15 @@
 @media (min-width: 768px) {
   .skin-purple-light.sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu {
     border-left: 1px solid #d2d6de;
+  }
+}
+.skin-purple-light .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+  padding-left: 12px;
+}
+@media (min-width: 768px) {
+  .skin-purple-light.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right) {
+    margin-left: -3px;
   }
 }
 .skin-purple-light .main-sidebar {

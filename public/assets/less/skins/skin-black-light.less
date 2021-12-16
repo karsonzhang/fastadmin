@@ -71,6 +71,19 @@
     //Create the sidebar skin
     .skin-light-sidebar(#222d32);
 
+    .sidebar-menu > li {
+        > a {
+            border-left: 3px solid transparent;
+            padding-left: 12px;
+        }
+    }
+
+    @media (min-width: @screen-sm) {
+        &.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right) {
+            margin-left: -3px;
+        }
+    }
+
     .main-sidebar {
         .box-shadow(7px 0 14px rgba(0, 0, 0, .03));
     }

@@ -27,7 +27,8 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             if ($(button).data("multiple") && inputObj.val() !== "") {
                                 urlArr.push(inputObj.val());
                             }
-                            urlArr.push(data.url);
+                            var url = Config.upload.fullmode ? Fast.api.cdnurl(data.url) : data.url;
+                            urlArr.push(url);
                             inputObj.val(urlArr.join(",")).trigger("change").trigger("validate");
                         }
                         //如果有回调函数
@@ -169,9 +170,15 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         }(maxsize));
 
                         var options = $(this).data() || {};
+                        options = $.extend(true, {}, options, $(this).data("upload-options") || {});
                         delete options.success;
                         delete options.url;
                         multipart = $.isArray(multipart) ? {} : multipart;
+                        var params = $(this).data("params") || {};
+                        var category = typeof params.category !== 'undefined' ? params.category : ($(this).data("category") || '');
+                        if (category) {
+                            // multipart.category = category;
+                        }
 
                         Upload.list[id] = new Dropzone(this, $.extend({
                             url: url,
@@ -218,6 +225,16 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                 $(">i", this.element).addClass("dz-message");
                                 this.options.elementHtml = $(this.element).html();
                             },
+                            sending: function (file, xhr, formData) {
+                                if (typeof file.category !== 'undefined') {
+                                    formData.append('category', file.category);
+                                }
+                            },
+                            addedfile: function (file) {
+                                var params = $(this.element).data("params") || {};
+                                var category = typeof params.category !== 'undefined' ? params.category : ($(this.element).data("category") || '');
+                                file.category = typeof category === 'function' ? category.call(this, file) : category;
+                            },
                             addedfiles: function (files) {
                                 if (this.options.maxFiles && (!this.options.maxFiles || this.options.maxFiles > 1) && this.options.inputId) {
                                     var inputObj = $("#" + this.options.inputId);
@@ -247,7 +264,8 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             error: function (file, response, xhr) {
                                 var responseObj = $("<div>" + (xhr && typeof xhr.responseText !== 'undefined' ? xhr.responseText : response) + "</div>");
                                 responseObj.find("style, title, script").remove();
-                                var ret = {code: 0, data: null, msg: responseObj.text()};
+                                var msg = responseObj.text() || __('Network error');
+                                var ret = {code: 0, data: null, msg: msg};
                                 Upload.events.onUploadError(this, ret, file);
                             },
                             uploadprogress: function (file, progress, bytesSent) {
@@ -347,6 +365,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                     }
                                     var suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(j);
                                     suffix = suffix ? suffix[1] : 'file';
+                                    j = Config.upload.fullmode ? Fast.api.cdnurl(j) : j;
                                     var value = (json && typeof json[i] !== 'undefined' ? json[i] : null);
                                     var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: value, row: value, suffix: suffix};
                                     var html = tpl ? Template(tpl, data) : Template.render(Upload.config.previewtpl, data);

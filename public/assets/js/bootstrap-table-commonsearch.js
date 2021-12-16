@@ -4,7 +4,7 @@
  * @author: pppscn <35696959@qq.com>
  * @update 2017-05-07 <https://gitee.com/pp/fastadmin>
  *
- * @author: Karson <karsonzhang@163.com>
+ * @author: Karson <karson@fastadmin.net>
  * @update 2018-04-05 <https://gitee.com/karson/fastadmin>
  */
 

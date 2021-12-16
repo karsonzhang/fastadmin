@@ -6,8 +6,6 @@
         -moz-border-radius: 3px;
         border-radius: 3px;
         margin-bottom: 20px;
-        -webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
-        box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
     }
 
     .sm-st-icon {
@@ -27,7 +25,6 @@
     }
 
     .sm-st-info {
-        font-size: 12px;
         padding-top: 2px;
     }
 
@@ -125,6 +122,7 @@
     .stat .name {
         overflow: hidden;
         text-overflow: ellipsis;
+        margin: 5px 0;
     }
 
     .stat.lg .value {
@@ -132,6 +130,9 @@
         line-height: 28px;
     }
 
+    .stat-col {
+        margin:0 0 10px 0;
+    }
     .stat.lg .name {
         font-size: 16px;
     }
@@ -155,7 +156,7 @@
     }
 
     #statistics .panel h5 {
-        font-size: 13px;
+        font-size: 14px;
     }
 </style>
 <div class="panel panel-default panel-intro">
@@ -211,7 +212,7 @@
 
                 <div class="row">
                     <div class="col-lg-8">
-                        <div id="echart" class="btn-refresh" style="height:200px;width:100%;"></div>
+                        <div id="echart" class="btn-refresh" style="height:300px;width:100%;"></div>
                     </div>
                     <div class="col-lg-4">
                         <div class="card sameheight-item stats">
@@ -224,7 +225,7 @@
                                             <div class="name"> {:__('Today user signup')}</div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 30%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6 stat-col">
@@ -234,7 +235,7 @@
                                             <div class="name"> {:__('Today user login')}</div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
@@ -244,7 +245,7 @@
                                             <div class="name"> {:__('Three dnu')}</div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6 stat-col">
@@ -254,7 +255,7 @@
                                             <div class="name"> {:__('Seven dnu')}</div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
@@ -264,7 +265,7 @@
                                             <div class="name"> {:__('Seven dau')}</div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
                                         </div>
                                     </div>
                                     <div class="col-xs-6  stat-col">
@@ -274,7 +275,7 @@
                                             <div class="name"> {:__('Thirty dau')}</div>
                                         </div>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
+                                            <div class="progress-bar progress-bar-success" style="width: 20%"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -308,7 +309,7 @@
                         </div>
                     </div>
                     <div class="col-xs-6 col-md-3">
-                        <div class="panel bg-aqua-gradient no-border">
+                        <div class="panel bg-teal-gradient no-border">
                             <div class="panel-body">
                                 <div class="ibox-title">
                                     <span class="label label-primary pull-right">{:__('Real time')}</span>

@@ -116,9 +116,6 @@
   color: #4b646f;
   background: #1a2226;
 }
-.skin-black-red .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
-}
 .skin-black-red .sidebar-menu > li:hover > a,
 .skin-black-red .sidebar-menu > li.active > a {
   color: #fff;
@@ -187,15 +184,12 @@
   padding-left: 18px;
 }
 .skin-black-red .treeview-menu > li.active > a {
-  background-color: #e74c3c;
-}
-.skin-black-red .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
+  background-color: #f75444;
 }
 .skin-black-red .sidebar-menu > li.active > a {
   color: #fff;
-  background: #e74c3c;
-  border-left-color: #e74c3c;
+  background: #f75444;
+  border-left-color: #f75444;
 }
 .skin-black-red .sidebar-menu > li:hover > a {
   border-left-color: transparent;
@@ -220,11 +214,11 @@
 .skin-black-red.sidebar-collapse .sidebar-menu li:hover > a,
 .skin-black-red.sidebar-collapse .sidebar-menu li.active > a {
   color: #fff;
-  background: #e74c3c;
+  background: #f75444;
 }
 .skin-black-red.sidebar-collapse .sidebar-menu .treeview-menu li.active > a {
   color: #fff;
-  background: #e74c3c;
+  background: #f75444;
 }
 .skin-black-red.sidebar-collapse .sidebar-menu .treeview-menu li.treeview > a {
   background: transparent;
@@ -236,7 +230,7 @@
     color: #fff;
   }
   .skin-black-red.multiplenav .sidebar .mobilenav a.btn-app.active {
-    background: #e74c3c;
+    background: #f75444;
     color: #fff;
   }
 }

@@ -3,10 +3,10 @@
  * ---------
  */
 .skin-red-light .main-header {
-  background-color: #e74c3c;
+  background-color: #f75444;
 }
 .skin-red-light .main-header .navbar {
-  background-color: #e74c3c;
+  background-color: #f75444;
 }
 .skin-red-light .main-header .navbar .nav > li > a {
   color: #fff;
@@ -35,7 +35,7 @@
   color: #fff;
 }
 .skin-red-light .main-header .navbar .sidebar-toggle:hover {
-  background-color: #e43725;
+  background-color: #f63e2c;
 }
 @media (max-width: 767px) {
   .skin-red-light .main-header .navbar .dropdown-menu li.divider {
@@ -45,19 +45,19 @@
     color: #fff;
   }
   .skin-red-light .main-header .navbar .dropdown-menu li a:hover {
-    background: #e43725;
+    background: #f63e2c;
   }
 }
 .skin-red-light .main-header .logo {
-  background-color: #e74c3c;
+  background-color: #f75444;
   color: #fff;
   border-bottom: 0 solid transparent;
 }
 .skin-red-light .main-header .logo:hover {
-  background-color: #e64837;
+  background-color: #f7503f;
 }
 .skin-red-light .main-header li.user-header {
-  background-color: #e74c3c;
+  background-color: #f75444;
 }
 .skin-red-light .content-header {
   background: transparent;
@@ -84,17 +84,14 @@
   color: #848484;
   background: #f9fafc;
 }
-.skin-red-light .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
-}
 .skin-red-light .sidebar-menu > li:hover > a,
 .skin-red-light .sidebar-menu > li.active > a {
   color: #000;
   background: #f4f4f5;
-  border-left-color: #e74c3c;
+  border-left-color: #f75444;
 }
 .skin-red-light .sidebar-menu > li.active {
-  border-left-color: #e74c3c;
+  border-left-color: #f75444;
 }
 .skin-red-light .sidebar-menu > li > .treeview-menu {
   background: #f4f4f5;
@@ -154,6 +151,15 @@
     border-left: 1px solid #d2d6de;
   }
 }
+.skin-red-light .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+  padding-left: 12px;
+}
+@media (min-width: 768px) {
+  .skin-red-light.sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right) {
+    margin-left: -3px;
+  }
+}
 .skin-red-light .main-sidebar {
   -webkit-box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
   box-shadow: 7px 0 14px rgba(0, 0, 0, 0.03);
@@ -168,7 +174,7 @@
     color: #757575;
   }
   .skin-red-light.multiplenav .sidebar .mobilenav a.btn-app.active {
-    background: #e74c3c;
+    background: #f75444;
     color: #fff;
   }
 }

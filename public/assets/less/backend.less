@@ -5,7 +5,7 @@
 @import "lesshat.less";
 @import url("../css/bootstrap.css");
 @import url("../css/fastadmin.css");
-@import url("../css/skins/skin-black-green.css");
+@import url("../css/skins/skin-black-blue.css");
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
 @import url("../libs/toastr/toastr.min.css");
@@ -17,6 +17,7 @@
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
 @import url("../libs/bootstrap-slider/slider.css");
+@import "tinycss.less";
 
 @main-bg: #f1f4f6;
 @panel-intro-bg: darken(@main-bg, 3%);
@@ -29,7 +30,8 @@ body {
 
 body {
     background: #f1f4f6;
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.5715;
 }
 
 body.is-dialog {
@@ -38,7 +40,6 @@ body.is-dialog {
 
 .dropdown-menu {
     > li > a {
-        font-size: 13px;
         padding: 5px 12px;
     }
 }
@@ -55,10 +56,10 @@ body.is-dialog {
         position: relative;
 
         .dropdown-menu {
-            font-size: 13px;
+            font-size: 14px;
 
             > li > a {
-                padding: 5px 20px;
+                padding: 8px 15px;
             }
         }
     }
@@ -191,6 +192,11 @@ table.table-template {
     .sp_container .sp_element_box .msg-box {
         left: inherit;
     }
+
+    .card-views .card-view {
+        padding: 5px 0;
+    }
+
 }
 
 .toast-top-right-index {
@@ -202,7 +208,7 @@ table.table-template {
     background: #f0f0f0;
     clear: both;
     color: #999;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     line-height: 1;
     margin-bottom: -5px;
@@ -605,7 +611,7 @@ form.form-horizontal .control-label {
                 height: 100%;
                 padding: 0;
                 line-height: 28px;
-                font-size: 12px;
+                font-size: 13px;
                 vertical-align: middle;
                 opacity: 1;
                 overflow: hidden;
@@ -741,10 +747,6 @@ form.form-horizontal .control-label {
     > li .badge {
         margin-top: 0;
     }
-
-    .treeview-menu > li > a {
-        font-size: inherit;
-    }
 }
 
 .sidebar-collapse {
@@ -755,19 +757,16 @@ form.form-horizontal .control-label {
 }
 
 @media (min-width: 768px) {
-    .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
-        top: 42px;
-    }
-
     .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
         top: 7px !important;
+        right: 10px;
         height: 17px;
     }
 }
 
 .fieldlist dd {
     display: block;
-    margin: 5px 0;
+    margin: 8px 0;
 
     input {
         display: inline-block;
@@ -782,7 +781,6 @@ form.form-horizontal .control-label {
         width: 110px;
         display: inline-block;
         text-decoration: none;
-        font-weight: bold;
     }
 }
 
@@ -938,7 +936,16 @@ form.form-horizontal .control-label {
 }
 
 .bootstrap-table .fixed-table-toolbar .dropdown-menu {
+    overflow: inherit;
+}
+
+.bootstrap-table .fixed-table-toolbar .columns-right .dropdown-menu {
     overflow: auto;
+}
+
+.bootstrap-table .bs-bars .fixed-table-toolbar .dropdown-menu > li:hover > a {
+    background-color: #e1e3e9;
+    color: #333;
 }
 
 .bootstrap-table .fa-toggle-on.fa-2x {
@@ -949,6 +956,19 @@ form.form-horizontal .control-label {
     margin-left: 0;
     margin-right: 0;
     white-space: nowrap;
+}
+
+.bootstrap-table .table:not(.table-condensed) > tbody > tr > th,
+.bootstrap-table .table:not(.table-condensed) > tfoot > tr > th,
+.bootstrap-table .table:not(.table-condensed) > thead > tr > td,
+.bootstrap-table .table:not(.table-condensed) > tbody > tr > td,
+.bootstrap-table .table:not(.table-condensed) > tfoot > tr > td {
+    padding: 8px 15px;
+    height: 47px;
+}
+
+.fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner {
+    padding: 8px 10px;
 }
 
 .toolbar {
@@ -980,7 +1000,7 @@ table.table-nowrap {
 }
 
 .fixed-table-container thead th .sortable {
-    padding-right: 0;
+    padding: 8px 15px;
 }
 
 .dropdown-submenu {
@@ -1110,11 +1130,12 @@ table.table-nowrap {
 
         a {
             background-color: #95a5a6;
-            border-color: #95a5a6;
             color: #fff !important;
-            height: 31px;
+            height: 32px;
+            line-height: 32px;
             margin-top: 0;
-            border: 1px solid transparent;
+            font-size: 13px;
+            border: none;
         }
 
         .layui-layer-btn0 {
@@ -1127,21 +1148,32 @@ table.table-nowrap {
         padding: 8px 20px;
         background-color: #ecf0f1;
         height: auto;
+        min-height: 53px;
         text-align: inherit !important;
     }
 
     .layui-layer-confirm {
         position: absolute;
-        width: 1px;
-        height: 1px;
+        width: 100%;
+        height: 100%;
         left: 0;
         bottom: 0;
-        border: none;
+        border: 1px solid transparent;
         background: transparent;
+        color: transparent;
+
+        &:focus {
+            border: 1px solid #444c69;
+            .border-radius(2px);
+        }
+
+        &:focus-visible {
+            outline: 0;
+        }
     }
 
     .layui-layer-tab .layui-layer-title span.layui-this {
-        height:46px;
+        height: 46px;
     }
 
     .layui-layer-setwin {
@@ -1280,7 +1312,10 @@ table.table-nowrap {
         }
 
         .toolbar {
-            a.btn-refresh, a.btn-del, a.btn-add, a.btn-edit, a.btn-import, a.btn-more, a.btn-recyclebin, .btn-mini-xs {
+            .btn {
+                min-height: 33px;
+            }
+            a.btn-refresh, a.btn-del, a.btn-add, a.btn-edit, a.btn-import, a.btn-more, a.btn-recyclebin, .btn-mini-xs, .btn-multi {
                 font-size: 0;
 
                 .fa {
@@ -1419,7 +1454,6 @@ table.table-nowrap {
 }
 
 .jumpto input {
-    height: 31px;
     width: 50px;
     margin-left: 5px;
     margin-right: 5px;
@@ -1476,3 +1510,108 @@ table.table-nowrap {
     transform: rotate(-90deg);
 }
 
+.sidebar-menu > li {
+    //margin: 4px 0 4px 0;
+}
+
+.sidebar-menu .treeview-menu > li {
+    margin: 4px 0 4px 0;
+}
+
+.bootstrap-tagsinput {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    display: inline-block;
+    padding: 4px 6px;
+    margin-bottom: 10px;
+    color: #555;
+    vertical-align: middle;
+    //border-radius: 4px;
+    //max-width: 100%;
+
+    width: 100%;
+    line-height: 22px;
+    cursor: text;
+
+
+    input {
+        border: none;
+        box-shadow: none;
+        outline: none;
+        background-color: transparent;
+        padding: 0;
+        margin: 0;
+        font-size: 13px;
+        //width: auto !important;
+        width: 80px;
+        max-width: inherit;
+
+        &:focus {
+            border: none;
+            box-shadow: none;
+        }
+    }
+
+    .tagsinput-text {
+        display: inline-block;
+        overflow: auto;
+        visibility: hidden;
+        height: 1px;
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+    }
+
+    .tag {
+        margin-right: 2px;
+        color: white;
+
+        [data-role="remove"] {
+            margin-left: 5px;
+            cursor: pointer;
+
+            &:after {
+                content: "x";
+                padding: 0px 2px;
+            }
+
+            &:hover {
+                background-color: rgba(255, 255, 255, .16);
+            }
+        }
+    }
+}
+
+.autocomplete-suggestions {
+    border-radius: 2px;
+    background: #FFF;
+    overflow: auto;
+    min-width: 200px;
+    .box-shadow(0px 20px 30px rgba(83, 88, 93, 0.05), 0px 0px 30px rgba(83, 88, 93, 0.1));
+
+    strong {
+        font-weight: normal;
+        color: red;
+    }
+
+    .autocomplete-suggestion {
+        padding: 5px 10px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .autocomplete-selected {
+        background: #F0F0F0;
+    }
+
+    .autocomplete-group {
+        padding: 5px 10px;
+
+        strong {
+            display: block;
+            border-bottom: 1px solid #ddd;
+        }
+
+    }
+}

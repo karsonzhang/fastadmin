@@ -90,7 +90,7 @@
     //First Level
     > li {
         position: relative;
-        margin: 0;
+        margin: 5px 0;
         padding: 0;
         > a {
             padding: 12px 5px 12px 15px;
@@ -134,18 +134,24 @@
     .treeview-menu {
         display: none;
         list-style: none;
-        padding: 0;
+        padding: 0px 0;
         margin: 0;
         padding-left: 5px;
         .treeview-menu {
             padding-left: 20px;
+        }
+        &:before,&:after{
+            content: "";
+            display: table;
+        }
+        &.menu-open {
+            display: block;
         }
         > li {
             margin: 0;
             > a {
                 padding: 12px 5px 12px 15px;
                 display: block;
-                font-size: 12px;
                 > .fa,
                 > .glyphicon,
                 > .ion {

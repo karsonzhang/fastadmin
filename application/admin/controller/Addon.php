@@ -25,13 +25,13 @@ class Addon extends Backend
     public function _initialize()
     {
         parent::_initialize();
-        if (!$this->auth->isSuperAdmin() && in_array($this->request->action(), ['install', 'uninstall', 'local', 'upgrade'])) {
+        if (!$this->auth->isSuperAdmin() && in_array($this->request->action(), ['install', 'uninstall', 'local', 'upgrade', 'authorization', 'testdata'])) {
             $this->error(__('Access is allowed only to the super management group'));
         }
     }
 
     /**
-     * 查看
+     * 插件列表
      */
     public function index()
     {
@@ -40,6 +40,18 @@ class Addon extends Backend
             $config = get_addon_config($v['name']);
             $v['config'] = $config ? 1 : 0;
             $v['url'] = str_replace($this->request->server('SCRIPT_NAME'), '', $v['url']);
+        }
+        if ($this->request->isAjax()) {
+            $result = [];
+            debug('begin');
+            try {
+                $result = Service::addons($this->request->get());
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
+            }
+            debug('end');
+            \think\Log::record("tx:" . debug('begin', 'end', 6) . 's');
+            return json($result);
         }
         $this->assignconfig(['addons' => $addons, 'api_url' => config('fastadmin.api_url'), 'faversion' => config('fastadmin.version')]);
         return $this->view->fetch();
@@ -57,13 +69,10 @@ class Addon extends Backend
         if (!preg_match("/^[a-zA-Z0-9]+$/", $name)) {
             $this->error(__('Addon name incorrect'));
         }
-        if (!is_dir(ADDON_PATH . $name)) {
-            $this->error(__('Directory not found'));
-        }
         $info = get_addon_info($name);
         $config = get_addon_fullconfig($name);
         if (!$info) {
-            $this->error(__('No Results were found'));
+            $this->error(__('Addon not exists'));
         }
         if ($this->request->isPost()) {
             $params = $this->request->post("row/a", [], 'trim');
@@ -80,13 +89,19 @@ class Addon extends Backend
                     }
                 }
                 try {
-                    //更新配置文件
-                    set_addon_fullconfig($name, $config);
-                    Service::refresh();
-                    $this->success();
+                    $addon = get_addon_instance($name);
+                    //插件自定义配置实现逻辑
+                    if (method_exists($addon, 'config')) {
+                        $addon->config($name, $config);
+                    } else {
+                        //更新配置文件
+                        set_addon_fullconfig($name, $config);
+                        Service::refresh();
+                    }
                 } catch (Exception $e) {
                     $this->error(__($e->getMessage()));
                 }
+                $this->success();
             }
             $this->error(__('Parameter %s can not be empty', ''));
         }
@@ -212,6 +227,9 @@ class Addon extends Backend
     {
         Config::set('default_return_type', 'json');
 
+        if (!config('app_debug')) {
+            $this->error(__('Only work at debug mode'));
+        }
         $info = [];
         $file = $this->request->file('file');
         try {
@@ -276,6 +294,29 @@ class Addon extends Backend
     }
 
     /**
+     * 测试数据
+     */
+    public function testdata()
+    {
+        $name = $this->request->post("name");
+        if (!$name) {
+            $this->error(__('Parameter %s can not be empty', 'name'));
+        }
+        if (!preg_match("/^[a-zA-Z0-9]+$/", $name)) {
+            $this->error(__('Addon name incorrect'));
+        }
+
+        try {
+            Service::importsql($name, 'testdata.sql');
+        } catch (AddonException $e) {
+            $this->result($e->getData(), $e->getCode(), __($e->getMessage()));
+        } catch (Exception $e) {
+            $this->error(__($e->getMessage()), $e->getCode());
+        }
+        $this->success(__('Import successful'), '');
+    }
+
+    /**
      * 已装插件
      */
     public function downloaded()
@@ -285,22 +326,7 @@ class Addon extends Backend
         $filter = $this->request->get("filter");
         $search = $this->request->get("search");
         $search = htmlspecialchars(strip_tags($search));
-        $onlineaddons = Cache::get("onlineaddons");
-        if (!is_array($onlineaddons) && config('fastadmin.api_url')) {
-            $onlineaddons = [];
-            $result = Http::sendRequest(config('fastadmin.api_url') . '/addon/index', [], 'GET', [
-                CURLOPT_HTTPHEADER => ['Accept-Encoding:gzip'],
-                CURLOPT_ENCODING   => "gzip"
-            ]);
-            if ($result['ret']) {
-                $json = (array)json_decode($result['msg'], true);
-                $rows = isset($json['rows']) ? $json['rows'] : [];
-                foreach ($rows as $index => $row) {
-                    $onlineaddons[$row['name']] = $row;
-                }
-            }
-            Cache::set("onlineaddons", $onlineaddons, 600);
-        }
+        $onlineaddons = $this->getAddonList();
         $filter = (array)json_decode($filter, true);
         $addons = get_addon_list();
         $list = [];
@@ -311,6 +337,7 @@ class Addon extends Backend
 
             if (isset($onlineaddons[$v['name']])) {
                 $v = array_merge($v, $onlineaddons[$v['name']]);
+                $v['price'] = '-';
             } else {
                 $v['category_id'] = 0;
                 $v['flag'] = '';
@@ -321,9 +348,9 @@ class Addon extends Backend
                 $v['price'] = __('None');
                 $v['screenshots'] = [];
                 $v['releaselist'] = [];
+                $v['url'] = addon_url($v['name']);
+                $v['url'] = str_replace($this->request->server('SCRIPT_NAME'), '', $v['url']);
             }
-            $v['url'] = addon_url($v['name']);
-            $v['url'] = str_replace($this->request->server('SCRIPT_NAME'), '', $v['url']);
             $v['createtime'] = filemtime(ADDON_PATH . $v['name']);
             if ($filter && isset($filter['category_id']) && is_numeric($filter['category_id']) && $filter['category_id'] != $v['category_id']) {
                 continue;
@@ -338,6 +365,105 @@ class Addon extends Backend
 
         $callback = $this->request->get('callback') ? "jsonp" : "json";
         return $callback($result);
+    }
+
+    /**
+     * 登录
+     */
+    public function login()
+    {
+        $params = [
+            'account'   => $this->request->post('account'),
+            'password'  => $this->request->post('password'),
+            'url'       => $this->request->url(true),
+            'faversion' => config('fastadmin.version')
+        ];
+        try {
+            $result = Service::login($params);
+        } catch (Exception $e) {
+            $this->error(__($e->getMessage()));
+        }
+        return json($result);
+    }
+
+    /**
+     * 会员信息
+     */
+    public function userinfo()
+    {
+        $params = [
+            'uid'       => $this->request->post('uid'),
+            'token'     => $this->request->post('token'),
+            'url'       => $this->request->url(true),
+            'faversion' => config('fastadmin.version')
+        ];
+        try {
+            $result = Service::userinfo($params);
+        } catch (Exception $e) {
+            $this->error($e->getMessage());
+        }
+        return json($result);
+    }
+
+    /**
+     * 退出
+     */
+    public function logout()
+    {
+        $params = [
+            'uid'       => $this->request->post('uid'),
+            'token'     => $this->request->post('token'),
+            'url'       => $this->request->url(true),
+            'faversion' => config('fastadmin.version')
+        ];
+        try {
+            $result = Service::logout($params);
+        } catch (Exception $e) {
+            $this->error(__($e->getMessage()));
+        }
+        return json($result);
+    }
+
+    /**
+     * 检测
+     */
+    public function isbuy()
+    {
+        $name = $this->request->post("name");
+        $uid = $this->request->post("uid");
+        $token = $this->request->post("token");
+        $version = $this->request->post("version");
+        $faversion = $this->request->post("faversion");
+        $extend = [
+            'uid'       => $uid,
+            'token'     => $token,
+            'version'   => $version,
+            'faversion' => $faversion
+        ];
+        try {
+            $result = Service::isBuy($name, $extend);
+        } catch (Exception $e) {
+            $this->error(__($e->getMessage()));
+        }
+        return json($result);
+    }
+
+    /**
+     * 刷新授权
+     */
+    public function authorization()
+    {
+        $params = [
+            'uid'       => $this->request->post('uid'),
+            'token'     => $this->request->post('token'),
+            'faversion' => $this->request->post('faversion'),
+        ];
+        try {
+            Service::authorization($params);
+        } catch (Exception $e) {
+            $this->error(__($e->getMessage()));
+        }
+        $this->success(__('Operate successful'));
     }
 
     /**
@@ -360,4 +486,31 @@ class Addon extends Backend
         $tables = array_values($tables);
         $this->success('', null, ['tables' => $tables]);
     }
+
+    protected function getAddonList()
+    {
+        $onlineaddons = Cache::get("onlineaddons");
+        if (!is_array($onlineaddons) && config('fastadmin.api_url')) {
+            $onlineaddons = [];
+            $params = [
+                'uid'       => $this->request->post('uid'),
+                'token'     => $this->request->post('token'),
+                'version'   => config('fastadmin.version'),
+                'faversion' => config('fastadmin.version'),
+            ];
+            $json = [];
+            try {
+                $json = Service::addons($params);
+            } catch (\Exception $e) {
+
+            }
+            $rows = isset($json['rows']) ? $json['rows'] : [];
+            foreach ($rows as $index => $row) {
+                $onlineaddons[$row['name']] = $row;
+            }
+            Cache::set("onlineaddons", $onlineaddons, 600);
+        }
+        return $onlineaddons;
+    }
+
 }

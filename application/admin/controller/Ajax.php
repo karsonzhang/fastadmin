@@ -11,6 +11,7 @@ use think\Cache;
 use think\Config;
 use think\Db;
 use think\Lang;
+use think\Response;
 use think\Validate;
 
 /**
@@ -37,17 +38,19 @@ class Ajax extends Backend
      */
     public function lang()
     {
-        header('Content-Type: application/javascript');
-        header("Cache-Control: public");
-        header("Pragma: cache");
 
-        $offset = 30 * 60 * 60 * 24; // 缓存一个月
-        header("Expires: " . gmdate("D, d M Y H:i:s", time() + $offset) . " GMT");
+        $header = ['Content-Type' => 'application/javascript'];
+        if (!config('app_debug')) {
+            $offset = 30 * 60 * 60 * 24; // 缓存一个月
+            $header['Cache-Control'] = 'public';
+            $header['Pragma'] = 'cache';
+            $header['Expires'] = gmdate("D, d M Y H:i:s", time() + $offset) . " GMT";
+        }
 
         $controllername = input("controllername");
         //默认只加载了控制器对应的语言名，你还根据控制器名来加载额外的语言包
         $this->loadlang($controllername);
-        return jsonp(Lang::get(), 200, [], ['json_encode_param' => JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE]);
+        return jsonp(Lang::get(), 200, $header, ['json_encode_param' => JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE]);
     }
 
     /**
@@ -296,10 +299,15 @@ class Ajax extends Backend
     public function icon()
     {
         $suffix = $this->request->request("suffix");
-        header('Content-type: image/svg+xml');
         $suffix = $suffix ? $suffix : "FILE";
-        echo build_suffix_image($suffix);
-        exit;
+        $data = build_suffix_image($suffix);
+        $header = ['Content-Type' => 'image/svg+xml'];
+        $offset = 30 * 60 * 60 * 24; // 缓存一个月
+        $header['Cache-Control'] = 'public';
+        $header['Pragma'] = 'cache';
+        $header['Expires'] = gmdate("D, d M Y H:i:s", time() + $offset) . " GMT";
+        $response = Response::create($data, '', 200, $header);
+        return $response;
     }
 
 }

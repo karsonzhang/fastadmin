@@ -65,6 +65,10 @@ class Attachment extends Model
         return '';
     }
 
+    /**
+     * 获取Mimetype列表
+     * @return array
+     */
     public static function getMimetypeList()
     {
         $data = [

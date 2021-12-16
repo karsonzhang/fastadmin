@@ -118,7 +118,7 @@ class Rule extends Backend
                 //这里需要针对name做唯一验证
                 $ruleValidate = \think\Loader::validate('AuthRule');
                 $ruleValidate->rule([
-                    'name' => 'require|format|unique:AuthRule,name,' . $row->id,
+                    'name' => 'require|unique:AuthRule,name,' . $row->id,
                 ]);
                 $result = $row->validate()->save($params);
                 if ($result === false) {

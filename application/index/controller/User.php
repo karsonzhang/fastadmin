@@ -301,6 +301,10 @@ class User extends Frontend
                 $timeArr = explode(' - ', $filterArr['createtime']);
                 $where['createtime'] = ['between', [strtotime($timeArr[0]), strtotime($timeArr[1])]];
             }
+            $search = $this->request->get('search');
+            if ($search) {
+                $where['filename'] = ['like', '%' . $search . '%'];
+            }
 
             $model = new Attachment();
             $offset = $this->request->get("offset", 0);

@@ -7,7 +7,7 @@
 
     <body>
 
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-white navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-navbar">
@@ -23,8 +23,9 @@
                         <li><a href="{:url('/')}">{:__('Home')}</a></li>
                         <li class="dropdown">
                             {if $user}
-                            <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown" style="padding-top: 10px;height: 50px;">
+                            <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="avatar-img"><img src="{$user.avatar|htmlentities|cdnurl}" alt=""></span>
+                                <span class="visible-xs-inline-block" style="padding:5px;">{$user.nickname} <b class="caret"></b></span>
                             </a>
                             {else /}
                             <a href="{:url('user/index')}" class="dropdown-toggle" data-toggle="dropdown">{:__('User center')} <b class="caret"></b></a>
@@ -52,7 +53,7 @@
         </main>
 
         <footer class="footer" style="clear:both">
-            <p class="copyright">Copyright&nbsp;©&nbsp;2017-2020 {$site.name|htmlentities} All Rights Reserved <a href="https://beian.miit.gov.cn" target="_blank">{$site.beian|htmlentities}</a></p>
+            <p class="copyright">Copyright&nbsp;©&nbsp;{:date("Y")} {$site.name|htmlentities} All Rights Reserved <a href="https://beian.miit.gov.cn" target="_blank">{$site.beian|htmlentities}</a></p>
         </footer>
 
         {include file="common/script" /}

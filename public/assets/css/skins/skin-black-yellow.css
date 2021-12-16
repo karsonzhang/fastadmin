@@ -116,9 +116,6 @@
   color: #4b646f;
   background: #1a2226;
 }
-.skin-black-yellow .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
-}
 .skin-black-yellow .sidebar-menu > li:hover > a,
 .skin-black-yellow .sidebar-menu > li.active > a {
   color: #fff;
@@ -188,9 +185,6 @@
 }
 .skin-black-yellow .treeview-menu > li.active > a {
   background-color: #f39c12;
-}
-.skin-black-yellow .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
 }
 .skin-black-yellow .sidebar-menu > li.active > a {
   color: #fff;
