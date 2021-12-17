@@ -11,6 +11,32 @@
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
 @import url("../libs/bootstrap-slider/slider.css");
+.m-0 {
+  margin-top: 0px !important;
+  margin-right: 0px !important;
+  margin-bottom: 0px !important;
+  margin-left: 0px !important;
+}
+.mt-0 {
+  margin-top: 0px !important;
+}
+.mr-0 {
+  margin-right: 0px !important;
+}
+.mb-0 {
+  margin-bottom: 0px !important;
+}
+.ml-0 {
+  margin-left: 0px !important;
+}
+.mx-0 {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.my-0 {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
 .m-1 {
   margin-top: 5px !important;
   margin-right: 5px !important;
@@ -114,6 +140,32 @@
 .my-4 {
   margin-top: 20px !important;
   margin-bottom: 20px !important;
+}
+.p-0 {
+  padding-top: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
+  padding-left: 0px !important;
+}
+.pt-0 {
+  padding-top: 0px !important;
+}
+.pr-0 {
+  padding-right: 0px !important;
+}
+.pb-0 {
+  padding-bottom: 0px !important;
+}
+.pl-0 {
+  padding-left: 0px !important;
+}
+.px-0 {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.py-0 {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 .p-1 {
   padding-top: 5px !important;
@@ -446,7 +498,7 @@ input.selectpage {
 }
 .radio > label > input,
 .checkbox > label > input {
-  margin: 2px 0 0;
+  margin: 5px 0 0;
 }
 form.form-horizontal .control-label {
   font-weight: normal;

@@ -277,16 +277,12 @@ class User extends Frontend
             $where = [];
             $filter = $this->request->request('filter');
             $filterArr = (array)json_decode($filter, true);
-            if (isset($filterArr['mimetype']) && preg_match("/[]\,|\*]/", $filterArr['mimetype'])) {
+            if (isset($filterArr['mimetype']) && preg_match("/(\/|\,|\*)/", $filterArr['mimetype'])) {
                 $this->request->get(['filter' => json_encode(array_diff_key($filterArr, ['mimetype' => '']))]);
                 $mimetypeQuery = function ($query) use ($filterArr) {
-                    $mimetypeArr = explode(',', $filterArr['mimetype']);
+                    $mimetypeArr = array_filter(explode(',', $filterArr['mimetype']));
                     foreach ($mimetypeArr as $index => $item) {
-                        if (stripos($item, "/*") !== false) {
-                            $query->whereOr('mimetype', 'like', str_replace("/*", "/", $item) . '%');
-                        } else {
-                            $query->whereOr('mimetype', 'like', '%' . $item . '%');
-                        }
+                        $query->whereOr('mimetype', 'like', '%' . str_replace("/*", "/", $item) . '%');
                     }
                 };
             } elseif (isset($filterArr['mimetype'])) {

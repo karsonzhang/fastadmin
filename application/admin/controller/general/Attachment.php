@@ -45,17 +45,13 @@ class Attachment extends Backend
                 $filterArr['category'] = ',unclassed';
                 $this->request->get(['filter' => json_encode(array_diff_key($filterArr, ['category' => '']))]);
             }
-            if (isset($filterArr['mimetype']) && preg_match("/[]\,|\*]/", $filterArr['mimetype'])) {
+            if (isset($filterArr['mimetype']) && preg_match("/(\/|\,|\*)/", $filterArr['mimetype'])) {
                 $mimetype = $filterArr['mimetype'];
                 $filterArr = array_diff_key($filterArr, ['mimetype' => '']);
                 $mimetypeQuery = function ($query) use ($mimetype) {
-                    $mimetypeArr = explode(',', $mimetype);
+                    $mimetypeArr = array_filter(explode(',', $mimetype));
                     foreach ($mimetypeArr as $index => $item) {
-                        if (stripos($item, "/*") !== false) {
-                            $query->whereOr('mimetype', 'like', str_replace("/*", "/", $item) . '%');
-                        } else {
-                            $query->whereOr('mimetype', 'like', '%' . $item . '%');
-                        }
+                        $query->whereOr('mimetype', 'like', '%' . str_replace("/*", "/", $item) . '%');
                     }
                 };
             }

@@ -2,7 +2,7 @@
 .make-margin-padding(margin, m, 5px, 4);
 .make-margin-padding(padding, p, 5px, 4);
 
-.make-margin-padding(@type, @prefix, @space, @i) when (@i > 0) {
+.make-margin-padding(@type, @prefix, @space, @i) when (@i >= 0) {
   .make-margin-padding(@type, @prefix, @space, @i - 1);
   @pixel: @space * @i;
   .@{prefix}-@{i} {

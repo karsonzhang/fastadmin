@@ -1660,7 +1660,7 @@ EOD;
     {
         $uploadfilter = $selectfilter = '';
         if ($this->isMatchSuffix($field, $this->imageField)) {
-            $uploadfilter = ' data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp"';
+            $uploadfilter = ' data-mimetype="image/gif,image/jpeg,image/png,image/jpg,image/bmp,image/webp"';
             $selectfilter = ' data-mimetype="image/*"';
         }
         $multiple = substr($field, -1) == 's' ? ' data-multiple="true"' : ' data-multiple="false"';

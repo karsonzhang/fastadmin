@@ -67,6 +67,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 });
             });
 
+            //当表格分页变更时
+            table.on('page-change.bs.table', function (e, page, pagesize) {
+                if (!isNaN(pagesize)) {
+                    localStorage.setItem("pagesize-addon", pagesize);
+                }
+            });
+
             Template.helper("Moment", Moment);
             Template.helper("addons", Config['addons']);
 
@@ -149,7 +156,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         {
                             field: 'id',
                             title: __('Operate'),
-                            align: 'center',
                             table: table,
                             formatter: Controller.api.formatter.operate,
                             align: 'right'
@@ -172,7 +178,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 commonSearch: true,
                 searchFormVisible: true,
                 searchFormTemplate: 'searchformtpl',
-                pageSize: 5,
+                pageSize: localStorage.getItem('pagesize-addon') || 50,
             });
 
             // 为表格绑定事件
