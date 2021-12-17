@@ -48,10 +48,10 @@ class User extends Model
         self::beforeUpdate(function ($row) {
             $changedata = $row->getChangedData();
             $origin = $row->getOriginData();
-            if (isset($changedata['money']) && (function_exists('bccomp') ? bccomp($changedata['money'], $origin['money'], 2) !== 0 : (double) $changedata['money'] !== (double) $origin['money'])) {
+            if (isset($changedata['money']) && (function_exists('bccomp') ? bccomp($changedata['money'], $origin['money'], 2) !== 0 : (double)$changedata['money'] !== (double)$origin['money'])) {
                 MoneyLog::create(['user_id' => $row['id'], 'money' => $changedata['money'] - $origin['money'], 'before' => $origin['money'], 'after' => $changedata['money'], 'memo' => '管理员变更金额']);
             }
-            if (isset($changedata['score']) && (int) $changedata['score'] !== (int) $origin['score']) {
+            if (isset($changedata['score']) && (int)$changedata['score'] !== (int)$origin['score']) {
                 ScoreLog::create(['user_id' => $row['id'], 'score' => $changedata['score'] - $origin['score'], 'before' => $origin['score'], 'after' => $changedata['score'], 'memo' => '管理员变更积分']);
             }
         });
@@ -67,21 +67,22 @@ class User extends Model
         return ['normal' => __('Normal'), 'hidden' => __('Hidden')];
     }
 
+
     public function getPrevtimeTextAttr($value, $data)
     {
-        $value = $value ? $value : $data['prevtime'];
+        $value = $value ? $value : ($data['prevtime'] ?? "");
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
     public function getLogintimeTextAttr($value, $data)
     {
-        $value = $value ? $value : $data['logintime'];
+        $value = $value ? $value : ($data['logintime'] ?? "");
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
     public function getJointimeTextAttr($value, $data)
     {
-        $value = $value ? $value : $data['jointime'];
+        $value = $value ? $value : ($data['jointime'] ?? "");
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
