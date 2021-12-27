@@ -614,6 +614,7 @@ form.form-horizontal .control-label {
 /*顶栏addtabs*/
 .nav-addtabs {
   height: 100%;
+  overflow-y: hidden;
   border: none;
 }
 .nav-addtabs.disable-top-badge > li > a > .pull-right-container {
@@ -846,7 +847,7 @@ form.form-horizontal .control-label {
 .input-group .sp_result_area {
   width: 100%;
 }
-.sidebar-menu.show-submenu .treeview-menu {
+.sidebar-menu .treeview-open > .treeview-menu {
   display: block;
 }
 .sidebar-menu > li .badge {
@@ -1466,6 +1467,15 @@ table.table-nowrap thead > tr > th {
   min-height: 41px;
   overflow-x: hidden !important;
 }
+.fixed-columns .fixed-table-body .btn-dragsort,
+.fixed-columns-right .fixed-table-body .btn-dragsort {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
 .fixed-columns {
   left: 0;
 }
@@ -1490,8 +1500,9 @@ table.table-nowrap thead > tr > th {
 .sidebar-menu li.treeview-open > a > .fa-angle-left,
 .sidebar-menu li.treeview-open > a > .pull-right-container > .fa-angle-left {
   -webkit-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
   -o-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
   transform: rotate(-90deg);
 }
 .sidebar-menu .treeview-menu > li {

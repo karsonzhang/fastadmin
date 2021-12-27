@@ -65,7 +65,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
 
                 var visible = nextul.is(":visible");
-                if (!visible) {
+                if (nextul.length == 0) {
                     $(this).parents("li").addClass("active");
                 } else {
                 }
@@ -108,7 +108,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 }
             });
 
-            var multiplenav = $("#secondnav").size() > 0 ? true : false;
+            var multiplenav = $("body").hasClass("multiplenav") > 0 ? true : false;
             var firstnav = $("#firstnav .nav-addtabs");
             var nav = multiplenav ? $("#secondnav .nav-addtabs") : firstnav;
 
@@ -125,6 +125,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                         firstnav.html(data.navlist);
                     }
                     $("li[role='presentation'].active a", nav).trigger('click');
+                    $(window).trigger("resize");
                     return false;
                 }, function () {
                     return false;
@@ -285,8 +286,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             // 切换子菜单显示和菜单小图标的显示
             $("[data-menu]").on('click', function () {
                 if ($(this).data("menu") == 'show-submenu') {
-                    $("ul.sidebar-menu").toggleClass("show-submenu");
-                    createCookie('show_submenu', $(this).prop("checked") ? 1 : 0)
+                    createCookie('show_submenu', $(this).prop("checked") ? 1 : 0);
+                    location.reload();
                 } else {
                     nav.toggleClass("disable-top-badge");
                 }

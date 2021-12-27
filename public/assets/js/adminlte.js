@@ -498,7 +498,7 @@ function _init() {
                     parent_li.addClass('treeview-open');
                 } else {
                     if (!$this.parent().hasClass("active")) {
-                        $this.parent().addClass("active");
+                        // $this.parent().addClass("active");
                     }
                     // modified by FastAdmin
                     if ($(".show-submenu", menu).size() == 0 && $this.parent().parent().hasClass("sidebar-menu")) {

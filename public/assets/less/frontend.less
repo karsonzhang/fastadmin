@@ -72,25 +72,36 @@ a {
 }
 
 @media (min-width: 768px) {
-    .navbar-white .navbar-brand {
-        height: 60px;
-        line-height: 27px;
-    }
+    .navbar-default {
+        .navbar-brand {
+            height: 60px;
+            line-height: 27px;
+        }
 
-    .navbar-white .navbar-nav > li > a {
-        height: 60px;
-        line-height: 27px;
-        color: #555;
-
-        &:hover, &:focus {
-            color: @primary-color;
+        .navbar-nav {
+            > li > a {
+                height: 60px;
+                line-height: 27px;
+            }
         }
     }
 
-    .navbar-white .navbar-nav > .active > a {
-        &, &:hover, &:focus {
-            background-color: inherit;
-            color: @primary-color;
+    .navbar-white .navbar-nav {
+        > li > a {
+            height: 60px;
+            line-height: 27px;
+            color: #555;
+
+            &:hover, &:focus {
+                color: @primary-color;
+            }
+        }
+
+        > .active > a {
+            &, &:hover, &:focus {
+                background-color: inherit;
+                color: @primary-color;
+            }
         }
     }
 }

@@ -454,6 +454,7 @@ form.form-horizontal .control-label {
 /*顶栏addtabs*/
 .nav-addtabs {
     height: 100%;
+    overflow-y: hidden;
 
     &.disable-top-badge {
         > li > a > .pull-right-container {
@@ -738,10 +739,9 @@ form.form-horizontal .control-label {
 }
 
 .sidebar-menu {
-    &.show-submenu {
-        .treeview-menu {
-            display: block;
-        }
+
+    .treeview-open > .treeview-menu {
+        display: block;
     }
 
     > li .badge {
@@ -1315,6 +1315,7 @@ table.table-nowrap {
             .btn {
                 min-height: 33px;
             }
+
             a.btn-refresh, a.btn-del, a.btn-add, a.btn-edit, a.btn-import, a.btn-more, a.btn-recyclebin, .btn-mini-xs, .btn-multi {
                 font-size: 0;
 
@@ -1473,7 +1474,16 @@ table.table-nowrap {
 
     .fixed-table-body {
         min-height: 41px;
-        overflow-x: hidden !important
+        overflow-x: hidden !important;
+
+        .btn-dragsort {
+            pointer-events: none;
+            cursor: not-allowed;
+            opacity: 0.65;
+            filter: alpha(opacity=65);
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
     }
 
 }
@@ -1504,10 +1514,7 @@ table.table-nowrap {
 }
 
 .sidebar-menu li.treeview-open > a > .fa-angle-left, .sidebar-menu li.treeview-open > a > .pull-right-container > .fa-angle-left {
-    -webkit-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    -o-transform: rotate(-90deg);
-    transform: rotate(-90deg);
+    .rotate(-90deg);
 }
 
 .sidebar-menu > li {

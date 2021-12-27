@@ -2,6 +2,7 @@
 
 namespace app\common\library;
 
+use fast\Random;
 use think\Hook;
 
 /**
@@ -49,7 +50,7 @@ class Sms
      */
     public static function send($mobile, $code = null, $event = 'default')
     {
-        $code = is_null($code) ? mt_rand(1000, 9999) : $code;
+        $code = is_null($code) ? Random::numeric(config('captcha.length')) : $code;
         $time = time();
         $ip = request()->ip();
         $sms = \app\common\model\Sms::create(['event' => $event, 'mobile' => $mobile, 'code' => $code, 'ip' => $ip, 'createtime' => $time]);

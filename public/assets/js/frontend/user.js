@@ -8,18 +8,9 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
     };
     var Controller = {
         login: function () {
+
             //本地验证未通过时提示
             $("#login-form").data("validator-options", validatoroptions);
-
-            $(document).on("change", "input[name=type]", function () {
-                var type = $(this).val();
-                $("div.form-group[data-type]").addClass("hide");
-                $("div.form-group[data-type='" + type + "']").removeClass("hide");
-                $('#resetpwd-form').validator("setField", {
-                    captcha: "required;length(4);integer[+];remote(" + $(this).data("check-url") + ", event=resetpwd, " + type + ":#" + type + ")",
-                });
-                $(".btn-captcha").data("url", $(this).data("send-url")).data("type", type);
-            });
 
             //为表单绑定事件
             Form.api.bindevent($("#login-form"), function (data, ret) {
@@ -28,10 +19,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                 }, 1000);
             });
 
-            Form.api.bindevent($("#resetpwd-form"), function (data) {
-                Layer.closeAll();
-            });
-
+            //忘记密码
             $(document).on("click", ".btn-forgot", function () {
                 var id = "resetpwdtpl";
                 var content = Template(id, {});
@@ -41,8 +29,18 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                     area: ["450px", "355px"],
                     content: content,
                     success: function (layero) {
+                        var rule = $("#resetpwd-form input[name='captcha']").data("rule");
                         Form.api.bindevent($("#resetpwd-form", layero), function (data) {
                             Layer.closeAll();
+                        });
+                        $(layero).on("change", "input[name=type]", function () {
+                            var type = $(this).val();
+                            $("div.form-group[data-type]").addClass("hide");
+                            $("div.form-group[data-type='" + type + "']").removeClass("hide");
+                            $('#resetpwd-form').validator("setField", {
+                                captcha: rule.replace(/remote\((.*)\)/, "remote(" + $(this).data("check-url") + ", event=resetpwd, " + type + ":#" + type + ")")
+                            });
+                            $(".btn-captcha").data("url", $(this).data("send-url")).data("type", type);
                         });
                     }
                 });
@@ -155,9 +153,11 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                                     return '<div style="width:120px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + html + '</div>';
                                 }
                             },
-                            {field: 'filename', title: __('Filename'), formatter: function (value, row, index) {
+                            {
+                                field: 'filename', title: __('Filename'), formatter: function (value, row, index) {
                                     return '<div style="width:150px;margin:0 auto;text-align:center;overflow:hidden;white-space: nowrap;text-overflow: ellipsis;">' + Table.api.formatter.search.call(this, value, row, index) + '</div>';
-                                }, operate: 'like'},
+                                }, operate: 'like'
+                            },
                             {field: 'imagewidth', title: __('Imagewidth'), operate: false},
                             {field: 'imageheight', title: __('Imageheight'), operate: false},
                             {field: 'mimetype', title: __('Mimetype'), formatter: Table.api.formatter.search},

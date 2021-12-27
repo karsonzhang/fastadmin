@@ -2,6 +2,7 @@
 
 namespace app\common\library;
 
+use fast\Random;
 use think\Hook;
 
 /**
@@ -49,7 +50,7 @@ class Ems
      */
     public static function send($email, $code = null, $event = 'default')
     {
-        $code = is_null($code) ? mt_rand(1000, 9999) : $code;
+        $code = is_null($code) ? Random::numeric(config('captcha.length')) : $code;
         $time = time();
         $ip = request()->ip();
         $ems = \app\common\model\Ems::create(['event' => $event, 'email' => $email, 'code' => $code, 'ip' => $ip, 'createtime' => $time]);
