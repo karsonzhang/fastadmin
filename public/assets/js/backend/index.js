@@ -284,13 +284,9 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             });
 
             // 切换子菜单显示和菜单小图标的显示
-            $("[data-menu]").on('click', function () {
-                if ($(this).data("menu") == 'show-submenu') {
-                    createCookie('show_submenu', $(this).prop("checked") ? 1 : 0);
-                    location.reload();
-                } else {
-                    nav.toggleClass("disable-top-badge");
-                }
+            $("[data-menu='show-submenu']").on('click', function () {
+                createCookie('show_submenu', $(this).prop("checked") ? 1 : 0);
+                location.reload();
             });
 
             // 右侧控制栏切换
@@ -368,9 +364,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             }
             if ($('ul.sidebar-menu').hasClass('show-submenu')) {
                 $("[data-menu='show-submenu']").attr('checked', 'checked');
-            }
-            if (nav.hasClass('disable-top-badge')) {
-                $("[data-menu='disable-top-badge']").attr('checked', 'checked');
             }
 
             var sidebarExpandOnHover = localStorage.getItem('sidebarExpandOnHover');
