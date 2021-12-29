@@ -240,7 +240,8 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             var createCookie = function (name, value) {
                 var date = new Date();
                 date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
-                document.cookie = encodeURIComponent(Config.cookie.prefix + name) + "=" + encodeURIComponent(value) + "; expires=" + date.toGMTString();
+                var path = Fast.api.fixurl('index/index');
+                document.cookie = encodeURIComponent(Config.cookie.prefix + name) + "=" + encodeURIComponent(value) + "; " + path + "; expires=" + date.toGMTString();
             };
 
             var my_skins = [
