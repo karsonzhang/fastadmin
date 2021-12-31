@@ -314,7 +314,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             }, function (data, ret) {
                                 Controller.api.userinfo.set(data);
                                 Layer.closeAll();
-                                Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
+                                Layer.alert(ret.msg, {title: __('Warning'), icon: 1});
                                 return false;
                             }, function (data, ret) {
                             });
@@ -330,7 +330,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                                 }
                             };
                             $(document).on('keydown', this.checkEnterKey);
-                            $(".layui-layer-btn1", layero).prop("href", "http://www.fastadmin.net/user/register.html").prop("target", "_blank");
+                            $(".layui-layer-btn1", layero).prop("href", "https://www.fastadmin.net/user/register.html").prop("target", "_blank");
                         },
                         end: function () {
                             $(document).off('keydown', this.checkEnterKey);
