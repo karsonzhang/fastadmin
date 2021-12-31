@@ -722,14 +722,14 @@ class Crud extends Command
                 $field = $v['COLUMN_NAME'];
                 $itemArr = [];
                 // 这里构建Enum和Set类型的列表数据
-                if (in_array($v['DATA_TYPE'], ['enum', 'set', 'tinyint'])) {
+                if (in_array($v['DATA_TYPE'], ['enum', 'set', 'tinyint']) || $this->headingFilterField == $field) {
                     if ($v['DATA_TYPE'] !== 'tinyint') {
                         $itemArr = substr($v['COLUMN_TYPE'], strlen($v['DATA_TYPE']) + 1, -1);
                         $itemArr = explode(',', str_replace("'", '', $itemArr));
                     }
                     $itemArr = $this->getItemArray($itemArr, $field, $v['COLUMN_COMMENT']);
                     //如果类型为tinyint且有使用备注数据
-                    if ($itemArr && $v['DATA_TYPE'] == 'tinyint') {
+                    if ($itemArr && !in_array($v['DATA_TYPE'], ['enum', 'set'])) {
                         $v['DATA_TYPE'] = 'enum';
                     }
                 }
