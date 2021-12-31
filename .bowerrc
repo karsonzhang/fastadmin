@@ -5,6 +5,7 @@
     "file-saver",
     "html2canvas",
     "jspdf",
-    "jspdf-autotable"
+    "jspdf-autotable",
+    "pdfmake"
   ]
 }
