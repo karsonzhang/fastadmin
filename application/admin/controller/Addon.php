@@ -368,63 +368,6 @@ class Addon extends Backend
     }
 
     /**
-     * 登录
-     */
-    public function login()
-    {
-        $params = [
-            'account'   => $this->request->post('account'),
-            'password'  => $this->request->post('password'),
-            'url'       => $this->request->url(true),
-            'faversion' => config('fastadmin.version')
-        ];
-        try {
-            $result = Service::login($params);
-        } catch (Exception $e) {
-            $this->error(__($e->getMessage()));
-        }
-        return json($result);
-    }
-
-    /**
-     * 会员信息
-     */
-    public function userinfo()
-    {
-        $params = [
-            'uid'       => $this->request->post('uid'),
-            'token'     => $this->request->post('token'),
-            'url'       => $this->request->url(true),
-            'faversion' => config('fastadmin.version')
-        ];
-        try {
-            $result = Service::userinfo($params);
-        } catch (Exception $e) {
-            $this->error($e->getMessage());
-        }
-        return json($result);
-    }
-
-    /**
-     * 退出
-     */
-    public function logout()
-    {
-        $params = [
-            'uid'       => $this->request->post('uid'),
-            'token'     => $this->request->post('token'),
-            'url'       => $this->request->url(true),
-            'faversion' => config('fastadmin.version')
-        ];
-        try {
-            $result = Service::logout($params);
-        } catch (Exception $e) {
-            $this->error(__($e->getMessage()));
-        }
-        return json($result);
-    }
-
-    /**
      * 检测
      */
     public function isbuy()

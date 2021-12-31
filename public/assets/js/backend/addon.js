@@ -304,7 +304,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                         btn: [__('Login'), __('Register')],
                         yes: function (index, layero) {
                             Fast.api.ajax({
-                                url: 'addon/login',
+                                url: Config.api_url + '/user/login',
                                 type: 'post',
                                 data: {
                                     account: $("#inputAccount", layero).val(),
@@ -338,10 +338,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     });
                 } else {
                     Fast.api.ajax({
-                        url: 'addon/userinfo',
+                        url: Config.api_url + '/user/index',
                         data: {
                             uid: userinfo.id,
                             token: userinfo.token,
+                            version: Config.faversion,
                         }
                     }, function (data) {
                         Layer.open({
@@ -352,8 +353,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             btn: [__('Logout'), __('Cancel')],
                             yes: function () {
                                 Fast.api.ajax({
-                                    url: 'addon/logout',
-                                    data: {uid: userinfo.id, token: userinfo.token}
+                                    url: Config.api_url + '/user/logout',
+                                    data: {uid: userinfo.id, token: userinfo.token, version: Config.faversion}
                                 }, function (data, ret) {
                                     Controller.api.userinfo.set(null);
                                     Layer.closeAll();
