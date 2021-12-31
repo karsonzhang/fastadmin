@@ -277,7 +277,7 @@ return [
         'multiplenav'           => false,
         //是否开启多选项卡(仅在开启多级菜单时起作用)
         'multipletab'           => true,
-        //后台皮肤,为空时表示使用skin-black-green
+        //后台皮肤,为空时表示使用skin-black-blue
         'adminskin'             => '',
         //后台是否启用面包屑
         'breadcrumb'            => false,
@@ -292,7 +292,7 @@ return [
         //允许跨域的域名,多个以,分隔
         'cors_request_domain'   => 'localhost,127.0.0.1',
         //版本号
-        'version'               => '1.2.2.20211011_beta',
+        'version'               => '1.3.0.20220101',
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],

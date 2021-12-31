@@ -250,7 +250,7 @@ if (!function_exists('addtion')) {
                 $model = $v['name'] ? \think\Db::name($v['name']) : \think\Db::table($v['table']);
             }
             $primary = $v['primary'] ? $v['primary'] : $model->getPk();
-            $result[$v['field']] = isset($ids[$v['field']]) ? $model->where($primary, 'in', $ids[$v['field']])->column("{$primary},{$v['column']}") : [];
+            $result[$v['field']] = isset($ids[$v['field']]) ? $model->where($primary, 'in', $ids[$v['field']])->column($v['column'], $primary) : [];
         }
 
         foreach ($items as $k => &$v) {
