@@ -11,9 +11,9 @@ class Admin extends Validate
      * 验证规则
      */
     protected $rule = [
-        'username' => 'require|regex:\w{3,12}|unique:admin',
+        'username' => 'require|regex:\w{3,30}|unique:admin',
         'nickname' => 'require',
-        'password' => 'require|regex:\S{32}',
+        'password' => 'require|regex:\S{6,30}',
         'email'    => 'require|email|unique:admin,email',
     ];
 

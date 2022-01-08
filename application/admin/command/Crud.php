@@ -179,6 +179,8 @@ class Crud extends Command
         'url'    => 'url',
         'image'  => 'image',
         'images' => 'images',
+        'file'   => 'file',
+        'files'  => 'files',
         'avatar' => 'image',
         'switch' => 'toggle',
         'tag'    => 'flag',
@@ -910,6 +912,7 @@ class Crud extends Command
                                 $attrArr['data-source'] = 'auth/admin/selectpage';
                             } elseif ($selectpageController == 'user') {
                                 $attrArr['data-source'] = 'user/user/index';
+                                $attrArr['data-field'] = 'nickname';
                             }
                             if ($this->isMatchSuffix($field, $this->selectpagesSuffix)) {
                                 $attrArr['data-multiple'] = 'true';

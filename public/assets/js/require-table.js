@@ -616,7 +616,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             url = Fast.api.cdnurl(value);
                             data.push({
                                 src: url,
-                                thumb: url + Config.upload.thumbstyle
+                                thumb: url.match(/^(\/|data:image\\)/) ? url : url + Config.upload.thumbstyle
                             });
                         });
                         Layer.photos({
@@ -641,16 +641,45 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     value = value == null || value.length === 0 ? '' : value.toString();
                     value = value ? value : '/assets/img/blank.gif';
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    return '<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value, true) + Config.upload.thumbstyle + '" /></a>';
+                    var url = Fast.api.cdnurl(value, true);
+                    url = url.match(/^(\/|data:image\\)/) ? url : url + Config.upload.thumbstyle;
+                    return '<a href="javascript:"><img class="' + classname + '" src="' + url + '" /></a>';
                 },
                 images: function (value, row, index) {
                     value = value == null || value.length === 0 ? '' : value.toString();
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
                     var arr = value != '' ? value.split(',') : [];
                     var html = [];
+                    var url;
                     $.each(arr, function (i, value) {
                         value = value ? value : '/assets/img/blank.gif';
-                        html.push('<a href="javascript:"><img class="' + classname + '" src="' + Fast.api.cdnurl(value, true) + Config.upload.thumbstyle + '" /></a>');
+                        url = Fast.api.cdnurl(value, true);
+                        url = url.match(/^(\/|data:image\\)/) ? url : url + Config.upload.thumbstyle;
+                        html.push('<a href="javascript:"><img class="' + classname + '" src="' + url + '" /></a>');
+                    });
+                    return html.join(' ');
+                },
+                file: function (value, row, index) {
+                    value = value == null || value.length === 0 ? '' : value.toString();
+                    value = Fast.api.cdnurl(value, true);
+                    var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
+                    var suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(value);
+                    suffix = suffix ? suffix[1] : 'file';
+                    var url = Fast.api.fixurl("ajax/icon?suffix=" + suffix);
+                    return '<a href="' + value + '" target="_blank"><img src="' + url + '" class="' + classname + '"></a>';
+                },
+                files: function (value, row, index) {
+                    value = value == null || value.length === 0 ? '' : value.toString();
+                    var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
+                    var arr = value != '' ? value.split(',') : [];
+                    var html = [];
+                    var suffix, url;
+                    $.each(arr, function (i, value) {
+                        value = Fast.api.cdnurl(value, true);
+                        suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(value);
+                        suffix = suffix ? suffix[1] : 'file';
+                        url = Fast.api.fixurl("ajax/icon?suffix=" + suffix);
+                        html.push('<a href="' + value + '" target="_blank"><img src="' + url + '" class="' + classname + '"></a>');
                     });
                     return html.join(' ');
                 },

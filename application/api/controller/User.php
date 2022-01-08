@@ -305,6 +305,10 @@ class User extends Api
         if (!$newpassword || !$captcha) {
             $this->error(__('Invalid parameters'));
         }
+        //验证Token
+        if (!Validate::make()->check(['newpassword' => $newpassword], ['newpassword' => 'require|regex:\S{6,30}'])) {
+            $this->error(__('Password must be 6 to 30 characters'));
+        }
         if ($type == 'mobile') {
             if (!Validate::regex($mobile, "^1\d{10}$")) {
                 $this->error(__('Mobile is incorrect'));

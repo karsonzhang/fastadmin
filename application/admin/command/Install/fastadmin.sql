@@ -392,6 +392,7 @@ CREATE TABLE `fa_sms` (
 DROP TABLE IF EXISTS `fa_test`;
 CREATE TABLE `fa_test` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` int(10) DEFAULT '0' COMMENT '会员ID',
   `admin_id` int(10) DEFAULT '0' COMMENT '管理员ID',
   `category_id` int(10) unsigned DEFAULT '0' COMMENT '分类ID(单选)',
   `category_ids` varchar(100) COMMENT '分类ID(多选)',
