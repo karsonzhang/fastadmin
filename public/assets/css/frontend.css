@@ -431,6 +431,32 @@ a:focus {
 .layui-layer-content {
   clear: both;
 }
+.layui-layer-fast .layui-layer-content > table.table {
+  margin-bottom: 0;
+}
+.layui-layer-fast .layui-layer-confirm {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  bottom: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: transparent;
+}
+.layui-layer-fast .layui-layer-confirm:focus {
+  border: 1px solid #444c69;
+  -webkit-border-radius: 2px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 2px;
+  -moz-background-clip: padding;
+  border-radius: 2px;
+  background-clip: padding-box;
+}
+.layui-layer-fast .layui-layer-confirm:focus-visible {
+  outline: 0;
+}
 .layui-layer-fast-msg {
   min-width: 100px;
   border-radius: 2px;

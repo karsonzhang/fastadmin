@@ -41,19 +41,7 @@ class Addon extends Backend
             $v['config'] = $config ? 1 : 0;
             $v['url'] = str_replace($this->request->server('SCRIPT_NAME'), '', $v['url']);
         }
-        if ($this->request->isAjax()) {
-            $result = [];
-            debug('begin');
-            try {
-                $result = Service::addons($this->request->get());
-            } catch (\Exception $e) {
-                $this->error($e->getMessage());
-            }
-            debug('end');
-            \think\Log::record("tx:" . debug('begin', 'end', 6) . 's');
-            return json($result);
-        }
-        $this->assignconfig(['addons' => $addons, 'api_url' => config('fastadmin.api_url'), 'faversion' => config('fastadmin.version')]);
+        $this->assignconfig(['addons' => $addons, 'api_url' => config('fastadmin.api_url'), 'faversion' => config('fastadmin.version'), 'domain' => request()->host(true)]);
         return $this->view->fetch();
     }
 
@@ -227,9 +215,6 @@ class Addon extends Backend
     {
         Config::set('default_return_type', 'json');
 
-        if (!config('app_debug')) {
-            $this->error(__('Only work at debug mode'));
-        }
         $info = [];
         $file = $this->request->file('file');
         try {

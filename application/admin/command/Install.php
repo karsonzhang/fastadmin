@@ -263,7 +263,7 @@ class Install extends Command
             $configList = $instance->name("config")->select();
             foreach ($configList as $k => $value) {
                 if (in_array($value['type'], ['selects', 'checkbox', 'images', 'files'])) {
-                    $value['value'] = explode(',', $value['value']);
+                    $value['value'] = is_array($value['value']) ? $value['value'] : explode(',', $value['value']);
                 }
                 if ($value['type'] == 'array') {
                     $value['value'] = (array)json_decode($value['value'], true);

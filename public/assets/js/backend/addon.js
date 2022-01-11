@@ -4,7 +4,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: Config.api_url ? 'addon/index' : "addon/downloaded",
+                    index_url: Config.api_url ? Config.api_url + '/addon/index' : "addon/downloaded",
                     add_url: '',
                     edit_url: '',
                     del_url: '',
@@ -45,6 +45,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 }
             });
             table.on('load-error.bs.table', function (e, status, res) {
+                console.log(e, status, res);
                 switch_local();
             });
             table.on('post-body.bs.table', function (e, settings, json, xhr) {
@@ -94,6 +95,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     $.extend(params, {
                         uid: userinfo ? userinfo.id : '',
                         token: userinfo ? userinfo.token : '',
+                        domain: Config.domain,
                         version: Config.faversion
                     });
                     return params;
@@ -168,6 +170,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     });
                     return res;
                 },
+                dataType: 'jsonp',
                 templateView: false,
                 clickToSelect: false,
                 search: true,
@@ -350,7 +353,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             area: area,
                             title: __('Userinfo'),
                             resize: false,
-                            btn: [__('Logout'), __('Cancel')],
+                            btn: [__('Logout'), __('Close')],
                             yes: function () {
                                 Fast.api.ajax({
                                     url: Config.api_url + '/user/logout',
@@ -680,6 +683,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
         api: {
             formatter: {
                 title: function (value, row, index) {
+                    if ($(".btn-switch.active").data("type") == "local") {
+                        // return value;
+                    }
                     var title = '<a class="title" href="' + row.url + '" data-toggle="tooltip" title="' + __('View addon home page') + '" target="_blank">' + value + '</a>';
                     if (row.screenshots && row.screenshots.length > 0) {
                         title += ' <a href="javascript:;" data-index="' + index + '" class="view-screenshots text-success" title="' + __('View addon screenshots') + '" data-toggle="tooltip"><i class="fa fa-image"></i></a>';

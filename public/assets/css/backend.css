@@ -614,7 +614,6 @@ form.form-horizontal .control-label {
 /*顶栏addtabs*/
 .nav-addtabs {
   height: 100%;
-  overflow-y: hidden;
   border: none;
 }
 .nav-addtabs.disable-top-badge > li > a > .pull-right-container {
