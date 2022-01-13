@@ -181,6 +181,7 @@ class Upload
             $suffix = $this->fileInfo['suffix'];
         }
         $filename = $filename ? $filename : ($suffix ? substr($this->fileInfo['name'], 0, strripos($this->fileInfo['name'], '.')) : $this->fileInfo['name']);
+        $filename = xss_clean(strip_tags(htmlspecialchars($filename)));
         $md5 = $md5 ? $md5 : md5_file($this->fileInfo['tmp_name']);
         $replaceArr = [
             '{year}'     => date("Y"),
