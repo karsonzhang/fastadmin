@@ -125,7 +125,7 @@ class Admin extends Backend
             if ($params) {
                 Db::startTrans();
                 try {
-                    if (!Validate::is($params['password'], '\S{6,16}')) {
+                    if (!Validate::is($params['password'], '\S{6,30}')) {
                         exception(__("Please input correct password"));
                     }
                     $params['salt'] = Random::alnum();
@@ -179,7 +179,7 @@ class Admin extends Backend
                 Db::startTrans();
                 try {
                     if ($params['password']) {
-                        if (!Validate::is($params['password'], '\S{6,16}')) {
+                        if (!Validate::is($params['password'], '\S{6,30}')) {
                             exception(__("Please input correct password"));
                         }
                         $params['salt'] = Random::alnum();
@@ -190,7 +190,7 @@ class Admin extends Backend
                     //这里需要针对username和email做唯一验证
                     $adminValidate = \think\Loader::validate('Admin');
                     $adminValidate->rule([
-                        'username' => 'require|regex:\w{3,12}|unique:admin,username,' . $row->id,
+                        'username' => 'require|regex:\w{3,30}|unique:admin,username,' . $row->id,
                         'email'    => 'require|email|unique:admin,email,' . $row->id,
                         'password' => 'regex:\S{32}',
                     ]);
