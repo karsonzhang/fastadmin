@@ -48,6 +48,7 @@ return [
     'Field value'                          => '字段值',
     'Content'                              => '数据列表',
     'Rule'                                 => '校验规则',
+    'Visible condition'                    => '可见条件',
     'Site name'                            => '站点名称',
     'Beian'                                => '备案号',
     'Cdn url'                              => 'CDN地址',

@@ -94,12 +94,16 @@ class Addon extends Backend
             $this->error(__('Parameter %s can not be empty', ''));
         }
         $tips = [];
+        $groupList = [];
         foreach ($config as $index => &$item) {
             if ($item['name'] == '__tips__') {
+                $groupList = $item['content'] ? $item['content'] : [];
                 $tips = $item;
                 unset($config[$index]);
             }
         }
+        $groupList['other'] = '其它';
+        $this->view->assign("groupList", $groupList);
         $this->view->assign("addon", ['info' => $info, 'config' => $config, 'tips' => $tips]);
         $configFile = ADDON_PATH . $name . DS . 'config.html';
         $viewFile = is_file($configFile) ? $configFile : '';

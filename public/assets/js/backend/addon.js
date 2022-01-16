@@ -678,6 +678,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             Controller.api.bindevent();
         },
         config: function () {
+            $(document).on("click", ".nav-group li a[data-toggle='tab']", function () {
+                if ($(this).attr("href") == "#all") {
+                    $(".tab-pane").addClass("active in");
+                }
+                return;
+                var type = $(this).attr("href").substring(1);
+                if (type == 'all') {
+                    $(".table-config tr").show();
+                } else {
+                    $(".table-config tr").hide();
+                    $(".table-config tr[data-group='" + type + "']").show();
+                }
+            });
+
             Controller.api.bindevent();
         },
         api: {

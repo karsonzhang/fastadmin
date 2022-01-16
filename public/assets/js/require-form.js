@@ -484,6 +484,89 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                         $("[data-role='autocomplete']").autocomplete();
                     });
                 }
+            },
+            favisible: function (form) {
+                if ($("[data-favisible]", form).length == 0) {
+                    return;
+                }
+                var checkCondition = function (condition) {
+                    var conditionArr = condition.split(/&&/);
+                    var success = 0;
+                    var baseregex = /^([a-z0-9\_]+)([>|<|=|\!]=?)(.*)$/i, strregex = /^('|")(.*)('|")$/, regregex = /^regex:(.*)$/;
+                    <!--@formatter:off-->
+                    var operator_result = {
+                        '>': function(a, b) { return a > b; },
+                        '>=': function(a, b) { return a >= b; },
+                        '<': function(a, b) { return a < b; },
+                        '<=': function(a, b) { return a <= b; },
+                        '==': function(a, b) { return a == b; },
+                        '!=': function(a, b) { return a != b; },
+                        'in': function(a, b) { return b.split(/\,/).indexOf(a) > -1; },
+                        'regex': function(a, b) {
+                            var regParts = b.match(/^\/(.*?)\/([gim]*)$/);
+                            var regexp = regParts ? new RegExp(regParts[1], regParts[2]) : new RegExp(b);
+                            return regexp.test(a);
+                        }
+                    };
+                    <!--@formatter:on-->
+                    var dataArr = form.serializeArray(), dataObj = {};
+                    $(dataArr).each(function (i, field) {
+                        dataObj[field.name] = field.value;
+                    });
+
+                    $.each(conditionArr, function (i, item) {
+                        var basematches = baseregex.exec(item);
+                        if (basematches) {
+                            var name = basematches[1], operator = basematches[2], value = basematches[3].toString();
+                            if (operator === '=') {
+                                var strmatches = strregex.exec(value);
+                                operator = strmatches ? '==' : 'in';
+                                value = strmatches ? strmatches[2] : value;
+                            }
+                            var regmatches = regregex.exec(value);
+                            if (regmatches) {
+                                operator = 'regex';
+                                value = regmatches[1];
+                            }
+                            var chkname = "row[" + name + "]";
+                            if (typeof dataObj[chkname] === 'undefined') {
+                                return false;
+                            }
+                            var objvalue = dataObj[chkname];
+                            if (['>', '>=', '<', '<='].indexOf(operator) > -1) {
+                                objvalue = parseFloat(objvalue);
+                                value = parseFloat(value);
+                            }
+                            var result = operator_result[operator](objvalue, value);
+                            success += (result ? 1 : 0);
+                        }
+                    });
+                    return success === conditionArr.length;
+                };
+                form.on("keyup change click configchange", "input,select", function () {
+                    $("[data-favisible][data-favisible!='']", form).each(function () {
+                        var visible = $(this).data("favisible");
+                        var groupArr = visible.split(/\|\|/);
+                        var success = 0;
+                        $.each(groupArr, function (i, j) {
+                            if (checkCondition(j)) {
+                                success++;
+                            }
+                        });
+                        if (success > 0) {
+                            $(this).removeClass("hidden");
+                        } else {
+                            $(this).addClass("hidden");
+                        }
+                    });
+                });
+
+                //追加上忽略元素
+                setTimeout(function () {
+                    form.data('validator').options.ignore += ((form.data('validator').options.ignore ? ',' : '') + '[data-favisible] :hidden');
+                }, 0);
+
+                $("input,select", form).trigger("configchange");
             }
         },
         api: {
@@ -590,6 +673,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                 events.tagsinput(form);
 
                 events.autocomplete(form);
+
+                events.favisible(form);
             },
             custom: {}
         },

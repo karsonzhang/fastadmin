@@ -36,7 +36,7 @@
         {:build_heading(null, false)}
         <ul class="nav nav-tabs">
             {foreach $siteList as $index=>$vo}
-            <li class="{$vo.active?'active':''}"><a href="#{$vo.name}" data-toggle="tab">{:__($vo.title)}</a></li>
+            <li class="{$vo.active?'active':''}"><a href="#tab-{$vo.name}" data-toggle="tab">{:__($vo.title)}</a></li>
             {/foreach}
             {if $Think.config.app_debug}
             <li data-toggle="tooltip" title="{:__('Add new config')}">
@@ -50,7 +50,7 @@
         <div id="myTabContent" class="tab-content">
             <!--@formatter:off-->
             {foreach $siteList as $index=>$vo}
-            <div class="tab-pane fade {$vo.active ? 'active in' : ''}" id="{$vo.name}">
+            <div class="tab-pane fade {$vo.active ? 'active in' : ''}" id="tab-{$vo.name}">
                 <div class="widget-body no-padding">
                     <form id="{$vo.name}-form" class="edit-form form-horizontal" role="form" data-toggle="validator" method="POST" action="{:url('general.config/edit')}">
                         {:token()}
@@ -67,7 +67,7 @@
                             </thead>
                             <tbody>
                             {foreach $vo.list as $item}
-                            <tr>
+                            <tr data-favisible="{$item.visible|default=''|htmlentities}" data-name="{$item.name}">
                                 <td>{$item.title}</td>
                                 <td>
                                     <div class="row">
@@ -321,6 +321,12 @@ value2|title2</textarea>
                                 </span>
                             </div>
                             <span class="msg-box n-right" for="rule"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="visible" class="control-label col-xs-12 col-sm-2">{:__('Visible condition')}:</label>
+                        <div class="col-xs-12 col-sm-4">
+                            <input type="text" class="form-control" id="visible" name="row[visible]" value="" data-rule=""/>
                         </div>
                     </div>
                     <div class="form-group">
