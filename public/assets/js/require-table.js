@@ -509,16 +509,13 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         var btnGroup = $(this);
                         var isPullRight = dropdownMenu.hasClass("pull-right") || dropdownMenu.hasClass("dropdown-menu-right");
                         var left, top, position;
-                        if (dropdownMenu.outerHeight() + btnGroup.outerHeight() > tableBody.outerHeight() - 41) {
+                        if (true || dropdownMenu.outerHeight() + btnGroup.outerHeight() > tableBody.outerHeight() - 41) {
                             position = 'fixed';
                             top = btnGroup.offset().top - $(window).scrollTop() + btnGroup.outerHeight();
-                            left = isPullRight ? btnGroup.offset().left + btnGroup.outerWidth() - dropdownMenu.outerWidth() : btnGroup.offset().left;
-                        } else {
-                            if (btnGroup.offset().top + btnGroup.outerHeight() + dropdownMenu.outerHeight() > tableBody.offset().top + tableBody.outerHeight() - 30) {
-                                position = 'absolute';
-                                left = isPullRight ? -(dropdownMenu.outerWidth() - btnGroup.outerWidth()) : 0;
-                                top = -(dropdownMenu.outerHeight() + 3);
+                            if ((top + dropdownMenu.outerHeight()) > $(window).height()) {
+                                top = btnGroup.offset().top - dropdownMenu.outerHeight() - 5;
                             }
+                            left = isPullRight ? btnGroup.offset().left + btnGroup.outerWidth() - dropdownMenu.outerWidth() : btnGroup.offset().left;
                         }
                         if (left || top) {
                             dropdownMenu.css({
@@ -878,7 +875,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         dropdown = j.dropdown ? j.dropdown : '';
                         url = j.url ? j.url : '';
                         url = typeof url === 'function' ? url.call(table, row, j) : (url ? Fast.api.fixurl(Table.api.replaceurl(url, row, table)) : 'javascript:;');
-                        classname = j.classname ? j.classname : 'btn-primary btn-' + name + 'one';
+                        classname = j.classname ? j.classname : (dropdown ? 'btn-' + name + 'one' : 'btn-primary btn-' + name + 'one');
                         icon = j.icon ? j.icon : '';
                         text = typeof j.text === 'function' ? j.text.call(table, row, j) : j.text ? j.text : '';
                         title = typeof j.title === 'function' ? j.title.call(table, row, j) : j.title ? j.title : text;

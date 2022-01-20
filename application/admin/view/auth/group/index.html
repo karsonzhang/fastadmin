@@ -8,9 +8,9 @@
                     <div id="toolbar" class="toolbar">
                         {:build_toolbar('refresh,add,delete')}
                     </div>
-                    <table id="table" class="table table-striped table-bordered table-hover" 
-                           data-operate-edit="{:$auth->check('auth/group/edit')}" 
-                           data-operate-del="{:$auth->check('auth/group/del')}" 
+                    <table id="table" class="table table-striped table-bordered table-hover table-nowrap"
+                           data-operate-edit="{:$auth->check('auth/group/edit')}"
+                           data-operate-del="{:$auth->check('auth/group/del')}"
                            width="100%">
                     </table>
                 </div>

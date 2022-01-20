@@ -67,7 +67,7 @@
                             </thead>
                             <tbody>
                             {foreach $vo.list as $item}
-                            <tr data-favisible="{$item.visible|default=''|htmlentities}" data-name="{$item.name}">
+                            <tr data-favisible="{$item.visible|default=''|htmlentities}" data-name="{$item.name}" class="{if $item.visible??''}hidden{/if}">
                                 <td>{$item.title}</td>
                                 <td>
                                     <div class="row">

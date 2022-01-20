@@ -29,7 +29,7 @@
                         <tbody>
                         {foreach name="$addon.config" id="item"}
                         {if ((!isset($item['group']) || $item['group']=='') && $groupName=='other') || (isset($item['group']) && $item['group']==$groupName)}
-                        <tr data-favisible="{$item.visible|default=''|htmlentities}" data-name="{$item.name}">
+                        <tr data-favisible="{$item.visible|default=''|htmlentities}" data-name="{$item.name}" class="{if $item.visible??''}hidden{/if}">
                             <td width="15%">{$item.title}</td>
                             <td>
                                 <div class="row">
