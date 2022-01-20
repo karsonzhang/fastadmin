@@ -451,7 +451,7 @@ class Auth extends \fast\Auth
 
         $select_id = $referer ? $referer['id'] : ($selected ? $selected['id'] : 0);
         $menu = $nav = '';
-        $showSubmenu = (int)cookie('show_submenu');
+        $showSubmenu = config('fastadmin.show_submenu');
         if (Config::get('fastadmin.multiplenav')) {
             $topList = [];
             foreach ($ruleList as $index => $item) {
