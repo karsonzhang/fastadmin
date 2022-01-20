@@ -28,7 +28,7 @@
                     <table class="table table-striped table-config">
                         <tbody>
                         {foreach name="$addon.config" id="item"}
-                        {if ((!isset($item['group']) || $item['group']=='') && $key=='other') || (isset($item['group']) && $item['group']==$groupName)}
+                        {if ((!isset($item['group']) || $item['group']=='') && $groupName=='other') || (isset($item['group']) && $item['group']==$groupName)}
                         <tr data-favisible="{$item.visible|default=''|htmlentities}" data-name="{$item.name}">
                             <td width="15%">{$item.title}</td>
                             <td>

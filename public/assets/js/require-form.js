@@ -351,10 +351,13 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             }
                             obj.attr("fieldlist-item", true);
                             obj.insertAfter($(tagName + "[fieldlist-item]", container).length > 0 ? $(tagName + "[fieldlist-item]:last", container) : $(tagName + ":first", container));
-                            //兼容旧版本事件
-                            $(".btn-append,.append", container).trigger("fa.event.appendfieldlist", obj);
-                            //新版本事件
-                            container.trigger("fa.event.appendfieldlist", obj);
+                            if ($(".btn-append,.append", container).length > 0) {
+                                //兼容旧版本事件
+                                $(".btn-append,.append", container).trigger("fa.event.appendfieldlist", obj);
+                            } else {
+                                //新版本事件
+                                container.trigger("fa.event.appendfieldlist", obj);
+                            }
                             return obj;
                         };
                         var fieldlist = $(".fieldlist", form);
