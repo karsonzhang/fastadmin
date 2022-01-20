@@ -112,10 +112,10 @@ class Tree
             if (!isset($value['id'])) {
                 continue;
             }
-            if ($value[$this->pidname] == $myid) {
+            if ((string)$value[$this->pidname] == (string)$myid) {
                 $newarr[] = $value;
                 $newarr = array_merge($newarr, $this->getChildren($value['id']));
-            } elseif ($withself && $value['id'] == $myid) {
+            } elseif ($withself && (string)$value['id'] == (string)$myid) {
                 $newarr[] = $value;
             }
         }
