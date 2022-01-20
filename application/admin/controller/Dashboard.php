@@ -45,25 +45,34 @@ class Dashboard extends Backend
         }
 
         $dbTableList = Db::query("SHOW TABLE STATUS");
+        $addonList = get_addon_list();
+        $totalworkingaddon = 0;
+        $totaladdon = count($addonList);
+        foreach ($addonList as $index => $item) {
+            if ($item['state']) {
+                $totalworkingaddon += 1;
+            }
+        }
         $this->view->assign([
-            'totaluser'       => User::count(),
-            'totaladdon'      => count(get_addon_list()),
-            'totaladmin'      => Admin::count(),
-            'totalcategory'   => \app\common\model\Category::count(),
-            'todayusersignup' => User::whereTime('jointime', 'today')->count(),
-            'todayuserlogin'  => User::whereTime('logintime', 'today')->count(),
-            'sevendau'        => User::whereTime('jointime|logintime|prevtime', '-7 days')->count(),
-            'thirtydau'       => User::whereTime('jointime|logintime|prevtime', '-30 days')->count(),
-            'threednu'        => User::whereTime('jointime', '-3 days')->count(),
-            'sevendnu'        => User::whereTime('jointime', '-7 days')->count(),
-            'dbtablenums'     => count($dbTableList),
-            'dbsize'          => array_sum(array_map(function ($item) {
+            'totaluser'         => User::count(),
+            'totaladdon'        => $totaladdon,
+            'totaladmin'        => Admin::count(),
+            'totalcategory'     => \app\common\model\Category::count(),
+            'todayusersignup'   => User::whereTime('jointime', 'today')->count(),
+            'todayuserlogin'    => User::whereTime('logintime', 'today')->count(),
+            'sevendau'          => User::whereTime('jointime|logintime|prevtime', '-7 days')->count(),
+            'thirtydau'         => User::whereTime('jointime|logintime|prevtime', '-30 days')->count(),
+            'threednu'          => User::whereTime('jointime', '-3 days')->count(),
+            'sevendnu'          => User::whereTime('jointime', '-7 days')->count(),
+            'dbtablenums'       => count($dbTableList),
+            'dbsize'            => array_sum(array_map(function ($item) {
                 return $item['Data_length'] + $item['Index_length'];
             }, $dbTableList)),
-            'attachmentnums'  => Attachment::count(),
-            'attachmentsize'  => Attachment::sum('filesize'),
-            'picturenums'     => Attachment::where('mimetype', 'like', 'image/%')->count(),
-            'picturesize'     => Attachment::where('mimetype', 'like', 'image/%')->sum('filesize'),
+            'totalworkingaddon' => $totalworkingaddon,
+            'attachmentnums'    => Attachment::count(),
+            'attachmentsize'    => Attachment::sum('filesize'),
+            'picturenums'       => Attachment::where('mimetype', 'like', 'image/%')->count(),
+            'picturesize'       => Attachment::where('mimetype', 'like', 'image/%')->sum('filesize'),
         ]);
 
         $this->assignconfig('column', array_keys($userlist));
