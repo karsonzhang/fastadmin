@@ -26,8 +26,8 @@ class Ems
     /**
      * 获取最后一次邮箱发送的数据
      *
-     * @param   int    $email 邮箱
-     * @param   string $event 事件
+     * @param int    $email 邮箱
+     * @param string $event 事件
      * @return  Ems
      */
     public static function get($email, $event = 'default')
@@ -43,9 +43,9 @@ class Ems
     /**
      * 发送验证码
      *
-     * @param   int    $email 邮箱
-     * @param   int    $code  验证码,为空时将自动生成4位数字
-     * @param   string $event 事件
+     * @param int    $email 邮箱
+     * @param int    $code  验证码,为空时将自动生成4位数字
+     * @param string $event 事件
      * @return  boolean
      */
     public static function send($email, $code = null, $event = 'default')
@@ -54,6 +54,18 @@ class Ems
         $time = time();
         $ip = request()->ip();
         $ems = \app\common\model\Ems::create(['event' => $event, 'email' => $email, 'code' => $code, 'ip' => $ip, 'createtime' => $time]);
+        if (!Hook::get('ems_send')) {
+            //采用框架默认的邮件推送
+            Hook::add('ems_send', function ($params) {
+                $obj = new Email();
+                $result = $obj
+                    ->to($params->email)
+                    ->subject('请查收你的验证码！')
+                    ->message("你的验证码是：" . $params->code . "，" . ceil(self::$expire / 60) . "分钟内有效。")
+                    ->send();
+                return $result;
+            });
+        }
         $result = Hook::listen('ems_send', $ems, null, true);
         if (!$result) {
             $ems->delete();
@@ -65,9 +77,9 @@ class Ems
     /**
      * 发送通知
      *
-     * @param   mixed  $email    邮箱,多个以,分隔
-     * @param   string $msg      消息内容
-     * @param   string $template 消息模板
+     * @param mixed  $email    邮箱,多个以,分隔
+     * @param string $msg      消息内容
+     * @param string $template 消息模板
      * @return  boolean
      */
     public static function notice($email, $msg = '', $template = null)
@@ -77,6 +89,19 @@ class Ems
             'msg'      => $msg,
             'template' => $template
         ];
+        if (!Hook::get('ems_notice')) {
+            //采用框架默认的邮件推送
+            Hook::add('ems_notice', function ($params) {
+                $subject = '你收到一封新的邮件！';
+                $content = $params['msg'];
+                $email = new Email();
+                $result = $email->to($params['email'])
+                    ->subject($subject)
+                    ->message($content)
+                    ->send();
+                return $result;
+            });
+        }
         $result = Hook::listen('ems_notice', $params, null, true);
         return $result ? true : false;
     }
@@ -84,9 +109,9 @@ class Ems
     /**
      * 校验验证码
      *
-     * @param   int    $email 邮箱
-     * @param   int    $code  验证码
-     * @param   string $event 事件
+     * @param int    $email 邮箱
+     * @param int    $code  验证码
+     * @param string $event 事件
      * @return  boolean
      */
     public static function check($email, $code, $event = 'default')
@@ -119,8 +144,8 @@ class Ems
     /**
      * 清空指定邮箱验证码
      *
-     * @param   int    $email 邮箱
-     * @param   string $event 事件
+     * @param int    $email 邮箱
+     * @param string $event 事件
      * @return  boolean
      */
     public static function flush($email, $event = 'default')
