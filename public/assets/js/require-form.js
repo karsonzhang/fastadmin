@@ -496,7 +496,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                     var conditionArr = condition.split(/&&/);
                     var success = 0;
                     var baseregex = /^([a-z0-9\_]+)([>|<|=|\!]=?)(.*)$/i, strregex = /^('|")(.*)('|")$/, regregex = /^regex:(.*)$/;
-                    <!--@formatter:off-->
+                    // @formatter:off
                     var operator_result = {
                         '>': function(a, b) { return a > b; },
                         '>=': function(a, b) { return a >= b; },
@@ -511,7 +511,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             return regexp.test(a);
                         }
                     };
-                    <!--@formatter:on-->
+                    // @formatter:on
                     var dataArr = form.serializeArray(), dataObj = {};
                     $(dataArr).each(function (i, field) {
                         dataObj[field.name] = field.value;
