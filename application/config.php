@@ -262,7 +262,7 @@ return [
         //是否开启前台会员中心
         'usercenter'            => true,
         //会员注册验证码类型email/mobile/wechat/text/false
-        'user_register_captcha' => 'text',
+        'user_register_captcha' => 'email',
         //登录验证码
         'login_captcha'         => true,
         //登录失败超过10次则1天后重试
@@ -294,7 +294,7 @@ return [
         //允许跨域的域名,多个以,分隔
         'cors_request_domain'   => 'localhost,127.0.0.1',
         //版本号
-        'version'               => '1.3.2.20220113',
+        'version'               => '1.3.3.20220121',
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],
