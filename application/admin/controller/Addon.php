@@ -96,8 +96,13 @@ class Addon extends Backend
         $tips = [];
         $groupList = [];
         foreach ($config as $index => &$item) {
+            //如果有设置分组
+            if (isset($item['group']) && $item['group']) {
+                if (!in_array($item['group'], $groupList)) {
+                    $groupList["custom" . (count($groupList) + 1)] = $item['group'];
+                }
+            }
             if ($item['name'] == '__tips__') {
-                $groupList = $item['content'] ? $item['content'] : [];
                 $tips = $item;
                 unset($config[$index]);
             }

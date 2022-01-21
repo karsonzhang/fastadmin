@@ -8,12 +8,16 @@ return [
         'title'   => '用户名',
         //类型
         'type'    => 'string',
+        //分组
+        'group'    => '',
+        //动态显示
+        'visible'    => '',
         //数据字典
         'content' => [
         ],
         //值
         'value'   => '',
-        //验证规则 
+        //验证规则
         'rule'    => 'required',
         //错误消息
         'msg'     => '',
