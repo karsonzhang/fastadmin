@@ -110,13 +110,7 @@ trait Backend
                     }
                     $result = $this->model->allowField(true)->save($params);
                     Db::commit();
-                } catch (ValidateException $e) {
-                    Db::rollback();
-                    $this->error($e->getMessage());
-                } catch (PDOException $e) {
-                    Db::rollback();
-                    $this->error($e->getMessage());
-                } catch (Exception $e) {
+                } catch (ValidateException|PDOException|Exception $e) {
                     Db::rollback();
                     $this->error($e->getMessage());
                 }
@@ -161,13 +155,7 @@ trait Backend
                     }
                     $result = $row->allowField(true)->save($params);
                     Db::commit();
-                } catch (ValidateException $e) {
-                    Db::rollback();
-                    $this->error($e->getMessage());
-                } catch (PDOException $e) {
-                    Db::rollback();
-                    $this->error($e->getMessage());
-                } catch (Exception $e) {
+                } catch (ValidateException|PDOException|Exception $e) {
                     Db::rollback();
                     $this->error($e->getMessage());
                 }
@@ -207,10 +195,7 @@ trait Backend
                     $count += $v->delete();
                 }
                 Db::commit();
-            } catch (PDOException $e) {
-                Db::rollback();
-                $this->error($e->getMessage());
-            } catch (Exception $e) {
+            } catch (PDOException|Exception $e) {
                 Db::rollback();
                 $this->error($e->getMessage());
             }
@@ -248,10 +233,7 @@ trait Backend
                 $count += $v->delete(true);
             }
             Db::commit();
-        } catch (PDOException $e) {
-            Db::rollback();
-            $this->error($e->getMessage());
-        } catch (Exception $e) {
+        } catch (PDOException|Exception $e) {
             Db::rollback();
             $this->error($e->getMessage());
         }
@@ -288,10 +270,7 @@ trait Backend
                 $count += $item->restore();
             }
             Db::commit();
-        } catch (PDOException $e) {
-            Db::rollback();
-            $this->error($e->getMessage());
-        } catch (Exception $e) {
+        } catch (PDOException|Exception $e) {
             Db::rollback();
             $this->error($e->getMessage());
         }
@@ -327,10 +306,7 @@ trait Backend
                             $count += $item->allowField(true)->isUpdate(true)->save($values);
                         }
                         Db::commit();
-                    } catch (PDOException $e) {
-                        Db::rollback();
-                        $this->error($e->getMessage());
-                    } catch (Exception $e) {
+                    } catch (PDOException|Exception $e) {
                         Db::rollback();
                         $this->error($e->getMessage());
                     }
