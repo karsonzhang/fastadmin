@@ -69,7 +69,7 @@
                 <label for="captcha" class="control-label col-xs-12 col-sm-3">{:__('Captcha')}:</label>
                 <div class="col-xs-12 col-sm-8">
                     <div class="input-group">
-                        <input type="text" name="captcha" class="form-control" data-rule="required;length({$Think.config.captcha.length});integer[+];remote({:url('api/validate/check_ems_correct')}, event=resetpwd, email:#email)"/>
+                        <input type="text" name="captcha" class="form-control" data-rule="required;length({$Think.config.captcha.length});digits;remote({:url('api/validate/check_ems_correct')}, event=resetpwd, email:#email)"/>
                         <span class="input-group-btn" style="padding:0;border:none;">
                             <a href="javascript:;" class="btn btn-primary btn-captcha" data-url="{:url('api/ems/send')}" data-type="email" data-event="resetpwd">{:__('Send verification code')}</a>
                         </span>
