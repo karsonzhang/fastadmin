@@ -190,12 +190,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 table.on('refresh.bs.table', function (e, settings, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").addClass("fa-spin");
                 });
-                //当表格分页变更时
-                table.on('page-change.bs.table', function (e, page, pagesize) {
-                    if (!isNaN(pagesize)) {
-                        localStorage.setItem("pagesize", pagesize);
-                    }
-                });
                 //当执行搜索时
                 table.on('search.bs.table common-search.bs.table', function (e, settings, data) {
                     table.trigger("uncheckbox");
@@ -539,6 +533,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 var id = table.attr("id");
                 Table.list[id] = table;
                 return table;
+            },
+            // 设置全局分页的单页显示数
+            pageSize: function (pageSize) {
+                if (!isNaN(pageSize)) {
+                    localStorage.setItem('pagesize', pageSize);
+                }
             },
             // 批量操作请求
             multi: function (action, ids, table, element) {
