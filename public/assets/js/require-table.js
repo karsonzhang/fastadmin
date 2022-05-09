@@ -26,7 +26,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 },
                 ignoreColumn: [0, 'operate'] //默认不导出第一列(checkbox)与操作(operate)列
             },
-            pageSize: localStorage.getItem("pagesize") || 10,
+            pageSize: localStorage.getItem('page-size') || 10,
             pageList: [10, 15, 20, 25, 50, 'All'],
             pagination: true,
             clickToSelect: true, //是否启用点击选中
@@ -537,7 +537,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             // 设置全局分页的单页显示数
             pageSize: function (pageSize) {
                 if (!isNaN(pageSize)) {
-                    localStorage.setItem('pagesize', pageSize);
+                    localStorage.setItem('page-size', pageSize);
                 }
             },
             // 批量操作请求
