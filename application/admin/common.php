@@ -4,6 +4,7 @@ use app\common\model\Category;
 use fast\Form;
 use fast\Tree;
 use think\Db;
+use think\Loader;
 
 if (!function_exists('build_select')) {
 
@@ -102,7 +103,7 @@ if (!function_exists('build_toolbar')) {
     function build_toolbar($btns = null, $attr = [])
     {
         $auth = \app\admin\library\Auth::instance();
-        $controller = str_replace('.', '/', strtolower(think\Request::instance()->controller()));
+        $controller = str_replace('.', '/', Loader::parseName(request()->controller()));
         $btns = $btns ? $btns : ['refresh', 'add', 'edit', 'del', 'import'];
         $btns = is_array($btns) ? $btns : explode(',', $btns);
         $index = array_search('delete', $btns);
@@ -175,7 +176,7 @@ if (!function_exists('build_heading')) {
         $title = $content = '';
         if (is_null($path)) {
             $action = request()->action();
-            $controller = str_replace('.', '/', request()->controller());
+            $controller = str_replace('.', '/', Loader::parseName(request()->controller()));
             $path = strtolower($controller . ($action && $action != 'index' ? '/' . $action : ''));
         }
         // 根据当前的URI自动匹配父节点的标题和备注
