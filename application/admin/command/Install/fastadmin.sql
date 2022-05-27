@@ -33,7 +33,7 @@ CREATE TABLE `fa_admin` (
 -- Records of fa_admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `fa_admin` VALUES (1, 'admin', 'Admin', '', '', '/assets/img/avatar.png', 'admin@admin.com', 0, 1491635035, '127.0.0.1',1491635035, 1491635035, '', 'normal');
+INSERT INTO `fa_admin` VALUES (1, 'admin', 'Admin', '', '', '/assets/img/avatar.png', 'admin@admin.com', '', 0, 1491635035, '127.0.0.1',1491635035, 1491635035, '', 'normal');
 COMMIT;
 
 -- ----------------------------

@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'Email'                                     => '电子邮箱',
+    'Mobile'                                    => '手机号',
     'Group'                                     => '所属组别',
     'Loginfailure'                              => '登录失败次数',
     'Login time'                                => '最后登录',

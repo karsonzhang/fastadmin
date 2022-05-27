@@ -192,6 +192,7 @@ class Admin extends Backend
                     $adminValidate->rule([
                         'username' => 'require|regex:\w{3,30}|unique:admin,username,' . $row->id,
                         'email'    => 'require|email|unique:admin,email,' . $row->id,
+                        'mobile'    => 'regex:1[3-9]\d{9}|unique:admin,mobile,' . $row->id,
                         'password' => 'regex:\S{32}',
                     ]);
                     $result = $row->validate('Admin.edit')->save($params);

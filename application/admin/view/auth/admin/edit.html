@@ -19,6 +19,12 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="mobile" class="control-label col-xs-12 col-sm-2">{:__('Mobile')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="mobile" name="row[mobile]" value="{$row.mobile|default=''|htmlentities}" data-rule="mobile" />
+        </div>
+    </div>
+    <div class="form-group">
         <label for="nickname" class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
         <div class="col-xs-12 col-sm-8">
             <input type="text" class="form-control" id="nickname" name="row[nickname]" autocomplete="off" value="{$row.nickname|htmlentities}" data-rule="required" />
