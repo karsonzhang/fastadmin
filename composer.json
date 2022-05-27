@@ -38,7 +38,7 @@
     "repositories": [
         {
             "type": "git",
-            "url": "https://gitee.com/karson/framework"
+            "url": "https://gitee.com/fastadminnet/framework.git"
         }
     ]
 }
