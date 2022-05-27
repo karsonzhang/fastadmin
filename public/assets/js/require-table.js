@@ -26,7 +26,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 },
                 ignoreColumn: [0, 'operate'] //默认不导出第一列(checkbox)与操作(operate)列
             },
-            pageSize: Config.pagesize || 10,
+            pageSize: Config.pagesize || localStorage.getItem("pagesize") || 10,
             pageList: [10, 15, 20, 25, 50, 'All'],
             pagination: true,
             clickToSelect: true, //是否启用点击选中
@@ -113,6 +113,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 locales = locales ? locales : {};
                 $.fn.bootstrapTable.Constructor.prototype.getSelectItem = function () {
                     return this.$selectItem;
+                };
+                var _onPageListChange = $.fn.bootstrapTable.Constructor.prototype.onPageListChange;
+                $.fn.bootstrapTable.Constructor.prototype.onPageListChange = function () {
+                    _onPageListChange.apply(this, Array.prototype.slice.apply(arguments));
+                    localStorage.setItem('pagesize', this.options.pageSize);
+                    return false;
                 };
                 // 写入bootstrap-table默认配置
                 $.extend(true, $.fn.bootstrapTable.defaults, Table.defaults, defaults);

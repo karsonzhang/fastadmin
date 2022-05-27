@@ -128,6 +128,7 @@ class Frontend extends Controller
     protected function loadlang($name)
     {
         $name = Loader::parseName($name);
+        $name = preg_match("/^([a-zA-Z0-9_\.\/]+)\$/i", $name) ? $name : 'index';
         $lang = $this->request->langset();
         $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
         Lang::load(APP_PATH . $this->request->module() . '/lang/' . $lang . '/' . str_replace('.', '/', $name) . '.php');

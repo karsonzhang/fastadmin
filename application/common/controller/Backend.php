@@ -237,6 +237,7 @@ class Backend extends Controller
     protected function loadlang($name)
     {
         $name = Loader::parseName($name);
+        $name = preg_match("/^([a-zA-Z0-9_\.\/]+)\$/i", $name) ? $name : 'index';
         $lang = $this->request->langset();
         $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
         Lang::load(APP_PATH . $this->request->module() . '/lang/' . $lang . '/' . str_replace('.', '/', $name) . '.php');
@@ -365,9 +366,9 @@ class Backend extends Controller
                 case 'BETWEEN':
                 case 'NOT BETWEEN':
                     $arr = array_slice(explode(',', $v), 0, 2);
-                    if (stripos($v, ',') === false || !array_filter($arr, function($v){
-                        return $v != '' && $v !== false && $v !== null;
-                    })) {
+                    if (stripos($v, ',') === false || !array_filter($arr, function ($v) {
+                            return $v != '' && $v !== false && $v !== null;
+                        })) {
                         continue 2;
                     }
                     //当出现一边为空时改变操作符
