@@ -9,6 +9,12 @@ use think\Loader;
 class Common
 {
 
+    public function appInit()
+    {
+        $allowLangList = Config::get('allow_lang_list') ?? ['zh-cn', 'en'];
+        Lang::setAllowLangList($allowLangList);
+    }
+
     public function appDispatch(&$dispatch)
     {
         $pathinfoArr = explode('/', request()->pathinfo());
@@ -56,8 +62,11 @@ class Common
             Config::set('app_trace', false);
         }
         // 切换多语言
-        if (Config::get('lang_switch_on') && $request->get('lang')) {
-            \think\Cookie::set('think_var', $request->get('lang'));
+        if (Config::get('lang_switch_on')) {
+            $lang = $request->get('lang');
+            if (preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang)) {
+                \think\Cookie::set('think_var', $lang);
+            }
         }
         // Form别名
         if (!class_exists('Form')) {
@@ -68,8 +77,10 @@ class Common
     public function addonBegin(&$request)
     {
         // 加载插件语言包
+        $lang = request()->langset();
+        $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
         Lang::load([
-            APP_PATH . 'common' . DS . 'lang' . DS . $request->langset() . DS . 'addon' . EXT,
+            APP_PATH . 'common' . DS . 'lang' . DS . $lang . DS . 'addon' . EXT,
         ]);
         $this->moduleInit($request);
     }

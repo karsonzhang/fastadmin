@@ -47,6 +47,8 @@ return [
     'default_filter'         => '',
     // 默认语言
     'default_lang'           => 'zh-cn',
+    // 默认语言
+    'allow_lang_list'        => ['zh-cn', 'en'],
     // 应用类库后缀
     'class_suffix'           => false,
     // 控制器类后缀
@@ -264,7 +266,7 @@ return [
         //会员注册验证码类型email/mobile/wechat/text/false
         'user_register_captcha' => 'text',
         //登录验证码
-        'login_captcha'         => true,
+        'login_captcha'         => false,
         //登录失败超过10次则1天后重试
         'login_failure_retry'   => true,
         //是否同一账号同一时间只能在一个地方登录
@@ -294,7 +296,7 @@ return [
         //允许跨域的域名,多个以,分隔
         'cors_request_domain'   => 'localhost,127.0.0.1',
         //版本号
-        'version'               => '1.3.3.20220121',
+        'version'               => '1.3.4.20220527',
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],
