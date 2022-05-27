@@ -47,7 +47,7 @@ return [
     'default_filter'         => '',
     // 默认语言
     'default_lang'           => 'zh-cn',
-    // 默认语言
+    // 允许的语言列表
     'allow_lang_list'        => ['zh-cn', 'en'],
     // 应用类库后缀
     'class_suffix'           => false,
