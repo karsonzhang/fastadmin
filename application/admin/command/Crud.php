@@ -185,7 +185,7 @@ class Crud extends Command
         'switch' => 'toggle',
         'tag'    => 'flag',
         'tags'   => 'flag',
-        'time'   => ['type' => ['int', 'timestamp'], 'name' => 'datetime'],
+        'time'   => ['type' => ['int', 'bigint', 'timestamp'], 'name' => 'datetime'],
     ];
 
     /**
@@ -1103,7 +1103,7 @@ class Crud extends Command
                 'langList'                => $langList,
                 'softDeleteClassPath'     => in_array($this->deleteTimeField, $fieldArr) ? "use traits\model\SoftDelete;" : '',
                 'softDelete'              => in_array($this->deleteTimeField, $fieldArr) ? "use SoftDelete;" : '',
-                'modelAutoWriteTimestamp' => in_array($this->createTimeField, $fieldArr) || in_array($this->updateTimeField, $fieldArr) ? "'int'" : 'false',
+                'modelAutoWriteTimestamp' => in_array($this->createTimeField, $fieldArr) || in_array($this->updateTimeField, $fieldArr) ? "'integer'" : 'false',
                 'createTime'              => in_array($this->createTimeField, $fieldArr) ? "'{$this->createTimeField}'" : 'false',
                 'updateTime'              => in_array($this->updateTimeField, $fieldArr) ? "'{$this->updateTimeField}'" : 'false',
                 'deleteTime'              => in_array($this->deleteTimeField, $fieldArr) ? "'{$this->deleteTimeField}'" : 'false',
