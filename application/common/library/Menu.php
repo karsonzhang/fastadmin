@@ -182,7 +182,7 @@ class Menu
         } else {
             $pid = $parent;
         }
-        $allow = array_flip(['file', 'name', 'title', 'icon', 'condition', 'remark', 'ismenu', 'weigh']);
+        $allow = array_flip(['file', 'name', 'title', 'url', 'icon', 'condition', 'remark', 'ismenu', 'menutype', 'extend', 'weigh']);
         foreach ($newMenu as $k => $v) {
             $hasChild = isset($v['sublist']) && $v['sublist'] ? true : false;
             $data = array_intersect_key($v, $allow);

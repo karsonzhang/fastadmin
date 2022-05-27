@@ -476,7 +476,7 @@ class Auth extends \fast\Auth
                 );
                 $current = in_array($item['id'], $selectParentIds);
                 $url = $childList ? 'javascript:;' : $item['url'];
-                $addtabs = $childList || !$url ? "" : (stripos($url, "?") !== false ? "&" : "?") . "ref=addtabs";
+                $addtabs = $childList || !$url ? "" : (stripos($url, "?") !== false ? "&" : "?") . "ref=" . ($item['menutype'] ? $item['menutype'] : 'addtabs');
                 $childList = str_replace(
                     '" pid="' . $item['id'] . '"',
                     ' ' . ($current ? '' : 'hidden') . '" pid="' . $item['id'] . '"',
