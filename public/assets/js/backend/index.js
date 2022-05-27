@@ -23,7 +23,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             $("form.sidebar-form").on("blur", "input[name=q]", function () {
                 searchResult.addClass("hide");
             }).on("focus", "input[name=q]", function () {
-                if ($("a", searchResult).size() > 0) {
+                if ($("a", searchResult).length > 0) {
                     searchResult.removeClass("hide");
                 }
             }).on("keyup", "input[name=q]", function () {
@@ -209,7 +209,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true,iframeForceRefreshTable只强制刷新表格
             nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, iframeForceRefreshTable: true, nav: nav});
 
-            if ($("ul.sidebar-menu li.active a").size() > 0) {
+            if ($("ul.sidebar-menu li.active a").length > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
             } else {
                 if (multiplenav) {
@@ -223,10 +223,10 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             if (Config.referer) {
                 if (Config.referer === $(addtabs).attr("url")) {
                     var active = $("ul.sidebar-menu li a[addtabs=" + $(addtabs).attr("addtabs") + "]");
-                    if (multiplenav && active.size() == 0) {
+                    if (multiplenav && active.length == 0) {
                         active = $("ul li a[addtabs='" + $(addtabs).attr("addtabs") + "']");
                     }
-                    if (active.size() > 0) {
+                    if (active.length > 0) {
                         active.trigger("click");
                     } else {
                         $(addtabs).appendTo(document.body).addClass("hide").trigger("click");

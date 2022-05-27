@@ -90,8 +90,11 @@ class Install extends Command
         $this->request = Request::instance();
 
         define('INSTALL_PATH', APP_PATH . 'admin' . DS . 'command' . DS . 'Install' . DS);
-        $langSet = strtolower($this->request->langset());
-        if (!$langSet || in_array($langSet, ['zh-cn', 'zh-hans-cn'])) {
+
+        $lang = $this->request->langset();
+        $lang = preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang) ? $lang : 'zh-cn';
+
+        if (!$lang || in_array($lang, ['zh-cn', 'zh-hans-cn'])) {
             Lang::load(INSTALL_PATH . 'zh-cn.php');
         }
 
@@ -279,6 +282,13 @@ class Install extends Command
         $result = @file_put_contents($installLockFile, 1);
         if (!$result) {
             throw new Exception(__('The current permissions are insufficient to write the file %s', 'application/admin/command/Install/install.lock'));
+        }
+
+        try {
+            //删除安装脚本
+            @unlink(ROOT_PATH . 'public' . DS . 'install.php');
+        } catch (\Exception $e) {
+
         }
 
         return $adminName;

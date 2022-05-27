@@ -63,7 +63,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 var value = $(this).val();
                 $(".tf").addClass("hidden");
                 $(".tf.tf-" + value).removeClass("hidden");
-                if (["selectpage", "selectpages"].indexOf(value) > -1 && $("#c-selectpage-table option").size() == 1) {
+                if (["selectpage", "selectpages"].indexOf(value) > -1 && $("#c-selectpage-table option").length == 1) {
                     //异步加载表列表
                     Fast.api.ajax({
                         url: "general/config/get_table_list",

@@ -80,7 +80,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"), null, null, function () {
-                    if ($("#treeview").size() > 0) {
+                    if ($("#treeview").length > 0) {
                         var r = $("#treeview").jstree("get_all_checked");
                         $("input[name='row[rules]']").val(r.join(','));
                     }

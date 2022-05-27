@@ -35,7 +35,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 }
             };
             table.on('load-success.bs.table', function (e, json) {
-                if (json && typeof json.category != 'undefined' && $(".nav-category li").size() == 2) {
+                if (json && typeof json.category != 'undefined' && $(".nav-category li").length == 2) {
                     $.each(json.category, function (i, j) {
                         $("<li><a href='javascript:;' data-id='" + j.id + "'>" + j.name + "</a></li>").insertBefore($(".nav-category li:last"));
                     });
@@ -238,7 +238,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             $(document).on("click", ".btn-addonindex", function () {
                 if ($(this).attr("href") == 'javascript:;') {
                     Layer.msg(__('Not installed tips'), {icon: 7});
-                } else if ($(this).closest(".operate").find("a.btn-enable").size() > 0) {
+                } else if ($(this).closest(".operate").find("a.btn-enable").length > 0) {
                     Layer.msg(__('Not enabled tips'), {icon: 7});
                     return false;
                 }
