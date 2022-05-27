@@ -180,11 +180,11 @@
             var name = $(this).data("name");
             var sym = $(this).is("select") ? $("option:selected", this).val() : $(this).val().toUpperCase();
             var obj = $("[name='" + name + "']", that.$commonsearch);
-            if (obj.size() == 0)
+            if (obj.length == 0)
                 return true;
             var vObjCol = ColumnsForSearch[i];
             var process = !that.options.searchFormTemplate && vObjCol && typeof vObjCol.process == 'function' ? vObjCol.process : null;
-            if (obj.size() > 1) {
+            if (obj.length > 1) {
                 if (/BETWEEN$/.test(sym)) {
                     var value_begin = $.trim($("[name='" + name + "']:first", that.$commonsearch).val()),
                         value_end = $.trim($("[name='" + name + "']:last", that.$commonsearch).val());
@@ -315,7 +315,7 @@
             html.push(sprintf('<i class="%s %s"></i>', that.options.iconsPrefix, that.options.icons.commonSearchIcon))
             html.push('</button></div>');
         }
-        if (that.$toolbar.find(".pull-right").size() > 0) {
+        if (that.$toolbar.find(".pull-right").length > 0) {
             $(html.join('')).insertBefore(that.$toolbar.find(".pull-right:first"));
         } else {
             that.$toolbar.append(html.join(''));
@@ -338,10 +338,10 @@
                 return;
             }
             var obj = $("form [name='" + field + "']", that.$commonsearch);
-            if (obj.size() > 0) {
+            if (obj.length > 0) {
                 if (obj.is("select")) {
                     $("option[value='" + value + "']", obj).prop("selected", true);
-                } else if (obj.size() > 1) {
+                } else if (obj.length > 1) {
                     $("form [name='" + field + "'][value='" + value + "']", that.$commonsearch).prop("checked", true);
                 } else {
                     obj.val(value + "");

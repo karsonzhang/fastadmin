@@ -238,7 +238,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             addedfiles: function (files) {
                                 if (this.options.maxFiles && (!this.options.maxFiles || this.options.maxFiles > 1) && this.options.inputId) {
                                     var inputObj = $("#" + this.options.inputId);
-                                    if (inputObj.size() > 0) {
+                                    if (inputObj.length > 0) {
                                         var value = $.trim(inputObj.val());
                                         var nums = value === '' ? 0 : value.split(/\,/).length;
                                         var remain = this.options.maxFiles - nums;

@@ -158,7 +158,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 var toolbar = $(options.toolbar, parenttable);
                 //跨页提示按钮
                 var tipsBtn = $(".btn-selected-tips", parenttable);
-                if (tipsBtn.size() === 0) {
+                if (tipsBtn.length === 0) {
                     tipsBtn = $('<a href="javascript:" class="btn btn-warning-light btn-selected-tips hide" data-animation="false" data-toggle="tooltip" data-title="' + __("Click to uncheck all") + '"><i class="fa fa-info-circle"></i> ' + __("Multiple selection mode: %s checked", "<b>0</b>") + '</a>').appendTo(toolbar);
                 }
                 //点击提示按钮
@@ -217,7 +217,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 //当内容渲染完成后
                 table.on('post-body.bs.table', function (e, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
-                    if ($(Table.config.checkboxtd + ":first", table).find("input[type='checkbox'][data-index]").size() > 0) {
+                    if ($(Table.config.checkboxtd + ":first", table).find("input[type='checkbox'][data-index]").length > 0) {
                         // 拖拽选择,需要重新绑定事件
                         require(['drag', 'drop'], function () {
                             var checkboxtd = $(Table.config.checkboxtd, table);
@@ -320,7 +320,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     Fast.api.open(url, $(this).data("original-title") || $(this).attr("title") || __('Add'), $(this).data() || {});
                 });
                 // 导入按钮事件
-                if ($(Table.config.importbtn, toolbar).size() > 0) {
+                if ($(Table.config.importbtn, toolbar).length > 0) {
                     require(['upload'], function (Upload) {
                         Upload.api.upload($(Table.config.importbtn, toolbar), function (data, ret) {
                             Fast.api.ajax({

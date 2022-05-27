@@ -476,7 +476,7 @@ function _init() {
                     //Get the parent menu
                     var parent = $this.parents('ul').first();
                     // modified by FastAdmin
-                    if ($(".show-submenu", menu).size() == 0) {
+                    if ($(".show-submenu", menu).length == 0) {
                         //Close all open menus within the parent
                         var ul = parent.find('ul:visible').slideUp(animationSpeed);
                         //Remove the menu-open class from the parent
@@ -501,7 +501,7 @@ function _init() {
                         // $this.parent().addClass("active");
                     }
                     // modified by FastAdmin
-                    if ($(".show-submenu", menu).size() == 0 && $this.parent().parent().hasClass("sidebar-menu")) {
+                    if ($(".show-submenu", menu).length == 0 && $this.parent().parent().hasClass("sidebar-menu")) {
                         $this.parent().siblings().find("ul.menu-open").slideUp();
                         $this.parent().siblings("li.treeview-open").removeClass("treeview-open");
                     }
