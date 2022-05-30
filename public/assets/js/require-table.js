@@ -540,12 +540,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 Table.list[id] = table;
                 return table;
             },
-            // 设置全局分页的单页显示数
-            pageSize: function (pageSize) {
-                if (!isNaN(pageSize)) {
-                    localStorage.setItem('page-size', pageSize);
-                }
-            },
             // 批量操作请求
             multi: function (action, ids, table, element) {
                 var options = table.bootstrapTable('getOptions');
