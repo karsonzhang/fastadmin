@@ -420,7 +420,7 @@ CREATE TABLE `fa_test` (
   `activitytime` datetime DEFAULT NULL COMMENT '活动时间(datetime)',
   `year` year(4) DEFAULT NULL COMMENT '年',
   `times` time DEFAULT NULL COMMENT '时间',
-  `refreshtime` bigint(16) DEFAULT NULL COMMENT '刷新时间(int)',
+  `refreshtime` bigint(16) DEFAULT NULL COMMENT '刷新时间',
   `createtime` bigint(16) DEFAULT NULL COMMENT '创建时间',
   `updatetime` bigint(16) DEFAULT NULL COMMENT '更新时间',
   `deletetime` bigint(16) DEFAULT NULL COMMENT '删除时间',

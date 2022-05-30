@@ -56,12 +56,15 @@
                             <button type="button" id="faupload-avatar" class="faupload" data-input-id="c-avatar"><i class="fa fa-upload"></i> {:__('Upload')}</button>
                         </div>
 
-                        <h3 class="profile-username text-center">{$admin.username|htmlentities}</h3>
+                        <h3 class="profile-username text-center">{$admin.nickname|htmlentities}</h3>
 
-                        <p class="text-muted text-center">{$admin.email|htmlentities}</p>
                         <div class="form-group">
                             <label for="username" class="control-label">{:__('Username')}:</label>
                             <input type="text" class="form-control" id="username" name="row[username]" value="{$admin.username|htmlentities}" disabled/>
+                        </div>
+                        <div class="form-group">
+                            <label for="mobile" class="control-label">{:__('Mobile')}:</label>
+                            <input type="text" class="form-control" id="mobile" name="row[mobile]" value="{$admin.mobile|htmlentities}" disabled/>
                         </div>
                         <div class="form-group">
                             <label for="email" class="control-label">{:__('Email')}:</label>
