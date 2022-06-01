@@ -753,7 +753,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 //刷新左侧边栏
                 Fast.api.refreshmenu();
                 //刷新插件JS缓存
-                Fast.api.ajax({url: require.toUrl('addons.js'), loading: false}, function () {
+                Fast.api.ajax({type: 'GET', url: require.toUrl('addons.js'), loading: false}, function () {
                     return false;
                 }, function () {
                     return false;
