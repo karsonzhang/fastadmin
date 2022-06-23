@@ -23,7 +23,7 @@
         "topthink/think-helper": "^1.0.7",
         "karsonzhang/fastadmin-addons": "~1.3.2",
         "overtrue/pinyin": "^3.0",
-        "phpoffice/phpspreadsheet": "1.12",
+        "phpoffice/phpspreadsheet": "1.19",
         "overtrue/wechat": "4.2.11",
         "nelexa/zip": "^3.3",
         "ext-json": "*",
