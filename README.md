@@ -81,7 +81,7 @@ Nice-validator: https://validator.niceue.com
 
 SelectPage: https://github.com/TerryZ/SelectPage
 
-Layer: https://layer.layui.com
+Layer: https://layuion.com/layer/
 
 DropzoneJS: https://www.dropzonejs.com
 
