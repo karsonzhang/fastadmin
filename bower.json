@@ -14,7 +14,7 @@
     "moment": "~2.29.0",
     "toastr": "~2.1.3",
     "eonasdan-bootstrap-datetimepicker": "~4.17.43",
-    "bootstrap-select": "~1.11.2",
+    "bootstrap-select": "~1.13.18",
     "require-css": "~0.1.8",
     "tableExport.jquery.plugin": "~1.10.3",
     "jquery-slimscroll": "~1.3.8",
