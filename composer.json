@@ -24,7 +24,7 @@
         "karsonzhang/fastadmin-addons": "~1.3.2",
         "overtrue/pinyin": "^3.0",
         "phpoffice/phpspreadsheet": "1.19",
-        "overtrue/wechat": "4.2.11",
+        "overtrue/wechat": "^4.6",
         "nelexa/zip": "^3.3",
         "ext-json": "*",
         "ext-curl": "*",
