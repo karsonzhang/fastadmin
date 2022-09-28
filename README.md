@@ -57,7 +57,7 @@ https://demo.fastadmin.net
 
 交流社区: https://ask.fastadmin.net
 
-QQ群: [636393962](https://jq.qq.com/?_wv=1027&k=487PNBb)(满) [708784003](https://jq.qq.com/?_wv=1027&k=5ObjtwM)(满) [964776039](https://jq.qq.com/?_wv=1027&k=59qjU2P)(3群) [749803490](https://jq.qq.com/?_wv=1027&k=5tczi88)(满) [767103006](https://jq.qq.com/?_wv=1027&k=5Z1U751)(满) [675115483](https://jq.qq.com/?_wv=1027&k=54I6mts)(6群)
+QQ 1 群（满）、QQ 2 群（满）、QQ 3 群（满）、QQ 4 群（满）、QQ 5 群（满）、QQ 6 群（满）、[QQ 7 群](https://www.fastadmin.net/goto/qun)。
 
 Github: https://github.com/karsonzhang/fastadmin
 
