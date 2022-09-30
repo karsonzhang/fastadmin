@@ -1363,7 +1363,7 @@ a:focus {
   border-radius: 0;
 }
 select.form-control {
-  padding-right: 27px;
+  padding-right: 25px;
   -webkit-appearance: none;
   -webkit-border-radius: 0px;
   background-position: right 50%;
