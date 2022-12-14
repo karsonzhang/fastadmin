@@ -38,7 +38,7 @@ class Ajax extends Backend
      */
     public function lang()
     {
-
+        $this->request->get(['callback' => 'define']);
         $header = ['Content-Type' => 'application/javascript'];
         if (!config('app_debug')) {
             $offset = 30 * 60 * 60 * 24; // 缓存一个月
