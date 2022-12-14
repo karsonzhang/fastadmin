@@ -28,6 +28,11 @@ class UserRule extends Model
         });
     }
 
+    public function getTitleAttr($value, $data)
+    {
+        return __($value);
+    }
+
     public function getStatusList()
     {
         return ['normal' => __('Normal'), 'hidden' => __('Hidden')];
