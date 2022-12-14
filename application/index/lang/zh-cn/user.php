@@ -60,6 +60,8 @@ return [
     'Logged in successful'                       => '登录成功',
     'Logout successful'                          => '退出成功',
     'User center already closed'                 => '会员中心已经关闭',
+    'Don\'t have an account? Sign up'            => '还没有账号？点击注册',
+    'Already have an account? Sign in'            => '已经有账号？点击登录',
     'Operation failed'                           => '操作失败',
     'Invalid parameters'                         => '参数不正确',
     'Change password failure'                    => '修改密码失败',

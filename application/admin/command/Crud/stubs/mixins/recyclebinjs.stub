@@ -27,7 +27,7 @@
                         },
                         {
                             field: 'operate',
-                            width: '130px',
+                            width: '140px',
                             title: __('Operate'),
                             table: table,
                             events: Table.api.events.operate,
