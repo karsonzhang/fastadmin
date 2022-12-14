@@ -266,15 +266,17 @@ class Addon extends Backend
 
         $info = [];
         try {
+            $info = get_addon_info($name);
             $uid = $this->request->post("uid");
             $token = $this->request->post("token");
             $version = $this->request->post("version");
             $faversion = $this->request->post("faversion");
             $extend = [
-                'uid'       => $uid,
-                'token'     => $token,
-                'version'   => $version,
-                'faversion' => $faversion
+                'uid'        => $uid,
+                'token'      => $token,
+                'version'    => $version,
+                'oldversion' => $info['version'] ?? '',
+                'faversion'  => $faversion
             ];
             //调用更新的方法
             $info = Service::upgrade($name, $extend);
@@ -337,7 +339,6 @@ class Addon extends Backend
                 $v['flag'] = '';
                 $v['banner'] = '';
                 $v['image'] = '';
-                $v['donateimage'] = '';
                 $v['demourl'] = '';
                 $v['price'] = __('None');
                 $v['screenshots'] = [];

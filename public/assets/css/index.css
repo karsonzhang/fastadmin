@@ -4,11 +4,18 @@ body {
     width: 100%;
 }
 
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: "Roboto", "SF Pro SC", "SF Pro Display", "SF Pro Icons", "PingFang SC", BlinkMacSystemFont, -apple-system, "Segoe UI", "Microsoft Yahei", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     font-weight: 400;
+    margin: 0;
 }
 
 a {
@@ -50,50 +57,6 @@ p {
     margin-bottom: 20px;
 }
 
-.navbar-default {
-    font-weight: 200;
-    letter-spacing: 1px;
-}
-
-.navbar-default .navbar-header .navbar-brand {
-    font-weight: 200;
-    letter-spacing: 1px;
-    color: #474157;
-}
-
-.navbar-default .navbar-header .navbar-brand:hover,
-.navbar-default .navbar-header .navbar-brand:focus {
-    color: #474157;
-}
-
-.navbar-default .navbar-header .navbar-toggle {
-    font-size: 12px;
-    color: #474157;
-    padding: 8px 10px;
-}
-
-.navbar-default .nav > li > a {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 14px;
-    color: #7a798c;
-}
-
-.navbar-default .nav > li > a:hover,
-.navbar-default .nav > li > a:focus:hover {
-    color: #474157;
-}
-
-.navbar-default .nav > li.active > a,
-.navbar-default .nav > li.active > a:focus {
-    color: #474157 !important;
-    background-color: transparent;
-}
-
-.navbar-default .nav > li.active > a:hover,
-.navbar-default .nav > li.active > a:focus:hover {
-    background-color: transparent;
-}
 
 #mainbody {
     position: relative;
@@ -105,23 +68,30 @@ p {
     height: calc(100vh - 61px);
 }
 
-#mainbody .index-text {
+#mainbody > .container > .text-center {
     text-align: center;
-    padding: 250px 0 50px;
+    padding: 350px 0 50px;
     position: relative;
     height: 100vh;
 }
 
-#mainbody .index-text h1 {
+#mainbody > .container > .text-center h1 {
     font-size: 50px;
     font-weight: bold;
     color: #171347
 }
 
-#mainbody .index-gallery {
-    text-align: center;
-    padding: 200px 0 50px;
-    position: relative;
+#mainbody > .container > .text-center > a {
+    background: #fdcc52;
+    background: -webkit-linear-gradient(#fdcc52, #fdc539);
+    background: linear-gradient(#fdcc52, #fdc539);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 300px;
+    margin-top: 20px;
+    padding: 10px 45px;
+    font-size: 14px;
+    text-decoration: none;
 }
 
 @media (max-height: 500px) {
@@ -143,61 +113,29 @@ p {
 
 @media (max-width: 767px) {
 
-    .navbar-default {
-        background-color: #f1f6fd;
-        border-color: #f1f6fd;
-    }
+    #mainbody > .container > .text-center {
 
-    .navbar-default .navbar-collapse {
-        background: #f1f6fd;
-        box-shadow: 5px 9px 5px rgba(0, 0, 0, 0.07);
-    }
 
-    #mainbody {
-        height: unset;
-    }
-
-    #mainbody .index-text {
         padding: 130px 0 0 0;
         height: calc(100vh - 261px);
     }
 
-    #mainbody .index-gallery {
-        padding: 30px 0 50px 0;
-    }
+    #mainbody > .container > .text-center > h1 {
 
-    #mainbody .index-text h1 {
+
         font-size: 50px;
         margin-bottom: 20px;
     }
 }
 
-footer {
+.footer {
     background-color: #222222;
     padding: 20px 0;
     color: rgba(255, 255, 255, 0.3);
     text-align: center;
 }
 
-footer p {
+.footer p {
     font-size: 14px;
     margin: 0;
-}
-
-.bg-primary {
-    background: #fdcc52;
-    background: -webkit-linear-gradient(#fdcc52, #fdc539);
-    background: linear-gradient(#fdcc52, #fdc539);
-}
-
-.btn {
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border-radius: 300px;
-}
-
-.btn-xl {
-    margin-top: 20px;
-    padding: 10px 45px;
-    font-size: 14px;
 }

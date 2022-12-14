@@ -239,7 +239,7 @@
             <% if(typeof item.releaselist !="undefined" && item.releaselist.length>1){%>
                 <span class="btn-group">
                     <a href="javascript:;" class="btn btn-xs btn-primary btn-success btn-install"
-                       data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"
+                       data-type="<%=item.price<=0?'free':'price';%>"
                        data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
                     <a class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" href="javascript:;">
                         <span class="fa fa-caret-down"></span>
@@ -247,14 +247,13 @@
                     <ul class="dropdown-menu">
                         <% for(var j=0;j< item.releaselist.length;j++){ %>
                         <li><a href="javascript:;" class="btn-install" data-type="<%=item.price<=0?'free':'price';%>"
-                               data-donateimage="<%=item.donateimage%>"
                                data-version="<%=item.releaselist[j].version%>"><%=item.releaselist[j].version%></a></li>
                         <% } %>
                     </ul>
                 </span>
             <% }else if(typeof item.releaselist !="undefined" && item.releaselist.length>0){%>
                 <a href="javascript:;" class="btn btn-xs btn-primary btn-success btn-install"
-                   data-type="<%=item.price<=0?'free':'price';%>" data-donateimage="<%=item.donateimage%>"
+                   data-type="<%=item.price<=0?'free':'price';%>"
                    data-version="<%=item.version%>"><i class="fa fa-cloud-download"></i> {:__('Install')}</a>
             <% } %>
 
