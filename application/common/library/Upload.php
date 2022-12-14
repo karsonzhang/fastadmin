@@ -150,7 +150,7 @@ class Upload
         $typeDict = ['b' => 0, 'k' => 1, 'kb' => 1, 'm' => 2, 'mb' => 2, 'gb' => 3, 'g' => 3];
         $size = (int)($size * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0));
         if ($this->fileInfo['size'] > $size) {
-            throw new UploadException(__('File is too big (%sMiB). Max filesize: %sMiB.',
+            throw new UploadException(__('File is too big (%sMiB), Max filesize: %sMiB.',
                 round($this->fileInfo['size'] / pow(1024, 2), 2),
                 round($size / pow(1024, 2), 2)));
         }
@@ -167,35 +167,41 @@ class Upload
 
     /**
      * 获取存储的文件名
-     * @param string $savekey
-     * @param string $filename
-     * @param string $md5
+     * @param string $savekey  保存路径
+     * @param string $filename 文件名
+     * @param string $md5      文件MD5
+     * @param string $category 分类
      * @return mixed|null
      */
-    public function getSavekey($savekey = null, $filename = null, $md5 = null)
+    public function getSavekey($savekey = null, $filename = null, $md5 = null, $category = null)
     {
         if ($filename) {
             $suffix = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-            $suffix = $suffix && preg_match("/^[a-zA-Z0-9]+$/", $suffix) ? $suffix : 'file';
         } else {
-            $suffix = $this->fileInfo['suffix'];
+            $suffix = $this->fileInfo['suffix'] ?? '';
         }
-        $filename = $filename ? $filename : ($suffix ? substr($this->fileInfo['name'], 0, strripos($this->fileInfo['name'], '.')) : $this->fileInfo['name']);
+        $suffix = $suffix && preg_match("/^[a-zA-Z0-9]+$/", $suffix) ? $suffix : 'file';
+        $filename = $filename ? $filename : ($this->fileInfo['name'] ?? 'unknown');
         $filename = xss_clean(strip_tags(htmlspecialchars($filename)));
-        $md5 = $md5 ? $md5 : md5_file($this->fileInfo['tmp_name']);
+        $fileprefix = substr($filename, 0, strripos($filename, '.'));
+        $md5 = $md5 ? $md5 : (isset($this->fileInfo['tmp_name']) ? md5_file($this->fileInfo['tmp_name']) : '');
+        $category = $category ? $category : request()->post('category');
+        $category = $category ? xss_clean($category) : 'all';
         $replaceArr = [
-            '{year}'     => date("Y"),
-            '{mon}'      => date("m"),
-            '{day}'      => date("d"),
-            '{hour}'     => date("H"),
-            '{min}'      => date("i"),
-            '{sec}'      => date("s"),
-            '{random}'   => Random::alnum(16),
-            '{random32}' => Random::alnum(32),
-            '{filename}' => substr($filename, 0, 100),
-            '{suffix}'   => $suffix,
-            '{.suffix}'  => $suffix ? '.' . $suffix : '',
-            '{filemd5}'  => $md5,
+            '{year}'       => date("Y"),
+            '{mon}'        => date("m"),
+            '{day}'        => date("d"),
+            '{hour}'       => date("H"),
+            '{min}'        => date("i"),
+            '{sec}'        => date("s"),
+            '{random}'     => Random::alnum(16),
+            '{random32}'   => Random::alnum(32),
+            '{category}'   => $category ? $category : '',
+            '{filename}'   => substr($filename, 0, 100),
+            '{fileprefix}' => substr($fileprefix, 0, 100),
+            '{suffix}'     => $suffix,
+            '{.suffix}'    => $suffix ? '.' . $suffix : '',
+            '{filemd5}'    => $md5,
         ];
         $savekey = $savekey ? $savekey : $this->config['savekey'];
         $savekey = str_replace(array_keys($replaceArr), array_values($replaceArr), $savekey);

@@ -201,6 +201,7 @@ return [
         'type'           => '',
         // 是否自动开启 SESSION
         'auto_start'     => true,
+        //'cache_limiter'=>''
     ],
     // +----------------------------------------------------------------------
     // | Cookie设置
@@ -296,7 +297,7 @@ return [
         //允许跨域的域名,多个以,分隔
         'cors_request_domain'   => 'localhost,127.0.0.1',
         //版本号
-        'version'               => '1.3.4.20220530',
+        'version'               => '1.3.5.20221214',
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],
