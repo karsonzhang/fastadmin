@@ -70,13 +70,13 @@
                                         {foreach name="item.content" item="vo"}
                                         <label for="row[{$item.name}][]-{$key}"><input id="row[{$item.name}][]-{$key}" name="row[{$item.name}][]" type="checkbox" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
                                         {/foreach}
-                                        <span class="msg-box n-right" for="c-{$item.name}"></span>
+                                        <span class="msg-box n-right" for="row[{$item.name}]"></span>
                                         {/case}
                                         {case radio}
                                         {foreach name="item.content" item="vo"}
                                         <label for="row[{$item.name}]-{$key}"><input id="row[{$item.name}]-{$key}" name="row[{$item.name}]" type="radio" value="{$key}" data-tip="{$item.tip}" {in name="key" value="$item.value" }checked{/in} /> {$vo}</label>
                                         {/foreach}
-                                        <span class="msg-box n-right" for="c-{$item.name}"></span>
+                                        <span class="msg-box n-right" for="row[{$item.name}]"></span>
                                         {/case}
                                         {case value="select" break="0"}{/case}
                                         {case value="selects"}

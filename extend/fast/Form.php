@@ -42,10 +42,10 @@ use ArrayAccess;
  * @method static string checkboxs(string $name, array $list = [], string $checked = null, array $options = []) 一组复选框
  * @method static string radio(string $name, string $value = null, string $checked = null, array $options = [])) 单个单选框
  * @method static string radios(string $name, array $list = [], string $checked = null, array $options = [])) 一组单选框
- * @method static string image(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传图片组件
- * @method static string images(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传图片组件(多图)）
- * @method static string upload(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传文件组件
- * @method static string uploads(string $name = null, string $value, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传文件组件(多文件)）
+ * @method static string image(string $name = null, string $value = null, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传图片组件
+ * @method static string images(string $name = null, string $value = null, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传图片组件(多图)）
+ * @method static string upload(string $name = null, string $value = null, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传文件组件
+ * @method static string uploads(string $name = null, string $value = null, array $inputAttr = [], array $uploadAttr = [], array $chooseAttr = [], array $previewAttr = []) 上传文件组件(多文件)）
  * @method static string button(string $value = null, array $options = []) 表单button
  */
 class Form

@@ -59,8 +59,10 @@ class Ajax extends Backend
     public function upload()
     {
         Config::set('default_return_type', 'json');
-        //必须设定cdnurl为空,否则cdnurl函数计算错误
-        Config::set('upload.cdnurl', '');
+
+        //必须还原upload配置,否则分片及cdnurl函数计算错误
+        Config::load(APP_PATH . 'extra/upload.php', 'upload');
+
         $chunkid = $this->request->post("chunkid");
         if ($chunkid) {
             if (!Config::get('upload.chunking')) {
