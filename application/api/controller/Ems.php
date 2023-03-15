@@ -30,8 +30,16 @@ class Ems extends Api
     public function send()
     {
         $email = $this->request->post("email");
+        $captcha = $this->request->post("captcha");
         $event = $this->request->post("event");
         $event = $event ? $event : 'register';
+
+        //发送前验证码
+        if (config('fastadmin.user_api_captcha')) {
+            if (!\think\Validate::is($captcha, 'captcha')) {
+                $this->error("验证码不正确");
+            }
+        }
 
         $last = Emslib::get($email, $event);
         if ($last && time() - $last['createtime'] < 60) {

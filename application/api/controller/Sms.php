@@ -25,9 +25,16 @@ class Sms extends Api
     public function send()
     {
         $mobile = $this->request->post("mobile");
+        $captcha = $this->request->post("captcha");
         $event = $this->request->post("event");
         $event = $event ? $event : 'register';
 
+        //发送前验证码
+        if (config('fastadmin.user_api_captcha')) {
+            if (!\think\Validate::is($captcha, 'captcha')) {
+                $this->error("验证码不正确");
+            }
+        }
         if (!$mobile || !\think\Validate::regex($mobile, "^1\d{10}$")) {
             $this->error(__('手机号不正确'));
         }

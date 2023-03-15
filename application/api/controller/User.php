@@ -105,7 +105,7 @@ class User extends Api
      * @param string $password 密码
      * @param string $email    邮箱
      * @param string $mobile   手机号
-     * @param string $code     验证码
+     * @param string $captcha  验证码
      */
     public function register()
     {
@@ -113,7 +113,8 @@ class User extends Api
         $password = $this->request->post('password');
         $email = $this->request->post('email');
         $mobile = $this->request->post('mobile');
-        $code = $this->request->post('code');
+        $captcha = $this->request->post("captcha", $this->request->post('code'));
+
         if (!$username || !$password) {
             $this->error(__('Invalid parameters'));
         }
@@ -123,7 +124,7 @@ class User extends Api
         if ($mobile && !Validate::regex($mobile, "^1\d{10}$")) {
             $this->error(__('Mobile is incorrect'));
         }
-        $ret = Sms::check($mobile, $code, 'register');
+        $ret = Sms::check($mobile, $captcha, 'register');
         if (!$ret) {
             $this->error(__('Captcha is incorrect'));
         }

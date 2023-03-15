@@ -1,11 +1,11 @@
 <div id="content-container" class="container">
     <div class="user-section login-section">
-        <div class="logon-tab clearfix"><a href="{:url('user/login')}?url={$url|urlencode|htmlentities}">{:__('Sign in')}</a> <a class="active">{:__('Sign up')}</a></div>
+        <div class="logon-tab clearfix"><a href="{:url('user/login')}?url={$url|xss_clean|urlencode}">{:__('Sign in')}</a> <a class="active">{:__('Sign up')}</a></div>
         <div class="login-main">
             <form name="form1" id="register-form" class="form-vertical" method="POST" action="">
                 <!--@IndexRegisterFormBegin-->
                 <input type="hidden" name="invite_user_id" value="0"/>
-                <input type="hidden" name="url" value="{$url|htmlentities}"/>
+                <input type="hidden" name="url" value="{$url|xss_clean}"/>
                 {:token()}
                 <div class="form-group">
                     <label class="control-label required">{:__('Email')}<span class="text-success"></span></label>
@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label class="control-label">{:__('Mobile')}</label>
                     <div class="controls">
-                        <input type="text" id="mobile" name="mobile" data-rule="required;mobile" class="form-control" placeholder="{:__('Mobile')}">
+                        <input type="text" id="mobile" name="mobile" data-rule="required;mobile" class="form-control" placeholder="{:__('Mobile')}" value="13241111111">
                         <p class="help-block"></p>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block">{:__('Sign up')}</button>
-                    <a href="{:url('user/login')}?url={$url|urlencode|htmlentities}" class="btn btn-default btn-lg btn-block mt-3 no-border">{:__('Already have an account? Sign in')}</a>
+                    <a href="{:url('user/login')}?url={$url|xss_clean|urlencode}" class="btn btn-default btn-lg btn-block mt-3 no-border">{:__('Already have an account? Sign in')}</a>
                 </div>
                 <!--@IndexRegisterFormEnd-->
             </form>

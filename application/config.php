@@ -232,6 +232,8 @@ return [
     'captcha'                => [
         // 验证码字符集合
         'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',
+        // 验证码过期时间（s）
+        'expire'   => 600,
         // 验证码字体大小(px)
         'fontSize' => 18,
         // 是否画混淆曲线
@@ -265,7 +267,9 @@ return [
         //是否开启前台会员中心
         'usercenter'            => true,
         //会员注册验证码类型email/mobile/wechat/text/false
-        'user_register_captcha' => 'text',
+        'user_register_captcha' => 'mobile',
+        //是否启用发送前验证码(用于短信和邮件发送)
+        'user_api_captcha'      => true,
         //登录验证码
         'login_captcha'         => true,
         //登录失败超过10次则1天后重试

@@ -7,6 +7,7 @@ use app\common\controller\Frontend;
 use app\common\library\Ems;
 use app\common\library\Sms;
 use app\common\model\Attachment;
+use fast\Random;
 use think\Config;
 use think\Cookie;
 use think\Hook;
@@ -19,7 +20,7 @@ use think\Validate;
 class User extends Frontend
 {
     protected $layout = 'default';
-    protected $noNeedLogin = ['login', 'register', 'third'];
+    protected $noNeedLogin = ['login', 'mobilelogin', 'register', 'third'];
     protected $noNeedRight = ['*'];
 
     public function _initialize()
@@ -65,7 +66,7 @@ class User extends Frontend
      */
     public function register()
     {
-        $url = $this->request->request('url', '', 'trim');
+        $url = $this->request->request('url', '', 'trim|xss_clean');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -144,7 +145,7 @@ class User extends Frontend
      */
     public function login()
     {
-        $url = $this->request->request('url', '', 'trim');
+        $url = $this->request->request('url', '', 'trim|xss_clean');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -180,6 +181,53 @@ class User extends Frontend
                 $this->success(__('Logged in successful'), $url ? $url : url('user/index'));
             } else {
                 $this->error($this->auth->getError(), null, ['token' => $this->request->token()]);
+            }
+        }
+        //判断来源
+        $referer = $this->request->server('HTTP_REFERER');
+        if (!$url && (strtolower(parse_url($referer, PHP_URL_HOST)) == strtolower($this->request->host()))
+            && !preg_match("/(user\/login|user\/register|user\/logout)/i", $referer)) {
+            $url = $referer;
+        }
+        $this->view->assign('url', $url);
+        $this->view->assign('title', __('Login'));
+        return $this->view->fetch();
+    }
+
+    /**
+     * 手机号验证码登录
+     */
+    public function mobilelogin()
+    {
+        $url = $this->request->request('url', '', 'trim|xss_clean');
+        if ($this->request->isPost()) {
+            $mobile = $this->request->post('mobile');
+            $captcha = $this->request->post('captcha');
+            if (!$mobile || !$captcha) {
+                $this->error(__('Invalid parameters'));
+            }
+            if (!Validate::regex($mobile, "^1\d{10}$")) {
+                $this->error(__('Mobile is incorrect'));
+            }
+            if (!Sms::check($mobile, $captcha, 'mobilelogin')) {
+                $this->error(__('Captcha is incorrect'));
+            }
+            $user = \app\common\model\User::getByMobile($mobile);
+            if ($user) {
+                if ($user->status != 'normal') {
+                    $this->error(__('Account is locked'));
+                }
+                //如果已经有账号则直接登录
+                $ret = $this->auth->direct($user->id);
+            } else {
+                $ret = $this->auth->register($mobile, Random::alnum(), '', $mobile, []);
+            }
+            if ($ret) {
+                Sms::flush($mobile, 'mobilelogin');
+                $data = ['userinfo' => $this->auth->getUserinfo()];
+                $this->success(__('Logged in successful'), $url);
+            } else {
+                $this->error($this->auth->getError());
             }
         }
         //判断来源

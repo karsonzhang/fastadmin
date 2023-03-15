@@ -4,7 +4,8 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
             $.each(errors, function (i, j) {
                 Layer.msg(j);
             });
-        }
+        },
+        ignore: ':hidden'
     };
     var Controller = {
         login: function () {
@@ -26,7 +27,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                 Layer.open({
                     type: 1,
                     title: __('Reset password'),
-                    area: ["450px", "355px"],
+                    area: [Math.min($(window).width(), 450) + "px", "355px"],
                     content: content,
                     success: function (layero) {
                         var rule = $("#resetpwd-form input[name='captcha']").data("rule");
@@ -44,6 +45,18 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                         });
                     }
                 });
+            });
+
+            //切换账号手机验证码登录
+            $(document).on("click", ".btn-switchlogin", function () {
+                var form = $(this).closest("form");
+                var current = $(this).data("type");
+                var type = current == 'mobile' ? 'account' : 'mobile';
+                var text = $(this).data(current + "-text");
+                $(this).text(text).data("type", type);
+                $("[data-login]").addClass("hidden");
+                $("[data-login='"+type+"']").removeClass("hidden");
+                form.attr("action", $(this).data(type + "-action"));
             });
         },
         register: function () {
@@ -85,7 +98,7 @@ define(['jquery', 'bootstrap', 'frontend', 'form', 'template'], function ($, und
                 Layer.open({
                     type: 1,
                     title: "修改",
-                    area: ["400px", "250px"],
+                    area: [Math.min($(window).width(), 400) + "px", "250px"],
                     content: content,
                     success: function (layero) {
                         var form = $("form", layero);
