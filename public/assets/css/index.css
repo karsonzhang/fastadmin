@@ -57,7 +57,6 @@ p {
     margin-bottom: 20px;
 }
 
-
 #mainbody {
     position: relative;
     width: 100%;
@@ -114,15 +113,11 @@ p {
 @media (max-width: 767px) {
 
     #mainbody > .container > .text-center {
-
-
         padding: 130px 0 0 0;
         height: calc(100vh - 261px);
     }
 
     #mainbody > .container > .text-center > h1 {
-
-
         font-size: 50px;
         margin-bottom: 20px;
     }
@@ -139,3 +134,4 @@ p {
     font-size: 14px;
     margin: 0;
 }
+

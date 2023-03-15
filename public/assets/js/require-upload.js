@@ -27,7 +27,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             if ($(button).data("multiple") && inputObj.val() !== "") {
                                 urlArr.push(inputObj.val());
                             }
-                            var url = Config.upload.fullmode ? Fast.api.cdnurl(data.url) : data.url;
+                            var url = Config.upload.fullmode ? (data.fullurl ? data.fullurl : Fast.api.cdnurl(data.url)) : data.url;
                             urlArr.push(url);
                             inputObj.val(urlArr.join(",")).trigger("change").trigger("validate");
                         }
@@ -173,12 +173,8 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                         options = $.extend(true, {}, options, $(this).data("upload-options") || {});
                         delete options.success;
                         delete options.url;
+                        // delete options.params;
                         multipart = $.isArray(multipart) ? {} : multipart;
-                        var params = $(this).data("params") || {};
-                        var category = typeof params.category !== 'undefined' ? params.category : ($(this).data("category") || '');
-                        if (category) {
-                            // multipart.category = category;
-                        }
 
                         Upload.list[id] = new Dropzone(this, $.extend({
                             url: url,
@@ -232,6 +228,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             },
                             addedfile: function (file) {
                                 var params = $(this.element).data("params") || {};
+                                params = typeof params === 'function' ? params.call(this, file) : params;
                                 var category = typeof params.category !== 'undefined' ? params.category : ($(this.element).data("category") || '');
                                 file.category = typeof category === 'function' ? category.call(this, file) : category;
                             },

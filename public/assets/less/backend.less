@@ -8,15 +8,15 @@
 @import url("../css/skins/skin-black-blue.css");
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
-@import url("../libs/toastr/toastr.min.css");
+@import url("../libs/toastr/build/toastr.min.css");
 @import url("../libs/fastadmin-layer/dist/theme/default/layer.css");
-@import url("../libs/bootstrap-table/dist/bootstrap-table.min.css");
+@import url("../libs/fastadmin-bootstraptable/dist/bootstrap-table.min.css");
 @import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
 @import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
-@import url("../libs/bootstrap-slider/slider.css");
+@import url("../libs/bootstrap-slider/dist/css/bootstrap-slider.min.css");
 @import "tinycss.less";
 
 @main-bg: #f1f4f6;
@@ -204,24 +204,30 @@ table.table-template {
     right: 12px;
 }
 
-.bootstrap-select .status {
-    background: #f0f0f0;
-    clear: both;
-    color: #999;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1;
-    margin-bottom: -5px;
-    padding: 10px 20px;
+.bootstrap-select {
+    .status {
+        background: #f0f0f0;
+        clear: both;
+        color: #999;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1;
+        margin-bottom: -5px;
+        padding: 10px 20px;
+    }
+
+    .bs-placeholder {
+        min-height: 33px;
+    }
 }
 
 select.bs-select-hidden, select.selectpicker {
     display: inherit !important;
-    max-height: 31px;
+    max-height: 33px;
     overflow: hidden;
 
     &[multiple] {
-        height: 31px;
+        height: 33px;
         //visibility: hidden;
         padding: 0;
         background: #f4f4f4;
@@ -963,12 +969,13 @@ form.form-horizontal .control-label {
 .bootstrap-table .table:not(.table-condensed) > thead > tr > td,
 .bootstrap-table .table:not(.table-condensed) > tbody > tr > td,
 .bootstrap-table .table:not(.table-condensed) > tfoot > tr > td {
-    padding: 8px 15px;
+    padding: 10px 15px;
+
     height: 47px;
 }
 
 .fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner {
-    padding: 8px 10px;
+    padding: 10px 10px;
 }
 
 .toolbar {
@@ -1532,13 +1539,14 @@ table.table-nowrap {
     display: inline-block;
     padding: 4px 6px;
     //margin-bottom: 10px;
+
     color: #555;
     vertical-align: middle;
     //border-radius: 4px;
     //max-width: 100%;
 
     width: 100%;
-    line-height: 22px;
+    line-height: 23px;
     cursor: text;
 
 
@@ -1573,6 +1581,7 @@ table.table-nowrap {
     .tag {
         margin-right: 2px;
         color: white;
+        min-height: 23px;
 
         [data-role="remove"] {
             margin-left: 5px;

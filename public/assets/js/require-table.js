@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table', 'bootstrap-table-lang', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template', 'bootstrap-table-jumpto', 'bootstrap-table-fixed-columns'], function ($, undefined, Moment) {
+define(['jquery', 'bootstrap'], function ($, undefined) {
     var Table = {
         list: {},
         // Bootstrap-table 基础配置
@@ -34,7 +34,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             singleSelect: false, //是否启用单选
             showRefresh: false,
             showJumpto: true,
-            locale: Config.language == 'zh-cn' ? 'zh-CN' : 'en-US',
+            locale: Config.language === 'en' ? 'en-US' : Config.language.replace(/\-(\w+)$/, function (value) {
+                return value.toUpperCase();
+            }),
             showToggle: true,
             showColumns: true,
             pk: 'id',
@@ -224,12 +226,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             checkboxtd.drag("start", function (ev, dd) {
                                 return $('<div class="selection" />').css('opacity', .65).appendTo(document.body);
                             }).drag(function (ev, dd) {
-                                $(dd.proxy).css({
-                                    top: Math.min(ev.pageY, dd.startY),
-                                    left: Math.min(ev.pageX, dd.startX),
-                                    height: Math.abs(ev.pageY - dd.startY),
-                                    width: Math.abs(ev.pageX - dd.startX)
-                                });
+                                setTimeout(function () {
+                                    $(dd.proxy).css({
+                                        top: Math.min(ev.pageY, dd.startY),
+                                        left: Math.min(ev.pageX, dd.startX),
+                                        height: Math.abs(ev.pageY - dd.startY),
+                                        width: Math.abs(ev.pageX - dd.startX)
+                                    });
+                                }, 0);
                             }).drag("end", function (ev, dd) {
                                 $(dd.proxy).remove();
                             });
@@ -383,7 +387,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 $(document).on('click', Table.config.restoreonebtn + ',' + Table.config.destroyonebtn, function () {
                     var that = this;
                     var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
-                    var row = Fast.api.getrowbyindex(table, $(that).data("row-index"));
+                    var row = Table.api.getrowbyindex(table, $(that).data("row-index"));
                     Fast.api.ajax({
                         url: url,
                         data: {ids: row[options.pk]}
@@ -635,40 +639,30 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return '<i class="' + value + '"></i> ' + value;
                 },
                 image: function (value, row, index) {
-                    value = value == null || value.length === 0 ? '' : value.toString();
-                    value = value ? value : '/assets/img/blank.gif';
-                    var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    var url = Fast.api.cdnurl(value, true);
-                    url = url.match(/^(\/|data:image\\)/) ? url : url + Config.upload.thumbstyle;
-                    return '<a href="javascript:"><img class="' + classname + '" src="' + url + '" /></a>';
+                    return Table.api.formatter.images.call(this, value, row, index);
                 },
                 images: function (value, row, index) {
                     value = value == null || value.length === 0 ? '' : value.toString();
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    var arr = value != '' ? value.split(',') : [];
+                    var arr = value !== '' ? value.split(',') : [];
                     var html = [];
                     var url;
                     $.each(arr, function (i, value) {
                         value = value ? value : '/assets/img/blank.gif';
                         url = Fast.api.cdnurl(value, true);
+
                         url = url.match(/^(\/|data:image\\)/) ? url : url + Config.upload.thumbstyle;
-                        html.push('<a href="javascript:"><img class="' + classname + '" src="' + url + '" /></a>');
+                        html.push('<a href="javascript:"><img class="' + classname + '" src="' + url + '" width="30" height="30" /></a>');
                     });
                     return html.join(' ');
                 },
                 file: function (value, row, index) {
-                    value = value == null || value.length === 0 ? '' : value.toString();
-                    value = Fast.api.cdnurl(value, true);
-                    var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    var suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(value);
-                    suffix = suffix ? suffix[1] : 'file';
-                    var url = Fast.api.fixurl("ajax/icon?suffix=" + suffix);
-                    return '<a href="' + value + '" target="_blank"><img src="' + url + '" class="' + classname + '"></a>';
+                    return Table.api.formatter.files.call(this, value, row, index);
                 },
                 files: function (value, row, index) {
                     value = value == null || value.length === 0 ? '' : value.toString();
                     var classname = typeof this.classname !== 'undefined' ? this.classname : 'img-sm img-center';
-                    var arr = value != '' ? value.split(',') : [];
+                    var arr = value !== '' ? value.split(',') : [];
                     var html = [];
                     var suffix, url;
                     $.each(arr, function (i, value) {
@@ -676,7 +670,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(value);
                         suffix = suffix ? suffix[1] : 'file';
                         url = Fast.api.fixurl("ajax/icon?suffix=" + suffix);
-                        html.push('<a href="' + value + '" target="_blank"><img src="' + url + '" class="' + classname + '"></a>');
+                        html.push('<a href="' + value + '" target="_blank"><img src="' + url + '" class="' + classname + '" width="30" height="30"></a>');
                     });
                     return html.join(' ');
                 },
@@ -773,7 +767,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                     if (typeof that.searchList === 'object' && typeof that.custom === 'undefined') {
                         var i = 0;
-                        var searchValues = Object.values(colorArr);
+                        var searchValues = Object.keys(colorArr).map(function (e) {
+                            return colorArr[e];
+                        });
                         $.each(that.searchList, function (key, val) {
                             if (typeof colorArr[key] == 'undefined') {
                                 colorArr[key] = searchValues[i];
@@ -784,11 +780,11 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
 
                     //渲染Flag
                     var html = [];
-                    var arr = value != '' ? value.split(',') : [];
+                    var arr = value !== '' ? value.split(',') : [];
                     var color, display, label;
                     $.each(arr, function (i, value) {
                         value = value == null || value.length === 0 ? '' : value.toString();
-                        if (value == '')
+                        if (value === '')
                             return true;
                         color = value && typeof colorArr[value] !== 'undefined' ? colorArr[value] : 'primary';
                         display = typeof that.searchList !== 'undefined' && typeof that.searchList[value] !== 'undefined' ? that.searchList[value] : __(value.charAt(0).toUpperCase() + value.slice(1));

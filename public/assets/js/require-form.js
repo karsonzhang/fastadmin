@@ -61,8 +61,10 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             var msg = ret.hasOwnProperty("msg") && ret.msg !== "" ? ret.msg : __('Operation completed');
                             parent.Toastr.success(msg);
                             parent.$(".btn-refresh").trigger("click");
-                            var index = parent.Layer.getFrameIndex(window.name);
-                            parent.Layer.close(index);
+                            if (window.name) {
+                                var index = parent.Layer.getFrameIndex(window.name);
+                                parent.Layer.close(index);
+                            }
                             return false;
                         }, function (data, ret) {
                             that.holdSubmit(false);
@@ -89,8 +91,10 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                 $(".layer-footer [type=submit],.fixed-footer [type=submit],.normal-footer [type=submit]", form).removeClass("disabled");
                 //自定义关闭按钮事件
                 form.on("click", ".layer-close", function () {
-                    var index = parent.Layer.getFrameIndex(window.name);
-                    parent.Layer.close(index);
+                    if (window.name) {
+                        var index = parent.Layer.getFrameIndex(window.name);
+                        parent.Layer.close(index);
+                    }
                     return false;
                 });
             },
@@ -282,7 +286,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                     }
                                     var result = urlArr.join(",");
                                     inputObj.val(result).trigger("change").trigger("validate");
-                                } else {
+                                } else if (input_id) {
                                     var url = Config.upload.fullmode ? Fast.api.cdnurl(data.url) : data.url;
                                     $("#" + input_id).val(url).trigger("change").trigger("validate");
                                 }

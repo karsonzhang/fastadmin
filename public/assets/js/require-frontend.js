@@ -20,28 +20,28 @@ require.config({
         'adminlte': 'adminlte',
         'bootstrap-table-commonsearch': 'bootstrap-table-commonsearch',
         'bootstrap-table-template': 'bootstrap-table-template',
-        //
-        // 以下的包从bower的libs目录加载
+        // 以下的包从libs目录加载
         'jquery': '../libs/jquery/dist/jquery.min',
         'bootstrap': '../libs/bootstrap/dist/js/bootstrap.min',
         'bootstrap-datetimepicker': '../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min',
         'bootstrap-daterangepicker': '../libs/bootstrap-daterangepicker/daterangepicker',
         'bootstrap-select': '../libs/bootstrap-select/dist/js/bootstrap-select.min',
         'bootstrap-select-lang': '../libs/bootstrap-select/dist/js/i18n/defaults-zh_CN',
-        'bootstrap-table': '../libs/bootstrap-table/dist/bootstrap-table.min',
-        'bootstrap-table-export': '../libs/bootstrap-table/dist/extensions/export/bootstrap-table-export.min',
-        'bootstrap-table-fixed-columns': '../libs/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns',
-        'bootstrap-table-mobile': '../libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile',
-        'bootstrap-table-lang': '../libs/bootstrap-table/dist/locale/bootstrap-table-zh-CN',
-        'bootstrap-table-jumpto': '../libs/bootstrap-table/dist/extensions/page-jumpto/bootstrap-table-jumpto',
-        'tableexport': '../libs/tableExport.jquery.plugin/tableExport.min',
+        'bootstrap-table': '../libs/fastadmin-bootstraptable/dist/bootstrap-table.min',
+        'bootstrap-table-export': '../libs/fastadmin-bootstraptable/dist/extensions/export/bootstrap-table-export.min',
+        'bootstrap-table-fixed-columns': '../libs/fastadmin-bootstraptable/dist/extensions/fixed-columns/bootstrap-table-fixed-columns',
+        'bootstrap-table-mobile': '../libs/fastadmin-bootstraptable/dist/extensions/mobile/bootstrap-table-mobile.min',
+        'bootstrap-table-lang': '../libs/fastadmin-bootstraptable/dist/locale/bootstrap-table-zh-CN',
+        'bootstrap-table-jumpto': '../libs/fastadmin-bootstraptable/dist/extensions/page-jumpto/bootstrap-table-jumpto',
+        'bootstrap-slider': '../libs/bootstrap-slider/dist/bootstrap-slider.min',
+        'tableexport': '../libs/tableexport.jquery.plugin/tableExport.min',
         'dragsort': '../libs/fastadmin-dragsort/jquery.dragsort',
-        'sortable': '../libs/Sortable/Sortable.min',
+        'sortable': '../libs/sortablejs/Sortable.min',
         'addtabs': '../libs/fastadmin-addtabs/jquery.addtabs',
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
         'validator': '../libs/nice-validator/dist/jquery.validator',
         'validator-lang': '../libs/nice-validator/dist/local/zh-CN',
-        'toastr': '../libs/toastr/toastr',
+        'toastr': '../libs/toastr/build/toastr.min',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/fastadmin-layer/dist/layer',
         'cookie': '../libs/jquery.cookie/jquery.cookie',
@@ -64,7 +64,7 @@ require.config({
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-export': {
-            deps: ['bootstrap-table', 'tableexport'],
+            deps: ['bootstrap-table'],
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-fixed-columns': {
@@ -103,13 +103,22 @@ require.config({
             deps: ['bootstrap', 'slimscroll'],
             exports: '$.AdminLTE'
         },
-        'bootstrap-daterangepicker': [
-            'moment/locale/zh-cn'
+        'table': [
+            'moment', 'moment/locale/zh-cn',
+            'bootstrap-table',
+            'bootstrap-table-lang', 'bootstrap-table-export', 'bootstrap-table-commonsearch', 'bootstrap-table-template',
+            'bootstrap-table-jumpto', 'bootstrap-table-fixed-columns'
         ],
-        'bootstrap-datetimepicker': [
-            'moment/locale/zh-cn',
-        ],
+        'bootstrap-daterangepicker': ['moment', 'moment/locale/zh-cn'],
+        'bootstrap-datetimepicker': ['moment', 'moment/locale/zh-cn'],
         'bootstrap-select-lang': ['bootstrap-select'],
+        'selectpage': {
+            deps: ['jquery'],
+            exports: '$.fn.extend'
+        },
+        'layer': {
+            deps: ['jquery']
+        },
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css'],
         'validator-lang': ['validator'],
         'citypicker': ['citypicker-data', 'css!../libs/fastadmin-citypicker/dist/css/city-picker.css']
@@ -134,6 +143,15 @@ require(['jquery', 'bootstrap'], function ($, undefined) {
     paths['lang'] = Config.moduleurl + '/ajax/lang?callback=define&controllername=' + Config.controllername + '&lang=' + Config.language + '&v=' + Config.site.version;
     // 避免目录冲突
     paths['frontend/'] = 'frontend/';
+    // 如果是英文，则移除默认的定义
+    if (Config.language === 'en') {
+        $.each(requirejs.s.contexts._.config.paths, function (key, value) {
+            if (key.match(/\-lang$/)) {
+                define(key);
+            }
+        });
+        define('moment/locale/zh-cn');
+    }
     require.config({paths: paths});
 
     // 初始化
@@ -143,7 +161,13 @@ require(['jquery', 'bootstrap'], function ($, undefined) {
                 //加载相应模块
                 if (Config.jsname) {
                     require([Config.jsname], function (Controller) {
-                        Controller[Config.actionname] != undefined && Controller[Config.actionname]();
+                        if (Controller.hasOwnProperty(Config.actionname)) {
+                            Controller[Config.actionname]();
+                        } else {
+                            if (Controller.hasOwnProperty("_empty")) {
+                                Controller._empty();
+                            }
+                        }
                     }, function (e) {
                         console.error(e);
                         // 这里可捕获模块加载的错误

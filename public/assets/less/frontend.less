@@ -5,15 +5,15 @@
 @import url("../css/fastadmin.css");
 @import url("../css/iconfont.css");
 @import url("../libs/font-awesome/css/font-awesome.min.css");
-@import url("../libs/toastr/toastr.min.css");
+@import url("../libs/toastr/build/toastr.min.css");
 @import url("../libs/fastadmin-layer/dist/theme/default/layer.css");
-@import url("../libs/bootstrap-table/dist/bootstrap-table.min.css");
+@import url("../libs/fastadmin-bootstraptable/dist/bootstrap-table.min.css");
 @import url("../libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
 @import url("../libs/bootstrap-daterangepicker/daterangepicker.css");
 @import url("../libs/nice-validator/dist/jquery.validator.css");
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
-@import url("../libs/bootstrap-slider/slider.css");
+@import url("../libs/bootstrap-slider/dist/css/bootstrap-slider.min.css");
 @import "tinycss.less";
 
 @primary-color: #007bff;
@@ -619,9 +619,11 @@ footer.footer {
     .login-main {
         padding: 40px 45px 20px 45px;
     }
+}
 
+.login-section, .form-section {
     .n-bootstrap {
-        .form-group {
+        .controls {
             position: relative;
         }
 
@@ -631,7 +633,7 @@ footer.footer {
 
         .n-right {
             margin-top: 0;
-            top: 0;
+            top: -20px;
             position: absolute;
             left: 0;
             text-align: right;
