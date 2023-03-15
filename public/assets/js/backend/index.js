@@ -206,8 +206,9 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             //这一行需要放在点击左侧链接事件之前
             var addtabs = Config.referer ? localStorage.getItem("addtabs") : null;
 
+            console.log($("[data-config='simplenav']").prop("checked"))
             //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true,iframeForceRefreshTable只强制刷新表格
-            nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, iframeForceRefreshTable: true, nav: nav});
+            nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, iframeForceRefreshTable: true, simple: $("[data-config='simplenav']").prop("checked"), nav: nav});
 
             if ($("ul.sidebar-menu li.active a").length > 0) {
                 $("ul.sidebar-menu li.active a").trigger("click");
@@ -337,6 +338,13 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                     $(window).trigger("resize");
                 }, 300);
                 createCookie('sidebar_collapse', value);
+            });
+
+            // 切换简洁模式菜单
+            $(document).on("click", "[data-config='simplenav']", function () {
+                var value = $(this).prop("checked") ? 1 : 0;
+                createCookie('simplenav', value);
+                location.reload();
             });
 
             // 切换多级菜单

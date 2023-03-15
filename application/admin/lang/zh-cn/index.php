@@ -16,6 +16,8 @@ return [
     'Toggle between slide over content and push content effects' => '切换右侧操作栏覆盖或独占',
     'Toggle Right Sidebar Skin'                                  => '切换右侧操作栏背景',
     'Toggle between dark and light skins for the right sidebar'  => '将右侧操作栏背景亮色或深色切换',
+    'Simple nav'                                                 => '简洁导航模式',
+    'Simple nav tips'                                            => '启用后顶部导航将不再显示，同时每次点击菜单都会刷新右侧内容',
     'Multiple nav'                                               => '多级菜单导航',
     'Toggle the top menu state (multiple or single)'             => '切换顶部菜单为多级菜单导航模式',
     'Multiple tab'                                               => '多选项卡',
