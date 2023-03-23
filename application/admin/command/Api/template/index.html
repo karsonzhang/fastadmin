@@ -137,7 +137,7 @@
                             Apiurl:
                         </div>
                         <div class="form-group">
-                            <input id="apiUrl" type="text" class="form-control input-sm" data-toggle="tooltip" title="{$lang.Apiurltips}" placeholder="https://api.mydomain.com" value="{$config.apiurl}" />
+                            <input id="apiUrl" type="text" class="form-control input-sm" data-toggle="tooltip" title="{$lang.Apiurltips}" placeholder="https://api.example.com" value="{$config.apiurl}" />
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" title="{$lang.Savetips}" id="save_data">
@@ -295,7 +295,7 @@
                                                         {foreach name="api['headersList']" id="param"}
                                                         <div class="form-group">
                                                             <label class="control-label" for="{$param.name}">{$param.name}</label>
-                                                            <input type="{$param.type}" class="form-control input-sm" id="{$param.name}" {if $param.required}required{/if} placeholder="{$param.description} - Ex: {$param.sample}" name="{$param.name}">
+                                                            <input type="{$param.inputtype|default='text'}" class="form-control input-sm" id="{$param.name}" {if $param.required}required{/if} placeholder="{$param.description} - Ex: {$param.sample}" name="{$param.name}">
                                                         </div>
                                                         {/foreach}
                                                     </div>
@@ -314,7 +314,7 @@
                                                         {foreach name="api['paramsList']" id="param"}
                                                         <div class="form-group">
                                                             <label class="control-label" for="{$param.name}">{$param.name}</label>
-                                                            <input type="{$param.type}" class="form-control input-sm" id="{$param.name}" {if $param.required}required{/if} placeholder="{$param.description}{if $param.sample} - 例: {$param.sample}{/if}" name="{$param.name}">
+                                                            <input type="{$param.inputtype|default='text'}" class="form-control input-sm" id="{$param.name}" {if $param.required}required{/if} placeholder="{$param.description}{if $param.sample} - 例: {$param.sample}{/if}" name="{$param.name}">
                                                         </div>
                                                         {/foreach}
                                                         {else /}

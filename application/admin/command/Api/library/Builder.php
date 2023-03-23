@@ -88,11 +88,17 @@ class Builder
             return [];
         }
 
+        $typeArr = [
+            'integer' => 'number',
+            'file' => 'file',
+        ];
         $paramslist = array();
         foreach ($docs['ApiParams'] as $params) {
+            $inputtype = $params['type'] && isset($typeArr[$params['type']]) ? $typeArr[$params['type']] : ($params['name'] == 'password' ? 'password' : 'text');
             $tr = array(
                 'name'        => $params['name'],
                 'type'        => $params['type'] ?? 'string',
+                'inputtype'   => $inputtype,
                 'sample'      => $params['sample'] ?? '',
                 'required'    => $params['required'] ?? true,
                 'description' => $params['description'] ?? '',
