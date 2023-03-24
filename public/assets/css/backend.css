@@ -407,6 +407,11 @@ table.table-template {
   top: 62px;
   right: 12px;
 }
+.bootstrap-select .msg-box {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 .bootstrap-select .status {
   background: #f0f0f0;
   clear: both;

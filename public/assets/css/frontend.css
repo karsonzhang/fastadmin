@@ -350,18 +350,18 @@ a:focus {
     border-top-color: #f5f5f5;
   }
 }
-.dropdown:hover .dropdown-menu {
+#header-navbar .dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0;
+}
+#header-navbar li.dropdown ul.dropdown-menu {
+  min-width: 100px;
 }
 .navbar {
   border: none;
 }
 .navbar-nav > li > a {
   font-size: 14px;
-}
-#header-navbar li.dropdown ul.dropdown-menu {
-  min-width: 100px;
 }
 .dropdown-menu > li > a {
   font-size: 14px;
@@ -473,6 +473,11 @@ a:focus {
   line-height: 1;
   margin-bottom: -5px;
   padding: 10px 20px;
+}
+.bootstrap-select .msg-box {
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 select.bs-select-hidden,
 select.selectpicker {
