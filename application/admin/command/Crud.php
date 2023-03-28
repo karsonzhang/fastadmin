@@ -957,6 +957,11 @@ class Crud extends Command
                             $attrArr['size'] = 50;
                         }
 
+                        //字段默认值判断
+                        if ('NULL' == $defaultValue || "''" == $defaultValue) {
+                            $defaultValue = '';
+                        }
+
                         $formAddElement = Form::input($inputType, $fieldName, $defaultValue, $attrArr);
                         $formEditElement = Form::input($inputType, $fieldName, $editValue, $attrArr);
                         if ($search && $replace) {
