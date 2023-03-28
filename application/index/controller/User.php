@@ -66,7 +66,7 @@ class User extends Frontend
      */
     public function register()
     {
-        $url = $this->request->request('url', '', 'trim|xss_clean');
+        $url = $this->request->request('url', '', 'trim,xss_clean');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -145,7 +145,7 @@ class User extends Frontend
      */
     public function login()
     {
-        $url = $this->request->request('url', '', 'trim|xss_clean');
+        $url = $this->request->request('url', '', 'trim,xss_clean');
         if ($this->auth->id) {
             $this->success(__('You\'ve logged in, do not login again'), $url ? $url : url('user/index'));
         }
@@ -199,7 +199,7 @@ class User extends Frontend
      */
     public function mobilelogin()
     {
-        $url = $this->request->request('url', '', 'trim|xss_clean');
+        $url = $this->request->request('url', '', 'trim,xss_clean');
         if ($this->request->isPost()) {
             $mobile = $this->request->post('mobile');
             $captcha = $this->request->post('captcha');
