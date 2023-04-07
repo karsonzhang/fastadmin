@@ -407,6 +407,9 @@ table.table-template {
   top: 62px;
   right: 12px;
 }
+.bootstrap-select {
+  min-height: 33px;
+}
 .bootstrap-select .msg-box {
   position: absolute;
   right: 0;
@@ -457,6 +460,9 @@ select.selectpicker[multiple] option {
 input.selectpage {
   color: transparent;
   pointer-events: none;
+}
+.sp_container {
+  min-height: 33px;
 }
 .sp_container input.selectpage {
   color: inherit;
@@ -1036,9 +1042,11 @@ form.form-horizontal .control-label {
 .bootstrap-table .fa-toggle-on.fa-2x {
   font-size: 1.86em;
 }
-.bootstrap-table .form-commonsearch .form-group {
+.bootstrap-table .form-commonsearch .row > .form-group {
   margin-left: 0;
   margin-right: 0;
+}
+.bootstrap-table .form-commonsearch .row > .form-group > .control-label {
   white-space: nowrap;
 }
 .bootstrap-table .table:not(.table-condensed) > tbody > tr > th,

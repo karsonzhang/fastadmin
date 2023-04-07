@@ -22,6 +22,7 @@
 @main-bg: #f1f4f6;
 @panel-intro-bg: darken(@main-bg, 3%);
 @panel-nav-bg: #fff;
+@input-min-height: 33px;
 
 html,
 body {
@@ -210,6 +211,7 @@ table.table-template {
         right: 0;
         top: 0;
     }
+
     .status {
         background: #f0f0f0;
         clear: both;
@@ -222,17 +224,19 @@ table.table-template {
     }
 
     .bs-placeholder {
-        min-height: 33px;
+        min-height: @input-min-height;
     }
+
+    min-height: @input-min-height;
 }
 
 select.bs-select-hidden, select.selectpicker {
     display: inherit !important;
-    max-height: 33px;
+    max-height: @input-min-height;
     overflow: hidden;
 
     &[multiple] {
-        height: 33px;
+        height: @input-min-height;
         //visibility: hidden;
         padding: 0;
         background: #f4f4f4;
@@ -276,6 +280,8 @@ input.selectpage {
             }
         }
     }
+
+    min-height: @input-min-height;
 }
 
 .img-center {
@@ -963,10 +969,13 @@ form.form-horizontal .control-label {
     font-size: 1.86em;
 }
 
-.bootstrap-table .form-commonsearch .form-group {
+.bootstrap-table .form-commonsearch .row > .form-group {
     margin-left: 0;
     margin-right: 0;
-    white-space: nowrap;
+
+    > .control-label {
+        white-space: nowrap;
+    }
 }
 
 .bootstrap-table .table:not(.table-condensed) > tbody > tr > th,
@@ -1325,7 +1334,7 @@ table.table-nowrap {
 
         .toolbar {
             .btn {
-                min-height: 33px;
+                min-height: @input-min-height;
             }
 
             a.btn-refresh, a.btn-del, a.btn-add, a.btn-edit, a.btn-import, a.btn-more, a.btn-recyclebin, .btn-mini-xs, .btn-multi {

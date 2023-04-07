@@ -18,6 +18,7 @@
 
 @primary-color: #007bff;
 //@primary-color: #2d76d9;
+@input-min-height: 33px;
 
 .clearfix() {
     &:before,
@@ -282,11 +283,16 @@ a {
         top: 0;
     }
 
+    .bs-placeholder {
+        min-height: @input-min-height;
+    }
+
+    min-height: @input-min-height;
 }
 
 select.bs-select-hidden, select.selectpicker {
     display: inherit !important;
-    max-height: 31px;
+    max-height: @input-min-height;
     overflow: hidden;
 
     &[multiple] {
@@ -334,6 +340,7 @@ input.selectpage {
             }
         }
     }
+    min-height: @input-min-height;
 }
 
 /*修复radio和checkbox样式对齐*/

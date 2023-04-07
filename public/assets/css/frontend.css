@@ -464,6 +464,9 @@ a:focus {
 .input-group > .msg-box.n-right {
   position: absolute;
 }
+.bootstrap-select {
+  min-height: 33px;
+}
 .bootstrap-select .status {
   background: #f0f0f0;
   clear: both;
@@ -479,10 +482,13 @@ a:focus {
   right: 0;
   top: 0;
 }
+.bootstrap-select .bs-placeholder {
+  min-height: 33px;
+}
 select.bs-select-hidden,
 select.selectpicker {
   display: inherit !important;
-  max-height: 31px;
+  max-height: 33px;
   overflow: hidden;
 }
 select.bs-select-hidden[multiple],
@@ -511,6 +517,9 @@ select.selectpicker[multiple] option {
 input.selectpage {
   color: transparent;
   pointer-events: none;
+}
+.sp_container {
+  min-height: 33px;
 }
 .sp_container input.selectpage {
   color: inherit;
