@@ -74,11 +74,12 @@ body.is-dialog {
 /*iOS兼容*/
 html.ios-fix, html.ios-fix body {
     height: 100%;
-    overflow: auto;
+    //overflow: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
 
     .wrapper, .tab-pane {
-        overflow: auto;
+        //overflow: auto;
         -webkit-overflow-scrolling: touch;
     }
 }
