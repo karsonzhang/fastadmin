@@ -297,7 +297,7 @@ class User extends Api
      */
     public function resetpwd()
     {
-        $type = $this->request->post("type");
+        $type = $this->request->post("type", "mobile");
         $mobile = $this->request->post("mobile");
         $email = $this->request->post("email");
         $newpassword = $this->request->post("newpassword");
