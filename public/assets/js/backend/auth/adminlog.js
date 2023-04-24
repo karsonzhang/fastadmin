@@ -24,6 +24,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {field: 'state', checkbox: true,},
                         {field: 'id', title: 'ID', operate: false},
+                        {field: 'admin_id', title: __('Admin_id'), formatter: Table.api.formatter.search, visible: false},
                         {field: 'username', title: __('Username'), formatter: Table.api.formatter.search},
                         {field: 'title', title: __('Title'), operate: 'LIKE %...%', placeholder: '模糊搜索'},
                         {field: 'url', title: __('Url'), formatter: Table.api.formatter.url},
