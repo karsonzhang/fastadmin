@@ -44,9 +44,15 @@ class Adminlog extends Backend
         $this->request->filter(['strip_tags', 'trim']);
         if ($this->request->isAjax()) {
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+            $isSuperAdmin = $this->auth->isSuperAdmin();
+            $childrenAdminIds = $this->childrenAdminIds;
             $list = $this->model
                 ->where($where)
-                ->where('admin_id', 'in', $this->childrenAdminIds)
+                ->where(function ($query) use ($isSuperAdmin, $childrenAdminIds) {
+                    if (!$isSuperAdmin) {
+                        $query->where('admin_id', 'in', $childrenAdminIds);
+                    }
+                })
                 ->order($sort, $order)
                 ->paginate($limit);
 
@@ -66,8 +72,10 @@ class Adminlog extends Backend
         if (!$row) {
             $this->error(__('No Results were found'));
         }
-        if (!$row['admin_id'] || !in_array($row['admin_id'], $this->childrenAdminIds)) {
-            $this->error(__('You have no permission'));
+        if (!$this->auth->isSuperAdmin()) {
+            if (!$row['admin_id'] || !in_array($row['admin_id'], $this->childrenAdminIds)) {
+                $this->error(__('You have no permission'));
+            }
         }
         $this->view->assign("row", $row->toArray());
         return $this->view->fetch();
@@ -101,7 +109,15 @@ class Adminlog extends Backend
         }
         $ids = $ids ? $ids : $this->request->post("ids");
         if ($ids) {
-            $adminList = $this->model->where('id', 'in', $ids)->where('admin_id', 'in', $this->childrenAdminIds)->select();
+            $isSuperAdmin = $this->auth->isSuperAdmin();
+            $childrenAdminIds = $this->childrenAdminIds;
+            $adminList = $this->model->where('id', 'in', $ids)
+                ->where(function ($query) use ($isSuperAdmin, $childrenAdminIds) {
+                    if (!$isSuperAdmin) {
+                        $query->where('admin_id', 'in', $childrenAdminIds);
+                    }
+                })
+                ->select();
             if ($adminList) {
                 $deleteIds = [];
                 foreach ($adminList as $k => $v) {
@@ -126,8 +142,4 @@ class Adminlog extends Backend
         $this->error();
     }
 
-    public function selectpage()
-    {
-        return parent::selectpage();
-    }
 }
