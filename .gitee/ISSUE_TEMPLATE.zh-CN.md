@@ -19,3 +19,4 @@ MySQL 版本：？
 服务器面板：（BT/phpStudy/XAMPP/其他/无）
 FastAdmin 版本：？
 浏览器：（Chrome/IE/Edge/其他）
+报错信息：
