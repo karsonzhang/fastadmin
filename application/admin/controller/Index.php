@@ -72,7 +72,7 @@ class Index extends Backend
         }
         if ($this->request->isPost()) {
             $username = $this->request->post('username');
-            $password = $this->request->post('password');
+            $password = html_entity_decode($this->request->post('password'));
             $keeplogin = $this->request->post('keeplogin');
             $token = $this->request->post('__token__');
             $rule = [
