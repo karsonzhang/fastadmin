@@ -25,6 +25,8 @@ return [
     'Disable top menu badge'                                     => '禁用顶部彩色小角标',
     'Disable top menu badge without left menu'                   => '左边菜单栏的彩色小角标不受影响',
     'Skins'                                                      => '皮肤',
+    'Username must be 3 to 30 characters'                        => '用户名只能由3-30位数字、字母、下划线组合',
+    'Password must be 6 to 30 characters'                        => '密码长度必须在6-30位之间，不能包含空格',
     'You\'ve logged in, do not login again'                      => '你已经登录，无需重复登录',
     'Username or password can not be empty'                      => '用户名密码不能为空',
     'Username or password is incorrect'                          => '用户名或密码不正确',
