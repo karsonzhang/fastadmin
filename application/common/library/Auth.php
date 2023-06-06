@@ -547,7 +547,7 @@ class Auth
             }
         }
         foreach ($datalist as $k => &$v) {
-            $v[$renderkey] = isset($list[$v[$fieldkey]]) ? $list[$v[$fieldkey]] : null;
+            $v[$renderkey] = $list[$v[$fieldkey]] ?? null;
         }
         unset($v);
         return $datalist;

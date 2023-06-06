@@ -133,7 +133,7 @@ class Http
         }
         $parts['query'] = isset($parts['query']) && $parts['query'] ? '?' . $parts['query'] : '';
         //发送socket请求,获得连接句柄
-        $fp = fsockopen($parts['host'], isset($parts['port']) ? $parts['port'] : 80, $errno, $errstr, 3);
+        $fp = fsockopen($parts['host'], $parts['port'] ?? 80, $errno, $errstr, 3);
         if (!$fp) {
             return false;
         }

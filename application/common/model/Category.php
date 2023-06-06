@@ -50,7 +50,7 @@ class Category extends Model
     {
         $value = $value ? $value : $data['type'];
         $list = $this->getTypeList();
-        return isset($list[$value]) ? $list[$value] : '';
+        return $list[$value] ?? '';
     }
 
     public function getFlagList()

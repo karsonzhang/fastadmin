@@ -312,12 +312,12 @@ class Backend extends Controller
             if (!preg_match('/^[a-zA-Z0-9_\-\.]+$/', $k)) {
                 continue;
             }
-            $sym = isset($op[$k]) ? $op[$k] : '=';
+            $sym = $op[$k] ?? '=';
             if (stripos($k, ".") === false) {
                 $k = $aliasName . $k;
             }
             $v = !is_array($v) ? trim($v) : $v;
-            $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
+            $sym = strtoupper($op[$k] ?? $sym);
             //null和空字符串特殊处理
             if (!is_array($v)) {
                 if (in_array(strtoupper($v), ['NULL', 'NOT NULL'])) {
@@ -367,8 +367,8 @@ class Backend extends Controller
                 case 'NOT BETWEEN':
                     $arr = array_slice(explode(',', $v), 0, 2);
                     if (stripos($v, ',') === false || !array_filter($arr, function ($v) {
-                            return $v != '' && $v !== false && $v !== null;
-                        })) {
+                        return $v != '' && $v !== false && $v !== null;
+                    })) {
                         continue 2;
                     }
                     //当出现一边为空时改变操作符
@@ -568,8 +568,8 @@ class Backend extends Controller
                 unset($item['password'], $item['salt']);
                 if ($this->selectpageFields == '*') {
                     $result = [
-                        $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
-                        $field      => isset($item[$field]) ? $item[$field] : '',
+                        $primarykey => $item[$primarykey] ?? '',
+                        $field      => $item[$field] ?? '',
                     ];
                 } else {
                     $result = array_intersect_key(($item instanceof Model ? $item->toArray() : (array)$item), array_flip($fields));

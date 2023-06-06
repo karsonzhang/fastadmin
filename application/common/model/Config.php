@@ -115,8 +115,8 @@ class Config extends Model
             $data = $result;
         }
         $fieldarr = $valuearr = [];
-        $field = isset($data['field']) ? $data['field'] : (isset($data['key']) ? $data['key'] : []);
-        $value = isset($data['value']) ? $data['value'] : [];
+        $field = $data['field'] ?? ($data['key'] ?? []);
+        $value = $data['value'] ?? [];
         foreach ($field as $m => $n) {
             if ($n != '') {
                 $fieldarr[] = $field[$m];
@@ -219,7 +219,7 @@ class Config extends Model
         }
         file_put_contents(
             CONF_PATH . 'extra' . DS . 'site.php',
-            '<?php' . "\n\nreturn " . var_export_short($config) . ";\n"
+            '<?php' . "\n\nreturn " . var_export($config, true) . ";\n"
         );
         return true;
     }

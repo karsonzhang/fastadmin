@@ -7,7 +7,7 @@ use think\Model;
 /**
  * 会员积分日志模型
  */
-class ScoreLog Extends Model
+class ScoreLog extends Model
 {
 
     // 表名

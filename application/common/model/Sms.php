@@ -7,7 +7,7 @@ use think\Model;
 /**
  * 短信验证码
  */
-class Sms Extends Model
+class Sms extends Model
 {
 
     // 开启自动写入时间戳字段
@@ -18,5 +18,4 @@ class Sms Extends Model
     // 追加属性
     protected $append = [
     ];
-
 }
