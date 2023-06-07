@@ -309,14 +309,13 @@ body.is-dialog {
 html.ios-fix,
 html.ios-fix body {
   height: 100%;
-  overflow: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
 html.ios-fix .wrapper,
 html.ios-fix body .wrapper,
 html.ios-fix .tab-pane,
 html.ios-fix body .tab-pane {
-  overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 .wrapper {
@@ -1048,6 +1047,14 @@ form.form-horizontal .control-label {
 }
 .bootstrap-table .form-commonsearch .row > .form-group > .control-label {
   white-space: nowrap;
+}
+.bootstrap-table .btn-commonsearch {
+  position: relative;
+}
+.bootstrap-table .btn-commonsearch > span {
+  position: absolute;
+  top: -10px;
+  right: -10px;
 }
 .bootstrap-table .table:not(.table-condensed) > tbody > tr > th,
 .bootstrap-table .table:not(.table-condensed) > tfoot > tr > th,

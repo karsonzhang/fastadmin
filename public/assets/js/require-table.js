@@ -132,7 +132,7 @@ define(['jquery', 'bootstrap'], function ($, undefined) {
                         return __('Common search');
                     },
                     formatCommonSubmitButton: function () {
-                        return __('Submit');
+                        return __('Search');
                     },
                     formatCommonResetButton: function () {
                         return __('Reset');

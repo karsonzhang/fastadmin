@@ -121,7 +121,7 @@ if (!function_exists('build_toolbar')) {
         $html = [];
         foreach ($btns as $k => $v) {
             //如果未定义或没有权限
-            if (!isset($btnAttr[$v]) || ($v !== 'refresh' && !$auth->check("{$controller}/{$v}"))) {
+            if (!isset($btnAttr[$v]) || ($v !== 'refresh' && !$auth->check("{$controller}/{$v}", $auth->id))) {
                 continue;
             }
             list($href, $class, $icon, $text, $title) = $btnAttr[$v];

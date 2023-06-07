@@ -81,15 +81,17 @@ if (!function_exists('cdnurl')) {
 
     /**
      * 获取上传资源的CDN的地址
-     * @param string  $url    资源相对地址
-     * @param boolean $domain 是否显示域名 或者直接传入域名
+     * @param string         $url    资源相对地址
+     * @param boolean|string $domain 是否显示域名 或者直接传入域名
      * @return string
      */
     function cdnurl($url, $domain = false)
     {
         $regex = "/^((?:[a-z]+:)?\/\/|data:image\/)(.*)/i";
-        $cdnurl = \think\Config::get('upload.cdnurl');
-        $url = preg_match($regex, $url) || ($cdnurl && stripos($url, $cdnurl) === 0) ? $url : $cdnurl . $url;
+        if (is_bool($domain)) {
+            $cdnurl = \think\Config::get('upload.cdnurl');
+            $url = preg_match($regex, $url) || ($cdnurl && stripos($url, $cdnurl) === 0) ? $url : $cdnurl . $url;
+        }
         if ($domain && !preg_match($regex, $url)) {
             $domain = is_bool($domain) ? request()->domain() : $domain;
             $url = $domain . $url;
@@ -216,7 +218,7 @@ if (!function_exists('addtion')) {
         } else {
             foreach ($fields as $k => $v) {
                 if (is_array($v)) {
-                    $v['field'] = isset($v['field']) ? $v['field'] : $k;
+                    $v['field'] = $v['field'] ?? $k;
                 } else {
                     $v = ['field' => $v];
                 }
@@ -225,12 +227,12 @@ if (!function_exists('addtion')) {
         }
         foreach ($fieldsArr as $k => &$v) {
             $v = is_array($v) ? $v : ['field' => $v];
-            $v['display'] = isset($v['display']) ? $v['display'] : str_replace(['_ids', '_id'], ['_names', '_name'], $v['field']);
-            $v['primary'] = isset($v['primary']) ? $v['primary'] : '';
-            $v['column'] = isset($v['column']) ? $v['column'] : 'name';
-            $v['model'] = isset($v['model']) ? $v['model'] : '';
-            $v['table'] = isset($v['table']) ? $v['table'] : '';
-            $v['name'] = isset($v['name']) ? $v['name'] : str_replace(['_ids', '_id'], '', $v['field']);
+            $v['display'] = $v['display'] ?? str_replace(['_ids', '_id'], ['_names', '_name'], $v['field']);
+            $v['primary'] = $v['primary'] ?? '';
+            $v['column'] = $v['column'] ?? 'name';
+            $v['model'] = $v['model'] ?? '';
+            $v['table'] = $v['table'] ?? '';
+            $v['name'] = $v['name'] ?? str_replace(['_ids', '_id'], '', $v['field']);
         }
         unset($v);
         $ids = [];
@@ -323,7 +325,7 @@ if (!function_exists('var_export_short')) {
 
         if ($replaced) {
             $dump = preg_replace_callback("/'##<(\d+)>##'/", function ($matches) use ($replaced) {
-                return isset($replaced[$matches[1]]) ? $replaced[$matches[1]] : "''";
+                return $replaced[$matches[1]] ?? "''";
             }, $dump);
         }
 
