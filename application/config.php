@@ -270,6 +270,14 @@ return [
         'user_register_captcha' => 'mobile',
         //是否启用发送前验证码(用于短信和邮件发送)
         'user_api_captcha'      => true,
+        //会员主页URL规则
+        'user_home_url'         => '/u/{uid}',
+        //是否启用会员字母头像
+        'user_letter_avatar'    => true,
+        //是否启用会员等级规则none/auto/up
+        'user_level_rule'       => '',
+        //会员等级积分字典
+        'user_level_dict'       => [1 => 0, 2 => 30, 3 => 100, 4 => 500, 5 => 1000, 6 => 2000, 7 => 3000, 8 => 5000, 9 => 8000, 10 => 10000],
         //登录验证码
         'login_captcha'         => true,
         //登录失败超过10次则1天后重试
