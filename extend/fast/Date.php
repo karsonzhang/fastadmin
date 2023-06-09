@@ -194,10 +194,14 @@ class Date
                 $time = $position ? $_timestamp : mktime(23, 59, 59, $month + $offset, self::days_in_month(date("m", $_timestamp), date("Y", $_timestamp)), $year);
                 break;
             case 'quarter':
-                $_month = date("m", mktime(0, 0, 0, (ceil(date('n', mktime(0, 0, 0, $month, $day, $year)) / 3) + $offset) * 3, $day, $year));
+                $quarter = ceil(date('n', $baseTime) / 3) + $offset;
+                $month = $quarter * 3;
+                $offset_year = ceil($month/12) - 1;
+                $year = $year + $offset_year;
+                $month = $month - ($offset_year * 12);
                 $time = $position ?
-                    mktime(0, 0, 0, 1 + ((ceil(date('n', $baseTime) / 3) + $offset) - 1) * 3, 1, $year) :
-                    mktime(23, 59, 59, (ceil(date('n', $baseTime) / 3) + $offset) * 3, self::days_in_month((ceil(date('n', $baseTime) / 3) + $offset) * 3, $year), $year);
+                    mktime(0, 0, 0, $month-2, 1, $year) :
+                    mktime(23, 59, 59, $month, self::days_in_month($month, $year), $year);
                 break;
             case 'year':
                 $time = $position ? mktime(0, 0, 0, 1, 1, $year + $offset) : mktime(23, 59, 59, 12, 31, $year + $offset);

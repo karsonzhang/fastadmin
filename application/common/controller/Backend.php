@@ -284,7 +284,7 @@ class Backend extends Controller
         $bind = [];
         $name = '';
         $aliasName = '';
-        if (!empty($this->model) && $this->relationSearch) {
+        if (!empty($this->model) && $relationSearch) {
             $name = $this->model->getTable();
             $alias[$name] = Loader::parseName(basename(str_replace('\\', '/', get_class($this->model))));
             $aliasName = $alias[$name] . '.';
