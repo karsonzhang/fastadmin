@@ -62,7 +62,10 @@
     ],
     "bootstrap-select": "dist/**",
     "bootstrap-slider": "dist/**",
-    "coloris": ["dist/umd/**", "dist/*.css"],
+    "coloris": [
+      "dist/umd/**",
+      "dist/*.css"
+    ],
     "eonasdan-bootstrap-datetimepicker": "build/**",
     "fastadmin-addtabs": "*.js",
     "fastadmin-bootstraptable": "dist/**",
