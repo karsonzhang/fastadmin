@@ -102,6 +102,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                 //绑定select元素事件
                 if ($(".selectpicker", form).length > 0) {
                     require(['bootstrap-select', 'bootstrap-select-lang'], function () {
+                        $.fn.selectpicker.Constructor.BootstrapVersion = '3';
                         $('.selectpicker', form).selectpicker();
                         $(form).on("reset", function () {
                             setTimeout(function () {
@@ -214,7 +215,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                         };
                         var origincallback = function (start, end) {
                             $(this.element).val(start.format(this.locale.format) + " - " + end.format(this.locale.format));
-                            $(this.element).trigger('blur');
+                            $(this.element).trigger('change');
                         };
                         $(".datetimerange", form).each(function () {
                             var callback = typeof $(this).data('callback') == 'function' ? $(this).data('callback') : origincallback;
@@ -222,7 +223,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                 callback.call(picker, picker.startDate, picker.endDate);
                             });
                             $(this).on('cancel.daterangepicker', function (ev, picker) {
-                                $(this).val('').trigger('blur');
+                                $(this).val('').trigger('change');
                             });
                             $(this).daterangepicker($.extend(true, options, $(this).data() || {}, $(this).data("daterangepicker-options") || {}));
                         });
@@ -321,15 +322,15 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             $.each(data, function (i, j) {
                                 if (j) {
                                     if (!template) {
-                                        if (j.key != '') {
-                                            result[j.key] = j.value;
+                                        if (j.key !== '') {
+                                            result['__PLACEHOLDKEY__' + j.key] = j.value;
                                         }
                                     } else {
                                         result.push(j);
                                     }
                                 }
                             });
-                            textarea.val(JSON.stringify(result));
+                            textarea.val(JSON.stringify(result).replace(/__PLACEHOLDKEY__/g, ''));
                         };
                         //追加一行数据
                         var append = function (container, row, initial) {
@@ -397,11 +398,12 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             $("[fieldlist-item]", container).remove();
                             var json = {};
                             try {
-                                json = JSON.parse(textarea.val());
+                                var val = textarea.val().replace(/"(\d+)"\:/g, "\"__PLACEHOLDERKEY__$1\":");
+                                json = JSON.parse(val);
                             } catch (e) {
                             }
                             $.each(json, function (i, j) {
-                                append(container, {key: i, value: j}, true);
+                                append(container, {key: i.toString().replace("__PLACEHOLDERKEY__", ""), value: j}, true);
                             });
                         });
                         //拖拽排序
@@ -509,7 +511,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                         '==': function(a, b) { return a == b; },
                         '!=': function(a, b) { return a != b; },
                         'in': function(a, b) { return b.split(/\,/).indexOf(a) > -1; },
-                        'regex': function(a, b) {
+                        'regex': function (a, b) {
                             var regParts = b.match(/^\/(.*?)\/([gim]*)$/);
                             var regexp = regParts ? new RegExp(regParts[1], regParts[2]) : new RegExp(b);
                             return regexp.test(a);
