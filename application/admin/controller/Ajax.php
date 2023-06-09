@@ -20,7 +20,6 @@ use think\Validate;
  */
 class Ajax extends Backend
 {
-
     protected $noNeedLogin = ['lang'];
     protected $noNeedRight = ['*'];
     protected $layout = '';
@@ -195,7 +194,6 @@ class Ajax extends Backend
             $type = $this->request->request("type");
             switch ($type) {
                 case 'all':
-                    // no break
                 case 'content':
                     //内容缓存
                     rmdirs(CACHE_PATH, false);
@@ -203,18 +201,21 @@ class Ajax extends Backend
                     if ($type == 'content') {
                         break;
                     }
+                    // no break
                 case 'template':
                     // 模板缓存
                     rmdirs(TEMP_PATH, false);
                     if ($type == 'template') {
                         break;
                     }
+                    // no break
                 case 'addons':
                     // 插件缓存
                     Service::refresh();
                     if ($type == 'addons') {
                         break;
                     }
+                    // no break
                 case 'browser':
                     // 浏览器缓存
                     // 只有生产环境下才修改
@@ -311,5 +312,4 @@ class Ajax extends Backend
         $response = Response::create($data, '', 200, $header);
         return $response;
     }
-
 }
