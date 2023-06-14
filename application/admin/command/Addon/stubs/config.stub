@@ -3,7 +3,7 @@
 return [
     [
         //配置唯一标识
-        'name'    => 'usernmae',
+        'name'    => 'username',
         //显示的标题
         'title'   => '用户名',
         //类型

@@ -397,7 +397,8 @@ class Backend extends Controller
                         $arr = $arr[0];
                     }
                     $tableArr = explode('.', $k);
-                    if (count($tableArr) > 1 && $tableArr[0] != $name && !in_array($tableArr[0], $alias) && !empty($this->model)) {
+                    if (count($tableArr) > 1 && $tableArr[0] != $name && !in_array($tableArr[0], $alias) 
+                        && !empty($this->model) && $this->relationSearch) {
                         //修复关联模型下时间无法搜索的BUG
                         $relation = Loader::parseName($tableArr[0], 1, false);
                         $alias[$this->model->$relation()->getTable()] = $tableArr[0];
