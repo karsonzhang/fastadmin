@@ -151,13 +151,6 @@ class Common extends Api
      */
     public function captcha($id = "")
     {
-        if ($this->request->isPost()) {
-            $captcha = $this->request->post("captcha");
-            if (!\think\Validate::is($captcha, 'captcha')) {
-                $this->error("验证码不正确");
-            }
-            $this->success("");
-        }
         \think\Config::set([
             'captcha' => array_merge(config('captcha'), [
                 'fontSize' => 44,
