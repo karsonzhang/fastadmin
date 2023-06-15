@@ -104,6 +104,7 @@ class Min extends Command
                         continue;
                     }
                     $config = preg_replace("/(urlArgs|baseUrl):(.*)\n/", '', $matches[1]);
+                    $config = preg_replace("/('tableexport'):(.*)\,\n/", "'tableexport': 'empty:',\n", $config);
                     $data['config'] = $config;
                 }
                 // 生成压缩文件
