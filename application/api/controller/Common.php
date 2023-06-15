@@ -8,6 +8,7 @@ use app\common\library\Upload;
 use app\common\model\Area;
 use app\common\model\Version;
 use fast\Random;
+use think\captcha\Captcha;
 use think\Config;
 use think\Hook;
 
@@ -16,15 +17,30 @@ use think\Hook;
  */
 class Common extends Api
 {
-    protected $noNeedLogin = ['init'];
+    protected $noNeedLogin = ['init', 'captcha'];
     protected $noNeedRight = '*';
+
+    public function _initialize()
+    {
+
+        if (isset($_SERVER['HTTP_ORIGIN'])) {
+            header('Access-Control-Expose-Headers: __token__');//跨域让客户端获取到
+        }
+        //跨域检测
+        check_cors_request();
+
+        if (!isset($_COOKIE['PHPSESSID'])) {
+            Config::set('session.id', $this->request->server("HTTP_SID"));
+        }
+        parent::_initialize();
+    }
 
     /**
      * 加载初始化
      *
      * @param string $version 版本号
-     * @param string $lng     经度
-     * @param string $lat     纬度
+     * @param string $lng 经度
+     * @param string $lat 纬度
      */
     public function init()
     {
@@ -126,5 +142,30 @@ class Common extends Api
             $this->success(__('Uploaded successful'), ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
         }
 
+    }
+
+    /**
+     * 验证码
+     * @param $id
+     * @return \think\Response
+     */
+    public function captcha($id = "")
+    {
+        if ($this->request->isPost()) {
+            $captcha = $this->request->post("captcha");
+            if (!\think\Validate::is($captcha, 'captcha')) {
+                $this->error("验证码不正确");
+            }
+            $this->success("");
+        }
+        \think\Config::set([
+            'captcha' => array_merge(config('captcha'), [
+                'fontSize' => 44,
+                'imageH'   => 150,
+                'imageW'   => 350,
+            ])
+        ]);
+        $captcha = new Captcha((array)Config::get('captcha'));
+        return $captcha->entry($id);
     }
 }

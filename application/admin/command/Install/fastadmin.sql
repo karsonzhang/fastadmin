@@ -1,6 +1,6 @@
 /*
  FastAdmin Install SQL
- Date: 2020-06-11 22:11:09
+ Date: 2023-06-07 15:17:57
 */
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -8,7 +8,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for fa_admin
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_admin`;
 CREATE TABLE `fa_admin` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `username` varchar(20) DEFAULT '' COMMENT '用户名',
@@ -39,7 +38,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_admin_log
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_admin_log`;
 CREATE TABLE `fa_admin_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
@@ -57,7 +55,6 @@ CREATE TABLE `fa_admin_log` (
 -- ----------------------------
 -- Table structure for fa_area
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_area`;
 CREATE TABLE `fa_area` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `pid` int(10) DEFAULT NULL COMMENT '父id',
@@ -78,7 +75,6 @@ CREATE TABLE `fa_area` (
 -- ----------------------------
 -- Table structure for fa_attachment
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_attachment`;
 CREATE TABLE `fa_attachment` (
   `id` int(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `category` varchar(50) DEFAULT '' COMMENT '类别',
@@ -111,7 +107,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_auth_group
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_auth_group`;
 CREATE TABLE `fa_auth_group` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父组别',
@@ -137,7 +132,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_auth_group_access
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_auth_group_access`;
 CREATE TABLE `fa_auth_group_access` (
   `uid` int(10) unsigned NOT NULL COMMENT '会员ID',
   `group_id` int(10) unsigned NOT NULL COMMENT '级别ID',
@@ -156,7 +150,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_auth_rule
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_auth_rule`;
 CREATE TABLE `fa_auth_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('menu','file') NOT NULL DEFAULT 'file' COMMENT 'menu为菜单,file为权限节点',
@@ -273,7 +266,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_category
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_category`;
 CREATE TABLE `fa_category` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父ID',
@@ -316,7 +308,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_config
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_config`;
 CREATE TABLE `fa_config` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT '' COMMENT '变量名',
@@ -361,7 +352,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_ems
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_ems`;
 CREATE TABLE `fa_ems`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `event` varchar(30) DEFAULT '' COMMENT '事件',
@@ -376,7 +366,6 @@ CREATE TABLE `fa_ems`  (
 -- ----------------------------
 -- Table structure for fa_sms
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_sms`;
 CREATE TABLE `fa_sms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `event` varchar(30) DEFAULT '' COMMENT '事件',
@@ -391,7 +380,6 @@ CREATE TABLE `fa_sms` (
 -- ----------------------------
 -- Table structure for fa_test
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_test`;
 CREATE TABLE `fa_test` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_id` int(10) DEFAULT '0' COMMENT '会员ID',
@@ -441,7 +429,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_user
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user`;
 CREATE TABLE `fa_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `group_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '组别ID',
@@ -487,7 +474,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_user_group
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user_group`;
 CREATE TABLE `fa_user_group` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT '' COMMENT '组名',
@@ -508,7 +494,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_user_money_log
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user_money_log`;
 CREATE TABLE `fa_user_money_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
@@ -523,7 +508,6 @@ CREATE TABLE `fa_user_money_log` (
 -- ----------------------------
 -- Table structure for fa_user_rule
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user_rule`;
 CREATE TABLE `fa_user_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(10) DEFAULT NULL COMMENT '父ID',
@@ -559,7 +543,6 @@ COMMIT;
 -- ----------------------------
 -- Table structure for fa_user_score_log
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user_score_log`;
 CREATE TABLE `fa_user_score_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
@@ -574,7 +557,6 @@ CREATE TABLE `fa_user_score_log` (
 -- ----------------------------
 -- Table structure for fa_user_token
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_user_token`;
 CREATE TABLE `fa_user_token` (
   `token` varchar(50) NOT NULL COMMENT 'Token',
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '会员ID',
@@ -586,7 +568,6 @@ CREATE TABLE `fa_user_token` (
 -- ----------------------------
 -- Table structure for fa_version
 -- ----------------------------
-DROP TABLE IF EXISTS `fa_version`;
 CREATE TABLE `fa_version`  (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `oldversion` varchar(30) DEFAULT '' COMMENT '旧版本号',

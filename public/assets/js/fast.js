@@ -320,6 +320,12 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             });
         },
         init: function () {
+            // jQuery兼容处理
+            $.fn.extend({
+                size: function () {
+                    return $(this).length;
+                }
+            });
             // 对相对地址进行处理
             $.ajaxSetup({
                 beforeSend: function (xhr, setting) {
