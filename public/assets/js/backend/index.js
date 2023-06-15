@@ -204,7 +204,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             }
 
             //这一行需要放在点击左侧链接事件之前
-            var addtabs = Config.referer ? localStorage.getItem("addtabs") : null;
+            var addtabs = Config.referer ? sessionStorage.getItem("addtabs") : null;
 
             //绑定tabs事件,如果需要点击强制刷新iframe,则请将iframeForceRefresh置为true,iframeForceRefreshTable只强制刷新表格
             nav.addtabs({iframeHeight: "100%", iframeForceRefresh: false, iframeForceRefreshTable: true, nav: nav});

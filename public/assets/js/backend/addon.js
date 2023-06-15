@@ -1,4 +1,6 @@
 define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie'], function ($, undefined, Backend, Table, Form, Template, undefined) {
+    $.cookie.prototype.defaults = {path: Config.moduleurl};
+
     var Controller = {
         index: function () {
             // 初始化表格参数配置
