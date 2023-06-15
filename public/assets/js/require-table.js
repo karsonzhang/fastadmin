@@ -878,7 +878,7 @@ define(['jquery', 'bootstrap'], function ($, undefined) {
                         refresh = j.refresh ? 'data-refresh="' + j.refresh + '"' : '';
                         confirm = typeof j.confirm === 'function' ? j.confirm.call(table, row, j) : (typeof j.confirm !== 'undefined' ? j.confirm : false);
                         confirm = confirm ? 'data-confirm="' + confirm + '"' : '';
-                        extend = j.extend ? j.extend : '';
+                        extend = typeof j.extend === 'function' ? j.extend.call(table, row, j) : (typeof j.extend !== 'undefined' ? j.extend : '');
                         disable = typeof j.disable === 'function' ? j.disable.call(table, row, j) : (typeof j.disable !== 'undefined' ? j.disable : false);
                         if (disable) {
                             classname = classname + ' disabled';
