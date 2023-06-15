@@ -152,56 +152,13 @@
         </div>
     </form>
 </script>
-<script id="logintpl" type="text/html">
-    <div>
-        <form class="form-horizontal">
-            <fieldset>
-                <div class="alert alert-dismissable alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>{:__('Warning')}</strong><br/>{:__('Login tips')}
-                </div>
-                <div class="form-group">
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                            <input type="text" class="form-control" id="inputAccount" value=""
-                                   placeholder="{:__('Your username or email')}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                            <input type="password" class="form-control" id="inputPassword" value=""
-                                   placeholder="{:__('Your password')}">
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-</script>
-<script id="userinfotpl" type="text/html">
-    <div>
-        <form class="form-horizontal form-userinfo">
-            <fieldset>
-                <div class="alert alert-dismissable alert-info-light">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    <strong>{:__('Warning')}</strong><br/>{:__('Logined tips', '<%=username%>')}
-                </div>
-            </fieldset>
-            <div class="breadcrumb"><a href="https://www.fastadmin.net/user/myaddon.html" target="_blank"><i class="fa fa-cube"></i> {:__('My addons')}</a></div>
-        </form>
-    </div>
-</script>
 <script id="uninstalltpl" type="text/html">
     <div class="">
         <div class=""><%=#__("Are you sure you want to unstall %s?", addon['title'])%>
             <p class="text-danger">{:__('Delete all the addon file and cannot be recovered!')} </p>
-                      {if config('app_debug')}
+            {if config('app_debug')}
             <p class="text-danger"><input type="checkbox" name="droptables" id="droptables" data-name="<%=addon['name']%>"/> {:__('Delete all the addon database and cannot be recovered!')} </p>
-                      {/if}
+            {/if}
             <p class="text-danger">{:__('Please backup important data manually before uninstall!')}</p>
         </div>
     </div>
