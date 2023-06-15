@@ -103,8 +103,10 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             //获取修复后可访问的cdn链接
             cdnurl: function (url, domain) {
                 var rule = new RegExp("^((?:[a-z]+:)?\\/\\/|data:image\\/)", "i");
-                var cdnurl = Config.upload.cdnurl;
-                url = rule.test(url) || (cdnurl && url.indexOf(cdnurl) === 0) ? url : cdnurl + url;
+                if(typeof domain === 'undefined'){
+                    var cdnurl = Config.upload.cdnurl;
+                    url = rule.test(url) || (cdnurl && url.indexOf(cdnurl) === 0) ? url : cdnurl + url;
+                }
                 if (domain && !rule.test(url)) {
                     domain = typeof domain === 'string' ? domain : location.origin;
                     url = domain + url;
@@ -318,6 +320,12 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             });
         },
         init: function () {
+            // jQuery兼容处理
+            $.fn.extend({
+                size: function () {
+                    return $(this).length;
+                }
+            });
             // 对相对地址进行处理
             $.ajaxSetup({
                 beforeSend: function (xhr, setting) {
