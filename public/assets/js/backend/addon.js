@@ -724,7 +724,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                     if (typeof row.homepage !== 'undefined') {
                         url = row.homepage;
                     } else if (typeof row.qq !== 'undefined' && row.qq) {
-                        url = 'https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=fastadmin.net&menu=yes';
+                        url = 'https://wpa.qq.com/msgrd?v=3&uin=' + row.qq + '&site=&menu=yes';
                     }
                     return '<a href="' + url + '" target="_blank" data-toggle="tooltip" class="text-primary">' + value + '</a>';
                 },
