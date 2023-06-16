@@ -38,12 +38,6 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             formatter: Table.api.formatter.toggle
                         },
                         {
-                            field: 'id',
-                            title: '<a href="javascript:;" class="btn btn-success btn-xs btn-toggle" style="border-top:none;"><i class="fa fa-chevron-up"></i></a>',
-                            operate: false,
-                            formatter: Controller.api.formatter.subnode
-                        },
-                        {
                             field: 'operate',
                             title: __('Operate'),
                             table: table,
@@ -56,10 +50,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                 search: false,
                 commonSearch: false,
                 rowAttributes: function (row, index) {
-                    if (this.totalRows > 500) {
-                        return row.pid == 0 ? {} : {style: "display:none"};
-                    }
-                    return row.haschild == 1 || row.ismenu == 1 ? {} : {style: "display:none"};
+                    return row.pid == 0 ? {} : {style: "display:none"};
                 }
             });
 
@@ -104,11 +95,25 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             //显示隐藏子节点
             $(document).on("click", ".btn-node-sub", function (e) {
                 var status = $(this).data("shown") ? true : false;
-                $("a.btn[data-pid='" + $(this).data("id") + "']").each(function () {
+                $("a[data-pid='" + $(this).data("id") + "']").each(function () {
                     $(this).closest("tr").toggle(!status);
                 });
+                if (status) {
+                    $("a[data-pid='" + $(this).data("id") + "']").trigger("collapse");
+                }
                 $(this).data("shown", !status);
+                $("i", this).toggleClass("fa-caret-down").toggleClass("fa-caret-right");
                 return false;
+            });
+
+            //隐藏子节点
+            $(document).on("collapse", ".btn-node-sub", function () {
+                if ($("i", this).length > 0) {
+                    $("a[data-pid='" + $(this).data("id") + "']").trigger("collapse");
+                }
+                $("i", this).removeClass("fa-caret-down").addClass("fa-caret-right");
+                $(this).data("shown", false);
+                $(this).closest("tr").toggle(false);
             });
 
             //批量删除后的回调
@@ -118,12 +123,11 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             //展开隐藏一级
             $(document.body).on("click", ".btn-toggle", function (e) {
-                $("a.btn[data-id][data-pid][data-pid!=0].disabled").closest("tr").hide();
+                $("a[data-id][data-pid][data-pid!=0].disabled").closest("tr").hide();
                 var that = this;
                 var show = $("i", that).hasClass("fa-chevron-down");
-                $("i", that).toggleClass("fa-chevron-down", !show);
-                $("i", that).toggleClass("fa-chevron-up", show);
-                $("a.btn[data-id][data-pid][data-pid!=0]").not('.disabled').closest("tr").toggle(show);
+                $("i", that).toggleClass("fa-chevron-down", !show).toggleClass("fa-chevron-up", show);
+                $("a[data-id][data-pid][data-pid!=0]").not('.disabled').closest("tr").toggle(show);
                 $(".btn-node-sub[data-pid=0]").data("shown", show);
             });
 
@@ -131,10 +135,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             $(document.body).on("click", ".btn-toggle-all", function (e) {
                 var that = this;
                 var show = $("i", that).hasClass("fa-plus");
-                $("i", that).toggleClass("fa-plus", !show);
-                $("i", that).toggleClass("fa-minus", show);
-                $(".btn-node-sub.disabled").closest("tr").toggle(show);
+                $("i", that).toggleClass("fa-plus", !show).toggleClass("fa-minus", show);
+                $(".btn-node-sub:not([data-pid=0])").closest("tr").toggle(show);
                 $(".btn-node-sub").data("shown", show);
+                $(".btn-node-sub > i").toggleClass("fa-caret-down", show).toggleClass("fa-caret-right", !show);
             });
         },
         add: function () {
@@ -147,17 +151,18 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
             formatter: {
                 title: function (value, row, index) {
                     value = value.toString().replace(/(&|&amp;)nbsp;/g, '&nbsp;');
-                    return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
+                    var caret = row.haschild == 1 || row.ismenu == 1 ? '<i class="fa fa-caret-right"></i>' : '';
+                    value = value.indexOf("&nbsp;") > -1 ? value.replace(/(.*)&nbsp;/, "$1" + caret) : caret + value;
+
+                    value = !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
+                    return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Toggle sub menu') + '" data-id="' + row.id + '" data-pid="' + row.pid + '" class="'
+                        + (row.haschild == 1 || row.ismenu == 1 ? 'text-primary' : 'disabled') + ' btn-node-sub">' + value + '</a>';
                 },
                 name: function (value, row, index) {
                     return !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
                 },
                 icon: function (value, row, index) {
                     return '<span class="' + (!row.ismenu || row.status == 'hidden' ? 'text-muted' : '') + '"><i class="' + value + '"></i></span>';
-                },
-                subnode: function (value, row, index) {
-                    return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Toggle sub menu') + '" data-id="' + row.id + '" data-pid="' + row.pid + '" class="btn btn-xs '
-                        + (row.haschild == 1 || row.ismenu == 1 ? 'btn-success' : 'btn-default disabled') + ' btn-node-sub"><i class="fa fa-sitemap"></i></a>';
                 }
             },
             bindevent: function () {
