@@ -55,9 +55,7 @@ https://demo.fastadmin.net
 
 在使用中有任何问题，请使用以下联系方式联系我们
 
-交流社区: https://ask.fastadmin.net
-
-QQ 1 群（满）、QQ 2 群（满）、QQ 3 群（满）、QQ 4 群（满）、QQ 5 群（满）、QQ 6 群（满）、[QQ 7 群](https://www.fastadmin.net/goto/qun)。
+问答社区: https://ask.fastadmin.net
 
 Github: https://github.com/karsonzhang/fastadmin
 
