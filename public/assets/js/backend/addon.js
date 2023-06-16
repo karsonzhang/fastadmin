@@ -92,7 +92,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                         uid: userinfo ? userinfo.id : '',
                         token: userinfo ? userinfo.token : '',
                         domain: Config.domain,
-                        version: Config.faversion
+                        version: Config.faversion,
+                        sid: Controller.api.sid()
                     });
                     return params;
                 },
@@ -297,7 +298,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                         url: Config.api_url + '/user/logintpl',
                         type: 'post',
                         data: {
-                            version: Config.faversion
+                            version: Config.faversion,
+                            sid: Controller.api.sid()
                         }
                     }, function (tpldata, ret) {
                         Layer.open({
@@ -310,6 +312,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                             yes: function (index, layero) {
                                 var data = $("form", layero).serializeArray();
                                 data.push({name: "faversion", value: Config.faversion});
+                                data.push({name: "sid", value: Controller.api.sid()});
                                 Fast.api.ajax({
                                     url: Config.api_url + '/user/login',
                                     type: 'post',
@@ -342,44 +345,42 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                         url: Config.api_url + '/user/userinfotpl',
                         type: 'post',
                         data: {
-                            version: Config.faversion
+                            uid: userinfo.id,
+                            token: userinfo.token,
+                            version: Config.faversion,
+                            sid: Controller.api.sid()
                         }
                     }, function (tpldata, ret) {
-                        Fast.api.ajax({
-                            url: Config.api_url + '/user/index',
-                            data: {
-                                uid: userinfo.id,
-                                token: userinfo.token,
-                                version: Config.faversion,
+                        Layer.open({
+                            content: Template.render(tpldata, userinfo),
+                            area: area,
+                            title: __('Userinfo'),
+                            resize: false,
+                            btn: [__('Logout'), __('Close')],
+                            yes: function () {
+                                Fast.api.ajax({
+                                    url: Config.api_url + '/user/logout',
+                                    data: {
+                                        uid: userinfo.id,
+                                        token: userinfo.token,
+                                        version: Config.faversion,
+                                        sid: Controller.api.sid()
+                                    }
+                                }, function (data, ret) {
+                                    Controller.api.userinfo.set(null);
+                                    Layer.closeAll();
+                                    Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
+                                }, function (data, ret) {
+                                    Controller.api.userinfo.set(null);
+                                    Layer.closeAll();
+                                    Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
+                                });
                             }
-                        }, function (data) {
-                            Layer.open({
-                                content: Template.render(tpldata, userinfo),
-                                area: area,
-                                title: __('Userinfo'),
-                                resize: false,
-                                btn: [__('Logout'), __('Close')],
-                                yes: function () {
-                                    Fast.api.ajax({
-                                        url: Config.api_url + '/user/logout',
-                                        data: {uid: userinfo.id, token: userinfo.token, version: Config.faversion}
-                                    }, function (data, ret) {
-                                        Controller.api.userinfo.set(null);
-                                        Layer.closeAll();
-                                        Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
-                                    }, function (data, ret) {
-                                        Controller.api.userinfo.set(null);
-                                        Layer.closeAll();
-                                        Layer.alert(ret.msg, {title: __('Warning'), icon: 0});
-                                    });
-                                }
-                            });
-                            return false;
-                        }, function (data) {
-                            Controller.api.userinfo.set(null);
-                            $(that).trigger('click');
-                            return false;
                         });
+                        return false;
+                    }, function (data) {
+                        Controller.api.userinfo.set(null);
+                        $(that).trigger('click');
                         return false;
                     });
                 }
@@ -773,6 +774,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                         }
                     }
                 }
+            },
+            sid: function () {
+                var sid = $.cookie('fastadmin_sid');
+                if (!sid) {
+                    sid = Math.random().toString(20).substr(2, 12);
+                    $.cookie('fastadmin_sid', sid);
+                }
+                return sid;
             },
             refresh: function (table, name) {
                 //刷新左侧边栏
