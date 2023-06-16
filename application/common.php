@@ -502,12 +502,16 @@ if (!function_exists('check_url_allowed')) {
      * @param string $url URL
      * @return bool
      */
-    function check_url_allowed($url = null)
+    function check_url_allowed($url = '')
     {
         //允许的主机列表
         $allowedHostArr = [
             strtolower(request()->host())
         ];
+
+        if (empty($url)) {
+            return true;
+        }
 
         //如果是站内相对链接则允许
         if (preg_match("/^[\/a-z][a-z0-9][a-z0-9\.\/]+\$/i", $url) && substr($url, 0, 2) !== '//') {
