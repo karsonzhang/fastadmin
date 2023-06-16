@@ -520,8 +520,8 @@ if (!function_exists('check_url_allowed')) {
 
         //如果是站外链接则需要判断HOST是否允许
         if (preg_match("/((http[s]?:\/\/)+(?>[a-z\-0-9]{2,}\.){1,}[a-z]{2,8})(?:\s|\/)/i", $url)) {
-
-            if (in_array(strtolower(parse_url($url, PHP_URL_HOST)), $allowedHostArr)) {
+            $chkHost = parse_url(strtolower($url), PHP_URL_HOST);
+            if ($chkHost && in_array($chkHost, $allowedHostArr)) {
                 return true;
             }
         }
