@@ -350,18 +350,18 @@ a:focus {
     border-top-color: #f5f5f5;
   }
 }
-.dropdown:hover .dropdown-menu {
+#header-navbar .dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0;
+}
+#header-navbar li.dropdown ul.dropdown-menu {
+  min-width: 100px;
 }
 .navbar {
   border: none;
 }
 .navbar-nav > li > a {
   font-size: 14px;
-}
-#header-navbar li.dropdown ul.dropdown-menu {
-  min-width: 100px;
 }
 .dropdown-menu > li > a {
   font-size: 14px;
@@ -464,6 +464,9 @@ a:focus {
 .input-group > .msg-box.n-right {
   position: absolute;
 }
+.bootstrap-select {
+  min-height: 33px;
+}
 .bootstrap-select .status {
   background: #f0f0f0;
   clear: both;
@@ -474,10 +477,18 @@ a:focus {
   margin-bottom: -5px;
   padding: 10px 20px;
 }
+.bootstrap-select .msg-box {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.bootstrap-select .bs-placeholder {
+  min-height: 33px;
+}
 select.bs-select-hidden,
 select.selectpicker {
   display: inherit !important;
-  max-height: 31px;
+  max-height: 33px;
   overflow: hidden;
 }
 select.bs-select-hidden[multiple],
@@ -506,6 +517,9 @@ select.selectpicker[multiple] option {
 input.selectpage {
   color: transparent;
   pointer-events: none;
+}
+.sp_container {
+  min-height: 33px;
 }
 .sp_container input.selectpage {
   color: inherit;
@@ -813,21 +827,25 @@ footer.footer .copyright a:hover {
 .login-section .login-main {
   padding: 40px 45px 20px 45px;
 }
-.login-section .n-bootstrap .form-group {
+.login-section .n-bootstrap .controls,
+.form-section .n-bootstrap .controls {
   position: relative;
 }
-.login-section .n-bootstrap .input-group {
+.login-section .n-bootstrap .input-group,
+.form-section .n-bootstrap .input-group {
   position: inherit;
 }
-.login-section .n-bootstrap .n-right {
+.login-section .n-bootstrap .n-right,
+.form-section .n-bootstrap .n-right {
   margin-top: 0;
-  top: 0;
+  top: -20px;
   position: absolute;
   left: 0;
   text-align: right;
   width: 100%;
 }
-.login-section .n-bootstrap .n-right .msg-wrap {
+.login-section .n-bootstrap .n-right .msg-wrap,
+.form-section .n-bootstrap .n-right .msg-wrap {
   position: relative;
 }
 main.content {
@@ -950,21 +968,21 @@ main.content {
   margin: 0;
 }
 .pager li {
-  margin: 0 .4em;
+  margin: 0 0.4em;
   display: inline-block;
 }
 .pager li:first-child > a,
 .pager li:last-child > a,
 .pager li:first-child > span,
 .pager li:last-child > span {
-  padding: .5em 1.2em;
+  padding: 0.5em 1.2em;
 }
 .pager li > a,
 .pager li > span {
   background: none;
   border: 1px solid #e6e6e6;
   border-radius: 0.25em;
-  padding: .5em .93em;
+  padding: 0.5em 0.93em;
   font-size: 14px;
 }
 .jumpto input {

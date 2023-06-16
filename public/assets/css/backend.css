@@ -309,14 +309,13 @@ body.is-dialog {
 html.ios-fix,
 html.ios-fix body {
   height: 100%;
-  overflow: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
 html.ios-fix .wrapper,
 html.ios-fix body .wrapper,
 html.ios-fix .tab-pane,
 html.ios-fix body .tab-pane {
-  overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 .wrapper {
@@ -407,6 +406,14 @@ table.table-template {
   top: 62px;
   right: 12px;
 }
+.bootstrap-select {
+  min-height: 33px;
+}
+.bootstrap-select .msg-box {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 .bootstrap-select .status {
   background: #f0f0f0;
   clear: both;
@@ -417,15 +424,18 @@ table.table-template {
   margin-bottom: -5px;
   padding: 10px 20px;
 }
+.bootstrap-select .bs-placeholder {
+  min-height: 33px;
+}
 select.bs-select-hidden,
 select.selectpicker {
   display: inherit !important;
-  max-height: 31px;
+  max-height: 33px;
   overflow: hidden;
 }
 select.bs-select-hidden[multiple],
 select.selectpicker[multiple] {
-  height: 31px;
+  height: 33px;
   padding: 0;
   background: #f4f4f4;
 }
@@ -449,6 +459,9 @@ select.selectpicker[multiple] option {
 input.selectpage {
   color: transparent;
   pointer-events: none;
+}
+.sp_container {
+  min-height: 33px;
 }
 .sp_container input.selectpage {
   color: inherit;
@@ -1028,22 +1041,32 @@ form.form-horizontal .control-label {
 .bootstrap-table .fa-toggle-on.fa-2x {
   font-size: 1.86em;
 }
-.bootstrap-table .form-commonsearch .form-group {
+.bootstrap-table .form-commonsearch .row > .form-group {
   margin-left: 0;
   margin-right: 0;
+}
+.bootstrap-table .form-commonsearch .row > .form-group > .control-label {
   white-space: nowrap;
+}
+.bootstrap-table .btn-commonsearch {
+  position: relative;
+}
+.bootstrap-table .btn-commonsearch > span {
+  position: absolute;
+  top: -10px;
+  right: -10px;
 }
 .bootstrap-table .table:not(.table-condensed) > tbody > tr > th,
 .bootstrap-table .table:not(.table-condensed) > tfoot > tr > th,
 .bootstrap-table .table:not(.table-condensed) > thead > tr > td,
 .bootstrap-table .table:not(.table-condensed) > tbody > tr > td,
 .bootstrap-table .table:not(.table-condensed) > tfoot > tr > td {
-  padding: 8px 15px;
+  padding: 10px 15px;
   height: 47px;
 }
 .fixed-table-container tbody td .th-inner,
 .fixed-table-container thead th .th-inner {
-  padding: 8px 10px;
+  padding: 10px 10px;
 }
 .toolbar {
   margin-top: 10px;
@@ -1437,7 +1460,7 @@ table.table-nowrap thead > tr > th {
 }
 /*修正开关关闭下的颜色值*/
 .btn-switcher.disabled {
-  opacity: .6;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 .btn-switcher .text-gray {
@@ -1516,7 +1539,7 @@ table.table-nowrap thead > tr > th {
   color: #555;
   vertical-align: middle;
   width: 100%;
-  line-height: 22px;
+  line-height: 23px;
   cursor: text;
 }
 .bootstrap-tagsinput input {
@@ -1546,6 +1569,7 @@ table.table-nowrap thead > tr > th {
 .bootstrap-tagsinput .tag {
   margin-right: 2px;
   color: white;
+  min-height: 23px;
 }
 .bootstrap-tagsinput .tag [data-role="remove"] {
   margin-left: 5px;
