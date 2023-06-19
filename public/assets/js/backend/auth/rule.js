@@ -25,7 +25,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     [
                         {field: 'state', checkbox: true,},
                         {field: 'id', title: 'ID'},
-                        {field: 'title', title: __('Title'), align: 'left', formatter: Controller.api.formatter.title},
+                        {field: 'title', title: __('Title'), align: 'left', formatter: Controller.api.formatter.title, clickToSelect: !false},
                         {field: 'icon', title: __('Icon'), formatter: Controller.api.formatter.icon},
                         {field: 'name', title: __('Name'), align: 'left', formatter: Controller.api.formatter.name},
                         {field: 'weigh', title: __('Weigh')},
@@ -92,18 +92,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
 
             });
 
-            //显示隐藏子节点
-            $(document).on("click", ".btn-node-sub", function (e) {
-                var status = $(this).data("shown") ? true : false;
-                $("a[data-pid='" + $(this).data("id") + "']").each(function () {
-                    $(this).closest("tr").toggle(!status);
+            table.on('post-body.bs.table', function (e, settings, json, xhr) {
+                //显示隐藏子节点
+                $(">tbody>tr[data-index] > td", this).on('click', "a.btn-node-sub", function () {
+                    var status = $(this).data("shown") ? true : false;
+                    $("a[data-pid='" + $(this).data("id") + "']").each(function () {
+                        $(this).closest("tr").toggle(!status);
+                    });
+                    if (status) {
+                        $("a[data-pid='" + $(this).data("id") + "']").trigger("collapse");
+                    }
+                    $(this).data("shown", !status);
+                    $("i", this).toggleClass("fa-caret-down").toggleClass("fa-caret-right");
+                    return false;
                 });
-                if (status) {
-                    $("a[data-pid='" + $(this).data("id") + "']").trigger("collapse");
-                }
-                $(this).data("shown", !status);
-                $("i", this).toggleClass("fa-caret-down").toggleClass("fa-caret-right");
-                return false;
             });
 
             //隐藏子节点
@@ -155,7 +157,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     value = value.indexOf("&nbsp;") > -1 ? value.replace(/(.*)&nbsp;/, "$1" + caret) : caret + value;
 
                     value = !row.ismenu || row.status == 'hidden' ? "<span class='text-muted'>" + value + "</span>" : value;
-                    return '<a href="javascript:;" data-toggle="tooltip" title="' + __('Toggle sub menu') + '" data-id="' + row.id + '" data-pid="' + row.pid + '" class="'
+                    return '<a href="javascript:;" data-id="' + row.id + '" data-pid="' + row.pid + '" class="'
                         + (row.haschild == 1 || row.ismenu == 1 ? 'text-primary' : 'disabled') + ' btn-node-sub">' + value + '</a>';
                 },
                 name: function (value, row, index) {
