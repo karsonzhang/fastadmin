@@ -712,6 +712,7 @@ class Crud extends Command
             $headingHtml = '{:build_heading()}';
             $controllerImport = '';
             $importHtml = '';
+            $multipleHtml = '';
             $recyclebinHtml = '';
 
             if ($import) {
@@ -996,6 +997,7 @@ class Crud extends Command
                     }
                     if ($this->headingFilterField && $this->headingFilterField == $field && $itemArr) {
                         $headingHtml = $this->getReplacedStub('html/heading-html', ['field' => $field, 'fieldName' => Loader::parseName($field, 1, false)]);
+                        $multipleHtml = $this->getReplacedStub('html/multiple-html', ['field' => $field, 'fieldName' => Loader::parseName($field, 1, false), 'controllerUrl' => $controllerUrl]);
                     }
                     //排序方式,如果有指定排序字段,否则按主键排序
                     $order = $field == $this->sortField ? $this->sortField : $order;
@@ -1119,6 +1121,7 @@ class Crud extends Command
                 'controllerIndex'         => '',
                 'recyclebinJs'            => '',
                 'headingHtml'             => $headingHtml,
+                'multipleHtml'            => $multipleHtml,
                 'importHtml'              => $importHtml,
                 'recyclebinHtml'          => $recyclebinHtml,
                 'visibleFieldList'        => $fields ? "\$row->visible(['" . implode("','", array_filter(in_array($priKey, explode(',', $fields)) ? explode(',', $fields) : explode(',', $priKey . ',' . $fields))) . "']);" : '',
@@ -1466,7 +1469,7 @@ EOD;
         if ($content || !Lang::has($field)) {
             $this->fieldMaxLen = strlen($field) > $this->fieldMaxLen ? strlen($field) : $this->fieldMaxLen;
             $content = str_replace('，', ',', $content);
-            if (stripos($content, ':') !== false && stripos($content, ',') && stripos($content, '=') !== false) {
+            if (stripos($content, ':') !== false && stripos($content, '=') !== false) {
                 list($fieldLang, $item) = explode(':', $content);
                 $itemArr = [$field => $fieldLang];
                 foreach (explode(',', $item) as $k => $v) {
@@ -1474,6 +1477,9 @@ EOD;
                     if (count($valArr) == 2) {
                         list($key, $value) = $valArr;
                         $itemArr[$field . ' ' . $key] = $value;
+                        if ($this->headingFilterField == $field) {
+                            $itemArr['Set ' . $field . ' to ' . $key] = '设为' . $value;
+                        }
                         $this->fieldMaxLen = strlen($field . ' ' . $key) > $this->fieldMaxLen ? strlen($field . ' ' . $key) : $this->fieldMaxLen;
                     }
                 }
@@ -1549,7 +1555,7 @@ EOD;
         return $itemArr;
     }
 
-    protected function getFieldType(& $v)
+    protected function getFieldType(&$v)
     {
         $inputType = 'text';
         switch ($v['DATA_TYPE']) {

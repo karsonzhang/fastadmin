@@ -123,6 +123,8 @@ return [
     '%d year%s after'                                       => '%d年后',
     'Set to normal'                                         => '设为正常',
     'Set to hidden'                                         => '设为隐藏',
+    'Set status to normal'                                  => '设为正常',
+    'Set status to hidden'                                  => '设为隐藏',
     'Recycle bin'                                           => '回收站',
     'Restore'                                               => '还原',
     'Restore all'                                           => '还原全部',

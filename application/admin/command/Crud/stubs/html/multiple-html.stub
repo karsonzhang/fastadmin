@@ -1,0 +1,8 @@
+<div class="dropdown btn-group {:$auth->check('{%controllerUrl%}/multi')?'':'hide'}">
+                            <a class="btn btn-primary btn-more dropdown-toggle btn-disabled disabled" data-toggle="dropdown"><i class="fa fa-cog"></i> {:__('More')}</a>
+                            <ul class="dropdown-menu text-left" role="menu">
+                                {foreach name="{%fieldName%}List" item="vo"}
+                                <li><a class="btn btn-link btn-multi btn-disabled disabled" href="javascript:" data-params="{%field%}={$key}">{:__('Set {%field%} to ' . $key)}</a></li>
+                                {/foreach}
+                            </ul>
+                        </div>
