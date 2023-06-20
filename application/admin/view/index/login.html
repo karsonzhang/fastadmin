@@ -28,7 +28,7 @@
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
             background: rgba(255, 255, 255, 1);
             border: none;
-            overflow: hidden;
+            /*overflow: hidden;*/
             padding: 0;
         }
 
@@ -55,6 +55,7 @@
 
         .login-head {
             background: #899fe1;
+            border-radius: 3px 3px 0 0;
         }
 
         .login-form {
@@ -122,12 +123,14 @@
                         </div>
                         {/if}
                         <!--@CaptchaEnd-->
+                        {if $keeyloginhours>0}
                         <div class="form-group checkbox">
-                            <label class="inline" for="keeplogin">
+                            <label class="inline" for="keeplogin" data-toggle="tooltip" title="{:__('The duration of the session is %s hours', $keeyloginhours)}">
                                 <input type="checkbox" name="keeplogin" id="keeplogin" value="1"/>
                                 {:__('Keep login')}
                             </label>
                         </div>
+                        {/if}
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-lg btn-block" style="background:#708eea;">{:__('Sign in')}</button>
                         </div>

@@ -13,22 +13,20 @@ class Admin extends Model
     // 定义时间戳字段名
     protected $createTime = 'createtime';
     protected $updateTime = 'updatetime';
+    protected $hidden = [
+        'password',
+        'salt'
+    ];
 
-    /**
-     * 重置用户密码
-     * @author baiyouwen
-     */
-    public function resetPassword($uid, $NewPassword)
+    public static function init()
     {
-        $passwd = $this->encryptPassword($NewPassword);
-        $ret = $this->where(['id' => $uid])->update(['password' => $passwd]);
-        return $ret;
-    }
-
-    // 密码加密
-    protected function encryptPassword($password, $salt = '', $encrypt = 'md5')
-    {
-        return $encrypt($password . $salt);
+        self::beforeWrite(function ($row) {
+            $changed = $row->getChangedData();
+            //如果修改了用户或或密码则需要重新登录
+            if (isset($changed['username']) || isset($changed['password']) || isset($changed['salt'])) {
+                $row->token = '';
+            }
+        });
     }
 
 }

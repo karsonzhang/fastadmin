@@ -51,7 +51,7 @@ class Auth extends \fast\Auth
             $this->setError('Please try again after 1 day');
             return false;
         }
-        if ($admin->password != md5(md5($password) . $admin->salt)) {
+        if ($admin->password != $this->getEncryptPassword($password, $admin->salt)) {
             $admin->loginfailure++;
             $admin->save();
             $this->setError('Password is incorrect');
@@ -63,7 +63,8 @@ class Auth extends \fast\Auth
         $admin->token = Random::uuid();
         $admin->save();
         Session::set("admin", $admin->toArray());
-        $this->keeplogin($keeptime);
+        Session::set("admin.safecode", $this->getEncryptSafecode($admin));
+        $this->keeplogin($admin, $keeptime);
         return true;
     }
 
@@ -101,7 +102,7 @@ class Auth extends \fast\Auth
                 return false;
             }
             //token有变更
-            if ($key != md5(md5($id) . md5($keeptime) . md5($expiretime) . $admin->token . config('token.key'))) {
+            if ($key != $this->getKeeploginKey($admin, $keeptime, $expiretime)) {
                 return false;
             }
             $ip = request()->ip();
@@ -110,8 +111,9 @@ class Auth extends \fast\Auth
                 return false;
             }
             Session::set("admin", $admin->toArray());
+            Session::set("admin.safecode", $this->getEncryptSafecode($admin));
             //刷新自动登录的时效
-            $this->keeplogin($keeptime);
+            $this->keeplogin($admin, $keeptime);
             return true;
         } else {
             return false;
@@ -124,16 +126,62 @@ class Auth extends \fast\Auth
      * @param int $keeptime
      * @return  boolean
      */
-    protected function keeplogin($keeptime = 0)
+    protected function keeplogin($admin, $keeptime = 0)
     {
         if ($keeptime) {
             $expiretime = time() + $keeptime;
-            $key = md5(md5($this->id) . md5($keeptime) . md5($expiretime) . $this->token . config('token.key'));
-            $data = [$this->id, $keeptime, $expiretime, $key];
-            Cookie::set('keeplogin', implode('|', $data), 86400 * 7);
+            $key = $this->getKeeploginKey($admin, $keeptime, $expiretime);
+            Cookie::set('keeplogin', implode('|', [$admin['id'], $keeptime, $expiretime, $key]), $keeptime);
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取密码加密后的字符串
+     * @param string $password 密码
+     * @param string $salt     密码盐
+     * @return string
+     */
+    public function getEncryptPassword($password, $salt = '')
+    {
+        return md5(md5($password) . $salt);
+    }
+
+    /**
+     * 获取密码加密后的自动登录码
+     * @param string $password 密码
+     * @param string $salt     密码盐
+     * @return string
+     */
+    public function getEncryptKeeplogin($params, $keeptime)
+    {
+        $expiretime = time() + $keeptime;
+        $key = md5(md5($params['id']) . md5($keeptime) . md5($expiretime) . $params['token'] . config('token.key'));
+        return implode('|', [$this->id, $keeptime, $expiretime, $key]);
+    }
+
+    /**
+     * 获取自动登录Key
+     * @param $params
+     * @param $keeptime
+     * @param $expiretime
+     * @return string
+     */
+    public function getKeeploginKey($params, $keeptime, $expiretime)
+    {
+        $key = md5(md5($params['id']) . md5($keeptime) . md5($expiretime) . $params['token'] . config('token.key'));
+        return $key;
+    }
+
+    /**
+     * 获取加密后的安全码
+     * @param $params
+     * @return string
+     */
+    public function getEncryptSafecode($params)
+    {
+        return md5(md5($params['username']) . md5(substr($params['password'], 0, 6)) . config('token.key'));
     }
 
     public function check($name, $uid = '', $relation = 'or', $mode = 'url')
@@ -180,13 +228,19 @@ class Auth extends \fast\Auth
         if (!$admin) {
             return false;
         }
+        $my = Admin::get($admin['id']);
+        if (!$my) {
+            return false;
+        }
+        //校验安全码，可用于判断关键信息发生了变更需要重新登录
+        if (!isset($admin['safecode']) || $this->getEncryptSafecode($my) !== $admin['safecode']) {
+            $this->logout();
+            return false;
+        }
         //判断是否同一时间同一账号只能在一个地方登录
         if (Config::get('fastadmin.login_unique')) {
-            $my = Admin::get($admin['id']);
-            if (!$my || $my['token'] != $admin['token']) {
-                $this->logined = false; //重置登录状态
-                Session::delete("admin");
-                Cookie::delete("keeplogin");
+            if ($my['token'] != $admin['token']) {
+                $this->logout();
                 return false;
             }
         }

@@ -129,7 +129,7 @@ class Admin extends Backend
                         exception(__("Please input correct password"));
                     }
                     $params['salt'] = Random::alnum();
-                    $params['password'] = md5(md5($params['password']) . $params['salt']);
+                    $params['password'] = $this->auth->getEncryptPassword($params['password'], $params['salt']);
                     $params['avatar'] = '/assets/img/avatar.png'; //设置新管理员默认头像。
                     $result = $this->model->validate('Admin.add')->save($params);
                     if ($result === false) {
@@ -183,7 +183,7 @@ class Admin extends Backend
                             exception(__("Please input correct password"));
                         }
                         $params['salt'] = Random::alnum();
-                        $params['password'] = md5(md5($params['password']) . $params['salt']);
+                        $params['password'] = $this->auth->getEncryptPassword($params['password'], $params['salt']);
                     } else {
                         unset($params['password'], $params['salt']);
                     }
@@ -192,7 +192,7 @@ class Admin extends Backend
                     $adminValidate->rule([
                         'username' => 'require|regex:\w{3,30}|unique:admin,username,' . $row->id,
                         'email'    => 'require|email|unique:admin,email,' . $row->id,
-                        'mobile'    => 'regex:1[3-9]\d{9}|unique:admin,mobile,' . $row->id,
+                        'mobile'   => 'regex:1[3-9]\d{9}|unique:admin,mobile,' . $row->id,
                         'password' => 'regex:\S{32}',
                     ]);
                     $result = $row->validate('Admin.edit')->save($params);
