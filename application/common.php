@@ -514,7 +514,7 @@ if (!function_exists('check_url_allowed')) {
         }
 
         //如果是站内相对链接则允许
-        if (preg_match("/^[\/a-z][a-z0-9][a-z0-9\.\/]+\$/i", $url) && substr($url, 0, 2) !== '//') {
+        if (preg_match("/^[\/a-z][a-z0-9][a-z0-9\.\/]+((\?|#).*)?\$/i", $url) && substr($url, 0, 2) !== '//') {
             return true;
         }
 
