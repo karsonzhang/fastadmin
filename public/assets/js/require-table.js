@@ -49,6 +49,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             checkOnInit: true, //是否在初始化时判断
             escape: true, //是否对内容进行转义
             fixDropdownPosition: true, //是否修复下拉的定位
+            dragCheckboxMultiselect: true, //拖拽时复选框是否多选模式
             selectedIds: [],
             selectedData: [],
             extend: {
@@ -218,37 +219,82 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 table.on('post-body.bs.table', function (e, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").removeClass("fa-spin");
                     if ($(Table.config.checkboxtd + ":first", table).find("input[type='checkbox'][data-index]").length > 0) {
-                        // 拖拽选择,需要重新绑定事件
-                        require(['drag', 'drop'], function () {
-                            var checkboxtd = $(Table.config.checkboxtd, table);
-                            checkboxtd.drag("start", function (ev, dd) {
-                                return $('<div class="selection" />').css('opacity', .65).appendTo(document.body);
-                            }).drag(function (ev, dd) {
-                                $(dd.proxy).css({
-                                    top: Math.min(ev.pageY, dd.startY),
-                                    left: Math.min(ev.pageX, dd.startX),
-                                    height: Math.abs(ev.pageY - dd.startY),
-                                    width: Math.abs(ev.pageX - dd.startX)
-                                });
-                            }).drag("end", function (ev, dd) {
-                                $(dd.proxy).remove();
-                            });
-                            checkboxtd.drop("start", function () {
-                                Table.api.toggleattr(this);
-                            }).drop(function () {
-                                // Table.api.toggleattr(this);
-                            }).drop("end", function (e) {
-                                var that = this;
-                                setTimeout(function () {
-                                    if (e.type === 'mousemove') {
-                                        Table.api.toggleattr(that);
+                        //拖拽选择复选框
+                        var posx, posy, dragdiv, drag = false, prepare = false;
+                        var mousemove = function (e) {
+                            if (drag) {
+                                var left = Math.min(e.pageX, posx);
+                                var top = Math.min(e.pageY, posy);
+                                var width = Math.abs(posx - e.pageX);
+                                var height = Math.abs(posy - e.pageY);
+                                dragdiv.css({left: left + "px", top: top + "px", width: width + "px", height: height + "px"});
+                                var dragrect = {x: left, y: top, width: width, height: height};
+                                $(Table.config.checkboxtd, table).each(function () {
+                                    var checkbox = $("input:checkbox", this);
+                                    var tdrect = this.getBoundingClientRect();
+                                    tdrect.x += document.documentElement.scrollLeft;
+                                    tdrect.y += document.documentElement.scrollTop;
+
+                                    var td_min_x = tdrect.x;
+                                    var td_min_y = tdrect.y;
+                                    var td_max_x = tdrect.x + tdrect.width;
+                                    var td_max_y = tdrect.y + tdrect.height;
+
+                                    var drag_min_x = dragrect.x;
+                                    var drag_min_y = dragrect.y;
+                                    var drag_max_x = dragrect.x + dragrect.width;
+                                    var drag_max_y = dragrect.y + dragrect.height;
+                                    var overlapped = td_min_x <= drag_max_x && td_max_x >= drag_min_x && td_min_y <= drag_max_y && td_max_y >= drag_min_y;
+                                    if (overlapped) {
+                                        if (!$(this).hasClass("overlaped")) {
+                                            $(this).addClass("overlaped");
+                                            checkbox.prop("checked", !checkbox.prop("checked"));
+                                        }
+                                    } else {
+                                        if ($(this).hasClass("overlaped")) {
+                                            $(this).removeClass("overlaped");
+                                            checkbox.prop("checked", !checkbox.prop("checked"));
+                                        }
                                     }
-                                }, 0);
-                            });
-                            $.drop({
-                                multi: true
-                            });
+                                });
+                            }
+                        };
+                        var selectstart = function () {
+                            return false;
+                        };
+                        var mouseup = function () {
+                            if (drag) {
+                                $(document).off("mousemove", mousemove);
+                                $(document).off("selectstart", selectstart);
+                                dragdiv.remove();
+                            }
+                            drag = false;
+                            prepare = false;
+                            $(document.body).css({'MozUserSelect': '', 'webkitUserSelect': ''}).attr('unselectable', 'off');
+                        };
+
+                        $(Table.config.checkboxtd, table).on("mousedown", function (e) {
+                            //禁止鼠标右键事件
+                            if (e.button === 2) {
+                                return false;
+                            }
+                            posx = e.pageX;
+                            posy = e.pageY;
+                            prepare = true;
+                        }).on("mousemove", function (e) {
+                            if (prepare && !drag) {
+                                drag = true;
+                                dragdiv = $("<div />");
+                                dragdiv.css({position: 'absolute', width: 0, height: 0, border: "1px dashed blue", background: "#0029ff", left: e.pageX + "px", top: e.pageY + "px", opacity: .1});
+                                dragdiv.appendTo(document.body);
+                                $(document.body).css({'MozUserSelect': 'none', 'webkitUserSelect': 'none'}).attr('unselectable', 'on');
+                                $(document).on("mousemove", mousemove).on("mouseup", mouseup).on("selectstart", selectstart);
+                                if (options.dragCheckboxMultiselect) {
+                                    $(Table.config.checkboxtd, table).removeClass("overlaped");
+                                }
+                            }
                         });
+
                     }
                 });
                 var exportDataType = options.exportDataType;
@@ -914,7 +960,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 row.ids = ids ? ids : (typeof row.ids !== 'undefined' ? row.ids : 0);
                 url = url == null || url.length === 0 ? '' : url.toString();
                 //自动添加ids参数
-                url = !url.match(/(?=([?&]ids=)|(\/ids\/)|(\{ids}))/i) ? 
+                url = !url.match(/(?=([?&]ids=)|(\/ids\/)|(\{ids}))/i) ?
                     url + (url.match(/(\?|&)+/) ? "&ids=" : "/ids/") + '{ids}' : url;
                 url = url.replace(/\{(.*?)\}/gi, function (matched) {
                     matched = matched.substring(1, matched.length - 1);
