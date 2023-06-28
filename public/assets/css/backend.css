@@ -970,6 +970,9 @@ form.form-horizontal .control-label {
 .fixed-table-container .bs-checkbox {
   min-width: 36px;
 }
+.fixed-table-container tr[data-origpos] > td > .tooltip.in {
+  display: none!important;
+}
 /*修复nice-validator新版下的一处BUG*/
 .nice-validator input,
 .nice-validator select,

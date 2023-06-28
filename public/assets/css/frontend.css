@@ -652,6 +652,20 @@ form.form-horizontal .control-label {
     padding: 15px;
     min-height: 300px;
   }
+  .n-bootstrap .n-right {
+    margin-top: 0;
+    top: -20px;
+    position: absolute;
+    left: 0;
+    text-align: right;
+    width: 100%;
+  }
+  .n-bootstrap .n-right .msg-wrap {
+    position: relative;
+  }
+  .n-bootstrap .col-xs-12 > .n-right .msg-wrap {
+    margin-right: 15px;
+  }
 }
 .nav-pills > li {
   margin-right: 5px;

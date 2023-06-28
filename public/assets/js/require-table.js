@@ -89,14 +89,14 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 name: 'edit',
                 icon: 'fa fa-pencil',
                 title: __('Edit'),
-                extend: 'data-toggle="tooltip"',
+                extend: 'data-toggle="tooltip" data-container="body"',
                 classname: 'btn btn-xs btn-success btn-editone'
             },
             del: {
                 name: 'del',
                 icon: 'fa fa-trash',
                 title: __('Del'),
-                extend: 'data-toggle="tooltip"',
+                extend: 'data-toggle="tooltip" data-container="body"',
                 classname: 'btn btn-xs btn-danger btn-delone'
             },
             dragsort: {
@@ -248,12 +248,12 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                                     if (overlapped) {
                                         if (!$(this).hasClass("overlaped")) {
                                             $(this).addClass("overlaped");
-                                            checkbox.prop("checked", !checkbox.prop("checked"));
+                                            checkbox.trigger("click");
                                         }
                                     } else {
                                         if ($(this).hasClass("overlaped")) {
                                             $(this).removeClass("overlaped");
-                                            checkbox.prop("checked", !checkbox.prop("checked"));
+                                            checkbox.trigger("click");
                                         }
                                     }
                                 });
@@ -463,6 +463,9 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     $("tbody", table).dragsort({
                         itemSelector: 'tr:visible',
                         dragSelector: "a.btn-dragsort",
+                        dragBegin: function (a, b) {
+                            $("[data-toggle='tooltip']", this).tooltip("destroy");
+                        },
                         dragEnd: function (a, b) {
                             var element = $("a.btn-dragsort", this);
                             var data = table.bootstrapTable('getData');
