@@ -971,7 +971,7 @@ form.form-horizontal .control-label {
   min-width: 36px;
 }
 .fixed-table-container tr[data-origpos] > td > .tooltip.in {
-  display: none!important;
+  display: none !important;
 }
 /*修复nice-validator新版下的一处BUG*/
 .nice-validator input,
@@ -1612,5 +1612,26 @@ table.table-nowrap thead > tr > th {
 .autocomplete-suggestions .autocomplete-group strong {
   display: block;
   border-bottom: 1px solid #ddd;
+}
+.autocontent {
+  position: relative;
+}
+.autocontent .autocontent-caret {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  line-height: 1;
+  background: #eee;
+  color: #ddd;
+  vertical-align: middle;
+  padding: 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.autocontent .autocontent-caret:hover {
+  color: #ccc;
 }
 /*# sourceMappingURL=backend.css.map */

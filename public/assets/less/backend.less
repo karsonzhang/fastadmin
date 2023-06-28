@@ -891,7 +891,7 @@ form.form-horizontal .control-label {
 
     //拖拽时隐藏tooltip，避免出现错位
     tr[data-origpos] > td > .tooltip.in {
-        display:none!important;
+        display: none !important;
     }
 }
 
@@ -1661,5 +1661,29 @@ table.table-nowrap {
             border-bottom: 1px solid #ddd;
         }
 
+    }
+}
+
+.autocontent {
+    position: relative;
+
+    .autocontent-caret {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        line-height: 1;
+        background: #eee;
+        color: #ddd;
+        vertical-align: middle;
+        padding: 0 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+            color: #ccc;
+        }
     }
 }

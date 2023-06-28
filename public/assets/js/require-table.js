@@ -196,6 +196,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 //当刷新表格时
                 table.on('refresh.bs.table', function (e, settings, data) {
                     $(Table.config.refreshbtn, toolbar).find(".fa").addClass("fa-spin");
+                    //移除指定浮动弹窗
+                    $(".layui-layer-autocontent").remove();
                 });
                 //当执行搜索时
                 table.on('search.bs.table common-search.bs.table', function (e, settings, data) {
@@ -463,9 +465,6 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     $("tbody", table).dragsort({
                         itemSelector: 'tr:visible',
                         dragSelector: "a.btn-dragsort",
-                        dragBegin: function (a, b) {
-                            $("[data-toggle='tooltip']", this).tooltip("destroy");
-                        },
                         dragEnd: function (a, b) {
                             var element = $("a.btn-dragsort", this);
                             var data = table.bootstrapTable('getData');
@@ -548,6 +547,30 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                             Layer.close(index);
                         }
                     );
+                });
+                table.on("mouseenter mouseleave", ".autocontent", function (e) {
+                    var target = $(".autocontent-item", this).get(0);
+                    if (!target) return;
+                    if (e.type === 'mouseenter') {
+                        if (target.scrollWidth > target.offsetWidth) {
+                            $(this).append("<div class='autocontent-caret'><i class='fa fa-chevron-down'></div>");
+                        }
+                    } else {
+                        $(".autocontent-caret", this).remove();
+                    }
+                });
+                table.on("click", ".autocontent-caret", function () {
+                    var text = $(this).prev().text();
+                    var tdrect = $(this).parent().get(0).getBoundingClientRect();
+                    tdrect.x += document.documentElement.scrollLeft;
+                    tdrect.y += document.documentElement.scrollTop;
+                    var index = Layer.open({id: 'autocontent', skin: 'layui-layer-fast layui-layer-autocontent', title: false, content: text, btn: false, anim: false, shade: 0, isOutAnim: false, area: 'auto', maxWidth: 450, maxHeight: 350, offset: [tdrect.y, tdrect.x]});
+
+                    $(document).one("mousedown", function (e) {
+                        if ($(e.target).closest(".layui-layer").length === 0) {
+                            Layer.close(index);
+                        }
+                    });
                 });
 
                 //修复dropdown定位溢出的情况
@@ -730,8 +753,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     return html.join(' ');
                 },
                 content: function (value, row, index) {
-                    var width = this.width != undefined ? (this.width.match(/^\d+$/) ? this.width + "px" : this.width) : "250px";
-                    return "<div style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:" + width + ";'>" + value + "</div>";
+                    var width = this.width != undefined ? (this.width.toString().match(/^\d+$/) ? this.width + "px" : this.width) : "250px";
+                    return "<div class='autocontent-item' style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:" + width + ";'>" + value + "</div>";
                 },
                 status: function (value, row, index) {
                     var custom = {normal: 'success', hidden: 'gray', deleted: 'danger', locked: 'info'};
