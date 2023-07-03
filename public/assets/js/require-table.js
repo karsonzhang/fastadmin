@@ -562,15 +562,15 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 table.on("click", ".autocontent-caret", function () {
                     var text = $(this).prev().text();
                     var tdrect = $(this).parent().get(0).getBoundingClientRect();
-                    tdrect.x += document.documentElement.scrollLeft;
-                    tdrect.y += document.documentElement.scrollTop;
                     var index = Layer.open({id: 'autocontent', skin: 'layui-layer-fast layui-layer-autocontent', title: false, content: text, btn: false, anim: false, shade: 0, isOutAnim: false, area: 'auto', maxWidth: 450, maxHeight: 350, offset: [tdrect.y, tdrect.x]});
 
-                    $(document).one("mousedown", function (e) {
+                    var mousedown = function (e) {
                         if ($(e.target).closest(".layui-layer").length === 0) {
                             Layer.close(index);
+                            $(document).off("mousedown", mousedown);
                         }
-                    });
+                    };
+                    $(document).off("mousedown", mousedown).on("mousedown", mousedown);
                 });
 
                 //修复dropdown定位溢出的情况
