@@ -123,10 +123,10 @@ class Backend extends Controller
         $path = str_replace('.', '/', $controllername) . '/' . $actionname;
 
         // 定义是否Addtabs请求
-        !defined('IS_ADDTABS') && define('IS_ADDTABS', input("addtabs") ? true : false);
+        !defined('IS_ADDTABS') && define('IS_ADDTABS', (bool)input("addtabs"));
 
         // 定义是否Dialog请求
-        !defined('IS_DIALOG') && define('IS_DIALOG', input("dialog") ? true : false);
+        !defined('IS_DIALOG') && define('IS_DIALOG', (bool)input("dialog"));
 
         // 定义是否AJAX请求
         !defined('IS_AJAX') && define('IS_AJAX', $this->request->isAjax());
@@ -312,12 +312,12 @@ class Backend extends Controller
             if (!preg_match('/^[a-zA-Z0-9_\-\.]+$/', $k)) {
                 continue;
             }
-            $sym = isset($op[$k]) ? $op[$k] : '=';
+            $sym = $op[$k] ?? '=';
             if (stripos($k, ".") === false) {
                 $k = $aliasName . $k;
             }
             $v = !is_array($v) ? trim($v) : $v;
-            $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
+            $sym = strtoupper($op[$k] ?? $sym);
             //null和空字符串特殊处理
             if (!is_array($v)) {
                 if (in_array(strtoupper($v), ['NULL', 'NOT NULL'])) {
@@ -367,8 +367,8 @@ class Backend extends Controller
                 case 'NOT BETWEEN':
                     $arr = array_slice(explode(',', $v), 0, 2);
                     if (stripos($v, ',') === false || !array_filter($arr, function ($v) {
-                            return $v != '' && $v !== false && $v !== null;
-                        })) {
+                        return $v != '' && $v !== false && $v !== null;
+                    })) {
                         continue 2;
                     }
                     //当出现一边为空时改变操作符
@@ -397,7 +397,7 @@ class Backend extends Controller
                         $arr = $arr[0];
                     }
                     $tableArr = explode('.', $k);
-                    if (count($tableArr) > 1 && $tableArr[0] != $name && !in_array($tableArr[0], $alias) 
+                    if (count($tableArr) > 1 && $tableArr[0] != $name && !in_array($tableArr[0], $alias)
                         && !empty($this->model) && $this->relationSearch) {
                         //修复关联模型下时间无法搜索的BUG
                         $relation = Loader::parseName($tableArr[0], 1, false);
@@ -569,8 +569,8 @@ class Backend extends Controller
                 unset($item['password'], $item['salt']);
                 if ($this->selectpageFields == '*') {
                     $result = [
-                        $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
-                        $field      => isset($item[$field]) ? $item[$field] : '',
+                        $primarykey => $item[$primarykey] ?? '',
+                        $field      => $item[$field] ?? '',
                     ];
                 } else {
                     $result = array_intersect_key(($item instanceof Model ? $item->toArray() : (array)$item), array_flip($fields));

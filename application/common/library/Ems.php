@@ -32,8 +32,7 @@ class Ems
      */
     public static function get($email, $event = 'default')
     {
-        $ems = \app\common\model\Ems::
-        where(['email' => $email, 'event' => $event])
+        $ems = \app\common\model\Ems::where(['email' => $email, 'event' => $event])
             ->order('id', 'DESC')
             ->find();
         Hook::listen('ems_get', $ems, null, true);
@@ -103,7 +102,7 @@ class Ems
             });
         }
         $result = Hook::listen('ems_notice', $params, null, true);
-        return $result ? true : false;
+        return (bool)$result;
     }
 
     /**
@@ -150,8 +149,7 @@ class Ems
      */
     public static function flush($email, $event = 'default')
     {
-        \app\common\model\Ems::
-        where(['email' => $email, 'event' => $event])
+        \app\common\model\Ems::where(['email' => $email, 'event' => $event])
             ->delete();
         Hook::listen('ems_flush');
         return true;

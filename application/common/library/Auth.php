@@ -164,7 +164,7 @@ class Auth
             'avatar'   => '',
         ];
         $params = array_merge($data, [
-            'nickname'  => preg_match("/^1[3-9]{1}\d{9}$/",$username) ? substr_replace($username,'****',3,4) : $username,
+            'nickname'  => preg_match("/^1[3-9]{1}\d{9}$/", $username) ? substr_replace($username, '****', 3, 4) : $username,
             'salt'      => Random::alnum(),
             'jointime'  => $time,
             'joinip'    => $ip,
@@ -356,7 +356,7 @@ class Auth
         }
         $url = ($module ? $module : request()->module()) . '/' . (is_null($path) ? $this->getRequestUri() : $path);
         $url = strtolower(str_replace('.', '/', $url));
-        return in_array($url, $rules) ? true : false;
+        return in_array($url, $rules);
     }
 
     /**
@@ -394,7 +394,7 @@ class Auth
 
     /**
      * 获取会员组别规则列表
-     * @return array
+     * @return array|bool|\PDOStatement|string|\think\Collection
      */
     public function getRuleList()
     {
@@ -547,7 +547,7 @@ class Auth
             }
         }
         foreach ($datalist as $k => &$v) {
-            $v[$renderkey] = isset($list[$v[$fieldkey]]) ? $list[$v[$fieldkey]] : null;
+            $v[$renderkey] = $list[$v[$fieldkey]] ?? null;
         }
         unset($v);
         return $datalist;

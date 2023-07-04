@@ -32,8 +32,7 @@ class Sms
      */
     public static function get($mobile, $event = 'default')
     {
-        $sms = \app\common\model\Sms::
-        where(['mobile' => $mobile, 'event' => $event])
+        $sms = \app\common\model\Sms::where(['mobile' => $mobile, 'event' => $event])
             ->order('id', 'DESC')
             ->find();
         Hook::listen('sms_get', $sms, null, true);
@@ -78,7 +77,7 @@ class Sms
             'template' => $template
         ];
         $result = Hook::listen('sms_notice', $params, null, true);
-        return $result ? true : false;
+        return (bool)$result;
     }
 
     /**
@@ -125,8 +124,7 @@ class Sms
      */
     public static function flush($mobile, $event = 'default')
     {
-        \app\common\model\Sms::
-        where(['mobile' => $mobile, 'event' => $event])
+        \app\common\model\Sms::where(['mobile' => $mobile, 'event' => $event])
             ->delete();
         Hook::listen('sms_flush');
         return true;

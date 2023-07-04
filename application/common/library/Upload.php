@@ -15,7 +15,6 @@ use think\Hook;
  */
 class Upload
 {
-
     protected $merging = false;
 
     protected $chunkDir = null;
@@ -130,8 +129,8 @@ class Upload
             if (!$imgInfo || !isset($imgInfo[0]) || !isset($imgInfo[1])) {
                 throw new UploadException(__('Uploaded file is not a valid image'));
             }
-            $this->fileInfo['imagewidth'] = isset($imgInfo[0]) ? $imgInfo[0] : 0;
-            $this->fileInfo['imageheight'] = isset($imgInfo[1]) ? $imgInfo[1] : 0;
+            $this->fileInfo['imagewidth'] = $imgInfo[0] ?? 0;
+            $this->fileInfo['imageheight'] = $imgInfo[1] ?? 0;
             return true;
         } else {
             return !$force;
@@ -148,11 +147,13 @@ class Upload
         $size = $matches ? $matches[1] : $this->config['maxsize'];
         $type = $matches ? strtolower($matches[2]) : 'b';
         $typeDict = ['b' => 0, 'k' => 1, 'kb' => 1, 'm' => 2, 'mb' => 2, 'gb' => 3, 'g' => 3];
-        $size = (int)($size * pow(1024, isset($typeDict[$type]) ? $typeDict[$type] : 0));
+        $size = (int)($size * pow(1024, $typeDict[$type] ?? 0));
         if ($this->fileInfo['size'] > $size) {
-            throw new UploadException(__('File is too big (%sMiB), Max filesize: %sMiB.',
+            throw new UploadException(__(
+                'File is too big (%sMiB), Max filesize: %sMiB.',
                 round($this->fileInfo['size'] / pow(1024, 2), 2),
-                round($size / pow(1024, 2), 2)));
+                round($size / pow(1024, 2), 2)
+            ));
         }
     }
 
@@ -316,7 +317,6 @@ class Upload
      */
     public function chunk($chunkid, $chunkindex, $chunkcount, $chunkfilesize = null, $chunkfilename = null, $direct = false)
     {
-
         if ($this->fileInfo['type'] != 'application/octet-stream') {
             throw new UploadException(__('Uploaded file format is limited'));
         }

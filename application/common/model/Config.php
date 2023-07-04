@@ -115,8 +115,8 @@ class Config extends Model
             $data = $result;
         }
         $fieldarr = $valuearr = [];
-        $field = isset($data['field']) ? $data['field'] : (isset($data['key']) ? $data['key'] : []);
-        $value = isset($data['value']) ? $data['value'] : [];
+        $field = $data['field'] ?? ($data['key'] ?? []);
+        $value = $data['value'] ?? [];
         foreach ($field as $m => $n) {
             if ($n != '') {
                 $fieldarr[] = $field[$m];
@@ -175,7 +175,7 @@ class Config extends Model
         if (!preg_match("/^((?:[a-z]+:)?\/\/)(.*)/i", $uploadurl) && substr($uploadurl, 0, 1) !== '/') {
             $uploadurl = url($uploadurl, '', false);
         }
-        $uploadcfg['fullmode'] = isset($uploadcfg['fullmode']) && $uploadcfg['fullmode'] ? true : false;
+        $uploadcfg['fullmode'] = isset($uploadcfg['fullmode']) && $uploadcfg['fullmode'];
         $uploadcfg['thumbstyle'] = $uploadcfg['thumbstyle'] ?? '';
 
         $upload = [

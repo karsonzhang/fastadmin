@@ -100,7 +100,7 @@ class Menu
             if ($ids) {
                 //旧版本的菜单需要做删除处理
                 $config = Service::config($name);
-                $menus = isset($config['menus']) ? $config['menus'] : [];
+                $menus = $config['menus'] ?? [];
                 $where = ['id' => ['in', $ids]];
                 if ($menus) {
                     //必须是旧版本中的菜单,可排除用户自主创建的菜单
@@ -184,10 +184,10 @@ class Menu
         }
         $allow = array_flip(['file', 'name', 'title', 'url', 'icon', 'condition', 'remark', 'ismenu', 'menutype', 'extend', 'weigh']);
         foreach ($newMenu as $k => $v) {
-            $hasChild = isset($v['sublist']) && $v['sublist'] ? true : false;
+            $hasChild = isset($v['sublist']) && $v['sublist'];
             $data = array_intersect_key($v, $allow);
-            $data['ismenu'] = isset($data['ismenu']) ? $data['ismenu'] : ($hasChild ? 1 : 0);
-            $data['icon'] = isset($data['icon']) ? $data['icon'] : ($hasChild ? 'fa fa-list' : 'fa fa-circle-o');
+            $data['ismenu'] = $data['ismenu'] ?? ($hasChild ? 1 : 0);
+            $data['icon'] = $data['icon'] ?? ($hasChild ? 'fa fa-list' : 'fa fa-circle-o');
             $data['pid'] = $pid;
             $data['status'] = 'normal';
             if (!isset($oldMenu[$data['name']])) {

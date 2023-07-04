@@ -22,8 +22,8 @@ class Area extends Model
     {
         $namearr = [1 => 'geo:province', 2 => 'geo:city', 3 => 'geo:district'];
         $rangearr = [1 => 15000, 2 => 1000, 3 => 200];
-        $geoname = isset($namearr[$level]) ? $namearr[$level] : $namearr[3];
-        $georange = isset($rangearr[$level]) ? $rangearr[$level] : $rangearr[3];
+        $geoname = $namearr[$level] ?? $namearr[3];
+        $georange = $rangearr[$level] ?? $rangearr[3];
         // 读取范围内的ID
         $redis = Cache::store('redis')->handler();
         $georadiuslist = [];

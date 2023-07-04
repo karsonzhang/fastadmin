@@ -14,9 +14,9 @@ class Log extends AbstractLogger
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed   $level
-     * @param string  $message
-     * @param mixed[] $context
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
      *
      * @return void
      *

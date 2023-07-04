@@ -7,7 +7,7 @@ use think\Model;
 /**
  * 会员余额日志模型
  */
-class MoneyLog Extends Model
+class MoneyLog extends Model
 {
 
     // 表名

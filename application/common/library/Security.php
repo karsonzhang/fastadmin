@@ -16,7 +16,6 @@ use Exception;
  */
 class Security
 {
-
     protected static $instance = null;
 
     /**
@@ -420,7 +419,7 @@ class Security
      */
     public function get_random_bytes($length)
     {
-        if (empty($length) OR !ctype_digit((string)$length)) {
+        if (empty($length) or !ctype_digit((string)$length)) {
             return false;
         }
 
@@ -485,8 +484,8 @@ class Security
 
         static $_entities;
 
-        isset($charset) OR $charset = $this->charset;
-        isset($_entities) OR $_entities = array_map('strtolower', get_html_translation_table(HTML_ENTITIES, ENT_COMPAT | ENT_HTML5, $charset));
+        isset($charset) or $charset = $this->charset;
+        isset($_entities) or $_entities = array_map('strtolower', get_html_translation_table(HTML_ENTITIES, ENT_COMPAT | ENT_HTML5, $charset));
 
         do {
             $str_compare = $str;
@@ -698,7 +697,7 @@ class Security
                     // Is it indeed an "evil" attribute?
                     preg_match($is_evil_pattern, $attribute['name'][0])
                     // Or does it have an equals sign, but no value and not quoted? Strip that too!
-                    OR (trim($attribute['value'][0]) === '')
+                    or (trim($attribute['value'][0]) === '')
                 ) {
                     $attributes[] = 'xss=removed';
                 } else {
@@ -870,5 +869,4 @@ class Security
 
         return $str;
     }
-
 }

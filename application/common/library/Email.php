@@ -60,7 +60,7 @@ class Email
         }
         $this->options = array_merge($this->options, $options);
         $secureArr = [0 => '', 1 => 'tls', 2 => 'ssl'];
-        $secure = isset($secureArr[$this->options['mail_verify_type']]) ? $secureArr[$this->options['mail_verify_type']] : '';
+        $secure = $secureArr[$this->options['mail_verify_type']] ?? '';
 
         $logger = isset($this->options['debug']) && $this->options['debug'] ? new Log : null;
         $this->mail = new Mailer($logger);
@@ -217,8 +217,8 @@ class Email
                 $this->setError($e->getCode() . $e->getMessage());
             } catch (CodeException $e) {
                 preg_match_all("/Expected: (\d+)\, Got: (\d+)( \| (.*))?\$/i", $e->getMessage(), $matches);
-                $code = isset($matches[2][3]) ? $matches[2][3] : 0;
-                $message = isset($matches[2][0]) ? $matches[4][0] : $e->getMessage();
+                $code = $matches[2][0] ?? 0;
+                $message = isset($matches[2][0]) && isset($matches[4][0]) ? $matches[4][0] : $e->getMessage();
                 $message = mb_convert_encoding($message, 'UTF-8', 'GBK,GB2312,BIG5');
                 $this->setError($message);
             } catch (\Exception $e) {
