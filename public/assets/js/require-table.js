@@ -559,11 +559,20 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         $(".autocontent-caret", this).remove();
                     }
                 });
-                table.on("click", ".autocontent-caret", function () {
+                table.on("click mouseenter", ".autocontent-caret", function (e) {
+                    var hover = $(this).prev().hasClass("autocontent-hover");
+                    if (!hover && e.type === 'mouseenter') {
+                        return;
+                    }
                     var text = $(this).prev().text();
                     var tdrect = $(this).parent().get(0).getBoundingClientRect();
                     var index = Layer.open({id: 'autocontent', skin: 'layui-layer-fast layui-layer-autocontent', title: false, content: text, btn: false, anim: false, shade: 0, isOutAnim: false, area: 'auto', maxWidth: 450, maxHeight: 350, offset: [tdrect.y, tdrect.x]});
 
+                    if (hover) {
+                        $(document).one("mouseleave", "#layui-layer" + index, function () {
+                            Layer.close(index);
+                        });
+                    }
                     var mousedown = function (e) {
                         if ($(e.target).closest(".layui-layer").length === 0) {
                             Layer.close(index);
@@ -754,7 +763,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 },
                 content: function (value, row, index) {
                     var width = this.width != undefined ? (this.width.toString().match(/^\d+$/) ? this.width + "px" : this.width) : "250px";
-                    return "<div class='autocontent-item' style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:" + width + ";'>" + value + "</div>";
+                    var hover = this.hover != undefined && this.hover ? "autocontent-hover" : "";
+                    return "<div class='autocontent-item " + hover + "' style='white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:" + width + ";'>" + value + "</div>";
                 },
                 status: function (value, row, index) {
                     var custom = {normal: 'success', hidden: 'gray', deleted: 'danger', locked: 'info'};

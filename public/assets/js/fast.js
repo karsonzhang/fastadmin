@@ -103,7 +103,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
             //获取修复后可访问的cdn链接
             cdnurl: function (url, domain) {
                 var rule = new RegExp("^((?:[a-z]+:)?\\/\\/|data:image\\/)", "i");
-                if(typeof domain === 'undefined'){
+                if(typeof domain === 'undefined' || domain === true){
                     var cdnurl = Config.upload.cdnurl;
                     url = rule.test(url) || (cdnurl && url.indexOf(cdnurl) === 0) ? url : cdnurl + url;
                 }
