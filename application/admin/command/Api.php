@@ -98,13 +98,13 @@ class Api extends Command
             foreach ($files as $name => $file) {
                 if (!$file->isDir() && $file->getExtension() == 'php') {
                     $filePath = $file->getRealPath();
-                    $classes[] = $this->get_class_from_file($filePath);
+                    $classes[] = $this->getClassFromFile($filePath);
                 }
             }
         } else {
             foreach ($controller as $index => $item) {
                 $filePath = $moduleDir . Config::get('url_controller_layer') . DS . $item . '.php';
-                $classes[] = $this->get_class_from_file($filePath);
+                $classes[] = $this->getClassFromFile($filePath);
             }
         }
 
@@ -129,67 +129,61 @@ class Api extends Command
     }
 
     /**
-     * get full qualified class name
+     * 从文件获取命名空间和类名
      *
-     * @param string $path_to_file
+     * @param string $filename
      * @return string
-     * @author JBYRNE http://jarretbyrne.com/2015/06/197/
      */
-    protected function get_class_from_file($path_to_file)
+    protected function getClassFromFile($filename)
     {
-        //Grab the contents of the file
-        $contents = file_get_contents($path_to_file);
-
-        //Start with a blank namespace and class
-        $namespace = $class = "";
-
-        //Set helper values to know that we have found the namespace/class token and need to collect the string values after them
-        $getting_namespace = $getting_class = false;
-
-        //Go through each token and evaluate it as necessary
-        foreach (token_get_all($contents) as $token) {
-
-            //If this token is the namespace declaring, then flag that the next tokens will be the namespace name
-            if (is_array($token) && $token[0] == T_NAMESPACE) {
-                $getting_namespace = true;
-            }
-
-            //If this token is the class declaring, then flag that the next tokens will be the class name
-            if (is_array($token) && $token[0] == T_CLASS) {
-                $getting_class = true;
-            }
-
-            //While we're grabbing the namespace name...
-            if ($getting_namespace === true) {
-
-                //If the token is a string or the namespace separator...
-                if (is_array($token) && in_array($token[0], [T_STRING, T_NS_SEPARATOR])) {
-
-                    //Append the token's value to the name of the namespace
-                    $namespace .= $token[1];
-                } elseif ($token === ';') {
-
-                    //If the token is the semicolon, then we're done with the namespace declaration
-                    $getting_namespace = false;
-                }
-            }
-
-            //While we're grabbing the class name...
-            if ($getting_class === true) {
-
-                //If the token is a string, it's the name of the class
-                if (is_array($token) && $token[0] == T_STRING) {
-
-                    //Store the token's value as the class name
-                    $class = $token[1];
-
-                    //Got what we need, stope here
-                    break;
+        $getNext = null;
+        $isNamespace = false;
+        $skipNext = false;
+        $namespace = '';
+        $class = '';
+        foreach (\PhpToken::tokenize(file_get_contents($filename)) as $token) {
+            if (!$token->isIgnorable()) {
+                $name = $token->getTokenName();
+                switch ($name) {
+                    case 'T_NAMESPACE':
+                        $isNamespace = true;
+                        break;
+                    case 'T_EXTENDS':
+                    case 'T_USE':
+                    case 'T_IMPLEMENTS':
+                        $skipNext = true;
+                        break;
+                    case 'T_CLASS':
+                        if ($skipNext) {
+                            $skipNext = false;
+                        } else {
+                            $getNext = strtolower(substr($name, 2));
+                        }
+                        break;
+                    case 'T_NAME_QUALIFIED':
+                    case 'T_NS_SEPARATOR':
+                    case 'T_STRING':
+                    case ';':
+                        if ($isNamespace) {
+                            if ($name == ';') {
+                                $isNamespace = false;
+                            } else {
+                                $namespace .= $token->text;
+                            }
+                        } elseif ($skipNext) {
+                            $skipNext = false;
+                        } elseif ($getNext == 'class') {
+                            $class = $token->text;
+                            $getNext = null;
+                            break 2;
+                        }
+                        break;
+                    default:
+                        $getNext = null;
                 }
             }
         }
 
-        //Build the fully-qualified class name and return it
-        return $namespace ? $namespace . '\\' . $class : $class;
+        return $namespace . '\\' . $class;
     }
 }
