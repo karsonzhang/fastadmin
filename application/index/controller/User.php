@@ -251,7 +251,6 @@ class User extends Frontend
             $result = $validate->check($data);
             if (!$result) {
                 $this->error(__($validate->getError()), null, ['token' => $this->request->token()]);
-                return false;
             }
 
             $ret = $this->auth->changepwd($newpassword, $oldpassword);
