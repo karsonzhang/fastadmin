@@ -297,6 +297,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                     Fast.api.ajax({
                         url: Config.api_url + '/user/logintpl',
                         type: 'post',
+                        loading: false,
                         data: {
                             version: Config.faversion,
                             sid: Controller.api.sid()
@@ -306,7 +307,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                             content: Template.render(tpldata, {}),
                             zIndex: 99,
                             area: area,
-                            title: __('Login FastAdmin'),
+                            title: __('Login'),
                             resize: false,
                             btn: [__('Login')],
                             yes: function (index, layero) {
@@ -608,16 +609,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                 var uid = userinfo ? userinfo.id : 0;
 
                 if (parseInt(uid) === 0) {
-                    return Layer.alert(__('Not login tips'), {
-                        title: __('Warning'),
-                        btn: [__('Login now')],
-                        yes: function (index, layero) {
-                            $(".btn-userinfo").trigger("click", name, version);
-                        },
-                        btn2: function () {
-                            install(name, version, false);
-                        }
-                    });
+                    $(".btn-userinfo").trigger("click", name, version);
+                    return false;
                 }
                 install(name, version, false);
             });

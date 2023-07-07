@@ -398,6 +398,11 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             });
                         }
                         if (input_id) {
+                            $("#" + input_id).closest("form").on("reset", function () {
+                                setTimeout($.proxy(function () {
+                                    $("#" + input_id, this).trigger("change");
+                                }, this), 0);
+                            });
                             //粘贴上传、拖拽上传
                             $("body").on('paste drop', "#" + input_id, function (event) {
                                 var originEvent = event.originalEvent;

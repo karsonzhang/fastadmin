@@ -147,7 +147,7 @@ class Upload
         $size = $matches ? $matches[1] : $this->config['maxsize'];
         $type = $matches ? strtolower($matches[2]) : 'b';
         $typeDict = ['b' => 0, 'k' => 1, 'kb' => 1, 'm' => 2, 'mb' => 2, 'gb' => 3, 'g' => 3];
-        $size = (int)($size * pow(1024, $typeDict[$type] ?? 0));
+        $size = $size * pow(1024, $typeDict[$type] ?? 0);
         if ($this->fileInfo['size'] > $size) {
             throw new UploadException(__(
                 'File is too big (%sMiB), Max filesize: %sMiB.',

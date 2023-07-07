@@ -62,7 +62,7 @@ require.config({
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-export': {
-            deps: ['bootstrap-table', 'tableexport'],
+            deps: ['bootstrap-table'],
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-fixed-columns': {

@@ -274,6 +274,15 @@
         },
 
         /**
+         * reset the items
+         */
+        reset: function () {
+            var val = this.$element.val();
+            this.removeAll();
+            this.add(val);
+        },
+
+        /**
          * Returns the items added as tags
          */
         items: function () {

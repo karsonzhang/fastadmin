@@ -6,7 +6,7 @@ require.config({
         main: 'moment'
     }],
     //在打包压缩时将会把include中的模块合并到主文件中
-    include: ['css', 'layer', 'toastr', 'fast', 'backend', 'backend-init', 'table', 'form', 'dragsort', 'addtabs', 'selectpage'],
+    include: ['css', 'layer', 'toastr', 'fast', 'backend', 'backend-init', 'table', 'form', 'dragsort', 'addtabs', 'selectpage', 'bootstrap-daterangepicker'],
     paths: {
         'lang': "empty:",
         'form': 'require-form',
@@ -63,7 +63,7 @@ require.config({
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-export': {
-            deps: ['bootstrap-table', 'tableexport'],
+            deps: ['bootstrap-table'],
             exports: '$.fn.bootstrapTable.defaults'
         },
         'bootstrap-table-fixed-columns': {
