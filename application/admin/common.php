@@ -39,7 +39,7 @@ if (!function_exists('build_radios')) {
         $selected = is_null($selected) ? key($list) : $selected;
         $selected = is_array($selected) ? $selected : explode(',', $selected);
         foreach ($list as $k => $v) {
-            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::radio($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
+            $html[] = sprintf(Form::label("{$name}-{$k}", "%s " . str_replace('%', '%%', $v)), Form::radio($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
         }
         return '<div class="radio">' . implode(' ', $html) . '</div>';
     }
@@ -60,7 +60,7 @@ if (!function_exists('build_checkboxs')) {
         $selected = is_null($selected) ? [] : $selected;
         $selected = is_array($selected) ? $selected : explode(',', $selected);
         foreach ($list as $k => $v) {
-            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
+            $html[] = sprintf(Form::label("{$name}-{$k}", "%s " . str_replace('%', '%%', $v)), Form::checkbox($name, $k, in_array($k, $selected), ['id' => "{$name}-{$k}"]));
         }
         return '<div class="checkbox">' . implode(' ', $html) . '</div>';
     }

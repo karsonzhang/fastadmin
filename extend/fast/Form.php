@@ -870,7 +870,7 @@ EOD;
         $checked = is_array($checked) ? $checked : explode(',', $checked);
         foreach ($list as $k => $v) {
             $options['id'] = "{$name}-{$k}";
-            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::checkbox("{$name}[{$k}]", $k, in_array($k, $checked), $options));
+            $html[] = sprintf(Form::label("{$name}-{$k}", "%s " . str_replace('%', '%%', $v)), Form::checkbox("{$name}[{$k}]", $k, in_array($k, $checked), $options));
         }
         return '<div class="checkbox">' . implode(' ', $html) . '</div>';
     }
@@ -913,7 +913,7 @@ EOD;
         $checked = is_array($checked) ? $checked : explode(',', $checked);
         foreach ($list as $k => $v) {
             $options['id'] = "{$name}-{$k}";
-            $html[] = sprintf(Form::label("{$name}-{$k}", "%s {$v}"), Form::radio($name, $k, in_array($k, $checked), $options));
+            $html[] = sprintf(Form::label("{$name}-{$k}", "%s " . str_replace('%', '%%', $v)), Form::radio($name, $k, in_array($k, $checked), $options));
         }
         return '<div class="radio">' . implode(' ', $html) . '</div>';
     }
@@ -1002,8 +1002,8 @@ EOD;
     {
         $domname = str_replace(['[', ']', '.'], '', $name);
         $options = [
-            'id'            => "plupload-{$domname}",
-            'class'         => "btn btn-danger plupload",
+            'id'            => "faupload-{$domname}",
+            'class'         => "btn btn-danger faupload",
             'data-input-id' => "c-{$domname}",
         ];
         $upload = $uploadAttr === false ? false : true;
@@ -1023,7 +1023,7 @@ EOD;
         }
         $chooseBtn = $choose ? $this->button('<i class="fa fa-list"></i> ' . __('Choose'), array_merge($options, $chooseAttr)) : '';
         $previewAttrHtml = $this->attributes($previewAttr);
-        $previewArea = $preview ? '<ul class="row list-inline plupload-preview" id="p-' . $domname . '" ' . $previewAttrHtml . '></ul>' : '';
+        $previewArea = $preview ? '<ul class="row list-inline faupload-preview" id="p-' . $domname . '" ' . $previewAttrHtml . '></ul>' : '';
         $input = $this->text($name, $value, array_merge(['size' => 50, 'id' => "c-{$domname}"], $inputAttr));
         $html = <<<EOD
 <div class="input-group">
