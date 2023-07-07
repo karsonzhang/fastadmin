@@ -931,7 +931,6 @@ class Crud extends Command
                                     }
                                 }
                             } catch (\Exception $e) {
-
                             }
                             if (!$selectpageField) {
                                 foreach ($this->fieldSelectpageMap as $m => $n) {
@@ -993,7 +992,7 @@ class Crud extends Command
                     }
                     if (!$fields || in_array($field, explode(',', $fields))) {
                         //构造JS列信息
-                        $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '', $itemArr);
+                        $javascriptList[] = $this->getJsColumn($field, $v['DATA_TYPE'], $inputType && in_array($inputType, ['select', 'checkbox', 'radio']) ? '_text' : '', $itemArr, $v);
                     }
                     if ($this->headingFilterField && $this->headingFilterField == $field && $itemArr) {
                         $headingHtml = $this->getReplacedStub('html/heading-html', ['field' => $field, 'fieldName' => Loader::parseName($field, 1, false)]);
@@ -1048,7 +1047,7 @@ class Crud extends Command
                     //过滤text类型字段
                     if ($v['DATA_TYPE'] != 'text') {
                         //构造JS列信息
-                        $javascriptList[] = $this->getJsColumn($relationField, $v['DATA_TYPE']);
+                        $javascriptList[] = $this->getJsColumn($relationField, $v['DATA_TYPE'], '', [], $v);
                     }
                 }
             }
@@ -1699,9 +1698,10 @@ EOD;
      * @param string $datatype
      * @param string $extend
      * @param array  $itemArr
+     * @param array  $fieldConfig
      * @return string
      */
-    protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [])
+    protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [], $fieldConfig)
     {
         $lang = mb_ucfirst($field);
         $formatter = '';
@@ -1739,7 +1739,7 @@ EOD;
         $noSearchFiles = ['file$', 'files$', 'image$', 'images$', '^weigh$'];
         if (preg_match("/" . implode('|', $noSearchFiles) . "/i", $field)) {
             $html .= ", operate: false";
-        } else if (in_array($datatype, ['varchar'])) {
+        } elseif (in_array($datatype, ['varchar'])) {
             $html .= ", operate: 'LIKE'";
         }
 
@@ -1750,6 +1750,10 @@ EOD;
         }
         if (in_array($datatype, ['set'])) {
             $html .= ", operate:'FIND_IN_SET'";
+        }
+        if (isset($fieldConfig['CHARACTER_MAXIMUM_LENGTH']) && $fieldConfig['CHARACTER_MAXIMUM_LENGTH'] >= 255 && in_array($datatype, ['varchar']) && !$formatter) {
+            $formatter = 'content';
+            $html .= ", table: table, class: 'autocontent'";
         }
         if (in_array($formatter, ['image', 'images'])) {
             $html .= ", events: Table.api.events.image";
