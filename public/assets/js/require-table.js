@@ -332,6 +332,16 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     }
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !options.selectedIds.length);
                 });
+                // 提交通用搜索时判断是否和Tabs筛选一致
+                table.on('common-search.bs.table', function (e, setting, query) {
+                    var tabs = $('.panel-heading [data-field]', table.closest(".panel-intro"));
+                    var field = tabs.data("field");
+                    var value = $("li.active > a", tabs).data("value");
+                    if (query.filter && typeof query.filter[field] !== 'undefined' && query.filter[field] != value) {
+                        $("li", tabs).removeClass("active");
+                        $("li > a[data-value='" + query.filter[field] + "']", tabs).parent().addClass("active");
+                    }
+                });
                 // 绑定TAB事件
                 $('.panel-heading [data-field] a[data-toggle="tab"]', table.closest(".panel-intro")).on('shown.bs.tab', function (e) {
                     var field = $(this).closest("[data-field]").data("field");
