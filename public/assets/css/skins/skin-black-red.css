@@ -198,6 +198,11 @@
   background: transparent;
   border-left-color: transparent;
 }
+.skin-black-red .sidebar-menu li.treeview.active > a,
+.skin-black-red .sidebar-menu li.treeview.treeview-open > a {
+  background-color: #181f23;
+  border-left-color: #181f23;
+}
 .skin-black-red .sidebar-menu .treeview-menu {
   padding-left: 0;
 }

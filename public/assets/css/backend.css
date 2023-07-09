@@ -1522,6 +1522,14 @@ table.table-nowrap thead > tr > th {
   border-bottom: 1px solid #eee;
   border-radius: 0;
 }
+.sidebar-menu li.active > a > .fa-angle-left,
+.sidebar-menu li.active > a > .pull-right-container > .fa-angle-left {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
 .sidebar-menu li.treeview-open > a > .fa-angle-left,
 .sidebar-menu li.treeview-open > a > .pull-right-container > .fa-angle-left {
   -webkit-transform: rotate(-90deg);

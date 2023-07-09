@@ -67,6 +67,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 var visible = nextul.is(":visible");
                 if (nextul.length == 0) {
                     $(this).parents("li").addClass("active");
+                    $(this).closest(".treeview").addClass("treeview-open");
                 } else {
                 }
                 e.stopPropagation();

@@ -2481,6 +2481,11 @@
   background: transparent;
   border-left-color: transparent;
 }
+.skin-black-blue .sidebar-menu li.treeview.active > a,
+.skin-black-blue .sidebar-menu li.treeview.treeview-open > a {
+  background-color: #555299;
+  border-left-color: #555299;
+}
 .skin-black-blue .sidebar-menu .treeview-menu {
   padding-left: 0;
 }
@@ -2716,6 +2721,11 @@
 .skin-black-purple .sidebar-menu li.treeview > a {
   background: transparent;
   border-left-color: transparent;
+}
+.skin-black-purple .sidebar-menu li.treeview.active > a,
+.skin-black-purple .sidebar-menu li.treeview.treeview-open > a {
+  background-color: #555299;
+  border-left-color: #555299;
 }
 .skin-black-purple .sidebar-menu .treeview-menu {
   padding-left: 0;
@@ -2953,6 +2963,11 @@
   background: transparent;
   border-left-color: transparent;
 }
+.skin-black-green .sidebar-menu li.treeview.active > a,
+.skin-black-green .sidebar-menu li.treeview.treeview-open > a {
+  background-color: #555299;
+  border-left-color: #555299;
+}
 .skin-black-green .sidebar-menu .treeview-menu {
   padding-left: 0;
 }
@@ -3188,6 +3203,11 @@
 .skin-black-red .sidebar-menu li.treeview > a {
   background: transparent;
   border-left-color: transparent;
+}
+.skin-black-red .sidebar-menu li.treeview.active > a,
+.skin-black-red .sidebar-menu li.treeview.treeview-open > a {
+  background-color: #555299;
+  border-left-color: #555299;
 }
 .skin-black-red .sidebar-menu .treeview-menu {
   padding-left: 0;
@@ -3425,6 +3445,11 @@
   background: transparent;
   border-left-color: transparent;
 }
+.skin-black-yellow .sidebar-menu li.treeview.active > a,
+.skin-black-yellow .sidebar-menu li.treeview.treeview-open > a {
+  background-color: #555299;
+  border-left-color: #555299;
+}
 .skin-black-yellow .sidebar-menu .treeview-menu {
   padding-left: 0;
 }
@@ -3660,6 +3685,11 @@
 .skin-black-pink .sidebar-menu li.treeview > a {
   background: transparent;
   border-left-color: transparent;
+}
+.skin-black-pink .sidebar-menu li.treeview.active > a,
+.skin-black-pink .sidebar-menu li.treeview.treeview-open > a {
+  background-color: #555299;
+  border-left-color: #555299;
 }
 .skin-black-pink .sidebar-menu .treeview-menu {
   padding-left: 0;

@@ -99,6 +99,13 @@
             border-left-color: transparent;
         }
 
+        li.treeview {
+            &.active > a,&.treeview-open > a {
+                background-color: @sidebar-dark-submenu-bg;
+                border-left-color: @sidebar-dark-submenu-bg;
+            }
+        }
+
         .treeview-menu {
             padding-left: 0;
 
