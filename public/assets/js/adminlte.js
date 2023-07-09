@@ -468,7 +468,7 @@ function _init() {
                         //Fix the layout in case the sidebar stretches over the height of the window
                         //_this.layout.fix();
                     });
-                    checkElement.parent("li").removeClass("active");
+                    // checkElement.parent("li").removeClass("active");
                     checkElement.parent("li").removeClass('treeview-open');
                 }
                 //If the menu is not visible
