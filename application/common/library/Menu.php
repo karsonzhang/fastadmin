@@ -182,14 +182,14 @@ class Menu
         } else {
             $pid = $parent;
         }
-        $allow = array_flip(['file', 'name', 'title', 'url', 'icon', 'condition', 'remark', 'ismenu', 'menutype', 'extend', 'weigh']);
+        $allow = array_flip(['file', 'name', 'title', 'url', 'icon', 'condition', 'remark', 'ismenu', 'menutype', 'extend', 'weigh', 'status']);
         foreach ($newMenu as $k => $v) {
             $hasChild = isset($v['sublist']) && $v['sublist'];
             $data = array_intersect_key($v, $allow);
             $data['ismenu'] = $data['ismenu'] ?? ($hasChild ? 1 : 0);
             $data['icon'] = $data['icon'] ?? ($hasChild ? 'fa fa-list' : 'fa fa-circle-o');
             $data['pid'] = $pid;
-            $data['status'] = 'normal';
+            $data['status'] = $data['status'] ?? 'normal';
             if (!isset($oldMenu[$data['name']])) {
                 $menu = AuthRule::create($data);
             } else {

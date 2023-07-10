@@ -1701,7 +1701,7 @@ EOD;
      * @param array  $fieldConfig
      * @return string
      */
-    protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [], $fieldConfig)
+    protected function getJsColumn($field, $datatype = '', $extend = '', $itemArr = [], $fieldConfig = [])
     {
         $lang = mb_ucfirst($field);
         $formatter = '';

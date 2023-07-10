@@ -276,8 +276,8 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         };
 
                         $(Table.config.checkboxtd, table).on("mousedown", function (e) {
-                            //禁止鼠标右键事件
-                            if (e.button === 2) {
+                            //禁止鼠标右键事件和文本框
+                            if (e.button === 2 || $(e.target).is("input")) {
                                 return false;
                             }
                             posx = e.pageX;
