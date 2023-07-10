@@ -71,7 +71,7 @@ class User extends Frontend
         }
         if ($this->request->isPost()) {
             $username = $this->request->post('username');
-            $password = $this->request->post('password');
+            $password = $this->request->post('password', '', null);
             $email = $this->request->post('email');
             $mobile = $this->request->post('mobile', '');
             $captcha = $this->request->post('captcha');
@@ -149,7 +149,7 @@ class User extends Frontend
         }
         if ($this->request->isPost()) {
             $account = $this->request->post('account');
-            $password = $this->request->post('password');
+            $password = $this->request->post('password', '', null);
             $keeplogin = (int)$this->request->post('keeplogin');
             $token = $this->request->post('__token__');
             $rule = [
@@ -222,9 +222,9 @@ class User extends Frontend
     public function changepwd()
     {
         if ($this->request->isPost()) {
-            $oldpassword = $this->request->post("oldpassword");
-            $newpassword = $this->request->post("newpassword");
-            $renewpassword = $this->request->post("renewpassword");
+            $oldpassword = $this->request->post("oldpassword", '', null);
+            $newpassword = $this->request->post("newpassword", '', null);
+            $renewpassword = $this->request->post("renewpassword", '', null);
             $token = $this->request->post('__token__');
             $rule = [
                 'oldpassword'   => 'require|regex:\S{6,30}',

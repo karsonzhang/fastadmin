@@ -74,7 +74,7 @@ class Index extends Backend
         $keeyloginhours = 24;
         if ($this->request->isPost()) {
             $username = $this->request->post('username');
-            $password = $this->request->post('password');
+            $password = $this->request->post('password', '', null);
             $keeplogin = $this->request->post('keeplogin');
             $token = $this->request->post('__token__');
             $rule = [
