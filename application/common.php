@@ -428,7 +428,7 @@ if (!function_exists('check_cors_request')) {
      */
     function check_cors_request()
     {
-        if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN']) {
+        if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] && config('fastadmin.cors_request_domain')) {
             $info = parse_url($_SERVER['HTTP_ORIGIN']);
             $domainArr = explode(',', config('fastadmin.cors_request_domain'));
             $domainArr[] = request()->host(true);
