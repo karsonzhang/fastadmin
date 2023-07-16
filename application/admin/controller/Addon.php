@@ -319,8 +319,8 @@ class Addon extends Backend
     {
         $offset = (int)$this->request->get("offset");
         $limit = (int)$this->request->get("limit");
-        $filter = $this->request->get("filter");
-        $search = $this->request->get("search");
+        $filter = $this->request->get("filter") ?? '';
+        $search = $this->request->get("search") ?? '';
         $search = htmlspecialchars(strip_tags($search));
         $onlineaddons = $this->getAddonList();
         $filter = (array)json_decode($filter, true);
