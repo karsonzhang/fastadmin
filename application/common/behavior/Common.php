@@ -63,7 +63,7 @@ class Common
         }
         // 切换多语言
         if (Config::get('lang_switch_on')) {
-            $lang = $request->get('lang');
+            $lang = $request->get('lang', '');
             if (preg_match("/^([a-zA-Z\-_]{2,10})\$/i", $lang)) {
                 \think\Cookie::set('think_var', $lang);
             }
