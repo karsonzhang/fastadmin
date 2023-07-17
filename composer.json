@@ -17,7 +17,7 @@
     "require": {
         "php": ">=7.2.0",
         "topthink/framework": "dev-master",
-        "topthink/think-captcha": "^1.0",
+        "topthink/think-captcha": "^1.0.9",
         "topthink/think-installer": "^1.0.14",
         "topthink/think-queue": "1.1.6",
         "topthink/think-helper": "^1.0.7",
@@ -39,6 +39,10 @@
         {
             "type": "git",
             "url": "https://gitee.com/fastadminnet/framework.git"
+        },
+        {
+            "type": "git",
+            "url": "https://gitee.com/fastadminnet/think-captcha.git"
         }
     ]
 }
