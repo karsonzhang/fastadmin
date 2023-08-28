@@ -40,7 +40,7 @@ if (!function_exists('format_bytes')) {
     function format_bytes($size, $delimiter = '', $precision = 2)
     {
         $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
-        for ($i = 0; $size >= 1024 && $i < 6; $i++) {
+        for ($i = 0; $size >= 1024 && $i < 5; $i++) {
             $size /= 1024;
         }
         return round($size, $precision) . $delimiter . $units[$i];
