@@ -37,6 +37,12 @@ class Ems extends Api
         if ($last && time() - $last['createtime'] < 60) {
             $this->error(__('发送频繁'));
         }
+
+        $ipSendTotal = \app\common\model\Ems::where(['ip' => $this->request->ip()])->whereTime('createtime', '-1 hours')->count();
+        if ($ipSendTotal >= 5) {
+            $this->error(__('发送频繁'));
+        }
+
         if ($event) {
             $userinfo = User::getByEmail($email);
             if ($event == 'register' && $userinfo) {
