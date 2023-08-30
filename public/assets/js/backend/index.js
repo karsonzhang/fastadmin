@@ -333,11 +333,13 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
 
             // 切换菜单栏
             $(document).on("click", ".sidebar-toggle", function () {
-                var value = $("body").hasClass("sidebar-collapse") ? 1 : 0;
-                setTimeout(function () {
-                    $(window).trigger("resize");
-                }, 300);
-                createCookie('sidebar_collapse', value);
+                setTimeout(function(){
+                    var value = $("body").hasClass("sidebar-collapse") ? 1 : 0;
+                    setTimeout(function () {
+                        $(window).trigger("resize");
+                    }, 300);
+                    createCookie('sidebar_collapse', value);
+                }, 0);
             });
 
             // 切换多级菜单
