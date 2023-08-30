@@ -520,7 +520,7 @@ if (!function_exists('check_url_allowed')) {
         }
 
         //如果是站外链接则需要判断HOST是否允许
-        if (preg_match("/((http[s]?:\/\/)+(?>[a-z\-0-9]{2,}\.){1,}[a-z]{2,8})(?:\s|\/)/i", $url)) {
+        if (preg_match("/((http[s]?:\/\/)+((?>[a-z\-0-9]{2,}\.)+[a-z]{2,8}|((?>([0-9]{1,3}\.)){3}[0-9]{1,3}))(:[0-9]{1,5})?)(?:\s|\/)/i", $url)) {
             $chkHost = parse_url(strtolower($url), PHP_URL_HOST);
             if ($chkHost && in_array($chkHost, $allowedHostArr)) {
                 return true;
