@@ -137,6 +137,8 @@ class Common extends Api
                 $attachment = $upload->upload();
             } catch (UploadException $e) {
                 $this->error($e->getMessage());
+            } catch (\Exception $e) {
+                $this->error($e->getMessage());
             }
 
             $this->success(__('Uploaded successful'), ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
