@@ -118,6 +118,8 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 if (!url) {
                     url = window.location.href;
                 }
+                if (!name)
+                    return '';
                 name = name.replace(/[\[\]]/g, "\\$&");
                 var regex = new RegExp("[?&/]" + name + "([=/]([^&#/?]*)|&|#|$)"),
                     results = regex.exec(url);

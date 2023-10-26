@@ -603,7 +603,10 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
 
                 //追加上忽略元素
                 setTimeout(function () {
-                    form.data('validator').options.ignore += ((form.data('validator').options.ignore ? ',' : '') + '[data-favisible] :hidden,[data-favisible]:hidden');
+                    var validator = form.data('validator');
+                    if (validator) {
+                        validator.options.ignore += ((validator.options.ignore ? ',' : '') + '[data-favisible] :hidden,[data-favisible]:hidden');
+                    }
                 }, 0);
 
                 $("input,select", form).trigger("configchange");

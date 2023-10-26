@@ -61,7 +61,7 @@
         htmlForm.push('<div class="row">');
         for (var i in pColumns) {
             var vObjCol = pColumns[i];
-            if (!vObjCol.checkbox && vObjCol.field !== 'operate' && vObjCol.searchable && vObjCol.operate !== false) {
+            if (!vObjCol.checkbox && !vObjCol.radio && vObjCol.field && vObjCol.field !== 'operate' && vObjCol.searchable && vObjCol.operate !== false) {
                 var query = Fast.api.query(vObjCol.field);
                 var operate = Fast.api.query(vObjCol.field + "-operate");
 
