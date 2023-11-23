@@ -133,6 +133,10 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                 url = Fast.api.fixurl(url);
                 url = url + (url.indexOf("?") > -1 ? "&" : "?") + "dialog=1";
                 var area = Fast.config.openArea != undefined ? Fast.config.openArea : [$(window).width() > 800 ? '800px' : '95%', $(window).height() > 600 ? '600px' : '95%'];
+                var success = options && typeof options.success === 'function' ? options.success : $.noop;
+                if (options && typeof options.success === 'function') {
+                    delete options.success;
+                }
                 options = $.extend({
                     type: 2,
                     title: title,
@@ -186,6 +190,7 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                                 height: $(window).height()
                             });
                         }
+                        success.call(this, layero, index);
                     }
                 }, options ? options : {});
                 if ($(window).width() < 480 || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream && top.$(".tab-pane.active").length > 0)) {

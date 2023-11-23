@@ -504,6 +504,39 @@ define(['jquery', 'bootstrap'], function ($, undefined) {
                         }
                     );
                 });
+                table.on("mouseenter mouseleave", ".autocontent", function (e) {
+                    var target = $(".autocontent-item", this).get(0);
+                    if (!target) return;
+                    if (e.type === 'mouseenter') {
+                        if (target.scrollWidth > target.offsetWidth && $(".autocontent-caret", this).length === 0) {
+                            $(this).append("<div class='autocontent-caret'><i class='fa fa-chevron-down'></div>");
+                        }
+                    } else {
+                        $(".autocontent-caret", this).remove();
+                    }
+                });
+                table.on("click mouseenter", ".autocontent-caret", function (e) {
+                    var hover = $(this).prev().hasClass("autocontent-hover");
+                    if (!hover && e.type === 'mouseenter') {
+                        return;
+                    }
+                    var text = $(this).prev().text();
+                    var tdrect = $(this).parent().get(0).getBoundingClientRect();
+                    var index = Layer.open({id: 'autocontent', skin: 'layui-layer-fast layui-layer-autocontent', title: false, content: text, btn: false, anim: false, shade: 0, isOutAnim: false, area: 'auto', maxWidth: 450, maxHeight: 350, offset: [tdrect.y, tdrect.x]});
+
+                    if (hover) {
+                        $(document).one("mouseleave", "#layui-layer" + index, function () {
+                            Layer.close(index);
+                        });
+                    }
+                    var mousedown = function (e) {
+                        if ($(e.target).closest(".layui-layer").length === 0) {
+                            Layer.close(index);
+                            $(document).off("mousedown", mousedown);
+                        }
+                    };
+                    $(document).off("mousedown", mousedown).on("mousedown", mousedown);
+                });
 
                 //修复dropdown定位溢出的情况
                 if (options.fixDropdownPosition) {

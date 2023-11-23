@@ -156,7 +156,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                             title: __('Operate'),
                             table: table,
                             formatter: Controller.api.formatter.operate,
-                            align: 'right'
+                            align: 'right',
+                            cellStyle: function (value, row, index) {
+                                return {css: {'min-width': '158px'}};
+                            }
                         },
                     ]
                 ],
