@@ -163,7 +163,7 @@ class Api extends Command
             if ($getting_namespace === true) {
 
                 //If the token is a string or the namespace separator...
-                if (is_array($token) && in_array($token[0], [T_STRING, T_NS_SEPARATOR])) {
+                if (is_array($token) && in_array($token[0], version_compare(PHP_VERSION, '8.0.0', '<') ? [T_STRING, T_NS_SEPARATOR] : [T_NAME_QUALIFIED])) {
 
                     //Append the token's value to the name of the namespace
                     $namespace .= $token[1];

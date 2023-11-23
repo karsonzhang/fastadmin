@@ -11,7 +11,7 @@ if (!function_exists('__')) {
     /**
      * 获取语言变量值
      * @param string $name 语言变量名
-     * @param array  $vars 动态变量值
+     * @param string | array  $vars 动态变量值
      * @param string $lang 语言
      * @return mixed
      */
@@ -41,7 +41,7 @@ if (!function_exists('format_bytes')) {
     function format_bytes($size, $delimiter = '', $precision = 2)
     {
         $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
-        for ($i = 0; $size >= 1024 && $i < 6; $i++) {
+        for ($i = 0; $size >= 1024 && $i < 5; $i++) {
             $size /= 1024;
         }
         return round($size, $precision) . $delimiter . $units[$i];
@@ -467,6 +467,19 @@ if (!function_exists('xss_clean')) {
     }
 }
 
+if (!function_exists('url_clean')) {
+    /**
+     * 清理URL
+     */
+    function url_clean($url)
+    {
+        if (!check_url_allowed($url)) {
+            return '';
+        }
+        return xss_clean($url);
+    }
+}
+
 if (!function_exists('check_ip_allowed')) {
     /**
      * 检测IP是否允许
@@ -482,6 +495,36 @@ if (!function_exists('check_ip_allowed')) {
             $response = Response::create('请求无权访问', 'html', 403);
             throw new HttpResponseException($response);
         }
+    }
+}
+
+if (!function_exists('check_url_allowed')) {
+    /**
+     * 检测URL是否允许
+     * @param string $url URL
+     * @return bool
+     */
+    function check_url_allowed($url = null)
+    {
+        //允许的主机列表
+        $allowedHostArr = [
+            strtolower(request()->host())
+        ];
+
+        //如果是站内相对链接则允许
+        if (preg_match("/^[\/a-z][a-z0-9][a-z0-9\.\/]+\$/i", $url) && substr($url, 0, 2) !== '//') {
+            return true;
+        }
+
+        //如果是站外链接则需要判断HOST是否允许
+        if (preg_match("/((http[s]?:\/\/)+(?>[a-z\-0-9]{2,}\.){1,}[a-z]{2,8})(?:\s|\/)/i", $url)) {
+
+            if (in_array(strtolower(parse_url($url, PHP_URL_HOST)), $allowedHostArr)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
