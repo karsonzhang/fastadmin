@@ -583,7 +583,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                     });
                     return success === conditionArr.length;
                 };
-                form.on("keyup change click configchange", "input,select", function () {
+                form.on("keyup change click configchange", "input,textarea,select", function () {
                     $("[data-favisible][data-favisible!='']", form).each(function () {
                         var visible = $(this).data("favisible");
                         var groupArr = visible.split(/\|\|/);
@@ -609,7 +609,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                     }
                 }, 0);
 
-                $("input,select", form).trigger("configchange");
+                $("input,textarea,select", form).trigger("configchange");
             }
         },
         api: {
