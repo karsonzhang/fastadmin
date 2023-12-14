@@ -305,7 +305,7 @@ class Upload
 
             $attachment = $this->upload();
         } catch (\Exception $e) {
-            @unlink($destFile);
+            @unlink($uploadPath);
             throw new UploadException($e->getMessage());
         }
         return $attachment;

@@ -19,7 +19,7 @@ if (isset($_GET['lang'])) {
     $langSet = strtolower($_COOKIE['think_var']);
 } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 preg_match('/^([a-z\d\-]+)/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
-    $langSet     = strtolower($matches[1]);
+    $langSet     = strtolower($matches[1] ?? '');
 }
 $langSet = $langSet && in_array($langSet, ['zh-cn', 'en']) ? $langSet : 'zh-cn';
 $langSet == 'en' && $lang = array_combine(array_keys($lang), array_keys($lang));
