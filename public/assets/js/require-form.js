@@ -322,9 +322,14 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             var result = template ? [] : {};
                             $.each(data, function (i, j) {
                                 if (j) {
-                                    if (!template) {
-                                        if (j.key != '') {
-                                            result[j.key] = j.value;
+                                    var keys = Object.keys(j);
+                                    if (keys.indexOf("value") > -1 && (keys.length === 1 || (keys.length === 2 && keys.indexOf("key") > -1))) {
+                                        if (keys.length === 2) {
+                                            if (j.key != '') {
+                                                result[j.key] = j.value;
+                                            }
+                                        } else {
+                                            result.push(j.value);
                                         }
                                     } else {
                                         result.push(j);
