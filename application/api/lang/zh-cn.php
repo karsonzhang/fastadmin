@@ -86,7 +86,7 @@ return [
     'You can only upload a maximum of %s files'      => '你最多允许上传 %s 个文件',
     'You can\'t upload files of this type'           => '不允许上传的文件类型',
     'Server responded with %s code'                  => '服务端响应(Code:%s)',
-    'File is too big (%sMiB), Max filesize: %sMiB'   => '当前上传(%sM)，最大允许上传文件大小:%sM',
+    'File is too big (%sMiB), Max filesize: %sMiB.'  => '当前上传(%sM)，最大允许上传文件大小:%sM',
     'Redirect now'                                   => '立即跳转',
     'Operation completed'                            => '操作成功!',
     'Operation failed'                               => '操作失败!',
