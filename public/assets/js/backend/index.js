@@ -33,7 +33,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 if (val != '') {
                     $("ul.sidebar-menu li a[addtabs]:not([href^='javascript:;'])").each(function () {
                         if ($("span:first", this).text().indexOf(val) > -1 || $(this).attr("py").indexOf(val) > -1 || $(this).attr("pinyin").indexOf(val) > -1) {
-                            html.push('<a data-url="' + $(this).attr("href") + '" href="javascript:;">' + $("span:first", this).text() + '</a>');
+                            html.push('<a data-url="' + ($(this).attr("url") || $(this).attr("href")) + '" href="javascript:;">' + $("span:first", this).text() + '</a>');
                             if (html.length >= 100) {
                                 return false;
                             }
