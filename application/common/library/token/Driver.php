@@ -76,6 +76,7 @@ abstract class Driver
     protected function getEncryptedToken($token)
     {
         $config = \think\Config::get('token');
+        $token = $token ?? ''; // 为兼容 php8
         return hash_hmac($config['hashalgo'], $token, $config['key']);
     }
 
