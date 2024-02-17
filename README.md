@@ -57,7 +57,6 @@ https://demo.fastadmin.net
 
 交流社区: https://ask.fastadmin.net
 
-QQ 1 群（满）、QQ 2 群（满）、QQ 3 群（满）、QQ 4 群（满）、QQ 5 群（满）、QQ 6 群（满）、[QQ 7 群](https://www.fastadmin.net/goto/qun)。
 
 Github: https://github.com/karsonzhang/fastadmin
 
@@ -92,6 +91,6 @@ FastAdmin遵循Apache2开源协议发布，并提供免费使用。
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2022 by FastAdmin (https://www.fastadmin.net)
+版权所有Copyright © 2017-2024 by FastAdmin (https://www.fastadmin.net)
 
 All rights reserved。
