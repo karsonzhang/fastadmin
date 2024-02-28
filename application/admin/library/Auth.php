@@ -371,8 +371,7 @@ class Auth extends \fast\Auth
         $childrenAdminIds = [];
         if (!$this->isSuperAdmin()) {
             $groupIds = $this->getChildrenGroupIds(false);
-            $authGroupList = \app\admin\model\AuthGroupAccess::
-            field('uid,group_id')
+            $authGroupList = \app\admin\model\AuthGroupAccess::field('uid,group_id')
                 ->where('group_id', 'in', $groupIds)
                 ->select();
             foreach ($authGroupList as $k => $v) {
@@ -418,7 +417,6 @@ class Auth extends \fast\Auth
                 $titleArr[$pathArr[$rule['name']]] = $rule['title'];
                 $menuArr[$pathArr[$rule['name']]] = $rule;
             }
-
         }
         ksort($menuArr);
         $this->breadcrumb = $menuArr;
@@ -444,9 +442,9 @@ class Auth extends \fast\Auth
         foreach ($params as $k => $v) {
             $url = $k;
             if (is_array($v)) {
-                $nums = isset($v[0]) ? $v[0] : 0;
-                $color = isset($v[1]) ? $v[1] : $colorArr[(is_numeric($nums) ? $nums : strlen($nums)) % $colorNums];
-                $class = isset($v[2]) ? $v[2] : 'label';
+                $nums = $v[0] ?? 0;
+                $color = $v[1] ?? $colorArr[(is_numeric($nums) ? $nums : strlen($nums)) % $colorNums];
+                $class = $v[2] ?? 'label';
             } else {
                 $nums = $v;
                 $color = $colorArr[(is_numeric($nums) ? $nums : strlen($nums)) % $colorNums];
@@ -485,7 +483,7 @@ class Auth extends \fast\Auth
             }
             $v['icon'] = $v['icon'] . ' fa-fw';
             $v['url'] = isset($v['url']) && $v['url'] ? $v['url'] : '/' . $module . '/' . $v['name'];
-            $v['badge'] = isset($badgeList[$v['name']]) ? $badgeList[$v['name']] : '';
+            $v['badge'] = $badgeList[$v['name']] ?? '';
             $v['title'] = __($v['title']);
             $v['url'] = preg_match("/^((?:[a-z]+:)?\/\/|data:image\/)(.*)/i", $v['url']) ? $v['url'] : url($v['url']);
             $v['menuclass'] = in_array($v['menutype'], ['dialog', 'ajax']) ? 'btn-' . $v['menutype'] : '';

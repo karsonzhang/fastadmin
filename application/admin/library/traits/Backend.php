@@ -391,7 +391,7 @@ trait Backend
         }
 
         //导入文件首行类型,默认是注释,如果需要使用字段名称请使用name
-        $importHeadType = isset($this->importHeadType) ? $this->importHeadType : 'comment';
+        $importHeadType = $this->importHeadType ?? 'comment';
 
         $table = $this->model->getQuery()->getTable();
         $database = \think\Config::get('database.database');
@@ -460,7 +460,7 @@ trait Backend
             if ($has_admin_id) {
                 $auth = Auth::instance();
                 foreach ($insert as &$val) {
-                    if (!isset($val['admin_id']) || empty($val['admin_id'])) {
+                    if (empty($val['admin_id'])) {
                         $val['admin_id'] = $auth->isLogin() ? $auth->id : 0;
                     }
                 }
