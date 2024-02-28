@@ -591,7 +591,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                 form.on("keyup change click configchange", "input,textarea,select", function () {
                     $("[data-favisible][data-favisible!='']", form).each(function () {
                         var visible = $(this).data("favisible");
-                        var groupArr = visible.split(/\|\|/);
+                        var groupArr = visible ? visible.toString().split(/\|\|/) : [];
                         var success = 0;
                         $.each(groupArr, function (i, j) {
                             if (checkCondition(j)) {
@@ -610,7 +610,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                 setTimeout(function () {
                     var validator = form.data('validator');
                     if (validator) {
-                        validator.options.ignore += ((validator.options.ignore ? ',' : '') + '[data-favisible] :hidden,[data-favisible]:hidden');
+                        validator.options.ignore += ((validator.options.ignore ? ',' : '') + '.hidden[data-favisible] :hidden,.hidden[data-favisible]:hidden');
                     }
                 }, 0);
 

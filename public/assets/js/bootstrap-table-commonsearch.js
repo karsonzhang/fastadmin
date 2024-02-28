@@ -43,7 +43,7 @@
 
             setTimeout(function () {
                 that.onCommonSearch();
-            }, 0);
+            }, 1);
         });
 
     };
