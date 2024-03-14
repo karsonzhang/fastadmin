@@ -339,7 +339,7 @@ class Auth extends \fast\Auth
             }
         }
         // 取出所有分组
-        $groupList = \app\admin\model\AuthGroup::where(['status' => 'normal'])->select();
+        $groupList = \app\admin\model\AuthGroup::where($this->isSuperAdmin() ? '1=1' : ['status' => 'normal'])->select();
         $objList = [];
         foreach ($groups as $k => $v) {
             if ($v['rules'] === '*') {
