@@ -226,7 +226,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             $(this).on('cancel.daterangepicker', function (ev, picker) {
                                 $(this).val('').trigger('blur');
                             });
-                            $(this).daterangepicker($.extend(true, options, $(this).data() || {}, $(this).data("daterangepicker-options") || {}));
+                            $(this).daterangepicker($.extend(true, {}, options, $(this).data() || {}, $(this).data("daterangepicker-options") || {}));
                         });
                     });
                 }
