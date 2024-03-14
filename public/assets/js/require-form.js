@@ -478,9 +478,9 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
 
             },
             slider: function (form) {
-                if ($(".slider", form).length > 0) {
+                if ($("[data-role='slider'],input.slider", form).length > 0) {
                     require(['bootstrap-slider'], function () {
-                        $('.slider').removeClass('hidden').css('width', function (index, value) {
+                        $("[data-role='slider'],input.slider").removeClass('hidden').css('width', function (index, value) {
                             return $(this).parents('.form-control').width();
                         }).slider().on('slide', function (ev) {
                             var data = $(this).data();
