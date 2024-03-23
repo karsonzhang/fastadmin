@@ -204,8 +204,8 @@ class Api
             'time' => Request::instance()->server('REQUEST_TIME'),
             'data' => $data,
         ];
-        // 如果未设置类型则自动判断
-        $type = $type ? $type : ($this->request->param(config('var_jsonp_handler')) ? 'jsonp' : $this->responseType);
+        // 如果未设置类型则使用默认类型判断
+        $type = $type ? : $this->responseType;
 
         if (isset($header['statuscode'])) {
             $code = $header['statuscode'];
