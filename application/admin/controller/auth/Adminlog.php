@@ -53,6 +53,7 @@ class Adminlog extends Backend
                         $query->where('admin_id', 'in', $childrenAdminIds);
                     }
                 })
+                ->field('content,useragent', true)
                 ->order($sort, $order)
                 ->paginate($limit);
 
