@@ -441,7 +441,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 $(document).on('click', Table.config.restoreonebtn + ',' + Table.config.destroyonebtn, function () {
                     var that = this;
                     var url = $(that).data("url") ? $(that).data("url") : $(that).attr("href");
-                    var row = Fast.api.getrowbyindex(table, $(that).data("row-index"));
+                    var row = Table.api.getrowbyindex(table, $(that).data("row-index"));
                     Fast.api.ajax({
                         url: url,
                         data: {ids: row[options.pk]}
@@ -562,7 +562,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var target = $(".autocontent-item", this).get(0);
                     if (!target) return;
                     if (e.type === 'mouseenter') {
-                        if (target.scrollWidth > target.offsetWidth) {
+                        if (target.scrollWidth > target.offsetWidth && $(".autocontent-caret", this).length === 0) {
                             $(this).append("<div class='autocontent-caret'><i class='fa fa-chevron-down'></div>");
                         }
                     } else {

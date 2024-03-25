@@ -91,8 +91,10 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                 $(".layer-footer [type=submit],.fixed-footer [type=submit],.normal-footer [type=submit]", form).removeClass("disabled");
                 //自定义关闭按钮事件
                 form.on("click", ".layer-close", function () {
-                    var index = parent.Layer.getFrameIndex(window.name);
-                    parent.Layer.close(index);
+                    if (window.name) {
+                        var index = parent.Layer.getFrameIndex(window.name);
+                        parent.Layer.close(index);
+                    }
                     return false;
                 });
             },
@@ -216,7 +218,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                         };
                         var origincallback = function (start, end) {
                             $(this.element).val(start.format(this.locale.format) + " - " + end.format(this.locale.format));
-                            $(this.element).trigger('blur');
+                            $(this.element).trigger('change');
                         };
                         $(".datetimerange", form).each(function () {
                             var callback = typeof $(this).data('callback') == 'function' ? $(this).data('callback') : origincallback;
@@ -224,7 +226,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                 callback.call(picker, picker.startDate, picker.endDate);
                             });
                             $(this).on('cancel.daterangepicker', function (ev, picker) {
-                                $(this).val('').trigger('blur');
+                                $(this).val('').trigger('change');
                             });
                             $(this).daterangepicker($.extend(true, {}, options, $(this).data() || {}, $(this).data("daterangepicker-options") || {}));
                         });
@@ -288,7 +290,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                     }
                                     var result = urlArr.join(",");
                                     inputObj.val(result).trigger("change").trigger("validate");
-                                } else {
+                                } else if (input_id) {
                                     var url = Config.upload.fullmode ? Fast.api.cdnurl(data.url) : data.url;
                                     $("#" + input_id).val(url).trigger("change").trigger("validate");
                                 }
@@ -326,7 +328,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                     if (keys.indexOf("value") > -1 && (keys.length === 1 || (keys.length === 2 && keys.indexOf("key") > -1))) {
                                         if (keys.length === 2) {
                                             if (j.key != '') {
-                                                result[j.key] = j.value;
+                                                result['__PLACEHOLDKEY__' + j.key] = j.value;
                                             }
                                         } else {
                                             result.push(j.value);
@@ -336,7 +338,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                                     }
                                 }
                             });
-                            textarea.val(JSON.stringify(result));
+                            textarea.val(JSON.stringify(result).replace(/__PLACEHOLDKEY__/g, ''));
                         };
                         //追加一行数据
                         var append = function (container, row, initial) {
@@ -410,11 +412,12 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                             $("[fieldlist-item]", container).remove();
                             var json = {};
                             try {
-                                json = JSON.parse(textarea.val());
+                                var val = textarea.val().replace(/"(\d+)"\:/g, "\"__PLACEHOLDERKEY__$1\":");
+                                json = JSON.parse(val);
                             } catch (e) {
                             }
                             $.each(json, function (i, j) {
-                                append(container, {key: i, value: j}, true);
+                                append(container, {key: i.toString().replace("__PLACEHOLDERKEY__", ""), value: j}, true);
                             });
                         });
                         //拖拽排序

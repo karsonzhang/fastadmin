@@ -27,7 +27,7 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             if ($(button).data("multiple") && inputObj.val() !== "") {
                                 urlArr.push(inputObj.val());
                             }
-                            var url = Config.upload.fullmode ? Fast.api.cdnurl(data.url) : data.url;
+                            var url = Config.upload.fullmode ? (data.fullurl ? data.fullurl : Fast.api.cdnurl(data.url)) : data.url;
                             urlArr.push(url);
                             inputObj.val(urlArr.join(",")).trigger("change").trigger("validate");
                         }
@@ -351,9 +351,10 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                             $(document.body).on("keyup change", "#" + input_id, function (e) {
                                 var inputStr = $("#" + input_id).val();
                                 var inputArr = inputStr.split(/\,/);
-                                $("#" + preview_id).empty();
-                                var tpl = $("#" + preview_id).data("template") ? $("#" + preview_id).data("template") : "";
-                                var extend = $("#" + preview_id).next().is("textarea") ? $("#" + preview_id).next("textarea").val() : "{}";
+                                var previewObj = $("#" + preview_id);
+                                previewObj.empty();
+                                var tpl = previewObj.data("template") ? previewObj.data("template") : "";
+                                var extend = previewObj.next().is("textarea") ? previewObj.next("textarea").val() : "{}";
                                 var json = {};
                                 try {
                                     json = JSON.parse(extend);
@@ -365,13 +366,15 @@ define(['jquery', 'bootstrap', 'dropzone', 'template'], function ($, undefined, 
                                     }
                                     var suffix = /[\.]?([a-zA-Z0-9]+)$/.exec(j);
                                     suffix = suffix ? suffix[1] : 'file';
-                                    j = Config.upload.fullmode ? Fast.api.cdnurl(j) : j;
+                                    var btnData = $(that).data();
+                                    var fullurl = typeof btnData.cdnurl!=='undefined' ? Fast.api.cdnurl(j, btnData.cdnurl) : Fast.api.cdnurl(j);
+                                    j = Config.upload.fullmode ? fullurl : j;
                                     var value = (json && typeof json[i] !== 'undefined' ? json[i] : null);
-                                    var data = {url: j, fullurl: Fast.api.cdnurl(j), data: $(that).data(), key: i, index: i, value: value, row: value, suffix: suffix};
+                                    var data = {url: j, fullurl: fullurl, data: btnData, key: i, index: i, value: value, row: value, suffix: suffix};
                                     var html = tpl ? Template(tpl, data) : Template.render(Upload.config.previewtpl, data);
-                                    $("#" + preview_id).append(html);
+                                    previewObj.append(html);
                                 });
-                                refresh($("#" + preview_id).data("name"));
+                                refresh(previewObj.data("name"));
                             });
                             $("#" + input_id).trigger("change");
                         }
