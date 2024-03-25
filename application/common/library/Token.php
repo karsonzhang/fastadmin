@@ -150,7 +150,7 @@ class Token
     /**
      * 清除Token
      * @access public
-     * @param int user_id 会员ID
+     * @param int $user_id 会员ID
      * @return boolean
      */
     public static function clear($user_id = null)

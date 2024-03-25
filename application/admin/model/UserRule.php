@@ -42,7 +42,7 @@ class UserRule extends Model
     {
         $value = $value ? $value : $data['status'];
         $list = $this->getStatusList();
-        return isset($list[$value]) ? $list[$value] : '';
+        return $list[$value] ?? '';
     }
 
     public static function getTreeList($selected = [])

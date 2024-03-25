@@ -36,7 +36,7 @@ class Sms
             ->order('id', 'DESC')
             ->find();
         Hook::listen('sms_get', $sms, null, true);
-        return $sms ? $sms : null;
+        return $sms ?: null;
     }
 
     /**

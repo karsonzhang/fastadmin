@@ -391,7 +391,7 @@ trait Backend
         }
 
         //导入文件首行类型,默认是注释,如果需要使用字段名称请使用name
-        $importHeadType = $this->importHeadType ?? 'comment';
+        $importHeadType = isset($this->importHeadType) ? $this->importHeadType : 'comment';
 
         $table = $this->model->getQuery()->getTable();
         $database = \think\Config::get('database.database');

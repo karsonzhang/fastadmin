@@ -28,7 +28,7 @@ class UserGroup extends Model
     {
         $value = $value ? $value : $data['status'];
         $list = $this->getStatusList();
-        return isset($list[$value]) ? $list[$value] : '';
+        return $list[$value] ?? '';
     }
 
 }
