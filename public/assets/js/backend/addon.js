@@ -167,7 +167,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                     });
                     return res;
                 },
-                dataType: 'jsonp',
+                dataType: 'json',
                 templateView: false,
                 clickToSelect: false,
                 search: true,
