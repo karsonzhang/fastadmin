@@ -466,7 +466,7 @@ class Crud extends Command
                     }
                 }
                 $relationTableInfo = $relationTableInfo[0];
-                $relationModel = isset($relationModels[$index]) ? $relationModels[$index] : '';
+                $relationModel = $relationModels[$index] ?? '';
 
                 list($relationNamespace, $relationName, $relationFile) = $this->getModelData($modelModuleName, $relationModel, $relationName);
 
@@ -666,8 +666,8 @@ class Crud extends Command
         //如果是关联模型
         foreach ($relations as $index => &$relation) {
             if ($relation['relationMode'] == 'hasone') {
-                $relationForeignKey = $relation['relationForeignKey'] ? $relation['relationForeignKey'] : $table . "_id";
-                $relationPrimaryKey = $relation['relationPrimaryKey'] ? $relation['relationPrimaryKey'] : $priKey;
+                $relationForeignKey = $relation['relationForeignKey'] ?: $table . "_id";
+                $relationPrimaryKey = $relation['relationPrimaryKey'] ?: $priKey;
 
                 if (!in_array($relationForeignKey, $relation['relationFieldList'])) {
                     throw new Exception('relation table [' . $relation['relationTableName'] . '] must be contain field [' . $relationForeignKey . ']');
@@ -676,8 +676,8 @@ class Crud extends Command
                     throw new Exception('table [' . $modelTableName . '] must be contain field [' . $relationPrimaryKey . ']');
                 }
             } elseif ($relation['relationMode'] == 'belongsto') {
-                $relationForeignKey = $relation['relationForeignKey'] ? $relation['relationForeignKey'] : Loader::parseName($relation['relationName']) . "_id";
-                $relationPrimaryKey = $relation['relationPrimaryKey'] ? $relation['relationPrimaryKey'] : $relation['relationPriKey'];
+                $relationForeignKey = $relation['relationForeignKey'] ?: Loader::parseName($relation['relationName']) . "_id";
+                $relationPrimaryKey = $relation['relationPrimaryKey'] ?: $relation['relationPriKey'];
                 if (!in_array($relationForeignKey, $fieldArr)) {
                     throw new Exception('table [' . $modelTableName . '] must be contain field [' . $relationForeignKey . ']');
                 }
@@ -685,8 +685,8 @@ class Crud extends Command
                     throw new Exception('relation table [' . $relation['relationTableName'] . '] must be contain field [' . $relationPrimaryKey . ']');
                 }
             } elseif ($relation['relationMode'] == 'hasmany') {
-                $relationForeignKey = $relation['relationForeignKey'] ? $relation['relationForeignKey'] : $table . "_id";
-                $relationPrimaryKey = $relation['relationPrimaryKey'] ? $relation['relationPrimaryKey'] : $priKey;
+                $relationForeignKey = $relation['relationForeignKey'] ?: $table . "_id";
+                $relationPrimaryKey = $relation['relationPrimaryKey'] ?: $priKey;
                 if (!in_array($relationForeignKey, $relation['relationFieldList'])) {
                     throw new Exception('relation table [' . $relation['relationTableName'] . '] must be contain field [' . $relationForeignKey . ']');
                 }
@@ -901,6 +901,12 @@ class Crud extends Command
                             $cssClassArr[] = 'selectpage';
                             $selectpageTable = substr($field, 0, strripos($field, '_'));
                             $selectpageField = '';
+                            foreach ($relations as $index => $relation) {
+                                if ($relation['relationForeignKey'] === $field) {
+                                    $selectpageTable = substr($relation['relationTableName'], strlen($prefix));
+                                    break;
+                                }
+                            }
                             $selectpageController = str_replace('_', '/', $selectpageTable);
                             $attrArr['data-source'] = $selectpageController . "/index";
                             //如果是类型表需要特殊处理下

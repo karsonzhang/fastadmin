@@ -15,7 +15,6 @@ use think\exception\PDOException;
 
 class Addon extends Command
 {
-
     protected function configure()
     {
         $this
@@ -33,6 +32,7 @@ class Addon extends Command
 
     protected function execute(Input $input, Output $output)
     {
+        \think\Config::load(dirname(dirname(__FILE__)) . DS . 'config.php');
         $name = $input->getOption('name') ?: '';
         $action = $input->getOption('action') ?: '';
         if (stripos($name, 'addons' . DS) !== false) {
@@ -82,7 +82,6 @@ class Addon extends Command
                         $createTableSql = $result[0]['Create Table'];
                     }
                 } catch (PDOException $e) {
-
                 }
 
                 $data = [
@@ -177,12 +176,12 @@ class Addon extends Command
                 if (!$info) {
                     throw new Exception(__('Addon info file data incorrect'));
                 }
-                $infoname = isset($info['name']) ? $info['name'] : '';
+                $infoname = $info['name'] ?? '';
                 if (!$infoname || !preg_match("/^[a-z]+$/i", $infoname) || $infoname != $name) {
                     throw new Exception(__('Addon info name incorrect'));
                 }
 
-                $infoversion = isset($info['version']) ? $info['version'] : '';
+                $infoversion = $info['version'] ?? '';
                 if (!$infoversion || !preg_match("/^\d+\.\d+\.\d+$/i", $infoversion)) {
                     throw new Exception(__('Addon info version incorrect'));
                 }
@@ -340,5 +339,4 @@ class Addon extends Command
     {
         return __DIR__ . '/Addon/stubs/' . $name . '.stub';
     }
-
 }

@@ -441,8 +441,11 @@ class Addon extends Backend
             } catch (\Exception $e) {
 
             }
-            $rows = isset($json['rows']) ? $json['rows'] : [];
+            $rows = $json['rows'] ?? [];
             foreach ($rows as $index => $row) {
+                if (!isset($row['name'])) {
+                    continue;
+                }
                 $onlineaddons[$row['name']] = $row;
             }
             Cache::set("onlineaddons", $onlineaddons, 600);
