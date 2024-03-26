@@ -34,7 +34,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             singleSelect: false, //是否启用单选
             showRefresh: false,
             showJumpto: true,
-            locale: Config.language == 'zh-cn' ? 'zh-CN' : 'en-US',
+            locale: Config.language === 'zh-cn' ? 'zh-CN' : 'en-US',
             showToggle: true,
             showColumns: true,
             pk: 'id',
@@ -347,12 +347,13 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                     var field = $(this).closest("[data-field]").data("field");
                     var value = $(this).data("value");
                     var object = $("[name='" + field + "']", table.closest(".bootstrap-table").find(".commonsearch-table"));
-                    if (object.prop('tagName') == "SELECT") {
+                    if (object.prop('tagName') === "SELECT") {
                         $("option[value='" + value + "']", object).prop("selected", true);
                     } else {
                         object.val(value);
                     }
                     table.trigger("uncheckbox");
+                    table.bootstrapTable('getOptions').totalRows = 0;
                     table.bootstrapTable('refresh', {pageNumber: 1});
                     return false;
                 });
