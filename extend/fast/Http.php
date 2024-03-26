@@ -67,8 +67,8 @@ class Http
         $defaults[CURLOPT_USERAGENT] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.98 Safari/537.36";
         $defaults[CURLOPT_FOLLOWLOCATION] = true;
         $defaults[CURLOPT_RETURNTRANSFER] = true;
-        $defaults[CURLOPT_CONNECTTIMEOUT] = 3;
-        $defaults[CURLOPT_TIMEOUT] = 3;
+        $defaults[CURLOPT_CONNECTTIMEOUT] = 10;
+        $defaults[CURLOPT_TIMEOUT] = 10;
 
         // disable 100-continue
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
@@ -133,12 +133,12 @@ class Http
         }
         $parts['query'] = isset($parts['query']) && $parts['query'] ? '?' . $parts['query'] : '';
         //发送socket请求,获得连接句柄
-        $fp = fsockopen($parts['host'], isset($parts['port']) ? $parts['port'] : 80, $errno, $errstr, 3);
+        $fp = fsockopen($parts['host'], $parts['port'] ?? 80, $errno, $errstr, 10);
         if (!$fp) {
             return false;
         }
         //设置超时时间
-        stream_set_timeout($fp, 3);
+        stream_set_timeout($fp, 10);
         $out = "{$method} {$parts['path']}{$parts['query']} HTTP/1.1\r\n";
         $out .= "Host: {$parts['host']}\r\n";
         $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
