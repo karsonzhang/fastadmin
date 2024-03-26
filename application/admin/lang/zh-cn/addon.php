@@ -33,6 +33,7 @@ return [
     'Store not available tips'                                => '插件市场暂不可用，是否切换到本地插件？',
     'Switch to the local'                                     => '切换到本地插件',
     'try to reload'                                           => '重新尝试加载',
+    'Please disable addon first'                              => '请先禁用插件再进行操作',
     'Please disable the add before trying to upgrade'         => '请先禁用插件再进行升级',
     'Please disable the add before trying to uninstall'       => '请先禁用插件再进行卸载',
     'Login now'                                               => '立即登录',

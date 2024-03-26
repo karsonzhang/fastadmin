@@ -230,6 +230,7 @@ class Addon extends Backend
             $uid = $this->request->post("uid");
             $token = $this->request->post("token");
             $faversion = $this->request->post("faversion");
+            $force = $this->request->post("force");
             if (!$uid || !$token) {
                 throw new Exception(__('Please login and try to install'));
             }
@@ -238,7 +239,7 @@ class Addon extends Backend
                 'token'     => $token,
                 'faversion' => $faversion
             ];
-            $info = Service::local($file, $extend);
+            $info = Service::local($file, $extend, $force);
         } catch (AddonException $e) {
             $this->result($e->getData(), $e->getCode(), __($e->getMessage()));
         } catch (Exception $e) {

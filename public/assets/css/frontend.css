@@ -317,6 +317,10 @@ a:focus {
     height: 60px;
     line-height: 27px;
   }
+  .navbar-white .navbar-brand {
+    height: 60px;
+    line-height: 27px;
+  }
   .navbar-white .navbar-nav > li > a {
     height: 60px;
     line-height: 27px;

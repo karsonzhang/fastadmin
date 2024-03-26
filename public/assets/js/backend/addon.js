@@ -73,12 +73,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
             Template.helper("Moment", Moment);
             Template.helper("addons", Config['addons']);
 
-            $("#faupload-addon").data("params", function () {
+            $("#faupload-addon").data("params", function (files, xhr) {
                 var userinfo = Controller.api.userinfo.get();
                 return {
                     uid: userinfo ? userinfo.id : '',
                     token: userinfo ? userinfo.token : '',
-                    version: Config.faversion
+                    version: Config.faversion,
+                    force: (files[0].force || false) ? 1 : 0
                 };
             });
 
@@ -185,7 +186,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
 
             // 离线安装
             require(['upload'], function (Upload) {
-                Upload.api.upload("#faupload-addon", function (data, ret) {
+                Upload.api.upload("#faupload-addon", function (data, ret, up, file) {
                     Config['addons'][data.addon.name] = data.addon;
                     var addon = data.addon;
                     var testdata = data.addon.testdata;
@@ -213,7 +214,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                         });
                     });
                     return false;
-                }, function (data, ret) {
+                }, function (data, ret, up, file) {
                     if (ret.msg && ret.msg.match(/(login|登录)/g)) {
                         return Layer.alert(ret.msg, {
                             title: __('Warning'),
@@ -222,6 +223,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                                 $(".btn-userinfo").trigger("click");
                             }
                         });
+                    } else if (ret.code === -1) {
+                        Layer.confirm(__('Upgrade tips', data.title), {title: __('Warmtips')}, function (index, layero) {
+                            up.removeFile(file);
+                            file.force = true;
+                            up.uploadFile(file);
+                            Layer.close(index);
+                        });
+                        return false;
                     }
                 });
 
@@ -651,7 +660,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                 }
                 var version = $(this).data("version");
 
-                Layer.confirm(__('Upgrade tips', Config['addons'][name].title), function (index, layero) {
+                Layer.confirm(__('Upgrade tips', Config['addons'][name].title), {title: __('Warmtips')}, function (index, layero) {
                     upgrade(name, version);
                 });
             });

@@ -389,7 +389,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator', 'validator-lang'], functio
                         fieldlist.on("click", ".btn-append,.append", function (e, row) {
                             var container = $(this).closest(".fieldlist");
                             append(container, row);
-                            // refresh(container);
+                            refresh(container);
                         });
                         //移除控制(点击按钮)
                         fieldlist.on("click", ".btn-remove", function () {
