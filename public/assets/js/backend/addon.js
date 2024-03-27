@@ -175,7 +175,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                     });
                     return res;
                 },
-                dataType: 'json',
+                dataType: 'jsonp',
                 templateView: false,
                 clickToSelect: false,
                 search: true,
@@ -245,10 +245,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                 $(document).on("mousedown", "#faupload-addon", function (e) {
                     var userinfo = Controller.api.userinfo.get();
                     var uid = userinfo ? userinfo.id : 0;
+                    var uploadBtn = Upload.list['faupload-addon'];
 
                     if (parseInt(uid) === 0) {
+                        uploadBtn.disable();
                         $(".btn-userinfo").trigger("click");
                         return false;
+                    } else {
+                        if (uploadBtn.disabled) {
+                            uploadBtn.enable();
+                        }
                     }
                 });
             });
