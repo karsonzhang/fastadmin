@@ -60,7 +60,7 @@ class Http
             } else {
                 $defaults[CURLOPT_CUSTOMREQUEST] = $method;
             }
-            $defaults[CURLOPT_POSTFIELDS] = $params;
+            $defaults[CURLOPT_POSTFIELDS] = is_array($params) && count(array_filter($params, 'is_array')) > 0 ? $query_string : $params;
         }
 
         $defaults[CURLOPT_HEADER] = false;
