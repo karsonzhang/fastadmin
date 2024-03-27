@@ -115,7 +115,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                             align: 'left',
                             formatter: Controller.api.formatter.title
                         },
-                        {field: 'intro', title: __('Intro'), operate: 'LIKE', align: 'left', class: 'visible-lg'},
+                        {
+                            field: 'intro',
+                            title: __('Intro'),
+                            operate: 'LIKE',
+                            align: 'left',
+                            class: 'visible-lg',
+                            formatter: Controller.api.formatter.intro
+                        },
                         {
                             field: 'author',
                             title: __('Author'),
@@ -710,11 +717,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template', 'cookie']
                     if ($(".btn-switch.active").data("type") == "local") {
                         // return value;
                     }
-                    var title = '<a class="title" href="' + row.url + '" data-toggle="tooltip" title="' + __('View addon home page') + '" target="_blank">' + value + '</a>';
+                    var title = '<a class="title" href="' + row.url + '" data-toggle="tooltip" title="' + __('View addon home page') + '" target="_blank"><span class="' + Fast.api.escape(row.color) + '">' + value + '</span></a>';
                     if (row.screenshots && row.screenshots.length > 0) {
                         title += ' <a href="javascript:;" data-index="' + index + '" class="view-screenshots text-success" title="' + __('View addon screenshots') + '" data-toggle="tooltip"><i class="fa fa-image"></i></a>';
                     }
                     return title;
+                },
+                intro: function (value, row, index) {
+                    return row.intro + (row.extend ? "<a href='" + Fast.api.escape(row.extend[1]) + "' class='" + Fast.api.escape(row.extend[2]) + "'>" + Fast.api.escape(row.extend[0]) + "</a>" : "");
                 },
                 operate: function (value, row, index) {
                     return Template("operatetpl", {item: row, index: index});

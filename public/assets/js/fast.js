@@ -278,6 +278,18 @@ define(['jquery', 'bootstrap', 'toastr', 'layer', 'lang'], function ($, undefine
                     time: 2000
                 }, callback);
             },
+            escape: function (text) {
+                if (typeof text === 'string') {
+                    return text
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;')
+                        .replace(/`/g, '&#x60;');
+                }
+                return text;
+            },
             toastr: Toastr,
             layer: Layer
         },
