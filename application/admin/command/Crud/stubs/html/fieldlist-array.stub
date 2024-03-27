@@ -1,0 +1,21 @@
+
+            <dl class="list-unstyled fieldlist" data-name="{%fieldName%}" data-template="{%fieldName%}tpl">
+                <dd>
+                    <ins>{:__('{%itemValue%}')}</ins>
+                </dd>
+                <dd>
+                    <ins><a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i> {:__('Append')}</a></ins>
+                </dd>
+            </dl>
+
+            <textarea name="{%fieldName%}" class="form-control hide" cols="30" rows="5">{%fieldValue%}</textarea>
+            <script id="{%fieldName%}tpl" type="text/html">
+                <dd class="form-inline">
+                    <ins><input type="text" name="<%=name%>[<%=index%>][value]" class="form-control" size="15" value="<%=row%>"/></ins>
+                    <ins>
+                        <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
+                        <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
+                    </ins>
+                </dd>
+            </script>
+

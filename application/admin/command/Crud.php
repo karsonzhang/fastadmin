@@ -152,7 +152,7 @@ class Crud extends Command
     /**
      * JSON后缀
      */
-    protected $jsonSuffix = ['json'];
+    protected $jsonSuffix = ['json', 'array'];
 
     /**
      * 标签后缀
@@ -879,7 +879,7 @@ class Crud extends Command
                         $formEditElement = Form::input('text', $fieldName, $editValue, $attrArr);
                     } elseif ($inputType == 'fieldlist') {
                         $itemArr = $this->getItemArray($itemArr, $field, $v['COLUMN_COMMENT']);
-                        $templateName = !isset($itemArr['key']) && !isset($itemArr['value']) && count($itemArr) > 0 ? 'fieldlist-template' : 'fieldlist';
+                        $templateName = !isset($itemArr['key']) && count($itemArr) > 0 ? (isset($itemArr['value']) && count($itemArr) === 1 ? 'fieldlist-array' : 'fieldlist-template') : 'fieldlist';
                         $itemKey = isset($itemArr['key']) ? ucfirst($itemArr['key']) : 'Key';
                         $itemValue = isset($itemArr['value']) ? ucfirst($itemArr['value']) : 'Value';
                         $theadListArr = $tbodyListArr = [];
@@ -1542,7 +1542,7 @@ EOD;
     {
         $itemArr = [];
         $comment = str_replace('，', ',', $comment);
-        if (stripos($comment, ':') !== false && stripos($comment, ',') && stripos($comment, '=') !== false) {
+        if (stripos($comment, ':') !== false && stripos($comment, '=') !== false) {
             list($fieldLang, $item) = explode(':', $comment);
             $itemArr = [];
             foreach (explode(',', $item) as $k => $v) {
