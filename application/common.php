@@ -248,9 +248,10 @@ if (!function_exists('addtion')) {
             if ($v['model']) {
                 $model = new $v['model'];
             } else {
-                $model = $v['name'] ? \think\Db::name($v['name']) : \think\Db::table($v['table']);
+                // 优先判断使用table的配置
+                $model = $v['table'] ? \think\Db::table($v['table']) : \think\Db::name($v['name']);
             }
-            $primary = $v['primary'] ? $v['primary'] : $model->getPk();
+            $primary = $v['primary'] ?: $model->getPk();
             $result[$v['field']] = isset($ids[$v['field']]) ? $model->where($primary, 'in', $ids[$v['field']])->column($v['column'], $primary) : [];
         }
 
@@ -279,60 +280,6 @@ if (!function_exists('var_export_short')) {
     function var_export_short($data, $return = true)
     {
         return var_export($data, $return);
-        $replaced = [];
-        $count = 0;
-
-        //判断是否是对象
-        if (is_resource($data) || is_object($data)) {
-            return var_export($data, $return);
-        }
-
-        //判断是否有特殊的键名
-        $specialKey = false;
-        array_walk_recursive($data, function (&$value, &$key) use (&$specialKey) {
-            if (is_string($key) && (stripos($key, "\n") !== false || stripos($key, "array (") !== false)) {
-                $specialKey = true;
-            }
-        });
-        if ($specialKey) {
-            return var_export($data, $return);
-        }
-        array_walk_recursive($data, function (&$value, &$key) use (&$replaced, &$count, &$stringcheck) {
-            if (is_object($value) || is_resource($value)) {
-                $replaced[$count] = var_export($value, true);
-                $value = "##<{$count}>##";
-            } else {
-                if (is_string($value) && (stripos($value, "\n") !== false || stripos($value, "array (") !== false)) {
-                    $index = array_search($value, $replaced);
-                    if ($index === false) {
-                        $replaced[$count] = var_export($value, true);
-                        $value = "##<{$count}>##";
-                    } else {
-                        $value = "##<{$index}>##";
-                    }
-                }
-            }
-            $count++;
-        });
-
-        $dump = var_export($data, true);
-
-        $dump = preg_replace('#(?:\A|\n)([ ]*)array \(#i', '[', $dump); // Starts
-        $dump = preg_replace('#\n([ ]*)\),#', "\n$1],", $dump); // Ends
-        $dump = preg_replace('#=> \[\n\s+\],\n#', "=> [],\n", $dump); // Empties
-        $dump = preg_replace('#\)$#', "]", $dump); //End
-
-        if ($replaced) {
-            $dump = preg_replace_callback("/'##<(\d+)>##'/", function ($matches) use ($replaced) {
-                return $replaced[$matches[1]] ?? "''";
-            }, $dump);
-        }
-
-        if ($return === true) {
-            return $dump;
-        } else {
-            echo $dump;
-        }
     }
 }
 
