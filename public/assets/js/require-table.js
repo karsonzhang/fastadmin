@@ -14,7 +14,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             titleForm: '', //为空则不显示标题，不定义默认显示：普通搜索
             idTable: 'commonTable',
             showExport: true,
-            exportDataType: "auto",
+            exportDataType: "auto", //支持auto,selected,all 当设定为auto时自动时有选中则导出选中，没有选中则导出全部
             exportTypes: ['json', 'xml', 'csv', 'txt', 'doc', 'excel'],
             exportOptions: {
                 fileName: 'export_' + Moment().format("YYYY-MM-DD"),
@@ -326,9 +326,15 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                         options.selectedIds = selectedIds;
                         options.selectedData = selectedData;
                     }
+
                     //如果导出类型为auto时则自动判断
                     if (exportDataType === 'auto') {
                         options.exportDataType = selectedIds.length > 0 ? 'selected' : 'all';
+                        if ($(".export .exporttips").length === 0) {
+                            $(".export .dropdown-menu").prepend("<li class='exporttips alert alert-warning-light mb-0 no-border p-2'></li>")
+                        }
+                        $(".export .exporttips").html("导出记录：" + (selectedIds.length > 0 ? "选中" : "全部"));
+
                     }
                     $(Table.config.disabledbtn, toolbar).toggleClass('disabled', !options.selectedIds.length);
                 });
