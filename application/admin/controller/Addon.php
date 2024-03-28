@@ -95,19 +95,24 @@ class Addon extends Backend
         }
         $tips = [];
         $groupList = [];
+        $ungroupList = [];
         foreach ($config as $index => &$item) {
             //如果有设置分组
             if (isset($item['group']) && $item['group']) {
                 if (!in_array($item['group'], $groupList)) {
                     $groupList["custom" . (count($groupList) + 1)] = $item['group'];
                 }
+            } elseif ($item['name'] != '__tips__') {
+                $ungroupList[] = $item['name'];
             }
             if ($item['name'] == '__tips__') {
                 $tips = $item;
                 unset($config[$index]);
             }
         }
-        $groupList['other'] = '其它';
+        if ($ungroupList) {
+            $groupList['other'] = '其它';
+        }
         $this->view->assign("groupList", $groupList);
         $this->view->assign("addon", ['info' => $info, 'config' => $config, 'tips' => $tips]);
         $configFile = ADDON_PATH . $name . DS . 'config.html';
